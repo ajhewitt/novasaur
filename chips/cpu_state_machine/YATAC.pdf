@@ -1,0 +1,193 @@
+{COMPONENT C:\WINCUPL\WINCUPL\YATAC.SYM
+
+ {ENVIRONMENT
+  {PDIFvrev 3.00}
+  {Program "CUPL(WM) Version 5.0a"}
+  {DBtype "Schematic"}
+  {DBvrev 1.01}
+  {DBtime "Mon Apr 29 20:10:20 2019 "}
+  {DBunit "MIL"}
+  {DBgrid 10}
+  {Lyrstr "WIRES" 1 "BUS" 1 "GATE" 2 "IEEE" 2 "PINFUN" 3 "PINNUM" 1 
+          "PINNAM" 6 "PINCON" 4 "REFDES" 2 "ATTR" 6 "SDOT" 1 
+          "DEVICE" 5 "OUTLIN" 5 "ATTR2" 6 "NOTES" 6 "NETNAM" 4 
+          "CMPNAM" 5 "BORDER" 5}
+ }
+
+ {USER
+  {VIEW
+   {Mode SYMB}
+   {Nlst OPEN}
+   {Vw 0 0 2}
+   {Lv 12 2 2 2 0 0 2 2 2 2 0 0 2 1 2 0 0 0 0}
+   {Gs 10 10}
+  }
+ }
+
+ {DISPLAY
+  [Ly "PINNUM"]
+  [Ls "SOLID"][Wd 0]
+  [Ts 15][Tj "LC"][Tr 0][Tm "N"]
+ }
+
+ {SYMBOL
+  {PIN_DEF
+   [Ly "PINCON"]
+   {P SCLK {Pt "INPUT"}{Lq 0}{Ploc 100 320}}
+   {P I0 {Pt "INPUT"}{Lq 0}{Ploc 100 280}}
+   {P I1 {Pt "INPUT"}{Lq 0}{Ploc 100 260}}
+   {P I2 {Pt "INPUT"}{Lq 0}{Ploc 100 240}}
+   {P I3OR4 {Pt "INPUT"}{Lq 0}{Ploc 100 220}}
+   {P I5 {Pt "INPUT"}{Lq 0}{Ploc 100 200}}
+   {P I6 {Pt "INPUT"}{Lq 0}{Ploc 100 180}}
+   {P I7 {Pt "INPUT"}{Lq 0}{Ploc 100 160}}
+   {P A7 {Pt "INPUT"}{Lq 0}{Ploc 100 140}}
+   {P RESET' {Pt "INPUT"}{Lq 0}{Ploc 100 120}}
+   {P INST' {Pt "INPUT"}{Lq 0}{Ploc 100 100}}
+   {P HSEL {Pt "INPUT"}{Lq 0}{Ploc 100 80}}
+   {P BOOT {Pt "INPUT"}{Lq 0}{Ploc 100 60}}
+   {P BANK' {Pt "INPUT"}{Lq 0}{Ploc 100 40}}
+   {P PCLK {Pt "INPUT"}{Lq 0}{Ploc 100 20}}
+   {P PCENT {Pt "I/O"}{Lq 0}{Ploc 300 20}}
+   {P A16' {Pt "I/O"}{Lq 0}{Ploc 300 40}}
+  }
+
+  {PKG
+   [Ly "REFDES"]
+   [Ts 25][Tj "CB"][Tr 0][Tm "N"]
+   {Rdl 200 350}
+
+   [Ly "PINNUM"]
+   [Ts 15][Tj "RC"]
+   {Pnl 120 330}
+   [Ts 15][Tj "RC"]
+   {Pnl 120 290}
+   {Pnl 120 270}
+   {Pnl 120 250}
+   {Pnl 120 230}
+   {Pnl 120 210}
+   {Pnl 120 190}
+   {Pnl 120 170}
+   {Pnl 120 150}
+   {Pnl 120 130}
+   {Pnl 120 110}
+   {Pnl 120 90}
+   {Pnl 120 70}
+   {Pnl 120 50}
+   {Pnl 120 30}
+   [Ts 15][Tj "LC"]
+   {Pnl 280 30}
+   {Pnl 280 50}
+
+   {Sd A 1 2 3 4 5 6 7 8 9 12 14 15 16 17 19 13 18}
+  }
+
+  {PIC
+   [Ly "GATE"]
+   [Ts 15][Tj "LC"][Tr 0][Tm "N"]
+   {R 130 340 270 0}
+   {L 130 320 100 320}
+   {L 130 330 140 320 130 310}
+   {L 130 280 100 280}
+   {L 130 260 100 260}
+   {L 130 240 100 240}
+   {L 130 220 100 220}
+   {L 130 200 100 200}
+   {L 130 180 100 180}
+   {L 130 160 100 160}
+   {L 130 140 100 140}
+   {L 120 120 100 120}
+   {C 125 120 5}
+   {L 120 100 100 100}
+   {C 125 100 5}
+   {L 130 80 100 80}
+   {L 130 60 100 60}
+   {L 120 40 100 40}
+   {C 125 40 5}
+   {L 130 20 100 20}
+   {L 270 20 300 20}
+   {C 275 40 5}
+   {L 280 40 300 40}
+   [Ly "PINNAM"]
+   [Tj "LC"]
+   {T "SCLK" 140 320}
+   {T "I0" 140 280}
+   {T "I1" 140 260}
+   {T "I2" 140 240}
+   {T "I3OR4" 140 220}
+   {T "I5" 140 200}
+   {T "I6" 140 180}
+   {T "I7" 140 160}
+   {T "A7" 140 140}
+   {T "RESET'" 140 120}
+   {T "INST'" 140 100}
+   {T "HSEL" 140 80}
+   {T "BOOT" 140 60}
+   {T "BANK'" 140 40}
+   {T "PCLK" 140 20}
+   [Tj "RC"]
+   {T "PCENT" 260 20}
+   {T "A16'" 260 40}
+   [Ly "DEVICE"]
+   [Tj "CT"]
+   {T "G16V8MS" 200 -10}
+  }
+
+  {ATR
+   {IN
+    {Org 100 20}
+    {Ty 255}
+   }
+   {EX
+    [Ly "ATTR2"]
+    [Ts 12][Tj "CT"][Tr 0][Tm "N"]
+    {At PLD C:\WINCUPL\WINCUPL\YATAC 200 340}
+   }
+  }
+ }
+
+ {DETAIL
+  {ANNOTATE
+  }
+
+  {NET_DEF
+   {N SCLK
+   }
+   {N I0
+   }
+   {N I1
+   }
+   {N I2
+   }
+   {N I3OR4
+   }
+   {N I5
+   }
+   {N I6
+   }
+   {N I7
+   }
+   {N A7
+   }
+   {N RESET'
+   }
+   {N INST'
+   }
+   {N HSEL
+   }
+   {N BOOT
+   }
+   {N BANK'
+   }
+   {N PCLK
+   }
+   {N PCENT
+   }
+   {N A16'
+   }
+  }
+
+  {SUBCOMP
+  }
+ }
+}

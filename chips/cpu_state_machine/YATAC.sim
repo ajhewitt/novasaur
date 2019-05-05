@@ -1,0 +1,130 @@
+%SIGNAL
+PIN   9 =  A7 
+PIN   2 =  I0 
+PIN   3 =  I1 
+PIN   4 =  I2 
+PIN   6 =  I5 
+PIN   7 =  I6 
+PIN   8 =  I7 
+PIN   5 =  I3or4 
+PIN  18 = !a16 
+PIN  17 = !bank 
+PIN  16 =  boot 
+PIN  15 =  hsel 
+PIN  14 = !inst 
+PIN  13 =  pcent 
+PIN  19 =  pclk 
+PIN  12 = !reset 
+PIN   1 =  sclk 
+%END
+
+%FIELD
+FIELD execution = inst,hsel
+%END
+
+%EQUATION
+a16 =>
+    I5 & !hsel & inst & pclk
+  # I6 & inst & pclk
+  # I7 & inst & pclk
+  # bank & !inst & pclk
+  # !I5 & !I6 & !I7 & bank & pclk
+
+bank.d  =>
+    I5 & !bank & reset
+  # I0 & I2 & !I5 & !I6 & !I7 & !I3or4 & bank & inst
+  # !bank & !inst & reset
+  # !I2 & !bank & reset
+  # !I0 & !bank & reset
+  # I3or4 & !bank & reset
+  # I7 & !bank & reset
+  # I6 & !bank & reset
+
+boot.d  =>
+    !reset
+  # I5 & boot & reset
+  # boot & !inst & reset
+  # !I2 & boot & reset
+  # !I0 & boot & reset
+  # I3or4 & boot & reset
+  # I7 & boot & reset
+  # I6 & boot & reset
+
+cond =>
+    !A7 & I0
+  # A7 & !I0
+
+fn4 =>
+    I7
+
+fn8 =>
+    I5 & !I6 & !I7
+
+fnh =>
+    !I6 & !I7
+
+hsel.d  =>
+    I6 & !I7 & !hsel & !inst & reset
+  # !I1 & I2 & !I7 & !hsel & !inst & reset
+  # I0 & !I1 & !I7 & !hsel & !inst & reset
+  # !A7 & !I0 & I2 & !I7 & !hsel & !inst & reset
+  # A7 & I0 & !I7 & !hsel & !inst & reset
+  # !A7 & !I0 & I1 & !I7 & !hsel & !inst & reset
+  # !I7 & I3or4 & !hsel & !inst & reset
+  # I5 & !I7 & !hsel & !inst & reset
+
+inst.d  =>
+    !hsel & !inst & !reset
+  # !I0 & !I1 & !I2 & !I5 & !I6 & !I7 & !I3or4 & !hsel & !inst
+  # !A7 & I0 & I1 & !I5 & !I6 & !I7 & !I3or4 & !hsel & !inst
+  # A7 & !I0 & I1 & !I5 & !I6 & !I7 & !I3or4 & !hsel & !inst
+  # !hsel & inst
+  # I7 & hsel & inst
+  # !I5 & hsel & inst
+  # I6 & hsel & inst
+
+nop =>
+    !I0 & !I1 & !I2 & !I5 & !I6 & !I7 & !I3or4
+  # !A7 & I0 & I1 & !I5 & !I6 & !I7 & !I3or4
+  # A7 & !I0 & I1 & !I5 & !I6 & !I7 & !I3or4
+
+oper =>
+    !I5 & !I6 & !I7
+
+pcent =>
+    !I5 & !I6 & !I7 & !pclk
+  # !inst & !pclk
+  # A7 & !I0 & I1 & !I5 & !I6 & !I7 & !I3or4
+  # !A7 & I0 & I1 & !I5 & !I6 & !I7 & !I3or4
+
+prog =>
+    !I5 & !I6 & !I7
+  # inst
+
+qclk =>
+    !pclk
+
+r2c =>
+    !I5 & !I6 & !I7 & !I3or4
+
+skip =>
+    !I0 & !I1 & !I2
+  # A7 & !I0 & I1
+  # !A7 & I0 & I1
+
+toggle =>
+    I0 & I2 & !I5 & !I6 & !I7 & !I3or4 & !inst
+
+a16.oe  =>
+    1 
+
+pcent.oe  =>
+    1 
+
+pclk.oe  =>
+    0 
+
+reset.oe  =>
+    0 
+
+%END
