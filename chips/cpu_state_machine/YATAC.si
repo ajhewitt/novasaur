@@ -9,7 +9,7 @@ Location None;
 Device   virtual;
 
 
-ORDER: A7, I0, I1, I2, I5, I6, I7, I3or4, !a16, !bank, boot, hsel, !inst, pcent, pclk, sclk, !reset; 
+ORDER: A7, I0, I1, I2, I5, I6, I7, I3or4, a16, !bank, boot, hsel, !inst, pcent, pclk, sclk, !reset; 
 
 
 VECTORS:

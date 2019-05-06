@@ -23,7 +23,7 @@ PIN 14    = !inst          ; /* CPU execution state (0=Load I)          */
 PIN 15    = hsel           ; /* H Register Select (0=L 1=H)             */
 PIN 16    = boot           ; /* Boot mode (0=run, 1=booting)            */
 PIN 17    = !bank          ; /* ROM memory bank (0=lower, 1=upper)      */
-PIN 18    = !a16           ; /* CPU-specific ROM A16 value              */
+PIN 18    = a16            ; /* CPU ROM A16                             */
 
 fn4 = I7;
 fnh = !I7 & !I6;
@@ -39,7 +39,7 @@ toggle = !inst & r2c & I2 & I0;
 qclk = !pclk;
 prog = oper # inst;
 pcent = (qclk & prog) # (nop & (I1 # I0));
-a16 = pclk  & ((prog & !bank) # (!prog & (!hsel # !fnh)));
+a16 = (prog & !bank) # (!prog & (!hsel # !fnh));
 
 FIELD execution = [inst, hsel];
 $DEFINE prog_I    'b'10

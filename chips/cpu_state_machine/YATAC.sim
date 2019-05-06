@@ -7,7 +7,7 @@ PIN   6 =  I5
 PIN   7 =  I6 
 PIN   8 =  I7 
 PIN   5 =  I3or4 
-PIN  18 = !a16 
+PIN  18 =  a16 
 PIN  17 = !bank 
 PIN  16 =  boot 
 PIN  15 =  hsel 
@@ -24,11 +24,11 @@ FIELD execution = inst,hsel
 
 %EQUATION
 a16 =>
-    I5 & !hsel & inst & pclk
-  # I6 & inst & pclk
-  # I7 & inst & pclk
-  # bank & !inst & pclk
-  # !I5 & !I6 & !I7 & bank & pclk
+    !I5 & !I6 & !I7 & bank
+  # bank & !inst
+  # I5 & !hsel & inst
+  # I7 & inst
+  # I6 & inst
 
 bank.d  =>
     I5 & !bank & reset
