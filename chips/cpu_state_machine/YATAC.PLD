@@ -36,9 +36,8 @@ r2c = oper & !I3or4;
 nop = r2c & skip;
 toggle = !inst & r2c & I2 & I0;
 
-qclk = !pclk;
 prog = oper # inst;
-pcent = (qclk & prog) # (nop & (I1 # I0));
+pcent = (pclk & prog) # (nop & (I1 # I0));
 a16 = (prog & !bank) # (!prog & (!hsel # !fnh));
 
 FIELD execution = [inst, hsel];

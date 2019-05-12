@@ -92,17 +92,14 @@ oper =>
     !I5 & !I6 & !I7
 
 pcent =>
-    !I5 & !I6 & !I7 & !pclk
-  # !inst & !pclk
+    !I5 & !I6 & !I7 & pclk
+  # !inst & pclk
   # A7 & !I0 & I1 & !I5 & !I6 & !I7 & !I3or4
   # !A7 & I0 & I1 & !I5 & !I6 & !I7 & !I3or4
 
 prog =>
     !I5 & !I6 & !I7
   # inst
-
-qclk =>
-    !pclk
 
 r2c =>
     !I5 & !I6 & !I7 & !I3or4
