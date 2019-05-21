@@ -435,8 +435,6 @@ Entry Wire Line
 	3350 4800 3250 4700
 Entry Wire Line
 	3250 4450 3350 4350
-Wire Wire Line
-	3350 4450 7400 4450
 Text GLabel 4350 1300 0    50   Output ~ 0
 ~jmp
 Wire Wire Line
@@ -491,27 +489,27 @@ Text GLabel 10450 5050 2    50   Output ~ 0
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB9322D
-P 4600 6050
+P 4600 6000
 AR Path="/5CDEEC9F/5DB9322D" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB9322D" Ref="D3"  Part="1" 
-F 0 "D3" V 4700 6000 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 4600 6175 50  0001 C CNN
-F 2 "" H 4600 6050 50  0001 C CNN
-F 3 "~" H 4600 6050 50  0001 C CNN
-	1    4600 6050
+AR Path="/5DAA5CD8/5DB9322D" Ref="D2"  Part="1" 
+F 0 "D2" V 4700 5950 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 4600 6125 50  0001 C CNN
+F 2 "" H 4600 6000 50  0001 C CNN
+F 3 "~" H 4600 6000 50  0001 C CNN
+	1    4600 6000
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB93233
-P 5000 6050
+P 5000 6000
 AR Path="/5CDEEC9F/5DB93233" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB93233" Ref="D5"  Part="1" 
-F 0 "D5" V 5100 6000 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 5000 6175 50  0001 C CNN
-F 2 "" H 5000 6050 50  0001 C CNN
-F 3 "~" H 5000 6050 50  0001 C CNN
-	1    5000 6050
+AR Path="/5DAA5CD8/5DB93233" Ref="D4"  Part="1" 
+F 0 "D4" V 5100 5950 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 5000 6125 50  0001 C CNN
+F 2 "" H 5000 6000 50  0001 C CNN
+F 3 "~" H 5000 6000 50  0001 C CNN
+	1    5000 6000
 	0    -1   -1   0   
 $EndComp
 $Comp
@@ -519,8 +517,8 @@ L Device:D_Schottky_ALT D?
 U 1 1 5DB93239
 P 6200 6950
 AR Path="/5CDEEC9F/5DB93239" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB93239" Ref="D13"  Part="1" 
-F 0 "D13" H 6200 7074 50  0000 C CNN
+AR Path="/5DAA5CD8/5DB93239" Ref="D12"  Part="1" 
+F 0 "D12" H 6200 7074 50  0000 C CNN
 F 1 "D_Schottky_ALT" H 6200 7075 50  0001 C CNN
 F 2 "" H 6200 6950 50  0001 C CNN
 F 3 "~" H 6200 6950 50  0001 C CNN
@@ -530,14 +528,14 @@ $EndComp
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB9323F
-P 5400 6050
+P 5400 6000
 AR Path="/5CDEEC9F/5DB9323F" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB9323F" Ref="D7"  Part="1" 
-F 0 "D7" V 5500 6000 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 5400 6175 50  0001 C CNN
-F 2 "" H 5400 6050 50  0001 C CNN
-F 3 "~" H 5400 6050 50  0001 C CNN
-	1    5400 6050
+AR Path="/5DAA5CD8/5DB9323F" Ref="D6"  Part="1" 
+F 0 "D6" V 5500 5950 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 5400 6125 50  0001 C CNN
+F 2 "" H 5400 6000 50  0001 C CNN
+F 3 "~" H 5400 6000 50  0001 C CNN
+	1    5400 6000
 	0    -1   -1   0   
 $EndComp
 $Comp
@@ -545,8 +543,8 @@ L Device:D_Schottky_ALT D?
 U 1 1 5DB93245
 P 5200 5750
 AR Path="/5CDEEC9F/5DB93245" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB93245" Ref="D6"  Part="1" 
-F 0 "D6" V 5300 5700 50  0000 R CNN
+AR Path="/5DAA5CD8/5DB93245" Ref="D5"  Part="1" 
+F 0 "D5" V 5300 5700 50  0000 R CNN
 F 1 "D_Schottky_ALT" H 5200 5875 50  0001 C CNN
 F 2 "" H 5200 5750 50  0001 C CNN
 F 3 "~" H 5200 5750 50  0001 C CNN
@@ -558,8 +556,8 @@ L Device:D_Schottky_ALT D?
 U 1 1 5DB9324B
 P 4800 5750
 AR Path="/5CDEEC9F/5DB9324B" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB9324B" Ref="D4"  Part="1" 
-F 0 "D4" V 4900 5700 50  0000 R CNN
+AR Path="/5DAA5CD8/5DB9324B" Ref="D3"  Part="1" 
+F 0 "D3" V 4900 5700 50  0000 R CNN
 F 1 "D_Schottky_ALT" H 4800 5875 50  0001 C CNN
 F 2 "" H 4800 5750 50  0001 C CNN
 F 3 "~" H 4800 5750 50  0001 C CNN
@@ -571,8 +569,8 @@ L Device:D_Schottky_ALT D?
 U 1 1 5DB93251
 P 6000 5750
 AR Path="/5CDEEC9F/5DB93251" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB93251" Ref="D10"  Part="1" 
-F 0 "D10" V 6100 5700 50  0000 R CNN
+AR Path="/5DAA5CD8/5DB93251" Ref="D9"  Part="1" 
+F 0 "D9" V 6100 5700 50  0000 R CNN
 F 1 "D_Schottky_ALT" H 6000 5875 50  0001 C CNN
 F 2 "" H 6000 5750 50  0001 C CNN
 F 3 "~" H 6000 5750 50  0001 C CNN
@@ -584,8 +582,8 @@ L Device:D_Schottky_ALT D?
 U 1 1 5DB93257
 P 6200 6250
 AR Path="/5CDEEC9F/5DB93257" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB93257" Ref="D11"  Part="1" 
-F 0 "D11" H 6200 6374 50  0000 C CNN
+AR Path="/5DAA5CD8/5DB93257" Ref="D10"  Part="1" 
+F 0 "D10" H 6200 6374 50  0000 C CNN
 F 1 "D_Schottky_ALT" H 6200 6375 50  0001 C CNN
 F 2 "" H 6200 6250 50  0001 C CNN
 F 3 "~" H 6200 6250 50  0001 C CNN
@@ -597,8 +595,8 @@ L Device:D_Schottky_ALT D?
 U 1 1 5DB9325D
 P 6200 6550
 AR Path="/5CDEEC9F/5DB9325D" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB9325D" Ref="D12"  Part="1" 
-F 0 "D12" H 6200 6674 50  0000 C CNN
+AR Path="/5DAA5CD8/5DB9325D" Ref="D11"  Part="1" 
+F 0 "D11" H 6200 6674 50  0000 C CNN
 F 1 "D_Schottky_ALT" H 6200 6675 50  0001 C CNN
 F 2 "" H 6200 6550 50  0001 C CNN
 F 3 "~" H 6200 6550 50  0001 C CNN
@@ -607,30 +605,26 @@ F 3 "~" H 6200 6550 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	4550 6350 4800 6350
-Wire Wire Line
-	4550 6250 4600 6250
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB93265
-P 5800 6050
+P 5800 6000
 AR Path="/5CDEEC9F/5DB93265" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB93265" Ref="D9"  Part="1" 
-F 0 "D9" V 5900 6000 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 5800 6175 50  0001 C CNN
-F 2 "" H 5800 6050 50  0001 C CNN
-F 3 "~" H 5800 6050 50  0001 C CNN
-	1    5800 6050
+AR Path="/5DAA5CD8/5DB93265" Ref="D8"  Part="1" 
+F 0 "D8" V 5900 5950 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 5800 6125 50  0001 C CNN
+F 2 "" H 5800 6000 50  0001 C CNN
+F 3 "~" H 5800 6000 50  0001 C CNN
+	1    5800 6000
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	4800 6350 4800 5900
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB9326C
 P 8500 5600
 AR Path="/5CDEEC9F/5DB9326C" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB9326C" Ref="D15"  Part="1" 
-F 0 "D15" V 8500 5521 50  0000 R CNN
+AR Path="/5DAA5CD8/5DB9326C" Ref="D14"  Part="1" 
+F 0 "D14" V 8500 5521 50  0000 R CNN
 F 1 "D_Schottky_ALT" H 8500 5725 50  0001 C CNN
 F 2 "" H 8500 5600 50  0001 C CNN
 F 3 "~" H 8500 5600 50  0001 C CNN
@@ -650,8 +644,8 @@ L Device:D_Schottky_ALT D?
 U 1 1 5DB93276
 P 8700 5300
 AR Path="/5CDEEC9F/5DB93276" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB93276" Ref="D14"  Part="1" 
-F 0 "D14" V 8700 5221 50  0000 R CNN
+AR Path="/5DAA5CD8/5DB93276" Ref="D13"  Part="1" 
+F 0 "D13" V 8700 5221 50  0000 R CNN
 F 1 "D_Schottky_ALT" H 8700 5425 50  0001 C CNN
 F 2 "" H 8700 5300 50  0001 C CNN
 F 3 "~" H 8700 5300 50  0001 C CNN
@@ -794,8 +788,8 @@ L Device:R_Network08_US RN?
 U 1 1 5DB932C3
 P 7550 3050
 AR Path="/5CDEEC9F/5DB932C3" Ref="RN?"  Part="1" 
-AR Path="/5DAA5CD8/5DB932C3" Ref="RN1"  Part="1" 
-F 0 "RN1" H 7938 3096 50  0000 L CNN
+AR Path="/5DAA5CD8/5DB932C3" Ref="RN4"  Part="1" 
+F 0 "RN4" H 7938 3096 50  0000 L CNN
 F 1 "680" H 7938 3005 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 8025 3050 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 7550 3050 50  0001 C CNN
@@ -815,23 +809,19 @@ F 3 "" H 7150 2850 50  0001 C CNN
 	1    7150 2850
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5200 6650 5200 5900
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB932D0
 P 5600 5750
 AR Path="/5CDEEC9F/5DB932D0" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5DB932D0" Ref="D8"  Part="1" 
-F 0 "D8" V 5700 5700 50  0000 R CNN
+AR Path="/5DAA5CD8/5DB932D0" Ref="D7"  Part="1" 
+F 0 "D7" V 5700 5700 50  0000 R CNN
 F 1 "D_Schottky_ALT" H 5600 5875 50  0001 C CNN
 F 2 "" H 5600 5750 50  0001 C CNN
 F 3 "~" H 5600 5750 50  0001 C CNN
 	1    5600 5750
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	5600 5900 5600 6450
 Wire Wire Line
 	7300 6250 7350 6250
 Wire Wire Line
@@ -859,8 +849,8 @@ L Device:R_Network04_US RN?
 U 1 1 5DB932E4
 P 8700 4000
 AR Path="/5CDEEC9F/5DB932E4" Ref="RN?"  Part="1" 
-AR Path="/5DAA5CD8/5DB932E4" Ref="RN2"  Part="1" 
-F 0 "RN2" H 8888 4046 50  0000 L CNN
+AR Path="/5DAA5CD8/5DB932E4" Ref="RN5"  Part="1" 
+F 0 "RN5" H 8888 4046 50  0000 L CNN
 F 1 "680" H 8888 3955 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP5" V 8975 4000 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 8700 4000 50  0001 C CNN
@@ -892,8 +882,6 @@ Connection ~ 8500 5850
 NoConn ~ 8400 4650
 Wire Wire Line
 	7400 4350 3350 4350
-Wire Wire Line
-	7400 4550 3350 4550
 Wire Wire Line
 	8400 4750 8500 4750
 Wire Wire Line
@@ -1306,19 +1294,6 @@ F 3 "" H 4050 5950 50  0001 C CNN
 $EndComp
 $Comp
 L power:VCC #PWR?
-U 1 1 5DB933CB
-P 7900 4050
-AR Path="/5CDEEC9F/5DB933CB" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA5CD8/5DB933CB" Ref="#PWR0146"  Part="1" 
-F 0 "#PWR0146" H 7900 3900 50  0001 C CNN
-F 1 "VCC" H 7917 4223 50  0000 C CNN
-F 2 "" H 7900 4050 50  0001 C CNN
-F 3 "" H 7900 4050 50  0001 C CNN
-	1    7900 4050
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:VCC #PWR?
 U 1 1 5DB933D1
 P 9950 4050
 AR Path="/5CDEEC9F/5DB933D1" Ref="#PWR?"  Part="1" 
@@ -1333,19 +1308,9 @@ $EndComp
 Wire Wire Line
 	3500 3350 3500 3950
 Wire Wire Line
-	4600 6250 4600 6200
-Connection ~ 4600 6250
-Wire Wire Line
-	5000 6550 5000 6200
-Connection ~ 5000 6550
-Wire Wire Line
 	4550 6650 5200 6650
 Wire Wire Line
-	5400 6850 5400 6200
-Wire Wire Line
 	4550 6450 5600 6450
-Wire Wire Line
-	5800 6750 5800 6200
 Wire Wire Line
 	6350 6950 6400 6950
 Wire Wire Line
@@ -1358,37 +1323,8 @@ Wire Wire Line
 	6400 6250 6350 6250
 Connection ~ 6400 6550
 Wire Wire Line
-	5000 6550 6050 6550
-Wire Wire Line
-	4550 6950 6000 6950
-Wire Wire Line
 	6400 6250 6400 5750
 Connection ~ 6400 6250
-Wire Wire Line
-	4600 5900 4600 5550
-Wire Wire Line
-	4600 5550 4800 5550
-Wire Wire Line
-	4800 5600 4800 5550
-Connection ~ 4800 5550
-Wire Wire Line
-	5200 5600 5200 5350
-Wire Wire Line
-	5400 5900 5400 5450
-Wire Wire Line
-	5600 5600 5600 5550
-Wire Wire Line
-	5600 5550 5800 5550
-Wire Wire Line
-	5800 5900 5800 5550
-Connection ~ 5800 5550
-Wire Wire Line
-	5800 5550 6000 5550
-Wire Wire Line
-	6000 5600 6000 5550
-Connection ~ 6000 5550
-Wire Wire Line
-	4550 6550 5000 6550
 Wire Wire Line
 	4550 6850 5400 6850
 Wire Wire Line
@@ -1403,13 +1339,6 @@ Wire Wire Line
 	6600 5950 6600 6250
 Wire Wire Line
 	900  7500 6600 7500
-Wire Wire Line
-	4600 6250 6050 6250
-Wire Wire Line
-	6000 5900 6000 6950
-Connection ~ 6000 6950
-Wire Wire Line
-	6000 6950 6050 6950
 Entry Wire Line
 	3250 4550 3150 4450
 Entry Wire Line
@@ -1430,23 +1359,6 @@ Entry Wire Line
 	3150 6450 3250 6350
 Entry Wire Line
 	3150 6350 3250 6250
-Wire Wire Line
-	6000 5550 6800 5550
-Wire Wire Line
-	5400 5450 6700 5450
-Wire Wire Line
-	5200 5350 6600 5350
-Wire Wire Line
-	5000 5250 6500 5250
-Wire Wire Line
-	5000 5250 5000 5400
-Wire Wire Line
-	5000 5400 4800 5400
-Wire Wire Line
-	4800 5400 4800 5550
-Connection ~ 5000 5400
-Wire Wire Line
-	5000 5400 5000 5900
 Wire Wire Line
 	6900 3350 6900 2500
 Wire Wire Line
@@ -1469,7 +1381,7 @@ Wire Wire Line
 	5600 4150 5450 4150
 Connection ~ 5450 4150
 Wire Wire Line
-	5450 4150 5450 4800
+	5450 4150 5450 4650
 Wire Wire Line
 	6200 4050 7050 4050
 Wire Wire Line
@@ -1502,17 +1414,9 @@ Wire Wire Line
 	6500 3600 6500 4750
 Connection ~ 6500 4750
 Wire Wire Line
-	6500 4750 6500 5250
-Wire Wire Line
 	6500 3600 7250 3600
 Wire Wire Line
 	6500 4750 7400 4750
-Wire Wire Line
-	6600 5350 6600 4850
-Wire Wire Line
-	6700 5450 6700 4950
-Wire Wire Line
-	6800 5550 6800 5050
 Wire Wire Line
 	6800 5050 7400 5050
 Wire Wire Line
@@ -1523,17 +1427,14 @@ Wire Wire Line
 	6600 4850 6600 3700
 Wire Wire Line
 	6600 3700 7350 3700
-Connection ~ 6600 4850
 Wire Wire Line
 	6700 4950 6700 3800
 Wire Wire Line
 	6700 3800 7450 3800
-Connection ~ 6700 4950
 Wire Wire Line
 	6800 5050 6800 3900
 Wire Wire Line
 	6800 3900 7550 3900
-Connection ~ 6800 5050
 Wire Wire Line
 	7050 5250 7050 4050
 Wire Wire Line
@@ -1542,10 +1443,6 @@ Wire Wire Line
 	3350 4800 3400 4800
 Wire Wire Line
 	3400 4800 3400 4850
-Wire Wire Line
-	3600 4850 3600 4800
-Wire Wire Line
-	3600 4800 5450 4800
 Wire Wire Line
 	3500 6450 3500 5450
 Wire Wire Line
@@ -1579,7 +1476,126 @@ Wire Wire Line
 Text Notes 8150 7650 0    66   ~ 0
 May 19, 2019
 Text Notes 7350 7500 0    66   Italic 13
-YATAC Execution and Control Unit
+Execution and Control Unit
+Wire Wire Line
+	3600 4650 3600 4850
+Connection ~ 6600 4850
+Connection ~ 6700 4950
+Connection ~ 6800 5050
+Wire Wire Line
+	4550 6950 6000 6950
+Wire Wire Line
+	3350 4450 7400 4450
+Wire Wire Line
+	3350 4550 7400 4550
+Wire Wire Line
+	3600 4650 5450 4650
+$Comp
+L Device:D_Schottky_ALT D?
+U 1 1 5D19DB0A
+P 4300 5450
+AR Path="/5CDEEC9F/5D19DB0A" Ref="D?"  Part="1" 
+AR Path="/5DAA5CD8/5D19DB0A" Ref="D1"  Part="1" 
+F 0 "D1" H 4350 5600 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 4300 5575 50  0001 C CNN
+F 2 "" H 4300 5450 50  0001 C CNN
+F 3 "~" H 4300 5450 50  0001 C CNN
+	1    4300 5450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6000 5900 6000 6950
+Connection ~ 6000 6950
+Wire Wire Line
+	6000 6950 6050 6950
+Text GLabel 4100 5450 0    50   Input ~ 0
+~jmp
+Wire Wire Line
+	4150 5450 4100 5450
+Wire Wire Line
+	4550 6550 5000 6550
+Wire Wire Line
+	5000 6550 6050 6550
+Connection ~ 5000 6550
+Wire Wire Line
+	4600 6250 6050 6250
+Wire Wire Line
+	4550 6250 4600 6250
+Connection ~ 4600 6250
+Wire Wire Line
+	6000 5450 5800 5450
+Wire Wire Line
+	6000 5450 6000 5600
+Wire Wire Line
+	5800 5850 5800 5450
+Wire Wire Line
+	4600 6150 4600 6250
+Wire Wire Line
+	4800 5900 4800 6350
+Wire Wire Line
+	5000 6150 5000 6550
+Wire Wire Line
+	5200 5900 5200 6650
+Wire Wire Line
+	5400 6150 5400 6850
+Wire Wire Line
+	5600 5900 5600 6450
+Wire Wire Line
+	5800 6150 5800 6750
+Connection ~ 5800 5450
+Wire Wire Line
+	4450 5450 4600 5450
+Wire Wire Line
+	6500 4750 5000 4750
+Wire Wire Line
+	6600 4850 5200 4850
+Wire Wire Line
+	6700 4950 5400 4950
+Wire Wire Line
+	6800 5050 5600 5050
+Wire Wire Line
+	5600 5050 5600 5300
+Wire Wire Line
+	5000 4750 5000 5150
+Wire Wire Line
+	5200 4850 5200 5600
+Wire Wire Line
+	5400 4950 5400 5850
+Wire Wire Line
+	5800 5450 5800 5300
+Wire Wire Line
+	5800 5300 5600 5300
+Connection ~ 5600 5300
+Wire Wire Line
+	5600 5300 5600 5600
+Wire Wire Line
+	4800 5300 4800 5150
+Wire Wire Line
+	4800 5150 5000 5150
+Connection ~ 4800 5300
+Connection ~ 5000 5150
+Wire Wire Line
+	4600 5300 4800 5300
+Wire Wire Line
+	5000 5150 5000 5850
+Wire Wire Line
+	4800 5300 4800 5600
+Wire Wire Line
+	4600 5300 4600 5450
+Connection ~ 4600 5450
+Wire Wire Line
+	4600 5450 4600 5850
+$Comp
+L power:VCC #PWR0146
+U 1 1 5ECE4C75
+P 7900 4050
+F 0 "#PWR0146" H 7900 3900 50  0001 C CNN
+F 1 "VCC" H 7917 4223 50  0000 C CNN
+F 2 "" H 7900 4050 50  0001 C CNN
+F 3 "" H 7900 4050 50  0001 C CNN
+	1    7900 4050
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	1650 5750 1650 6550
 Wire Bus Line

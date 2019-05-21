@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 5
+Sheet 4 5
 Title ""
 Date ""
 Rev ""
@@ -113,22 +113,14 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS574" H 8200 5450 50  0001 C CNN
 	1    8200 5450
 	1    0    0    -1  
 $EndComp
-Entry Wire Line
-	4500 1150 4400 1050
-Entry Wire Line
-	4500 1250 4400 1150
-Entry Wire Line
-	4500 1350 4400 1250
-Entry Wire Line
-	4500 1450 4400 1350
 Text Label 4500 1150 0    50   ~ 0
-PA0
+PD0
 Text Label 4500 1250 0    50   ~ 0
-PA1
+PD1
 Text Label 4500 1350 0    50   ~ 0
-PA2
+PD2
 Text Label 4500 1450 0    50   ~ 0
-PA3
+PD3
 Text Label 2300 1450 0    50   ~ 0
 H3
 Text Label 2300 1350 0    50   ~ 0
@@ -554,22 +546,14 @@ F 3 "" H 5300 850 50  0001 C CNN
 	1    5300 850 
 	1    0    0    -1  
 $EndComp
-Entry Wire Line
-	4500 3250 4400 3150
-Entry Wire Line
-	4500 3350 4400 3250
-Entry Wire Line
-	4500 3450 4400 3350
-Entry Wire Line
-	4500 3550 4400 3450
 Text Label 4500 3250 0    50   ~ 0
-PA4
+PD4
 Text Label 4500 3350 0    50   ~ 0
-PA5
+PD5
 Text Label 4500 3450 0    50   ~ 0
-PA6
+PD6
 Text Label 4500 3550 0    50   ~ 0
-PA7
+PD7
 Wire Wire Line
 	4500 1150 4800 1150
 Wire Wire Line
@@ -578,8 +562,6 @@ Wire Wire Line
 	4500 1350 4800 1350
 Wire Wire Line
 	4500 1450 4800 1450
-Text GLabel 4400 1050 1    50   Input ~ 0
-PA[0..15]
 Wire Wire Line
 	4500 3550 4700 3550
 Wire Wire Line
@@ -974,8 +956,6 @@ Wire Wire Line
 Wire Wire Line
 	3400 5750 3450 5750
 Wire Wire Line
-	3450 5750 3450 5600
-Wire Wire Line
 	3400 6150 3550 6150
 Wire Wire Line
 	3550 6150 3550 5700
@@ -996,8 +976,6 @@ Text GLabel 3900 6400 0    50   Input ~ 0
 1
 Wire Wire Line
 	2300 6000 2300 6500
-Wire Wire Line
-	3450 6400 2600 6400
 Entry Wire Line
 	2500 6300 2600 6400
 Text Label 2600 6400 0    50   ~ 0
@@ -1005,19 +983,13 @@ SC3
 Text GLabel 3900 6700 0    50   Input ~ 0
 0
 Wire Wire Line
-	3450 6400 3450 6300
-Wire Wire Line
 	3650 6500 3650 5800
 Wire Wire Line
 	2300 6500 3650 6500
 Wire Wire Line
-	3450 6300 3900 6300
-Wire Wire Line
 	3650 5800 3900 5800
 Wire Wire Line
 	2600 5500 3900 5500
-Wire Wire Line
-	3450 5600 3900 5600
 Wire Wire Line
 	3550 5700 3900 5700
 Text GLabel 2500 5300 1    50   Output ~ 0
@@ -1466,10 +1438,10 @@ vblank
 Text GLabel 6700 2150 0    50   Input ~ 0
 vblank
 $Comp
-L Device:R_Network09_US RN3
+L Device:R_Network09_US RN6
 U 1 1 5FA45019
 P 8300 3900
-F 0 "RN3" V 8925 3900 50  0000 C CNN
+F 0 "RN6" V 8925 3900 50  0000 C CNN
 F 1 "4610X-R2R-103LF" V 8834 3900 50  0000 C CNN
 F 2 "Resistor_THT:R_Array_SIP10" V 8875 3900 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 8300 3900 50  0001 C CNN
@@ -1677,7 +1649,7 @@ Wire Wire Line
 Wire Wire Line
 	8100 1850 8300 1850
 Text GLabel 10000 1300 0    50   Output ~ 0
-vdac2r
+vdac0r
 Text GLabel 9700 1450 2    50   Output ~ 0
 vdac1g
 Text GLabel 9700 1150 2    50   Output ~ 0
@@ -1823,7 +1795,7 @@ Wire Wire Line
 Text GLabel 10050 3800 2    50   Input ~ 0
 cclk
 Text GLabel 10000 1900 0    50   Output ~ 0
-vdac2g
+vdac0g
 Text GLabel 9700 1750 2    50   Output ~ 0
 vdac1b
 Text Label 10600 1200 0    50   ~ 0
@@ -1859,7 +1831,7 @@ Wire Wire Line
 Wire Wire Line
 	10100 2400 10200 2400
 Text GLabel 10000 2500 0    50   Output ~ 0
-vdac2b
+vdac0b
 Wire Wire Line
 	10000 1900 10100 1900
 Wire Wire Line
@@ -2024,7 +1996,41 @@ Wire Wire Line
 Text Notes 8150 7650 0    66   ~ 0
 May 19, 2019
 Text Notes 7350 7500 0    66   Italic 13
-YATAC GPU
+Graphics Processing Unit
+Wire Wire Line
+	2600 6400 3350 6400
+Wire Wire Line
+	3350 6400 3350 6300
+Wire Wire Line
+	3350 6300 3900 6300
+Entry Wire Line
+	4500 3350 4400 3250
+Entry Wire Line
+	4500 3450 4400 3350
+Entry Wire Line
+	4500 3550 4400 3450
+Entry Wire Line
+	4500 3250 4400 3150
+Entry Wire Line
+	4500 1250 4400 1150
+Entry Wire Line
+	4500 1350 4400 1250
+Entry Wire Line
+	4500 1450 4400 1350
+Entry Wire Line
+	4500 1150 4400 1050
+Text GLabel 4400 1050 1    50   Input ~ 0
+PD[0..7]
+Text GLabel 3650 5350 1    50   Input ~ 0
+U3Dyi
+Text GLabel 3450 5350 1    50   Output ~ 0
+U3Dyo
+Wire Wire Line
+	3450 5350 3450 5750
+Wire Wire Line
+	3650 5350 3650 5600
+Wire Wire Line
+	3650 5600 3900 5600
 Wire Bus Line
 	5100 6000 5100 6250
 Wire Bus Line
@@ -2032,17 +2038,19 @@ Wire Bus Line
 Wire Bus Line
 	2600 2600 3700 2600
 Wire Bus Line
-	4400 1050 4400 3450
-Wire Bus Line
 	8000 1050 8000 1750
 Wire Bus Line
 	8800 3700 8800 4400
 Wire Bus Line
 	6300 1050 6300 1750
 Wire Bus Line
+	4400 1050 4400 3450
+Wire Bus Line
 	10800 1050 10800 2500
 Wire Bus Line
 	7400 4750 7400 5550
+Wire Bus Line
+	9000 4500 9000 5550
 Wire Bus Line
 	6900 5300 6900 6100
 Wire Bus Line
@@ -2055,6 +2063,4 @@ Wire Bus Line
 	4100 3350 4100 4150
 Wire Bus Line
 	2500 1250 2500 3850
-Wire Bus Line
-	9000 4500 9000 5550
 $EndSCHEMATC
