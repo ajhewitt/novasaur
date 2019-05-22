@@ -5,11 +5,11 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 2 5
-Title ""
-Date ""
-Rev ""
+Title "Central Processing Unit"
+Date "2019-05-22"
+Rev "0.4"
 Comp ""
-Comment1 ""
+Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
 Comment3 ""
 Comment4 ""
@@ -34,7 +34,7 @@ Text GLabel 3800 2550 2    50   Input ~ 0
 Text GLabel 3800 2250 2    50   Input ~ 0
 0
 Text GLabel 3800 2350 2    50   Input ~ 0
-1
+dcs
 Entry Wire Line
 	4100 1450 4000 1350
 Entry Wire Line
@@ -623,12 +623,8 @@ Wire Wire Line
 	10400 1450 10600 1450
 Wire Wire Line
 	10400 1550 10600 1550
-Wire Wire Line
-	10400 1650 10600 1650
 Entry Wire Line
 	10600 1350 10700 1250
-Entry Wire Line
-	10600 1650 10700 1550
 Entry Wire Line
 	10600 1550 10700 1450
 Entry Wire Line
@@ -1109,7 +1105,7 @@ DA[0..15]
 Text GLabel 7600 5950 3    50   Input ~ 0
 PA[0..15]
 Text GLabel 10700 1150 1    50   Output ~ 0
-Eo[0..3]
+Eo[0..2]
 Text GLabel 4100 5850 1    50   Input ~ 0
 Ei[0..3]
 Text GLabel 4100 6850 3    50   Input ~ 0
@@ -1500,8 +1496,6 @@ Text Label 10450 1450 0    50   ~ 0
 Eo1
 Text Label 10450 1550 0    50   ~ 0
 Eo2
-Text Label 10450 1650 0    50   ~ 0
-Eo3
 Text Label 1000 1350 0    50   ~ 0
 PD0
 Text Label 1000 1450 0    50   ~ 0
@@ -2154,10 +2148,6 @@ Wire Wire Line
 	4000 6150 3800 6150
 Text GLabel 2250 5150 1    50   Input ~ 0
 DD[0..7]
-Text Notes 8150 7650 0    66   ~ 0
-May 19, 2019
-Text Notes 7350 7500 0    66   Italic 13
-Central Processing Unit
 Wire Wire Line
 	5600 4400 5700 4400
 Wire Wire Line
@@ -2318,14 +2308,39 @@ Wire Wire Line
 	6000 5250 6300 5250
 Wire Wire Line
 	6000 5350 6300 5350
+$Comp
+L 74xx:74LS00 U?
+U 4 1 5CF33C64
+P 10700 2750
+AR Path="/62D13D9D/5CF33C64" Ref="U?"  Part="4" 
+AR Path="/5DAA19D5/5CF33C64" Ref="U7"  Part="4" 
+F 0 "U7" H 10700 2750 50  0000 C CNN
+F 1 "74F00" H 10700 2550 50  0001 C CNN
+F 2 "" H 10700 2750 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74ls00" H 10700 2750 50  0001 C CNN
+	4    10700 2750
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	10400 1650 10800 1650
+Text GLabel 10600 2450 1    50   Input ~ 0
+qclk2
+Text GLabel 10500 3100 0    50   Output ~ 0
+dcs
+Wire Wire Line
+	10800 1650 10800 2450
+Wire Wire Line
+	10500 3100 10700 3100
+Wire Wire Line
+	10700 3100 10700 3050
+Wire Bus Line
+	10700 1150 10700 1450
 Wire Bus Line
 	4100 5850 4100 6150
 Wire Bus Line
 	4100 6450 4100 6850
 Wire Bus Line
 	2500 6450 2500 6850
-Wire Bus Line
-	10700 1150 10700 1550
 Wire Bus Line
 	5900 3100 5900 3800
 Wire Bus Line

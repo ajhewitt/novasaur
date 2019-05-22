@@ -5,11 +5,11 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 3 5
-Title ""
-Date ""
-Rev ""
+Title "Execution and Control Unit"
+Date "2019-05-22"
+Rev "0.4"
 Comp ""
-Comment1 ""
+Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
 Comment3 ""
 Comment4 ""
@@ -157,14 +157,14 @@ $EndComp
 $Comp
 L 74xx:74LS04 U?
 U 4 1 5DB9317D
-P 5000 3950
+P 5000 2900
 AR Path="/5CDEEC9F/5DB9317D" Ref="U?"  Part="4" 
 AR Path="/5DAA5CD8/5DB9317D" Ref="U8"  Part="4" 
-F 0 "U8" H 4950 3950 50  0000 C CNN
-F 1 "74F04" H 5000 4176 50  0001 C CNN
-F 2 "" H 5000 3950 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 5000 3950 50  0001 C CNN
-	4    5000 3950
+F 0 "U8" H 4950 2900 50  0000 C CNN
+F 1 "74F04" H 5000 3126 50  0001 C CNN
+F 2 "" H 5000 2900 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 5000 2900 50  0001 C CNN
+	4    5000 2900
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -421,14 +421,14 @@ $EndComp
 $Comp
 L 74xx:74LS32 U?
 U 4 1 5DB93208
-P 7000 5850
+P 7000 6050
 AR Path="/5CDEEC9F/5DB93208" Ref="U?"  Part="4" 
 AR Path="/5DAA5CD8/5DB93208" Ref="U4"  Part="4" 
-F 0 "U4" H 7000 5850 50  0000 C CNN
-F 1 "74F32" H 7000 5650 50  0001 C CNN
-F 2 "" H 7000 5850 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 7000 5850 50  0001 C CNN
-	4    7000 5850
+F 0 "U4" H 7000 6050 50  0000 C CNN
+F 1 "74F32" H 7000 5850 50  0001 C CNN
+F 2 "" H 7000 6050 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 7000 6050 50  0001 C CNN
+	4    7000 6050
 	1    0    0    -1  
 $EndComp
 Entry Wire Line
@@ -541,40 +541,40 @@ $EndComp
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB93245
-P 5200 5750
+P 5200 5650
 AR Path="/5CDEEC9F/5DB93245" Ref="D?"  Part="1" 
 AR Path="/5DAA5CD8/5DB93245" Ref="D5"  Part="1" 
-F 0 "D5" V 5300 5700 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 5200 5875 50  0001 C CNN
-F 2 "" H 5200 5750 50  0001 C CNN
-F 3 "~" H 5200 5750 50  0001 C CNN
-	1    5200 5750
+F 0 "D5" V 5300 5600 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 5200 5775 50  0001 C CNN
+F 2 "" H 5200 5650 50  0001 C CNN
+F 3 "~" H 5200 5650 50  0001 C CNN
+	1    5200 5650
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB9324B
-P 4800 5750
+P 4800 5650
 AR Path="/5CDEEC9F/5DB9324B" Ref="D?"  Part="1" 
 AR Path="/5DAA5CD8/5DB9324B" Ref="D3"  Part="1" 
-F 0 "D3" V 4900 5700 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 4800 5875 50  0001 C CNN
-F 2 "" H 4800 5750 50  0001 C CNN
-F 3 "~" H 4800 5750 50  0001 C CNN
-	1    4800 5750
+F 0 "D3" V 4900 5600 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 4800 5775 50  0001 C CNN
+F 2 "" H 4800 5650 50  0001 C CNN
+F 3 "~" H 4800 5650 50  0001 C CNN
+	1    4800 5650
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB93251
-P 6000 5750
+P 6000 5650
 AR Path="/5CDEEC9F/5DB93251" Ref="D?"  Part="1" 
 AR Path="/5DAA5CD8/5DB93251" Ref="D9"  Part="1" 
-F 0 "D9" V 6100 5700 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 6000 5875 50  0001 C CNN
-F 2 "" H 6000 5750 50  0001 C CNN
-F 3 "~" H 6000 5750 50  0001 C CNN
-	1    6000 5750
+F 0 "D9" V 6100 5600 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 6000 5775 50  0001 C CNN
+F 2 "" H 6000 5650 50  0001 C CNN
+F 3 "~" H 6000 5650 50  0001 C CNN
+	1    6000 5650
 	0    -1   -1   0   
 $EndComp
 $Comp
@@ -621,14 +621,14 @@ $EndComp
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB9326C
-P 8500 5600
+P 8500 5750
 AR Path="/5CDEEC9F/5DB9326C" Ref="D?"  Part="1" 
 AR Path="/5DAA5CD8/5DB9326C" Ref="D14"  Part="1" 
-F 0 "D14" V 8500 5521 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 8500 5725 50  0001 C CNN
-F 2 "" H 8500 5600 50  0001 C CNN
-F 3 "~" H 8500 5600 50  0001 C CNN
-	1    8500 5600
+F 0 "D14" V 8500 5671 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 8500 5875 50  0001 C CNN
+F 2 "" H 8500 5750 50  0001 C CNN
+F 3 "~" H 8500 5750 50  0001 C CNN
+	1    8500 5750
 	0    -1   -1   0   
 $EndComp
 Text GLabel 8900 4750 2    50   Output ~ 0
@@ -642,22 +642,22 @@ Text GLabel 8900 5050 2    50   Output ~ 0
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB93276
-P 8700 5300
+P 8700 5400
 AR Path="/5CDEEC9F/5DB93276" Ref="D?"  Part="1" 
 AR Path="/5DAA5CD8/5DB93276" Ref="D13"  Part="1" 
-F 0 "D13" V 8700 5221 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 8700 5425 50  0001 C CNN
-F 2 "" H 8700 5300 50  0001 C CNN
-F 3 "~" H 8700 5300 50  0001 C CNN
-	1    8700 5300
+F 0 "D13" V 8700 5321 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 8700 5525 50  0001 C CNN
+F 2 "" H 8700 5400 50  0001 C CNN
+F 3 "~" H 8700 5400 50  0001 C CNN
+	1    8700 5400
 	0    -1   -1   0   
 $EndComp
-Text GLabel 8850 5500 2    50   Input ~ 0
+Text GLabel 8850 5600 2    50   Input ~ 0
 qclk1
-Text GLabel 8900 5850 2    50   Output ~ 0
+Text GLabel 8900 6050 2    50   Output ~ 0
 ~dwe
 Wire Wire Line
-	8700 5500 8700 5450
+	8700 5600 8700 5550
 Wire Wire Line
 	900  7500 900  1700
 Wire Wire Line
@@ -689,13 +689,7 @@ F 3 "" H 7900 5650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7300 5850 8500 5850
-Wire Wire Line
-	6700 5950 6600 5950
-Wire Wire Line
-	6700 6250 6600 6250
-Wire Wire Line
-	8700 5050 8700 5150
+	7300 6050 8500 6050
 $Comp
 L Logic_Programmable:GAL16V8 U?
 U 1 1 5DB93291
@@ -812,33 +806,26 @@ $EndComp
 $Comp
 L Device:D_Schottky_ALT D?
 U 1 1 5DB932D0
-P 5600 5750
+P 5600 5650
 AR Path="/5CDEEC9F/5DB932D0" Ref="D?"  Part="1" 
 AR Path="/5DAA5CD8/5DB932D0" Ref="D7"  Part="1" 
-F 0 "D7" V 5700 5700 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 5600 5875 50  0001 C CNN
-F 2 "" H 5600 5750 50  0001 C CNN
-F 3 "~" H 5600 5750 50  0001 C CNN
-	1    5600 5750
+F 0 "D7" V 5700 5600 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 5600 5775 50  0001 C CNN
+F 2 "" H 5600 5650 50  0001 C CNN
+F 3 "~" H 5600 5650 50  0001 C CNN
+	1    5600 5650
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	7300 6250 7350 6250
-Wire Wire Line
-	7350 6250 7350 5350
+	7350 6250 7350 5650
 Wire Wire Line
 	7350 5350 7400 5350
-Connection ~ 7350 6250
 Connection ~ 8500 4750
 Connection ~ 8700 4950
 Wire Wire Line
 	8700 4950 8900 4950
 Wire Wire Line
 	8800 5050 8900 5050
-Wire Wire Line
-	8500 5850 8500 5750
-Wire Wire Line
-	8500 5450 8500 4750
 Connection ~ 8600 4850
 Wire Wire Line
 	8600 4850 8900 4850
@@ -877,8 +864,8 @@ F 3 "" H 8500 3800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	8900 5850 8500 5850
-Connection ~ 8500 5850
+	8900 6050 8500 6050
+Connection ~ 8500 6050
 NoConn ~ 8400 4650
 Wire Wire Line
 	7400 4350 3350 4350
@@ -896,7 +883,7 @@ Wire Wire Line
 Text GLabel 7400 4650 0    50   Input ~ 0
 1
 Wire Wire Line
-	8850 5500 8700 5500
+	8850 5600 8700 5600
 Entry Wire Line
 	3250 4650 3350 4550
 Text Label 3350 6350 0    50   ~ 0
@@ -1163,19 +1150,6 @@ F 3 "http://www.ti.com/lit/gpn/sn74ls00" H 5900 2800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74xx:74LS04 U?
-U 3 1 5DB9338F
-P 5000 2900
-AR Path="/5CDEEC9F/5DB9338F" Ref="U?"  Part="3" 
-AR Path="/5DAA5CD8/5DB9338F" Ref="U8"  Part="3" 
-F 0 "U8" H 4950 2900 50  0000 C CNN
-F 1 "74F04" H 5100 2750 50  0001 C CNN
-F 2 "" H 5000 2900 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 5000 2900 50  0001 C CNN
-	3    5000 2900
-	1    0    0    -1  
-$EndComp
-$Comp
 L 74xx:74LS00 U?
 U 2 1 5DB93395
 P 5000 3350
@@ -1191,15 +1165,15 @@ $EndComp
 $Comp
 L 74xx:74LS04 U?
 U 5 1 5DB9339B
-P 7000 6250
+P 5000 3950
 AR Path="/5CDEEC9F/5DB9339B" Ref="U?"  Part="5" 
 AR Path="/5DAA5CD8/5DB9339B" Ref="U8"  Part="5" 
-F 0 "U8" H 6950 6250 50  0000 C CNN
-F 1 "74F04" H 7150 6100 50  0001 C CNN
-F 2 "" H 7000 6250 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 7000 6250 50  0001 C CNN
-	5    7000 6250
-	-1   0    0    1   
+F 0 "U8" H 4950 3950 50  0000 C CNN
+F 1 "74F04" H 5150 3800 50  0001 C CNN
+F 2 "" H 5000 3950 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 5000 3950 50  0001 C CNN
+	5    5000 3950
+	1    0    0    -1  
 $EndComp
 $Comp
 L 74xx:74LS00 U?
@@ -1322,21 +1296,11 @@ Wire Wire Line
 Wire Wire Line
 	6400 6250 6350 6250
 Connection ~ 6400 6550
-Wire Wire Line
-	6400 6250 6400 5750
 Connection ~ 6400 6250
 Wire Wire Line
 	4550 6850 5400 6850
 Wire Wire Line
 	4550 6750 5800 6750
-Wire Wire Line
-	6700 5750 6400 5750
-Connection ~ 6400 5750
-Wire Wire Line
-	6600 7500 6600 6250
-Connection ~ 6600 6250
-Wire Wire Line
-	6600 5950 6600 6250
 Wire Wire Line
 	900  7500 6600 7500
 Entry Wire Line
@@ -1398,8 +1362,6 @@ Wire Wire Line
 	3500 2700 5600 2700
 Wire Wire Line
 	6400 3500 7150 3500
-Wire Wire Line
-	6400 3500 6400 5750
 Wire Wire Line
 	7150 3250 7150 3500
 Wire Wire Line
@@ -1473,10 +1435,6 @@ Wire Bus Line
 	3100 4850 3100 4750
 Wire Wire Line
 	2800 4650 3000 4650
-Text Notes 8150 7650 0    66   ~ 0
-May 19, 2019
-Text Notes 7350 7500 0    66   Italic 13
-Execution and Control Unit
 Wire Wire Line
 	3600 4650 3600 4850
 Connection ~ 6600 4850
@@ -1490,28 +1448,9 @@ Wire Wire Line
 	3350 4550 7400 4550
 Wire Wire Line
 	3600 4650 5450 4650
-$Comp
-L Device:D_Schottky_ALT D?
-U 1 1 5D19DB0A
-P 4300 5450
-AR Path="/5CDEEC9F/5D19DB0A" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5D19DB0A" Ref="D1"  Part="1" 
-F 0 "D1" H 4350 5600 50  0000 R CNN
-F 1 "D_Schottky_ALT" H 4300 5575 50  0001 C CNN
-F 2 "" H 4300 5450 50  0001 C CNN
-F 3 "~" H 4300 5450 50  0001 C CNN
-	1    4300 5450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6000 5900 6000 6950
 Connection ~ 6000 6950
 Wire Wire Line
 	6000 6950 6050 6950
-Text GLabel 4100 5450 0    50   Input ~ 0
-~jmp
-Wire Wire Line
-	4150 5450 4100 5450
 Wire Wire Line
 	4550 6550 5000 6550
 Wire Wire Line
@@ -1523,28 +1462,13 @@ Wire Wire Line
 	4550 6250 4600 6250
 Connection ~ 4600 6250
 Wire Wire Line
-	6000 5450 5800 5450
-Wire Wire Line
-	6000 5450 6000 5600
-Wire Wire Line
-	5800 5850 5800 5450
-Wire Wire Line
 	4600 6150 4600 6250
-Wire Wire Line
-	4800 5900 4800 6350
 Wire Wire Line
 	5000 6150 5000 6550
 Wire Wire Line
-	5200 5900 5200 6650
-Wire Wire Line
 	5400 6150 5400 6850
 Wire Wire Line
-	5600 5900 5600 6450
-Wire Wire Line
 	5800 6150 5800 6750
-Connection ~ 5800 5450
-Wire Wire Line
-	4450 5450 4600 5450
 Wire Wire Line
 	6500 4750 5000 4750
 Wire Wire Line
@@ -1553,38 +1477,6 @@ Wire Wire Line
 	6700 4950 5400 4950
 Wire Wire Line
 	6800 5050 5600 5050
-Wire Wire Line
-	5600 5050 5600 5300
-Wire Wire Line
-	5000 4750 5000 5150
-Wire Wire Line
-	5200 4850 5200 5600
-Wire Wire Line
-	5400 4950 5400 5850
-Wire Wire Line
-	5800 5450 5800 5300
-Wire Wire Line
-	5800 5300 5600 5300
-Connection ~ 5600 5300
-Wire Wire Line
-	5600 5300 5600 5600
-Wire Wire Line
-	4800 5300 4800 5150
-Wire Wire Line
-	4800 5150 5000 5150
-Connection ~ 4800 5300
-Connection ~ 5000 5150
-Wire Wire Line
-	4600 5300 4800 5300
-Wire Wire Line
-	5000 5150 5000 5850
-Wire Wire Line
-	4800 5300 4800 5600
-Wire Wire Line
-	4600 5300 4600 5450
-Connection ~ 4600 5450
-Wire Wire Line
-	4600 5450 4600 5850
 $Comp
 L power:VCC #PWR0146
 U 1 1 5ECE4C75
@@ -1596,6 +1488,112 @@ F 3 "" H 7900 4050 50  0001 C CNN
 	1    7900 4050
 	1    0    0    -1  
 $EndComp
+$Comp
+L 74xx:74LS04 U?
+U 6 1 5DD8861D
+P 7000 5650
+AR Path="/5DAA3954/5DD8861D" Ref="U?"  Part="6" 
+AR Path="/5DAA5CD8/5DD8861D" Ref="U8"  Part="6" 
+F 0 "U8" H 6950 5650 50  0000 C CNN
+F 1 "74F04" H 7000 5450 50  0001 C CNN
+F 2 "" H 7000 5650 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 7000 5650 50  0001 C CNN
+	6    7000 5650
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5600 5500 5600 5250
+Wire Wire Line
+	5600 5800 5600 6450
+Wire Wire Line
+	6000 5800 6000 6950
+Wire Wire Line
+	5400 5850 5400 4950
+Wire Wire Line
+	5200 5500 5200 4850
+Wire Wire Line
+	5200 5800 5200 6650
+Wire Wire Line
+	4800 5800 4800 6350
+Wire Wire Line
+	6000 5400 5800 5400
+Wire Wire Line
+	6000 5400 6000 5500
+Connection ~ 5800 5400
+Wire Wire Line
+	5800 5400 5800 5850
+Wire Wire Line
+	5800 5250 5600 5250
+Wire Wire Line
+	5800 5250 5800 5400
+Connection ~ 5600 5250
+Wire Wire Line
+	5600 5050 5600 5250
+Wire Wire Line
+	4800 5250 4800 5400
+Wire Wire Line
+	4800 5400 4800 5500
+Connection ~ 4800 5400
+Wire Wire Line
+	4600 5400 4800 5400
+Wire Wire Line
+	5000 5850 5000 5250
+Connection ~ 5000 5250
+Wire Wire Line
+	4800 5250 5000 5250
+Wire Wire Line
+	5000 4750 5000 5250
+Connection ~ 4600 5550
+Wire Wire Line
+	4600 5400 4600 5550
+Wire Wire Line
+	4600 5850 4600 5550
+Wire Wire Line
+	4450 5550 4600 5550
+Wire Wire Line
+	4150 5550 4100 5550
+Text GLabel 4100 5550 0    50   Input ~ 0
+~jmp
+$Comp
+L Device:D_Schottky_ALT D?
+U 1 1 5D19DB0A
+P 4300 5550
+AR Path="/5CDEEC9F/5D19DB0A" Ref="D?"  Part="1" 
+AR Path="/5DAA5CD8/5D19DB0A" Ref="D1"  Part="1" 
+F 0 "D1" H 4350 5700 50  0000 R CNN
+F 1 "D_Schottky_ALT" H 4300 5675 50  0001 C CNN
+F 2 "" H 4300 5550 50  0001 C CNN
+F 3 "~" H 4300 5550 50  0001 C CNN
+	1    4300 5550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6400 3500 6400 5950
+Wire Wire Line
+	8500 4750 8500 5600
+Wire Wire Line
+	6700 5950 6400 5950
+Connection ~ 6400 5950
+Wire Wire Line
+	6700 6150 6600 6150
+Connection ~ 6600 6150
+Wire Wire Line
+	6600 6150 6600 7500
+Wire Wire Line
+	6400 5950 6400 6250
+Wire Wire Line
+	6700 5650 6600 5650
+Wire Wire Line
+	6600 5650 6600 6150
+Wire Wire Line
+	7300 5650 7350 5650
+Connection ~ 7350 5650
+Wire Wire Line
+	7350 5350 7350 5650
+Wire Wire Line
+	8700 5050 8700 5250
+Wire Wire Line
+	8500 5900 8500 6050
 Wire Bus Line
 	1650 5750 1650 6550
 Wire Bus Line

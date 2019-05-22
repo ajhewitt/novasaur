@@ -5,11 +5,11 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 4 5
-Title ""
-Date ""
-Rev ""
+Title "Graphics Processing Unit"
+Date "2019-05-22"
+Rev "0.4"
 Comp ""
-Comment1 ""
+Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
 Comment3 ""
 Comment4 ""
@@ -711,17 +711,6 @@ Wire Wire Line
 	2200 3750 2300 3750
 Wire Wire Line
 	2300 3750 2300 4550
-$Comp
-L 74xx:74LS04 U8
-U 6 1 5E74147A
-P 2650 4550
-F 0 "U8" H 2600 4550 50  0000 C CNN
-F 1 "74F04" H 2650 4350 50  0001 C CNN
-F 2 "" H 2650 4550 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 2650 4550 50  0001 C CNN
-	6    2650 4550
-	1    0    0    -1  
-$EndComp
 Text GLabel 1200 1250 0    50   Input ~ 0
 0
 Text GLabel 1200 1150 0    50   Input ~ 0
@@ -871,8 +860,6 @@ Text GLabel 1200 6000 0    50   Input ~ 0
 1
 Text GLabel 1200 6100 0    50   Input ~ 0
 1
-Text Label 2250 5800 0    50   ~ 0
-SC3
 Text Label 2250 5700 0    50   ~ 0
 SC2
 Text Label 2250 5600 0    50   ~ 0
@@ -890,75 +877,51 @@ Wire Wire Line
 Entry Wire Line
 	2500 5400 2400 5500
 Entry Wire Line
-	2500 5700 2400 5800
-Entry Wire Line
 	2500 5600 2400 5700
 Entry Wire Line
 	2500 5500 2400 5600
 $Comp
 L 74xx:74LS11 U10
 U 2 1 5E8C5299
-P 3100 6150
-F 0 "U10" H 3100 6150 50  0000 C CNN
-F 1 "74F11" H 3100 5950 50  0001 C CNN
-F 2 "" H 3100 6150 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS11" H 3100 6150 50  0001 C CNN
-	2    3100 6150
+P 3100 5950
+F 0 "U10" H 3100 5950 50  0000 C CNN
+F 1 "74F11" H 3100 5750 50  0001 C CNN
+F 2 "" H 3100 5950 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS11" H 3100 5950 50  0001 C CNN
+	2    3100 5950
 	1    0    0    -1  
 $EndComp
 $Comp
 L 74xx:74LS08 U3
 U 4 1 5E8CEEC7
-P 3100 5750
-F 0 "U3" H 3100 5750 50  0000 C CNN
-F 1 "74F08" H 3100 5550 50  0001 C CNN
-F 2 "" H 3100 5750 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3100 5750 50  0001 C CNN
-	4    3100 5750
+P 3100 6550
+F 0 "U3" H 3100 6550 50  0000 C CNN
+F 1 "74F08" H 3100 6350 50  0001 C CNN
+F 2 "" H 3100 6550 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3100 6550 50  0001 C CNN
+	4    3100 6550
 	1    0    0    -1  
 $EndComp
 Entry Wire Line
 	2500 5400 2600 5500
-Entry Wire Line
-	2500 5750 2600 5850
 Text Label 2600 5500 0    50   ~ 0
 SC0
-Text Label 2600 5850 0    50   ~ 0
-SC1
-Wire Wire Line
-	2300 6000 2200 6000
-Entry Wire Line
-	2500 6150 2600 6250
-Text Label 2600 6250 0    50   ~ 0
+Text Label 2600 6050 0    50   ~ 0
 SC2
 Wire Wire Line
-	2600 6050 2800 6050
-Text Label 2600 6050 0    50   ~ 0
+	2600 5850 2800 5850
+Text Label 2600 5850 0    50   ~ 0
 SC0
 Entry Wire Line
-	2500 6050 2600 6150
+	2500 5850 2600 5950
 Entry Wire Line
-	2500 5950 2600 6050
-Entry Wire Line
-	2500 5550 2600 5650
+	2500 5750 2600 5850
 Wire Wire Line
-	2600 6150 2800 6150
-Text Label 2600 6150 0    50   ~ 0
+	2600 5950 2800 5950
+Text Label 2600 5950 0    50   ~ 0
 SC1
 Wire Wire Line
-	2600 5650 2800 5650
-Text Label 2600 5650 0    50   ~ 0
-SC0
-Wire Wire Line
-	2600 5850 2800 5850
-Wire Wire Line
-	2600 6250 2800 6250
-Wire Wire Line
-	3400 5750 3450 5750
-Wire Wire Line
-	3400 6150 3550 6150
-Wire Wire Line
-	3550 6150 3550 5700
+	2600 6050 2800 6050
 $Comp
 L power:GNDD #PWR0119
 U 1 1 5EBAD5CD
@@ -974,26 +937,12 @@ Text GLabel 3900 6200 0    50   Input ~ 0
 0
 Text GLabel 3900 6400 0    50   Input ~ 0
 1
-Wire Wire Line
-	2300 6000 2300 6500
-Entry Wire Line
-	2500 6300 2600 6400
-Text Label 2600 6400 0    50   ~ 0
-SC3
 Text GLabel 3900 6700 0    50   Input ~ 0
 0
 Wire Wire Line
-	3650 6500 3650 5800
-Wire Wire Line
-	2300 6500 3650 6500
-Wire Wire Line
-	3650 5800 3900 5800
-Wire Wire Line
 	2600 5500 3900 5500
-Wire Wire Line
-	3550 5700 3900 5700
 Text GLabel 2500 5300 1    50   Output ~ 0
-SC[0..3]
+SC[0..2]
 $Comp
 L power:VCC #PWR0120
 U 1 1 5EDB72C3
@@ -1024,7 +973,7 @@ SC1
 Wire Wire Line
 	5400 5700 5600 5700
 Text GLabel 5300 5300 1    50   Input ~ 0
-SC[0..3]
+SC[0..2]
 Text GLabel 5100 6250 3    50   Input ~ 0
 C[0..7]
 Text GLabel 5600 6400 0    50   Input ~ 0
@@ -1993,16 +1942,6 @@ Wire Wire Line
 	10450 3300 9800 3300
 Wire Wire Line
 	9800 3150 10550 3150
-Text Notes 8150 7650 0    66   ~ 0
-May 19, 2019
-Text Notes 7350 7500 0    66   Italic 13
-Graphics Processing Unit
-Wire Wire Line
-	2600 6400 3350 6400
-Wire Wire Line
-	3350 6400 3350 6300
-Wire Wire Line
-	3350 6300 3900 6300
 Entry Wire Line
 	4500 3350 4400 3250
 Entry Wire Line
@@ -2021,22 +1960,76 @@ Entry Wire Line
 	4500 1150 4400 1050
 Text GLabel 4400 1050 1    50   Input ~ 0
 PD[0..7]
-Text GLabel 3650 5350 1    50   Input ~ 0
+Text GLabel 3700 5600 0    50   Input ~ 0
 U3Dyi
-Text GLabel 3450 5350 1    50   Output ~ 0
+Text GLabel 3400 6550 2    50   Output ~ 0
 U3Dyo
+Entry Wire Line
+	2500 5950 2600 6050
 Wire Wire Line
-	3450 5350 3450 5750
+	2400 6300 2400 5800
 Wire Wire Line
-	3650 5350 3650 5600
+	2400 6300 3900 6300
 Wire Wire Line
-	3650 5600 3900 5600
+	3900 5600 3700 5600
+Text GLabel 2800 6450 0    50   Input ~ 0
+U3Dai
+Text GLabel 2800 6650 0    50   Input ~ 0
+U3Dbi
+Text Label 2600 5700 0    50   ~ 0
+SC1
+Entry Wire Line
+	2500 5500 2600 5600
+Wire Wire Line
+	2600 5600 2800 5600
+Text Label 2600 5600 0    50   ~ 0
+SC0
+Entry Wire Line
+	2500 5600 2600 5700
+Wire Wire Line
+	2600 5700 2800 5700
+Text GLabel 2800 5600 2    50   Input ~ 0
+U3Dao
+Text GLabel 2800 5700 2    50   Input ~ 0
+U3Dbo
+Wire Wire Line
+	2200 6000 2300 6000
+Wire Wire Line
+	2300 6000 2300 6200
+Wire Wire Line
+	2300 6200 3600 6200
+Wire Wire Line
+	3400 5950 3500 5950
+Wire Wire Line
+	3500 5950 3500 5700
+Wire Wire Line
+	3500 5700 3900 5700
+Wire Wire Line
+	3600 6200 3600 5800
+Wire Wire Line
+	3600 5800 3900 5800
+$Comp
+L 74xx:74LS04 U?
+U 3 1 5DD2243C
+P 2650 4550
+AR Path="/5CDEEC9F/5DD2243C" Ref="U?"  Part="3" 
+AR Path="/5DAA5CD8/5DD2243C" Ref="U?"  Part="3" 
+AR Path="/5DAA3954/5DD2243C" Ref="U8"  Part="3" 
+F 0 "U8" H 2600 4550 50  0000 C CNN
+F 1 "74F04" H 2750 4400 50  0001 C CNN
+F 2 "" H 2650 4550 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 2650 4550 50  0001 C CNN
+	3    2650 4550
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	5100 6000 5100 6250
 Wire Bus Line
 	5300 5300 5300 5600
 Wire Bus Line
 	2600 2600 3700 2600
+Wire Bus Line
+	2500 5300 2500 5950
 Wire Bus Line
 	8000 1050 8000 1750
 Wire Bus Line
@@ -2053,8 +2046,6 @@ Wire Bus Line
 	9000 4500 9000 5550
 Wire Bus Line
 	6900 5300 6900 6100
-Wire Bus Line
-	2500 5300 2500 6300
 Wire Bus Line
 	7700 3350 7700 4150
 Wire Bus Line
