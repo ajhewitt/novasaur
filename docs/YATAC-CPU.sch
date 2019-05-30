@@ -949,7 +949,7 @@ DA[0..15]
 Text GLabel 7600 5950 3    50   Input ~ 0
 PA[0..15]
 Text GLabel 10800 1150 1    50   Output ~ 0
-Eo[0..3]
+Eo[0..1]
 Text GLabel 4100 5850 1    50   Input ~ 0
 Ei[0..3]
 Text GLabel 4100 6850 3    50   Input ~ 0
@@ -2168,9 +2168,9 @@ F 3 "http://ww1.microchip.com/downloads/en/devicedoc/doc0570.pdf" H 8400 2450 50
 	1    0    0    -1  
 $EndComp
 Entry Wire Line
-	10800 1750 10700 1650
+	10700 1550 10800 1650
 Entry Wire Line
-	10800 1650 10700 1550
+	10700 1650 10800 1750
 Text Label 10550 1550 0    50   ~ 0
 Eo2
 Text Label 10550 1650 0    50   ~ 0
@@ -2208,18 +2208,9 @@ Eo3
 Wire Wire Line
 	10400 3400 10450 3400
 Wire Wire Line
-	10450 3400 10450 3800
-Wire Wire Line
-	10450 3800 10400 3800
-Wire Wire Line
-	10450 3800 10550 3800
-Connection ~ 10450 3800
-Wire Wire Line
 	10400 3200 10700 3200
-Wire Wire Line
-	10400 3600 10700 3600
 Text GLabel 10550 3800 2    50   Input ~ 0
-pclk1
+qclk1
 Text GLabel 9700 3300 0    50   Output ~ 0
 DA17
 Text GLabel 9700 3700 0    50   Output ~ 0
@@ -2362,20 +2353,34 @@ Wire Wire Line
 Text GLabel 1200 6550 0    50   Input ~ 0
 ~aoe
 $Comp
-L 74xx:74LS00 U?
-U 3 1 5E5646FF
+L 74xx:74LS00 U7
+U 4 1 5D7B5DAE
 P 10100 3300
-AR Path="/5DAA5CD8/5E5646FF" Ref="U?"  Part="3" 
-AR Path="/5DAA19D5/5E5646FF" Ref="U2"  Part="3" 
-F 0 "U2" H 10100 3300 50  0000 C CNN
-F 1 "74F00" H 10050 3100 50  0001 C CNN
+AR Path="/5DAA19D5/5D7B5DAE" Ref="U7"  Part="4" 
+AR Path="/62D13D9D/5D7B5DAE" Ref="U?"  Part="4" 
+AR Path="/5DAA5CD8/5D7B5DAE" Ref="U?"  Part="4" 
+F 0 "U7" H 10100 3300 50  0000 C CNN
+F 1 "74F00" H 10100 3500 50  0001 C CNN
 F 2 "" H 10100 3300 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74ls00" H 10100 3300 50  0001 C CNN
-	3    10100 3300
+	4    10100 3300
 	-1   0    0    1   
 $EndComp
+Wire Wire Line
+	10400 3800 10450 3800
+Connection ~ 10450 3800
+Wire Wire Line
+	10450 3800 10550 3800
+Wire Wire Line
+	10400 3600 10700 3600
+Wire Wire Line
+	10450 3400 10450 3800
+Wire Bus Line
+	10800 1150 10800 1350
 Wire Bus Line
 	4100 5850 4100 6150
+Wire Bus Line
+	10800 1650 10800 3500
 Wire Bus Line
 	4100 6450 4100 6850
 Wire Bus Line
@@ -2386,8 +2391,6 @@ Wire Bus Line
 	5900 4000 5900 5250
 Wire Bus Line
 	6000 5550 6000 6250
-Wire Bus Line
-	10800 1150 10800 3500
 Wire Bus Line
 	10800 4350 10800 5450
 Wire Bus Line

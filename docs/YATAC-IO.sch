@@ -1160,7 +1160,7 @@ Entry Wire Line
 Text GLabel 4500 7150 3    50   Output ~ 0
 Ei[0..3]
 Text GLabel 4500 6150 1    50   Input ~ 0
-Eo[0..3]
+Eo[0..2]
 Text Label 4600 6750 0    50   ~ 0
 Ei2
 Text Label 4600 6950 0    50   ~ 0
@@ -1812,8 +1812,8 @@ U 1 1 5CFF29F6
 P 4900 6400
 AR Path="/5CDEEC9F/5CFF29F6" Ref="D?"  Part="1" 
 AR Path="/5DAA5CD8/5CFF29F6" Ref="D?"  Part="1" 
-AR Path="/62D13D9D/5CFF29F6" Ref="D11"  Part="1" 
-F 0 "D11" V 4900 6250 50  0000 C CNN
+AR Path="/62D13D9D/5CFF29F6" Ref="D13"  Part="1" 
+F 0 "D13" V 4900 6250 50  0000 C CNN
 F 1 "D_Schottky_ALT" H 4900 6525 50  0001 C CNN
 F 2 "" H 4900 6400 50  0001 C CNN
 F 3 "~" H 4900 6400 50  0001 C CNN
@@ -1897,33 +1897,81 @@ F 3 "http://www.ti.com/lit/gpn/sn74ls00" H 7950 1500 50  0001 C CNN
 	5    7950 1500
 	1    0    0    -1  
 $EndComp
-Text GLabel 3350 3000 2    50   Input ~ 0
+Text GLabel 3200 3050 2    50   Input ~ 0
 mode1
-Text GLabel 3350 2800 2    50   Input ~ 0
+Text GLabel 3200 2750 2    50   Input ~ 0
 mode0
-$Comp
-L 74xx:74LS00 U?
-U 4 1 5E630F5E
-P 3050 2900
-AR Path="/5DAA19D5/5E630F5E" Ref="U?"  Part="4" 
-AR Path="/62D13D9D/5E630F5E" Ref="U7"  Part="4" 
-AR Path="/5DAA5CD8/5E630F5E" Ref="U?"  Part="4" 
-F 0 "U7" H 3050 2900 50  0000 C CNN
-F 1 "74F00" H 3050 3100 50  0001 C CNN
-F 2 "" H 3050 2900 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74ls00" H 3050 2900 50  0001 C CNN
-	4    3050 2900
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	2700 3650 2700 2900
-Wire Wire Line
-	2700 2900 2750 2900
 Connection ~ 4200 3250
 Wire Wire Line
 	3900 2550 4200 2550
 Wire Wire Line
 	3900 3250 4200 3250
+$Comp
+L Device:R_US R14
+U 1 1 5D7E4544
+P 2700 2400
+F 0 "R14" H 2800 2450 50  0000 L CNN
+F 1 "1k" H 2800 2350 50  0000 L CNN
+F 2 "" V 2740 2390 50  0001 C CNN
+F 3 "~" H 2700 2400 50  0001 C CNN
+	1    2700 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D_Schottky_ALT D?
+U 1 1 5D86245D
+P 2950 2750
+AR Path="/5CDEEC9F/5D86245D" Ref="D?"  Part="1" 
+AR Path="/5DAA5CD8/5D86245D" Ref="D?"  Part="1" 
+AR Path="/62D13D9D/5D86245D" Ref="D11"  Part="1" 
+F 0 "D11" H 2950 2600 50  0000 C CNN
+F 1 "D_Schottky_ALT" H 2950 2875 50  0001 C CNN
+F 2 "" H 2950 2750 50  0001 C CNN
+F 3 "~" H 2950 2750 50  0001 C CNN
+	1    2950 2750
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:D_Schottky_ALT D?
+U 1 1 5D882DE1
+P 2950 3050
+AR Path="/5CDEEC9F/5D882DE1" Ref="D?"  Part="1" 
+AR Path="/5DAA5CD8/5D882DE1" Ref="D?"  Part="1" 
+AR Path="/62D13D9D/5D882DE1" Ref="D12"  Part="1" 
+F 0 "D12" H 2950 2900 50  0000 C CNN
+F 1 "D_Schottky_ALT" H 2950 3175 50  0001 C CNN
+F 2 "" H 2950 3050 50  0001 C CNN
+F 3 "~" H 2950 3050 50  0001 C CNN
+	1    2950 3050
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2700 2550 2700 2750
+Connection ~ 2700 2750
+Wire Wire Line
+	2700 2750 2700 3050
+Connection ~ 2700 3050
+Wire Wire Line
+	2700 3050 2700 3650
+Wire Wire Line
+	3100 2750 3200 2750
+Wire Wire Line
+	3100 3050 3200 3050
+Wire Wire Line
+	2700 2750 2800 2750
+Wire Wire Line
+	2700 3050 2800 3050
+$Comp
+L power:VCC #PWR0135
+U 1 1 5DA270BC
+P 2700 2250
+F 0 "#PWR0135" H 2700 2100 50  0001 C CNN
+F 1 "VCC" H 2717 2423 50  0000 C CNN
+F 2 "" H 2700 2250 50  0001 C CNN
+F 3 "" H 2700 2250 50  0001 C CNN
+	1    2700 2250
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	4500 6150 4500 6450
 Wire Bus Line
