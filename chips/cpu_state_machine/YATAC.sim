@@ -26,9 +26,10 @@ FIELD execution = inst,hsel
 a16 =>
     !I5 & !I6 & !I7 & bank
   # bank & !inst
+  # I6 & !I7 & inst
+  # I7 & !hsel & inst
   # I5 & !hsel & inst
-  # I7 & inst
-  # I6 & inst
+  # I6 & !hsel & inst
 
 bank.d  =>
     I5 & !bank & reset
@@ -61,27 +62,21 @@ fn8 =>
     I5 & !I6 & !I7
 
 fnh =>
-    !I6 & !I7
+    I6 & !I7
 
 hsel.d  =>
-    I6 & !I7 & !hsel & !inst & reset
-  # !I1 & I2 & !I7 & !hsel & !inst & reset
-  # I0 & !I1 & !I7 & !hsel & !inst & reset
-  # !A7 & !I0 & I2 & !I7 & !hsel & !inst & reset
-  # A7 & I0 & !I7 & !hsel & !inst & reset
-  # !A7 & !I0 & I1 & !I7 & !hsel & !inst & reset
-  # !I7 & I3or4 & !hsel & !inst & reset
-  # I5 & !I7 & !hsel & !inst & reset
+    I5 & !I6 & !I7 & !hsel & inst
+  # I6 & !I7 & !hsel & !inst
 
 inst.d  =>
-    !hsel & !inst & !reset
+    !hsel & !reset
   # !I0 & !I1 & !I2 & !I5 & !I6 & !I7 & !I3or4 & !hsel & !inst
   # !A7 & I0 & I1 & !I5 & !I6 & !I7 & !I3or4 & !hsel & !inst
   # A7 & !I0 & I1 & !I5 & !I6 & !I7 & !I3or4 & !hsel & !inst
-  # !hsel & inst
-  # I7 & hsel & inst
-  # !I5 & hsel & inst
-  # I6 & hsel & inst
+  # hsel & inst
+  # I7 & !hsel & inst & reset
+  # I6 & !hsel & inst & reset
+  # !I5 & !hsel & inst & reset
 
 nop =>
     !I0 & !I1 & !I2 & !I5 & !I6 & !I7 & !I3or4
