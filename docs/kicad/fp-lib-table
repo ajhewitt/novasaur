@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name 5749180-1)(type Legacy)(uri /Users/al/Downloads/5749180-1/5749180-1.mod)(options "")(descr ""))
+  (lib (name PJ-051A)(type Legacy)(uri /Users/al/Downloads/PJ-051A/PJ-051A.mod)(options "")(descr ""))
+)
