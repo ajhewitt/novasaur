@@ -8,9 +8,9 @@ def print_data(data)
 end
 
 def print_binary(op, offset, s = 0)
-  (0..15).map do |a|
-    (0..15).map do |b|
-      d = (0..15).map do |c|
+  16.times.map do |a|
+    16.times.map do |b|
+      d = 16.times.map do |c|
         (((b << 4) + c).send(op, a << s)) & 0xff rescue 0
       end
       print_data([d.size, offset + a, b << 4, 0] + d)
