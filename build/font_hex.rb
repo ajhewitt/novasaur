@@ -1,3 +1,22 @@
+DITHER = [
+  [0b1100,
+   0b1100,
+   0b1100,
+   0b1100],
+  [0b1000,
+   0b0100,
+   0b0100,
+   0b1000],
+  [0b0010,
+   0b0001,
+   0b0001,
+   0b0010],
+  [0b1010,
+   0b0101,
+   0b0101,
+   0b1010]
+]
+
 def print_ext_addr(addr)
   print_data [2, 0, 0, 4, (addr >> 8) & 0xff, addr & 0xff]
 end
@@ -40,57 +59,42 @@ end
 def print_font(filename, offset)
   file = File.open filename
   h  = parse_header file
-  h[:length].times.each do |i|
-    g = parse_glyph(file, h[:width], h[:height])
-    print_data([g.size, offset + (i >> 4), (i << 4) & 0xf0, 0] + g)
+  font = h[:length].times.map {|i| parse_glyph(file, h[:width], h[:height])}
+  h[:height].times do |a|
+    (0..font.size-1).step(16) do |b|
+      print_data([0x10, offset + a, b, 0] + 
+                 16.times.map {|c| font[b + c][a]})
+    end
   end
 end
 
+
 def print_dither(offset)
-  d = [
-    [0b1100,
-     0b1100,
-     0b1100,
-     0b1100],
-    [0b1000,
-     0b0100,
-     0b0100,
-     0b1000],
-    [0b0010,
-     0b0001,
-     0b0001,
-     0b0010],
-    [0b1010,
-     0b0101,
-     0b0101,
-     0b1010]
-  ]
   4.times.each do |a|
-    256.times.each do |b|
-      print_data([8, offset + (a << 4) + (b >> 4), (b << 4) & 0xf0 | 8, 0] +
-                 2.times.map {d[a].map {|n| n * 0x11}}.flatten)
+    128.times.each do |b|
+      print_data([0x10, offset + (a << 4) + (b >> 4), (b << 4) & 0xf0, 0] +
+                 4.times.map {DITHER[a].map {|g| g * 0x11}}.flatten)
     end
   end
 end
 
 # start of ALU high
 print_ext_addr 0x0002
-# 0x00028000-0x00028FFF: standard 8x8 font
-print_font '../fonts/Bm437_IBM_BIOS.txt', 0x80
-# 0x00029000-0x00029FFF: bold 8x8 font
-
-# 0x0002A000-0x0002AFFF: italic 8x8 font
-
-# 0x0002B000-0x0002BFFF: underlined 8x8 font
-
-# 0x00028000-0x0002BFFF: dithering patterns
-print_dither 0x80
-
+# 0x00028000-0x000287FF: thick serif 8x8 font
+print_font 'fonts/Bm437_IBM_BIOS.txt', 0x80
+# 0x00029000-0x000297FF: thin serif 8x8 font
+print_font 'fonts/Bm437_CompaqThin_8x8_6.txt', 0x90
+# 0x0002A000-0x0002A7FF: thick san-serif 8x8 font
+print_font 'fonts/Bm437_AmstradPC1512.txt', 0xA0
+# 0x0002B000-0x0002B7FF: thin san-serif 8x8 font
+print_font 'fonts/Bm437_Kaypro2K.txt', 0xB0
+# 0x00028800-0x0002BFFF: dithering patterns
+print_dither 0x88
 # 0x0002C000-0x0002CFFF: standard 8x16 font
-print_font '../fonts/Bm437_IBM_VGA8.txt', 0xC0
-# 0x0002D000-0x0002DFFF: bold 8x16 font
-
-# 0x0002E000-0x0002EFFF: italic 8x16 font
-
-# 0x0002F000-0x0002FFFF: underlined 8x16 font
-
+print_font 'fonts/Bm437_IBM_VGA8.txt', 0xC0
+# 0x0002D000-0x0002DFFF: thin serif 8x16 font
+print_font 'fonts/Bm437_CompaqThin_8x16.txt', 0xD0
+# 0x0002E000-0x0002EFFF: thick san-serif 8x16 font
+print_font 'fonts/Bm437_PhoenixEGA_8x16.txt', 0xE0
+# 0x0002F000-0x0002FFFF: thin san-serif 8x16 font
+print_font 'fonts/Bm437_IBM_PS2thin2.txt', 0xF0
