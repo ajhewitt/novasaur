@@ -73,7 +73,7 @@ def print_dither(offset)
   4.times.each do |a|
     128.times.each do |b|
       print_data([0x10, offset + (a << 4) + (b >> 4), (b << 4) & 0xf0, 0] +
-                 4.times.map {DITHER[a].map {|g| g * 0x11}}.flatten)
+                 16.times.map {DITHER[a][(b >> 4) & 3] * 0x11})
     end
   end
 end
@@ -97,4 +97,4 @@ print_font 'fonts/Bm437_CompaqThin_8x16.txt', 0xD0
 # 0x0002E000-0x0002EFFF: thick san-serif 8x16 font
 print_font 'fonts/Bm437_PhoenixEGA_8x16.txt', 0xE0
 # 0x0002F000-0x0002FFFF: thin san-serif 8x16 font
-print_font 'fonts/Bm437_IBM_PS2thin2.txt', 0xF0
+print_font 'fonts/Bm437_IBM_ISO8_12.txt', 0xF0
