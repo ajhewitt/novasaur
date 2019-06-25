@@ -1,0 +1,94 @@
+Name     YATAC ;
+PartNo   00 ;
+Date     6/23/2019 ;
+Revision 04 ;
+Designer A J Hewitt ;
+Company  ;
+Assembly None ;
+Location None ;
+Device   g16v8a ;
+
+/****************************** INPUT PINS ******************************/
+PIN 1      = sclk          ; /*                                         */
+PIN 2      = pclk          ; /*                                         */
+PIN 3      = hblank        ; /*                                         */
+PIN 4      = DA7           ; /*                                         */
+PIN [5..9] = [I3..7]       ; /*                                         */
+PIN 19     = !reset        ; /*                                         */
+
+/****************************** OUTPUT PINS *****************************/
+PIN 12    = PA16           ; /* ROM A16                                 */
+PIN 13    = pcent          ; /* PC Count Enable (ent)                   */
+PIN 14    = inst           ; /* CPU execution state (0=Load I)          */
+PIN 15    = hsel           ; /* H Register Select (0=L 1=H)             */
+PIN 16    = boot           ; /* Boot mode (0=run, 1=booting)            */
+PIN 17    = bank           ; /* ROM memory bank (0=lower, 1=upper)      */
+PIN 18    = !hloe          ; /* HL register ~OE                         */
+
+ext  = !I7;
+oper = !I6;
+ld   = oper & !I5;
+ldc  = oper & I5;
+mv   = I7 & I6 & !I5;
+fnh  = I7 & I6 & I5;
+fn4  = !I7 & I6 & !I5;
+fn8  = !I7 & I6 & I5;
+
+toggle = oper & I3 & inst;
+cond   = I4 $ DA7;
+nop    = ld & !I4;
+skip   = ldc & cond;
+prog   = inst # oper;
+pcent  = (pclk & prog) # skip;
+PA16   = (pclk & ((prog & bank) # (!prog & (!hsel # fnh)))) # (!pclk & hblank);
+hloe   = fnh # fn4 # fn8;
+
+FIELD execution = [inst, hsel];
+$DEFINE prog_L    'b'00
+$DEFINE prog_H    'b'01
+$DEFINE alu_L     'b'10
+$DEFINE alu_H     'b'11
+
+SEQUENCE execution {
+  PRESENT prog_L
+    IF nop # skip # reset NEXT prog_L;
+    IF ext NEXT prog_H;
+    IF fnh NEXT alu_H;
+    DEFAULT NEXT alu_L;
+  PRESENT prog_H
+    IF reset NEXT prog_L;
+    DEFAULT NEXT alu_L;
+  PRESENT alu_L
+    IF reset NEXT prog_L;
+    IF fn8 NEXT alu_H;
+    DEFAULT NEXT prog_L;
+  PRESENT alu_H
+    NEXT prog_L;
+}
+
+$DEFINE upper     'b'1
+$DEFINE lower     'b'0
+
+SEQUENCE bank {
+  PRESENT upper
+    IF reset NEXT upper;
+    IF toggle NEXT lower;
+    DEFAULT NEXT upper;
+  PRESENT lower
+    IF reset NEXT upper;
+    IF toggle NEXT upper;
+    DEFAULT NEXT lower;
+}
+
+$DEFINE init      'b'1
+$DEFINE run       'b'0
+
+SEQUENCE boot {
+  PRESENT init
+    IF reset NEXT init;
+    IF toggle NEXT run;
+    DEFAULT NEXT init;
+  PRESENT run
+    IF reset NEXT init;
+    DEFAULT NEXT run;
+}

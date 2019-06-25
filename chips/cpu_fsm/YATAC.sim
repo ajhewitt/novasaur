@@ -1,0 +1,124 @@
+%SIGNAL
+PIN   4 =  DA7 
+PIN   5 =  I3 
+PIN   6 =  I4 
+PIN   7 =  I5 
+PIN   8 =  I6 
+PIN   9 =  I7 
+PIN  12 =  PA16 
+PIN  17 =  bank 
+PIN  16 =  boot 
+PIN   3 =  hblank 
+PIN  18 = !hloe 
+PIN  15 =  hsel 
+PIN  14 =  inst 
+PIN  13 =  pcent 
+PIN   2 =  pclk 
+PIN  19 = !reset 
+PIN   1 =  sclk 
+%END
+
+%FIELD
+FIELD execution = inst,hsel
+%END
+
+%EQUATION
+PA16 =>
+    I6 & !hsel & !inst & pclk
+  # I5 & I6 & I7 & !inst & pclk
+  # !I6 & bank & pclk
+  # bank & inst & pclk
+  # hblank & !pclk
+
+bank.d  =>
+    !reset
+  # I3 & !I6 & !bank & inst
+  # I6 & bank & reset
+  # !I3 & bank & reset
+  # bank & !inst & reset
+
+boot.d  =>
+    !reset
+  # boot & !inst & reset
+  # I6 & boot & reset
+  # !I3 & boot & reset
+
+cond =>
+    !DA7 & I4
+  # DA7 & !I4
+
+ext =>
+    !I7
+
+fn4 =>
+    !I5 & I6 & !I7
+
+fn8 =>
+    I5 & I6 & !I7
+
+fnh =>
+    I5 & I6 & I7
+
+hloe =>
+    I5 & I6
+  # !I5 & I6 & !I7
+
+hsel.d  =>
+    I5 & I6 & !I7 & !hsel & inst
+  # !I7 & !hsel & !inst
+  # I5 & I6 & I7 & !hsel & !inst
+
+inst.d  =>
+    I5 & I6 & !I7 & !hsel & inst
+  # I5 & I6 & I7 & !hsel & !inst
+  # !I5 & I6 & I7 & !hsel & !inst & reset
+  # I4 & !I5 & I7 & !hsel & !inst & reset
+  # !DA7 & !I4 & I5 & !I6 & I7 & !hsel & !inst & reset
+  # DA7 & I4 & !I6 & I7 & !hsel & !inst & reset
+  # hsel & !inst & reset
+
+ld =>
+    !I5 & !I6
+
+ldc =>
+    I5 & !I6
+
+mv =>
+    !I5 & I6 & I7
+
+nop =>
+    !I4 & !I5 & !I6
+
+oper =>
+    !I6
+
+pcent =>
+    inst & pclk
+  # !I6 & pclk
+  # DA7 & !I4 & I5 & !I6
+  # !DA7 & I4 & I5 & !I6
+
+prog =>
+    inst
+  # !I6
+
+skip =>
+    DA7 & !I4 & I5 & !I6
+  # !DA7 & I4 & I5 & !I6
+
+toggle =>
+    I3 & !I6 & inst
+
+PA16.oe  =>
+    1 
+
+hloe.oe  =>
+    1 
+
+pcent.oe  =>
+    1 
+
+reset.oe  =>
+    0 
+
+%END
