@@ -1,6 +1,6 @@
 Name     YATAC ;
 PartNo   00 ;
-Date     6/23/2019 ;
+Date     7/4/2019 ;
 Revision 04 ;
 Designer A J Hewitt ;
 Company  ;
@@ -10,20 +10,20 @@ Device   g16v8a ;
 
 /****************************** INPUT PINS ******************************/
 PIN 1      = sclk          ; /*                                         */
-PIN 2      = pclk          ; /*                                         */
-PIN 3      = hblank        ; /*                                         */
-PIN 4      = DA7           ; /*                                         */
+PIN 2      = !reset        ; /*                                         */
+PIN 3      = pclk          ; /*                                         */
+PIN 4      = hblank        ; /*                                         */
 PIN [5..9] = [I3..7]       ; /*                                         */
-PIN 19     = !reset        ; /*                                         */
+PIN 12     = DD7           ; /*                                         */
 
 /****************************** OUTPUT PINS *****************************/
-PIN 12    = PA16           ; /* ROM A16                                 */
-PIN 13    = pcent          ; /* PC Count Enable (ent)                   */
+PIN 13    = !hloe          ; /* HL register ~OE                         */
 PIN 14    = inst           ; /* CPU execution state (0=Load I)          */
 PIN 15    = hsel           ; /* H Register Select (0=L 1=H)             */
 PIN 16    = boot           ; /* Boot mode (0=run, 1=booting)            */
 PIN 17    = bank           ; /* ROM memory bank (0=lower, 1=upper)      */
-PIN 18    = !hloe          ; /* HL register ~OE                         */
+PIN 18    = pcent          ; /* PC Count Enable (ent)                   */
+PIN 19    = PA16           ; /* ROM A16                                 */
 
 ext  = !I7;
 oper = !I6;
@@ -35,7 +35,7 @@ fn4  = !I7 & I6 & !I5;
 fn8  = !I7 & I6 & I5;
 
 toggle = oper & I3 & inst;
-cond   = I4 $ DA7;
+cond   = I4 $ DD7;
 nop    = ld & !I4;
 skip   = ldc & cond;
 prog   = inst # oper;

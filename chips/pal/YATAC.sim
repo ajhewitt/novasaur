@@ -1,20 +1,20 @@
 %SIGNAL
-PIN   4 =  DA7 
+PIN  12 =  DD7 
 PIN   5 =  I3 
 PIN   6 =  I4 
 PIN   7 =  I5 
 PIN   8 =  I6 
 PIN   9 =  I7 
-PIN  12 =  PA16 
+PIN  19 =  PA16 
 PIN  17 =  bank 
 PIN  16 =  boot 
-PIN   3 =  hblank 
-PIN  18 = !hloe 
+PIN   4 =  hblank 
+PIN  13 = !hloe 
 PIN  15 =  hsel 
 PIN  14 =  inst 
-PIN  13 =  pcent 
-PIN   2 =  pclk 
-PIN  19 = !reset 
+PIN  18 =  pcent 
+PIN   3 =  pclk 
+PIN   2 = !reset 
 PIN   1 =  sclk 
 %END
 
@@ -44,8 +44,8 @@ boot.d  =>
   # !I3 & boot & reset
 
 cond =>
-    !DA7 & I4
-  # DA7 & !I4
+    !DD7 & I4
+  # DD7 & !I4
 
 ext =>
     !I7
@@ -73,8 +73,8 @@ inst.d  =>
   # I5 & I6 & I7 & !hsel & !inst
   # !I5 & I6 & I7 & !hsel & !inst & reset
   # I4 & !I5 & I7 & !hsel & !inst & reset
-  # !DA7 & !I4 & I5 & !I6 & I7 & !hsel & !inst & reset
-  # DA7 & I4 & !I6 & I7 & !hsel & !inst & reset
+  # !DD7 & !I4 & I5 & !I6 & I7 & !hsel & !inst & reset
+  # DD7 & I4 & !I6 & I7 & !hsel & !inst & reset
   # hsel & !inst & reset
 
 ld =>
@@ -95,19 +95,22 @@ oper =>
 pcent =>
     inst & pclk
   # !I6 & pclk
-  # DA7 & !I4 & I5 & !I6
-  # !DA7 & I4 & I5 & !I6
+  # DD7 & !I4 & I5 & !I6
+  # !DD7 & I4 & I5 & !I6
 
 prog =>
     inst
   # !I6
 
 skip =>
-    DA7 & !I4 & I5 & !I6
-  # !DA7 & I4 & I5 & !I6
+    DD7 & !I4 & I5 & !I6
+  # !DD7 & I4 & I5 & !I6
 
 toggle =>
     I3 & !I6 & inst
+
+DD7.oe  =>
+    0 
 
 PA16.oe  =>
     1 
@@ -117,8 +120,5 @@ hloe.oe  =>
 
 pcent.oe  =>
     1 
-
-reset.oe  =>
-    0 
 
 %END
