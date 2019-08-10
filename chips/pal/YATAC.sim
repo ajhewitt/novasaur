@@ -9,9 +9,9 @@ PIN  19 =  PA16
 PIN  17 =  bank 
 PIN  16 =  boot 
 PIN   4 =  hblank 
-PIN  13 = !hloe 
 PIN  15 =  hsel 
-PIN  14 =  inst 
+PIN  14 = !inst 
+PIN  13 =  mv 
 PIN  18 =  pcent 
 PIN   3 =  pclk 
 PIN   2 = !reset 
@@ -19,15 +19,16 @@ PIN   1 =  sclk
 %END
 
 %FIELD
-FIELD execution = inst,hsel
+FIELD execution = !inst,hsel
 %END
 
 %EQUATION
 PA16 =>
-    I6 & !hsel & !inst & pclk
-  # I5 & I6 & I7 & !inst & pclk
+    I6 & !hsel & inst & pclk
+  # I6 & inst & mv & pclk
+  # I5 & I6 & I7 & inst & pclk
   # !I6 & bank & pclk
-  # bank & inst & pclk
+  # bank & !inst & pclk
   # hblank & !pclk
 
 bank.d  =>
@@ -59,22 +60,20 @@ fn8 =>
 fnh =>
     I5 & I6 & I7
 
-hloe =>
-    I5 & I6
-  # !I5 & I6 & !I7
-
 hsel.d  =>
     I5 & I6 & !I7 & !hsel & inst
   # !I7 & !hsel & !inst
+  # !hsel & !inst & mv
   # I5 & I6 & I7 & !hsel & !inst
 
-inst.d  =>
+!inst.d  =>
     I5 & I6 & !I7 & !hsel & inst
+  # !hsel & !inst & mv
   # I5 & I6 & I7 & !hsel & !inst
-  # !I5 & I6 & I7 & !hsel & !inst & reset
-  # I4 & !I5 & I7 & !hsel & !inst & reset
-  # !DD7 & !I4 & I5 & !I6 & I7 & !hsel & !inst & reset
-  # DD7 & I4 & !I6 & I7 & !hsel & !inst & reset
+  # !DD7 & !I4 & I5 & !I6 & I7 & !hsel & !inst & !mv & reset
+  # DD7 & I4 & !I6 & I7 & !hsel & !inst & !mv & reset
+  # !I5 & I6 & I7 & !hsel & !inst & !mv & reset
+  # I4 & !I5 & I7 & !hsel & !inst & !mv & reset
   # hsel & !inst & reset
 
 ld =>
@@ -93,7 +92,7 @@ oper =>
     !I6
 
 pcent =>
-    inst & pclk
+    !inst & pclk
   # !I6 & pclk
   # DD7 & !I4 & I5 & !I6
   # !DD7 & I4 & I5 & !I6
@@ -107,7 +106,7 @@ skip =>
   # !DD7 & I4 & I5 & !I6
 
 toggle =>
-    I3 & !I6 & inst
+    I3 & !I6 & !inst
 
 DD7.oe  =>
     0 
@@ -115,7 +114,7 @@ DD7.oe  =>
 PA16.oe  =>
     1 
 
-hloe.oe  =>
+mv.oe  =>
     1 
 
 pcent.oe  =>

@@ -1,7 +1,7 @@
 Name     YATAC ;
 PartNo   00 ;
-Date     7/4/2019 ;
-Revision 04 ;
+Date     8/10/2019 ;
+Revision 05 ;
 Designer A J Hewitt ;
 Company  ;
 Assembly None ;
@@ -17,8 +17,8 @@ PIN [5..9] = [I3..7]       ; /*                                         */
 PIN 12     = DD7           ; /*                                         */
 
 /****************************** OUTPUT PINS *****************************/
-PIN 13    = !hloe          ; /* HL register ~OE                         */
-PIN 14    = inst           ; /* CPU execution state (0=Load I)          */
+PIN 13    = mv             ; /* Move instruction                        */
+PIN 14    = !inst          ; /* CPU execution state (0=Load I)          */
 PIN 15    = hsel           ; /* H Register Select (0=L 1=H)             */
 PIN 16    = boot           ; /* Boot mode (0=run, 1=booting)            */
 PIN 17    = bank           ; /* ROM memory bank (0=lower, 1=upper)      */
@@ -34,16 +34,15 @@ fnh  = I7 & I6 & I5;
 fn4  = !I7 & I6 & !I5;
 fn8  = !I7 & I6 & I5;
 
-toggle = oper & I3 & inst;
 cond   = I4 $ DD7;
 nop    = ld & !I4;
+toggle = oper & I3 & !inst;
 skip   = ldc & cond;
 prog   = inst # oper;
 pcent  = (pclk & prog) # skip;
-PA16   = (pclk & ((prog & bank) # (!prog & (!hsel # fnh)))) # (!pclk & hblank);
-hloe   = fnh # fn4 # fn8;
+PA16   = (pclk & ((prog & bank) # (!prog & (!hsel # fnh # mv)))) # (!pclk & hblank);
 
-FIELD execution = [inst, hsel];
+FIELD execution = [!inst, hsel];
 $DEFINE prog_L    'b'00
 $DEFINE prog_H    'b'01
 $DEFINE alu_L     'b'10
@@ -53,7 +52,7 @@ SEQUENCE execution {
   PRESENT prog_L
     IF nop # skip # reset NEXT prog_L;
     IF ext NEXT prog_H;
-    IF fnh NEXT alu_H;
+    IF fnh # mv NEXT alu_H;
     DEFAULT NEXT alu_L;
   PRESENT prog_H
     IF reset NEXT prog_L;
