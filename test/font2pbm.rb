@@ -1,6 +1,7 @@
-# Use this script to test font rom.
-# Result is 256x1024 bitmap image as a PNG
-# ruby test/font2pbm.rb | pnmtopng > font.png
+# This script converts the font rom to an image.
+# Use NetPBM ( http://netpbm.sourceforge.net/)
+# to generate a 2048×128 bitmap image as a PNG
+# ruby test/font2pbm.rb | pnmtopng > docs/font.png
 
 filename = 'chips/rom/font.hex'
 file = File.open filename
@@ -11,7 +12,7 @@ file.each do |l|
   next unless l[7, 2].to_i(16) == 0
   size.times {|i| rom[addr + i] = l[(i * 2) + 9, 2].to_i(16)}
 end
-#rom.compact!
+
 i = 2**15
 printf("P1\n%d %d\n", 0x800, (rom.size - i) >> 8)
 while i < rom.size

@@ -64,9 +64,10 @@ end
 def print_dither(offset)
   4.times.each do |a|
     32.times.each do |b|
-      next if (a >> 1) & 1 != (b >> 3) & 1
-      print_data([0x10, offset + (a << 4) + (b >> 4), (b << 4) & 0xf0, 0] +
-                 16.times.map {DITHER[a][(b >> 4) & 1] * 0x11})
+      next if a & 2 != (b >> 2) & 2
+      print_data([8, offset + (a << 4) + (b >> 4),
+                  ((b << 4) & 0xf0) + ((a & 1) << 3), 0] +
+                 8.times.map {DITHER[a][(b >> 4) & 1] * 0x11})
     end
   end
 end
