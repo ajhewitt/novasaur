@@ -11,9 +11,9 @@ file.each do |l|
   next unless l[7, 2].to_i(16) == 0
   size.times {|i| rom[addr + i] = l[(i * 2) + 9, 2].to_i(16)}
 end
-rom.compact!
-printf("P1\n%d %d\n", 0x800, rom.size >> 8)
-i = 0
+#rom.compact!
+i = 2**15
+printf("P1\n%d %d\n", 0x800, (rom.size - i) >> 8)
 while i < rom.size
     16.times do |sc|
       256.times do |cp|
