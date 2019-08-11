@@ -12,18 +12,15 @@ file.each do |l|
   size.times {|i| rom[addr + i] = l[(i * 2) + 9, 2].to_i(16)}
 end
 rom.compact!
-printf("P1\n%d %d\n", 0x100, rom.size >> 5)
+printf("P1\n%d %d\n", 0x800, rom.size >> 8)
 i = 0
 while i < rom.size
-  8.times do |cph|
     16.times do |sc|
-      32.times do |cpl|
-        cp = (cph << 5) + cpl
+      256.times do |cp|
         addr = (i & 0xf000) + (sc << 8) + cp
-        printf("%08b", rom[addr])
+        printf("%08b", rom[addr] || 0)
         i += 1
       end
       printf("\n")
     end
-  end
 end
