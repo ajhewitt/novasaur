@@ -6,8 +6,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 4 5
 Title "Graphics Processing Unit"
-Date "2019-06-30"
-Rev "1.0"
+Date "2019-08-10"
+Rev "1.0.2"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
@@ -264,7 +264,7 @@ PD1
 Text Label 6300 4500 2    50   ~ 0
 PD0
 Text GLabel 3500 4100 2    50   Output ~ 0
-~hsync
+~gsync
 Text GLabel 3500 5100 2    50   Output ~ 0
 hblank
 $Comp
@@ -318,8 +318,6 @@ F 3 "" H 5600 4200 50  0001 C CNN
 	1    5600 4200
 	-1   0    0    1   
 $EndComp
-Text GLabel 2900 3800 2    50   Output ~ 0
-eclk
 $Comp
 L power:GNDD #PWR0126
 U 1 1 5F1A79BE
@@ -536,7 +534,7 @@ L Device:R_Pack03_SIP RN7
 U 1 1 5CF64880
 P 9450 1850
 F 0 "RN7" V 8900 1800 50  0000 L CNN
-F 1 "270" V 9000 1800 50  0000 L CNN
+F 1 "470" V 9000 1800 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP6" V 10025 1850 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 9450 1850 50  0001 C CNN
 	1    9450 1850
@@ -559,15 +557,13 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS157" H 8500 2250 50  0001 C CNN
 	1    8500 2250
 	1    0    0    -1  
 $EndComp
-Text GLabel 4300 3500 0    50   Input ~ 0
+Text GLabel 2900 3500 0    50   Input ~ 0
 mode1
-Text GLabel 4300 3700 0    50   Input ~ 0
-tclk
-Text GLabel 5750 3700 0    50   Input ~ 0
+Text GLabel 4350 3700 0    50   Input ~ 0
 nclk
-Text GLabel 6350 3000 2    50   Input ~ 0
+Text GLabel 5050 3200 0    50   Input ~ 0
 cclk
-Text GLabel 5050 3400 0    50   Input ~ 0
+Text GLabel 3650 3400 0    50   Input ~ 0
 qclk2
 Text Label 6200 2550 0    50   ~ 0
 ~cle
@@ -577,16 +573,14 @@ Wire Wire Line
 	2700 3700 2900 3700
 Text Label 2700 3700 0    50   ~ 0
 H0
-Text Label 2700 3800 0    50   ~ 0
+Text Label 2700 3850 0    50   ~ 0
 H1
-Text GLabel 2900 3700 2    50   Output ~ 0
-tclk
 Entry Wire Line
 	2700 4000 2600 4100
 Text Label 2700 4000 0    50   ~ 0
 H4
 Entry Wire Line
-	2600 3900 2700 3800
+	2600 3950 2700 3850
 $Comp
 L 74xx:74LS574 U34
 U 1 1 5D660036
@@ -599,7 +593,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS574" H 5600 5000 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	2700 3800 2900 3800
+	2700 3850 2900 3850
 Wire Wire Line
 	2900 4000 2700 4000
 NoConn ~ 2300 6300
@@ -634,44 +628,44 @@ $EndComp
 $Comp
 L 74xx:74LS00 U?
 U 3 1 5F2C1DFC
-P 6050 3100
+P 5350 3300
 AR Path="/5DAA5CD8/5F2C1DFC" Ref="U?"  Part="3" 
 AR Path="/5DAA19D5/5F2C1DFC" Ref="U?"  Part="3" 
 AR Path="/5DAA3954/5F2C1DFC" Ref="U1"  Part="3" 
-F 0 "U1" H 6050 3100 50  0000 C CNN
-F 1 "74F00" H 6000 2900 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 6050 3100 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74ls00" H 6050 3100 50  0001 C CNN
-	3    6050 3100
-	-1   0    0    -1  
+F 0 "U1" H 5350 3300 50  0000 C CNN
+F 1 "74F00" H 5300 3100 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5350 3300 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74ls00" H 5350 3300 50  0001 C CNN
+	3    5350 3300
+	1    0    0    1   
 $EndComp
 $Comp
 L 74xx:74LS08 U3
 U 2 1 5F534DD6
-P 6050 3600
-F 0 "U3" H 6050 3600 50  0000 C CNN
-F 1 "74F08" H 6250 3400 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 6050 3600 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 6050 3600 50  0001 C CNN
-	2    6050 3600
+P 4650 3600
+F 0 "U3" H 4650 3600 50  0000 C CNN
+F 1 "74F08" H 4850 3400 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4650 3600 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 4650 3600 50  0001 C CNN
+	2    4650 3600
 	1    0    0    -1  
 $EndComp
 $Comp
 L 74xx:74LS08 U3
 U 1 1 5F5C337B
-P 5350 3500
-F 0 "U3" H 5350 3500 50  0000 C CNN
-F 1 "74F08" H 5500 3300 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5350 3500 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 5350 3500 50  0001 C CNN
-	1    5350 3500
+P 3950 3500
+F 0 "U3" H 3950 3500 50  0000 C CNN
+F 1 "74F08" H 4100 3300 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 3950 3500 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3950 3500 50  0001 C CNN
+	1    3950 3500
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Network08_US RN1
+L Device:R_Network08_US RN2
 U 1 1 5D1C1190
 P 4700 6200
-F 0 "RN1" V 5250 6100 50  0000 L CNN
+F 0 "RN2" V 5250 6100 50  0000 L CNN
 F 1 "270" V 5150 6100 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 5175 6200 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4700 6200 50  0001 C CNN
@@ -772,8 +766,8 @@ L Device:R_Network08_US RN?
 U 1 1 5D26EEA2
 P 5600 2050
 AR Path="/5D26EEA2" Ref="RN?"  Part="1" 
-AR Path="/5DAA3954/5D26EEA2" Ref="RN4"  Part="1" 
-F 0 "RN4" V 4950 1950 50  0000 L CNN
+AR Path="/5DAA3954/5D26EEA2" Ref="RN5"  Part="1" 
+F 0 "RN5" V 4950 1950 50  0000 L CNN
 F 1 "270" V 5050 1950 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 6075 2050 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5600 2050 50  0001 C CNN
@@ -880,8 +874,8 @@ L Device:R_Network08_US RN?
 U 1 1 5D1C9541
 P 4900 2050
 AR Path="/5D1C9541" Ref="RN?"  Part="1" 
-AR Path="/5DAA3954/5D1C9541" Ref="RN3"  Part="1" 
-F 0 "RN3" V 4250 1950 50  0000 L CNN
+AR Path="/5DAA3954/5D1C9541" Ref="RN4"  Part="1" 
+F 0 "RN4" V 4250 1950 50  0000 L CNN
 F 1 "270" V 4350 1950 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 5375 2050 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4900 2050 50  0001 C CNN
@@ -1073,10 +1067,10 @@ Entry Wire Line
 Entry Wire Line
 	9950 5200 10050 5100
 $Comp
-L Device:R_Network09_US RN11
+L Device:R_Network09_US RN6
 U 1 1 5FA45019
 P 10450 4900
-F 0 "RN11" V 9800 4900 50  0000 C CNN
+F 0 "RN6" V 9800 4900 50  0000 C CNN
 F 1 "R2R10k" V 9900 4900 50  0000 C CNN
 F 2 "Resistor_THT:R_Array_SIP10" V 11025 4900 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 10450 4900 50  0001 C CNN
@@ -1261,7 +1255,7 @@ P 10450 1550
 AR Path="/5D54D3C2" Ref="RN?"  Part="1" 
 AR Path="/5DAA3954/5D54D3C2" Ref="RN8"  Part="1" 
 F 0 "RN8" V 9900 1450 50  0000 L CNN
-F 1 "1800" V 10000 1450 50  0000 L CNN
+F 1 "3300" V 10000 1450 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP8" V 10925 1550 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 10450 1550 50  0001 C CNN
 	1    10450 1550
@@ -1274,7 +1268,7 @@ P 10400 3650
 AR Path="/5DAA3954/5D54D3BC" Ref="RN10"  Part="1" 
 AR Path="/5D54D3BC" Ref="RN?"  Part="1" 
 F 0 "RN10" V 9850 3600 50  0000 L CNN
-F 1 "820" V 9950 3600 50  0000 L CNN
+F 1 "1500" V 9950 3600 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP6" V 10975 3650 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 10400 3650 50  0001 C CNN
 	1    10400 3650
@@ -1287,7 +1281,7 @@ P 10450 2550
 AR Path="/5D54D3B6" Ref="RN?"  Part="1" 
 AR Path="/5DAA3954/5D54D3B6" Ref="RN9"  Part="1" 
 F 0 "RN9" V 9900 2450 50  0000 L CNN
-F 1 "1800" V 10000 2450 50  0000 L CNN
+F 1 "3300" V 10000 2450 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP8" V 10925 2550 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 10450 2550 50  0001 C CNN
 	1    10450 2550
@@ -1340,10 +1334,10 @@ Entry Bus Bus
 Text Label 4700 5200 2    50   ~ 0
 DA15
 $Comp
-L Device:R_Network08_US RN2
+L Device:R_Network08_US RN3
 U 1 1 5D1C1196
 P 4250 4900
-F 0 "RN2" V 3600 4850 50  0000 L CNN
+F 0 "RN3" V 3600 4850 50  0000 L CNN
 F 1 "270" V 3700 4850 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 4725 4900 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4250 4900 50  0001 C CNN
@@ -1597,7 +1591,7 @@ G6
 Text Label 8100 5200 0    50   ~ 0
 G7
 Wire Wire Line
-	5650 3500 5750 3500
+	4250 3500 4350 3500
 Wire Wire Line
 	9500 4600 9500 3600
 Wire Wire Line
@@ -1605,26 +1599,11 @@ Wire Wire Line
 Wire Wire Line
 	6100 5200 6300 5200
 Wire Wire Line
-	6350 3600 6400 3600
-Connection ~ 6400 3600
-Wire Wire Line
-	6400 3600 9500 3600
-Wire Wire Line
-	4900 3600 5050 3600
+	3500 3600 3650 3600
 Wire Bus Line
 	8100 5900 9850 5900
 Wire Bus Line
 	7800 1050 9650 1050
-Wire Wire Line
-	6400 3200 6400 3600
-Wire Wire Line
-	6350 3200 6400 3200
-Wire Wire Line
-	5750 3100 5700 3100
-Wire Wire Line
-	5700 3100 5700 2550
-Wire Wire Line
-	5700 2550 6400 2550
 Connection ~ 10150 1400
 Wire Wire Line
 	10150 1400 10150 1450
@@ -1806,8 +1785,6 @@ Wire Wire Line
 	1100 2350 1300 2350
 Wire Wire Line
 	1100 2250 1300 2250
-Text GLabel 2300 2350 2    50   Output ~ 0
-mode1
 Wire Wire Line
 	2300 1950 3100 1950
 Wire Wire Line
@@ -1820,20 +1797,6 @@ Wire Wire Line
 	4900 5800 5000 5800
 Wire Wire Line
 	5000 5800 5000 5700
-$Comp
-L 74xx:74LS32 U?
-U 2 1 5EFF05F1
-P 4600 3600
-AR Path="/5CDEEC9F/5EFF05F1" Ref="U?"  Part="2" 
-AR Path="/5DAA5CD8/5EFF05F1" Ref="U?"  Part="2" 
-AR Path="/5DAA3954/5EFF05F1" Ref="U6"  Part="2" 
-F 0 "U6" H 4550 3600 50  0000 L CNN
-F 1 "74F32" V 4600 3150 50  0001 L CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4600 3600 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 4600 3600 50  0001 C CNN
-	2    4600 3600
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	2900 5000 2850 5000
 Wire Wire Line
@@ -1888,6 +1851,38 @@ Wire Wire Line
 	2850 4350 2850 4200
 Wire Wire Line
 	2850 4200 2900 4200
+$Comp
+L 74xx:74LS32 U?
+U 2 1 5EFF05F1
+P 3200 3600
+AR Path="/5CDEEC9F/5EFF05F1" Ref="U?"  Part="2" 
+AR Path="/5DAA5CD8/5EFF05F1" Ref="U?"  Part="2" 
+AR Path="/5DAA3954/5EFF05F1" Ref="U6"  Part="2" 
+F 0 "U6" H 3150 3600 50  0000 L CNN
+F 1 "74F32" V 3200 3150 50  0001 L CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 3200 3600 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 3200 3600 50  0001 C CNN
+	2    3200 3600
+	1    0    0    -1  
+$EndComp
+Text GLabel 2900 3850 2    50   Output ~ 0
+eclk
+Wire Wire Line
+	4950 3600 5000 3600
+Wire Wire Line
+	5000 3600 5000 3400
+Wire Wire Line
+	5000 3400 5050 3400
+Connection ~ 5000 3600
+Wire Wire Line
+	5000 3600 9500 3600
+Wire Wire Line
+	5850 3300 5850 2550
+Wire Wire Line
+	5850 2550 6400 2550
+Wire Wire Line
+	5650 3300 5850 3300
+NoConn ~ 2300 2350
 Wire Bus Line
 	2650 2150 2650 2450
 Wire Bus Line
