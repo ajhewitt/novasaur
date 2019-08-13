@@ -11,7 +11,8 @@ def print_binary(op, offset, s = 0)
   16.times.map do |a|
     16.times.map do |b|
       d = 16.times.map do |c|
-        (((b << 4) + c).send(op, a << s)) & 0xff rescue 0
+        v = (op == '/' && a == 0) ? 0x10 : a << s
+        (((b << 4) + c).send(op, v)) & 0xff
       end
       print_data([d.size, offset + a, b << 4, 0] + d)
     end
@@ -20,30 +21,30 @@ end
 
 # start of ALU high
 print_ext_addr 0x0002
-# 0x00024000-0x00024FFF: ADD high nibble
-print_binary '+', 0x40, 4
-# 0x00025000-0x00025FFF: SUB high nibble
-print_binary '-', 0x50, 4
-# 0x00026000-0x00026FFF: AND high nibble
-print_binary '&', 0x60, 4
-# 0x00027000-0x00027FFF: OR high nibble
-print_binary '|', 0x70, 4
+# 0x00020000-0x00020FFF: ADD high nibble
+print_binary '+', 0x00, 4
+# 0x00021000-0x00021FFF: SUB high nibble
+print_binary '-', 0x10, 4
+# 0x00022000-0x00022FFF: AND high nibble
+print_binary '&', 0x20, 4
+# 0x00023000-0x00023FFF: OR high nibble
+print_binary '|', 0x30, 4
 # start of ALU low
 print_ext_addr 0x0003
-# 0x00034000-0x00034FFF: ADD low nibble
-print_binary '+', 0x40
-# 0x00035000-0x00035FFF: SUB low nibble
-print_binary '-', 0x50
-# 0x00036000-0x00036FFF: AND low nibble
-print_binary '&', 0x60
-# 0x00037000-0x00037FFF: OR low nibble
-print_binary '|', 0x70
-# 0x00038000-0x00038FFF: MUL low nibble only
-print_binary '*', 0x80
-# 0x00039000-0x00039FFF: DIV low nibble only
-print_binary '/', 0x90
-# 0x0003A000-0x0003AFFF: MOD low nibble only
-print_binary '%', 0xA0
+# 0x00030000-0x00030FFF: ADD low nibble
+print_binary '+', 0x00
+# 0x00031000-0x00031FFF: SUB low nibble
+print_binary '-', 0x10
+# 0x00032000-0x00032FFF: AND low nibble
+print_binary '&', 0x20
+# 0x00033000-0x00033FFF: OR low nibble
+print_binary '|', 0x30
+# 0x00034000-0x00034FFF: MUL low nibble only
+print_binary '*', 0x40
+# 0x00035000-0x00035FFF: DIV low nibble only
+print_binary '/', 0x50
+# 0x0003C000-0x0003CFFF: VID low nibble only
+
 # 0x0003D000-0x0003DFFF: FN0
 
 # 0x0003E000-0x0003EFFF: FN1
