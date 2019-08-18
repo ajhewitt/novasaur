@@ -6,8 +6,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 4 5
 Title "Graphics Processing Unit"
-Date "2019-08-10"
-Rev "1.0.2"
+Date "2019-08-18"
+Rev "1.0.3"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
@@ -15,10 +15,10 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L 74xx:74LS163 U32
+L 74xx:74LS163 U31
 U 1 1 5E4B79C3
 P 1800 6300
-F 0 "U32" H 1800 6300 50  0000 C CNN
+F 0 "U31" H 1800 6300 50  0000 C CNN
 F 1 "74F163" H 1850 6200 50  0000 C CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 1800 6300 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS163" H 1800 6300 50  0001 C CNN
@@ -26,10 +26,10 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS163" H 1800 6300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74xx:74LS541 U33
+L 74xx:74LS541 U32
 U 1 1 5E4BA4C4
 P 3400 6300
-F 0 "U33" H 3400 6100 50  0000 C CNN
+F 0 "U32" H 3400 6100 50  0000 C CNN
 F 1 "74F541" H 3400 6000 50  0000 C CNN
 F 2 "Package_DIP:DIP-20_W7.62mm_LongPads" H 3400 6300 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS541" H 3400 6300 50  0001 C CNN
@@ -530,10 +530,10 @@ vdac1r
 Text GLabel 9250 2150 0    50   Output ~ 0
 vdac1b
 $Comp
-L Device:R_Pack03_SIP RN7
+L Device:R_Pack03_SIP RN8
 U 1 1 5CF64880
 P 9450 1850
-F 0 "RN7" V 8900 1800 50  0000 L CNN
+F 0 "RN8" V 8900 1800 50  0000 L CNN
 F 1 "470" V 9000 1800 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP6" V 10025 1850 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 9450 1850 50  0001 C CNN
@@ -547,10 +547,10 @@ Wire Wire Line
 Wire Wire Line
 	9000 2250 9250 2250
 $Comp
-L 74xx:74LS157 U40
+L 74xx:74LS157 U39
 U 1 1 5CFB1097
 P 8500 2250
-F 0 "U40" H 8500 2150 50  0000 C CNN
+F 0 "U39" H 8500 2150 50  0000 C CNN
 F 1 "74F157" H 8500 2050 50  0000 C CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 8500 2250 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS157" H 8500 2250 50  0001 C CNN
@@ -567,33 +567,25 @@ Text GLabel 3650 3400 0    50   Input ~ 0
 qclk2
 Text Label 6200 2550 0    50   ~ 0
 ~cle
-Entry Wire Line
-	2700 3700 2600 3800
 Wire Wire Line
 	2700 3700 2900 3700
 Text Label 2700 3700 0    50   ~ 0
 H0
-Text Label 2700 3850 0    50   ~ 0
-H1
 Entry Wire Line
 	2700 4000 2600 4100
 Text Label 2700 4000 0    50   ~ 0
 H4
-Entry Wire Line
-	2600 3950 2700 3850
 $Comp
-L 74xx:74LS574 U34
+L 74xx:74LS574 U33
 U 1 1 5D660036
 P 5600 5000
-F 0 "U34" H 5600 4800 50  0000 C CNN
+F 0 "U33" H 5600 4800 50  0000 C CNN
 F 1 "74F574" H 5600 4700 50  0000 C CNN
 F 2 "Package_DIP:DIP-20_W7.62mm_LongPads" H 5600 5000 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS574" H 5600 5000 50  0001 C CNN
 	1    5600 5000
 	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	2700 3850 2900 3850
 Wire Wire Line
 	2900 4000 2700 4000
 NoConn ~ 2300 6300
@@ -662,10 +654,10 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3950 3500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Network08_US RN2
+L Device:R_Network08_US RN3
 U 1 1 5D1C1190
 P 4700 6200
-F 0 "RN2" V 5250 6100 50  0000 L CNN
+F 0 "RN3" V 5250 6100 50  0000 L CNN
 F 1 "270" V 5150 6100 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 5175 6200 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4700 6200 50  0001 C CNN
@@ -766,8 +758,8 @@ L Device:R_Network08_US RN?
 U 1 1 5D26EEA2
 P 5600 2050
 AR Path="/5D26EEA2" Ref="RN?"  Part="1" 
-AR Path="/5DAA3954/5D26EEA2" Ref="RN5"  Part="1" 
-F 0 "RN5" V 4950 1950 50  0000 L CNN
+AR Path="/5DAA3954/5D26EEA2" Ref="RN6"  Part="1" 
+F 0 "RN6" V 4950 1950 50  0000 L CNN
 F 1 "270" V 5050 1950 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 6075 2050 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5600 2050 50  0001 C CNN
@@ -874,8 +866,8 @@ L Device:R_Network08_US RN?
 U 1 1 5D1C9541
 P 4900 2050
 AR Path="/5D1C9541" Ref="RN?"  Part="1" 
-AR Path="/5DAA3954/5D1C9541" Ref="RN4"  Part="1" 
-F 0 "RN4" V 4250 1950 50  0000 L CNN
+AR Path="/5DAA3954/5D1C9541" Ref="RN5"  Part="1" 
+F 0 "RN5" V 4250 1950 50  0000 L CNN
 F 1 "270" V 4350 1950 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 5375 2050 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4900 2050 50  0001 C CNN
@@ -883,7 +875,7 @@ F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4900 2050 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 Text GLabel 1300 2650 0    50   Input ~ 0
-1
+0
 $Comp
 L power:GNDD #PWR0110
 U 1 1 5D7DF376
@@ -911,10 +903,10 @@ vblank
 Text GLabel 2300 2150 2    50   Output ~ 0
 vsync
 $Comp
-L 74xx:74LS541 U36
+L 74xx:74LS541 U35
 U 1 1 5E4BAE6E
 P 3600 2150
-F 0 "U36" H 3600 1950 50  0000 C CNN
+F 0 "U35" H 3600 1950 50  0000 C CNN
 F 1 "74F541" H 3600 1850 50  0000 C CNN
 F 2 "Package_DIP:DIP-20_W7.62mm_LongPads" H 3600 2150 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS541" H 3600 2150 50  0001 C CNN
@@ -1067,10 +1059,10 @@ Entry Wire Line
 Entry Wire Line
 	9950 5200 10050 5100
 $Comp
-L Device:R_Network09_US RN6
+L Device:R_Network09_US RN7
 U 1 1 5FA45019
 P 10450 4900
-F 0 "RN6" V 9800 4900 50  0000 C CNN
+F 0 "RN7" V 9800 4900 50  0000 C CNN
 F 1 "R2R10k" V 9900 4900 50  0000 C CNN
 F 2 "Resistor_THT:R_Array_SIP10" V 11025 4900 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 10450 4900 50  0001 C CNN
@@ -1176,10 +1168,10 @@ Wire Wire Line
 Wire Wire Line
 	6500 4500 6700 4500
 $Comp
-L 74xx:74LS574 U37
+L 74xx:74LS574 U36
 U 1 1 5E4BEA85
 P 7200 5000
-F 0 "U37" H 7200 4800 50  0000 C CNN
+F 0 "U36" H 7200 4800 50  0000 C CNN
 F 1 "74F574" H 7200 4700 50  0000 C CNN
 F 2 "Package_DIP:DIP-20_W7.62mm_LongPads" H 7200 5000 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS574" H 7200 5000 50  0001 C CNN
@@ -1253,8 +1245,8 @@ L Device:R_Network07_US RN?
 U 1 1 5D54D3C2
 P 10450 1550
 AR Path="/5D54D3C2" Ref="RN?"  Part="1" 
-AR Path="/5DAA3954/5D54D3C2" Ref="RN8"  Part="1" 
-F 0 "RN8" V 9900 1450 50  0000 L CNN
+AR Path="/5DAA3954/5D54D3C2" Ref="RN9"  Part="1" 
+F 0 "RN9" V 9900 1450 50  0000 L CNN
 F 1 "3300" V 10000 1450 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP8" V 10925 1550 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 10450 1550 50  0001 C CNN
@@ -1262,12 +1254,12 @@ F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 10450 1550 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Device:R_Pack03_SIP RN10
+L Device:R_Pack03_SIP RN11
 U 1 1 5D54D3BC
 P 10400 3650
-AR Path="/5DAA3954/5D54D3BC" Ref="RN10"  Part="1" 
+AR Path="/5DAA3954/5D54D3BC" Ref="RN11"  Part="1" 
 AR Path="/5D54D3BC" Ref="RN?"  Part="1" 
-F 0 "RN10" V 9850 3600 50  0000 L CNN
+F 0 "RN11" V 9850 3600 50  0000 L CNN
 F 1 "1500" V 9950 3600 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP6" V 10975 3650 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 10400 3650 50  0001 C CNN
@@ -1279,8 +1271,8 @@ L Device:R_Network07_US RN?
 U 1 1 5D54D3B6
 P 10450 2550
 AR Path="/5D54D3B6" Ref="RN?"  Part="1" 
-AR Path="/5DAA3954/5D54D3B6" Ref="RN9"  Part="1" 
-F 0 "RN9" V 9900 2450 50  0000 L CNN
+AR Path="/5DAA3954/5D54D3B6" Ref="RN10"  Part="1" 
+F 0 "RN10" V 9900 2450 50  0000 L CNN
 F 1 "3300" V 10000 2450 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP8" V 10925 2550 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 10450 2550 50  0001 C CNN
@@ -1334,10 +1326,10 @@ Entry Bus Bus
 Text Label 4700 5200 2    50   ~ 0
 DA15
 $Comp
-L Device:R_Network08_US RN3
+L Device:R_Network08_US RN4
 U 1 1 5D1C1196
 P 4250 4900
-F 0 "RN3" V 3600 4850 50  0000 L CNN
+F 0 "RN4" V 3600 4850 50  0000 L CNN
 F 1 "270" V 3700 4850 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 4725 4900 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4250 4900 50  0001 C CNN
@@ -1419,10 +1411,10 @@ H2
 Text Label 2400 4000 0    50   ~ 0
 H3
 $Comp
-L 74xx:74LS163 U31
+L 74xx:74LS163 U30
 U 1 1 5E4B7483
 P 1800 4200
-F 0 "U31" H 1800 4200 50  0000 C CNN
+F 0 "U30" H 1800 4200 50  0000 C CNN
 F 1 "74F163" H 1850 4100 50  0000 C CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 1800 4200 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS163" H 1800 4200 50  0001 C CNN
@@ -1486,10 +1478,10 @@ NoConn ~ 8300 4200
 Wire Wire Line
 	7700 4700 7900 4700
 $Comp
-L 74xx:74LS299 U38
+L 74xx:74LS299 U37
 U 1 1 5E4BD098
 P 8800 4700
-F 0 "U38" H 8800 4800 50  0000 C CNN
+F 0 "U37" H 8800 4800 50  0000 C CNN
 F 1 "74F299" H 8750 4700 50  0000 C CNN
 F 2 "Package_DIP:DIP-20_W7.62mm_LongPads" H 8800 4700 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS299" H 8800 4700 50  0001 C CNN
@@ -1709,10 +1701,10 @@ Text GLabel 6100 5500 2    50   Input ~ 0
 Text GLabel 6100 5400 2    50   Input ~ 0
 ~vle
 $Comp
-L 74xx:74LS574 U39
+L 74xx:74LS574 U38
 U 1 1 5E4BDEC4
 P 6900 2150
-F 0 "U39" H 6900 1950 50  0000 C CNN
+F 0 "U38" H 6900 1950 50  0000 C CNN
 F 1 "74F574" H 6900 1850 50  0000 C CNN
 F 2 "Package_DIP:DIP-20_W7.62mm_LongPads" H 6900 2150 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS574" H 6900 2150 50  0001 C CNN
@@ -1763,10 +1755,10 @@ Wire Wire Line
 Text GLabel 2300 2250 2    50   Output ~ 0
 mode0
 $Comp
-L 74xx:74LS574 U35
+L 74xx:74LS574 U34
 U 1 1 5D29AFB1
 P 1800 2150
-F 0 "U35" H 1800 1950 50  0000 C CNN
+F 0 "U34" H 1800 1950 50  0000 C CNN
 F 1 "74F574" H 1800 1850 50  0000 C CNN
 F 2 "Package_DIP:DIP-20_W7.62mm_LongPads" H 1800 2150 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS574" H 1800 2150 50  0001 C CNN
@@ -1865,8 +1857,6 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 3200 3600 50  0001 C CNN
 	2    3200 3600
 	1    0    0    -1  
 $EndComp
-Text GLabel 2900 3850 2    50   Output ~ 0
-eclk
 Wire Wire Line
 	4950 3600 5000 3600
 Wire Wire Line
@@ -1883,6 +1873,8 @@ Wire Wire Line
 Wire Wire Line
 	5650 3300 5850 3300
 NoConn ~ 2300 2350
+Entry Wire Line
+	2700 3700 2600 3800
 Wire Bus Line
 	2650 2150 2650 2450
 Wire Bus Line
