@@ -1,6 +1,5 @@
 %SIGNAL
-PIN  12 =  DD7 
-PIN   5 =  I3 
+PIN   5 =  DD7 
 PIN   6 =  I4 
 PIN   7 =  I5 
 PIN   8 =  I6 
@@ -11,7 +10,8 @@ PIN  16 =  boot
 PIN   4 =  hblank 
 PIN  15 =  hsel 
 PIN  14 = !inst 
-PIN  13 =  mv 
+PIN  12 =  mv 
+PIN  13 = !oper 
 PIN  18 =  pcent 
 PIN   3 =  pclk 
 PIN   2 = !reset 
@@ -19,102 +19,106 @@ PIN   1 =  sclk
 %END
 
 %FIELD
-FIELD execution = !inst,hsel
+FIELD execution = !inst,!hsel
 %END
 
 %EQUATION
 PA16 =>
-    I6 & !hsel & inst & pclk
-  # I6 & inst & mv & pclk
-  # I5 & I6 & I7 & inst & pclk
-  # !I6 & bank & pclk
+    !hsel & inst & oper & pclk
+  # inst & mv & oper & pclk
+  # I5 & I6 & inst & oper & pclk
+  # bank & !oper & pclk
   # bank & !inst & pclk
   # hblank & !pclk
 
 bank.d  =>
     !reset
-  # I3 & !I6 & !bank & inst
-  # I6 & bank & reset
-  # !I3 & bank & reset
+  # I4 & I5 & !I6 & !I7 & !bank & inst
   # bank & !inst & reset
+  # I7 & bank & reset
+  # !I4 & bank & reset
+  # I6 & bank & reset
+  # !I5 & bank & reset
 
 boot.d  =>
     !reset
+  # !I5 & boot & reset
   # boot & !inst & reset
+  # I7 & boot & reset
+  # !I4 & boot & reset
   # I6 & boot & reset
-  # !I3 & boot & reset
 
 cond =>
-    !DD7 & I4
-  # DD7 & !I4
-
-ext =>
-    !I7
-
-fn4 =>
-    !I5 & I6 & !I7
-
-fn8 =>
-    I5 & I6 & !I7
+    !DD7 & I5
+  # DD7 & !I5
 
 fnh =>
-    I5 & I6 & I7
+    I5 & I6
 
-hsel.d  =>
-    I5 & I6 & !I7 & !hsel & inst
-  # !I7 & !hsel & !inst
-  # !hsel & !inst & mv
-  # I5 & I6 & I7 & !hsel & !inst
+fnhl =>
+    !I5 & !I6 & !I7
+
+fnl =>
+    !I5 & I6 & !I7
+
+!hsel.d  =>
+    !I5 & !hsel & !inst & reset
+  # !I7 & hsel & !inst
+  # !I6 & !hsel & !inst & reset
 
 !inst.d  =>
-    I5 & I6 & !I7 & !hsel & inst
-  # !hsel & !inst & mv
-  # I5 & I6 & I7 & !hsel & !inst
-  # !DD7 & !I4 & I5 & !I6 & I7 & !hsel & !inst & !mv & reset
-  # DD7 & I4 & !I6 & I7 & !hsel & !inst & !mv & reset
-  # !I5 & I6 & I7 & !hsel & !inst & !mv & reset
-  # I4 & !I5 & I7 & !hsel & !inst & !mv & reset
-  # hsel & !inst & reset
+    !I5 & !I6 & !I7 & !hsel & inst
+  # !DD7 & I4 & !I5 & I7 & hsel & !inst & reset
+  # DD7 & I5 & I7 & hsel & !inst & reset
+  # I6 & I7 & hsel & !inst & reset
+  # !I4 & I5 & I7 & hsel & !inst & reset
+  # I5 & I6 & !hsel & !inst
+  # !I6 & !hsel & !inst & reset
+  # !I5 & !hsel & !inst & reset
 
 ld =>
-    !I5 & !I6
+    I5 & !I6
 
 ldc =>
-    I5 & !I6
+    I4 & !I6 & I7
+
+ldt =>
+    I4 & I5 & !I6 & !I7
 
 mv =>
     !I5 & I6 & I7
 
 nop =>
-    !I4 & !I5 & !I6
+    !I4 & !I5 & !I6 & I7
 
 oper =>
-    !I6
+    I5 & !I6
+  # I4 & !I6 & I7
 
 pcent =>
     !inst & pclk
-  # !I6 & pclk
-  # DD7 & !I4 & I5 & !I6
-  # !DD7 & I4 & I5 & !I6
+  # !oper & pclk
+  # DD7 & I4 & !I5 & !I6 & I7
+  # !DD7 & I4 & I5 & !I6 & I7
 
 prog =>
     inst
-  # !I6
+  # oper
 
 skip =>
-    DD7 & !I4 & I5 & !I6
-  # !DD7 & I4 & I5 & !I6
+    DD7 & I4 & !I5 & !I6 & I7
+  # !DD7 & I4 & I5 & !I6 & I7
 
 toggle =>
-    I3 & !I6 & !inst
-
-DD7.oe  =>
-    0 
+    I4 & I5 & !I6 & !I7 & !inst
 
 PA16.oe  =>
     1 
 
 mv.oe  =>
+    1 
+
+oper.oe  =>
     1 
 
 pcent.oe  =>

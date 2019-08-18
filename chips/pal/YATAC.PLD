@@ -1,7 +1,7 @@
 Name     YATAC ;
 PartNo   00 ;
-Date     8/10/2019 ;
-Revision 05 ;
+Date     8/18/2019 ;
+Revision 06 ;
 Designer A J Hewitt ;
 Company  ;
 Assembly None ;
@@ -13,11 +13,12 @@ PIN 1      = sclk          ; /*                                         */
 PIN 2      = !reset        ; /*                                         */
 PIN 3      = pclk          ; /*                                         */
 PIN 4      = hblank        ; /*                                         */
-PIN [5..9] = [I3..7]       ; /*                                         */
-PIN 12     = DD7           ; /*                                         */
+PIN 5      = DD7           ; /*                                         */
+PIN [6..9] = [I4..7]       ; /*                                         */
 
 /****************************** OUTPUT PINS *****************************/
-PIN 13    = mv             ; /* Move instruction                        */
+PIN 12    = mv             ; /* Move instruction (1=mv)                 */
+PIN 13    = !oper          ; /* Operand instruction (0=ld)              */
 PIN 14    = !inst          ; /* CPU execution state (0=Load I)          */
 PIN 15    = hsel           ; /* H Register Select (0=L 1=H)             */
 PIN 16    = boot           ; /* Boot mode (0=run, 1=booting)            */
@@ -25,41 +26,42 @@ PIN 17    = bank           ; /* ROM memory bank (0=lower, 1=upper)      */
 PIN 18    = pcent          ; /* PC Count Enable (ent)                   */
 PIN 19    = PA16           ; /* ROM A16                                 */
 
-ext  = !I7;
-oper = !I6;
-ld   = oper & !I5;
-ldc  = oper & I5;
+fnhl = !I7 & !I6 & !I5;
+ld   = !I6 & I5;
+ldt  = ld & !I7 & I4;
+fnl  = !I7 & I6 & !I5;
+fnh  = I6 & I5;
+nop  = I7 & !I6 & !I5 & !I4;
+ldc  = I7 & !I6 & I4;
 mv   = I7 & I6 & !I5;
-fnh  = I7 & I6 & I5;
-fn4  = !I7 & I6 & !I5;
-fn8  = !I7 & I6 & I5;
 
-cond   = I4 $ DD7;
-nop    = ld & !I4;
-toggle = oper & I3 & !inst;
+cond   = I5 $ DD7;
 skip   = ldc & cond;
+toggle = ldt & !inst;
+oper = ld # ldc;
 prog   = inst # oper;
+
 pcent  = (pclk & prog) # skip;
 PA16   = (pclk & ((prog & bank) # (!prog & (!hsel # fnh # mv)))) # (!pclk & hblank);
 
-FIELD execution = [!inst, hsel];
+FIELD execution = [!inst, !hsel];
 $DEFINE prog_L    'b'00
 $DEFINE prog_H    'b'01
-$DEFINE alu_L     'b'10
-$DEFINE alu_H     'b'11
+$DEFINE alu_L     'b'11
+$DEFINE alu_H     'b'10
 
 SEQUENCE execution {
   PRESENT prog_L
     IF nop # skip # reset NEXT prog_L;
-    IF ext NEXT prog_H;
-    IF fnh # mv NEXT alu_H;
-    DEFAULT NEXT alu_L;
+    IF !I7 NEXT prog_H;
+    DEFAULT NEXT alu_H;
   PRESENT prog_H
     IF reset NEXT prog_L;
+    IF fnh NEXT alu_H;
     DEFAULT NEXT alu_L;
   PRESENT alu_L
     IF reset NEXT prog_L;
-    IF fn8 NEXT alu_H;
+    IF fnhl NEXT alu_H;
     DEFAULT NEXT prog_L;
   PRESENT alu_H
     NEXT prog_L;
