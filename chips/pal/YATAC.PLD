@@ -18,7 +18,7 @@ PIN [6..9] = [I4..7]       ; /*                                         */
 
 /****************************** OUTPUT PINS *****************************/
 PIN 12    = mv             ; /* Move instruction (1=mv)                 */
-PIN 13    = !oper          ; /* Operand instruction (0=ld)              */
+PIN 13    = !prog          ; /* Program Select (0=prog)                 */
 PIN 14    = !inst          ; /* CPU execution state (0=Load I)          */
 PIN 15    = hsel           ; /* H Register Select (0=L 1=H)             */
 PIN 16    = boot           ; /* Boot mode (0=run, 1=booting)            */
@@ -26,45 +26,43 @@ PIN 17    = bank           ; /* ROM memory bank (0=lower, 1=upper)      */
 PIN 18    = pcent          ; /* PC Count Enable (ent)                   */
 PIN 19    = PA16           ; /* ROM A16                                 */
 
-fnhl = !I7 & !I6 & !I5;
-ld   = !I6 & I5;
-ldt  = ld & !I7 & I4;
-fnl  = !I7 & I6 & !I5;
-fnh  = I6 & I5;
-nop  = I7 & !I6 & !I5 & !I4;
-ldc  = I7 & !I6 & I4;
-mv   = I7 & I6 & !I5;
+aluhl = !I6 & !I5;
+ld    = !I6 & I5;
+aluh  = I6 & I5;
+ldt   = ld & !I7 & I4;
+nop   = I7 & !I6 & !I5 & !I4;
+ldc   = I7 & !I6 & I4;
+mv    = I7 & I6 & !I5;
 
 cond   = I5 $ DD7;
 skip   = ldc & cond;
 toggle = ldt & !inst;
-oper = ld # ldc;
-prog   = inst # oper;
+prog   = inst # ld # ldc;
 
 pcent  = (pclk & prog) # skip;
-PA16   = (pclk & ((prog & bank) # (!prog & (!hsel # fnh # mv)))) # (!pclk & hblank);
+PA16   = (pclk & ((prog & bank) # (!prog & (!hsel # aluh # mv)))) # (!pclk & hblank);
 
 FIELD execution = [!inst, !hsel];
-$DEFINE prog_L    'b'00
-$DEFINE prog_H    'b'01
+$DEFINE inst_L    'b'00
+$DEFINE inst_H    'b'01
 $DEFINE alu_L     'b'11
 $DEFINE alu_H     'b'10
 
 SEQUENCE execution {
-  PRESENT prog_L
-    IF nop # skip # reset NEXT prog_L;
-    IF !I7 NEXT prog_H;
+  PRESENT inst_L
+    IF nop # skip # reset NEXT inst_L;
+    IF !I7 NEXT inst_H;
     DEFAULT NEXT alu_H;
-  PRESENT prog_H
-    IF reset NEXT prog_L;
-    IF fnh NEXT alu_H;
+  PRESENT inst_H
+    IF reset NEXT inst_L;
+    IF aluh NEXT alu_H;
     DEFAULT NEXT alu_L;
   PRESENT alu_L
-    IF reset NEXT prog_L;
-    IF fnhl NEXT alu_H;
-    DEFAULT NEXT prog_L;
+    IF reset NEXT inst_L;
+    IF aluhl NEXT alu_H;
+    DEFAULT NEXT inst_L;
   PRESENT alu_H
-    NEXT prog_L;
+    NEXT inst_L;
 }
 
 $DEFINE upper     'b'1

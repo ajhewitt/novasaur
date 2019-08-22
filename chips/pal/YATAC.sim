@@ -11,9 +11,9 @@ PIN   4 =  hblank
 PIN  15 =  hsel 
 PIN  14 = !inst 
 PIN  12 =  mv 
-PIN  13 = !oper 
 PIN  18 =  pcent 
 PIN   3 =  pclk 
+PIN  13 = !prog 
 PIN   2 = !reset 
 PIN   1 =  sclk 
 %END
@@ -24,12 +24,17 @@ FIELD execution = !inst,!hsel
 
 %EQUATION
 PA16 =>
-    !hsel & inst & oper & pclk
-  # inst & mv & oper & pclk
-  # I5 & I6 & inst & oper & pclk
-  # bank & !oper & pclk
-  # bank & !inst & pclk
+    bank & pclk & !prog
+  # !hsel & pclk & prog
+  # mv & pclk & prog
+  # I5 & I6 & pclk & prog
   # hblank & !pclk
+
+aluh =>
+    I5 & I6
+
+aluhl =>
+    !I5 & !I6
 
 bank.d  =>
     !reset
@@ -52,22 +57,13 @@ cond =>
     !DD7 & I5
   # DD7 & !I5
 
-fnh =>
-    I5 & I6
-
-fnhl =>
-    !I5 & !I6 & !I7
-
-fnl =>
-    !I5 & I6 & !I7
-
 !hsel.d  =>
     !I5 & !hsel & !inst & reset
   # !I7 & hsel & !inst
   # !I6 & !hsel & !inst & reset
 
 !inst.d  =>
-    !I5 & !I6 & !I7 & !hsel & inst
+    !I5 & !I6 & !hsel & inst
   # !DD7 & I4 & !I5 & I7 & hsel & !inst & reset
   # DD7 & I5 & I7 & hsel & !inst & reset
   # I6 & I7 & hsel & !inst & reset
@@ -91,19 +87,15 @@ mv =>
 nop =>
     !I4 & !I5 & !I6 & I7
 
-oper =>
-    I5 & !I6
-  # I4 & !I6 & I7
-
 pcent =>
-    !inst & pclk
-  # !oper & pclk
+    pclk & !prog
   # DD7 & I4 & !I5 & !I6 & I7
   # !DD7 & I4 & I5 & !I6 & I7
 
 prog =>
-    inst
-  # oper
+    !inst
+  # I5 & !I6
+  # I4 & !I6 & I7
 
 skip =>
     DD7 & I4 & !I5 & !I6 & I7
@@ -118,10 +110,10 @@ PA16.oe  =>
 mv.oe  =>
     1 
 
-oper.oe  =>
+pcent.oe  =>
     1 
 
-pcent.oe  =>
+prog.oe  =>
     1 
 
 %END
