@@ -1,0 +1,90 @@
+ AS V1.42 Beta [Bld 86] - source file interrupthandler.asm - page 1 - 2/16/2013 14:25:27
+
+
+       1/       0 :                     	relaxed on
+       2/       0 :                     REST:
+       3/       0 : 90                  	GHI 0     ;.. INITIALIZE Rl, R2, R3
+       4/       1 : B1                  	PHI 1
+       5/       2 : B2                  	PHI 2
+       6/       3 : B3                  	PHI 3
+       7/       4 : F8 1B               	LDI INTS  ;.. R1 = INTERRUPT PC
+       8/       6 : A1                  	PLO 1
+       9/       7 : F8 FF               	LDI 0xFF   ;.. R2 = STACK (TEMP DATA)
+      10/       9 : A2                  	PLO 2
+      11/       A : F8 0F               	LDI MAIN  ;.. R3 = MAIN PC
+      12/       C : A3                  	PLO 3
+      13/       D : 70                  	RET       ;.. X=0, R0=000E
+      14/       E : 23                  	db 0x23	  ;.. SET X=2, P=3
+      15/       F : 69                  MAIN: INP 1   ;.. TURN ON TV
+      16/      10 : 90                  LOOP: GHI 0   ;.. DISPLAY R0
+      17/      11 : 22                  	DEC 2
+      18/      12 : 52                  	STR 2     ;.. FROM MEM AT R2
+      19/      13 : 64                  	OUT 4     ;.. X=2!
+      20/      14 : 30 10               	BR  LOOP  ;.. DO NOTHING
+      21/      16 :                     
+      22/      16 :                     ;
+      23/      16 :                     ; Interrupt service routine for 1861
+      24/      16 :                     ;
+      25/      16 : E2                  INTX:   SEX  2
+      26/      17 : 42                          LDA  2         ; recover carry
+      27/      18 : FE                          SHL
+      28/      19 : 42                          LDA  2         ; recover A
+      29/      1A : 70                          RET             ; < exit
+      30/      1B : C4                  INTS:   NOP             ; > entry
+      31/      1C : 22                          DEC  2
+      32/      1D : 78                          SAV             ; save T
+      33/      1E : 22                          DEC  2
+      34/      1F : 73                          STXD            ; save A
+      35/      20 : F8 00                       LDI  BUFF/256
+      36/      22 : B0                          PHI  0         ; set up R0 for DMA
+      37/      23 : F8 28                       LDI  BUFF
+      38/      25 : A0                          PLO  0
+      39/      26 : 30 16                       br   intx
+      40/      28 : 01 01 01 01 01 01   BUFF:	db 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+                    01 01 01 01 01 01 
+                    01 01 01 01 
+      41/      38 : 01 01 01 01 01 01   	db 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1        
+                    01 01 01 01 01 01 
+                    01 01 01 01 
+ AS V1.42 Beta [Bld 86] - source file interrupthandler.asm - page 2 - 2/16/2013 14:25:27
+
+
+  symbol table (* = unused):
+  ------------------------
+
+*ARCHITECTURE :  i386-unknown-win32 - | *BIGENDIAN :                      0 - |
+*BRANCHEXT :                      0 - |  BUFF :                          28 C |
+*CASESENSITIVE :                  0 - | *CONSTPI :        3.141592653589793 - |
+*DATE :                   2/16/2013 - | *FALSE :                          0 - |
+*FULLPMMU :                       1 - | *HAS64 :                          1 - |
+*HASDSP :                         0 - | *HASFPU :                         0 - |
+*HASPMMU :                        0 - | *INEXTMODE :                      0 - |
+*INLWORDMODE :                    0 - | *INMAXMODE :                      0 - |
+*INSRCMODE :                      0 - | *INSUPMODE :                      0 - |
+ INTS :                          1B C |  INTX :                          16 C |
+*LISTON :                         1 - |  LOOP :                          10 C |
+*MACEXP :                         1 - |  MAIN :                           F C |
+*MOMCPU :                      1802 - | *MOMCPUNAME :                  1802 - |
+*NESTMAX :                      100 - | *PACKING :                        0 - |
+*PADDING :                        1 - | *RELAXED :                        1 - |
+*REST :                           0 C | *TIME :                    14:25:27 - |
+*TRUE :                           1 - | *VERSION :                     142F - |
+
+     34 symbols
+     29 unused symbols
+
+ AS V1.42 Beta [Bld 86] - source file interrupthandler.asm - page 3 - 2/16/2013 14:25:27
+
+
+  codepages:
+  ----------
+
+STANDARD (0 changed characters)
+
+
+0.01 seconds assembly time
+
+     41 lines source file
+      2 passes
+      0 errors
+      0 warnings

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/80/trunk/examples/tinyFat
+END
+tinyFAT.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/68/trunk/examples/tinyFat/tinyFAT.h
+END
+mmcsmall.c
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/78/trunk/examples/tinyFat/mmcsmall.c
+END
+SD_defines.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/68/trunk/examples/tinyFat/SD_defines.h
+END
+HW_1802_defines.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/68/trunk/examples/tinyFat/HW_1802_defines.h
+END
+mmc.c
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/76/trunk/examples/tinyFat/mmc.c
+END
+tfdemo.c
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/71/trunk/examples/tinyFat/tfdemo.c
+END
+tinyFAT.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/71/trunk/examples/tinyFat/tinyFAT.c
+END
+tfLcdDemo.c
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/71/trunk/examples/tinyFat/tfLcdDemo.c
+END
+mmc.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/68/trunk/examples/tinyFat/mmc.h
+END

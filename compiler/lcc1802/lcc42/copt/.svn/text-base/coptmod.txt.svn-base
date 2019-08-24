@@ -1,0 +1,173 @@
+/*
+ * Note: copt is available on the lcc website under Contributed software:
+ *
+ * copt.shar        Source code and documentation for copt, the simple
+ *                peephole optimizer mentioned on p. 534 of "A Retargetable
+ *                C Compiler: Design and Implementation". This file is
+ *                a shell archive; unload it with sh <copt.shar.
+ *                Chris Fraser / cwfr...@microsoft.com
+ *
+ *  Added command line options -I and -O to copt to support input and output
+ *  files rather than using stdin/stdout.
+ */
+/*===== copt.c: replaced main() with =====*/
+
+/* main - peephole optimizer */
+main(argc, argv) int argc; char **argv; {
+        FILE *fp;
+        FILE *finp = stdin;
+        FILE *fout = stdout;
+        int i;
+        struct lnode head, *p, *opt(), tail;
+
+        for (i = 1; i < argc; i++)
+                if (strcmp(argv[i], "-D") == 0)
+                        debug = 1;
+                else if (strcmp(argv[i], "-I") == 0)
+                        finp = fopen(argv[++i], "r");
+                else if (strcmp(argv[i], "-O") == 0)
+                        fout = fopen(argv[++i], "w");
+                else if ((fp=fopen(argv[i], "r")) == NULL)
+                        error("copt: can't open patterns file\n");
+                else
+                        init(fp);
+
+        getlst(finp, "", &head, &tail);
+        head.l_text = tail.l_text = "";
+
+        for (p = head.l_next; p != &tail; p = opt(p))
+                ;
+
+        for (p = head.l_next; p != &tail; p = p->l_next)
+                fputs(p->l_text, fout);
+}
+
+/*
+ *  Optionally invoke copt (using -O command line option in lcc).  It would
+ *  be nice if this was added to the next version (4.3) of lcc...
+ */
+
+/*===== Inserted before line 54 =====*/
+
+extern char *peep[];
+
+/*===== Inserted before line 60 =====*/
+
+static int Oflag;       /* -O specified */
+
+/*===== Replaced compile() =====*/
+
+/* compile - compile src into dst, return status */
+static int compile(char *src, char *dst) {
+        int status;
+
+        if (!Oflag) {
+                compose(com, clist, append(src, 0), append(dst, 0));
+                status = callsys(av);
+        } else {
+                char* nonoptname = Oflag ? tempname(".n") : dst;
+
+                /* compile source into non-optimized assembly code */
+                compose(com, clist, append(src, 0), append(nonoptname, 0));
+                status = callsys(av);
+                if (status >= 0 && Oflag) {
+                        /* call peephole optimizer */
+                        compose(peep, clist, append(nonoptname, 0), append(dst, 0));
+                        status = callsys(av);
+                }
+        }
+        return status;
+}
+
+/*===== Replaced line 488 with =====*/
+"-O        use peephole optimizer\n",
+
+/*===== Replaced line 669 with =====*/
+                        Oflag++;
+
+/*===== Added line to etc/hostfile.c =====*/
+
+char *peep[] = { LCCDIR "bin/copt", "mips.opt", "-I", "$2", "-O", "$3", 0 };
+
+
+**************************
+Found another problem with exit code (passed back to make from lcc).
+Added int return value to main:
+/* main - peephole optimizer */
+int main(argc, argv) int argc; char **argv; {
+
+        FILE *fp;
+        FILE *finp = stdin;
+        FILE *fout = stdout;
+        int i;
+        struct lnode head, *p, *opt(), tail;
+        for (i = 1; i < argc; i++)
+                if (strcmp(argv[i], "-D") == 0)
+                        debug = 1;
+                else if (strcmp(argv[i], "-I") == 0)
+                        finp = fopen(argv[++i], "r");
+                else if (strcmp(argv[i], "-O") == 0)
+                        fout = fopen(argv[++i], "w");
+                else if ((fp=fopen(argv[i], "r")) == NULL)
+                        error("copt: can't open patterns file\n");
+                else
+                        init(fp);
+        getlst(finp, "", &head, &tail);
+        head.l_text = tail.l_text = "";
+        for (p = head.l_next; p != &tail; p = opt(p))
+                ;
+        for (p = head.l_next; p != &tail; p = p->l_next)
+                fputs(p->l_text, fout);
+        return 0;
+}
+****************************************
+DESCRIPTION
+       copt is a general\fB-purpose peephole optimizer. It reads code from its
+       standard input and writes an improved version to its  standard  output.
+       copy  reads the named files for its optimizations, which are encoded as
+       follows:
+
+                 <pattern for input line 1>
+                 <pattern for input line 2>
+                  ...
+                 <pattern for input line n>
+                 =
+                 <pattern for output line 1>
+                 <pattern for output line 2>
+                  ...
+                 <pattern for output line m>
+                 <blank line>
+
+       Pattern matching uses literal string comparison,  with  one  exception:
+       ‘‘%%’’  matches  the  ‘‘%’’  character,  and  ‘‘%’’ followed by a digit
+       matches everything up to  the  next  occurrence  of  the  next  pattern
+       character,  though  all  occurrences of %n must denote the same string.
+       For example, the pattern ‘‘%1=%1.’’ matches exactly those strings  that
+       begin  with  a string X, followed by a ‘‘=’’ (the first), followed by a
+       second occurrence of  X,  followed  by  a  period.  In  this  way,  the
+       input/output pattern
+
+                 mov $%1,r%2
+                 mov *r%2,r%2
+                 =
+                 mov %1,r%2
+
+       commands copt to replace runs like
+
+                 mov $_a,r3
+                 mov *r3,r3
+
+       with
+
+                 mov _a,r3
+
+       Note that a tab or newline can terminate a %n variable.
+
+       copt  compares  each  run  of  input  patterns  with  the current input
+       instruction and its predecessors. If no match is found, it advances  to
+       the  next input instruction and tries again. Otherwise, it replaces the
+       input instructions with  the  corresponding  output  patterns,  pattern
+       variables   instantiated,and   resumes   its   search  with  the  first
+       instruction of the replacement. copt matches input patterns in  reverse
+       order to cascade optimizations without backing up.
+

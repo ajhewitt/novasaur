@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/4/trunk/examples/opttest
+END
+retval.asm
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/4/trunk/examples/opttest/retval.asm
+END
+lcc1802.opt
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/4/trunk/examples/opttest/lcc1802.opt
+END
+retval.c
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/4/trunk/examples/opttest/retval.c
+END
+retval.mipsasm
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/4/trunk/examples/opttest/retval.mipsasm
+END
+8q.asm
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/4/trunk/examples/opttest/8q.asm
+END
+00comparulator.asm
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/4/trunk/examples/opttest/00comparulator.asm
+END
+8q.c
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/4/trunk/examples/opttest/8q.c
+END
+00comparulator.c
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/4/trunk/examples/opttest/00comparulator.c
+END

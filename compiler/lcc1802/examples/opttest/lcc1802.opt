@@ -1,0 +1,6 @@
+	release 0; release room for local variables 
+=
+
+_main:
+=
+_main: ;copt is peeping you now!

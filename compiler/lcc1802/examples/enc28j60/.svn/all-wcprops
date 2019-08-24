@@ -1,0 +1,209 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/4/trunk/examples/enc28j60
+END
+pingseq.txt
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/4/trunk/examples/enc28j60/pingseq.txt
+END
+failertoo.lst
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/4/trunk/examples/enc28j60/failertoo.lst
+END
+xnc28j60nv.lst
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/4/trunk/examples/enc28j60/xnc28j60nv.lst
+END
+webutil.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/4/trunk/examples/enc28j60/webutil.c
+END
+tcpipfail.c
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/4/trunk/examples/enc28j60/tcpipfail.c
+END
+tcpip.c
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/4/trunk/examples/enc28j60/tcpip.c
+END
+xnc28j60.asm
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/4/trunk/examples/enc28j60/xnc28j60.asm
+END
+webutil.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/4/trunk/examples/enc28j60/webutil.h
+END
+xnc28j60.c
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/4/trunk/examples/enc28j60/xnc28j60.c
+END
+a.hex
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/4/trunk/examples/enc28j60/a.hex
+END
+tcpip.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/4/trunk/examples/enc28j60/tcpip.h
+END
+peep1.def
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/4/trunk/examples/enc28j60/peep1.def
+END
+null
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/4/trunk/examples/enc28j60/null
+END
+readme.txt
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/4/trunk/examples/enc28j60/readme.txt
+END
+net.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/4/trunk/examples/enc28j60/net.h
+END
+failer.asm
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/4/trunk/examples/enc28j60/failer.asm
+END
+xnc28j60aswas.lst
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/4/trunk/examples/enc28j60/xnc28j60aswas.lst
+END
+xnc28j60.lst
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/4/trunk/examples/enc28j60/xnc28j60.lst
+END
+failer.c
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/4/trunk/examples/enc28j60/failer.c
+END
+enc.asm
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/4/trunk/examples/enc28j60/enc.asm
+END
+enc.c
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/4/trunk/examples/enc28j60/enc.c
+END
+compstats.txt
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/4/trunk/examples/enc28j60/compstats.txt
+END
+enc.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/4/trunk/examples/enc28j60/enc.h
+END
+util.c
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/4/trunk/examples/enc28j60/util.c
+END
+xnc28j60.asmaswas
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/4/trunk/examples/enc28j60/xnc28j60.asmaswas
+END
+mytypes.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/4/trunk/examples/enc28j60/mytypes.h
+END
+failertoo.asm
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/4/trunk/examples/enc28j60/failertoo.asm
+END
+util.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/4/trunk/examples/enc28j60/util.h
+END
+xnc28j60nv.asm
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/4/trunk/examples/enc28j60/xnc28j60nv.asm
+END
+fragments.asm
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/4/trunk/examples/enc28j60/fragments.asm
+END
+failertoo.c
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/4/trunk/examples/enc28j60/failertoo.c
+END
+fragments.c
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/4/trunk/examples/enc28j60/fragments.c
+END
+enc28j60.tws
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/4/trunk/examples/enc28j60/enc28j60.tws
+END
+pigs.txt
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/4/trunk/examples/enc28j60/pigs.txt
+END

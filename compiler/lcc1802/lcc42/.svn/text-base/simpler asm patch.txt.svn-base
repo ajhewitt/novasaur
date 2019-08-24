@@ -1,0 +1,330 @@
+I made a really quick hack to support inline assembly on lcc. The
+syntax is gcc-like but it currently does emit only the assembly
+instruction. More work has to be done to go even close gcc.
+diff -Nru orig/lcc-4.2/src/alpha.md lcc-4.2/src/alpha.md
+--- orig/lcc-4.2/src/alpha.md        2002-08-28 16:12:41.000000000 -0700
++++ lcc-4.2/src/alpha.md        2004-02-16 18:15:51.253977544 -0800
+@@ -321,6 +321,8 @@
+ %term LOADU4=4326
+ %term LOADU8=8422
+ 
++%term IASMV=88
++
+ %term VREGP=711
+ %%
+ reg:  INDIRI1(VREGP)     "# read register\n"
+@@ -620,6 +622,8 @@
+ stmt: ARGB(INDIRB(reg))       "# argb %0\n"      1
+ stmt: ASGNB(reg,INDIRB(reg))  "# asgnb %0 %1\n"  1
+ 
++stmt: IASMV                 "# emit inline assembly\n"
++
+ %%
+ static void progend(void){}
+ 
+@@ -797,6 +801,9 @@
+                 break;
+                 }
+ 
++        case IASM+V:
++                asminline(p);
++                break;
+         }
+ }
+ 
+diff -Nru orig/lcc-4.2/src/config.h lcc-4.2/src/config.h
+--- orig/lcc-4.2/src/config.h        2002-08-28 16:12:42.000000000 -0700
++++ lcc-4.2/src/config.h        2004-02-16 18:07:25.414876776 -0800
+@@ -39,6 +39,7 @@
+ extern void    setreg(Node, Symbol);
+ extern void    spill(unsigned, int, Node);
+ extern int     widens(Node);
++extern void    asminline(Node p);
+ 
+
+ extern int      argoffset, maxargoffset;
+ extern int      bflag, dflag;
+diff -Nru orig/lcc-4.2/src/dag.c lcc-4.2/src/dag.c
+--- orig/lcc-4.2/src/dag.c        2002-08-28 16:12:42.000000000 -0700
++++ lcc-4.2/src/dag.c        2004-02-16 20:16:21.710781032 -0800
+@@ -372,6 +372,18 @@
+                       if (tp->u.sym->generated)
+                               addlocal(tp->u.sym);
+                       p = node(tp->op + sizeop(voidptype->size), NULL, NULL,
+tp->u.sym); } break;
++        case IASM: {
++                Symbol iasm;
++
++                NEW0(iasm, FUNC);
++                iasm->name = iasm->x.name = (char *) tp->u.v.p;
++                iasm->scope = CONSTANTS;
++                iasm->sclass = STATIC;
++                iasm->type = voidtype;
++
++                p = newnode(IASM+V, NULL, NULL, iasm);
++
++                list(p); } break;
+         default:assert(0);
+         }
+         tp->node = p;
+diff -Nru orig/lcc-4.2/src/gen.c lcc-4.2/src/gen.c
+--- orig/lcc-4.2/src/gen.c        2002-08-28 16:12:43.000000000 -0700
++++ lcc-4.2/src/gen.c        2004-02-16 18:46:34.926696688 -0800
+@@ -828,3 +828,16 @@
+         return p->x.regnode->set<<8 | p->x.regnode->number;
+ }
+ 
++void asminline(Node p) {
++        char *asmi, *ireg, *oreg;
++
++        asmi = p->syms[0]->name;
++        ireg = strchr(asmi, ':');
++        *ireg++ = 0;
++        oreg = strchr(ireg, ':');
++        *oreg++ = 0;
++
++        print("%s", asmi);
++
++}
++
+diff -Nru orig/lcc-4.2/src/lex.c lcc-4.2/src/lex.c
+--- orig/lcc-4.2/src/lex.c        2002-08-28 16:12:44.000000000 -0700
++++ lcc-4.2/src/lex.c        2004-02-16 11:30:25.063120672 -0800
+@@ -382,6 +382,12 @@
+                                 cp = rcp + 3;
+                                 return AUTO;
+                         }
++                        if (rcp[0] == 's'
++                        &&  rcp[1] == 'm'
++                        && !(map[rcp[2]]&(DIGIT|LETTER))) {
++                                cp = rcp + 2;
++                                return ASM;
++                        }
+                         goto id;
+                 case 'b':
+                         if (rcp[0] == 'r'
+diff -Nru orig/lcc-4.2/src/mips.md lcc-4.2/src/mips.md
+--- orig/lcc-4.2/src/mips.md        2002-08-28 16:12:44.000000000 -0700
++++ lcc-4.2/src/mips.md        2004-02-16 18:14:22.900409328 -0800
+@@ -323,6 +323,8 @@
+ %term LOADU4=4326
+ %term LOADU8=8422
+ 
++%term IASMV=88
++
+ %term VREGP=711
+ %%
+ reg:  INDIRI1(VREGP)     "# read register\n"
+@@ -523,6 +525,9 @@
+ 
+ stmt: ARGB(INDIRB(reg))       "# argb %0\n"      1
+ stmt: ASGNB(reg,INDIRB(reg))  "# asgnb %0 %1\n"  1
++
++stmt: IASMV                 "# emit inline assembly\n"
++
+ %%
+ static void progend(void){}
+ static void progbeg(int argc, char *argv[]) {
+@@ -669,6 +674,9 @@
+                 for ( ; dst <= 12 && dst < n; dst += 4)
+                         print("lw $%d,%d($sp)\n", (dst/4)+4, dst);
+                 break;
++        case IASM+V:
++                asminline(p);
++                break;
+         }
+ }
+ static Symbol argreg(int argno, int offset, int ty, int sz, int ty0)
+{
+diff -Nru orig/lcc-4.2/src/ops.h lcc-4.2/src/ops.h
+--- orig/lcc-4.2/src/ops.h        2002-09-03 16:39:33.000000000 -0700
++++ lcc-4.2/src/ops.h        2004-02-16 16:15:59.289322360 -0800
+@@ -131,3 +131,5 @@
+         op(LOAD,I,csilh)
+         op(LOAD,P,p)
+         op(LOAD,U,csilhp)
++gop(IASM,5)
++        op(IASM,V,-)
+diff -Nru orig/lcc-4.2/src/sparc.md lcc-4.2/src/sparc.md
+--- orig/lcc-4.2/src/sparc.md        2002-08-28 16:12:46.000000000 -0700
++++ lcc-4.2/src/sparc.md        2004-02-16 18:16:53.224556584 -0800
+@@ -325,6 +325,8 @@
+ %term LOADU4=4326
+ %term LOADU8=8422
+ 
++%term IASMV=88
++
+ %term VREGP=711
+ %%
+ reg:  INDIRI1(VREGP)     "# read register\n"
+@@ -576,6 +578,8 @@
+ 
+ stmt:  ASGNB(reg,INDIRB(reg))  "# ASGNB\n"
+ 
++stmt: IASMV                 "# emit inline assembly\n"
++
+ %%
+ static void progend(void){}
+ static void progbeg(int argc, char *argv[]) {
+@@ -738,7 +742,10 @@
+                         getregnum(p->x.kids[1]), 0,
+                         p->syms[0]->u.c.v.i, tmpregs);
+                 break;
+-        }
++        }
++        case IASM+V:
++                asminline(p);
++                break;
+         }
+ }
+ static void local(Symbol p) {
+diff -Nru orig/lcc-4.2/src/stmt.c lcc-4.2/src/stmt.c
+--- orig/lcc-4.2/src/stmt.c        2002-08-28 16:12:46.000000000 -0700
++++ lcc-4.2/src/stmt.c        2004-02-16 18:00:06.237641864 -0800
+@@ -18,6 +18,7 @@
+ static void dostmt(int, Swtch, int);
+ static int equal(Symbol, Symbol);
+ static void forstmt(int, Swtch, int);
++static void asmstmt(int, Swtch, int);
+ static void ifstmt(int, int, Swtch, int);
+ static Symbol localaddr(Tree);
+ static void stmtlabel(void);
+@@ -90,6 +91,8 @@
+ 
+         case FOR:      forstmt(genlabel(4), swp, lev + 1);
+  break;
++        case ASM:      asmstmt(genlabel(1), swp, lev + 1);
++                break;
+         case BREAK:    walk(NULL, 0, 0);
+                        definept(NULL);
+                        if (swp && swp->lab > loop)
+@@ -311,6 +314,49 @@
+         if (findlabel(lab + 2)->ref)
+                 definelab(lab + 2);
+ }
++static void asmstmt(int lab, Swtch swp, int lev) {
++        char *asmi, *ireg, *oreg, *symn;
++        Tree p;
++
++        t = gettok();
++        expect('(');
++        definept(NULL);
++
++        if (t != SCON) {
++                error("expecting string constant\n");
++                return;
++        }
++        asmi = strdup(tsym->u.c.v.p);
++        t = gettok();
++        expect(':');
++        if (t != SCON) {
++                error("expecting string constant\n");
++                return;
++        }
++        ireg = strdup(tsym->u.c.v.p);
++        t = gettok();
++        expect(':');
++        if (t != SCON) {
++                error("expecting string constant\n");
++                return;
++        }
++        oreg = strdup(tsym->u.c.v.p);
++        t = gettok();
++        expect(')');
++        expect(';');
++
++        symn = (char *) malloc(strlen(asmi) + strlen(ireg) + strlen(oreg) +
+4);
++        sprintf(symn, "%s:%s:%s", asmi, ireg, oreg);
++
++        free(asmi);
++        free(ireg);
++        free(oreg);
++
++        p = tree(mkop(IASM, voidtype), voidtype, NULL, NULL);
++        p->u.v.p = symn;
++
++        listnodes(p, 0, 0);
++}
+ static void swstmt(int loop, int lab, int lev) {
+         Tree e;
+         struct swtch sw;
+diff -Nru orig/lcc-4.2/src/token.h lcc-4.2/src/token.h
+--- orig/lcc-4.2/src/token.h        2002-08-28 16:12:47.000000000 -0700
++++ lcc-4.2/src/token.h        2004-02-16 15:25:18.480595552 -0800
+@@ -89,7 +89,7 @@
+ xx(WHILE,       84,     0,      0,      0,      IF,     "while")
+ xx(TYPECODE,    85,     0,      0,      0,      ID,     "__typecode")
+ xx(FIRSTARG,    86,     0,      0,      0,      ID,     "__firstarg")
+-yy(0,           87,     0,      0,      0,      0,      0)
++xx(ASM,         87,     0,      IASM,   0,      IF,     "asm")
+ yy(0,           88,     0,      0,      0,      0,      0)
+ yy(0,           89,     0,      0,      0,      0,      0)
+ yy(0,           90,     0,      0,      0,      0,      0)
+diff -Nru orig/lcc-4.2/src/x86.md lcc-4.2/src/x86.md
+--- orig/lcc-4.2/src/x86.md        2002-08-28 16:12:48.000000000 -0700
++++ lcc-4.2/src/x86.md        2004-02-16 18:18:04.734685392 -0800
+@@ -308,6 +308,8 @@
+ %term LOADU4=4326
+ %term LOADU8=8422
+ 
++%term IASMV=88
++
+ %term VREGP=711
+ %%
+ reg:  INDIRI1(VREGP)     "# read register\n"
+@@ -586,6 +588,9 @@
+ stmt: RETP4(reg)  "# ret\n"
+ stmt: RETF4(reg)  "# ret\n"
+ stmt: RETF8(reg)  "# ret\n"
++
++stmt: IASMV                 "# emit inline assembly\n"
++
+ %%
+ static void progbeg(int argc, char *argv[]) {
+         int i;
+@@ -812,6 +817,8 @@
+         else if (op == ARG+B)
+                 print("sub esp,%d\nmov edi,esp\nmov ecx,%d\nrep
+movsb\n",
+                         roundup(p->syms[0]->u.c.v.i, 4),
+p->syms[0]->u.c.v.i);
++        else if (op == IASM+V)
++                asminline(p);
+ }
+ 
+ static void doarg(Node p) {
+diff -Nru orig/lcc-4.2/src/x86linux.md lcc-4.2/src/x86linux.md
+--- orig/lcc-4.2/src/x86linux.md        2002-08-28 16:12:48.000000000 -0700
++++ lcc-4.2/src/x86linux.md        2004-02-16 18:18:29.774878704 -0800
+@@ -305,6 +305,8 @@
+ %term LOADU4=4326
+ %term LOADU8=8422
+ 
++%term IASMV=88
++
+ %term VREGP=711
+ %%
+ reg:  INDIRI1(VREGP)     "# read register\n"
+@@ -680,6 +682,8 @@
+ stmt: RETP4(reg)  "# ret\n"
+ stmt: RETF4(freg) "# ret\n"
+ stmt: RETF8(freg) "# ret\n"
++
++stmt: IASMV                 "# emit inline assembly\n"
+ %%
+ static void progbeg(int argc, char *argv[]) {
+         int i;
+@@ -875,6 +879,8 @@
+         } else if (op == ARG+B)
+                 print("subl $%d,%%esp\nmovl %%esp,%%edi\nmovl
+$%d,%%ecx\nrep\nmovsb\n",
+                         roundup(p->syms[0]->u.c.v.i, 4),
+p->syms[0]->u.c.v.i);
++        else if (op == IASM+V)
++                asminline(p);
+ }
+ 
+ static void function(Symbol f, Symbol caller[], Symbol callee[], int
+n) {
+

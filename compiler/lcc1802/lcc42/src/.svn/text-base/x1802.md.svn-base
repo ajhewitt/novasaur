@@ -1,0 +1,788 @@
+%{
+
+/* 	**does not blow up**
+	dec 2 trying to get closer to the pdp11 rules
+	also copied in pdp11 code for function, defsymbol, and local
+	this stopped the blowup in emitcode
+	This file is the smallest/simplest LCC machine description (.md) file I could make
+    Copyright (C) 2012 Bill Rowe (wjr)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by  
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License  
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+#include <stdlib.h>
+#include "c.h"
+
+#define INTTMP 0x0f00				/* integer temps R8-11*/
+#define INTVAR (0x1f00 ^ INTTMP)		/* integer register variables R12-15 */
+#define LNGTMP 0x03				/* long integer temps L0 & L1*/
+#define LNGVAR (0x0f ^ LNGTMP)			/* long integer register variables L2 & L3 */
+#define FLTTMP 0x03				/* float temps F0&1 */
+#define FLTVAR (0x0f ^ FLTTMP)			/* float register variables F2&3 */
+
+#define NODEPTR_TYPE Node
+#define OP_LABEL(p) ((p)->op)
+#define LEFT_CHILD(p) ((p)->kids[0])
+#define RIGHT_CHILD(p) ((p)->kids[1])
+#define STATE_LABEL(p) ((p)->x.state)
+
+// Declare local routines to be used by IR record here
+static void address(Symbol, Symbol, long);
+static void blkfetch(int, int, int, int);
+static void blkloop(int, int, int, int, int, int[]);
+static void blkstore(int, int, int, int);
+static void defaddress(Symbol);
+static void defconst(int, int, Value);
+static void defstring(int, char *);
+static void defsymbol(Symbol);
+static void doarg(Node);
+static void emit2(Node);
+static void export(Symbol);
+static void clobber(Node);
+static void function(Symbol, Symbol[], Symbol[], int);
+static void global(Symbol);
+static void import(Symbol);
+static void local(Symbol);
+static void progbeg(int, char **);
+static void progend(void);
+static void segment(int);
+static void space(int);
+static void target(Node);
+
+static int memop(Node);
+static int cnstrhs(Node);
+static int sametree(Node,Node);
+
+/* Local vars here 
+these variables represent the machine registers: int, long, and float.  
+LCC exprects arrays of 32 slots, most of which are unused.
+The three last entries are wildcards used to select subsets of the 3 types of registers */
+static Symbol ireg[32],lreg[32],freg[32],iregw,lregw,fregw;
+
+static int cseg = -1;
+
+%}
+
+%start stmt
+
+%term CNSTF4=4113 CNSTF8=8209
+%term CNSTI1=1045 CNSTI2=2069 CNSTI4=4117
+%term CNSTP2=2071
+%term CNSTU1=1046 CNSTU2=2070 CNSTU4=4118
+
+%term ARGB=41
+%term ARGF4=4129 ARGF8=8225
+%term ARGI2=2085 ARGI4=4133
+%term ARGP2=2087
+%term ARGU2=2086 ARGU4=4134
+
+%term ASGNB=57
+%term ASGNF4=4145 ASGNF8=8241
+%term ASGNI1=1077 ASGNI2=2101 ASGNI4=4149
+%term ASGNP2=2103
+%term ASGNU1=1078 ASGNU2=2102 ASGNU4=4150
+
+%term INDIRB=73
+%term INDIRF4=4161 INDIRF8=8257
+%term INDIRI1=1093 INDIRI2=2117 INDIRI4=4165
+%term INDIRP2=2119
+%term INDIRU1=1094 INDIRU2=2118 INDIRU4=4166
+
+%term CVFF4=4209 CVFF8=8305
+%term CVFI2=2165 CVFI4=4213
+
+%term CVIF4=4225 CVIF8=8321
+%term CVII1=1157 CVII2=2181 CVII4=4229
+%term CVIU1=1158 CVIU2=2182 CVIU4=4230
+
+%term CVPU2=2198
+
+%term CVUI1=1205 CVUI2=2229 CVUI4=4277
+%term CVUP2=2231
+%term CVUU1=1206 CVUU2=2230 CVUU4=4278
+
+%term NEGF4=4289 NEGF8=8385
+%term NEGI2=2245 NEGI4=4293
+
+%term CALLB=217
+%term CALLF4=4305 CALLF8=8401
+%term CALLI2=2261 CALLI4=4309
+%term CALLP2=2263
+%term CALLU2=2262 CALLU4=4310
+%term CALLV=216
+
+%term RETF4=4337 RETF8=8433
+%term RETI2=2293 RETI4=4341
+%term RETP2=2295
+%term RETU2=2294 RETU4=4342
+%term RETV=248
+
+%term ADDRGP2=2311
+
+%term ADDRFP2=2327
+
+%term ADDRLP2=2343
+
+%term ADDF4=4401 ADDF8=8497
+%term ADDI2=2357 ADDI4=4405
+%term ADDP2=2359
+%term ADDU2=2358 ADDU4=4406
+
+%term SUBF4=4417 SUBF8=8513
+%term SUBI2=2373 SUBI4=4421
+%term SUBP2=2375
+%term SUBU2=2374 SUBU4=4422
+
+%term LSHI2=2389 LSHI4=4437
+%term LSHU2=2390 LSHU4=4438
+
+%term MODI2=2405 MODI4=4453
+%term MODU2=2406 MODU4=4454
+
+%term RSHI2=2421 RSHI4=4469
+%term RSHU2=2422 RSHU4=4470
+
+%term BANDI2=2437 BANDI4=4485
+%term BANDU2=2438 BANDU4=4486
+
+%term BCOMI2=2453 BCOMI4=4501
+%term BCOMU2=2454 BCOMU4=4502
+
+%term BORI2=2469 BORI4=4517
+%term BORU2=2470 BORU4=4518
+
+%term BXORI2=2485 BXORI4=4533
+%term BXORU2=2486 BXORU4=4534
+
+%term DIVF4=4545 DIVF8=8641
+%term DIVI2=2501 DIVI4=4549
+%term DIVU2=2502 DIVU4=4550
+
+%term MULF4=4561 MULF8=8657
+%term MULI2=2517 MULI4=4565
+%term MULU2=2518 MULU4=4566
+
+%term EQF4=4577 EQF8=8673
+%term EQI2=2533 EQI4=4581
+%term EQU2=2534 EQU4=4582
+
+%term GEF4=4593 GEF8=8689
+%term GEI2=2549 GEI4=4597
+%term GEU2=2550 GEU4=4598
+
+%term GTF4=4609 GTF8=8705
+%term GTI2=2565 GTI4=4613
+%term GTU2=2566 GTU4=4614
+
+%term LEF4=4625 LEF8=8721
+%term LEI2=2581 LEI4=4629
+%term LEU2=2582 LEU4=4630
+
+%term LTF4=4641 LTF8=8737
+%term LTI2=2597 LTI4=4645
+%term LTU2=2598 LTU4=4646
+
+%term NEF4=4657 NEF8=8753
+%term NEI2=2613 NEI4=4661
+%term NEU2=2614 NEU4=4662
+
+%term JUMPV=584
+
+%term LABELV=600 
+
+%term LOADB=233
+%term LOADF4=4321 LOADF8=8417
+%term LOADI1=1253 LOADI2=2277 LOADI4=4325
+%term LOADP2=2279
+%term LOADU1=1254 LOADU2=2278 LOADU4=4326
+
+%term VREGP=711
+
+%%
+reg:	INDIRI1(VREGP)	"# read reg\n"	
+reg:	INDIRU1(VREGP)	"# read reg\n"	
+reg:	INDIRI2(VREGP)	"# read reg\n"	
+reg:	INDIRU2(VREGP)	"# read reg\n"	
+reg:	INDIRP2(VREGP)	"# read reg\n"	
+
+stmt:	ASGNI1(VREGP,reg)	"# write reg\n"	
+stmt:	ASGNU1(VREGP,reg)	"# write reg\n"	
+stmt:	ASGNI2(VREGP,reg)	"# write reg\n"	
+stmt:	ASGNU2(VREGP,reg)	"# write reg\n"	
+stmt:	ASGNP2(VREGP,reg)	"# write reg\n"	
+
+reg: LOADI2(reg) 	"cpyR %0,%c\n"
+reg: LOADU2(reg) 	"cpyR %0,%c\n"
+reg: LOADP2(reg) 	"cpyR %0,%c\n"
+stmt: LOADB "LOADB\n"
+reg: LOADI1(reg) 	"cpyLo %0,%c\n"
+reg: LOADU1(reg) 	"cpyLo %0,%c\n"
+
+
+stmt: reg		""
+
+con:	CNSTI1	"%a"	
+con:	CNSTU1	"%a"	
+con:	CNSTI2	"%a"	
+con:	CNSTU2	"%a"	
+con:	CNSTP2	"%a"	
+con:	addrg	"%a"	
+
+addr: ADDRGP2 	"%a"
+addr: reg	 	"%0,0"
+addr: ADDRFP2 	"sp,%a"
+addr: ADDRLP2 	"sp,%a"
+addr: ADDU2(reg,con)	"%0,%1"
+addr: ADDI2(reg,con)	"%0,%1"
+addr: ADDP2(reg,con)	"%0,%1"
+
+addrg:	ADDRGP2			"%a"
+
+mem:	addr			"%0"
+mem:	INDIRP2(addr)	"@ %0"
+
+reg:	ADDRGP2	"mov # %a,%c ; reg <- ADDRGP2\n"	
+reg:	ADDRLP2	"mov fp,%c\nadd # %a,%c\n"			
+reg:	ADDRFP2	"mov fp,%c\nadd # %a,%c\n"			
+reg:	opd		"mov %0,%c ; reg <- opd\n" 
+
+opd:	con		" #%0"	
+opd:	reg		"%0"	
+opd:	INDIRI1(mem)	"%0"
+opd:	INDIRU1(mem)	"%0"
+opd:	INDIRI2(mem)	"%0"
+opd:	INDIRU2(mem)	"%0"
+opd:	INDIRP2(mem)	"%0"
+
+
+stmt: 	ASGNI1(addr,opd) "\tstDirC1 %0,%1 ;ASGNI1(diraddr,con)\n"
+stmt: 	ASGNU1(addr,opd) "\tstDirC1 %0,%1 ;ASGNU1(diraddr,con)\n"
+stmt: 	ASGNI2(addr,opd) "\tstDirC2 %0,%1 ;ASGNI2(diraddr,con)\n"
+stmt: 	ASGNU2(addr,opd) "\tstDirC2 %0,%1 ;ASGNI2(diraddr,con)\n"
+stmt: 	ASGNP2(addr,opd) "\tstDirC2 %0,%1 ;ASGNI2(diraddr,con)\n"
+
+stmt: ARGI2 "ARGI2\n"
+stmt: ARGI4 "ARGI4\n"
+stmt: ARGP2 "ARGP2\n"
+stmt: ARGU2 "ARGU2\n"
+stmt: ARGU4 "ARGU4\n"
+
+
+stmt: CVFF4 "CVFF4\n"
+stmt: CVFF8 "CVFF8\n"
+stmt: CVFI2 "CVFI2\n"
+stmt: CVFI4 "CVFI4\n"
+stmt: CVIF4 "CVIF4\n"
+stmt: CVIF8 "CVIF8\n"
+stmt: CVII1 "CVII1\n"
+stmt: CVII2 "CVII2\n"
+stmt: CVII4 "CVII4\n"
+stmt: CVIU1 "CVIU1\n"
+stmt: CVIU2 "CVIU2\n"
+stmt: CVIU4 "CVIU4\n"
+stmt: CVPU2 "CVPU2\n"
+stmt: CVUI1 "CVUI1\n"
+stmt: CVUI2 "CVUI2\n"
+stmt: CVUI4 "CVUI4\n"
+stmt: CVUP2 "CVUP2\n"
+stmt: CVUU1 "CVUU1\n"
+stmt: CVUU2 "CVUU2\n"
+stmt: CVUU4 "CVUU4\n"
+
+stmt: NEGF4 "NEGF4\n"
+stmt: NEGF8 "NEGF8\n"
+stmt: NEGI2 "NEGI2\n"
+stmt: NEGI4 "NEGI4\n"
+
+stmt: CALLB "CALLB\n"
+stmt: CALLF4 "CALLF4\n"
+stmt: CALLF8 "CALLF8\n"
+stmt: CALLI2 "CALLI2\n"
+stmt: CALLI4 "CALLI4\n"
+stmt: CALLP2 "CALLP2\n"
+stmt: CALLU2 "CALLU2\n"
+stmt: CALLU4 "CALLU4\n"
+stmt: CALLV "CALLV\n"
+
+stmt: RETF4 "RETF4\n"
+stmt: RETF8 "RETF8\n"
+stmt: RETI2 "RETI2\n"
+stmt: RETI4 "RETI4\n"
+stmt: RETP2 "RETP2\n"
+stmt: RETU2 "RETU2\n"
+stmt: RETU4 "RETU4\n"
+stmt: RETV "RETV\n"
+
+stmt: ADDI2(reg,con) "ADDI2(reg,con)\n"
+stmt: ADDU2(reg,con) "ADDU2(reg,con)\n"
+stmt: ADDP2(reg,con) "ADDP2(reg,con)\n"
+
+stmt: SUBF4 "SUBF4\n"
+stmt: SUBF8 "SUBF8\n"
+stmt: SUBI2 "SUBI2\n"
+stmt: SUBI4 "SUBI4\n"
+stmt: SUBP2 "SUBP2\n"
+stmt: SUBU2 "SUBU2\n"
+stmt: SUBU4 "SUBU4\n"
+
+stmt: LSHI2 "LSHI2\n"
+stmt: LSHI4 "LSHI4\n"
+stmt: LSHU2 "LSHU2\n"
+stmt: LSHU4 "LSHU4\n"
+
+stmt: MODI2 "MODI2\n"
+stmt: MODI4 "MODI4\n"
+stmt: MODU2 "MODU2\n"
+stmt: MODU4 "MODU4\n"
+
+stmt: RSHI2 "RSHI2\n"
+stmt: RSHI4 "RSHI4\n"
+stmt: RSHU2 "RSHU2\n"
+stmt: RSHU4 "RSHU4\n"
+
+stmt: BANDI2 "BANDI2\n"
+stmt: BANDI4 "BANDI4\n"
+stmt: BANDU2 "BANDU2\n"
+stmt: BANDU4 "BANDU4\n"
+
+stmt: BCOMI2 "BCOMI2\n"
+stmt: BCOMI4 "BCOMI4\n"
+stmt: BCOMU2 "BCOMU2\n"
+stmt: BCOMU4 "BCOMU4\n"
+
+stmt: BORI2 "BORI2\n"
+stmt: BORI4 "BORI4\n"
+stmt: BORU2 "BORU2\n"
+stmt: BORU4 "BORU4\n"
+
+stmt: BXORI2 "BXORI2\n"
+stmt: BXORI4 "BXORI4\n"
+stmt: BXORU2 "BXORU2\n"
+stmt: BXORU4 "BXORU4\n"
+
+stmt: DIVF4 "DIVF4\n"
+stmt: DIVF8 "DIVF8\n"
+stmt: DIVI2 "DIVI2\n"
+stmt: DIVI4 "DIVI4\n"
+stmt: DIVU2 "DIVU2\n"
+stmt: DIVU4 "DIVU4\n"
+
+stmt: MULF4 "MULF4\n"
+stmt: MULF8 "MULF8\n"
+stmt: MULI2 "MULI2\n"
+stmt: MULI4 "MULI4\n"
+stmt: MULU2 "MULU2\n"
+stmt: MULU4 "MULU4\n"
+
+stmt: EQF4 "EQF4\n"
+stmt: EQF8 "EQF8\n"
+stmt: EQI2 "EQI2\n"
+stmt: EQI4 "EQI4\n"
+stmt: EQU2 "EQU2\n"
+stmt: EQU4 "EQU4\n"
+
+stmt: GEF4 "GEF4\n"
+stmt: GEF8 "GEF8\n"
+stmt: GEI2 "GEI2\n"
+stmt: GEI4 "GEI4\n"
+stmt: GEU2 "GEU2\n"
+stmt: GEU4 "GEU4\n"
+
+stmt: GTF4 "GTF4\n"
+stmt: GTF8 "GTF8\n"
+stmt: GTI2 "GTI2\n"
+stmt: GTI4 "GTI4\n"
+stmt: GTU2 "GTU2\n"
+stmt: GTU4 "GTU4\n"
+
+stmt: LEF4 "LEF4\n"
+stmt: LEF8 "LEF8\n"
+stmt: LEI2 "LEI2\n"
+stmt: LEI4 "LEI4\n"
+stmt: LEU2 "LEU2\n"
+stmt: LEU4 "LEU4\n"
+
+stmt: LTF4 "LTF4\n"
+stmt: LTF8 "LTF8\n"
+stmt: LTI2 "LTI2\n"
+stmt: LTI4 "LTI4\n"
+stmt: LTU2 "LTU2\n"
+stmt: LTU4 "LTU4\n"
+
+stmt: NEF4 "NEF4\n"
+stmt: NEF8 "NEF8\n"
+stmt: NEI2 "NEI2\n"
+stmt: NEI4 "NEI4\n"
+stmt: NEU2 "NEU2\n"
+stmt: NEU4 "NEU4\n"
+
+stmt: JUMPV "JUMPV\n"
+
+stmt: LABELV "%a:\n"
+
+stmt: VREGP "VREGP\n"
+%%
+
+//wjr interface routines for code generation
+static void progbeg(int argc, char *argv[]) {
+	int i;
+	fprintf(stderr,"progbeg\n");
+
+    parseflags(argc, argv);
+
+	print("; Baseline x1802 assembly generated by lcc 4.2 (Hi Bill!)\n");
+
+	/*populate the representations of the 15 integer/pointer registers (only 8-15 are used by LCC*/
+	for(i=0;i<=15;++i){
+		ireg[i] = mkreg("R%d",i,1,IREG);
+	}
+
+	/*populate the representations of 4 long and 4 float registers */
+	for(i=0;i<=3;++i){
+		lreg[i] = mkreg("L%d",i,1,IREG);
+		freg[i] = mkreg("F%d",i,1,FREG);
+	}
+	tmask[IREG] = INTTMP; vmask[IREG] = INTVAR;
+	tmask[FREG] = FLTTMP; vmask[FREG] = FLTVAR;
+
+	iregw = mkwildcard(ireg);
+	lregw = mkwildcard(lreg);
+	fregw = mkwildcard(freg);
+}
+
+static Symbol rmap(int opk) {
+	fprintf(stderr,"rmap\n");
+    switch (optype(opk)) {
+	case B:
+	case P:
+	    return iregw;
+	case I:
+	case U:
+	    if (opsize(opk) <= 2) {
+	        return iregw; 
+	    } else {
+		return lregw;
+	    }
+	case F:
+	    return fregw;
+	defaulstmt:
+	    return 0;
+    }
+}
+
+static void segment(int n) {
+}
+
+static void progend(void) {
+    print(".END\n");
+}
+
+
+static void target(Node p) {
+	fprintf(stderr,"target\n");
+}
+
+static void clobber(Node p) {
+	fprintf(stderr,"clobber\n");
+}
+
+static void emitband(char *dstname,unsigned andmask){
+}
+
+
+static void emit2(Node p) {
+    int op = specific(p->op); 
+    print(";*emit2 called for %d, specifically:%d\n",p->op,op);
+}
+
+static void doarg(Node p) {
+	fprintf(stderr,"doarg\n");
+}
+
+// Block operators not needed
+static void blkfetch(int k, int off, int reg, int tmp) {}
+static void blkstore(int k, int off, int reg, int tmp) {}
+static void blkloop(int dreg, int doff, int sreg, int soff,int size, int tmps[]) {}
+
+static void local(Symbol p) { //from pdp11
+	// always put long locals on stack frame 
+	if (  (isint(p->type) && p->type->size==4 && !p->temporary) || askregvar(p, rmap(ttob(p->type))) == 0)
+	{
+		assert(p->sclass == AUTO);
+		offset = roundup(offset + p->type->size,2);
+		p->x.offset = -offset;
+		/* note, all offsets must have sign in front, so we can pull dirty tricks
+		   with assembler address arithmetic later. */
+		p->x.name = stringf("-%d",offset);
+		//fprintf(stderr,"local(\"%s\") offset=%d\n",p->name,offset);
+	}
+}
+
+/*static void local(Symbol p) {
+    fprintf(stderr,"local(\"%s\") sclass=%d\n",p->name,p->sclass);	
+    // always put locals on stack frame 
+    //if (  (isint(p->type) && p->type->size==4 && !p->temporary) || askregvar(p, rmap(ttob(p->type))) == 0)
+    if (p->sclass == AUTO){
+        offset = roundup(offset + p->type->size,2);
+        p->x.offset = offset;
+        p->x.name = stringf("%d",offset);
+    }
+    fprintf(stderr,"local(\"%s\") offset=%d\n",p->name,offset);	
+}*/
+static void function(Symbol f, Symbol caller[], Symbol callee[], int n) { //from pdp11
+	int i,j,nargs;
+	Symbol fs;
+	
+    usedmask[IREG] = usedmask[FREG] = 0;
+    freemask[IREG] = INTTMP|INTVAR;
+    freemask[FREG] = FLTTMP|FLTVAR;
+
+    maxoffset = offset = maxargoffset = 0;
+
+	/* Determine offsets of parameters relative
+	   to frame pointer (set up in prologue).
+	   This assumes right-to-left pushing of parameters,
+	   to facilitate variable-argument functions like printf.
+	   With right-to-left, we always know the address
+	   of the first parameter, because it is the last pushed,
+	   so has highest address on stack and a fixed offset (4)
+	   relative to frame pointer. */
+
+	offset = 4;  /* allow for link register word @ 0(SP), and saved FP, after JSR */
+	for (nargs = 0; callee[nargs]; nargs++) {
+		Symbol p = callee[nargs];
+		Symbol q = caller[nargs];
+		p->x.offset = q->x.offset = offset;
+		p->x.name = q->x.name = stringf("%d", p->x.offset);
+		p->sclass = q->sclass = AUTO;
+		//fprintf(stderr,"callee/caller[%d]: %s offset=%d\n", nargs,p->name,offset);
+		offset += roundup(q->type->size,2);  // PDP-11 system stack is always word aligned
+	}
+	assert(caller[nargs] == 0);
+	offset = maxoffset = 0;
+	
+	//fputs("...calling gencode()\n",stderr);
+	gencode(caller, callee);
+	
+	framesize = roundup(maxoffset,2);
+
+	// prologue...
+	
+	
+	
+	segment(CODE);
+    print(".SBTTL %s\n",f->name);
+    print("%s:\n",f->x.name);
+    if(nargs||framesize){
+		print("mov fp,-(sp) ; save frame pointer\n");
+		print("mov sp,fp\n"); /* setup frame pointer */
+		if(framesize == 2) 
+			print("clr -(sp) ; alloc stack frame\n");
+		else if(framesize > 2) 
+			print("sub #%d,sp ; alloc stack frame\n",framesize);
+    }
+
+	// don't bother saving scratch registers,
+	// this is assumed to include return register (R0) 
+	usedmask[IREG] &= ~INTTMP; 
+	usedmask[FREG] &= ~FLTTMP;	 
+
+	// save used registers on stack, below stack frame 
+	fprintf(stderr,"%16s used=",f->name);
+	for(i=usedmask[IREG],j=0;i;i>>=1,++j)
+		if(i&1){
+			fputc(' ',stderr);
+			fputs(ireg[j]->x.name,stderr);
+			print("mov %s,-(sp) ; save\n",ireg[j]->x.name);
+		}
+	fputc('\n',stderr);
+
+	// call front end to emit function body
+    //fputs("...calling emitcode()\n",stderr);
+
+    print(";\n");
+	emitcode();
+
+	// epilogue...
+
+    print(";\n");
+    
+    // restore used registers, in reverse order from save 
+	for(i=usedmask[IREG];j;--j)
+		if(i & (1<<j))
+			print("mov (sp)+,%s ; restore\n",ireg[j]->x.name);
+
+    if(nargs||framesize){
+		if(framesize) print("mov fp,sp ; pop stack frame\n");
+		print("mov (sp)+,fp ; restore frame pointer\n");
+    }
+    
+
+	print("rts pc\n\n");
+}
+
+/*static void function(Symbol f, Symbol caller[], Symbol callee[], int n) {
+	int i,j,nargs;
+	Symbol fs;
+	fprintf(stderr,"function\n");	
+    usedmask[IREG] = usedmask[FREG] = 0;
+    freemask[IREG] = INTTMP|INTVAR;
+    freemask[FREG] = FLTTMP|FLTVAR;
+	
+    fprintf(stderr,"calling gencode()...\n");
+    gencode(caller, callee);
+	
+    print("%s:\n",f->x.name);
+ 
+    // call front end to emit function body
+    fprintf(stderr,"...calling emitcode()...\n");
+
+    print(";\n");
+	emitcode();
+
+	// epilogue...
+
+    print(";\n");
+    
+    fprintf(stderr,"...progbeg is done\n");
+}*/
+static void defsymbol(Symbol p) { //from pdp11
+	long v;
+	char *q;
+
+	if(p->scope >= LOCAL && p->sclass == STATIC)
+		p->x.name = stringf("%d$", genlabel(1));
+	else if (p->generated)
+		p->x.name = stringf("%s$", p->name);
+	else if(p->scope == CONSTANTS && isint(p->type)){
+		/* make sure constants are literal decimal (not hex or octal) */
+		p->x.name = isunsigned(p->type) ? stringf("%u",p->u.c.v.u) : stringf("%d",p->u.c.v.i);
+	}else if(p->scope == GLOBAL || p->sclass == EXTERN){
+		/* underscores not allowed in MACRO-11 identifiers; replace with $ */
+		q = p->x.name = strdup(p->name);
+		for( ; *q ; ++q )
+			if(*q == '_')
+				*q = '$';
+	}
+
+	fprintf(stderr,"defsymbol(%s = %s)\n",p->x.name,p->name);
+}
+/*static void defsymbol(Symbol p) {
+    if (p->scope >= LOCAL && p->sclass == STATIC)
+	p->x.name = stringf("L%d", genlabel(1));
+    else if (p->generated)
+	p->x.name = stringf("L%s", p->name);
+    else if (p->scope == GLOBAL || p->sclass == EXTERN)
+	p->x.name = stringf("_%s",p->name);
+    else if (p->scope == CONSTANTS
+	    && (isint(p->type) || isptr(p->type))
+	    && p->name[0] == '0' && p->name[1] == 'x')
+	p->x.name = stringf("0%sH", &p->name[2]);
+    else
+	p->x.name = p->name;
+    fprintf(stderr,"defsymbol(%s = %s)\n",p->x.name,p->name);
+}*/
+
+static void address(Symbol q, Symbol p, long n) {
+	fprintf(stderr,"address\n");
+	//fprintf(stderr,"address(%s, %s, %d)\n",q->x.name,p->x.name,n);
+}
+
+
+static void defconst(int suffix, int size, Value v) {
+	fprintf(stderr,"defconst\n");
+
+}
+
+static void defaddress(Symbol p) {
+	fprintf(stderr,"defaddress\n");
+}
+
+static void defstring(int n, char *str) {
+	fprintf(stderr,"defstring\n");
+
+}
+
+static void export(Symbol p) {
+
+}
+
+static void import(Symbol p) {
+}
+
+static void global(Symbol p) {
+
+}
+
+static void space(int n) {
+
+}
+
+Interface x1802IR = {
+	1, 1, 0,  /* char */
+	2, 1, 0,  /* short */
+	2, 1, 0,  /* int */
+	4, 1, 0,  /* long */
+	4, 1, 0,  /* long long */
+	4, 1, 0,  /* float */
+	8, 1, 0,  /* double */
+	8, 1, 0,  /* long double */
+	2, 1, 0,  /* T * */
+	0, 1, 1,  /* struct */
+
+	1,        /* little_endian */
+	1,        /* mulops_calls */
+	0,        /* wants_callb */
+	0,        /* wants_argb */
+	0,        /* left_to_right */
+	0,        /* wants_dag */
+	0,        /* unsigned_char */
+
+	address,
+	blockbeg,
+	blockend,
+	defaddress,
+	defconst,
+	defstring,
+	defsymbol,
+	emit,
+	export,
+	function,
+	gen,
+	global,
+	import,
+	local,
+	progbeg,
+	progend,
+	segment,
+	space,
+	0, 0, 0, 0, 0, 0, 0,
+	{	1, /* max_unaligned_load */
+		rmap,
+		blkfetch, blkstore, blkloop,
+		_label,
+		_rule,
+		_nts,
+		_kids,
+		_string,
+		_templates,
+		_isinstruction,
+		_ntname,
+		emit2,
+		doarg,
+		target,
+		clobber,
+	}
+};
+static char rcsid[] = "$Id: x1802.md,v 0.0 2012-11-28 wjr $";

@@ -1,0 +1,257 @@
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/157/trunk/include
+END
+lcc1802epiloNG.inc
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/3/trunk/include/lcc1802epiloNG.inc
+END
+spiship.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/67/trunk/include/spiship.h
+END
+nstdlib.inc
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/47/trunk/include/nstdlib.inc
+END
+defs.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/3/trunk/include/defs.h
+END
+nstdlib2b.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/3/trunk/include/nstdlib2b.h
+END
+LCC1802fp.inc
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/3/trunk/include/LCC1802fp.inc
+END
+lcc1802epiloNO.inc
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/3/trunk/include/lcc1802epiloNO.inc
+END
+readme.txt
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/3/trunk/include/readme.txt
+END
+lcc1802proloDH.inc
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/87/trunk/include/lcc1802proloDH.inc
+END
+fastdw.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/86/trunk/include/fastdw.h
+END
+cpu1802spd4port7.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/131/trunk/include/cpu1802spd4port7.h
+END
+lcc1802prolofl.inc
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/13/trunk/include/lcc1802prolofl.inc
+END
+lcd.c
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/3/trunk/include/lcd.c
+END
+lcc1802prolo2b.inc
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/48/trunk/include/lcc1802prolo2b.inc
+END
+hspi.c
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/65/trunk/include/hspi.c
+END
+lcc1802proloNG.inc
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/3/trunk/include/lcc1802proloNG.inc
+END
+arduino.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/3/trunk/include/arduino.h
+END
+lcd.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/3/trunk/include/lcd.h
+END
+hspi.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/70/trunk/include/hspi.h
+END
+fastspi.c
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/3/trunk/include/fastspi.c
+END
+olduino.c
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/152/trunk/include/olduino.c
+END
+IO1802.inc
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/108/trunk/include/IO1802.inc
+END
+lcc1802proloNO.inc
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/3/trunk/include/lcc1802proloNO.inc
+END
+fastspi.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/3/trunk/include/fastspi.h
+END
+olduino.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/64/trunk/include/olduino.h
+END
+hspi2.c
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/88/trunk/include/hspi2.c
+END
+lcc1802prolog.inc
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/3/trunk/include/lcc1802prolog.inc
+END
+nstdint.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/66/trunk/include/nstdint.h
+END
+hspi2.h
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/70/trunk/include/hspi2.h
+END
+lcc1802.opt
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/157/trunk/include/lcc1802.opt
+END
+nstdlib.c
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/89/trunk/include/nstdlib.c
+END
+lcdchar.c
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/105/trunk/include/lcdchar.c
+END
+fastspi.inc
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/3/trunk/include/fastspi.inc
+END
+olduino.inc
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/3/trunk/include/olduino.inc
+END
+putc.inc
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/3/trunk/include/putc.inc
+END
+lcc1802epilog.inc
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/3/trunk/include/lcc1802epilog.inc
+END
+nstdlib.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/3/trunk/include/nstdlib.h
+END
+lcdchar.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/105/trunk/include/lcdchar.h
+END
+lcc1802epiloDH.inc
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/53/trunk/include/lcc1802epiloDH.inc
+END
+hspi2Lcd.c
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/70/trunk/include/hspi2Lcd.c
+END
+hspi2Lcd.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/70/trunk/include/hspi2Lcd.h
+END
+lcc1802epiloFL.inc
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/3/trunk/include/lcc1802epiloFL.inc
+END

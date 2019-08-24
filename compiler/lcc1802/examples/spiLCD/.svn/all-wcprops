@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/140/trunk/examples/spiLCD
+END
+spilcd.c
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/4/trunk/examples/spiLCD/spilcd.c
+END
+a.hex
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/140/trunk/examples/spiLCD/a.hex
+END
+spiship.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/4/trunk/examples/spiLCD/spiship.h
+END
+lcc.bat
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/4/trunk/examples/spiLCD/lcc.bat
+END

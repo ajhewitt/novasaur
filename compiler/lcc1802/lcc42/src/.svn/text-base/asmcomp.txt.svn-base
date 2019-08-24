@@ -1,0 +1,463 @@
+_loop:
+	reserve 8
+;void loop () {
+;  len = encpacketReceive();
+	Ccall _encpacketReceive
+	cpy2 R11,R15 ;LOADU2(reg)
+	st2 R11,'O',sp,(-4+10); ASGNU2(addr,reg)
+;  pos = tcppacketLoop(len);
+	ld2 R12,'O',sp,(-4+10); INDIRU2(addr)
+	Ccall _tcppacketLoop
+	cpy2 R11,R15 ;LOADU2(reg)
+	st2 R11,'O',sp,(-6+10); ASGNU2(addr,reg)
+;}
+L12:
+	release 8
+	Cretn
+
+_main:
+	reserve 4
+;void main(){
+;	asm("	seq	;1 on Q de-activates ethernet chip\n"); //digitalWrite(encss,HIGH); //deactivate the chip select
+;	printf("encmule - watch my Q!\n");
+	seq	;1 on Q de-activates ethernet chip
+	ldaD R12,L15; reg:acon
+	Ccall _printf
+;	setup();
+	Ccall _setup
+	lbr L17
+L16:
+;	while(1){
+;		loop();
+	Ccall _loop
+;	}
+L17:
+;	while(1){
+	lbr L16
+;}
+L13:
+	release 4
+	Cretn
+	
+_encpacketReceive:
+	reserve 10; save room for local variables
+	pushr r7
+	reserve 6; save room for outgoing arguments
+;uint16_t encpacketReceive() {
+;    uint16_t len = 0;
+	ld2z R7
+;    if (readRegByte(EPKTCNT) > 0) {
+	ldaD R12,57; reg:acon
+	Ccall _readRegByte
+	cpy2 R11,R15 ;LOADI2(reg)
+	zExt 11 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	jnI2I r11,0,lbdf,L134 ;LEI2 0 11 L134; LE is flipped test & subtraction
+;        writeReg(ERDPT, gNextPacketPtr);
+	ld2z R12
+	ld2 R11,'D',(_gNextPacketPtr),0
+	cpy2 R13,R11 ;LOADU2(reg)
+	Ccall _writeReg
+;        readBuf(sizeof header, (uint8_t*) &header);
+	ldaD R12,6; reg:acon
+	ldA2 R13,'O',sp,(-8+20); reg:addr
+	Ccall _readBuf
+;        headernextPacket=header.nextPacketL+(header.nextPacketH<<8); //assemble next packet pointer
+	ld1 R11,'O',sp,(-8+20)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	ld1 R10,'O',sp,(-7+20)
+	zExt R10 ;CVUI2: widen unsigned char to signed int (zero extend)
+	shl2I R10,8
+	alu2 R11,R11,R10,add,adc; ADDI2(r,r)
+	st2 R11,'O',sp,(-10+20); ASGNU2(addr,reg)
+;        headerbyteCount=header.byteCountL+(header.byteCountH<<8); //assemble byte count
+	ld1 R11,'O',sp,(-6+20)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	ld1 R10,'O',sp,(-5+20)
+	zExt R10 ;CVUI2: widen unsigned char to signed int (zero extend)
+	shl2I R10,8
+	alu2 R11,R11,R10,add,adc; ADDI2(r,r)
+	st2 R11,'O',sp,(-12+20); ASGNU2(addr,reg)
+;        gNextPacketPtr  = headernextPacket;
+	ld2 R11,'O',sp,(-10+20); INDIRU2(addr)
+	st2 R11,'D',(_gNextPacketPtr),0
+;        len = headerbyteCount - 4; //remove the CRC count
+	ld2 R11,'O',sp,(-12+20); INDIRU2(addr)
+	alu2I R7,R11,4,smi,smbi
+;        if (len>bufferSize-1)
+	ld2 R11,'D',(_bufferSize),0; INDIRU2(addr)
+	alu2I R11,R11,1,smi,smbi
+	jcU2 r11,r7,lbdf,L139 ;LE is flipped test & operands
+;            len=bufferSize-1;
+	ld2 R11,'D',(_bufferSize),0; INDIRU2(addr)
+	alu2I R7,R11,1,smi,smbi
+L139:
+;        if ((header.statusL & 0x80)==0)
+	ld1 R11,'O',sp,(-4+20)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	alu2I R11,R11,128,ani,ani
+	;removed ?	cpy2 R11,R11
+	jnzU2 r11,L141; NE 0
+;            len = 0;
+	ld2z R7
+	lbr L142
+L141:
+;            readBuf(len, buffer);
+	cpy2 R12,R7 ;LOADU2(reg)
+	ldaD R13,_buffer; reg:acon
+	Ccall _readBuf
+L142:
+;        buffer[len] = 0;
+	ldaD R11,0; reg:acon
+	st1 R11,'O',R7,(_buffer); ASGNU1
+;        if (gNextPacketPtr - 1 > RXSTOP_INIT)
+	ld2 R11,'D',(_gNextPacketPtr),0
+	alu2I R11,R11,1,smi,smbi
+	jnI2I r11,3071,lbdf,L144 ;LEI2 3071 11 L144; LE is flipped test & subtraction
+;            writeReg(ERXRDPT, RXSTOP_INIT);
+	ldaD R12,12; reg:acon
+	ldaD R13,3071; reg:acon
+	Ccall _writeReg
+	lbr L145
+L144:
+;            writeReg(ERXRDPT, gNextPacketPtr - 1);
+	ldaD R12,12; reg:acon
+	ld2 R11,'D',(_gNextPacketPtr),0
+	alu2I R11,R11,1,smi,smbi
+	cpy2 R13,R11 ;LOADU2(reg)
+	Ccall _writeReg
+L145:
+;        writeOp(ENC28J60_BIT_FIELD_SET, ECON2, ECON2_PKTDEC);
+	ldaD R12,128; reg:acon
+	ldaD R13,30; reg:acon
+	ldaD R11,64; reg:acon
+	st2 r11,'O',sp,(4); arg+f**
+	Ccall _writeOp
+;    }
+L134:
+;    return len;
+	cpy2 R15,R7 ;LOADU2(reg)
+L132:
+	release 6; save room for outgoing arguments
+	popr r7
+	release 10; release room for local variables 
+	Cretn
+
+
+_readRegByte:
+	reserve 4
+	st2 r12,'O',sp,(6); flag1 
+	ld2 R11,'O',sp,(0+6)
+	st1 R11,'O',sp,(0+6); ASGNU1
+; uint8_t readRegByte (uint8_t address) {
+;    SetBank(address);
+	ld1 R12,'O',sp,(0+6)
+	zExt R12 ;CVUI2: widen unsigned char to signed int (zero extend)
+	Ccall _SetBank
+;    return readOp(ENC28J60_READ_CTRL_REG, address);
+	ld2z R12
+	ld1 R13,'O',sp,(0+6)
+	zExt R13 ;CVUI2: widen unsigned char to signed int (zero extend)
+	Ccall _readOp
+	cpy2 R11,R15 ;LOADI2(reg)
+	cpy1 R15,R11
+	zExt 15 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+L116:
+	release 4
+	Cretn
+
+_SetBank:
+	reserve 6
+	st2 r12,'O',sp,(8); flag1 
+	ld2 R11,'O',sp,(0+8)
+	st1 R11,'O',sp,(0+8); ASGNU1
+; void SetBank (uint8_t address) {
+;  if ((address & BANK_MASK) != Enc28j60Bank) {
+	ld1 R11,'O',sp,(0+8)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	alu2I R11,R11,96,ani,ani
+	;removed ?	cpy2 R11,R11
+	ld1 R10,'D',(_Enc28j60Bank),0
+	zExt R10 ;CVUI2: widen unsigned char to signed int (zero extend)
+	jeqI2 r11,r10,L105; EQI2(reg,reg)
+;    writeOp(ENC28J60_BIT_FIELD_CLR, ECON1, ECON1_BSEL1|ECON1_BSEL0);
+	ldaD R12,160; reg:acon
+	ldaD R13,31; reg:acon
+	ldaD R11,3; reg:acon
+	st2 r11,'O',sp,(4); arg+f**
+	Ccall _writeOp
+;    Enc28j60Bank = address & BANK_MASK;
+	ld1 R11,'O',sp,(0+8)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	alu2I R11,R11,96,ani,ani
+	;removed ?	cpy2 R11,R11
+	st1 R11,'D',(_Enc28j60Bank),0; ASGNU1
+;    writeOp(ENC28J60_BIT_FIELD_SET, ECON1, Enc28j60Bank>>5);
+	ldaD R12,128; reg:acon
+	ldaD R13,31; reg:acon
+	ld1 R11,'D',(_Enc28j60Bank),0
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	shrI2I R11,5
+	zExt 11 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	st2 r11,'O',sp,(4); arg+f**
+	Ccall _writeOp
+;  }
+L105:
+;}
+L104:
+	release 6
+	Cretn
+
+_xferSPI:
+	reserve 0; save room for local variables
+	pushr r1
+	pushr r7
+	reserve 4; save room for outgoing arguments
+	cpy2 r7,r12; function(1030) 1
+;uint8_t xferSPI(uint8_t value){
+;  for(i=0;i<8;i++){
+	ld2z R1
+L108:
+;    digitalWrite(mosi,(value&0x80));      //by setting mosi for each bit
+	ldaD R12,7; reg:acon
+	cpy1 R11,R7
+	zExt 11 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	alu2I R11,R11,128,ani,ani
+	;removed ?	cpy2 R11,R11
+	cpy1 R13,R11
+	zExt 13 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	Ccall _digitalWrite
+;    value=(value<<1)|digitalRead(miso);;
+	ldaD R12,15; reg:acon
+	Ccall _digitalRead
+	cpy2 R11,R15 ;LOADI2(reg)
+	cpy1 R10,R7
+	zExt 10 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	shl2I R10,1
+	alu2 R11,R10,R11,or,or
+	cpy1 R7,R11;LOADU1(reg)
+;    digitalWrite(sck,HIGH);              //then pulsing the clock
+	ldaD R12,5; reg:acon
+	ldaD R13,1; reg:acon
+	Ccall _digitalWrite
+;    digitalWrite(sck,LOW);
+	ldaD R12,5; reg:acon
+	ld2z R13
+	Ccall _digitalWrite
+;  }
+L109:
+;  for(i=0;i<8;i++){
+	incm R1,1
+	jcI2I r1,8,lbnf,L108  ;LT=lbnf i.e. subtract immedB from A and jump if borrow
+;  return value;
+	cpy1 R15,R7
+	zExt 15 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+L107:
+	release 4; save room for outgoing arguments
+	popr r7
+	popr r1
+	release 0; release room for local variables 
+	Cretn
+
+_readOp:
+	reserve 6
+	st2 r12,'O',sp,(8); flag1 
+	st2 r13,'O',sp,(10); flag1 
+	ld2 R11,'O',sp,(0+8)
+	st1 R11,'O',sp,(0+8); ASGNU1
+	ld2 R11,'O',sp,(2+8)
+	st1 R11,'O',sp,(2+8); ASGNU1
+;uint8_t readOp(uint8_t op,uint8_t address){
+;  enableChip();
+	Ccall _enableChip
+;  xferSPI(op | (address & ADDR_MASK));
+	ld1 R11,'O',sp,(0+8)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	ld1 R10,'O',sp,(2+8)
+	zExt R10 ;CVUI2: widen unsigned char to signed int (zero extend)
+	alu2I R10,R10,31,ani,ani
+	;removed ?	cpy2 R10,R10
+	alu2 R11,R11,R10,or,or
+	cpy1 R12,R11
+	zExt 12 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	Ccall _xferSPI
+;  if (address & 0x80)
+	ld1 R11,'O',sp,(2+8)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	alu2I R11,R11,128,ani,ani
+	;removed ?	cpy2 R11,R11
+	jzU2 r11,L113; EQ 0
+;    result=xferSPI(00);  //dummy byte if needed
+	ld2z R12
+	Ccall _xferSPI
+	cpy2 R11,R15 ;LOADI2(reg)
+	st1 R11,'O',sp,(-3+8); ASGNU1
+L113:
+;  result=xferSPI(0x00); //then read the result
+	ld2z R12
+	Ccall _xferSPI
+	cpy2 R11,R15 ;LOADI2(reg)
+	st1 R11,'O',sp,(-3+8); ASGNU1
+;  disableChip();
+	Ccall _disableChip
+;  return result;
+	ld1 R15,'O',sp,(-3+8)
+	zExt R15 ;CVUI2: widen unsigned char to signed int (zero extend)
+L112:
+	release 6
+	Cretn
+
+_writeOp:
+	reserve 8
+	st2 r12,'O',sp,(10); flag1 
+	st2 r13,'O',sp,(12); flag1 
+	ld2 R11,'O',sp,(0+10)
+	st1 R11,'O',sp,(0+10); ASGNU1
+	ld2 R11,'O',sp,(2+10)
+	st1 R11,'O',sp,(2+10); ASGNU1
+	ld2 R11,'O',sp,(4+10)
+	st1 R11,'O',sp,(4+10); ASGNU1
+;void writeOp(uint8_t op, uint8_t address, uint8_t data){
+;  enableChip();
+	Ccall _enableChip
+;  xferSPI(op|(address& ADDR_MASK));
+	ld1 R11,'O',sp,(0+10)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	ld1 R10,'O',sp,(2+10)
+	zExt R10 ;CVUI2: widen unsigned char to signed int (zero extend)
+	alu2I R10,R10,31,ani,ani
+	;removed ?	cpy2 R10,R10
+	alu2 R11,R11,R10,or,or
+	cpy1 R12,R11
+	zExt 12 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	Ccall _xferSPI
+;  xferSPI(data);
+	ld1 R12,'O',sp,(4+10)
+	zExt R12 ;CVUI2: widen unsigned char to signed int (zero extend)
+	Ccall _xferSPI
+;  disableChip();
+	Ccall _disableChip
+;}
+L115:
+	release 8
+	Cretn
+
+_writeRegByte:
+	reserve 6
+	st2 r12,'O',sp,(8); flag1 
+	st2 r13,'O',sp,(10); flag1 
+	ld2 R11,'O',sp,(0+8)
+	st1 R11,'O',sp,(0+8); ASGNU1
+	ld2 R11,'O',sp,(2+8)
+	st1 R11,'O',sp,(2+8); ASGNU1
+; void writeRegByte (uint8_t address, uint8_t data) {
+;    SetBank(address);
+	ld1 R12,'O',sp,(0+8)
+	zExt R12 ;CVUI2: widen unsigned char to signed int (zero extend)
+	Ccall _SetBank
+;    writeOp(ENC28J60_WRITE_CTRL_REG, address, data);
+	ldaD R12,64; reg:acon
+	ld1 R13,'O',sp,(0+8)
+	zExt R13 ;CVUI2: widen unsigned char to signed int (zero extend)
+	ld1 R11,'O',sp,(2+8)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	st2 r11,'O',sp,(4); arg+f**
+	Ccall _writeOp
+;}
+L117:
+	release 6
+	Cretn
+
+_writeReg:
+	reserve 4
+	st2 r12,'O',sp,(6); flag1 
+	st2 r13,'O',sp,(8); flag1 
+	ld2 R11,'O',sp,(0+6)
+	st1 R11,'O',sp,(0+6); ASGNU1
+; void writeReg(uint8_t address, uint16_t data) {
+;    writeRegByte(address, data);
+	ld1 R12,'O',sp,(0+6)
+	zExt R12 ;CVUI2: widen unsigned char to signed int (zero extend)
+	ld2 R11,'O',sp,(2+6); INDIRU2(addr)
+	cpy1 R13,R11
+	zExt 13 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	Ccall _writeRegByte
+;    writeRegByte(address + 1, data >> 8);
+	ld1 R11,'O',sp,(0+6)
+	zExt R11 ;CVUI2: widen unsigned char to signed int (zero extend)
+	incm R11,1
+	cpy1 R12,R11
+	zExt 12 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	ld2 R11,'O',sp,(2+6); INDIRU2(addr)
+	shrU2I R11,8
+	cpy1 R13,R11
+	zExt 13 ;CVUI2(reg): widen unsigned char to signed int (zero extend)
+	Ccall _writeRegByte
+;}
+L118:
+	release 4
+	Cretn
+_enableChip:
+	reserve 4
+; void enableChip () {
+;  digitalWrite(sck,LOW); //make sure the clock is low
+	ldaD R12,5; reg:acon
+	ld2z R13
+	Ccall _digitalWrite
+;  asm("	req	;0 on Q activates ethernet chip\n"); //digitalWrite(encss,LOW); //activate the chip select
+	req	;0 on Q activates ethernet chip
+;}
+L100:
+	release 4
+	Cretn
+
+_disableChip:
+; void disableChip () {
+;  asm("	seq	;1 on Q de-activates ethernet chip\n"); //digitalWrite(encss,HIGH); //deactivate the chip select
+	seq	;1 on Q de-activates ethernet chip
+;}
+L102:
+	Cretn
+
+_readBuf:	approx total 24+28+len*(100+73+1800*2+13)
+	reserve 0; save room for local variables
+	pushr r0 
+	pushr r1
+	pushr r7
+	reserve 4; save room for outgoing arguments ;16
+	cpy2 r7,r12; function(2054) 1
+	cpy2 r1,r13; function(2055) 1			;24
+; void readBuf(uint16_t len, uint8_t* data) {
+;    enableChip();
+	Ccall _enableChip				;40+73
+;    xferSPI(ENC28J60_READ_BUF_MEM);
+	ldaD R12,58; reg:acon				;44
+	Ccall _xferSPI					;60+1800+73		
+	lbr L148					;61
+L147:
+;    while (len--) {
+;        x=xferSPI(0x00);
+	ld2z R12					;64	
+	Ccall _xferSPI					;64+1800+1800+73
+	cpy2 R11,R15 ;LOADI2(reg)			;68
+	cpy1 R0,R11;LOADU1(reg)				;70
+;        *data++ = x;
+	cpy2 R11,R1 ;LOADP2(reg)			;74
+	cpy2 R1,R11					;78
+	inc R1						;79
+	str1 R0,R11; ASGNU1(indaddr,reg)		;80
+;    }
+L148:
+;    while (len--) {
+	cpy2 R11,R7 ;LOADU2(reg)			;84
+	alu2I R7,R11,1,smi,smbi				;90
+	jnzU2 r11,L147; NE 0				;94
+;    disableChip();
+	Ccall _disableChip				;110+73+1800*2+13
+;}
+L146:
+	release 4; save room for outgoing arguments	;114
+	popr r7						
+	popr r1
+	popr r0
+	release 0; release room for local variables 
+	Cretn						;138

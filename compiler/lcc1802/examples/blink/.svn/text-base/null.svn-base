@@ -1,0 +1,16 @@
+Default to even parity.
+
+Status for device COM1:
+-----------------------
+    Baud:            1200
+    Parity:          Even
+    Data Bits:       7
+    Stop Bits:       1
+    Timeout:         OFF
+    XON/XOFF:        OFF
+    CTS handshaking: OFF
+    DSR handshaking: OFF
+    DSR sensitivity: OFF
+    DTR circuit:     ON
+    RTS circuit:     ON
+

@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix
+END
+time.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/time.h
+END
+locale.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/locale.h
+END
+assert.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/assert.h
+END
+limits.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/limits.h
+END
+setjmp.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/setjmp.h
+END
+float.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/float.h
+END
+string.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/string.h
+END
+stddef.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/stddef.h
+END
+signal.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/signal.h
+END
+stdlib.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/stdlib.h
+END
+stdio.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/stdio.h
+END
+ctype.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/ctype.h
+END
+stdarg.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/stdarg.h
+END
+errno.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/errno.h
+END
+math.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/2/trunk/lcc42/include/symbolic/irix/math.h
+END

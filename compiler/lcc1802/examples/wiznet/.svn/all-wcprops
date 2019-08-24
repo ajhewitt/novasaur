@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/140/trunk/examples/wiznet
+END
+null
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/4/trunk/examples/wiznet/null
+END
+secrettable.c
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/122/trunk/examples/wiznet/secrettable.c
+END
+wiznetping.c
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/4/trunk/examples/wiznet/wiznetping.c
+END
+olduinoserverhspi2V51.c
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/124/trunk/examples/wiznet/olduinoserverhspi2V51.c
+END
+secrettable.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/122/trunk/examples/wiznet/secrettable.h
+END
+wizcode.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/102/trunk/examples/wiznet/wizcode.c
+END
+olduinoserverhspi2.c
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/94/trunk/examples/wiznet/olduinoserverhspi2.c
+END
+wiznetpingolduino.lst
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/4/trunk/examples/wiznet/wiznetpingolduino.lst
+END
+wizcode.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/102/trunk/examples/wiznet/wizcode.h
+END
+olduinoMserver.c
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/93/trunk/examples/wiznet/olduinoMserver.c
+END
+bagels1.c
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/98/trunk/examples/wiznet/bagels1.c
+END
+bagels2.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/121/trunk/examples/wiznet/bagels2.c
+END
+bagels3.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/102/trunk/examples/wiznet/bagels3.c
+END
+wiznetpingarduino.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/4/trunk/examples/wiznet/wiznetpingarduino.c
+END
+bagels4.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/121/trunk/examples/wiznet/bagels4.c
+END
+bagels5.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/121/trunk/examples/wiznet/bagels5.c
+END
+a.hex
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/4/trunk/examples/wiznet/a.hex
+END
+bagels6.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/121/trunk/examples/wiznet/bagels6.c
+END
+olduinoserver4.c
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/9/trunk/examples/wiznet/olduinoserver4.c
+END
+bagels5b.c
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/121/trunk/examples/wiznet/bagels5b.c
+END
+wiznet.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/10/trunk/examples/wiznet/wiznet.h
+END
+olduinoMserverv2.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/123/trunk/examples/wiznet/olduinoMserverv2.c
+END
+wiznetpingolduino.asm
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/4/trunk/examples/wiznet/wiznetpingolduino.asm
+END
+olduinoMserverv3.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/99/trunk/examples/wiznet/olduinoMserverv3.c
+END
+wiznetpingolduino.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/4/trunk/examples/wiznet/wiznetpingolduino.c
+END

@@ -1,0 +1,201 @@
+#14-07-22 adding opt6.1
+#15-04-15 disabling opt14 for R0
+	release 0; release room for local variables 
+=
+
+_main:		;framesize=%1
+=
+_main: ;copt is peeping your size %1 frame with oct 23 rules
+
+	cpy2 %1,%2 ;LOAD%3(reg)
+	cpy2 %2,%1
+=
+	cpy2 %1,%2 ;LOAD%3(reg) ;opt1.1
+
+	shrU2I %1,8
+=
+	ghi	%1	;opt2
+	plo	%1
+	ldi	0
+	phi	%1	
+
+	ld2 %1,'O',sp,(%2) ;reg:INDIRI2(addr)
+	st1 %1,'O',sp,(%2); ASGNU1
+=
+	demote	%2	;opt3
+
+	st2 %1,'O',sp,(%2); flag1 
+	demote	%2	;opt3
+=
+	st1 %1,'O',sp,(%2)	; opt4 
+
+	st2 %1,'O',%2,0; ASGN%32(addr,reg)
+=
+	str2 %1,%2	;opt5 ASGN%32
+
+	st2I %1,'O',%2,0; ASGNI2(addr,acon)
+=
+	str2I %1,%2	;opt8.3n
+
+	cpy2 %1,%2
+	shl2I %1,2
+=
+	shlR2R	%1,%2	;opt6.1
+	shl2I 	%1,1	;opt6.1
+
+	cpy2 %1,%2
+	shl2I %1,1
+=
+	shlR2R	%1,%2	;opt6
+
+	ld2 %1,'O',%1,0 ;reg:INDIR%82(addr)
+=
+	ldn2s %1,%1	;opt9xs
+
+	ld2 %1,'O',%2,0 ;reg:INDIR%82(addr)
+=
+	ldn2 %1,%2	;opt9x
+
+	pushr %1
+	pushr %2
+=
+	pushf %1	;opt11
+	pushl %2	;opt11
+
+	pushl %1	;%3
+	pushr %2
+=
+	pushm %1	;opt11.1
+	pushl %2	;opt11.1
+
+	ld2 %1,%2,%3,%4 ;reg:INDIRP2(addr)
+	str2 %1,%5	;opt5 ASGNP2
+;%9
+=
+	lda2 memaddr,%2,%3,%4	;opt12.7
+	mvcn2 %5,memaddr
+;%9
+
+	ldn2 %1,%2	;opt9x
+	str2 %1,%3	;opt5 %8
+;%9
+=
+	mvcn2 %3,%2	;opt12x
+;%9
+
+	ldn2s %1,%2	;opt9xs
+	str2 %1,%3	;opt5 %8
+;%9
+=
+	mvcn2 %3,%2	;opt12xs
+;%9
+
+	ldn2s %1,%2	;opt9xs
+	str2 %1,%3	;opt5 %8
+%9:
+=
+	mvcn2 %3,%2	;opt12xs:
+%9:
+
+	ld2 %1,%2,%3,%4 ;reg:INDIRI2(addr)
+	st2 %1,%5,%6,%7; ASGNI2(addr,reg)
+	lbr %8
+%9:
+=
+	mvc2 %1,%5,%6,%7,%2,%3,%4	;opt12
+	lbr %8
+%9:
+
+	ld2 %1,%2,%3,%4 ;reg:INDIRI2(addr)
+	st2 %1,%5,%6,%7; arg+f**
+	ld2 %1,'O',sp,(%8) ;reg:INDIRI2(addr)
+=
+	mvc2 %1,%5,%6,%7,%2,%3,%4	;opt12.1
+	ld2 %1,'O',sp,(%8) ;reg:INDIRI2(addr)
+
+	ld2 %1,%2,%3,%4 ;reg:INDIRI2(addr)
+	st2 %1,%5,%6,%7; arg+f**
+	Ccall %8; CALLI2(ar)
+=
+	mvc2 %1,%5,%6,%7,%2,%3,%4	;opt12.2
+	Ccall %8; CALLI2(ar)
+
+	ld2 %1,%2,%3,%4;reg:  INDIRP2(addr)
+	st2 %1,%5,%6,%7; ASGNP2
+;%9
+=
+	mvc2 %1,%5,%6,%7,%2,%3,%4	;opt12.3
+;%9
+
+	cpy1 %1,%2
+	zExt %1 ;CVUI2(reg)*: widen unsigned char to signed int (zero extend)*
+	incm %1,1
+	cpy1 %2,%1;LOADU1(reg)
+%9:
+=
+	incm %2,1	;opt13
+%9:
+
+	ld1 %1,'O',R0,0
+=
+	ld1 %1,'O',R0,0 ;opt14 would generate ldn1 0 which is illegal
+
+	ld1 %1,'O',%2,0
+=
+	ldn1 %1,%2	;opt14*
+
+	ld1 %1,'O',sp,(0)
+=
+	ldn1 %1,sp	;opt14.1*
+
+	st2 R12,'O',sp,(%1); flag1 
+	st2 R13,'O',sp,(%2); flag2
+=
+	st2 R12,'O',sp,(%1)			
+	inc memaddr				;opt16
+	str2 R13,memaddr			
+
+	st2 R12,'O',sp,(%1); flag1 
+	st2 R13,'O',sp,(%2); flag1 
+=
+	st2 R12,'O',sp,(%1)			
+	inc memaddr				;opt16.1
+	str2 R13,memaddr			
+
+	ldA2 %1,'O',sp,(1); reg:addr
+=
+	ldaXs %1,sp,(1)			;opt17
+
+	ldA2 %1,'O',sp,(0); reg:addr
+=
+	ldaXs %1,sp,(0)			;opt17.1
+
+	ld1 %1,'O',sp,(1)
+	str1 %1,%2; ASGNU1(indaddr,reg)		DH
+;%9
+=
+	ldaXs memaddr,sp,(1)	;opt18
+	mvcn1 %2,memaddr
+;%9
+
+	ld2 %1,'O',sp,(0) ;reg:INDIRI2(addr)
+=
+	cpy2 memaddr,sp	;opt19
+	ldn2 %1,memaddr
+
+	ldn2 %1,memaddr
+	jneU2I %1,%2,%3; NE
+;%9
+=
+	jneU2NI memaddr,%2,%3	;opt20
+;%9
+
+	zExt %1 ;CVUI2: widen unsigned char to signed int (zero extend)
+	ldn1 %2,%3	;opt14*
+	zExt %2 ;CVUI2: widen unsigned char to signed int (zero extend)
+	jeqI2 %1,%2,%4; EQI2(reg,reg)
+;%9
+=
+	ldn1 %2,%3	;opt14*
+	jeqI1 %1,%2,%4	;opt21
+;%9

@@ -1,0 +1,43 @@
+opsizes={
+	'sex':1,'shl':1,'lda':1,'ret':1,'nop':1,'dec':1,'stxd':1,'shrc':1,'str':1,'ldn':1,'adi':2,'str':1,'smi':2,'inc':1,
+	'inp':1,'sav':1,
+	'bnz':2,'br':2,
+        'cpy2': 4, 'cpy1': 2, 'cpy4': 8,
+        'zext': 3,'sext': 9,'zext4':4,'sext4':11,
+        'negi2':9,'negi4':32,
+        'alu2':12,'alu2i':8,
+        'alu4':22,'alu4i':16,
+        'ldad': 6,
+        'lda2': -8,
+        'shl2i': -6,'shri2i': -8,'shru2i': -6,
+        'shl4':12,'shri4':14,
+        'shl4i': -12,'shri4i': -14,
+        'st1':-10,'st2':-13,'str1':2,
+        'ld2':-12,'ld1':-10,
+        'ldn1':2,'ldn2':4,
+        'jzu2':8,
+        'jnzu2':8,'jnzu1':4,'sjnzu2':6,'sjnzu1':3, #the sj codes are short branch variants
+        'jeqi2':18,'jcu2':13,'jneu2': 18,
+        'jci2': 20,'jci4': 28,'jcu4': 28,
+        'jcu2i':9,
+        'jni2i':17,'jnu2i':9,
+        'jneu2i': 12,
+        'jneu4':39,
+        'jequ2i':12,'jci2i':17,
+        'jcf4':69,
+        'ld2z':4,
+        'ldi4':12,'st4':-19,'ld4':-16, 
+        'incm': -1,'decm': -1,
+        'popr': 4, 'pushr': 5,
+        'lbr': 3,
+        'equ': 0, 'db': -1,  'dw':2,'dd':4,
+        'align':-1, #force alignment
+        'cretn': 1,'ccall': 3,
+         'seq': 1,   'req': 1,
+        'listing': 0,   'include': -3,
+        'release': -1,'reserve': -1,
+        'jumpv':10}
+        
+jumpdefs={'jnzu1':[2,1,5],'jnzu2':[2,1,1],
+	'sjnzu1':[2,1,4],'sjnzu2':[2,1,1]}
+

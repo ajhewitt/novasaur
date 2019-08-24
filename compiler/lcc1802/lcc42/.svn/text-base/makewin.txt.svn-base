@@ -1,0 +1,1013 @@
+
+MACROS:
+
+PROCESSOR_IDENTIFIER = x86 Family 15 Model 4 Stepping 7, GenuineIntel
+      LIBPATH = C:\Windows\Microsoft.NET\Framework\v4.0.30319;C:\Windows\Microsoft.NET\Framework\v3.5;C:\Program Files\Microsoft Visual Studio 10.0\VC\LIB;
+      INCLUDE = C:\Program Files\Microsoft Visual Studio 10.0\VC\INCLUDE;C:\Program Files\Microsoft SDKs\Windows\v7.0A\include;
+      LIBOBJS = $Bassert$O $Bbbexit$O $Byynull$O
+      RCCOBJS = $Balloc$O  $Bbind$O  $Bdag$O  $Bdagcheck$O  $Bdecl$O  $Benode$O  $Berror$O  $Bexpr$O  $Bevent$O  $Binit$O  $Binits$O  $Binput$O  $Blex$O  $Blist$O  $Bmain$O  $Boutput$O  $Bprof$O  $Bprofio$O  $Bsimp$O  $Bstmt$O  $Bstring$O  $Bsym$O  $Btrace$O  $Btree$O  $Btypes$O  $Bnull$O  $Bsymbolic$O  $Bgen$O  $Bbytecode$O  $Balpha$O  $Bmips$O  $Bm1$O  $Bxr16$O  $Bxr18$O  $Bsparc$O  $Bstab$O  $Bx86$O  $Bx86linux$O
+      COMSPEC = C:\Windows\system32\cmd.exe
+      CPPOBJS = $Bcpp$O $Blexer$O $Bnlist$O $Btokens$O $Bmacro$O $Beval$O  $Binclude$O $Bhideset$O $Bgetopt$O $Bunix$O
+      RCCSRCS = src/alloc.c  src/bind.c  src/dag.c  src/decl.c  src/enode.c  src/error.c  src/expr.c  src/event.c  src/init.c  src/inits.c  src/input.c  src/lex.c  src/list.c  src/main.c  src/output.c  src/prof.c  src/profio.c  src/simp.c  src/stmt.c  src/string.c  src/sym.c  src/trace.c  src/tree.c  src/types.c  src/null.c  src/symbolic.c  src/bytecode.c  src/gen.c  src/stab.c  $Bdagcheck.c  $Balpha.c  $Bmips.c  $Bm1.c  $Bxr16.c  $Bxr18.c  $Bsparc.c  $Bx86linux.c  $Bx86.c
+      TEMPDIR = \\temp
+   _NMAKE_VER = 10.00.30319.01
+      PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+         MAKE = "C:\Program Files\Microsoft Visual Studio 10.0\VC\BIN\nmake.exe"
+   SYSTEMROOT = C:\Windows
+         PATH = C:\Program Files\Microsoft Visual Studio 10.0\VSTSDB\Deploy;C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\;C:\Program Files\Microsoft Visual Studio 10.0\VC\BIN;C:\Program Files\Microsoft Visual Studio 10.0\Common7\Tools;C:\Windows\Microsoft.NET\Framework\v4.0.30319;C:\Windows\Microsoft.NET\Framework\v3.5;C:\Program Files\Microsoft Visual Studio 10.0\VC\VCPackages;C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\NETFX 4.0 Tools;C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;c:\mingw\bin\;c:\apps\cc1802\bin\;C:\Users\Bill\Desktop\processing-1.5.1\java\bin\;C:\apps\asw\bin\;C:\apps\arduino-1.0.1\hardware\tools\avr\bin\;C:\apps\cc1802\Bin\;C:\Program Files\Subversion\bin;C:\Program Files\doxygen\bin;c:\gnuwin32\bin;C:\usr\local\wbin;C:\Program Files\Common Files\Acronis\SnapAPI\;C:\Program Files\SDCC\bin;"C:\Program Files\Microsoft Visual Studio 10.0\VC\bin"
+NUMBER_OF_PROCESSORS = 2
+  PROGRAMDATA = C:\ProgramData
+         TEMP = C:\Users\Bill\AppData\Local\Temp
+FRAMEWORKVERSION32 = v4.0.30319
+FRAMEWORK35VERSION = v3.5
+            A = .lib
+            B = $(BUILDDIR)\
+            C = $Blcc -A -d0.6 -Wo-lccdir=$(BUILDDIR) -Isrc -I$(BUILDDIR)
+		$Blcc -Wo-lccdir=$(BUILDDIR) -Wf-target=$(TARGET) -Iinclude\$(TARGET)
+            E = .exe
+  SESSIONNAME = Console
+APR_ICONV_PATH = C:\Program Files\Subversion\iconv
+            O = .obj
+     BUILDDIR = c:\lcc42\bin
+  USERPROFILE = C:\Users\Bill
+            T = $(TSTDIR)\
+COMMONPROGRAMFILES = C:\Program Files\Common Files
+  LOGONSERVER = \\BSMTVISTA
+     HOMEPATH = \Users\Bill
+     HOSTFILE = etc/win32.c
+  SYSTEMDRIVE = C:
+     USERNAME = Bill
+ LOCALAPPDATA = C:\Users\Bill\AppData\Local
+ALLUSERSPROFILE = C:\ProgramData
+           CC = cl -nologo
+		cl
+ PROGRAMFILES = C:\Program Files
+    MAKEFLAGS = P                 
+ FRAMEWORKDIR = C:\Windows\Microsoft.NET\Framework\
+PROCESSOR_REVISION = 0407
+ VCINSTALLDIR = C:\Program Files\Microsoft Visual Studio 10.0\VC\
+           LD = cl -nologo
+ COMPUTERNAME = BSMTVISTA
+           AS = ml
+           RC = rc
+ PSMODULEPATH = C:\Windows\system32\WindowsPowerShell\v1.0\Modules\
+PROCESSOR_LEVEL = 15
+ VSINSTALLDIR = C:\Program Files\Microsoft Visual Studio 10.0\
+PROCESSOR_ARCHITECTURE = x86
+           OS = Windows_NT
+    HOMEDRIVE = C:
+    DEVENVDIR = C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\
+       CFLAGS = -DWIN32 -Zi  -Fd$(BUILDDIR)\
+       PUBLIC = C:\Users\Public
+       TARGET = x86\win32
+       WINDIR = C:\Windows
+FRAMEWORKVERSION = v4.0.30319
+          LIB = C:\Program Files\Microsoft Visual Studio 10.0\VC\LIB;C:\Program Files\Microsoft SDKs\Windows\v7.0A\lib;
+       TSTDIR = $(BUILDDIR)\$(TARGET)\tst
+       PROMPT = $P$G
+          CPP = cl
+WINDOWSSDKDIR = C:\Program Files\Microsoft SDKs\Windows\v7.0A\
+FP_NO_HOST_CHECK = NO
+          TMP = C:\Users\Bill\AppData\Local\Temp
+FRAMEWORKDIR32 = C:\Windows\Microsoft.NET\Framework\
+          CXX = cl
+   USERDOMAIN = BsmtVista
+VS100COMNTOOLS = C:\Program Files\Microsoft Visual Studio 10.0\Common7\Tools\
+      APPDATA = C:\Users\Bill\AppData\Roaming
+      LDFLAGS = -Zi  -Fd$(BUILDDIR)\
+      MAKEDIR = C:\Users\Bill\Downloads\lcc42
+
+
+INFERENCE RULES:
+
+.asm.obj::
+	commands:	$(AS) $(AFLAGS) /c $<
+
+.asm.exe:
+	commands:	$(AS) $(AFLAGS) $<
+
+.c.obj::
+	commands:	$(CC) $(CFLAGS) /c $<
+
+.c.exe:
+	commands:	$(CC) $(CFLAGS) $<
+
+.cc.obj::
+	commands:	$(CC) $(CFLAGS) /c $<
+
+.cc.exe:
+	commands:	$(CC) $(CFLAGS) $<
+
+.cpp.obj::
+	commands:	$(CPP) $(CPPFLAGS) /c $<
+
+.cpp.exe:
+	commands:	$(CPP) $(CPPFLAGS) $<
+
+.cxx.obj::
+	commands:	$(CXX) $(CXXFLAGS) /c $<
+
+.cxx.exe:
+	commands:	$(CXX) $(CXXFLAGS) $<
+
+.rc.res:
+	commands:	$(RC) $(RFLAGS) /r $<
+
+.SUFFIXES: .obj .asm .c .cc .cpp .cxx .f .f90 .for .rc 
+
+TARGETS:
+
+c:\lcc42\bin\bprint.exe: 
+	flags:	
+	dependents:	c:\lcc42\bin\bprint.obj 
+	commands:		$(LD) $(LDFLAGS) -Fe$@ $Bbprint$O
+
+c:\lcc42\bin\x86linux.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	c:\lcc42\bin\x86linux.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ $Bx86linux.c
+
+c:\lcc42\bin\x86\win32\tst\fields.s: 
+	flags:	
+	dependents:	tst\fields.c tst\fields.0 all 
+	commands:	-$C -S -Wf-errout=$Tfields.2 -o $Tfields.s tst/fields.c
+			fc $(TARGET)\tst\fields.sbk $Tfields.s
+			fc $(TARGET)\tst\fields.2bk $Tfields.2
+			$C -o $Tfields$E $Tfields.s
+			-$Tfields$E <tst/fields.0 >$Tfields.1
+			fc $(TARGET)\tst\fields.1bk $Tfields.1
+
+c:\lcc42\bin\string.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/string.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/string.c
+
+c:\lcc42\bin\lcc.exe: 
+	flags:	
+	dependents:	c:\lcc42\bin\lcc.obj c:\lcc42\bin\host.obj 
+			
+	commands:		$(LD) $(LDFLAGS) -Fe$@ $Blcc$O $Bhost$O
+
+c:\lcc42\bin\gen.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/gen.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/gen.c
+
+c:\lcc42\bin\rcc.exe::
+	flags:	
+	dependents:	c:\lcc42\bin\main.obj c:\lcc42\bin\librcc.lib 
+			
+	commands:		$(LD) $(LDFLAGS) -Fe$@ $Bmain$O $(EXTRAOBJS) $Blibrcc$A $(EXTRALIBS)
+
+c:\lcc42\bin\sparc.c: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe src/sparc.md 
+	commands:	    $Blburg src/sparc.md    $@
+
+c:\lcc42\bin\symbolic.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/symbolic.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/symbolic.c
+
+c:\lcc42\bin\cpp.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/cpp.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/cpp.c
+
+c:\lcc42\bin\x86\win32\tst\stdarg.s: 
+	flags:	
+	dependents:	tst\stdarg.c tst\stdarg.0 all 
+	commands:	-$C -S -Wf-errout=$Tstdarg.2 -o $Tstdarg.s tst/stdarg.c
+			fc $(TARGET)\tst\stdarg.sbk $Tstdarg.s
+			fc $(TARGET)\tst\stdarg.2bk $Tstdarg.2
+			$C -o $Tstdarg$E $Tstdarg.s
+			-$Tstdarg$E <tst/stdarg.0 >$Tstdarg.1
+			fc $(TARGET)\tst\stdarg.1bk $Tstdarg.1
+
+c:\lcc42\bin\m1.c: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe src/m1.md 
+	commands:		   $Blburg src/m1.md       $@
+
+c:\lcc42\bin\alpha.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	c:\lcc42\bin\alpha.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ $Balpha.c
+
+c:\lcc42\bin\x86\win32\tst\sort.s: 
+	flags:	
+	dependents:	tst\sort.c tst\sort.0 all 
+	commands:	-$C -S -Wf-errout=$Tsort.2 -o $Tsort.s tst/sort.c
+			fc $(TARGET)\tst\sort.sbk $Tsort.s
+			fc $(TARGET)\tst\sort.2bk $Tsort.2
+			$C -o $Tsort$E $Tsort.s
+			-$Tsort$E <tst/sort.0 >$Tsort.1
+			fc $(TARGET)\tst\sort.1bk $Tsort.1
+
+c:\lcc42\bin\lex.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/lex.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/lex.c
+
+c:\lcc42\bin\cpp.exe: 
+	flags:	
+	dependents:	c:\lcc42\bin\cpp.obj c:\lcc42\bin\lexer.obj 
+			c:\lcc42\bin\nlist.obj c:\lcc42\bin\tokens.obj 
+			c:\lcc42\bin\macro.obj c:\lcc42\bin\eval.obj 
+			c:\lcc42\bin\include.obj c:\lcc42\bin\hideset.obj 
+			c:\lcc42\bin\getopt.obj c:\lcc42\bin\unix.obj 
+			
+	commands:		$(LD) $(LDFLAGS) -Fe$@ $(CPPOBJS)
+
+c:\lcc42\bin\x86\win32\tst\paranoia.s: 
+	flags:	
+	dependents:	tst\paranoia.c tst\paranoia.0 all 
+	commands:	-$C -S -Wf-errout=$Tparanoia.2 -o $Tparanoia.s tst/paranoia.c
+			fc $(TARGET)\tst\paranoia.sbk $Tparanoia.s
+			fc $(TARGET)\tst\paranoia.2bk $Tparanoia.2
+			$C -o $Tparanoia$E $Tparanoia.s
+			-$Tparanoia$E <tst/paranoia.0 >$Tparanoia.1
+			fc $(TARGET)\tst\paranoia.1bk $Tparanoia.1
+
+c:\lcc42\bin\alloc.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/alloc.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/alloc.c
+
+c:\lcc42\bin\enode.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/enode.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/enode.c
+
+c:\lcc42\bin\yynull.obj: 
+	flags:	
+	dependents:	lib/yynull.c 
+	commands:		$(CC) -c -Fo$@ lib/yynull.c
+
+c:\lcc42\bin\x86\win32\tst\wf1.s: 
+	flags:	
+	dependents:	tst\wf1.c tst\wf1.0 all 
+	commands:	-$C -S -Wf-errout=$Twf1.2 -o $Twf1.s tst/wf1.c
+			fc $(TARGET)\tst\wf1.sbk $Twf1.s
+			fc $(TARGET)\tst\wf1.2bk $Twf1.2
+			$C -o $Twf1$E $Twf1.s
+			-$Twf1$E <tst/wf1.0 >$Twf1.1
+			fc $(TARGET)\tst\wf1.1bk $Twf1.1
+
+c:\lcc42\bin\trace.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/trace.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/trace.c
+
+c:\lcc42\bin\output.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/output.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/output.c
+
+c:\lcc42\bin\x86\win32\tst\switch.s: 
+	flags:	
+	dependents:	tst\switch.c tst\switch.0 all 
+	commands:	-$C -S -Wf-errout=$Tswitch.2 -o $Tswitch.s tst/switch.c
+			fc $(TARGET)\tst\switch.sbk $Tswitch.s
+			fc $(TARGET)\tst\switch.2bk $Tswitch.2
+			$C -o $Tswitch$E $Tswitch.s
+			-$Tswitch$E <tst/switch.0 >$Tswitch.1
+			fc $(TARGET)\tst\switch.1bk $Tswitch.1
+
+c:\lcc42\bin\x86\win32\tst\limits.s: 
+	flags:	
+	dependents:	tst\limits.c tst\limits.0 all 
+	commands:	-$C -S -Wf-errout=$Tlimits.2 -o $Tlimits.s tst/limits.c
+			fc $(TARGET)\tst\limits.sbk $Tlimits.s
+			fc $(TARGET)\tst\limits.2bk $Tlimits.2
+			$C -o $Tlimits$E $Tlimits.s
+			-$Tlimits$E <tst/limits.0 >$Tlimits.1
+			fc $(TARGET)\tst\limits.1bk $Tlimits.1
+
+c:\lcc42\bin\macro.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/macro.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/macro.c
+
+c:\lcc42\bin\ops.obj: 
+	flags:	
+	dependents:	etc/ops.c src/ops.h 
+	commands:			$(CC) $(CFLAGS) -c -Isrc -Fo$@ etc/ops.c
+
+testclean: 
+	flags:	
+	dependents:	
+	commands:	-del /q $T8q$E $T8q.s $T8q.2 $T8q.1
+			-del /q $Tarray$E $Tarray.s $Tarray.2 $Tarray.1
+			-del /q $Tcf$E $Tcf.s $Tcf.2 $Tcf.1
+			-del /q $Tcq$E $Tcq.s $Tcq.2 $Tcq.1
+			-del /q $Tcvt$E $Tcvt.s $Tcvt.2 $Tcvt.1
+			-del /q $Tfields$E $Tfields.s $Tfields.2 $Tfields.1
+			-del /q $Tfront$E $Tfront.s $Tfront.2 $Tfront.1
+			-del /q $Tincr$E $Tincr.s $Tincr.2 $Tincr.1
+			-del /q $Tinit$E $Tinit.s $Tinit.2 $Tinit.1
+			-del /q $Tlimits$E $Tlimits.s $Tlimits.2 $Tlimits.1
+			-del /q $Tparanoia$E $Tparanoia.s $Tparanoia.2 $Tparanoia.1
+			-del /q $Tsort$E $Tsort.s $Tsort.2 $Tsort.1
+			-del /q $Tspill$E $Tspill.s $Tspill.2 $Tspill.1
+			-del /q $Tstdarg$E $Tstdarg.s $Tstdarg.2 $Tstdarg.1
+			-del /q $Tstruct$E $Tstruct.s $Tstruct.2 $Tstruct.1
+			-del /q $Tswitch$E $Tswitch.s $Tswitch.2 $Tswitch.1
+			-del /q $Twf1$E $Twf1.s $Twf1.2 $Twf1.1
+			-del /q $Tyacc$E $Tyacc.s $Tyacc.2 $Tyacc.1
+
+c:\lcc42\bin\ops.exe: 
+	flags:	
+	dependents:	c:\lcc42\bin\ops.obj 
+	commands:		$(LD) $(LDFLAGS) -Fe$@ $Bops$O
+
+c:\lcc42\bin\xr16.c: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe src/xr16.md 
+	commands:		   $Blburg src/xr16.md       $@
+
+c:\lcc42\bin\sym.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/sym.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/sym.c
+
+c:\lcc42\bin\sparc.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	c:\lcc42\bin\sparc.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ $Bsparc.c
+
+c:\lcc42\bin\xr18.c: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe src/xr18.md 
+	commands:		   $Blburg src/xr18.md       $@
+
+c:\lcc42\bin\lburg.obj: 
+	flags:	
+	dependents:	lburg/lburg.h 
+	commands:	
+
+	flags:	
+	dependents:	lburg/lburg.c 
+	commands:		$(CC) $(CFLAGS) -c -Ilburg -Fo$@ lburg/lburg.c
+
+c:\lcc42\bin\m1.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	c:\lcc42\bin\m1.c 
+	commands:			$(CC) $(CFLAGS) -c -Isrc -Fo$@ $Bm1.c
+
+liblcc: 
+	flags:	
+	dependents:	c:\lcc42\bin\liblcc.lib 
+	commands:	
+
+c:\lcc42\bin\lexer.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/lex.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/lex.c
+
+c:\lcc42\bin\event.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/event.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/event.c
+
+c:\lcc42\bin\lburg.exe: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.obj c:\lcc42\bin\gram.obj 
+			
+	commands:		$(LD) $(LDFLAGS) -Fe$@ $Blburg$O $Bgram$O
+
+c:\lcc42\bin\include.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/include.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/include.c
+
+c:\lcc42\bin\x86\win32\tst\struct.s: 
+	flags:	
+	dependents:	tst\struct.c tst\struct.0 all 
+	commands:	-$C -S -Wf-errout=$Tstruct.2 -o $Tstruct.s tst/struct.c
+			fc $(TARGET)\tst\struct.sbk $Tstruct.s
+			fc $(TARGET)\tst\struct.2bk $Tstruct.2
+			$C -o $Tstruct$E $Tstruct.s
+			-$Tstruct$E <tst/struct.0 >$Tstruct.1
+			fc $(TARGET)\tst\struct.1bk $Tstruct.1
+
+c:\lcc42\bin\hideset.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/hideset.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/hideset.c
+
+c:\lcc42\bin\inits.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/inits.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/inits.c
+
+what: 
+	flags:	
+	dependents:	
+	commands:	-@echo make all rcc lburg cpp lcc bprint liblcc triple clean clobber
+
+c:\lcc42\bin\nlist.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/nlist.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/nlist.c
+
+c:\lcc42\bin\error.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/error.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/error.c
+
+c:\lcc42\bin\x86\win32\tst\cvt.s: 
+	flags:	
+	dependents:	tst\cvt.c tst\cvt.0 all 
+	commands:	-$C -S -Wf-errout=$Tcvt.2 -o $Tcvt.s tst/cvt.c
+			fc $(TARGET)\tst\cvt.sbk $Tcvt.s
+			fc $(TARGET)\tst\cvt.2bk $Tcvt.2
+			$C -o $Tcvt$E $Tcvt.s
+			-$Tcvt$E <tst/cvt.0 >$Tcvt.1
+			fc $(TARGET)\tst\cvt.1bk $Tcvt.1
+
+c:\lcc42\bin\1rcc.exe: 
+	flags:	
+	dependents:	c:\lcc42\bin\rcc.exe c:\lcc42\bin\lcc.exe c:\lcc42\bin\cpp.exe 
+			
+	commands:		$C -o $@ -B$B $(RCCSRCS)
+
+c:\lcc42\bin\input.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/input.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/input.c
+
+c:\lcc42\bin\2rcc.exe: 
+	flags:	
+	dependents:	c:\lcc42\bin\1rcc.exe 
+	commands:		$C -o $@ -B$B1 $(RCCSRCS)
+
+c:\lcc42\bin\xr16.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	c:\lcc42\bin\xr16.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ $Bxr16.c
+
+c:\lcc42\bin\dagcheck.c: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe src/dagcheck.md 
+	commands:	 $Blburg src/dagcheck.md $@
+
+c:\lcc42\bin\xr18.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	c:\lcc42\bin\xr18.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ $Bxr18.c
+
+test: 
+	flags:	
+	dependents:	c:\lcc42\bin\x86\win32\tst\8q.s c:\lcc42\bin\x86\win32\tst\array.s 
+			c:\lcc42\bin\x86\win32\tst\cf.s c:\lcc42\bin\x86\win32\tst\cq.s 
+			c:\lcc42\bin\x86\win32\tst\cvt.s c:\lcc42\bin\x86\win32\tst\fields.s 
+			c:\lcc42\bin\x86\win32\tst\front.s c:\lcc42\bin\x86\win32\tst\incr.s 
+			c:\lcc42\bin\x86\win32\tst\init.s c:\lcc42\bin\x86\win32\tst\limits.s 
+			c:\lcc42\bin\x86\win32\tst\paranoia.s c:\lcc42\bin\x86\win32\tst\sort.s 
+			c:\lcc42\bin\x86\win32\tst\spill.s c:\lcc42\bin\x86\win32\tst\stdarg.s 
+			c:\lcc42\bin\x86\win32\tst\struct.s c:\lcc42\bin\x86\win32\tst\switch.s 
+			c:\lcc42\bin\x86\win32\tst\wf1.s c:\lcc42\bin\x86\win32\tst\yacc.s 
+			
+	commands:	
+
+c:\lcc42\bin\types.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/types.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/types.c
+
+c:\lcc42\bin\decl.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/decl.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/decl.c
+
+c:\lcc42\bin\cp.exe: 
+	flags:	
+	dependents:	etc/cp.c 
+	commands:		$(CC) $(CFLAGS) -Fo$@ etc/cp.c
+
+c:\lcc42\bin\bind.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/bind.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/bind.c
+
+c:\lcc42\bin\x86\win32\tst\array.s: 
+	flags:	
+	dependents:	tst\array.c tst\array.0 all 
+	commands:	-$C -S -Wf-errout=$Tarray.2 -o $Tarray.s tst/array.c
+			fc $(TARGET)\tst\array.sbk $Tarray.s
+			fc $(TARGET)\tst\array.2bk $Tarray.2
+			$C -o $Tarray$E $Tarray.s
+			-$Tarray$E <tst/array.0 >$Tarray.1
+			fc $(TARGET)\tst\array.1bk $Tarray.1
+
+c:\lcc42\bin\mips.c: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe src/mips.md 
+	commands:	     $Blburg src/mips.md     $@
+
+c:\lcc42\bin\x86\win32\tst\spill.s: 
+	flags:	
+	dependents:	tst\spill.c tst\spill.0 all 
+	commands:	-$C -S -Wf-errout=$Tspill.2 -o $Tspill.s tst/spill.c
+			fc $(TARGET)\tst\spill.sbk $Tspill.s
+			fc $(TARGET)\tst\spill.2bk $Tspill.2
+			$C -o $Tspill$E $Tspill.s
+			-$Tspill$E <tst/spill.0 >$Tspill.1
+			fc $(TARGET)\tst\spill.1bk $Tspill.1
+
+bprint: 
+	flags:	
+	dependents:	c:\lcc42\bin\bprint.exe 
+	commands:	
+
+triple: 
+	flags:	
+	dependents:	c:\lcc42\bin\2rcc.exe 
+	commands:	-fc /b $B1rcc$E $B2rcc$E
+
+c:\lcc42\bin\liblcc.lib: 
+	flags:	
+	dependents:	c:\lcc42\bin\assert.obj c:\lcc42\bin\bbexit.obj 
+			c:\lcc42\bin\yynull.obj 
+	commands:		lib -out:$@ $Bassert$O $Bbbexit$O $Byynull$O
+
+c:\lcc42\bin\main.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/main.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/main.c
+
+c:\lcc42\bin\gram.obj: 
+	flags:	
+	dependents:	lburg/lburg.h 
+	commands:	
+
+	flags:	
+	dependents:	lburg/gram.c 
+	commands:		$(CC) $(CFLAGS) -c -Ilburg -Fo$@ lburg/gram.c
+
+lcc: 
+	flags:	
+	dependents:	c:\lcc42\bin\lcc.exe 
+	commands:	
+
+c:\lcc42\bin\eval.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/eval.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/eval.c
+
+c:\lcc42\bin\x86\win32\tst\front.s: 
+	flags:	
+	dependents:	tst\front.c tst\front.0 all 
+	commands:	-$C -S -Wf-errout=$Tfront.2 -o $Tfront.s tst/front.c
+			fc $(TARGET)\tst\front.sbk $Tfront.s
+			fc $(TARGET)\tst\front.2bk $Tfront.2
+
+c:\lcc42\bin\x86\win32\tst\cf.s: 
+	flags:	
+	dependents:	tst\cf.c tst\cf.0 all 
+	commands:	-$C -S -Wf-errout=$Tcf.2 -o $Tcf.s tst/cf.c
+			fc $(TARGET)\tst\cf.sbk $Tcf.s
+			fc $(TARGET)\tst\cf.2bk $Tcf.2
+			$C -o $Tcf$E $Tcf.s
+			-$Tcf$E <tst/cf.0 >$Tcf.1
+			fc $(TARGET)\tst\cf.1bk $Tcf.1
+
+c:\lcc42\bin\x86\win32\tst\8q.s: 
+	flags:	
+	dependents:	tst\8q.c tst\8q.0 all 
+	commands:	-$C -S -Wf-errout=$T8q.2 -o $T8q.s tst/8q.c
+			fc $(TARGET)\tst\8q.sbk $T8q.s
+			fc $(TARGET)\tst\8q.2bk $T8q.2
+			$C -o $T8q$E $T8q.s
+			-$T8q$E <tst/8q.0 >$T8q.1
+			fc $(TARGET)\tst\8q.1bk $T8q.1
+
+c:\lcc42\bin\dagcheck.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	c:\lcc42\bin\dagcheck.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ $Bdagcheck.c
+
+c:\lcc42\bin\stab.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/stab.c src/stab.h 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/stab.c
+
+c:\lcc42\bin\librcc.lib: 
+	flags:	
+	dependents:	c:\lcc42\bin\alloc.obj c:\lcc42\bin\bind.obj 
+			c:\lcc42\bin\dag.obj c:\lcc42\bin\dagcheck.obj 
+			c:\lcc42\bin\decl.obj c:\lcc42\bin\enode.obj 
+			c:\lcc42\bin\error.obj c:\lcc42\bin\expr.obj 
+			c:\lcc42\bin\event.obj c:\lcc42\bin\init.obj 
+			c:\lcc42\bin\inits.obj c:\lcc42\bin\input.obj 
+			c:\lcc42\bin\lex.obj c:\lcc42\bin\list.obj 
+			c:\lcc42\bin\main.obj c:\lcc42\bin\output.obj 
+			c:\lcc42\bin\prof.obj c:\lcc42\bin\profio.obj 
+			c:\lcc42\bin\simp.obj c:\lcc42\bin\stmt.obj 
+			c:\lcc42\bin\string.obj c:\lcc42\bin\sym.obj 
+			c:\lcc42\bin\trace.obj c:\lcc42\bin\tree.obj 
+			c:\lcc42\bin\types.obj c:\lcc42\bin\null.obj 
+			c:\lcc42\bin\symbolic.obj c:\lcc42\bin\gen.obj 
+			c:\lcc42\bin\bytecode.obj c:\lcc42\bin\alpha.obj 
+			c:\lcc42\bin\mips.obj c:\lcc42\bin\m1.obj c:\lcc42\bin\xr16.obj 
+			c:\lcc42\bin\xr18.obj c:\lcc42\bin\sparc.obj 
+			c:\lcc42\bin\stab.obj c:\lcc42\bin\x86.obj 
+			c:\lcc42\bin\x86linux.obj 
+	commands:		lib -out:$@ $(RCCOBJS)
+
+rcc: 
+	flags:	
+	dependents:	c:\lcc42\bin\rcc.exe 
+	commands:	
+
+c:\lcc42\bin\x86.c: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe src/x86.md 
+	commands:	      $Blburg src/x86.md      $@
+
+all::
+	flags:	
+	dependents:	rcc lburg cpp lcc bprint liblcc 
+	commands:	
+
+c:\lcc42\bin\tree.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/tree.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/tree.c
+
+c:\lcc42\bin\x86\win32\tst\cq.s: 
+	flags:	
+	dependents:	tst\cq.c tst\cq.0 all 
+	commands:	-$C -S -Wf-errout=$Tcq.2 -o $Tcq.s tst/cq.c
+			fc $(TARGET)\tst\cq.sbk $Tcq.s
+			fc $(TARGET)\tst\cq.2bk $Tcq.2
+			$C -o $Tcq$E $Tcq.s
+			-$Tcq$E <tst/cq.0 >$Tcq.1
+			fc $(TARGET)\tst\cq.1bk $Tcq.1
+
+c:\lcc42\bin\init.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/init.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/init.c
+
+c:\lcc42\bin\prof.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/prof.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/prof.c
+
+clean::
+	flags:	
+	dependents:	testclean 
+	commands:		-del /q $B*$O
+				-del /q $Bdagcheck.c $Balpha.c $Bmips.c $Bm1.c  $Bxr16.c $Bxr18.c  $Bx86.c $Bsparc.c $Bx86linux.c
+				-del /q $Brcc1$E $Brcc1$E $B1rcc$E $B2rcc$E
+				-del /q $B*.ilk
+
+cpp: 
+	flags:	
+	dependents:	c:\lcc42\bin\cpp.exe 
+	commands:	
+
+c:\lcc42\bin\simp.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/simp.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/simp.c
+
+c:\lcc42\bin\mips.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	c:\lcc42\bin\mips.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ $Bmips.c
+
+c:\lcc42\bin\null.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/null.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/null.c
+
+c:\lcc42\bin\list.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/list.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/list.c
+
+c:\lcc42\bin\bbexit.obj: 
+	flags:	
+	dependents:	lib/bbexit.c 
+	commands:		$(CC) -c -Fo$@ lib/bbexit.c
+
+c:\lcc42\bin\host.obj: 
+	flags:	
+	dependents:	etc/win32.c 
+	commands:		$(CC) $(CFLAGS) -c -Fo$@ $(HOSTFILE)
+
+c:\lcc42\bin\x86linux.c: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe src/x86linux.md 
+	commands:	 $Blburg src/x86linux.md $@
+
+c:\lcc42\bin\expr.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/expr.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/expr.c
+
+c:\lcc42\bin\x86\win32\tst\yacc.s: 
+	flags:	
+	dependents:	tst\yacc.c tst\yacc.0 all 
+	commands:	-$C -S -Wf-errout=$Tyacc.2 -o $Tyacc.s tst/yacc.c
+			fc $(TARGET)\tst\yacc.sbk $Tyacc.s
+			fc $(TARGET)\tst\yacc.2bk $Tyacc.2
+			$C -o $Tyacc$E $Tyacc.s
+			-$Tyacc$E <tst/yacc.0 >$Tyacc.1
+			fc $(TARGET)\tst\yacc.1bk $Tyacc.1
+
+c:\lcc42\bin\unix.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/unix.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/unix.c
+
+c:\lcc42\bin\x86.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	c:\lcc42\bin\x86.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ $Bx86.c
+
+c:\lcc42\bin\stmt.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/stmt.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/stmt.c
+
+c:\lcc42\bin\x86\win32\tst\incr.s: 
+	flags:	
+	dependents:	tst\incr.c tst\incr.0 all 
+	commands:	-$C -S -Wf-errout=$Tincr.2 -o $Tincr.s tst/incr.c
+			fc $(TARGET)\tst\incr.sbk $Tincr.s
+			fc $(TARGET)\tst\incr.2bk $Tincr.2
+			$C -o $Tincr$E $Tincr.s
+			-$Tincr$E <tst/incr.0 >$Tincr.1
+			fc $(TARGET)\tst\incr.1bk $Tincr.1
+
+c:\lcc42\bin\dag.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/dag.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/dag.c
+
+clobber::
+	flags:	
+	dependents:	clean 
+	commands:		-del /q $Brcc$E $Blburg$E $Bcpp$E $Blcc$E $Bcp$E $Bbprint$E $Bops$E $B*$A
+				-del /q $B*.pdb $B*.pch
+
+c:\lcc42\bin\alpha.c: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe src/alpha.md 
+	commands:	    $Blburg src/alpha.md    $@
+
+c:\lcc42\bin\bprint.obj: 
+	flags:	
+	dependents:	etc/bprint.c src/profio.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ etc/bprint.c
+
+c:\lcc42\bin\profio.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/profio.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/profio.c
+
+c:\lcc42\bin\bytecode.obj: 
+	flags:	
+	dependents:	src/c.h src/ops.h src/token.h src/config.h 
+	commands:	
+
+	flags:	
+	dependents:	src/bytecode.c 
+	commands:		$(CC) $(CFLAGS) -c -Isrc -Fo$@ src/bytecode.c
+
+lburg: 
+	flags:	
+	dependents:	c:\lcc42\bin\lburg.exe 
+	commands:	
+
+c:\lcc42\bin\assert.obj: 
+	flags:	
+	dependents:	lib/assert.c 
+	commands:		$(CC) -c -Fo$@ lib/assert.c
+
+c:\lcc42\bin\lcc.obj: 
+	flags:	
+	dependents:	etc/lcc.c 
+	commands:		$(CC) $(CFLAGS) -c -DTEMPDIR=\"$(TEMPDIR)\" -Fo$@ etc/lcc.c
+
+c:\lcc42\bin\getopt.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/getopt.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/getopt.c
+
+c:\lcc42\bin\x86\win32\tst\init.s: 
+	flags:	
+	dependents:	tst\init.c tst\init.0 all 
+	commands:	-$C -S -Wf-errout=$Tinit.2 -o $Tinit.s tst/init.c
+			fc $(TARGET)\tst\init.sbk $Tinit.s
+			fc $(TARGET)\tst\init.2bk $Tinit.2
+			$C -o $Tinit$E $Tinit.s
+			-$Tinit$E <tst/init.0 >$Tinit.1
+			fc $(TARGET)\tst\init.1bk $Tinit.1
+
+c:\lcc42\bin\tokens.obj: 
+	flags:	
+	dependents:	cpp/cpp.h 
+	commands:	
+
+	flags:	
+	dependents:	cpp/tokens.c 
+	commands:		$(CC) $(CFLAGS) -c -Icpp -Fo$@ cpp/tokens.c
+
+
+	cl -nologo -DWIN32 -Zi  -Fdc:\lcc42\bin\ -c -Foc:\lcc42\bin\host.obj etc/win32.c
+win32.c
+etc/win32.c(20) : error C2061: syntax error : identifier 'include'
+etc/win32.c(20) : error C2001: newline in constant
+etc/win32.c(40) : error C2065: 'ld' : undeclared identifier
+etc/win32.c(40) : error C2109: subscript requires array or pointer type
+etc/win32.c(45) : error C2065: 'ld' : undeclared identifier
+etc/win32.c(45) : error C2109: subscript requires array or pointer type

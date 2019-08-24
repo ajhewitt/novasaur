@@ -1,0 +1,140 @@
+10
+
+dir
+166
+http://lcc1802.googlecode.com/svn/trunk/examples
+http://lcc1802.googlecode.com/svn
+
+
+
+2015-08-22T19:32:52.578541Z
+166
+bill.rowe.ottawa@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+eb17a4d8-bb3f-b7f4-9369-459629264cf3
+
+pinger
+dir
+
+tms1638
+dir
+
+selftest
+dir
+
+branchanal
+dir
+
+Bagels
+dir
+
+blink
+dir
+
+enc28j60
+dir
+
+enc28j60.zip
+file
+
+
+
+
+2016-03-17T22:10:49.479041Z
+94f967d08a0f018d966c74a45fa8d435
+2013-06-27T14:17:55.991777Z
+4
+bill.rowe.ottawa@gmail.com
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+102415
+
+lcctest
+dir
+
+opttest
+dir
+
+sdmmc
+dir
+
+numberNinja
+dir
+
+shieldadapter
+dir
+
+longmath
+dir
+
+carbot
+dir
+
+helloworld
+dir
+
+hwspilcd
+dir
+
+floatingpoint
+dir
+
+spiLCD
+dir
+
+tinyFat
+dir
+
+asminline
+dir
+
+interrupts
+dir
+
+dhrystone
+dir
+
+tftlcd
+dir
+
+wiznet
+dir
+
+dubdab
+dir
+
+!w5500
+dir
+

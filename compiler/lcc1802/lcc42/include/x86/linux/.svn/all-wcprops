@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/2/trunk/lcc42/include/x86/linux
+END
+math.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/2/trunk/lcc42/include/x86/linux/math.h
+END
+limits.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2/trunk/lcc42/include/x86/linux/limits.h
+END
+assert.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2/trunk/lcc42/include/x86/linux/assert.h
+END
+stdarg.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2/trunk/lcc42/include/x86/linux/stdarg.h
+END
+float.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/2/trunk/lcc42/include/x86/linux/float.h
+END

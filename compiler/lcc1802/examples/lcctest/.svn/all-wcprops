@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/96/trunk/examples/lcctest
+END
+runtests2bO.bat
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/4/trunk/examples/lcctest/runtests2bO.bat
+END
+array.c
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/4/trunk/examples/lcctest/array.c
+END
+8q7.c
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/96/trunk/examples/lcctest/8q7.c
+END
+a.hex
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/4/trunk/examples/lcctest/a.hex
+END
+lcc.bat
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/4/trunk/examples/lcctest/lcc.bat
+END
+8q.asm
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/4/trunk/examples/lcctest/8q.asm
+END
+8qo.lst
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/4/trunk/examples/lcctest/8qo.lst
+END
+8q.c
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/4/trunk/examples/lcctest/8q.c
+END
+null
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/4/trunk/examples/lcctest/null
+END
+runtestsFL.bat
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/4/trunk/examples/lcctest/runtestsFL.bat
+END
+8qf.c
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/4/trunk/examples/lcctest/8qf.c
+END
+8ql.c
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/4/trunk/examples/lcctest/8ql.c
+END
+8qo.asm
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/4/trunk/examples/lcctest/8qo.asm
+END
+8qo.c
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/4/trunk/examples/lcctest/8qo.c
+END
+runtestsNO.bat
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/4/trunk/examples/lcctest/runtestsNO.bat
+END
+8q.lst
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/4/trunk/examples/lcctest/8q.lst
+END
+runtests.bat
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/4/trunk/examples/lcctest/runtests.bat
+END

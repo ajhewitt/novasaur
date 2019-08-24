@@ -1,0 +1,72 @@
+ENC28j60 compiled with standard registers
+approximate program size  15595
+epilog include is at 3CEB	
+reg	dest	src	overhead
+00	26	25	16
+01	49	45	30
+02	0	0	0
+03	0	0	0
+04	0	0	0
+05	0	0	0
+06	0	0	0
+07	56	650	48
+08	7	4	0
+09	16	8	0
+10	84	65	0
+11	586	419	0
+12	218	51	0
+13	136	26	0
+14	0	0	0
+15	41	39	0
+strg	245	253	94
+
+approximate program size  17795 +2000
+epilog include is at 4583	
+reg	dest	src	overhead
+00	0	0	0 -25
+01	0	0	0 -50
+02	0	0	0
+03	0	0	0
+04	0	0	0
+05	0	0	0
+06	0	0	0
+07	56	65	48 SAME!
+08	9	7	0 +2
+09	22	14	0 +5
+10	117	94	180 +30
+11	644	472	0 +60 dest +50 src
+12	218	51	0 same
+13	136	26	0 same
+14	0	0	0
+15	41	39	0
+strg	303	311	48 +50
+
+reducing reg variables to 1
+-bulked up code 2200 bytes
+-added 50 storage load/stores
+-added 90 temp src/dest 
+-reduced 70 vbl src dest
+-reduced 46 push pop
+-not obviously a huge diference.
+
+compiled with R14 available as reg var
+approximate program size  16363
+epilog include is at 3FEB	
+reg	dest	src	overhead
+00	15	22	12 net new -used more than 8 or 9
+01	27	27	16 similar to 0
+02	0	0	0
+03	0	0	0
+04	0	0	0
+05	0	0	0
+06	0	0	0
+07	44	38	28 similar to 1
+08	6	4	0
+09	14	7	0
+10	80	58	0
+11	572	404	0 down 15 - corresponds to net new
+12	218	51	0
+13	136	26	0
+14	56	65	48 same as 7
+15	41	39	0
+strg	236	240	104 -10 but more overhead
