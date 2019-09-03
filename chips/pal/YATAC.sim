@@ -4,110 +4,119 @@ PIN   6 =  I4
 PIN   7 =  I5 
 PIN   8 =  I6 
 PIN   9 =  I7 
-PIN  19 =  PA16 
-PIN  17 =  bank 
+PIN  18 =  PA16 
+PIN  19 =  PA17 
 PIN  16 =  boot 
+PIN  14 = !fetch 
 PIN   4 =  hblank 
 PIN  15 =  hsel 
-PIN  14 = !inst 
-PIN  12 =  mv 
-PIN  18 =  pcent 
+PIN  12 =  pcent 
 PIN   3 =  pclk 
 PIN  13 = !prog 
 PIN   2 = !reset 
 PIN   1 =  sclk 
+PIN  17 =  sign 
 %END
 
 %FIELD
-FIELD execution = !inst,!hsel
+FIELD execution = !fetch,!hsel
 %END
 
 %EQUATION
+!A16 =>
+    !hsel
+  # I7
+  # I6
+  # I5
+
 PA16 =>
-    bank & pclk & !prog
-  # !hsel & pclk & prog
-  # mv & pclk & prog
-  # I5 & I6 & pclk & prog
+    !hsel & pclk
+  # I7 & pclk
+  # I6 & pclk
+  # I5 & pclk
   # hblank & !pclk
+
+!PA17 =>
+    !fetch & pclk
+  # !I5 & I6 & pclk
+  # !I6 & I7 & pclk
 
 aluh =>
     I5 & I6
 
 aluhl =>
-    !I5 & !I6
-
-bank.d  =>
-    !reset
-  # I4 & I5 & !I6 & !I7 & !bank & inst
-  # bank & !inst & reset
-  # I7 & bank & reset
-  # !I4 & bank & reset
-  # I6 & bank & reset
-  # !I5 & bank & reset
+    !I5 & !I6 & !I7
 
 boot.d  =>
     !reset
   # !I5 & boot & reset
-  # boot & !inst & reset
-  # I7 & boot & reset
   # !I4 & boot & reset
+  # boot & !fetch & reset
+  # !I7 & boot & reset
   # I6 & boot & reset
 
 cond =>
-    !DD7 & I5
-  # DD7 & !I5
+    I4 & !sign
+  # !I4 & sign
+
+!fetch.d  =>
+    !I5 & !I6 & !I7 & fetch & !hsel
+  # !I4 & I5 & I7 & !fetch & hsel & reset & !sign
+  # I4 & I7 & !fetch & hsel & reset & sign
+  # I6 & I7 & !fetch & hsel & reset
+  # I4 & !I5 & I7 & !fetch & hsel & reset
+  # I5 & I6 & !fetch & !hsel
+  # !I6 & !fetch & !hsel & reset
+  # !I5 & !fetch & !hsel & reset
 
 !hsel.d  =>
-    !I5 & !hsel & !inst & reset
-  # !I7 & hsel & !inst
-  # !I6 & !hsel & !inst & reset
-
-!inst.d  =>
-    !I5 & !I6 & !hsel & inst
-  # !DD7 & I4 & !I5 & I7 & hsel & !inst & reset
-  # DD7 & I5 & I7 & hsel & !inst & reset
-  # I6 & I7 & hsel & !inst & reset
-  # !I4 & I5 & I7 & hsel & !inst & reset
-  # I5 & I6 & !hsel & !inst
-  # !I6 & !hsel & !inst & reset
-  # !I5 & !hsel & !inst & reset
+    !I5 & !fetch & !hsel & reset
+  # !I7 & !fetch & hsel
+  # !I6 & !fetch & !hsel & reset
 
 ld =>
-    I5 & !I6
+    I4 & !I5 & !I6 & I7
 
 ldc =>
-    I4 & !I6 & I7
-
-ldt =>
-    I4 & I5 & !I6 & !I7
-
-mv =>
-    !I5 & I6 & I7
+    I5 & !I6 & I7
 
 nop =>
     !I4 & !I5 & !I6 & I7
 
+oper =>
+    !I6 & I7
+
 pcent =>
-    pclk & !prog
-  # DD7 & I4 & !I5 & !I6 & I7
-  # !DD7 & I4 & I5 & !I6 & I7
+    !I6 & I7 & pclk
+  # !fetch & pclk
+  # !I4 & I5 & !I6 & I7 & sign
+  # I4 & I5 & !I6 & I7 & !sign
 
 prog =>
-    !inst
-  # I5 & !I6
-  # I4 & !I6 & I7
+    !fetch
+  # !I6 & I7
+
+rc =>
+    !I5 & I6
+
+sign.d  =>
+    DD7 & !I7 & fetch & !sign
+  # DD7 & sign
+  # !fetch & sign
+  # !I6 & I7 & sign
+  # DD7 & I6 & fetch & !sign
 
 skip =>
-    DD7 & I4 & !I5 & !I6 & I7
-  # !DD7 & I4 & I5 & !I6 & I7
+    !I4 & I5 & !I6 & I7 & sign
+  # I4 & I5 & !I6 & I7 & !sign
 
-toggle =>
-    I4 & I5 & !I6 & !I7 & !inst
+start =>
+    I4 & I5 & !I6 & I7 & !fetch
 
 PA16.oe  =>
     1 
 
-mv.oe  =>
+PA17.oe  =>
     1 
 
 pcent.oe  =>

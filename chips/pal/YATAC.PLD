@@ -1,82 +1,82 @@
 Name     YATAC ;
 PartNo   00 ;
-Date     8/18/2019 ;
-Revision 06 ;
+Date     9/1/2019 ;
+Revision 07 ;
 Designer A J Hewitt ;
 Company  ;
 Assembly None ;
 Location None ;
 Device   g16v8a ;
 
-/****************************** INPUT PINS ******************************/
-PIN 1      = sclk          ; /*                                         */
-PIN 2      = !reset        ; /*                                         */
-PIN 3      = pclk          ; /*                                         */
-PIN 4      = hblank        ; /*                                         */
-PIN 5      = DD7           ; /*                                         */
-PIN [6..9] = [I4..7]       ; /*                                         */
+/****************************** INPUT PINS *******************************/
+PIN 1      = sclk          ; /*                                          */
+PIN 2      = !reset        ; /*                                          */
+PIN 3      = pclk          ; /*                                          */
+PIN 4      = hblank        ; /*                                          */
+PIN 5      = DD7           ; /*                                          */
+PIN [6..9] = [I4..7]       ; /*                                          */
 
-/****************************** OUTPUT PINS *****************************/
-PIN 12    = mv             ; /* Move instruction (1=mv)                 */
-PIN 13    = !prog          ; /* Program Select (0=prog)                 */
-PIN 14    = !inst          ; /* CPU execution state (0=Load I)          */
-PIN 15    = hsel           ; /* H Register Select (0=L 1=H)             */
-PIN 16    = boot           ; /* Boot mode (0=run, 1=booting)            */
-PIN 17    = bank           ; /* ROM memory bank (0=lower, 1=upper)      */
-PIN 18    = pcent          ; /* PC Count Enable (ent)                   */
-PIN 19    = PA16           ; /* ROM A16                                 */
+/****************************** OUTPUT PINS ******************************/
+PIN 12    = pcent          ; /* PC Count Enable (ent)                    */
+PIN 13    = !prog          ; /* Program Select (0=prog)                  */
+PIN 14    = !fetch         ; /* CPU execution state (0=fetch, 1=execute) */
+PIN 15    = hsel           ; /* H Register Select (0=L 1=H)              */
+PIN 16    = boot           ; /* Boot mode (0=run, 1=booting)             */
+PIN 17    = sign           ; /* Cached value of DD7                      */
+PIN 18    = PA16           ; /* ROM A16                                  */
+PIN 19    = PA17           ; /* ROM A17                                  */
 
-aluhl = !I6 & !I5;
-ld    = !I6 & I5;
-aluh  = I6 & I5;
-ldt   = ld & !I7 & I4;
-nop   = I7 & !I6 & !I5 & !I4;
-ldc   = I7 & !I6 & I4;
-mv    = I7 & I6 & !I5;
+aluhl = !I7 & !I6 & !I5;
+rc    =        I6 & !I5;
+aluh  =        I6 &  I5;
+nop   =  I7 & !I6 & !I5 & !I4;
+ld    =  I7 & !I6 & !I5 &  I4;
+ldc   =  I7 & !I6 &  I5;
 
-cond   = I5 $ DD7;
+cond   = I4 $ sign;
 skip   = ldc & cond;
-toggle = ldt & !inst;
-prog   = inst # ld # ldc;
+start  = ldc & I4 & !fetch;
+oper   = I7 & !I6;
+prog   = fetch # oper;
 
-pcent  = (pclk & prog) # skip;
-PA16   = (pclk & ((prog & bank) # (!prog & (!hsel # aluh # mv)))) # (!pclk & hblank);
+pcent  = (pclk & (fetch # oper)) # skip;
+!A16    = hsel & aluhl;
+PA16   = (pclk & A16) # (!pclk & hblank);
+!PA17   = pclk & (fetch # oper # rc);
 
-FIELD execution = [!inst, !hsel];
-$DEFINE inst_L    'b'00
-$DEFINE inst_H    'b'01
+FIELD execution = [!fetch, !hsel];
+$DEFINE fetch_L   'b'00
+$DEFINE fetch_H   'b'01
 $DEFINE alu_L     'b'11
 $DEFINE alu_H     'b'10
 
 SEQUENCE execution {
-  PRESENT inst_L
-    IF nop # skip # reset NEXT inst_L;
-    IF !I7 NEXT inst_H;
+  PRESENT fetch_L
+    IF nop # skip # reset NEXT fetch_L;
+    IF !I7 NEXT fetch_H;
     DEFAULT NEXT alu_H;
-  PRESENT inst_H
-    IF reset NEXT inst_L;
+  PRESENT fetch_H
+    IF reset NEXT fetch_L;
     IF aluh NEXT alu_H;
     DEFAULT NEXT alu_L;
   PRESENT alu_L
-    IF reset NEXT inst_L;
+    IF reset NEXT fetch_L;
     IF aluhl NEXT alu_H;
-    DEFAULT NEXT inst_L;
+    DEFAULT NEXT fetch_L;
   PRESENT alu_H
-    NEXT inst_L;
+    NEXT fetch_L;
 }
 
-$DEFINE upper     'b'1
-$DEFINE lower     'b'0
+$DEFINE neg       'b'1
+$DEFINE pos       'b'0
 
-SEQUENCE bank {
-  PRESENT upper
-    IF reset NEXT upper;
-    IF toggle NEXT lower;
-    DEFAULT NEXT upper;
-  PRESENT lower
-    IF reset NEXT upper;
-    IF toggle NEXT upper;
-    DEFAULT NEXT lower;
+SEQUENCE sign {
+  PRESENT neg
+    IF !(fetch # oper) & !DD7 NEXT pos;
+    DEFAULT NEXT neg;
+  PRESENT pos
+    IF !(fetch # oper) & DD7 NEXT neg;
+    DEFAULT NEXT pos;
 }
 
 $DEFINE init      'b'1
@@ -85,7 +85,7 @@ $DEFINE run       'b'0
 SEQUENCE boot {
   PRESENT init
     IF reset NEXT init;
-    IF toggle NEXT run;
+    IF start NEXT run;
     DEFAULT NEXT init;
   PRESENT run
     IF reset NEXT init;
