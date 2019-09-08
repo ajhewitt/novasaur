@@ -32,14 +32,17 @@ PA16 =>
 
 !PA17 =>
     !fetch & pclk
-  # !I5 & I6 & pclk
+  # I5 & I6 & !I7 & pclk
   # !I6 & I7 & pclk
 
 aluh =>
-    I5 & I6
+    I6
 
 aluhl =>
     !I5 & !I6 & !I7
+
+alul =>
+    I5 & !I6 & !I7
 
 boot.d  =>
     !reset
@@ -55,14 +58,15 @@ boot.d  =>
   # I4 & I7 & !fetch & hsel & reset & sign
   # I4 & !I5 & I7 & !fetch & hsel & reset
   # I6 & I7 & !fetch & hsel & reset
-  # I5 & I6 & !fetch & !hsel
+  # I6 & !fetch & !hsel
   # !I6 & !fetch & !hsel & reset
-  # !I5 & !fetch & !hsel & reset
 
 !hsel.d  =>
-    !I5 & !fetch & !hsel & reset
+    !I6 & !fetch & !hsel & reset
   # !I7 & !fetch & hsel
-  # !I6 & !fetch & !hsel & reset
+
+ld =>
+    I4 & !I5 & !I6 & I7
 
 ldc =>
     I5 & !I6 & I7
@@ -84,7 +88,7 @@ prog =>
   # !I6 & I7
 
 rom =>
-    !I5 & I6
+    I5 & I6 & !I7
 
 sign.d  =>
     DD7 & !I7 & fetch & !sign

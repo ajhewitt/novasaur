@@ -27,10 +27,12 @@ PIN 18    = PA16           ; /* ROM A16                                  */
 PIN 19    = PA17           ; /* ROM A17                                  */
 
 aluhl = !I7 & !I6 & !I5;
-rom   =        I6 & !I5;
-aluh  =        I6 &  I5;
+alul  = !I7 & !I6 &  I5;
+aluh  =        I6;
+rom   = !I7 &  I6 &  I5;
 oper  =  I7 & !I6;
 nop   =  oper     & !I5 & !I4;
+ld    =  oper     & !I5 &  I4;
 ldc   =  oper     &  I5;
 
 skip  = ldc & (I4 $ sign);
