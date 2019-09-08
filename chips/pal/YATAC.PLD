@@ -27,22 +27,19 @@ PIN 18    = PA16           ; /* ROM A16                                  */
 PIN 19    = PA17           ; /* ROM A17                                  */
 
 aluhl = !I7 & !I6 & !I5;
-rc    =        I6 & !I5;
+rom   =        I6 & !I5;
 aluh  =        I6 &  I5;
-nop   =  I7 & !I6 & !I5 & !I4;
-ld    =  I7 & !I6 & !I5 &  I4;
-ldc   =  I7 & !I6 &  I5;
+oper  =  I7 & !I6;
+nop   =  oper     & !I5 & !I4;
+ldc   =  oper     &  I5;
 
-cond   = I4 $ sign;
-skip   = ldc & cond;
-start  = ldc & I4 & !fetch;
-oper   = I7 & !I6;
-prog   = fetch # oper;
+skip  = ldc & (I4 $ sign);
+start = ldc & I4 & !fetch;
 
-pcent  = (pclk & (fetch # oper)) # skip;
-!A16    = hsel & aluhl;
-PA16   = (pclk & A16) # (!pclk & hblank);
-!PA17   = pclk & (fetch # oper # rc);
+pcent = (pclk & (fetch # oper)) # skip;
+prog  = fetch # oper;
+PA16  = (pclk & !(hsel & aluhl)) # (!pclk & hblank);
+!PA17 = pclk & (fetch # oper # rom);
 
 FIELD execution = [!fetch, !hsel];
 $DEFINE fetch_L   'b'00
@@ -72,10 +69,10 @@ $DEFINE pos       'b'0
 
 SEQUENCE sign {
   PRESENT neg
-    IF !(fetch # oper) & !DD7 NEXT pos;
+    IF !fetch & !oper & !DD7 NEXT pos;
     DEFAULT NEXT neg;
   PRESENT pos
-    IF !(fetch # oper) & DD7 NEXT neg;
+    IF !fetch & !oper & DD7 NEXT neg;
     DEFAULT NEXT pos;
 }
 

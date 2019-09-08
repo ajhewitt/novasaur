@@ -23,12 +23,6 @@ FIELD execution = !fetch,!hsel
 %END
 
 %EQUATION
-!A16 =>
-    !hsel
-  # I7
-  # I6
-  # I5
-
 PA16 =>
     !hsel & pclk
   # I7 & pclk
@@ -49,22 +43,18 @@ aluhl =>
 
 boot.d  =>
     !reset
-  # !I5 & boot & reset
+  # I6 & boot & reset
   # !I4 & boot & reset
   # boot & !fetch & reset
+  # !I5 & boot & reset
   # !I7 & boot & reset
-  # I6 & boot & reset
-
-cond =>
-    I4 & !sign
-  # !I4 & sign
 
 !fetch.d  =>
     !I5 & !I6 & !I7 & fetch & !hsel
   # !I4 & I5 & I7 & !fetch & hsel & reset & !sign
   # I4 & I7 & !fetch & hsel & reset & sign
-  # I6 & I7 & !fetch & hsel & reset
   # I4 & !I5 & I7 & !fetch & hsel & reset
+  # I6 & I7 & !fetch & hsel & reset
   # I5 & I6 & !fetch & !hsel
   # !I6 & !fetch & !hsel & reset
   # !I5 & !fetch & !hsel & reset
@@ -73,9 +63,6 @@ cond =>
     !I5 & !fetch & !hsel & reset
   # !I7 & !fetch & hsel
   # !I6 & !fetch & !hsel & reset
-
-ld =>
-    I4 & !I5 & !I6 & I7
 
 ldc =>
     I5 & !I6 & I7
@@ -96,13 +83,13 @@ prog =>
     !fetch
   # !I6 & I7
 
-rc =>
+rom =>
     !I5 & I6
 
 sign.d  =>
     DD7 & !I7 & fetch & !sign
-  # DD7 & sign
   # !fetch & sign
+  # DD7 & sign
   # !I6 & I7 & sign
   # DD7 & I6 & fetch & !sign
 
