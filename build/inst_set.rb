@@ -1,12 +1,12 @@
-DST = %w[A E1 E2 E3 E4 E5 E6 E7 PG PC SC V E HL X Y]
-SRC = %w[E A D0 D0S E AZ D0 D0Z E A D1 D1S E AZ D1 D1Z]
+DST = %w[N E1 E2 E3 E4 E5 E6 E7 X E SC V Y HL PC PG]
+SRC = %w[I E IZ EZ I E IZ EZ A D0 AZ D0Z A D1 AZ D1Z]
 ALU = %w[MV ADD SUB AS AND OR XOR DEC MUL DIV FNA FNB FNC FND FNE FNF]
 LD = %w[NOP NOPZ LD LDZ LDP LDPZ LDN LDNZ]
 
 def decode(i, a); a.each_with_index.map{|b, n| i[b] * (2 ** n)}.reduce(:+) end
-def src(i); SRC[decode i,  [3, 4, 13, 14]] end
-def dst(i); DST[decode i, [0, 1, 2, 15]] end
-def rom(i); "ROM#{(decode i,  [8, 9, 10, 11]).to_s(16).upcase}" end
+def src(i); SRC[decode i,  [2, 3, 4, 10]] end
+def dst(i); DST[decode i, [0, 1, 8, 9]] end
+def rom(i); "ROM#{(decode i,  [12, 13, 14, 15]).to_s(16).upcase}" end
 
 def ld(i, dest)
   n = decode i, [3, 4, 5]
@@ -16,8 +16,9 @@ def ld(i, dest)
 end
 
 def alu(i, hl, dest)
-  n = decode i,  [8, 9, 10, 11]
-  return "MV#{hl} #{dest}" if n.zero?
+  n = decode i,  [12, 13, 14, 15]
+  z = i[3] == 1 ? 'Z' : ''
+  return "MV#{hl}#{z} #{dest}" if n.zero?
 
   "#{ALU[n]}#{hl} #{src(i)}, #{dest}"
 end
@@ -27,19 +28,19 @@ def inst(i)
   dest += "W" if i[12] == 0
   case decode i, [5, 6, 7]
   when 0
-    "#{alu(i, 'HL', dest)}"
+    "#{alu(i, 'HL', dest)}A"
   when 1
     "#{alu(i, 'L', dest)}"
   when 2
-    "#{rom(i)} #{src(i)}, #{dest}"
+    "#{alu(i, 'H', dest)}A"
   when 3
-    "#{alu(i, 'H', dest)}"
+    "#{rom(i)}H #{src(i)}, #{dest}"
   when 4
     ld(i, dest)
   when 5
     ld(i, dest)
   when 6
-    "ROMH #{src(i)}, #{dest}"
+    "FNH #{src(i)}, #{dest}A"
   when 7
     "FNH #{src(i)}, #{dest}"
   end
