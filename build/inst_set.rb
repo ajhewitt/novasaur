@@ -61,5 +61,4 @@ end
 end
 
 require 'json'
-#puts JSON.pretty_generate is
-puts is.count
+puts JSON.pretty_generate is
