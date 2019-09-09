@@ -1,7 +1,8 @@
 DST = %w[N E1 E2 E3 E4 E5 E6 E7 X E SC V Y HL PC PG]
-SRC = %w[I0 E0 I0Z E0Z I1 E1 I1Z E1Z A0 D0 A0Z D0Z A1 D1 A1Z D1Z]
+SRC = %w[I E IZ EZ I E IZ EZ A D0 AZ D0Z A D1 AZ D1Z]
 ALU = %w[MV ADD SUB AS AND OR XOR DEC MUL DIV FNA FNB FNC FND FNE FNF]
 LD = %w[NOP NOPZ LD LDZ LDP LDPZ LDN LDNZ]
+WR = %w[D0 D1]
 
 def decode(i, a); a.each_with_index.map{|b, n| i[b] * (2 ** n)}.reduce(:+) end
 def src(i); SRC[decode i,  [2, 3, 4, 10]] end
@@ -25,7 +26,7 @@ end
 
 def inst(i)
   dest = dst(i)
-  dest += "W" if i[11] == 0
+  dest += WR[i[4]] if i[11] == 0
   case decode i, [5, 6, 7]
   when 0
     "#{alu(i, 'HL', dest)}"
