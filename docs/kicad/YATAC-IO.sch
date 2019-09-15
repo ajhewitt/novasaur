@@ -6,8 +6,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 5 5
 Title "Input & Output"
-Date "2019-09-08"
-Rev "1.0.6"
+Date "2019-09-15"
+Rev "1.0.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
@@ -1029,17 +1029,6 @@ F 3 "~" H 9500 1100 50  0001 C CNN
 	1    9500 1100
 	0    1    1    0   
 $EndComp
-$Comp
-L Device:D_Zener D1
-U 1 1 5CFC17F0
-P 9200 1450
-F 0 "D1" V 9154 1529 50  0000 L CNN
-F 1 "1N5339" V 9245 1529 50  0000 L CNN
-F 2 "Diode_THT:D_5W_P10.16mm_Horizontal" H 9200 1450 50  0001 C CNN
-F 3 "~" H 9200 1450 50  0001 C CNN
-	1    9200 1450
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	9200 1300 9200 1100
 Connection ~ 9200 1100
@@ -1846,6 +1835,17 @@ $EndComp
 Connection ~ 5950 4500
 Wire Wire Line
 	5950 4500 6650 4500
+$Comp
+L Device:D_Zener_ALT D1
+U 1 1 5D9237CC
+P 9200 1450
+F 0 "D1" V 9154 1529 50  0000 L CNN
+F 1 "1N5339" V 9245 1529 50  0000 L CNN
+F 2 "Diode_THT:D_DO-27_P12.70mm_Horizontal" H 9200 1450 50  0001 C CNN
+F 3 "~" H 9200 1450 50  0001 C CNN
+	1    9200 1450
+	0    1    1    0   
+$EndComp
 Wire Bus Line
 	1500 2700 1700 2700
 Wire Bus Line

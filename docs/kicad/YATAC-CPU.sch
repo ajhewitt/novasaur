@@ -6,8 +6,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 3 5
 Title "Central Processing Unit"
-Date "2019-09-08"
-Rev "1.0.6"
+Date "2019-09-15"
+Rev "1.0.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
@@ -1215,14 +1215,14 @@ $EndComp
 $Comp
 L power:GNDD #PWR?
 U 1 1 5DAE35E5
-P 9900 2650
+P 10150 3000
 AR Path="/5F6C0B36/5DAE35E5" Ref="#PWR?"  Part="1" 
 AR Path="/5DAA19D5/5DAE35E5" Ref="#PWR0157"  Part="1" 
-F 0 "#PWR0157" H 9900 2400 50  0001 C CNN
-F 1 "GNDD" H 9904 2495 50  0000 C CNN
-F 2 "" H 9900 2650 50  0001 C CNN
-F 3 "" H 9900 2650 50  0001 C CNN
-	1    9900 2650
+F 0 "#PWR0157" H 10150 2750 50  0001 C CNN
+F 1 "GNDD" H 10154 2845 50  0000 C CNN
+F 2 "" H 10150 3000 50  0001 C CNN
+F 3 "" H 10150 3000 50  0001 C CNN
+	1    10150 3000
 	1    0    0    -1  
 $EndComp
 Text GLabel 8900 5750 2    50   Input ~ 0
@@ -1287,11 +1287,11 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS541" H 6800 5050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Entry Bus Bus
-	10600 3450 10700 3550
+	10600 3650 10700 3750
 Entry Bus Bus
-	9100 3350 9200 3450
+	9100 3550 9200 3650
 Wire Bus Line
-	9200 3450 10600 3450
+	9200 3650 10600 3650
 Wire Wire Line
 	10400 4550 10600 4550
 Wire Wire Line
@@ -1728,7 +1728,7 @@ F 3 "" H 3300 1050 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	3300 1150 3300 1050
-Text GLabel 10400 2050 2    50   Output ~ 0
+Text GLabel 10600 2050 2    50   Output ~ 0
 Q
 $Comp
 L Memory_RAM:628128_DIP32_SSOP32 U15
@@ -1987,6 +1987,50 @@ Entry Wire Line
 	6000 3750 5900 3650
 Text GLabel 10400 1750 2    50   Output ~ 0
 mode0
+Wire Wire Line
+	10400 2050 10450 2050
+Wire Wire Line
+	10450 2850 10450 2900
+Wire Wire Line
+	10450 2900 10150 2900
+Wire Wire Line
+	9900 2900 9900 2650
+Wire Wire Line
+	10450 2550 10450 2450
+Wire Wire Line
+	10450 2150 10450 2050
+Connection ~ 10450 2050
+Wire Wire Line
+	10450 2050 10600 2050
+$Comp
+L Device:LED_ALT D2
+U 1 1 5D8249BF
+P 10450 2700
+F 0 "D2" V 10489 2583 50  0000 R CNN
+F 1 "Q LED" V 10398 2583 50  0000 R CNN
+F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm" H 10450 2700 50  0001 C CNN
+F 3 "~" H 10450 2700 50  0001 C CNN
+	1    10450 2700
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R?
+U 1 1 5D844A3C
+P 10450 2300
+AR Path="/62D13D9D/5D844A3C" Ref="R?"  Part="1" 
+AR Path="/5DAA19D5/5D844A3C" Ref="R3"  Part="1" 
+F 0 "R3" H 10550 2350 50  0000 L CNN
+F 1 "1.6k" H 10550 2250 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 10490 2290 50  0001 C CNN
+F 3 "~" H 10450 2300 50  0001 C CNN
+	1    10450 2300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10150 3000 10150 2900
+Connection ~ 10150 2900
+Wire Wire Line
+	10150 2900 9900 2900
 Wire Bus Line
 	1600 5650 1600 6050
 Wire Bus Line
@@ -1998,7 +2042,7 @@ Wire Bus Line
 Wire Bus Line
 	10700 1150 10700 1550
 Wire Bus Line
-	10700 3550 10700 5150
+	10700 3750 10700 5150
 Wire Bus Line
 	6000 5050 6000 6050
 Wire Bus Line
@@ -2012,7 +2056,7 @@ Wire Bus Line
 Wire Bus Line
 	4100 1450 4100 3350
 Wire Bus Line
-	9100 850  9100 3350
+	9100 850  9100 3550
 Wire Bus Line
 	4300 3100 4300 7450
 Wire Bus Line

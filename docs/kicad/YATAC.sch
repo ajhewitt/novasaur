@@ -6,8 +6,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 5
 Title "YATAC78 TTL Computer"
-Date "2019-09-08"
-Rev "1.0.6"
+Date "2019-09-15"
+Rev "1.0.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
