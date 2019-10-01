@@ -36,7 +36,7 @@ ld    =  oper     & !I5 &  I4;
 ldc   =  oper     &  I5;
 
 skip  = ldc & (I4 $ sign);
-start = ldc & I4 & !fetch;
+start = !nop & !fetch;
 
 pcent = (pclk & (fetch # oper)) # skip;
 prog  = fetch # oper;

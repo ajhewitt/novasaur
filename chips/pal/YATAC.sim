@@ -46,11 +46,8 @@ alul =>
 
 boot.d  =>
     !reset
-  # I6 & boot & reset
-  # !I4 & boot & reset
   # boot & !fetch & reset
-  # !I5 & boot & reset
-  # !I7 & boot & reset
+  # !I4 & !I5 & !I6 & I7 & boot & reset
 
 !fetch.d  =>
     !I5 & !I6 & !I7 & fetch & !hsel
@@ -102,7 +99,10 @@ skip =>
   # I4 & I5 & !I6 & I7 & !sign
 
 start =>
-    I4 & I5 & !I6 & I7 & !fetch
+    I5 & !fetch
+  # I4 & !fetch
+  # !I7 & !fetch
+  # I6 & !fetch
 
 PA16.oe  =>
     1 
