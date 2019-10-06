@@ -1,7 +1,7 @@
 Name     YATAC;
 PartNo   00;
-Date     9/1/2019;
-Revision 07;
+Date     10/5/2019;
+Revision 08;
 Designer A J Hewitt;
 Company  ;
 Assembly None;
@@ -9,7 +9,7 @@ Location None;
 Device   virtual;
 
 
-ORDER: sclk, pclk, hblank, DD7, !reset, I7, I6, I5, I4, pcent, !prog, !fetch, hsel, boot, sign, PA16, PA17; 
+ORDER: sclk, pclk, hblank, DD7, !reset, I7, I6, I5, I4, pcent, alu, fetch, hsel, boot, sign, PA16, PA17; 
 
 
 VECTORS:

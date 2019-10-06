@@ -1,7 +1,7 @@
 Name     YATAC ;
 PartNo   00 ;
-Date     9/1/2019 ;
-Revision 07 ;
+Date     10/5/2019 ;
+Revision 08 ;
 Designer A J Hewitt ;
 Company  ;
 Assembly None ;
@@ -18,10 +18,10 @@ PIN [6..9] = [I4..7]       ; /*                                          */
 
 /****************************** OUTPUT PINS ******************************/
 PIN 12    = pcent          ; /* PC Count Enable (ent)                    */
-PIN 13    = !prog          ; /* Program Select (0=prog)                  */
-PIN 14    = !fetch         ; /* CPU execution state (0=fetch, 1=execute) */
-PIN 15    = hsel           ; /* H Register Select (0=L 1=H)              */
-PIN 16    = boot           ; /* Boot mode (0=run, 1=booting)             */
+PIN 13    = alu            ; /* ALU Select (0=prog, 1=ALU)               */
+PIN 14    = fetch          ; /* CPU execution state (0=execute, 1=fetch) */
+PIN 15    = hsel           ; /* H Register Select (0=L, 1=H)             */
+PIN 16    = boot           ; /* Boot mode (0=run, 1=boot)                */
 PIN 17    = sign           ; /* Cached value of DD7                      */
 PIN 18    = PA16           ; /* ROM A16                                  */
 PIN 19    = PA17           ; /* ROM A17                                  */
@@ -36,11 +36,11 @@ ld    =  oper     & !I5 &  I4;
 ldc   =  oper     &  I5;
 
 skip  = ldc & (I4 $ sign);
-start = !nop & !fetch;
+start = ld & !fetch;
 
 pcent = (pclk & (fetch # oper)) # skip;
-prog  = fetch # oper;
-PA16  = (pclk & !(hsel & aluhl)) # (!pclk & hblank);
+!alu   = fetch # oper;
+PA16  = (pclk & !(fetch # oper) & !(hsel & aluhl)) # (!pclk & hblank);
 !PA17 = pclk & (fetch # oper # rom);
 
 FIELD execution = [!fetch, !hsel];
@@ -66,8 +66,8 @@ SEQUENCE execution {
     NEXT fetch_L;
 }
 
-$DEFINE neg       'b'1
 $DEFINE pos       'b'0
+$DEFINE neg       'b'1
 
 SEQUENCE sign {
   PRESENT neg
@@ -78,10 +78,10 @@ SEQUENCE sign {
     DEFAULT NEXT pos;
 }
 
-$DEFINE init      'b'1
-$DEFINE run       'b'0
+$DEFINE init      'b'0
+$DEFINE run       'b'1
 
-SEQUENCE boot {
+SEQUENCE !boot {
   PRESENT init
     IF reset NEXT init;
     IF start NEXT run;
