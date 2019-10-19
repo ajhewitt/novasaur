@@ -1,8 +1,8 @@
 DST = %w[N O1 O2 O3 O4 O5 O6 O7 X E S V Y HL PC PG]
-SRC = %w[IN INZ E EZ IN INZ E EZ A AZ D1 D1Z A AZ D0 D0Z]
-ALU = %w[MV ADD SUB AS AND OR XOR DPG MUL DIV SYS VOL AV SER FNE FNF]
+SRC = %w[IN INZ E EZ IN INZ E EZ A AZ D0 D0Z A AZ D1 D1Z]
+ALU = %w[MV ADD SUB AS AND OR XOR DPG MUL DIV FNA FNB VOL AV SER FNF]
 LD = %w[NOP NOPZ LD LDZ LDP LDPZ LDN LDNZ]
-WR = %w[D1 D0]
+WR = %w[D0 D1]
 
 def decode(i, a); a.each_with_index.map{|b, n| i[b] * (2 ** n)}.reduce(:+) end
 def src(i); SRC[decode i,  [3, 4, 10, 11]] end
@@ -13,7 +13,9 @@ def ld(i, dest)
   n = decode i, [3, 4, 5]
   return LD[n] if n < 2
 
-  "#{LD[n]} #{dest}, $OP"
+  return if i[2]  == 0
+
+  "#{LD[n]} #{dest}, $D"
 end
 
 def alu(i, hl, dest)
@@ -26,7 +28,7 @@ end
 
 def inst(i)
   dest = dst(i)
-  dest += WR[i[10]] if i[2] == 0
+  dest += (i[2] == 0 ? WR[i[10]] : 'A') if i[5]  == 0
   case decode i, [5, 6, 7]
   when 0
     "#{alu(i, 'HL', dest)}"
@@ -37,13 +39,13 @@ def inst(i)
   when 3
     "#{rom(i)}H #{src(i)}, #{dest}"
   when 4
-    ld(i, dest)
+    ld(i, dst(i))
   when 5
-    ld(i, dest)
+    ld(i, dst(i))
   when 6
-    "FNH #{src(i)}, #{dest}A"
-  when 7
     "FNH #{src(i)}, #{dest}"
+  when 7
+    "FNH #{src(i)}, #{dest}" if i[2] == 1
   end
 end
 
@@ -60,6 +62,8 @@ end
   i += [1, 1, 1, 1, 1, 1, 1, 1, 1]
   is[inst(i)] ||= (n + 0x80).to_s(16).upcase.rjust(2, '0')
 end
+
+is.delete nil
 
 require 'json'
 puts JSON.pretty_generate is
