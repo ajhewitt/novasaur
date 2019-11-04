@@ -28,16 +28,16 @@ end
 
 def inst(i)
   dest = dst(i)
-  dest += (i[2] == 0 ? WR[i[10]] : 'A') if i[5]  == 0
+  dest += (i[2] == 0 ? WR[i[10]] : 'A') if i[5] == 0
   case decode i, [5, 6, 7]
   when 0
     "#{alu(i, 'HL', dest)}"
   when 1
-    "#{alu(i, 'L', dest)}"
+    "#{alu(i, 'L', dest)}"  if i[2] == 1
   when 2
     "#{alu(i, 'H', dest)}"
   when 3
-    "#{rom(i)}H #{src(i)}, #{dest}"
+    "#{rom(i)}H #{src(i)}, #{dest}" if i[2] == 1
   when 4
     ld(i, dst(i))
   when 5
@@ -63,7 +63,7 @@ end
   is[inst(i)] ||= (n + 0x80).to_s(16).upcase.rjust(2, '0')
 end
 
-is.delete nil
+[nil, "", "MVL N", "MVLZ N"].each { |k| is.delete k }
 
 require 'json'
 puts JSON.pretty_generate is

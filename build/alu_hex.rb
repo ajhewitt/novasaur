@@ -36,9 +36,9 @@ print_binary '-', 0x20,  high: true
 # 0x00024000-0x00024FFF: AND high nibble
 print_binary '&', 0x40,  high: true, pass: true
 # 0x00026000-0x00025FFF: OR high nibble
-print_binary '|', 0x50,  high: true
+print_binary '|', 0x50,  high: true, pass: true
 # 0x00027000-0x00026FFF: XOR high nibble
-print_binary '^', 0x60,  high: true
+print_binary '^', 0x60,  high: true, pass: true
 # 0x00027000-0x00027FFF: DPG high nibble
 
 
@@ -55,9 +55,9 @@ print_binary '-', 0x20
 # 0x00034000-0x00034FFF: AND low nibble
 print_binary '&', 0x40, pass: true
 # 0x00035000-0x00035FFF: OR low nibble
-print_binary '|', 0x50
+print_binary '|', 0x50, pass: true
 # 0x00036000-0x00036FFF: XOR low nibble
-print_binary '^', 0x60
+print_binary '^', 0x60, pass: true
 # 0x00037000-0x00037FFF: DPG low nibble
 
 # 0x00038000-0x00038FFF: MUL low nibble only
