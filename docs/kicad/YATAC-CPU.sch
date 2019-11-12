@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2019-10-27"
+Date "2019-11-10"
 Rev "1.1.0"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
@@ -270,7 +270,7 @@ Text GLabel 7700 3350 0    50   Input ~ 0
 Text GLabel 7700 3550 0    50   Input ~ 0
 0
 Text GLabel 7700 3650 0    50   Input ~ 0
-mclk
+0
 Text GLabel 7700 3450 0    50   Input ~ 0
 1
 Entry Wire Line
@@ -716,8 +716,8 @@ P 2150 6800
 AR Path="/62D13D9D/5D844A3C" Ref="R?"  Part="1" 
 AR Path="/5DAA19D5/5D844A3C" Ref="R3"  Part="1" 
 AR Path="/5DAA5CD8/5D99DA9F/5D844A3C" Ref="R?"  Part="1" 
-AR Path="/5DA1E9BA/5D844A3C" Ref="R2"  Part="1" 
-F 0 "R2" H 2250 6850 50  0000 L CNN
+AR Path="/5DA1E9BA/5D844A3C" Ref="R1"  Part="1" 
+F 0 "R1" H 2250 6850 50  0000 L CNN
 F 1 "1k" H 2250 6750 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2190 6790 50  0001 C CNN
 F 3 "~" H 2150 6800 50  0001 C CNN
@@ -1765,21 +1765,6 @@ Wire Wire Line
 Wire Wire Line
 	4200 6550 4550 6550
 $Comp
-L 74xx:74LS541 U?
-U 1 1 5DA9E23D
-P 9500 1950
-AR Path="/5F6C0B36/5DA9E23D" Ref="U?"  Part="1" 
-AR Path="/5DAA19D5/5DA9E23D" Ref="U?"  Part="1" 
-AR Path="/5DAA5CD8/5D99DA9F/5DA9E23D" Ref="U?"  Part="1" 
-AR Path="/5DA1E9BA/5DA9E23D" Ref="U27"  Part="1" 
-F 0 "U27" H 9500 1750 50  0000 C CNN
-F 1 "74F541" H 9500 1650 50  0000 C CNN
-F 2 "Package_DIP:DIP-20_W7.62mm_LongPads" H 9500 1950 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS541" H 9500 1950 50  0001 C CNN
-	1    9500 1950
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:VCC #PWR?
 U 1 1 5DA9E243
 P 9500 1150
@@ -2152,21 +2137,6 @@ Entry Wire Line
 Entry Wire Line
 	10250 3400 10150 3300
 $Comp
-L Device:R_Network08_US RN?
-U 1 1 5DC4BE41
-P 9750 3500
-AR Path="/5DAA3954/5DC4BE41" Ref="RN?"  Part="1" 
-AR Path="/5DAA5CD8/5D9A6C5F/5DC4BE41" Ref="RN?"  Part="1" 
-AR Path="/5DA1E9BD/5DC4BE41" Ref="RN?"  Part="1" 
-AR Path="/5DA1E9BA/5DC4BE41" Ref="RN2"  Part="1" 
-F 0 "RN2" V 9100 3450 50  0000 L CNN
-F 1 "270" V 9200 3450 50  0000 L CNN
-F 2 "Resistor_THT:R_Array_SIP9" V 10225 3500 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 9750 3500 50  0001 C CNN
-	1    9750 3500
-	0    -1   1    0   
-$EndComp
-$Comp
 L power:GNDD #PWR?
 U 1 1 5DC7127C
 P 9400 3150
@@ -2314,6 +2284,36 @@ Wire Bus Line
 	5800 6600 5800 7650
 Wire Bus Line
 	850  750  10150 750 
+$Comp
+L 74xx:74LS541 U?
+U 1 1 5DA9E23D
+P 9500 1950
+AR Path="/5F6C0B36/5DA9E23D" Ref="U?"  Part="1" 
+AR Path="/5DAA19D5/5DA9E23D" Ref="U?"  Part="1" 
+AR Path="/5DAA5CD8/5D99DA9F/5DA9E23D" Ref="U?"  Part="1" 
+AR Path="/5DA1E9BA/5DA9E23D" Ref="U27"  Part="1" 
+F 0 "U27" H 9500 1750 50  0000 C CNN
+F 1 "74F541" H 9500 1650 50  0000 C CNN
+F 2 "Package_DIP:DIP-20_W7.62mm_LongPads" H 9500 1950 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS541" H 9500 1950 50  0001 C CNN
+	1    9500 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_Network08_US RN?
+U 1 1 5DC4BE41
+P 9750 3500
+AR Path="/5DAA3954/5DC4BE41" Ref="RN?"  Part="1" 
+AR Path="/5DAA5CD8/5D9A6C5F/5DC4BE41" Ref="RN?"  Part="1" 
+AR Path="/5DA1E9BD/5DC4BE41" Ref="RN?"  Part="1" 
+AR Path="/5DA1E9BA/5DC4BE41" Ref="RN2"  Part="1" 
+F 0 "RN2" V 9100 3400 50  0000 L CNN
+F 1 "1k" V 9200 3400 50  0000 L CNN
+F 2 "Resistor_THT:R_Array_SIP9" V 10225 3500 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 9750 3500 50  0001 C CNN
+	1    9750 3500
+	0    -1   1    0   
+$EndComp
 Wire Bus Line
 	4350 3350 4350 3750
 Wire Bus Line

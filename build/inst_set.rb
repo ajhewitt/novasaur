@@ -1,5 +1,5 @@
 DST = %w[N O1 O2 O3 O4 O5 O6 O7 X E S V Y HL PC PG]
-SRC = %w[IN INZ E EZ IN INZ E EZ A AZ D0 D0Z A AZ D1 D1Z]
+SRC = %w[I IZ E EZ I IZ E EZ A AZ D0 D0Z A AZ D1 D1Z]
 ALU = %w[MV ADD SUB AS AND OR XOR DPG MUL DIV FNA FNB VOL AV SER FNF]
 LD = %w[NOP NOPZ LD LDZ LDP LDPZ LDN LDNZ]
 WR = %w[D0 D1]
@@ -63,7 +63,9 @@ end
   is[inst(i)] ||= (n + 0x80).to_s(16).upcase.rjust(2, '0')
 end
 
-[nil, "", "MVL N", "MVLZ N"].each { |k| is.delete k }
+is.delete nil
+is.delete ""
+is.reject! { |k, v| k.end_with? " N" }
 
 require 'json'
 puts JSON.pretty_generate is
