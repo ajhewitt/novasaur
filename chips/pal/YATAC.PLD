@@ -10,9 +10,9 @@ Device   g16v8a ;
 
 /****************************** INPUT PINS *******************************/
 PIN 1      = sclk          ; /*                                          */
-PIN 2      = !reset        ; /*                                          */
-PIN 3      = pclk          ; /*                                          */
-PIN 4      = hblank        ; /*                                          */
+PIN 2      = pclk          ; /*                                          */
+PIN 3      = hblank        ; /*                                          */
+PIN 4      = !reset        ; /*                                          */
 PIN 5      = DD7           ; /*                                          */
 PIN [6..9] = [I4..7]       ; /*                                          */
 

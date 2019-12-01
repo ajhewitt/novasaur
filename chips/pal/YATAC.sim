@@ -9,11 +9,11 @@ PIN  19 =  PA17
 PIN  13 =  alu 
 PIN  16 =  boot 
 PIN  14 =  fetch 
-PIN   4 =  hblank 
+PIN   3 =  hblank 
 PIN  15 =  hsel 
 PIN  12 =  pcent 
-PIN   3 =  pclk 
-PIN   2 = !reset 
+PIN   2 =  pclk 
+PIN   4 = !reset 
 PIN   1 =  sclk 
 PIN  17 =  sign 
 %END
