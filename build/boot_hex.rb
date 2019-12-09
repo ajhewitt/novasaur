@@ -11,6 +11,6 @@ print_ext_addr 0
 16.times.map do |a|
   d = []
   16.times.each { d << 0x80 }
-  d[15] = 0x9b if a == 15
+  d[14] = 0x9f if a == 15
   print_data [d.size, 0xff, a << 4, 0] + d
 end

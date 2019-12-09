@@ -23,6 +23,12 @@ def print_binary(op, offset, opts = {})
   end
 end
 
+def print_unary(offset, r)
+  0.step(0xF0, 0x10).map do |a|
+    print_data([0x10, offset, a, 0] + r[a..a+0xF])
+  end
+end
+
 # start of ALU high
 print_ext_addr 0x0002
 # 0x00020000-0x00020FFF: MV high nibble
@@ -39,7 +45,7 @@ print_binary '&', 0x40,  high: true, pass: true
 print_binary '|', 0x50,  high: true, pass: true
 # 0x00027000-0x00026FFF: XOR high nibble
 print_binary '^', 0x60,  high: true, pass: true
-# 0x00027000-0x00027FFF: DPG high nibble
+# 0x00027000-0x00027FFF: DC high nibble
 
 
 # start of ALU low
@@ -58,7 +64,7 @@ print_binary '&', 0x40, pass: true
 print_binary '|', 0x50, pass: true
 # 0x00036000-0x00036FFF: XOR low nibble
 print_binary '^', 0x60, pass: true
-# 0x00037000-0x00037FFF: DPG low nibble
+# 0x00037000-0x00037FFF: DC low nibble
 
 # 0x00038000-0x00038FFF: MUL low nibble only
 print_binary '*', 0x80
@@ -75,4 +81,11 @@ print_binary '/', 0x90
 # 0x0003E000-0x0003EFFF: SER low nibble only
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only
-
+# $INC: A = A + 1
+print_unary(0xF0, [*1..0xFF] + [0])
+# $DEC: A = A - 1
+print_unary(0xF1, [0xFF] + [*0..0xFE])
+# $ZERO: A = (A == 0) ? 0 : -1
+print_unary(0xFE, [0] + 0xFF.times.map{0xFF})
+# $IDEN: A = A
+print_unary(0xFF, [*0..0xFF])
