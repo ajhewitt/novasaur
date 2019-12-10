@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "YATAC78 TTL Computer"
-Date "2019-11-10"
-Rev "1.1.0"
+Date "2019-12-09"
+Rev "1.2.0"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
@@ -160,16 +160,16 @@ pclk1
 $Comp
 L YATAC-rescue:SW_Push-Switch SW1
 U 1 1 5E0603B4
-P 3150 1600
+P 3400 1600
 AR Path="/5E0603B4" Ref="SW1"  Part="1" 
 AR Path="/5CDEEC9F/5E0603B4" Ref="SW?"  Part="1" 
 AR Path="/62D13D9D/5E0603B4" Ref="SW?"  Part="1" 
 AR Path="/5DAA5CD8/5E0603B4" Ref="SW?"  Part="1" 
-F 0 "SW1" H 3100 1950 50  0000 L CNN
-F 1 "Reset" H 3050 1850 50  0000 L CNN
-F 2 "FSMRA3JH04:SWITCH_FSMRA3JH04" H 3150 1800 50  0001 C CNN
-F 3 "~" H 3150 1800 50  0001 C CNN
-	1    3150 1600
+F 0 "SW1" H 3350 1950 50  0000 L CNN
+F 1 "RESET" H 3300 1850 50  0000 L CNN
+F 2 "FSMRA3JH04:SWITCH_FSMRA3JH04" H 3400 1800 50  0001 C CNN
+F 3 "~" H 3400 1800 50  0001 C CNN
+	1    3400 1600
 	-1   0    0    -1  
 $EndComp
 Text GLabel 1350 2100 0    50   Output ~ 0
@@ -581,9 +581,9 @@ Entry Wire Line
 Text Label 2550 4000 0    50   ~ 0
 I9
 Text GLabel 1350 4200 0    50   Output ~ 0
-~pgle
+pgcp
 Text GLabel 1350 3700 0    50   Output ~ 0
-~sle
+scp
 $Comp
 L power:VCC #PWR?
 U 1 1 5DA1E756
@@ -599,17 +599,17 @@ F 3 "" H 1850 3200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 1350 4000 0    50   Output ~ 0
-~hlle
+hlcp
 Text GLabel 1350 3900 0    50   Output ~ 0
-~yle
+ycp
 Text GLabel 1350 3500 0    50   Output ~ 0
-~xle
+xcp
 Text GLabel 1350 4100 0    50   Output ~ 0
-~pcle
+pccp
 Text GLabel 1350 3600 0    50   Output ~ 0
-~ele
+ecp
 Text GLabel 1350 3800 0    50   Output ~ 0
-~vle
+vcp
 $Comp
 L 74xx:74LS138 U?
 U 1 1 5DA1E74A
@@ -696,7 +696,7 @@ AR Path="/5DAA3954/5DA1E820" Ref="RN?"  Part="1"
 AR Path="/5DAA5CD8/5DA1E820" Ref="RN?"  Part="1" 
 AR Path="/5DA1E820" Ref="RN1"  Part="1" 
 F 0 "RN1" V 3550 4750 50  0000 L CNN
-F 1 "330" V 3450 4750 50  0000 L CNN
+F 1 "1k" V 3450 4750 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 3725 4550 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 3250 4550 50  0001 C CNN
 	1    3250 4550
@@ -864,7 +864,7 @@ s1
 Text GLabel 9300 2100 2    50   Output ~ 0
 ~store
 Text GLabel 9300 2000 2    50   Output ~ 0
-~cle
+ccp
 Text GLabel 7200 1600 0    50   Input ~ 0
 hblank
 Text GLabel 7200 1800 0    50   Input ~ 0
@@ -1099,8 +1099,8 @@ $Comp
 L Oscillator:CXO_DIP8 X1
 U 1 1 5D9CA9D5
 P 7500 5700
-F 0 "X1" H 7750 6100 50  0000 L CNN
-F 1 "ACH-28M322" H 7600 6000 50  0000 L CNN
+F 0 "X1" H 7700 6100 50  0000 L CNN
+F 1 "35M" H 7700 6000 50  0000 L CNN
 F 2 "Oscillator:Oscillator_DIP-8" H 7950 5350 50  0001 C CNN
 F 3 "http://cdn-reichelt.de/documents/datenblatt/B400/OSZI.pdf" H 7400 5700 50  0001 C CNN
 	1    7500 5700
@@ -1120,15 +1120,8 @@ Wire Wire Line
 Connection ~ 8000 3550
 Wire Wire Line
 	8000 3550 8000 4250
-Connection ~ 8000 4250
-Wire Wire Line
-	8000 4250 8000 4450
 Wire Wire Line
 	8000 3550 9500 3550
-Wire Wire Line
-	8300 4250 8000 4250
-Wire Wire Line
-	8000 4450 8300 4450
 Connection ~ 8150 5050
 Wire Wire Line
 	8150 2900 8150 5050
@@ -1220,40 +1213,36 @@ $EndComp
 $Comp
 L power:GNDD #PWR?
 U 1 1 5DEF95A1
-P 3700 1750
+P 3950 1750
 AR Path="/5CDEEC9F/5DEF95A1" Ref="#PWR?"  Part="1" 
 AR Path="/5DAA5CD8/5DEF95A1" Ref="#PWR?"  Part="1" 
 AR Path="/5DEF95A1" Ref="#PWR0194"  Part="1" 
-F 0 "#PWR0194" H 3700 1500 50  0001 C CNN
-F 1 "GNDD" H 3704 1595 50  0000 C CNN
-F 2 "" H 3700 1750 50  0001 C CNN
-F 3 "" H 3700 1750 50  0001 C CNN
-	1    3700 1750
+F 0 "#PWR0194" H 3950 1500 50  0001 C CNN
+F 1 "GNDD" H 3954 1595 50  0000 C CNN
+F 2 "" H 3950 1750 50  0001 C CNN
+F 3 "" H 3950 1750 50  0001 C CNN
+	1    3950 1750
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3700 1650 3700 1750
+	3950 1650 3950 1750
 Wire Wire Line
-	3450 1700 3550 1700
+	3700 1700 3800 1700
 Wire Wire Line
-	3550 1700 3550 1650
+	3800 1700 3800 1650
 Wire Wire Line
-	3550 1600 3450 1600
+	3800 1600 3700 1600
 Wire Wire Line
-	3550 1650 3700 1650
-Connection ~ 3550 1650
+	3800 1650 3950 1650
+Connection ~ 3800 1650
 Wire Wire Line
-	3550 1650 3550 1600
+	3800 1650 3800 1600
 Text Label 2850 1900 0    50   ~ 0
 DD7
 Wire Wire Line
 	3050 1900 2350 1900
 Wire Wire Line
 	2350 1800 2750 1800
-Wire Wire Line
-	2750 1800 2750 1600
-Wire Wire Line
-	2750 1600 2850 1600
 Wire Wire Line
 	7500 5400 7500 5350
 Wire Wire Line
@@ -1306,6 +1295,67 @@ F 1 "74F08" H 4750 3100 50  0001 C CNN
 F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4750 3300 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 4750 3300 50  0001 C CNN
 	4    4750 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_US R?
+U 1 1 5E523FD1
+P 2750 1500
+AR Path="/62D13D9D/5E523FD1" Ref="R?"  Part="1" 
+AR Path="/5DAA19D5/5E523FD1" Ref="R?"  Part="1" 
+AR Path="/5DAA5CD8/5D99DA9F/5E523FD1" Ref="R?"  Part="1" 
+AR Path="/5DA1E9BA/5E523FD1" Ref="R?"  Part="1" 
+AR Path="/5E523FD1" Ref="R1"  Part="1" 
+F 0 "R1" H 2850 1550 50  0000 L CNN
+F 1 "1k" H 2850 1450 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2790 1490 50  0001 C CNN
+F 3 "~" H 2750 1500 50  0001 C CNN
+	1    2750 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:VCC #PWR?
+U 1 1 5E54FDAD
+P 2750 1300
+AR Path="/5CDEEC9F/5E54FDAD" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/5E54FDAD" Ref="#PWR?"  Part="1" 
+AR Path="/5E54FDAD" Ref="#PWR0111"  Part="1" 
+F 0 "#PWR0111" H 2750 1150 50  0001 C CNN
+F 1 "VCC" H 2767 1473 50  0000 C CNN
+F 2 "" H 2750 1300 50  0001 C CNN
+F 3 "" H 2750 1300 50  0001 C CNN
+	1    2750 1300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 1800 2750 1700
+Wire Wire Line
+	2750 1700 3050 1700
+Connection ~ 2750 1700
+Wire Wire Line
+	2750 1700 2750 1650
+Wire Wire Line
+	2750 1350 2750 1300
+Wire Wire Line
+	3050 1700 3050 1600
+Wire Wire Line
+	3050 1600 3100 1600
+Connection ~ 8000 4250
+Wire Wire Line
+	8000 4250 8000 4450
+Wire Wire Line
+	8300 4250 8000 4250
+Wire Wire Line
+	8000 4450 8300 4450
+$Comp
+L Connector:TestPoint_Alt TP1
+U 1 1 5DEA480B
+P 5550 2400
+F 0 "TP1" H 5350 2550 50  0000 L CNN
+F 1 "BOOT" H 5300 2550 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5750 2400 50  0001 C CNN
+F 3 "~" H 5750 2400 50  0001 C CNN
+	1    5550 2400
 	1    0    0    -1  
 $EndComp
 Wire Bus Line

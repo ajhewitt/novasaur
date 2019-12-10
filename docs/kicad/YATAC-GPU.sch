@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2019-11-10"
-Rev "1.1.0"
+Date "2019-12-09"
+Rev "1.2.0"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Text GLabel 1400 2450 0    50   Input ~ 0
-~sle
+scp
 Text GLabel 1800 2550 0    50   Input ~ 0
 0
 $Comp
@@ -189,8 +189,8 @@ P 5700 1950
 AR Path="/5D1C9541" Ref="RN?"  Part="1" 
 AR Path="/5DAA3954/5D1C9541" Ref="RN2"  Part="1" 
 AR Path="/5DAA5CD8/5D9A6C5F/5D1C9541" Ref="RN?"  Part="1" 
-AR Path="/5DA1E9BD/5D1C9541" Ref="RN5"  Part="1" 
-F 0 "RN5" V 5050 1850 50  0000 L CNN
+AR Path="/5DA1E9BD/5D1C9541" Ref="RN6"  Part="1" 
+F 0 "RN6" V 5050 1850 50  0000 L CNN
 F 1 "1k" V 5150 1900 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 6175 1950 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5700 1950 50  0001 C CNN
@@ -251,7 +251,7 @@ g
 Text GLabel 9200 1550 2    50   Output ~ 0
 r
 Text GLabel 6800 2450 0    50   Input ~ 0
-~cle
+ccp
 Text GLabel 8000 1350 1    50   Output ~ 0
 C[0..7]
 Wire Wire Line
@@ -1034,8 +1034,8 @@ U 1 1 5D1C1190
 P 5250 6900
 AR Path="/5DAA3954/5D1C1190" Ref="RN3"  Part="1" 
 AR Path="/5DAA5CD8/5D9A6C5F/5D1C1190" Ref="RN?"  Part="1" 
-AR Path="/5DA1E9BD/5D1C1190" Ref="RN3"  Part="1" 
-F 0 "RN3" V 4600 6800 50  0000 L CNN
+AR Path="/5DA1E9BD/5D1C1190" Ref="RN5"  Part="1" 
+F 0 "RN5" V 4600 6800 50  0000 L CNN
 F 1 "1k" V 4700 6850 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 5725 6900 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5250 6900 50  0001 C CNN
@@ -1343,7 +1343,7 @@ G7
 Wire Wire Line
 	6000 5350 6200 5350
 Text GLabel 6000 5550 2    50   Input ~ 0
-~vle
+vcp
 Wire Wire Line
 	5500 6500 5500 6400
 Entry Wire Line
@@ -1547,6 +1547,35 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 4700 3550 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5000 3550 5200 3550
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E10A07A
+P 6000 5550
+AR Path="/5E10A07A" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E10A07A" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E10A07A" Ref="TP6"  Part="1" 
+F 0 "TP6" H 6050 5700 50  0000 L CNN
+F 1 "VCP" H 5750 5700 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6200 5550 50  0001 C CNN
+F 3 "~" H 6200 5550 50  0001 C CNN
+	1    6000 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E144DCF
+P 1800 2450
+AR Path="/5E144DCF" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E144DCF" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E144DCF" Ref="TP7"  Part="1" 
+F 0 "TP7" H 1600 2600 50  0000 L CNN
+F 1 "SCP" H 1550 2600 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 2000 2450 50  0001 C CNN
+F 3 "~" H 2000 2450 50  0001 C CNN
+	1    1800 2450
+	1    0    0    -1  
+$EndComp
+Connection ~ 1800 2450
 Wire Bus Line
 	3200 2150 3200 2450
 Wire Bus Line
