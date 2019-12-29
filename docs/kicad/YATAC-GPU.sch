@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2019-12-09"
-Rev "1.2.0"
+Date "2019-12-27"
+Rev "1.2.1"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
@@ -716,7 +716,7 @@ Wire Wire Line
 	3950 6500 3900 6500
 Wire Wire Line
 	5450 6500 5500 6500
-Text GLabel 2800 6450 2    50   Output ~ 0
+Text GLabel 3100 6450 2    50   Output ~ 0
 hblank
 Text GLabel 6300 5650 3    50   Input ~ 0
 PD[0..7]
@@ -1452,8 +1452,6 @@ $EndComp
 Text Label 2800 2150 0    50   ~ 0
 vblank
 Wire Wire Line
-	3050 3150 6750 3150
-Wire Wire Line
 	2800 2150 3050 2150
 $Comp
 L 74xx:74LS574 U?
@@ -1469,8 +1467,6 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS574" H 2300 2050 50  0001 C CNN
 	1    2300 2050
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	3050 2150 3050 3150
 Wire Wire Line
 	2800 1950 3800 1950
 Text Label 1600 2150 0    50   ~ 0
@@ -1553,8 +1549,8 @@ U 1 1 5E10A07A
 P 6000 5550
 AR Path="/5E10A07A" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BA/5E10A07A" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BD/5E10A07A" Ref="TP6"  Part="1" 
-F 0 "TP6" H 6050 5700 50  0000 L CNN
+AR Path="/5DA1E9BD/5E10A07A" Ref="TP28"  Part="1" 
+F 0 "TP28" H 6050 5650 50  0000 L CNN
 F 1 "VCP" H 5750 5700 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6200 5550 50  0001 C CNN
 F 3 "~" H 6200 5550 50  0001 C CNN
@@ -1567,8 +1563,8 @@ U 1 1 5E144DCF
 P 1800 2450
 AR Path="/5E144DCF" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BA/5E144DCF" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BD/5E144DCF" Ref="TP7"  Part="1" 
-F 0 "TP7" H 1600 2600 50  0000 L CNN
+AR Path="/5DA1E9BD/5E144DCF" Ref="TP25"  Part="1" 
+F 0 "TP25" H 1550 2550 50  0000 L CNN
 F 1 "SCP" H 1550 2600 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 2000 2450 50  0001 C CNN
 F 3 "~" H 2000 2450 50  0001 C CNN
@@ -1576,6 +1572,93 @@ F 3 "~" H 2000 2450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 1800 2450
+$Comp
+L 74xx:74LS86 U1
+U 2 1 5E17A200
+P 3300 6750
+AR Path="/5DA1E9BD/5E17A200" Ref="U1"  Part="2" 
+AR Path="/5E17A200" Ref="U?"  Part="2" 
+F 0 "U1" H 3300 6750 50  0000 C CNN
+F 1 "74F86" H 3300 6984 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 3300 6750 50  0001 C CNN
+F 3 "74xx/74ls86.pdf" H 3300 6750 50  0001 C CNN
+	2    3300 6750
+	1    0    0    -1  
+$EndComp
+Text GLabel 3000 6850 0    50   Input ~ 0
+mode2
+Wire Wire Line
+	3000 6650 2900 6650
+Wire Wire Line
+	2800 6450 2900 6450
+Wire Wire Line
+	2900 6450 2900 6650
+Text GLabel 3600 6750 2    50   Output ~ 0
+hsync
+Wire Wire Line
+	2900 6450 3100 6450
+Connection ~ 2900 6450
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E19A64A
+P 3100 6450
+AR Path="/5E19A64A" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E19A64A" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E19A64A" Ref="TP26"  Part="1" 
+F 0 "TP26" H 2850 6550 50  0000 L CNN
+F 1 "HBLANK" H 2850 6600 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3300 6450 50  0001 C CNN
+F 3 "~" H 3300 6450 50  0001 C CNN
+	1    3100 6450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E1AAD36
+P 3050 3150
+AR Path="/5E1AAD36" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E1AAD36" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E1AAD36" Ref="TP27"  Part="1" 
+F 0 "TP27" H 2800 3300 50  0000 L CNN
+F 1 "VBLANK" H 2800 3300 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3250 3150 50  0001 C CNN
+F 3 "~" H 3250 3150 50  0001 C CNN
+	1    3050 3150
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E24D2E2
+P 6000 5650
+AR Path="/5E24D2E2" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E24D2E2" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E24D2E2" Ref="TP29"  Part="1" 
+F 0 "TP29" H 5750 5800 50  0000 L CNN
+F 1 "~VOE" H 5750 5800 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6200 5650 50  0001 C CNN
+F 3 "~" H 6200 5650 50  0001 C CNN
+	1    6000 5650
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3050 3150 6750 3150
+Connection ~ 3050 3150
+Wire Wire Line
+	3050 2150 3050 3150
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E199218
+P 6800 2450
+AR Path="/5E199218" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E199218" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E199218" Ref="TP30"  Part="1" 
+F 0 "TP30" H 6550 2550 50  0000 L CNN
+F 1 "CCP" H 6550 2600 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 7000 2450 50  0001 C CNN
+F 3 "~" H 7000 2450 50  0001 C CNN
+	1    6800 2450
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	3200 2150 3200 2450
 Wire Bus Line
@@ -1589,13 +1672,13 @@ Wire Bus Line
 Wire Bus Line
 	1500 1350 1500 2150
 Wire Bus Line
-	6500 1350 6500 2150
-Wire Bus Line
-	5150 1350 5150 2150
-Wire Bus Line
 	8000 4750 8000 5550
 Wire Bus Line
 	8000 1350 8000 2450
+Wire Bus Line
+	6500 1350 6500 2150
+Wire Bus Line
+	5150 1350 5150 2150
 Wire Bus Line
 	4700 4450 4700 7100
 $EndSCHEMATC

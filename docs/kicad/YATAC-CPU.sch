@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2019-12-09"
-Rev "1.2.0"
+Date "2019-12-27"
+Rev "1.2.1"
 Comp ""
 Comment1 "(c) A J Hewitt 2019"
 Comment2 ""
@@ -484,7 +484,7 @@ AR Path="/5DAA5CD8/5D99DA9F/5DAE32A8" Ref="U?"  Part="1"
 AR Path="/5DA1E9BA/5DAE32A8" Ref="U20"  Part="1" 
 F 0 "U20" H 8150 2550 50  0000 C CNN
 F 1 "27C020" H 8150 2450 50  0000 C CNN
-F 2 "Package_DIP:DIP-32_W15.24mm_LongPads" H 8100 2550 50  0001 C CNN
+F 2 "Package_DIP:DIP-32_W15.24mm_Socket_LongPads" H 8100 2550 50  0001 C CNN
 F 3 "http://ww1.microchip.com/downloads/en/devicedoc/doc0570.pdf" H 8100 2550 50  0001 C CNN
 	1    8100 2550
 	1    0    0    -1  
@@ -873,7 +873,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS574" H 3300 4550 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Text GLabel 3800 4950 2    50   Input ~ 0
-~ale
+acp
 Text Label 2650 4750 0    50   ~ 0
 DD7
 Text Label 2650 4650 0    50   ~ 0
@@ -2319,8 +2319,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5DF36352
 P 6000 2750
 AR Path="/5DF36352" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5DF36352" Ref="TP2"  Part="1" 
-F 0 "TP2" H 5800 2900 50  0000 L CNN
+AR Path="/5DA1E9BA/5DF36352" Ref="TP22"  Part="1" 
+F 0 "TP22" H 5750 2850 50  0000 L CNN
 F 1 "PGCP" H 5750 2900 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6200 2750 50  0001 C CNN
 F 3 "~" H 6200 2750 50  0001 C CNN
@@ -2332,8 +2332,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5DFA9E4A
 P 4550 4050
 AR Path="/5DFA9E4A" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5DFA9E4A" Ref="TP3"  Part="1" 
-F 0 "TP3" H 4350 4200 50  0000 L CNN
+AR Path="/5DA1E9BA/5DFA9E4A" Ref="TP20"  Part="1" 
+F 0 "TP20" H 4300 4150 50  0000 L CNN
 F 1 "PCCP" H 4300 4200 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4750 4050 50  0001 C CNN
 F 3 "~" H 4750 4050 50  0001 C CNN
@@ -2345,8 +2345,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5DFD4631
 P 10000 5500
 AR Path="/5DFD4631" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5DFD4631" Ref="TP4"  Part="1" 
-F 0 "TP4" H 10050 5650 50  0000 L CNN
+AR Path="/5DA1E9BA/5DFD4631" Ref="TP24"  Part="1" 
+F 0 "TP24" H 10050 5600 50  0000 L CNN
 F 1 "HLCP" H 9750 5650 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 10200 5500 50  0001 C CNN
 F 3 "~" H 10200 5500 50  0001 C CNN
@@ -2358,8 +2358,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5DFFD800
 P 1050 4400
 AR Path="/5DFFD800" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5DFFD800" Ref="TP5"  Part="1" 
-F 0 "TP5" H 850 4550 50  0000 L CNN
+AR Path="/5DA1E9BA/5DFFD800" Ref="TP16"  Part="1" 
+F 0 "TP16" H 800 4500 50  0000 L CNN
 F 1 "YCP" H 800 4550 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 4400 50  0001 C CNN
 F 3 "~" H 1250 4400 50  0001 C CNN
@@ -2371,8 +2371,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5E0789A4
 P 1050 6450
 AR Path="/5E0789A4" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E0789A4" Ref="TP8"  Part="1" 
-F 0 "TP8" H 850 6600 50  0000 L CNN
+AR Path="/5DA1E9BA/5E0789A4" Ref="TP17"  Part="1" 
+F 0 "TP17" H 800 6550 50  0000 L CNN
 F 1 "ECP" H 800 6600 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 6450 50  0001 C CNN
 F 3 "~" H 1250 6450 50  0001 C CNN
@@ -2384,20 +2384,104 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5E0A1A30
 P 1050 2350
 AR Path="/5E0A1A30" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E0A1A30" Ref="TP9"  Part="1" 
-F 0 "TP9" H 850 2500 50  0000 L CNN
+AR Path="/5DA1E9BA/5E0A1A30" Ref="TP14"  Part="1" 
+F 0 "TP14" H 800 2450 50  0000 L CNN
 F 1 "XCP" H 800 2500 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 2350 50  0001 C CNN
 F 3 "~" H 1250 2350 50  0001 C CNN
 	1    1050 2350
 	1    0    0    -1  
 $EndComp
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E35AB13
+P 1050 2450
+AR Path="/5E35AB13" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E35AB13" Ref="TP15"  Part="1" 
+AR Path="/5DA1E9BD/5E35AB13" Ref="TP?"  Part="1" 
+F 0 "TP15" H 1100 2600 50  0000 L CNN
+F 1 "~XOE" H 800 2600 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 2450 50  0001 C CNN
+F 3 "~" H 1250 2450 50  0001 C CNN
+	1    1050 2450
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E39EF69
+P 4250 2450
+AR Path="/5E39EF69" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E39EF69" Ref="TP21"  Part="1" 
+AR Path="/5DA1E9BD/5E39EF69" Ref="TP?"  Part="1" 
+F 0 "TP21" H 4300 2600 50  0000 L CNN
+F 1 "~POE" H 4000 2600 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4450 2450 50  0001 C CNN
+F 3 "~" H 4450 2450 50  0001 C CNN
+	1    4250 2450
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E39EF6F
+P 6000 2850
+AR Path="/5E39EF6F" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E39EF6F" Ref="TP23"  Part="1" 
+AR Path="/5DA1E9BD/5E39EF6F" Ref="TP?"  Part="1" 
+F 0 "TP23" H 6050 3000 50  0000 L CNN
+F 1 "~PGOE" H 5750 3000 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6200 2850 50  0001 C CNN
+F 3 "~" H 6200 2850 50  0001 C CNN
+	1    6000 2850
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E43A381
+P 3800 5050
+AR Path="/5E43A381" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E43A381" Ref="TP19"  Part="1" 
+AR Path="/5DA1E9BD/5E43A381" Ref="TP?"  Part="1" 
+F 0 "TP19" H 3550 5200 50  0000 L CNN
+F 1 "~AOE" H 3550 5200 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4000 5050 50  0001 C CNN
+F 3 "~" H 4000 5050 50  0001 C CNN
+	1    3800 5050
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E5A4F7F
+P 3800 4950
+AR Path="/5E5A4F7F" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E5A4F7F" Ref="TP18"  Part="1" 
+AR Path="/5DA1E9BD/5E5A4F7F" Ref="TP?"  Part="1" 
+F 0 "TP18" H 3850 5050 50  0000 L CNN
+F 1 "ACP" H 3550 5100 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4000 4950 50  0001 C CNN
+F 3 "~" H 4000 4950 50  0001 C CNN
+	1    3800 4950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E215CAE
+P 1050 4500
+AR Path="/5E215CAE" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E215CAE" Ref="TP13"  Part="1" 
+AR Path="/5DA1E9BD/5E215CAE" Ref="TP?"  Part="1" 
+F 0 "TP13" H 1100 4600 50  0000 L CNN
+F 1 "PCLK" H 800 4650 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 4500 50  0001 C CNN
+F 3 "~" H 1250 4500 50  0001 C CNN
+	1    1050 4500
+	-1   0    0    1   
+$EndComp
+Wire Bus Line
+	2350 5350 2350 5750
 Wire Bus Line
 	4350 3350 4350 3750
 Wire Bus Line
 	4350 5650 4350 6050
-Wire Bus Line
-	2350 5350 2350 5750
 Wire Bus Line
 	2550 6600 2550 7100
 Wire Bus Line
