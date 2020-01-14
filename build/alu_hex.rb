@@ -29,6 +29,78 @@ def print_unary(offset, r)
   end
 end
 
+def print_av(offset)
+  rom = Array.new(16) { Array.new(256, 0xFF) }
+  len = [113, 128, 160, 129] # DMT ID: 02h,06h,09h,0Eh
+  div = [[3, 5, 6, 10], [2, 4, 8, 16]]
+  seqs = [[[14,15,14,15,14,15], [8,8,8,8,8],
+          [0,10,11,12,13,7], [0,1,2,3,4,5,6,7,8,9]],
+         [[14,15,15,14], [8,8,8,8], [0,1,2,3,4,5,6,7],
+          [16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]]]
+  vid = [[[[396,3,3,50], [400,1,3,48], [396,3,3,50], [400,1,3,48]],
+         [[400,1,3,48], [400,1,3,48], [400,1,3,48], [400,1,3,48]]],
+        [[[480,1,3,28], [480,1,3,28], [480,1,3,28], [480,1,3,28]],
+         [[480,1,3,28], [480,1,3,28], [480,1,3,28], [480,1,3,28]]],
+        [[[600,1,4,35], [600,1,4,35], [600,1,4,35], [600,1,4,35]],
+         [[512,45,4,79], [600,1,4,35], [600,1,4,35], [592,5,4,39]]],
+        [[[480,6,8,22], [480,6,8,22], [480,6,8,22], [480,6,8,22]],
+         [[480,6,8,22], [480,6,8,22], [480,6,8,22], [480,6,8,22]]]]
+  com = [[[396,3,3,50], [400,1,3,48]], [[480,1,3,28], [480,1,3,28]],
+         [[600,1,4,35], [512,45,4,79]], [[480,6,8,22], [480,6,8,22]]]
+  bpl = [101, 121, 152, 124]
+  bpi = [250, 251, 252, 253]
+  porch = [0x48,0x48,0x48,0x48]
+  vsync = [true,false,true,true]
+  j = 0
+  k = 200
+  4.times.each do |a| # DMT ID: 02h, 06h, 09h, 0Eh
+    2.times.each do |b|
+      p = [15,4][b] # mod15, mod4
+      4.times.each do |c|
+        j = k
+        mod = div[b][c] # 3,5,6,10
+        seq = seqs[b][c] # [6,5,6,10]
+        t = vid[a][b][c] # 396,3,3,50
+        len[a].times.each do |d|
+          l = d * 4 # native line
+          if l < com[a][b][0] # active common
+            i = 162 + (d % p) # 0-14, 0-3
+            i += 15 if b > 0 # skip mod15
+            i += 20 if vsync[a] # skip neg sync times
+          else
+            i = d > bpl[a] ? bpi[a] : j += 1
+          end
+          4.times.each do |e|
+            if l < t[0] # active specific
+              s = seq[l % seq.size]
+              s |= 0x80 if (l % mod) == mod - 1
+              q = 'active'
+            else
+              s = porch[a]
+            end
+            if l >= t[0..1].map.reduce(:+) && l < t[0..2].map.reduce(:+)
+              s |= 0x20 if vsync[a]
+            else
+              s |= 0x20 unless vsync[a]
+            end
+            rom[(a * 2) + b][d] = i # set $LMOD
+            rom[(c * 4) + e][i] = s # set S value
+            l += 1
+          end
+        end
+      end
+      rom[(a * 2) + b][len[a]] = 0 # terminate line
+      k = j
+    end
+  end
+  # calculate audio, add to ROM here...
+  rom.each_with_index do |a, j|
+    a.each_slice(16).each_with_index do |b, i|
+      print_data [b.size, j, i << 4, 0] + b
+    end
+  end
+end
+
 # start of ALU high
 print_ext_addr 0x0002
 # 0x00020000-0x00020FFF: MV high nibble
@@ -77,7 +149,7 @@ print_binary '/', 0x90
 # 0x0003C000-0x0003CFFF: VOL low nibble only
 
 # 0x0003D000-0x0003DFFF: AV low nibble only
-
+print_av 0xD0
 # 0x0003E000-0x0003EFFF: SER low nibble only
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only
