@@ -70,7 +70,7 @@ Ne 0 ""
 Po -6.76 -0.81
 $EndPAD
 $PAD
-Sh "1" R 1.398 1.398 0 0 1800
+Sh "2" R 1.398 1.398 0 0 1800
 Dr 0.89 0 0
 At STD N 00C0FFFF
 .SolderMask 0
@@ -78,7 +78,7 @@ Ne 0 ""
 Po -1.3 -3.81
 $EndPAD
 $PAD
-Sh "2" C 1.398 1.398 0 0 1800
+Sh "1" C 1.398 1.398 0 0 1800
 Dr 0.89 0 0
 At STD N 00C0FFFF
 .SolderMask 0
@@ -86,7 +86,7 @@ Ne 0 ""
 Po 1.3 -3.81
 $EndPAD
 $PAD
-Sh "3" C 1.398 1.398 0 0 1800
+Sh "4" C 1.398 1.398 0 0 1800
 Dr 0.89 0 0
 At STD N 00C0FFFF
 .SolderMask 0
@@ -94,7 +94,7 @@ Ne 0 ""
 Po -3.35 -3.81
 $EndPAD
 $PAD
-Sh "4" C 1.398 1.398 0 0 1800
+Sh "3" C 1.398 1.398 0 0 1800
 Dr 0.89 0 0
 At STD N 00C0FFFF
 .SolderMask 0
@@ -102,7 +102,7 @@ Ne 0 ""
 Po 3.35 -3.81
 $EndPAD
 $PAD
-Sh "5" C 1.398 1.398 0 0 1800
+Sh "6" C 1.398 1.398 0 0 1800
 Dr 0.89 0 0
 At STD N 00C0FFFF
 .SolderMask 0
@@ -110,7 +110,7 @@ Ne 0 ""
 Po -3.35 -6.3
 $EndPAD
 $PAD
-Sh "6" C 1.398 1.398 0 0 1800
+Sh "5" C 1.398 1.398 0 0 1800
 Dr 0.89 0 0
 At STD N 00C0FFFF
 .SolderMask 0

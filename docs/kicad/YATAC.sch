@@ -5,11 +5,11 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
-Title "YATAC78 TTL Computer"
-Date "2019-12-27"
-Rev "1.2.1"
+Title "POKOYOKO TTL Computer"
+Date "2020-01-13"
+Rev "1.3"
 Comp ""
-Comment1 "(c) A J Hewitt 2019"
+Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
 Comment3 ""
 Comment4 ""
@@ -61,13 +61,13 @@ Entry Wire Line
 Entry Wire Line
 	2850 2900 2750 3000
 Text Label 2850 3000 0    50   ~ 0
-I4
+I12
 Entry Wire Line
 	2850 2400 2750 2500
 Text Label 2850 2400 0    50   ~ 0
-I2
+I10
 Text Label 2850 3600 0    50   ~ 0
-I5
+I13
 Entry Wire Line
 	2850 3600 2750 3700
 Wire Wire Line
@@ -119,7 +119,7 @@ Text GLabel 5050 2900 2    50   Output ~ 0
 Text GLabel 4450 3400 0    50   Input ~ 0
 qclk2
 Text Label 2850 2900 0    50   ~ 0
-I11
+I3
 Wire Wire Line
 	2850 3600 4450 3600
 Wire Wire Line
@@ -270,7 +270,7 @@ $EndComp
 Entry Wire Line
 	2850 2000 2750 2100
 Text Label 2850 2000 0    50   ~ 0
-I10
+I2
 Text GLabel 1350 1600 0    50   Output ~ 0
 PA16
 Text GLabel 1350 2200 0    50   Output ~ 0
@@ -278,9 +278,9 @@ pcent
 Entry Wire Line
 	2850 2200 2750 2300
 Text Label 2850 2200 0    50   ~ 0
-I3
-Text Label 2550 2000 0    50   ~ 0
-I4
+I11
+Text Label 2500 2000 0    50   ~ 0
+I12
 Entry Wire Line
 	2650 2000 2750 2100
 Text GLabel 3050 1900 2    50   Input ~ 0
@@ -340,13 +340,13 @@ F 3 "" H 1850 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text Label 2550 3500 0    50   ~ 0
-I0
-Text Label 2550 3600 0    50   ~ 0
-I1
-Text Label 2550 3700 0    50   ~ 0
 I8
-Text Label 2550 2200 0    50   ~ 0
-I6
+Text Label 2550 3600 0    50   ~ 0
+I9
+Text Label 2550 3700 0    50   ~ 0
+I0
+Text Label 2500 2200 0    50   ~ 0
+I14
 Text GLabel 2750 6300 3    50   Output ~ 0
 I[0..15]
 Entry Wire Line
@@ -406,21 +406,21 @@ Entry Wire Line
 Entry Wire Line
 	4450 6100 4350 6000
 Text Label 2550 5300 0    50   ~ 0
-I0
+I8
 Text Label 2550 5400 0    50   ~ 0
-I1
-Text Label 2550 5500 0    50   ~ 0
-I2
-Text Label 2550 5600 0    50   ~ 0
-I3
-Text Label 2550 5700 0    50   ~ 0
-I4
-Text Label 2550 5800 0    50   ~ 0
-I5
-Text Label 2550 5900 0    50   ~ 0
-I6
-Text Label 2550 6000 0    50   ~ 0
-I7
+I9
+Text Label 2500 5500 0    50   ~ 0
+I10
+Text Label 2500 5600 0    50   ~ 0
+I11
+Text Label 2500 5700 0    50   ~ 0
+I12
+Text Label 2500 5800 0    50   ~ 0
+I13
+Text Label 2500 5900 0    50   ~ 0
+I14
+Text Label 2500 6000 0    50   ~ 0
+I15
 Text Label 4200 5300 0    50   ~ 0
 PD0
 Text Label 4200 5400 0    50   ~ 0
@@ -467,8 +467,8 @@ Entry Wire Line
 	2650 2300 2750 2400
 Entry Wire Line
 	2650 2200 2750 2300
-Text Label 2550 2100 0    50   ~ 0
-I5
+Text Label 2500 2100 0    50   ~ 0
+I13
 Entry Wire Line
 	2650 2100 2750 2200
 Text GLabel 1350 1800 0    50   Output ~ 0
@@ -534,21 +534,21 @@ PD1
 Text Label 1150 5300 0    50   ~ 0
 PD0
 Text Label 2850 6000 0    50   ~ 0
-I15
+I7
 Text Label 2850 5900 0    50   ~ 0
-I14
+I6
 Text Label 2850 5800 0    50   ~ 0
-I13
+I5
 Text Label 2850 5700 0    50   ~ 0
-I12
+I4
 Text Label 2850 5600 0    50   ~ 0
-I11
+I3
 Text Label 2850 5500 0    50   ~ 0
-I10
+I2
 Text Label 2850 5400 0    50   ~ 0
-I9
+I1
 Text Label 2850 5300 0    50   ~ 0
-I8
+I0
 Entry Wire Line
 	2750 6100 2650 6000
 Entry Wire Line
@@ -574,7 +574,7 @@ Entry Wire Line
 Entry Wire Line
 	1150 5300 1050 5200
 Text Label 2550 4000 0    50   ~ 0
-I9
+I1
 Text GLabel 1350 4200 0    50   Output ~ 0
 pgcp
 Text GLabel 1350 3700 0    50   Output ~ 0
@@ -619,10 +619,10 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS138" H 1850 3800 50  0001 C CNN
 	1    1850 3800
 	-1   0    0    -1  
 $EndComp
-Text Label 2550 2300 0    50   ~ 0
-I7
+Text Label 2500 2300 0    50   ~ 0
+I15
 Text Label 2850 4000 0    50   ~ 0
-I9
+I1
 Entry Wire Line
 	2850 4000 2750 4100
 Wire Wire Line
@@ -668,21 +668,21 @@ Wire Wire Line
 Wire Wire Line
 	2850 4950 3050 4950
 Text Label 2850 4950 0    50   ~ 0
-I8
+I0
 Text Label 2850 4850 0    50   ~ 0
-I9
+I1
 Text Label 2850 4750 0    50   ~ 0
-I10
+I2
 Text Label 2850 4650 0    50   ~ 0
-I11
+I3
 Text Label 2850 4550 0    50   ~ 0
-I12
+I4
 Text Label 2850 4450 0    50   ~ 0
-I13
+I5
 Text Label 2850 4350 0    50   ~ 0
-I14
+I6
 Text Label 2850 4250 0    50   ~ 0
-I15
+I7
 $Comp
 L Device:R_Network08_US RN?
 U 1 1 5DA1E820
@@ -846,7 +846,7 @@ rclk
 Text GLabel 9300 2100 2    50   Output ~ 0
 ~voe
 Text GLabel 7050 2000 0    50   Input ~ 0
-sclk
+qclk2
 NoConn ~ 6550 2700
 $Comp
 L 74xx:74LS86 U1
@@ -1054,44 +1054,21 @@ Connection ~ 9350 4450
 Wire Wire Line
 	9350 4450 9650 4450
 $Comp
-L 74xx:74LS32 U?
-U 4 1 5DEC0D55
-P 4750 4500
-AR Path="/5CDEEC9F/5DEC0D55" Ref="U?"  Part="4" 
-AR Path="/5DAA5CD8/5DEC0D55" Ref="U?"  Part="4" 
-AR Path="/5DAA3954/5DEC0D55" Ref="U?"  Part="4" 
-AR Path="/5DAA5CD8/5D9A6C5F/5DEC0D55" Ref="U?"  Part="4" 
-AR Path="/5DA1E9BD/5DEC0D55" Ref="U?"  Part="4" 
-AR Path="/5DA1E9C0/5DEC0D55" Ref="U?"  Part="4" 
-AR Path="/5DEC0D55" Ref="U4"  Part="4" 
-F 0 "U4" H 4750 4500 50  0000 C CNN
-F 1 "74F32" H 4750 4734 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4750 4500 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 4750 4500 50  0001 C CNN
-	4    4750 4500
-	1    0    0    -1  
-$EndComp
-NoConn ~ 5050 4500
-Text GLabel 4450 4400 0    50   Input ~ 0
-1
-Text GLabel 4450 4600 0    50   Input ~ 0
-1
-$Comp
 L 74xx:74LS86 U1
 U 4 1 5DEE629C
-P 4750 4900
-F 0 "U1" H 4750 4900 50  0000 C CNN
-F 1 "74F86" H 4750 5134 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4750 4900 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 4750 4900 50  0001 C CNN
-	4    4750 4900
+P 4750 4700
+F 0 "U1" H 4750 4700 50  0000 C CNN
+F 1 "74F86" H 4750 4934 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4750 4700 50  0001 C CNN
+F 3 "74xx/74ls86.pdf" H 4750 4700 50  0001 C CNN
+	4    4750 4700
 	1    0    0    -1  
 $EndComp
+Text GLabel 4450 4600 0    50   Input ~ 0
+0
 Text GLabel 4450 4800 0    50   Input ~ 0
-1
-Text GLabel 4450 5000 0    50   Input ~ 0
-1
-NoConn ~ 5050 4900
+0
+NoConn ~ 5050 4700
 Text GLabel 2350 1700 2    50   Input ~ 0
 hblank
 $Comp
@@ -1425,7 +1402,7 @@ P 5950 6000
 AR Path="/5E52109D" Ref="TP3"  Part="1" 
 AR Path="/5DA1E9BA/5E52109D" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5E52109D" Ref="TP?"  Part="1" 
-F 0 "TP3" H 6000 6150 50  0000 L CNN
+F 0 "TP3" H 6000 6100 50  0000 L CNN
 F 1 "FETCH" H 5700 6150 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6150 6000 50  0001 C CNN
 F 3 "~" H 6150 6000 50  0001 C CNN
@@ -1448,37 +1425,9 @@ F 3 "~" H 6150 6100 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	2850 2200 7050 2200
-$Comp
-L Connector:TestPoint_Alt TP11
-U 1 1 5E63C233
-P 7700 4850
-AR Path="/5E63C233" Ref="TP11"  Part="1" 
-AR Path="/5DA1E9BA/5E63C233" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BD/5E63C233" Ref="TP?"  Part="1" 
-F 0 "TP11" H 7450 5000 50  0000 L CNN
-F 1 "NCLK" H 7450 5000 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 7900 4850 50  0001 C CNN
-F 3 "~" H 7900 4850 50  0001 C CNN
-	1    7700 4850
-	1    0    0    -1  
-$EndComp
 Connection ~ 4400 2600
 Wire Wire Line
 	4400 2600 4400 2800
-$Comp
-L Connector:TestPoint_Alt TP12
-U 1 1 5E643BC8
-P 7050 2000
-AR Path="/5E643BC8" Ref="TP12"  Part="1" 
-AR Path="/5DA1E9BA/5E643BC8" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BD/5E643BC8" Ref="TP?"  Part="1" 
-F 0 "TP12" H 6800 2100 50  0000 L CNN
-F 1 "SCLK" H 6800 2150 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 7250 2000 50  0001 C CNN
-F 3 "~" H 7250 2000 50  0001 C CNN
-	1    7050 2000
-	1    0    0    -1  
-$EndComp
 $Comp
 L Connector:TestPoint_Alt TP2
 U 1 1 5E14D83F

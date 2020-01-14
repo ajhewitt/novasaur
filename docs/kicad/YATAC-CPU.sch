@@ -6,10 +6,10 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2019-12-27"
-Rev "1.2.1"
+Date "2020-01-13"
+Rev "1.3"
 Comp ""
-Comment1 "(c) A J Hewitt 2019"
+Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
 Comment3 ""
 Comment4 ""
@@ -235,14 +235,14 @@ Text Label 3800 6300 0    50   ~ 0
 Ei2
 Text Label 3800 6400 0    50   ~ 0
 Ei3
-Text Label 3800 6700 0    50   ~ 0
-I14
-Text Label 3800 6600 0    50   ~ 0
-I13
-Text Label 3800 6500 0    50   ~ 0
-I12
-Text Label 3800 6800 0    50   ~ 0
-I15
+Text Label 3850 6700 0    50   ~ 0
+I6
+Text Label 3850 6600 0    50   ~ 0
+I5
+Text Label 3850 6500 0    50   ~ 0
+I4
+Text Label 3850 6800 0    50   ~ 0
+I7
 Wire Wire Line
 	10000 5300 10150 5300
 Wire Wire Line
@@ -2306,8 +2306,8 @@ U 1 1 5D8249BF
 P 2150 6450
 AR Path="/5DAA19D5/5D8249BF" Ref="D2"  Part="1" 
 AR Path="/5DAA5CD8/5D99DA9F/5D8249BF" Ref="D?"  Part="1" 
-AR Path="/5DA1E9BA/5D8249BF" Ref="D2"  Part="1" 
-F 0 "D2" V 2150 6350 50  0000 R CNN
+AR Path="/5DA1E9BA/5D8249BF" Ref="D1"  Part="1" 
+F 0 "D1" V 2150 6350 50  0000 R CNN
 F 1 "4300H1LC" V 2098 6333 50  0001 R CNN
 F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm" H 2150 6450 50  0001 C CNN
 F 3 "~" H 2150 6450 50  0001 C CNN
@@ -2319,8 +2319,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5DF36352
 P 6000 2750
 AR Path="/5DF36352" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5DF36352" Ref="TP22"  Part="1" 
-F 0 "TP22" H 5750 2850 50  0000 L CNN
+AR Path="/5DA1E9BA/5DF36352" Ref="TP19"  Part="1" 
+F 0 "TP19" H 5750 2850 50  0000 L CNN
 F 1 "PGCP" H 5750 2900 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6200 2750 50  0001 C CNN
 F 3 "~" H 6200 2750 50  0001 C CNN
@@ -2332,8 +2332,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5DFA9E4A
 P 4550 4050
 AR Path="/5DFA9E4A" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5DFA9E4A" Ref="TP20"  Part="1" 
-F 0 "TP20" H 4300 4150 50  0000 L CNN
+AR Path="/5DA1E9BA/5DFA9E4A" Ref="TP16"  Part="1" 
+F 0 "TP16" H 4300 4150 50  0000 L CNN
 F 1 "PCCP" H 4300 4200 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4750 4050 50  0001 C CNN
 F 3 "~" H 4750 4050 50  0001 C CNN
@@ -2345,8 +2345,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5DFD4631
 P 10000 5500
 AR Path="/5DFD4631" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5DFD4631" Ref="TP24"  Part="1" 
-F 0 "TP24" H 10050 5600 50  0000 L CNN
+AR Path="/5DA1E9BA/5DFD4631" Ref="TP21"  Part="1" 
+F 0 "TP21" H 10050 5600 50  0000 L CNN
 F 1 "HLCP" H 9750 5650 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 10200 5500 50  0001 C CNN
 F 3 "~" H 10200 5500 50  0001 C CNN
@@ -2358,8 +2358,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5DFFD800
 P 1050 4400
 AR Path="/5DFFD800" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5DFFD800" Ref="TP16"  Part="1" 
-F 0 "TP16" H 800 4500 50  0000 L CNN
+AR Path="/5DA1E9BA/5DFFD800" Ref="TP13"  Part="1" 
+F 0 "TP13" H 800 4500 50  0000 L CNN
 F 1 "YCP" H 800 4550 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 4400 50  0001 C CNN
 F 3 "~" H 1250 4400 50  0001 C CNN
@@ -2371,8 +2371,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5E0789A4
 P 1050 6450
 AR Path="/5E0789A4" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E0789A4" Ref="TP17"  Part="1" 
-F 0 "TP17" H 800 6550 50  0000 L CNN
+AR Path="/5DA1E9BA/5E0789A4" Ref="TP14"  Part="1" 
+F 0 "TP14" H 800 6550 50  0000 L CNN
 F 1 "ECP" H 800 6600 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 6450 50  0001 C CNN
 F 3 "~" H 1250 6450 50  0001 C CNN
@@ -2384,8 +2384,8 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5E0A1A30
 P 1050 2350
 AR Path="/5E0A1A30" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E0A1A30" Ref="TP14"  Part="1" 
-F 0 "TP14" H 800 2450 50  0000 L CNN
+AR Path="/5DA1E9BA/5E0A1A30" Ref="TP11"  Part="1" 
+F 0 "TP11" H 800 2450 50  0000 L CNN
 F 1 "XCP" H 800 2500 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 2350 50  0001 C CNN
 F 3 "~" H 1250 2350 50  0001 C CNN
@@ -2397,9 +2397,9 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5E35AB13
 P 1050 2450
 AR Path="/5E35AB13" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E35AB13" Ref="TP15"  Part="1" 
+AR Path="/5DA1E9BA/5E35AB13" Ref="TP12"  Part="1" 
 AR Path="/5DA1E9BD/5E35AB13" Ref="TP?"  Part="1" 
-F 0 "TP15" H 1100 2600 50  0000 L CNN
+F 0 "TP12" H 1100 2600 50  0000 L CNN
 F 1 "~XOE" H 800 2600 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 2450 50  0001 C CNN
 F 3 "~" H 1250 2450 50  0001 C CNN
@@ -2411,9 +2411,9 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5E39EF69
 P 4250 2450
 AR Path="/5E39EF69" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E39EF69" Ref="TP21"  Part="1" 
+AR Path="/5DA1E9BA/5E39EF69" Ref="TP15"  Part="1" 
 AR Path="/5DA1E9BD/5E39EF69" Ref="TP?"  Part="1" 
-F 0 "TP21" H 4300 2600 50  0000 L CNN
+F 0 "TP15" H 4300 2600 50  0000 L CNN
 F 1 "~POE" H 4000 2600 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4450 2450 50  0001 C CNN
 F 3 "~" H 4450 2450 50  0001 C CNN
@@ -2425,9 +2425,9 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5E39EF6F
 P 6000 2850
 AR Path="/5E39EF6F" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E39EF6F" Ref="TP23"  Part="1" 
+AR Path="/5DA1E9BA/5E39EF6F" Ref="TP20"  Part="1" 
 AR Path="/5DA1E9BD/5E39EF6F" Ref="TP?"  Part="1" 
-F 0 "TP23" H 6050 3000 50  0000 L CNN
+F 0 "TP20" H 6050 3000 50  0000 L CNN
 F 1 "~PGOE" H 5750 3000 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6200 2850 50  0001 C CNN
 F 3 "~" H 6200 2850 50  0001 C CNN
@@ -2439,9 +2439,9 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5E43A381
 P 3800 5050
 AR Path="/5E43A381" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E43A381" Ref="TP19"  Part="1" 
+AR Path="/5DA1E9BA/5E43A381" Ref="TP18"  Part="1" 
 AR Path="/5DA1E9BD/5E43A381" Ref="TP?"  Part="1" 
-F 0 "TP19" H 3550 5200 50  0000 L CNN
+F 0 "TP18" H 3550 5200 50  0000 L CNN
 F 1 "~AOE" H 3550 5200 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4000 5050 50  0001 C CNN
 F 3 "~" H 4000 5050 50  0001 C CNN
@@ -2453,28 +2453,14 @@ L Connector:TestPoint_Alt TP?
 U 1 1 5E5A4F7F
 P 3800 4950
 AR Path="/5E5A4F7F" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E5A4F7F" Ref="TP18"  Part="1" 
+AR Path="/5DA1E9BA/5E5A4F7F" Ref="TP17"  Part="1" 
 AR Path="/5DA1E9BD/5E5A4F7F" Ref="TP?"  Part="1" 
-F 0 "TP18" H 3850 5050 50  0000 L CNN
+F 0 "TP17" H 3850 5050 50  0000 L CNN
 F 1 "ACP" H 3550 5100 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4000 4950 50  0001 C CNN
 F 3 "~" H 4000 4950 50  0001 C CNN
 	1    3800 4950
 	1    0    0    -1  
-$EndComp
-$Comp
-L Connector:TestPoint_Alt TP?
-U 1 1 5E215CAE
-P 1050 4500
-AR Path="/5E215CAE" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E215CAE" Ref="TP13"  Part="1" 
-AR Path="/5DA1E9BD/5E215CAE" Ref="TP?"  Part="1" 
-F 0 "TP13" H 1100 4600 50  0000 L CNN
-F 1 "PCLK" H 800 4650 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 4500 50  0001 C CNN
-F 3 "~" H 1250 4500 50  0001 C CNN
-	1    1050 4500
-	-1   0    0    1   
 $EndComp
 Wire Bus Line
 	2350 5350 2350 5750
