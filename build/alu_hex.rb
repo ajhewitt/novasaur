@@ -96,7 +96,7 @@ def print_av(offset)
   # calculate audio, add to ROM here...
   rom.each_with_index do |a, j|
     a.each_slice(16).each_with_index do |b, i|
-      print_data [b.size, j, i << 4, 0] + b
+      print_data [b.size, offset + j, i << 4, 0] + b
     end
   end
 end
