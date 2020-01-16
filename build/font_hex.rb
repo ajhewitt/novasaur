@@ -1,12 +1,22 @@
+# Use PSF tools to generate text font files: https://www.seasip.info/Unix/PSF
+# Starting with FON files, use 'fon2fnts' to extract font-file.fnt
+# fnt2psf font-file.fnt | psf2txt > font-file.txt
+# Font ROM Row Assignments
+# 0-7: 8x8 glyph fonts
+# 8: underline - last row of mod10 fonts, all 0's or 1's for underline
+# 9: blank - first row of mod10 fonts/low-res graphics, all 0's
+# 10-13: top 4 rows of 8x6 glyph fonts (followed by rows 6,7)
+# 14,15: dither patterns
+# 16-31: 8x16 glyph fonts
 DITHER = [
   [0b1100,
    0b1100],
-  [0b0100,
-   0b1000],
+  [0b1000,
+   0b0100],
   [0b0001,
    0b0010],
-  [0b0101,
-   0b1010]
+  [0b1001,
+   0b0110]
 ]
 
 def print_ext_addr(addr)
@@ -64,44 +74,57 @@ end
 def print_dither(offset)
   4.times.each do |a|
     32.times.each do |b|
-      next if a & 2 != (b >> 2) & 2
-      print_data([8, offset + (a << 4) + (b >> 4),
-                  ((b << 4) & 0xf0) + ((a & 1) << 3), 0] +
-                 8.times.map {DITHER[a][(b >> 4) & 1] * 0x11})
+      print_data([0x10, offset + (a << 5) + (b >> 4) , (b << 4) & 0xf0, 0] +
+        16.times.map {DITHER[a][b >> 4] * 0x11})
     end
   end
 end
 
+def print_line(offset, solid)
+  16.times.each do |a|
+    print_data([0x10, offset, a << 4, 0] +
+      Array.new(16) {solid ? 0xff : 0})
+  end
+end
+
+def print_underline(offset, underline)
+  print_line(offset, underline)
+  print_line(offset + 1, false)
+end
+
 # start of ALU high
 print_ext_addr 0x0002
-#print_dither 0x88
+print_dither 0x8E
 
-# 0x0002C000-0x0002CFFF: thick serif 8x16 font
-# IBM PS/2 VGA/MCGA. ca. 1987
-print_font 'fonts/Bm437_IBM_VGA8.txt', 0x80
 # 0x00028000-0x000287FF: thick serif 8x8 font
 # IBM PC BIOS. ca. 1981
-print_font 'fonts/Bm437_IBM_BIOS.txt', 0x90
+print_font 'fonts/Bm437_IBM_BIOS.txt', 0x80
+print_underline 0x88, false
+# 0x00029000-0x00029FFF: thick serif 8x16 font
+# IBM PS/2 VGA/MCGA. ca. 1987
+print_font 'fonts/Bm437_IBM_VGA8.txt', 0x90
 
-# 0x0002D000-0x0002DFFF: thin serif 8x16 font
+# 0x0002A000-0x0002A7FF: thin serif 8x8 font
 # COMPAQ MS-DOS 3.31 (Rev. G). ca. 1990
-print_font 'fonts/Bm437_CompaqThin_8x16.txt', 0xA0
-# 0x00029000-0x000297FF: thin serif 8x8 font
+print_font 'fonts/Bm437_CompaqThin_8x8_6.txt', 0xA0
+print_underline 0xA8, false
+# 0x0002B000-0x0002BFFF: thin serif 8x16 font
 # COMPAQ MS-DOS 3.31 (Rev. G). ca. 1990
-print_font 'fonts/Bm437_CompaqThin_8x8_6.txt', 0xB0
+print_font 'fonts/Bm437_CompaqThin_8x16.txt', 0xB0
 
-# 0x0002E000-0x0002EFFF: thick san-serif 8x16 font
+# 0x0002D000-0x0002DFFF: thick san-serif 8x8 font
 # Chips and Technologies, Inc. 82C435 Enhanced Graphics Controller. ca. 1985
-print_font 'fonts/Bm437_PhoenixEGA_8x16.txt', 0xC0
-# 0x0002A000-0x0002A7FF: thick san-serif 8x8 font
-# Amstrad PC1512. ca. 1986
-print_font 'fonts/Bm437_AmstradPC1512.txt', 0xD0
+print_font 'fonts/Bm437_PhoenixEGA_8x8.txt', 0xC0
+print_underline 0xC8, false
+# 0x0002D000-0x0002DFFF: thick san-serif 8x16 font
+# Chips and Technologies, Inc. 82C435 Enhanced Graphics Controller. ca. 1985
+print_font 'fonts/Bm437_PhoenixEGA_8x16.txt', 0xD0
 
-# 0x0002F000-0x0002FFFF: thin san-serif 8x16 font
-# IBM PC DOS 5.02 (ISO 9241-3:1992). ca. 1992
-print_font 'fonts/Bm437_IBM_ISO8_12.txt', 0xE0
-# 0x0002B000-0x0002B7FF: thin san-serif 8x8 font
-# Kaypro 2000. ca. 1985
-print_font 'fonts/Bm437_Kaypro2K.txt', 0xF0
-
-
+# 0x0002D000-0x0002DFFF: thick san-serif 8x8 font
+# Chips and Technologies, Inc. 82C435 Enhanced Graphics Controller. ca. 1985
+print_font 'fonts/Bm437_PhoenixEGA_8x8.txt', 0xE0
+print_underline 0xE8, true
+# 0x0002D000-0x0002DFFF: thick san-serif 8x14 font
+# Chips and Technologies, Inc. 82C435 Enhanced Graphics Controller. ca. 1985
+print_font 'fonts/Bm437_PhoenixEGA_8x14.txt', 0xF0
+print_underline 0xFE, true
