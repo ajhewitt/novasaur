@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2020-01-13"
-Rev "1.3"
+Date "2020-01-26"
+Rev "1.4"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -191,7 +191,7 @@ AR Path="/5DAA3954/5D1C9541" Ref="RN2"  Part="1"
 AR Path="/5DAA5CD8/5D9A6C5F/5D1C9541" Ref="RN?"  Part="1" 
 AR Path="/5DA1E9BD/5D1C9541" Ref="RN6"  Part="1" 
 F 0 "RN6" V 5050 1850 50  0000 L CNN
-F 1 "1k" V 5150 1900 50  0000 L CNN
+F 1 "330" V 5150 1850 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 6175 1950 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5700 1950 50  0001 C CNN
 	1    5700 1950
@@ -1036,7 +1036,7 @@ AR Path="/5DAA3954/5D1C1190" Ref="RN3"  Part="1"
 AR Path="/5DAA5CD8/5D9A6C5F/5D1C1190" Ref="RN?"  Part="1" 
 AR Path="/5DA1E9BD/5D1C1190" Ref="RN5"  Part="1" 
 F 0 "RN5" V 4600 6800 50  0000 L CNN
-F 1 "1k" V 4700 6850 50  0000 L CNN
+F 1 "330" V 4700 6800 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 5725 6900 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5250 6900 50  0001 C CNN
 	1    5250 6900
@@ -1172,7 +1172,7 @@ AR Path="/5DAA3954/5D1C1196" Ref="RN4"  Part="1"
 AR Path="/5DAA5CD8/5D9A6C5F/5D1C1196" Ref="RN?"  Part="1" 
 AR Path="/5DA1E9BD/5D1C1196" Ref="RN4"  Part="1" 
 F 0 "RN4" V 3500 6800 50  0000 L CNN
-F 1 "1k" V 3600 6850 50  0000 L CNN
+F 1 "330" V 3600 6800 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 4625 6900 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4150 6900 50  0001 C CNN
 	1    4150 6900

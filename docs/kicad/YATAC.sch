@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "POKOYOKO TTL Computer"
-Date "2020-01-13"
-Rev "1.3"
+Date "2020-01-26"
+Rev "1.4"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -691,7 +691,7 @@ AR Path="/5DAA3954/5DA1E820" Ref="RN?"  Part="1"
 AR Path="/5DAA5CD8/5DA1E820" Ref="RN?"  Part="1" 
 AR Path="/5DA1E820" Ref="RN1"  Part="1" 
 F 0 "RN1" V 3550 4750 50  0000 L CNN
-F 1 "1k" V 3450 4750 50  0000 L CNN
+F 1 "330" V 3450 4750 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 3725 4550 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 3250 4550 50  0001 C CNN
 	1    3250 4550
@@ -1065,10 +1065,9 @@ F 3 "74xx/74ls86.pdf" H 4750 4700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 4450 4600 0    50   Input ~ 0
-0
+Q
 Text GLabel 4450 4800 0    50   Input ~ 0
-0
-NoConn ~ 5050 4700
+1
 Text GLabel 2350 1700 2    50   Input ~ 0
 hblank
 $Comp
@@ -1442,6 +1441,74 @@ F 3 "~" H 5750 2500 50  0001 C CNN
 	1    5550 2500
 	-1   0    0    1   
 $EndComp
+$Comp
+L Connector:TestPoint_Alt TP36
+U 1 1 5E2B88BD
+P 7850 5700
+AR Path="/5E2B88BD" Ref="TP36"  Part="1" 
+AR Path="/5DA1E9BA/5E2B88BD" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E2B88BD" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9C0/5E2B88BD" Ref="TP?"  Part="1" 
+F 0 "TP36" H 7750 5950 50  0000 L CNN
+F 1 "DCLK" H 7600 5850 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 8050 5700 50  0001 C CNN
+F 3 "~" H 8050 5700 50  0001 C CNN
+	1    7850 5700
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R_US R?
+U 1 1 5E4FA20F
+P 5450 4500
+AR Path="/62D13D9D/5E4FA20F" Ref="R?"  Part="1" 
+AR Path="/5DAA19D5/5E4FA20F" Ref="R?"  Part="1" 
+AR Path="/5DAA5CD8/5D99DA9F/5E4FA20F" Ref="R?"  Part="1" 
+AR Path="/5DA1E9BA/5E4FA20F" Ref="R?"  Part="1" 
+AR Path="/5E4FA20F" Ref="R2"  Part="1" 
+F 0 "R2" H 5550 4550 50  0000 L CNN
+F 1 "1k" H 5550 4450 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5490 4490 50  0001 C CNN
+F 3 "~" H 5450 4500 50  0001 C CNN
+	1    5450 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED_ALT D?
+U 1 1 5E4FA215
+P 5250 4700
+AR Path="/5DAA19D5/5E4FA215" Ref="D?"  Part="1" 
+AR Path="/5DAA5CD8/5D99DA9F/5E4FA215" Ref="D?"  Part="1" 
+AR Path="/5DA1E9BA/5E4FA215" Ref="D?"  Part="1" 
+AR Path="/5E4FA215" Ref="D1"  Part="1" 
+F 0 "D1" H 5300 4850 50  0000 R CNN
+F 1 "4300H1LC" V 5198 4583 50  0001 R CNN
+F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm" H 5250 4700 50  0001 C CNN
+F 3 "~" H 5250 4700 50  0001 C CNN
+	1    5250 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5050 4700 5100 4700
+Wire Wire Line
+	5400 4700 5450 4700
+Wire Wire Line
+	5450 4700 5450 4650
+$Comp
+L power:VCC #PWR?
+U 1 1 5E521E7C
+P 5450 4300
+AR Path="/5CDEEC9F/5E521E7C" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/5E521E7C" Ref="#PWR?"  Part="1" 
+AR Path="/5E521E7C" Ref="#PWR0175"  Part="1" 
+F 0 "#PWR0175" H 5450 4150 50  0001 C CNN
+F 1 "VCC" H 5467 4473 50  0000 C CNN
+F 2 "" H 5450 4300 50  0001 C CNN
+F 3 "" H 5450 4300 50  0001 C CNN
+	1    5450 4300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5450 4350 5450 4300
 Wire Bus Line
 	4450 5400 4450 7050
 Wire Bus Line
