@@ -68,4 +68,4 @@ is.delete ""
 is.reject! { |k, v| k.end_with? " N" }
 
 require 'json'
-puts JSON.pretty_generate is
+puts JSON.pretty_generate is.sort_by {|_k,v| v}.to_h
