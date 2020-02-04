@@ -107,9 +107,6 @@ def print_av(offset)
   end
 end
 
-print_av 0xD0
-exit
-
 # start of ALU high
 print_ext_addr 0x0002
 # 0x00020000-0x00020FFF: MV high nibble
@@ -169,4 +166,6 @@ print_unary(0xF1, [0xFF] + [*0..0xFE])
 # $ZERO: A = (A == 0) ? 0 : -1
 print_unary(0xFE, [0] + 0xFF.times.map{0xFF})
 # $IDEN: A = A
-print_unary(0xFF, [*0..0xFF])
+print_unary(0xFE, [*0..0xFF])
+# $FLIP: A76543210 = A01234567
+print_unary(0xFF, 256.times.map {|i| (sprintf "%08b", i)}.map {|i| i.reverse.to_i(2)})
