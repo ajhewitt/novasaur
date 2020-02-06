@@ -42,12 +42,12 @@ def print_av(offset)
           [[480,1,3,28], [480,1,3,28], [480,1,3,28], [480,1,3,28]]]]
   com = [[[144,3,0,5,8], [150,0,0,2,8]], [[153,1,0,2,4], [150,2,0,4,4]],
          [[115,5,5,4,4], [120,0,7,2,4]], [[120,0,0,1,7], [120,0,0,1,7]]]
-  div = [[[2,4,8,16], [3,5,6,10]], [[4,8,16], [3,6,10]],
+  div = [[[0,4,8,16], [0,3,5,10]], [[4,8,16], [3,6,10]],
          [[4,8,16], [3,6,10]], [[2,4,8,16], [3,5,6,10]]]
   mod = [[4,15], [16,6], [16,6], [4,15]]
   pos = [[141,145], [160,176], [182,198], [204,208]]
-  seq = {2=>[14,15,15,14], 3=>[14,15],
-         4=>[10,11,12,13], 5=>[10,11,12,13], 6=>[10,11,12,10,11,12],
+  seq = {2=>[14,15,15,14], 3=>[14,15], 4=>[10,11,12,13],
+         5=>[10,11,12,13,12,11], 6=>[10,11,12,13,12,11],
          8=>[0,1,2,3,4,5,6,7], 10=>[9,0,1,2,3,4,5,6,7,8],
          16=>[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]}
   j = 0
@@ -107,6 +107,20 @@ def print_av(offset)
   end
 end
 
+def print_att(offset)
+  16.times.map do |a|
+    16.times.map do |b|
+      d = 16.times.map do |c|
+        x = (b << 4) + c
+        y = a/-2
+        (x * 2**y).to_i
+      end
+      print_data([d.size, offset + a, b << 4, 0] + d)
+    end
+  end
+end
+
+
 # start of ALU high
 print_ext_addr 0x0002
 # 0x00020000-0x00020FFF: MV high nibble
@@ -142,30 +156,53 @@ print_binary '&', 0x40, pass: true
 print_binary '|', 0x50, pass: true
 # 0x00036000-0x00036FFF: XOR low nibble
 print_binary '^', 0x60, pass: true
-# 0x00037000-0x00037FFF: DC low nibble
+# 0x00037000-0x00037FFF: DEC low nibble
+
 
 # 0x00038000-0x00038FFF: MUL low nibble only
 print_binary '*', 0x80
 # 0x00039000-0x00039FFF: DIV low nibble only
 print_binary '/', 0x90
-# 0x0003A000-0x0003AFFF: FNA low nibble only
+# 0x0003A000-0x0003AFFF: ATT low nibble only
+print_att 0xA0
+# 0x0003B000-0x0003BFFF: SER low nibble only
 
-# 0x0003B000-0x0003BFFF: FNB low nibble only
+# 0x0003C000-0x0003CFFF: AV low nibble only
+print_av 0xC0
+# 0x0003D000-0x0003DFFF: FND low nibble only
 
-# 0x0003C000-0x0003CFFF: VOL low nibble only
-
-# 0x0003D000-0x0003DFFF: AV low nibble only
-print_av 0xD0
-# 0x0003E000-0x0003EFFF: SER low nibble only
+# 0x0003E000-0x0003EFFF: FNE low nibble only
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only
+# $IDEN: A = A
+print_unary(0xF0, [*0..0xFF])
 # $INC: A = A + 1
-print_unary(0xF0, [*1..0xFF] + [0])
+print_unary(0xF1, [*1..0xFF] + [0])
 # $DEC: A = A - 1
-print_unary(0xF1, [0xFF] + [*0..0xFE])
+print_unary(0xF2, [0xFF] + [*0..0xFE])
+# $INC2: A = A + 2
+print_unary(0xF3, [*2..0xFF] + [0,1])
+# $1COM: A = -A + 1
+print_unary(0xF4, 256.times.map{|i| ((-1*i)-1)&0xFF})
+# $2COM: A = -A
+print_unary(0xF5, 256.times.map{|i| (-1*i)&0xFF})
+# $ROR
+print_unary(0xF6, 256.times.map{|i| ((i>>1)|(i<<7))&0xFF})
+# $ROL
+print_unary(0xF7, 256.times.map{|i| ((i<<1)|(i>>7))&0xFF})
+# $LSR
+print_unary(0xF8, 256.times.map{|i| i>>1})
+# $LSL
+print_unary(0xF9, 256.times.map{|i| (i<<1)&0xFF})
+# $ASR
+print_unary(0xFA, 256.times.map{|i| (i>>1)|(i&0x80)})
+# $INCVMC: A = A%4 + 1
+print_unary(0xFB, 256.times.map{|i| i&3==3 ? i&0xFC : i+1})
+# $INCLINE - inc mode_line, cyc = 0 if len = 0, cyc = 1 if len = 1
+print_unary(0xFC, 256.times.map{|i| ((i+16)&0xFC)|((i&4)>>2)})
+# $INCVPC - mode_line -= mode_line%4 + len, cyc = 0 if len = 0, cyc = 1 if len = 1
+print_unary(0xFD, 256.times.map{|i| ((i-((i&0xF0) % (0x40+((i&4)<<2))))&0xFC)|((i&4)>>2)})
 # $ZERO: A = (A == 0) ? 0 : -1
 print_unary(0xFE, [0] + 0xFF.times.map{0xFF})
-# $IDEN: A = A
-print_unary(0xFE, [*0..0xFF])
 # $FLIP: A76543210 = A01234567
 print_unary(0xFF, 256.times.map {|i| (sprintf "%08b", i)}.map {|i| i.reverse.to_i(2)})
