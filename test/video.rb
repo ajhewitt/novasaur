@@ -12,14 +12,14 @@ end
 def print_line(i, j, l, n, s)
   puts "#{(i * n) + l}: [#{j}, #{s & 0xF}] #{
           (s & 0x10) >> 4} #{
-          (s & 0x20) == 0 ? '-' : '+'} #{
+          (s & 0x20) == 0 ? '#' : '.'} #{
           (s & 0x40) == 0 ? 'A' : 'B'}"
 end
 
-mode = ARGV.first.to_i # 1-3,5-7,8-10,12-14,16-18,20-22,24-31
-n = [4,5,5,4][mode >> 3]
+mode = ARGV.first.to_i # 0-18,20-22,24-26,28-30
+n = [4,5][mode >> 4]
 m = (mode & 3) * n
-offset = 0xD000 + ((mode & 0x1C) * 64)
+offset = 0xC000 + ((mode & 0x1C) * 64)
 i = 0
 j = 0
 s = 0
@@ -32,7 +32,7 @@ while true
       exit
     end
     state = (m + l) * 256
-    s = rom[0xD000 + state + lmod]
+    s = rom[0xC000 + state + lmod]
     print_line(i, j, l, n, s)
     j += 1 unless s & 0x80 == 0
   end
