@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 4 4
 Title "Input & Output"
-Date "2020-01-26"
-Rev "1.4"
+Date "2020-02-06"
+Rev "1.5"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -552,7 +552,7 @@ AR Path="/62D13D9D/5DD21162" Ref="U7"  Part="3"
 AR Path="/5DAA5CD8/5D9AFF37/5DD21162" Ref="U?"  Part="3" 
 AR Path="/5DA1E9C0/5DD21162" Ref="U6"  Part="3" 
 F 0 "U6" H 8850 5550 50  0000 L CNN
-F 1 "74F139" H 8800 5450 50  0000 L CNN
+F 1 "74ALS139" H 8750 5450 50  0000 L CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 8950 5500 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS139" H 8950 5500 50  0001 C CNN
 	3    8950 5500
@@ -826,7 +826,7 @@ F 3 "http://www.ti.com/lit/ds/symlink/cd4052b.pdf" H 3080 4150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 2450 3450 0    50   Input ~ 0
-mode3
+mode1
 Connection ~ 2550 3450
 $Comp
 L Connector_Generic:Conn_01x16 J7
@@ -1815,7 +1815,7 @@ AR Path="/62D13D9D/63199772" Ref="U6"  Part="3"
 AR Path="/5DAA5CD8/5D9AFF37/63199772" Ref="U?"  Part="3" 
 AR Path="/5DA1E9C0/63199772" Ref="U5"  Part="3" 
 F 0 "U5" H 8250 5550 50  0000 L CNN
-F 1 "74F139" H 8200 5450 50  0000 L CNN
+F 1 "74ALS139" H 8150 5450 50  0000 L CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 8350 5500 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS139" H 8350 5500 50  0001 C CNN
 	3    8350 5500
@@ -1916,7 +1916,7 @@ AR Path="/62D13D9D/5E36911E" Ref="R?"  Part="1"
 AR Path="/5DAA5CD8/5D9AFF37/5E36911E" Ref="R?"  Part="1" 
 AR Path="/5DA1E9C0/5E36911E" Ref="R6"  Part="1" 
 F 0 "R6" V 6500 1750 50  0000 L CNN
-F 1 "560" V 6600 1750 50  0000 L CNN
+F 1 "330" V 6600 1750 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 6740 1790 50  0001 C CNN
 F 3 "~" H 6700 1800 50  0001 C CNN
 	1    6700 1800

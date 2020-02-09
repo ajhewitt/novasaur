@@ -5,9 +5,9 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
-Title "Central Processing Unit"
-Date "2020-01-26"
-Rev "1.4"
+Title "Yoco CPU"
+Date "2020-02-06"
+Rev "1.5"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -2019,9 +2019,9 @@ Wire Wire Line
 Wire Wire Line
 	850  6100 1050 6100
 Text GLabel 2050 6700 2    50   Output ~ 0
-mode3
+mode2
 Text GLabel 2050 6500 2    50   Output ~ 0
-mode1
+mode0
 Text Label 850  6800 0    50   ~ 0
 PD7
 Text Label 850  6700 0    50   ~ 0
@@ -2046,7 +2046,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS574" H 1550 6600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 2050 6600 2    50   Output ~ 0
-mode2
+mode1
 $Comp
 L power:GNDD #PWR?
 U 1 1 5DAE35E5

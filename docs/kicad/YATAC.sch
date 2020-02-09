@@ -5,9 +5,9 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
-Title "POKOYOKO TTL Computer"
-Date "2020-01-26"
-Rev "1.4"
+Title "TTL Minicomputer"
+Date "2020-02-06"
+Rev "1.5"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -92,7 +92,7 @@ AR Path="/5CDEEC9F/5DA1E949" Ref="U?"  Part="2"
 AR Path="/5DAA5CD8/5DA1E949" Ref="U?"  Part="2" 
 AR Path="/5DA1E949" Ref="U5"  Part="2" 
 F 0 "U5" H 3650 3000 50  0000 C CNN
-F 1 "74F139" H 3600 2900 50  0000 C CNN
+F 1 "74ALS139" H 3600 2900 50  0000 C CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 3650 3000 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS139" H 3650 3000 50  0001 C CNN
 	2    3650 3000
@@ -236,7 +236,7 @@ Entry Bus Bus
 Text GLabel 2350 4200 2    50   Input ~ 0
 qclk1
 Text GLabel 2350 4100 2    50   Input ~ 0
-~store
+~exec
 Entry Wire Line
 	2650 4000 2750 4100
 $Comp
@@ -318,8 +318,8 @@ P 1850 2000
 AR Path="/5CDEEC9F/5DA1E80A" Ref="U?"  Part="1" 
 AR Path="/5DAA5CD8/5DA1E80A" Ref="U?"  Part="1" 
 AR Path="/5DA1E80A" Ref="U12"  Part="1" 
-F 0 "U12" H 1850 1850 50  0000 C CNN
-F 1 "PAL16R4" H 1850 1750 50  0000 C CNN
+F 0 "U12" H 1850 1800 50  0000 C CNN
+F 1 "ATF16V8" H 1850 1700 50  0000 C CNN
 F 2 "Package_DIP:DIP-20_W7.62mm_Socket_LongPads" H 1850 2000 50  0001 C CNN
 F 3 "" H 1850 2000 50  0001 C CNN
 	1    1850 2000
@@ -644,7 +644,7 @@ Entry Wire Line
 Entry Wire Line
 	2750 5050 2850 4950
 Text GLabel 4450 4200 0    50   Input ~ 0
-~store
+~exec
 Text GLabel 5050 4100 2    50   Output ~ 0
 ocp
 Wire Wire Line
@@ -729,7 +729,7 @@ fetch
 Text GLabel 5950 5300 2    50   Input ~ 0
 1
 Text GLabel 5950 5400 2    50   Input ~ 0
-~store
+~exec
 NoConn ~ 4950 5300
 $Comp
 L 74xx:74LS139 U?
@@ -738,7 +738,7 @@ P 5450 6100
 AR Path="/5DAA5CD8/5DA1E8DD" Ref="U?"  Part="2" 
 AR Path="/5DA1E8DD" Ref="U6"  Part="2" 
 F 0 "U6" H 5450 6100 50  0000 C CNN
-F 1 "74F139" H 5400 6000 50  0000 C CNN
+F 1 "74ALS139" H 5400 6000 50  0000 C CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 5450 6100 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS139" H 5450 6100 50  0001 C CNN
 	2    5450 6100
@@ -752,7 +752,7 @@ AR Path="/5CDEEC9F/5DA1E8F2" Ref="U?"  Part="1"
 AR Path="/5DAA5CD8/5DA1E8F2" Ref="U?"  Part="1" 
 AR Path="/5DA1E8F2" Ref="U6"  Part="1" 
 F 0 "U6" H 5450 5400 50  0000 C CNN
-F 1 "74F139" H 5400 5300 50  0000 C CNN
+F 1 "74ALS139" H 5400 5300 50  0000 C CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 5450 5400 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS139" H 5450 5400 50  0001 C CNN
 	1    5450 5400
@@ -782,7 +782,7 @@ P 6050 2500
 AR Path="/5DAA5CD8/5DA1E943" Ref="U?"  Part="1" 
 AR Path="/5DA1E943" Ref="U5"  Part="1" 
 F 0 "U5" H 6050 2500 50  0000 C CNN
-F 1 "74F139" H 6000 2400 50  0000 C CNN
+F 1 "74ALS139" H 6000 2400 50  0000 C CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 6050 2500 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS139" H 6050 2500 50  0001 C CNN
 	1    6050 2500
@@ -836,7 +836,7 @@ $EndSheet
 Text GLabel 8300 1900 0    50   Input ~ 0
 s1
 Text GLabel 9300 2000 2    50   Output ~ 0
-~store
+~exec
 Text GLabel 9300 1900 2    50   Output ~ 0
 ccp
 Text GLabel 7050 1600 0    50   Input ~ 0
@@ -851,12 +851,12 @@ NoConn ~ 6550 2700
 $Comp
 L 74xx:74LS86 U1
 U 1 1 5D9EA8C5
-P 7350 2800
-F 0 "U1" H 7350 2800 50  0000 C CNN
-F 1 "74F86" H 7350 3034 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7350 2800 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 7350 2800 50  0001 C CNN
-	1    7350 2800
+P 7350 4850
+F 0 "U1" H 7350 4850 50  0000 C CNN
+F 1 "74F86" H 7350 5084 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7350 4850 50  0001 C CNN
+F 3 "74xx/74ls86.pdf" H 7350 4850 50  0001 C CNN
+	1    7350 4850
 	1    0    0    -1  
 $EndComp
 Text GLabel 8300 2000 0    50   Input ~ 0
@@ -931,19 +931,6 @@ Text GLabel 9650 4550 2    50   Output ~ 0
 qclk2
 Text GLabel 8300 5150 0    50   Input ~ 0
 1
-$Comp
-L 74xx:74LS86 U1
-U 3 1 5EB8600D
-P 7350 4850
-AR Path="/5EB8600D" Ref="U1"  Part="3" 
-AR Path="/5DA1E9BD/5EB8600D" Ref="U?"  Part="3" 
-F 0 "U1" H 7350 4850 50  0000 C CNN
-F 1 "74F86" H 7350 5084 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7350 4850 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 7350 4850 50  0001 C CNN
-	3    7350 4850
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	9300 4650 9650 4650
 Wire Wire Line
@@ -1053,21 +1040,10 @@ Wire Wire Line
 Connection ~ 9350 4450
 Wire Wire Line
 	9350 4450 9650 4450
-$Comp
-L 74xx:74LS86 U1
-U 4 1 5DEE629C
-P 4750 4700
-F 0 "U1" H 4750 4700 50  0000 C CNN
-F 1 "74F86" H 4750 4934 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4750 4700 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 4750 4700 50  0001 C CNN
-	4    4750 4700
-	1    0    0    -1  
-$EndComp
-Text GLabel 4450 4600 0    50   Input ~ 0
+Text GLabel 4450 4400 0    50   Input ~ 0
 Q
-Text GLabel 4450 4800 0    50   Input ~ 0
-1
+Text GLabel 4450 4600 0    50   Input ~ 0
+boot
 Text GLabel 2350 1700 2    50   Input ~ 0
 hblank
 $Comp
@@ -1388,7 +1364,7 @@ AR Path="/5E501288" Ref="TP10"  Part="1"
 AR Path="/5DA1E9BA/5E501288" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5E501288" Ref="TP?"  Part="1" 
 F 0 "TP10" H 4200 4300 50  0000 L CNN
-F 1 "~STORE" H 4200 4350 50  0001 L CNN
+F 1 "~EXEC" H 4200 4350 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4650 4200 50  0001 C CNN
 F 3 "~" H 4650 4200 50  0001 C CNN
 	1    4450 4200
@@ -1459,56 +1435,84 @@ $EndComp
 $Comp
 L Device:R_US R?
 U 1 1 5E4FA20F
-P 5450 4500
+P 5450 4650
 AR Path="/62D13D9D/5E4FA20F" Ref="R?"  Part="1" 
 AR Path="/5DAA19D5/5E4FA20F" Ref="R?"  Part="1" 
 AR Path="/5DAA5CD8/5D99DA9F/5E4FA20F" Ref="R?"  Part="1" 
 AR Path="/5DA1E9BA/5E4FA20F" Ref="R?"  Part="1" 
 AR Path="/5E4FA20F" Ref="R2"  Part="1" 
-F 0 "R2" H 5550 4550 50  0000 L CNN
-F 1 "1k" H 5550 4450 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5490 4490 50  0001 C CNN
-F 3 "~" H 5450 4500 50  0001 C CNN
-	1    5450 4500
+F 0 "R2" H 5550 4700 50  0000 L CNN
+F 1 "1k" H 5550 4600 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5490 4640 50  0001 C CNN
+F 3 "~" H 5450 4650 50  0001 C CNN
+	1    5450 4650
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:LED_ALT D?
 U 1 1 5E4FA215
-P 5250 4700
+P 5250 4500
 AR Path="/5DAA19D5/5E4FA215" Ref="D?"  Part="1" 
 AR Path="/5DAA5CD8/5D99DA9F/5E4FA215" Ref="D?"  Part="1" 
 AR Path="/5DA1E9BA/5E4FA215" Ref="D?"  Part="1" 
 AR Path="/5E4FA215" Ref="D1"  Part="1" 
-F 0 "D1" H 5300 4850 50  0000 R CNN
-F 1 "4300H1LC" V 5198 4583 50  0001 R CNN
-F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm" H 5250 4700 50  0001 C CNN
-F 3 "~" H 5250 4700 50  0001 C CNN
-	1    5250 4700
-	1    0    0    -1  
+F 0 "D1" H 5300 4650 50  0000 R CNN
+F 1 "4300H1LC" V 5198 4383 50  0001 R CNN
+F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm" H 5250 4500 50  0001 C CNN
+F 3 "~" H 5250 4500 50  0001 C CNN
+	1    5250 4500
+	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	5050 4700 5100 4700
+	5050 4500 5100 4500
 Wire Wire Line
-	5400 4700 5450 4700
-Wire Wire Line
-	5450 4700 5450 4650
+	5400 4500 5450 4500
 $Comp
-L power:VCC #PWR?
-U 1 1 5E521E7C
-P 5450 4300
-AR Path="/5CDEEC9F/5E521E7C" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA5CD8/5E521E7C" Ref="#PWR?"  Part="1" 
-AR Path="/5E521E7C" Ref="#PWR0175"  Part="1" 
-F 0 "#PWR0175" H 5450 4150 50  0001 C CNN
-F 1 "VCC" H 5467 4473 50  0000 C CNN
-F 2 "" H 5450 4300 50  0001 C CNN
-F 3 "" H 5450 4300 50  0001 C CNN
-	1    5450 4300
+L power:GNDD #PWR?
+U 1 1 5E41DA86
+P 5450 4850
+AR Path="/5CDEEC9F/5E41DA86" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/5E41DA86" Ref="#PWR?"  Part="1" 
+AR Path="/5E41DA86" Ref="#PWR0175"  Part="1" 
+F 0 "#PWR0175" H 5450 4600 50  0001 C CNN
+F 1 "GNDD" H 5454 4695 50  0000 C CNN
+F 2 "" H 5450 4850 50  0001 C CNN
+F 3 "" H 5450 4850 50  0001 C CNN
+	1    5450 4850
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5450 4350 5450 4300
+	5450 4800 5450 4850
+$Comp
+L 74xx:74LS32 U?
+U 3 1 5E6A8202
+P 4750 4500
+AR Path="/5CDEEC9F/5E6A8202" Ref="U?"  Part="3" 
+AR Path="/5DAA5CD8/5E6A8202" Ref="U?"  Part="3" 
+AR Path="/5DAA3954/5E6A8202" Ref="U?"  Part="3" 
+AR Path="/5DAA5CD8/5D9A6C5F/5E6A8202" Ref="U?"  Part="3" 
+AR Path="/5DA1E9BD/5E6A8202" Ref="U?"  Part="3" 
+AR Path="/5E6A8202" Ref="U4"  Part="3" 
+F 0 "U4" H 4750 4500 50  0000 C CNN
+F 1 "74F32" H 4750 4300 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4750 4500 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 4750 4500 50  0001 C CNN
+	3    4750 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L 74xx:74LS86 U?
+U 2 1 5E78AC8B
+P 7350 2800
+AR Path="/5DA1E9BD/5E78AC8B" Ref="U?"  Part="2" 
+AR Path="/5E78AC8B" Ref="U1"  Part="2" 
+F 0 "U1" H 7350 2800 50  0000 C CNN
+F 1 "74F86" H 7350 3034 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7350 2800 50  0001 C CNN
+F 3 "74xx/74ls86.pdf" H 7350 2800 50  0001 C CNN
+	2    7350 2800
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	4450 5400 4450 7050
 Wire Bus Line
