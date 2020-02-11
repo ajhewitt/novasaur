@@ -59,7 +59,7 @@ end
 
 (2**7).times do |n|
   i = 7.times.each_with_object([]) {|b, a| a[b] = n >> b & 1}
-  i += [1, 1, 1, 1, 1, 1, 1, 1, 1]
+  i += Array.new 9, 1
   is[inst(i)] ||= (n + 0x80).to_s(16).upcase.rjust(2, '0')
 end
 
