@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 # Use PSF tools to generate text font files: https://www.seasip.info/Unix/PSF
 # Starting with FON files, use 'fon2fnts' to extract font-file.fnt
 # fnt2psf font-file.fnt | psf2txt > font-file.txt

@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 def print_ext_addr(addr)
   print_data [2, 0, 0, 4, (addr >> 8) & 0xff, addr & 0xff]
 end

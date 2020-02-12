@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 DST = %w[N O1 O2 O3 O4 O5 O6 O7 X E S V Y HL PC PG]
 SRC = %w[I IZ E EZ I IZ E EZ A AZ D0 D0Z A AZ D1 D1Z]
 ALU = %w[MV ADD SUB AS AND OR XOR DEC MUL DIV ATT SER AV FND FNE FNF]
@@ -59,74 +61,127 @@ is = {}
 (2**16).times do |n|
   i = 16.times.each_with_object([]) {|b, a| a[b] = n >> b & 1}
   next unless i[7] == 0
+
   is["#{inst(i)}"] ||= [n&0xff, n>>8]
 end
 
 (2**7).times do |n|
   i = 7.times.each_with_object([]) {|b, a| a[b] = n >> b & 1}
   i += Array.new 9, 1
-  is["#{inst(i)}"] ||= n+128
+  is["#{inst(i)}"] ||= [n+128]
 end
 
 is.delete nil
 is.delete ""
 is.reject! { |k, v| k.end_with? " N" }
 
-abort("FILENAME?") unless filename = ARGV[0]
-abort("PAGE?") unless page = Integer(ARGV[1]) rescue nil
-
-file = File.open filename
-src = file.readlines.map(&:chomp)
-labels = {}
 vars = {}
-o = []
-i = 0
+if filename = ARGV.first
+  if filename.upcase == 'BOOT'
+    src = []
+    page = 'BOOT'
+    vars[page] = 0xFF
+  else
+    file = File.open filename
+    src = file.readlines.map(&:chomp)
+    page = nil
+  end
+else
+  require 'json'
+  abort JSON.pretty_generate is.map {|k,v|
+    [k, v.map {|x| sprintf("%02x",x)}.join.upcase]
+  }.sort_by {|_k,v| v}.to_h
+end
 
+addrs = {}
+incs = []
+i = 0
 src.each_with_index do |l, j|
-  a = l.split
-  b = a.first
-  if b&.start_with? '$'
-    c = l.partition '='
-    if c[1].empty?
-      labels[b[1..-1]] = i
+  a = l.partition('#').first
+  next if a.empty?
+
+  if a&.start_with? '$'
+    b = a.split
+    k = b.first[1..-1]
+    if b.size > 1
+      vars[k] = b[1]
     else
-      vars[c[0][1..-1]] = c[2].strip
+      vars[k] = i
     end
   else
-    d = l.partition(/\$|#/)[0].strip
+    b = a.partition('$')
+    c = b.first.strip
+    d = c.split
     next if d.empty?
-    abort("#{j}: SYNTAX? #{d}") if is[d].nil?
-    i += is[d].size>>1
-    abort("#{j}: END_OF_PAGE?") if i > 255
-  end
-end
 
-src.each_with_index do |l, j|
-  a = l.split
-  b = a.first
-  next if b&.start_with? '$'
-  c = l.partition(/\$|#/)
-  d = c[0].strip
-  next if d.empty?
-  o << is[d]
-  if c[1] == '$'
-    e = c[2].split[0]
-    f = e.split '$'
-    f.each {|g| abort("#{j}:UNDEF? $#{g}") if vars[g].nil?}
-    v = Integer(vars[f[0]]) rescue abort("#{j}: SYNTAX? $#{f[0]}")
-    if f.size > 1
-      v <<= 4
-      v += Integer(vars[f[1]]) rescue abort("#{j}: SYNTAX? $#{f[1]}")
+    case d.first.upcase
+    when 'PAGE'
+      abort("#{j}: PAGE? #{d[1]}") unless page = d[1].strip
+    when 'INCLUDE'
+      incs << d[1]
+    when 'ADDR'
+      i = Integer(d[1].strip) rescue abort("#{j}: ADDR? #{d[1]}")
+    else
+      abort("#{j}: SYNTAX? #{c}") if is[c].nil?
+      addrs[j] = i
+      i += is[c].size
+      i += 1 if b[1] == '$'
+      abort("#{j}: END_OF_PAGE?") if i > 256
     end
-    abort("#{j}: OVERFLOW? $#{e}=0x#{v.to_s(16).upcase}") if v > 255
-    o << v
   end
 end
 
-p = Array.new(256 - o.flatten.size, 128)
-p[-2] = 0x9f if p.size >= 2
-o << p
+incs.each do |incname|
+  dir = filename.rpartition '/'
+  incfile = File.open [dir.first, incname].join(dir[1])
+  incfile.readlines.map(&:chomp).each do |l|
+    a = l.partition('#').first.strip
+    b = a.split.first
+    next unless b&.start_with? '$'
 
-o.flatten.each_slice(16).each_with_index do |b, i|
-  print_data [b.size, page, i << 4, 0] + b
+    d = a.partition /\s+/
+    e = d.first[1..-1]&.strip
+    vars[e] = d[2].strip if vars[e].nil?
+  end
 end
+
+page = Integer(vars[page]) rescue abort("NO_PAGE? #{page}")
+
+i = 0
+o = Array.new 256, 128
+src.each_with_index do |l, j|
+  a = l.partition(/\$|#/)
+  b = a.first.strip
+  next unless c = is[b]
+
+  i = addrs[j]
+  c.each do |k|
+    o[i] = k
+    i += 1
+  end
+  if a[1] == '$'
+    c = a[2].split.first
+    d = c.split '$'
+    e = d.first
+    if vars[e].nil?
+      v = Integer(e) rescue abort("#{j}:UNDEF? $#{e}")
+    else
+      v = Integer(vars[e]) rescue abort("#{j}: SYNTAX? $#{e}")
+      if d.size > 1
+        v <<= 4
+        if vars[d[1]].nil?
+          v = Integer(d[1]) rescue abort("#{j}:UNDEF? $#{d[1]}")
+        else
+          v += Integer(vars[d[1]]) rescue abort("#{j}: SYNTAX? $#{d[1]}")
+        end
+      end
+    end
+    abort("#{j}: OVERFLOW? $#{c}, 0x#{v.to_s(16).upcase}") if v > 255
+    o[i] = v
+    i += 1
+  end
+end
+
+o[254] = 0x9f if i < 255
+
+o.flatten.each_slice(16).each_with_index {|b, i| print_data [b.size, page, i << 4, 0] + b}
