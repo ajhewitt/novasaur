@@ -1,4 +1,4 @@
-update=Sunday, February 02, 2020 at 07:21:27 AM
+update=Sunday, February 16, 2020 at 01:54:56 PM
 version=1
 last_client=kicad
 [general]
@@ -15,7 +15,7 @@ LibDir=
 [pcbnew]
 version=1
 PageLayoutDescrFile=
-LastNetListRead=YATAC.net
+LastNetListRead=novasaur.net
 CopperLayerCount=4
 BoardThickness=1.6
 AllowMicroVias=0
@@ -26,7 +26,7 @@ MinTrackWidth=0.127
 MinViaDiameter=0.6
 MinViaDrill=0.3
 MinMicroViaDiameter=0.2
-MinMicroViaDrill=0.09999999999999999
+MinMicroViaDrill=0.01
 MinHoleToHole=0.25
 TrackWidth1=0.2
 TrackWidth2=0.3

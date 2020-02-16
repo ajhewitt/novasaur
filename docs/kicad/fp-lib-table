@@ -1,5 +1,0 @@
-(fp_lib_table
-  (lib (name 5749180-1)(type Legacy)(uri ${KIPRJMOD}/5749180-1.mod)(options "")(descr ""))
-  (lib (name PJ-051A)(type Legacy)(uri ${KIPRJMOD}/PJ-051A.mod)(options "")(descr ""))
-  (lib (name FSMRA3JH04)(type Legacy)(uri ${KIPRJMOD}/FSMRA3JH04.mod)(options "")(descr ""))
-)

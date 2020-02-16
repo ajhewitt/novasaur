@@ -89,6 +89,7 @@ if filename = ARGV.first
 else
   require 'json'
   abort JSON.pretty_generate is.map {|k,v|
+    k += " $BYTE" if k.start_with? 'LD'
     [k, v.map {|x| sprintf("%02x",x)}.join.upcase]
   }.sort_by {|_k,v| v}.to_h
 end
@@ -147,7 +148,6 @@ end
 
 page = Integer(vars[page]) rescue abort("NO_PAGE? #{page}")
 
-i = 0
 o = Array.new 256, 128
 src.each_with_index do |l, j|
   a = l.partition(/\$|#/)
@@ -184,4 +184,4 @@ end
 
 o[254] = 0x9f if i < 255
 
-o.flatten.each_slice(16).each_with_index {|b, i| print_data [b.size, page, i << 4, 0] + b}
+o.each_slice(16).each_with_index {|b, i| print_data [b.size, page, i << 4, 0] + b}

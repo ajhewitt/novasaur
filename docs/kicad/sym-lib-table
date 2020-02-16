@@ -1,3 +1,0 @@
-(sym_lib_table
-  (lib (name YATAC-rescue)(type Legacy)(uri ${KIPRJMOD}/YATAC-rescue.lib)(options "")(descr ""))
-)

@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name novasaur-rescue)(type Legacy)(uri /Users/al/my_dev/novasaur/eda/kicad/novasaur-resucue.lib)(options "")(descr ""))
+)

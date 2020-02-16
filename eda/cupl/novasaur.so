@@ -3,9 +3,9 @@ Version 5.0a Serial#
 Copyright (c) 1983, 1998 Logical Devices, Inc.
 CREATED Wed Nov 20 21:17:20 2019
 
-LISTING FOR SIMULATION FILE: YATAC.si
+LISTING FOR SIMULATION FILE: novasaur.si
 
-   1: Name     YATAC;
+   1: Name     novasaur;
    2: PartNo   00;
    3: Date     10/5/2019;
    4: Revision 08;
