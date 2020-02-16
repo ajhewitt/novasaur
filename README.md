@@ -1,4 +1,4 @@
-# YATAC78
+# Novasaur
 Retro computer built from 1978-era TTL logic chips
 ```
                                                         ...
@@ -22,6 +22,6 @@ Can you browse the Web using pre-1980 TTL logic and memory speeds? The goal of t
 ## License Info
 
 [![License](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-- Copyright 2019 © Alastair Hewitt.
+- Copyright 2020 © Alastair Hewitt.
 
 The font files (TTF and FON remakes and enhancements) come from [_The Ultimate Oldschool PC Font Pack_](http://int10h.org/oldschool-pc-fonts/), copyright 2016 VileR, and licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
