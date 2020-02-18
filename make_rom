@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# ATMEL OTP - AT27C020@DIP32
+# SST NOR FLASH - SST39SF020A
+
+# firmware
+echo "Assemble Firmware"
+echo ":020000040000FA" > build/output/rom.hex
+
+build/asm_hex.rb boot >> build/output/rom.hex
+
+#echo "Relocatable Code"
+#echo ":020000040001F9" >> build/output/rom.hex
+
+echo "Building ALU"
+build/alu_hex.rb >> build/output/rom.hex
+
+echo "Building Fonts"
+build/font_hex.rb >> build/output/rom.hex
+
+echo ":00000001FF" >> build/output/rom.hex
+
+echo "Burn ROM"
+minipro -p "SST39SF020A" -w "build/output/rom.hex" -f ihex

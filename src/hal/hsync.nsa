@@ -1,0 +1,42 @@
+# fetch
+INCLUDE ../inc/fnh.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE HSYNC_PG
+
+# LMOD: line modulus 0-160%4|15 (maps to AV function)
+# VINDEX: line(page) in video ram
+# VMS: [mode_line][e][i][cyc]
+#       0,4,8,12   0  0  0-3
+#       0,5,10     1  1  1-3
+# assume Y = $VMC
+LD HL, $INCLINE$NULL
+FNH D1Z, HLD1        # state: mode|line++, ext|cycle = 0 —> HL
+LD Y, $LMOD
+AVH D1Z, SA          # L=mode|line, A=line mod —> S
+LDP HL, $IDEN$NULL   # sign bit low, don’t inc cursor
+LDN HL, $INC$NULL    # sign bit high, inc cursor
+LD Y, $VINDEX	     # active cursor
+FNFH D1Z, VD1        # increment cursor —> V
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+LDZ HL, $IDEN$NULL
+LDZ Y, $INST_CACHE
+FNH D1Z, YA
+LD Y, $VMS
+FNH D1Z, HL
+FNEL AZ, PG          # L=EI00 of VMS, DEC2 in 0-3 of FNE
+

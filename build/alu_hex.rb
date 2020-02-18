@@ -31,6 +31,49 @@ def print_unary(offset, r)
   end
 end
 
+# ALU function: AS (arithmetic status)
+# HHHHLLLL - HL, BBBBAAAA - acc
+# L) BBBBCZCZ - carry/zero on A-L/A+L (B-H-C/B+H+C)
+# H) CONZCONZ - carry/overflow/negative/zero on BA-HL/BA+HL
+#   (sub)(add)
+def print_as(offset, opts = {})
+ 
+end
+
+# ALU function: DEC (VCPU Decode)
+# Instruction - HL, virtual machine state (VMS) MMMMEICC - acc
+# L) ESSSLLLL - state/ext/L|N, SSS:0=decode/L, 1=hsync/next:0=line, 1=vpc
+# H) PPPPPPPP - page number
+def print_dec(offset, opts = {})
+  16.times.map do |a|
+    16.times.map do |b|
+      if opts[:high]
+        d = case b&7
+        when 0 #decode
+          Array.new 16, 0
+        when 1 #hsync
+          [1, 2, 0, 0, 0, 0, 0, 0] * 2
+        else
+          Array.new 16, 0
+        end
+      else
+        d = 16.times.map do |c|
+          r = (c<<4) & 0x80
+          if c&3==0
+            r += 0x10 #hsync
+            l = 4 + ((c&4)>>2)
+            r += 1 if b%l == l-1 #next vpc
+          else
+            r += a #decode - preserve L
+          end
+          r
+        end
+      end
+      print_data([d.size, offset + a, b << 4, 0] + d)
+    end
+  end
+end
+
 def print_av(offset)
   rom = Array.new(16) { Array.new(255, 0xFF) }
   vid = [[[[480,1,3,28], [480,1,3,28], [480,1,3,28], [480,1,3,28]],
@@ -116,7 +159,6 @@ def print_att(offset)
   end
 end
 
-
 # start of ALU high
 print_ext_addr 0x0002
 # 0x00020000-0x00020FFF: MV high nibble
@@ -126,15 +168,15 @@ print_binary '+', 0x10,  high: true
 # 0x00022000-0x00022FFF: SUB high nibble
 print_binary '-', 0x20,  high: true
 # 0x00023000-0x00023FFF: AS high nibble
-
+print_as 0x30, high: true
 # 0x00024000-0x00024FFF: AND high nibble
 print_binary '&', 0x40,  high: true, pass: true
 # 0x00026000-0x00025FFF: OR high nibble
 print_binary '|', 0x50,  high: true, pass: true
 # 0x00027000-0x00026FFF: XOR high nibble
 print_binary '^', 0x60,  high: true, pass: true
-# 0x00027000-0x00027FFF: DC high nibble
-
+# 0x00027000-0x00027FFF: DEC high nibble
+print_dec 0x70, high: true
 
 # start of ALU low
 print_ext_addr 0x0003
@@ -145,7 +187,7 @@ print_binary '+', 0x10
 # 0x00032000-0x00032FFF: SUB low nibble
 print_binary '-', 0x20
 # 0x00033000-0x00033FFF: AS low nibble
-
+print_as 0x30, high: true
 # 0x00034000-0x00034FFF: AND low nibble
 print_binary '&', 0x40, pass: true
 # 0x00035000-0x00035FFF: OR low nibble
@@ -153,7 +195,7 @@ print_binary '|', 0x50, pass: true
 # 0x00036000-0x00036FFF: XOR low nibble
 print_binary '^', 0x60, pass: true
 # 0x00037000-0x00037FFF: DEC low nibble
-
+print_dec 0x70, high: false
 
 # 0x00038000-0x00038FFF: MUL low nibble only
 print_binary '*', 0x80
@@ -194,9 +236,9 @@ print_unary(0xF9, 256.times.map{|i| (i<<1)&0xFF})
 print_unary(0xFA, 256.times.map{|i| (i>>1)|(i&0x80)})
 # $INCVMC: A = A%4 + 1
 print_unary(0xFB, 256.times.map{|i| i&3==3 ? i&0xFC : i+1})
-# $INCLINE - inc mode_line, cyc = 0 if len = 0, cyc = 1 if len = 1
+# $INCLINE - inc mode_line, cyc=cinit 
 print_unary(0xFC, 256.times.map{|i| ((i+16)&0xFC)|((i&4)>>2)})
-# $INCVPC - mode_line -= mode_line%4 + len, cyc = 0 if len = 0, cyc = 1 if len = 1
+# $INCVPC - mode_line -= mode_line%4 + cinit, cyc=cinit
 print_unary(0xFD, 256.times.map{|i| ((i-((i&0xF0) % (0x40+((i&4)<<2))))&0xFC)|((i&4)>>2)})
 # $ZERO: A = (A == 0) ? 0 : -1
 print_unary(0xFE, [0] + 0xFF.times.map{0xFF})

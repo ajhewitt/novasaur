@@ -1,0 +1,4 @@
+build/output
+docs/inst_set.json
+eda/kicad/*bak
+eda/kicad/*.kicad_pcb

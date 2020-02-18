@@ -1,0 +1,5 @@
+# zero page assignments
+$PINDEX      0xF0
+
+$VMS         0xF8
+$INST_CACHE  0xF9

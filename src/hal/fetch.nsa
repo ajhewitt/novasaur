@@ -1,0 +1,35 @@
+# fetch
+INCLUDE ../inc/fnh.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE FETCH_PG
+
+# assume Y = $VMC
+# $PINDEX - zero page location of the P register
+# (SEP instruction updates value of $PINDEX)
+# $PINDEX: 10> 100
+# $REG0H:  100> 222 Big-endian
+# $REG0L:  101> 111
+LDZ HL, $INC$NULL
+FNH D1Z, YD1        # inc state
+LDZ Y, $PINDEX      # zero page address of P (Y=10, [10]->100)
+FNH D1Z, Y          # load P; Y = ‘lower’ byte address (y=101)
+FNFH D1Z, XD1       # inc value of lower byte put in X  [101]->111->112
+#11
+LDZ HL, $ZERO
+FNH D1Z, HL         # check if zero?
+LDP HL, $IDEN$IDEN  # load identity fn if not zero
+LDN HL, $INC$IDEN   # load inc fn if zero after inc
+LDZ Y, $PINDEX      # zero page address of P (Y=10, [10]->100)
+#20
+FNFL D1Z, Y         # load P; Y = ‘upper’ byte address y=100
+FNH D1Z, YD1        # inc? value of upper byte put in Y [101]->111->111
+FNFL D0, HL         # HL=[Y,X]=[222,112]
+LD Y, $INST_CACHE
+#30
+MVHLZ ND1           # cache instruction (from HL)
+NOP
+NOP
+NOP
+LDZ Y, $VMS         # set Y = $VMS on exit
+DECHL D1Z, PGA      # jump to next VMC

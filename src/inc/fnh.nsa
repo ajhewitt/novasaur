@@ -1,0 +1,20 @@
+# FNH unary function codes
+
+$NULL    0
+$IDEN    0
+$INC     1
+$DEC     2
+$INC2    3
+$1COM    4
+$2COM    5
+$ROR     6
+$ROL     7
+$LSR     8
+$LSL     9
+$ASR     10
+$INCVMC	 11
+$INCLINE 12
+$INCVPC  13
+$ZERO    14
+$FLIP    15
+
