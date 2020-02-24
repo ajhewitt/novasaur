@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
 DST = %w[N O1 O2 O3 O4 O5 O6 O7 X E S V Y HL PC PG]
-SRC = %w[I IZ E EZ I IZ E EZ A AZ D0 D0Z A AZ D1 D1Z]
-ALU = %w[MV ADD SUB AS AND OR XOR DEC MUL DIV ATT SER AV FND FNE FNF]
+SRC = %w[I IZ E EZ I IZ E EZ A AZ B BZ A AZ D DZ]
+ALU = %w[MV ADD SUB AS AND OR XOR VMC MUL DIV COM SER AV ATT FNE FNF]
 LD = %w[NOP NOPZ LD LDZ LDP LDPZ LDN LDNZ]
-WR = %w[D0 D1]
+WR = %w[B D]
 
 def decode(i, a); a.each_with_index.map{|b, n| i[b] * (2 ** n)}.reduce(:+) end
 def src(i); SRC[decode i,  [3, 4, 10, 11]] end
@@ -167,13 +167,13 @@ src.each_with_index do |l, j|
       v = Integer(e) rescue abort("#{j}:UNDEF? $#{e}")
     else
       v = Integer(vars[e]) rescue abort("#{j}: SYNTAX? $#{e}")
-      if d.size > 1
-        v <<= 4
-        if vars[d[1]].nil?
-          v = Integer(d[1]) rescue abort("#{j}:UNDEF? $#{d[1]}")
-        else
-          v += Integer(vars[d[1]]) rescue abort("#{j}: SYNTAX? $#{d[1]}")
-        end
+    end
+    if d.size > 1
+      v <<= 4
+      if vars[d[1]].nil?
+        v += Integer(d[1]) rescue abort("#{j}:UNDEF? $#{d[1]}")
+      else
+        v += Integer(vars[d[1]]) rescue abort("#{j}: SYNTAX? $#{d[1]}")
       end
     end
     abort("#{j}: OVERFLOW? $#{c}, 0x#{v.to_s(16).upcase}") if v > 255

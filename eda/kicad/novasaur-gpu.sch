@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "GPU"
-Date "2020-02-15"
+Date "2020-02-20"
 Rev "1.5"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -491,8 +491,8 @@ P 2150 6450
 AR Path="/5DAA3954/5E4B79C3" Ref="U29"  Part="1" 
 AR Path="/5DAA5CD8/5D9A6C5F/5E4B79C3" Ref="U?"  Part="1" 
 AR Path="/5DA1E9BD/5E4B79C3" Ref="U29"  Part="1" 
-F 0 "U29" H 2150 6450 50  0000 C CNN
-F 1 "74F163" H 2200 6350 50  0000 C CNN
+F 0 "U29" H 2150 6650 50  0000 C CNN
+F 1 "74F163" H 2150 6550 50  0000 C CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 2150 6450 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS163" H 2150 6450 50  0001 C CNN
 	1    2150 6450
@@ -503,11 +503,11 @@ mode1
 Text GLabel 1650 3850 0    50   Input ~ 0
 0
 Text GLabel 1650 3950 0    50   Input ~ 0
-mode2
+mode3
 Text GLabel 1650 3750 0    50   Input ~ 0
 0
 Text GLabel 1650 4050 0    50   Input ~ 0
-mode2
+mode3
 Wire Wire Line
 	2650 4250 2750 4250
 Wire Wire Line
@@ -1153,8 +1153,8 @@ P 2150 4250
 AR Path="/5DAA3954/5E4B7483" Ref="U28"  Part="1" 
 AR Path="/5DAA5CD8/5D9A6C5F/5E4B7483" Ref="U?"  Part="1" 
 AR Path="/5DA1E9BD/5E4B7483" Ref="U28"  Part="1" 
-F 0 "U28" H 2150 4250 50  0000 C CNN
-F 1 "74F163" H 2200 4150 50  0000 C CNN
+F 0 "U28" H 2150 4450 50  0000 C CNN
+F 1 "74F163" H 2150 4350 50  0000 C CNN
 F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 2150 4250 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS163" H 2150 4250 50  0001 C CNN
 	1    2150 4250
@@ -1395,7 +1395,6 @@ Entry Wire Line
 	1450 2150 1350 2050
 Wire Wire Line
 	1450 2150 1650 2150
-NoConn ~ 2650 2250
 $Comp
 L 74xx:74LS08 U?
 U 2 1 5DCE5E0A
@@ -1440,21 +1439,6 @@ F 3 "~" H 6050 5550 50  0001 C CNN
 	1    5850 5550
 	1    0    0    -1  
 $EndComp
-$Comp
-L Connector:TestPoint_Alt TP?
-U 1 1 5E144DCF
-P 1650 2450
-AR Path="/5E144DCF" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E144DCF" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BD/5E144DCF" Ref="TP22"  Part="1" 
-F 0 "TP22" H 1400 2550 50  0000 L CNN
-F 1 "SCP" H 1400 2600 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1850 2450 50  0001 C CNN
-F 3 "~" H 1850 2450 50  0001 C CNN
-	1    1650 2450
-	1    0    0    -1  
-$EndComp
-Connection ~ 1650 2450
 $Comp
 L Connector:TestPoint_Alt TP?
 U 1 1 5E19A64A
@@ -1506,8 +1490,6 @@ Wire Wire Line
 Wire Wire Line
 	1250 2450 1250 4250
 Connection ~ 1250 2450
-Wire Wire Line
-	1250 2450 1650 2450
 Wire Wire Line
 	1250 4250 1250 6450
 Connection ~ 1250 4250
@@ -1571,12 +1553,6 @@ Text GLabel 9800 2550 2    50   Output ~ 0
 hsync
 Wire Wire Line
 	9050 2450 9200 2450
-Text Label 1450 2250 0    50   ~ 0
-PD7
-Entry Wire Line
-	1450 2250 1350 2150
-Wire Wire Line
-	1450 2250 1650 2250
 Wire Wire Line
 	5700 3650 5900 3650
 Wire Wire Line
@@ -1625,8 +1601,31 @@ Wire Wire Line
 	4850 3550 5100 3550
 Text Label 2650 1950 0    50   ~ 0
 mode0
+Text GLabel 1650 2250 0    50   Input ~ 0
+hblank
+Text GLabel 2650 2250 2    50   Output ~ 0
+kbd
+Connection ~ 1650 2450
+Wire Wire Line
+	1250 2450 1650 2450
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 5E144DCF
+P 1650 2450
+AR Path="/5E144DCF" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/5E144DCF" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E144DCF" Ref="TP22"  Part="1" 
+F 0 "TP22" H 1400 2550 50  0000 L CNN
+F 1 "SCP" H 1400 2600 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1850 2450 50  0001 C CNN
+F 3 "~" H 1850 2450 50  0001 C CNN
+	1    1650 2450
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	3050 2150 3050 2450
+Wire Bus Line
+	1350 1350 1350 2050
 Wire Bus Line
 	2900 3850 2900 4850
 Wire Bus Line
@@ -1635,8 +1634,6 @@ Wire Bus Line
 	6150 4750 6150 5650
 Wire Bus Line
 	6350 4750 6350 5650
-Wire Bus Line
-	1350 1350 1350 2150
 Wire Bus Line
 	7850 4750 7850 5550
 Wire Bus Line

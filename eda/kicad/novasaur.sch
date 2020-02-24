@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur TTL Minicomputer"
-Date "2020-02-15"
+Date "2020-02-20"
 Rev "1.5"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -91,10 +91,6 @@ Wire Wire Line
 Wire Wire Line
 	2350 1700 2650 1700
 NoConn ~ 1350 1400
-Wire Wire Line
-	1350 5900 1150 5900
-Wire Wire Line
-	1150 5900 1150 6700
 Entry Bus Bus
 	4350 6850 4450 6750
 Entry Bus Bus
@@ -177,7 +173,7 @@ AR Path="/5CDEEC9F/5DA1E80A" Ref="U?"  Part="1"
 AR Path="/5DAA5CD8/5DA1E80A" Ref="U?"  Part="1" 
 AR Path="/5DA1E80A" Ref="U12"  Part="1" 
 F 0 "U12" H 1850 1500 50  0000 C CNN
-F 1 "ATF16V8" H 1850 1400 50  0000 C CNN
+F 1 "ATF16V8B" H 1850 1400 50  0000 C CNN
 F 2 "Package_DIP:DIP-20_W7.62mm_Socket_LongPads" H 1850 1700 50  0001 C CNN
 F 3 "" H 1850 1700 50  0001 C CNN
 	1    1850 1700
@@ -1422,8 +1418,6 @@ Wire Wire Line
 Wire Wire Line
 	4650 6000 5600 6000
 Wire Wire Line
-	5600 5900 4150 5900
-Wire Wire Line
 	7800 5500 7900 5500
 Connection ~ 7900 5500
 Wire Wire Line
@@ -1478,6 +1472,44 @@ Wire Wire Line
 	6600 3100 6850 3100
 Text GLabel 6850 2900 0    50   Input ~ 0
 1
+$Comp
+L Connector:TestPoint_Alt TP38
+U 1 1 5E51CAB2
+P 1350 5900
+AR Path="/5E51CAB2" Ref="TP38"  Part="1" 
+AR Path="/5DA1E9BA/5E51CAB2" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E51CAB2" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9C0/5E51CAB2" Ref="TP?"  Part="1" 
+F 0 "TP38" H 1100 6000 50  0000 L CNN
+F 1 "IHCP" H 1100 6050 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1550 5900 50  0001 C CNN
+F 3 "~" H 1550 5900 50  0001 C CNN
+	1    1350 5900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1150 6700 1150 5900
+Wire Wire Line
+	1150 5900 1350 5900
+Connection ~ 1350 5900
+Wire Wire Line
+	5600 5900 4150 5900
+Connection ~ 4150 5900
+$Comp
+L Connector:TestPoint_Alt TP37
+U 1 1 5E514E07
+P 4150 5900
+AR Path="/5E514E07" Ref="TP37"  Part="1" 
+AR Path="/5DA1E9BA/5E514E07" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E514E07" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9C0/5E514E07" Ref="TP?"  Part="1" 
+F 0 "TP37" H 4200 6000 50  0000 L CNN
+F 1 "ILCP" H 3900 6050 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4350 5900 50  0001 C CNN
+F 3 "~" H 4350 5900 50  0001 C CNN
+	1    4150 5900
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	4450 5100 4450 6750
 Wire Bus Line

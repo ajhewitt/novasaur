@@ -1,12 +1,12 @@
 # Idle Page
-INCLUDE ../inc/fnh.nsa
+INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE IDLE_PG
 
-LDZ HL, $INCVMC$IDEN
+LD HL, $INC$NULL
 LDZ Y, $VMS
-FNH D1Z, YD1
+FNH DZ, HLD         # inc virtual machine state
 NOP
 NOP
 NOP
@@ -35,8 +35,8 @@ NOP
 NOP
 #30
 NOP
-NOP
-LDZ Y, $INST_CACHE
-FNFL D1Z, HL        # inst cache -> HL
-LDZ Y, $VMS         # set Y = $VMS on exit
-DECHL D1Z, PGA      # jump to next VMC
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL         # instruction cache -> HL
+LD Y, $VMS         # set Y = $VMS on exit
+VMCHL DZ, PGA      # jump to next VMC

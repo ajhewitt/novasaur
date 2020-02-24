@@ -7,6 +7,11 @@
 echo "Assemble Firmware"
 echo ":020000040000FA" > build/output/rom.hex
 
+for f in src/sys/* src/hal/*
+do
+  build/asm_hex.rb $f >> build/output/rom.hex
+done
+
 build/asm_hex.rb boot >> build/output/rom.hex
 
 #echo "Relocatable Code"

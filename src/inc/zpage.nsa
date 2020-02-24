@@ -1,5 +1,11 @@
 # zero page assignments
-$PINDEX      0xF0
+$PMODE      0xF0
+$PLINE      0xF1
+$VMODE      0xF2
+$VLINE      0xF3
+$VSTART     0xF4
+$SERS       0xF5
+$EREG       0xF6
 
-$VMS         0xF8
-$INST_CACHE  0xF9
+$VMS        0xF8
+$INST       0xF9

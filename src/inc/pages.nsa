@@ -1,7 +1,9 @@
 # All the pages
 $IDLE_PG       0    # 43-pc idle VMC
-$FETCH_PG      1
-$HSYNC_PG      2
+$FETCH_PG      100
+$LSYNC_PG      1
+$PSYNC_PG      2
 
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot
+$SET_VMODE     0x82

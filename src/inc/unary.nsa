@@ -1,5 +1,5 @@
-# FNH unary function codes
-
+# Unary function codes
+#FNF, FNH
 $NULL    0
 $IDEN    0
 $INC     1
@@ -12,9 +12,13 @@ $ROL     7
 $LSR     8
 $LSL     9
 $ASR     10
-$INCVMC	 11
+$SWAP    11
 $INCLINE 12
-$INCVPC  13
-$ZERO    14
+$CLEAR   13
+$ZERO?   14
 $FLIP    15
-
+#FNE
+$VMC2    0
+$VMC3    1
+$V2E     2
+$V2M     3

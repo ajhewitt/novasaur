@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "CPU"
-Date "2020-02-15"
+Date "2020-02-20"
 Rev "1.5"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -186,13 +186,13 @@ PA13
 Text Label 2650 6450 0    50   ~ 0
 PA12
 Text Label 2650 6350 0    50   ~ 0
-DD3
+DD7
 Text Label 2650 6250 0    50   ~ 0
-DD2
+DD6
 Text Label 2650 6150 0    50   ~ 0
-DD1
+DD5
 Text Label 2650 6050 0    50   ~ 0
-DD0
+DD4
 Wire Wire Line
 	2650 6050 2800 6050
 Wire Wire Line
@@ -2380,9 +2380,9 @@ Wire Wire Line
 Text GLabel 4350 3300 1    50   Input ~ 0
 FD[0..7]
 Text GLabel 2050 6350 2    50   Output ~ 0
-Tx
+tx
 Text GLabel 2350 6450 2    50   Output ~ 0
-RTS
+rts
 Text GLabel 2050 6550 2    50   Output ~ 0
 mode1
 Text GLabel 2050 6650 2    50   Output ~ 0

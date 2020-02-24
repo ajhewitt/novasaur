@@ -1,0 +1,33 @@
+# fetch
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE FETCH_PG
+
+# $PREG - zero page location of the P register
+# (SEP instruction updates value of $PREG)
+# $PREG:  10> 100
+# $REG0H: 100> 222 Big-endian
+# $REG0L: 101> 111
+LD HL, $INC$NULL
+LDZ Y, $VMS
+FNH DZ, YD          # inc state
+LDZ Y, $PREG        # zero page address of P (Y=10, [10]->100)
+FNH DZ, Y           # load PC; Y = ‘lower’ byte address (y=101)
+#10
+FNFH DZ, XD         # inc value of lower byte put in X  [101]->111->112
+LDZ HL, $ZERO?
+FNH DZ, HL          # check if zero?
+LDP HL, $IDEN$IDEN  # load identity fn if not zero
+LDN HL, $INC$IDEN   # load inc fn if zero after inc
+#20
+LDZ Y, $PREG        # zero page address of P (Y=10, [10]->100)
+FNFL DZ, Y          # load P; Y = ‘upper’ byte address y=100
+FNH DZ, YD          # inc? value of upper byte put in Y [101]->111->111
+FNFL B, HL          # HL=[Y,X]=[222,112]
+#30
+LD Y, $INST
+MVHLZ ND            # cache instruction (from HL)
+NOP
+LDZ Y, $VMS         # set Y = $VMS on exit
+VMCHL DZ, PGA       # jump to next VMC

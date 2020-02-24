@@ -1,0 +1,68 @@
+# psync - horz sync at end of process cycle
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE PSYNC_PG
+
+# PMODE: column in AV used during process cycle
+# VLINE: line(page) in video ram
+# VMS: [mode_line][e][l][cyc]
+#       0,4,8,12   0  0  0-3
+#       0,5,10     1  1  0-2
+# assumes Y=$VMS
+LDZ HL, $INCLINE$NULL
+FNH DZ, HLD          # H=mode_line+1, L=EL00
+LD Y, $PMODE
+AVH DZ, SA           # mode_line, pmode —> S
+LDP HL, $IDEN$NULL   # sign bit low, don’t inc vline
+LDN HL, $INC$NULL    # sign bit high, inc vline
+LD Y, $VLINE
+FNFH DZ, VD          # increment? vline —> V
+#17
+LD HL, $INC$NULL
+LDZ Y, $PLINE
+FNH DZ, HLD          # increment pline -> A
+LD HL, $IDEN$NULL
+LDZ Y, $VMODE
+FNH DZ, HL           # load video mode -> H
+LD Y, $PMODE
+AVH AZ, ND           # determine mode for next process cycle
+LDP PC, $NEXT_FIELD  # jump at end of field
+#35
+NOP
+LD HL, $NULL$VMC2
+LD Y, $INST
+FNEL DZ, PG          # decode2 jump
+
+$NEXT_FIELD
+#0.36
+LD HL, $0
+LD Y, $PLINE
+MULH DZ, ND          # reset the process line to start -> A
+#1.0
+LD HL, $IDEN$NULL
+LDZ Y, $VMODE
+FNH DZ, HL           # load video mode -> H
+LD Y, $PMODE
+AVH AZ, ND           # set mode for next process cycle
+#1.11
+LD HL, $IDEN$NULL
+LDZ Y, $VSTART
+FNH DZ, HL           # load start of display -> HL
+LDZ Y, $VLINE
+MVHLZ ND             # reset vline to start
+#1.23
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#1.30
+LD HL, $INC$NULL
+LDZ Y, $VMS
+FNH DZ, HLD          # skip first machine cycle on decode
+LD HL, $VMC2$NULL
+LD Y, $INST
+FNEH DZ, PGA         # decode jump
