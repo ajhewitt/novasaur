@@ -6,12 +6,12 @@ PAGE PSYNC_PG
 
 # PMODE: column in AV used during process cycle
 # VLINE: line(page) in video ram
-# VMS: [mode_line][e][l][cyc]
+# VMS: [mode_line][e][x][cyc]
 #       0,4,8,12   0  0  0-3
 #       0,5,10     1  1  0-2
 # assumes Y=$VMS
 LDZ HL, $INCLINE$NULL
-FNH DZ, HLD          # H=mode_line+1, L=EL00
+FNH DZ, HLD          # H=mode_line+1, L=EX00
 LD Y, $PMODE
 AVH DZ, SA           # mode_line, pmode —> S
 LDP HL, $IDEN$NULL   # sign bit low, don’t inc vline

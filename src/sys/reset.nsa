@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE RESET
 
 ADDR 0X80
-LD HL, $0x0A        # VGA, 8x8 text
+LD HL, $0x25        # VGA, 8x8 text
 LD Y, $VMODE
 MVHLZ ND            # store video mode
 LD PG, $SET_VMODE

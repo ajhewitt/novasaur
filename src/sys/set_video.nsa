@@ -6,19 +6,19 @@ PAGE SET_VMODE
 
 # Video Mode @ $VMODE
 # bit 6,5: Video Timing
-#   00 - DMT 06h (480l/75Hz/8mods)
-#   01 - DMT 09h (600l/60Hz/8mods)
-#   10 - DMT 10h (768l/60Hz/6mods)
-#   11 - CVT 1.01M9-R
-# bit 4,3,2: Line Modulo
-#   000 - 2
-#   001 - 4
-#   010 - 8
-#   011 - 16
-#   100 - 3
-#   101 - 5
-#   110 - 6
-#   111 - 10
+#   00 - DMT 06h (480l/75Hz)
+#   01 - DMT 09h (600l/60Hz)
+#   10 - DMT 10h (768l/60Hz)
+#   11 - CVT 1.01MA-R
+# bit 4,3,2: Line Modulo (4, 5 line)
+#   000 - 2, 4
+#   001 - 4, 8
+#   010 - 8, 16
+#   011 - 16,-
+#   100 - 3, 3
+#   101 - 5, 6
+#   110 - 6, 10
+#   111 - 10,-
 # bit 1 (mode2): Video DAC
 #   0 - 3:3:2
 #   1 - 1:1:1

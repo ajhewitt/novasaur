@@ -1,5 +1,7 @@
+#!/usr/bin/env ruby
+
 # Output video timing for one of 32 modes
-filename = 'chips/rom/alu.hex'
+filename = 'build/output/alu.hex'
 file = File.open filename
 rom = []
 file.each do |l|

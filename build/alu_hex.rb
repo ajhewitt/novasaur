@@ -51,23 +51,21 @@ def print_vmc(offset, opts = {})
         d = case b&7
         when 0 # decode
           Array.new 16, 0
-        when 1 # hsync
+        when 1 # hsync - lsync,psync
           [1, 2, 0, 0, 0, 0, 0, 0] * 2
         else # future stuff
           Array.new 16, 0
         end
       else
         d = 16.times.map do |c| # c = EXCC
-          r = (c<<4) & 0x80 # ext bit to MSB
-          case
-          when c&7 == 4 || c&7 == 7 # last VMC of line
-            r |= 0x10 # hsync
-            n = c&4 == 0 ? 3 : 4
-            r |= 1 if b%(n+1) == n # last VMC of VPC
-            r
+          case c&7
+          when 4 #sync on 4 line modes
+            b%4 == 2 ? 0x11 : 0x10 #add one for last line
+          when 7 #sync on 5 line modes
+            b%5 == 3 ? 0x11 : 0x10 #add one for last line
           else
-            r + a #decode - preserve L
-          end
+            a #decode - preserve L
+          end | (c&8)<<4 #move ext bit to MSB
         end
       end
       print_data([d.size, offset + a, b << 4, 0] + d)
@@ -253,9 +251,9 @@ print_unary(0xFA, 256.times.map{|i| (i>>1)|(i&0x80)})
 print_unary(0xFB, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
 # $INCLINE: (mode_line + 1) % 4|5, cycle = 0
 print_unary(0xFC, 256.times.map {|i|
-  i &= i&7 > 4 ? 0xF8 : 0xFC
+  i &= i&7 > 4 ? 0xFC : 0xF8
   n = i&4 == 0 ? 0x30 : 0x40
-  ((i&0xF0) % (n+0x10) == n ? i-n : i+0x10) & 0xFC
+  (i&0xF0) % (n+0x10) == n ? i-n : (i+0x10)&0xFF
 })
 # $CLEAR: A = 0
 print_unary(0xFD, Array.new(256, 0))
