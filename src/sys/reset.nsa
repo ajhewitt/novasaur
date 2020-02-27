@@ -5,7 +5,20 @@ INCLUDE ../inc/pages.nsa
 PAGE RESET
 
 ADDR 0X80
-LD HL, $0x25        # VGA, 8x8 text
+LD HL, $0x31        # VGA, 8x8 text
 LD Y, $VMODE
 MVHLZ ND            # store video mode
-LD PG, $SET_VMODE
+
+# ROM Copy
+LD HL, $0
+LD Y, $ROM_ID
+MULH DZ, ND             # init 0
+LD HL, $0xB
+LD Y, $ROM_Y
+MVHLZ ND                # init 11 - v-porch
+LD HL, $0xC
+LD Y, $ROM_N
+MVHLZ ND                # init 12
+
+# Start Video
+LD PG, $ROM_COPY

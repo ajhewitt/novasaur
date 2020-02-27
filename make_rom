@@ -9,13 +9,14 @@ echo ":020000040000FA" > build/output/rom.hex
 
 for f in src/sys/* src/hal/*
 do
+  echo $f
   build/asm_hex.rb $f >> build/output/rom.hex
 done
 
 build/asm_hex.rb boot >> build/output/rom.hex
 
-#echo "Relocatable Code"
-#echo ":020000040001F9" >> build/output/rom.hex
+echo "Copy Cold Storage"
+cat build/output/cold.hex >> build/output/rom.hex
 
 echo "Building ALU"
 build/alu_hex.rb >> build/output/rom.hex

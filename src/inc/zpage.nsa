@@ -1,4 +1,11 @@
 # zero page assignments
+
+$ROM_ID     0xEB        # source rom 0-15 - init to PC jump point
+$ROM_PG     0xEC        # source page 0-15 - init to 0
+$ROM_X      0xED        # x index - ref both src and dest - init to 0
+$ROM_Y      0xEE        # y index - dest D0 page
+$ROM_N      0xEF        # ROM count
+
 $PMODE      0xF0
 $PLINE      0xF1
 $VMODE      0xF2
