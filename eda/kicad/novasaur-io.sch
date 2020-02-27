@@ -1351,15 +1351,10 @@ Wire Wire Line
 	8000 1700 8050 1700
 Wire Wire Line
 	8000 1300 8000 1700
-Connection ~ 8400 1300
 Wire Wire Line
 	8400 1300 8400 1700
 Wire Wire Line
-	8400 1050 8400 1300
-Wire Wire Line
 	8200 1050 8200 1150
-Wire Wire Line
-	8200 1050 8400 1050
 $Comp
 L Device:C C?
 U 1 1 5EAB34C5
@@ -2315,6 +2310,11 @@ Wire Wire Line
 	3900 6250 4250 6250
 Wire Wire Line
 	3950 5850 4250 5850
+Wire Wire Line
+	8000 1300 8000 1050
+Wire Wire Line
+	8000 1050 8200 1050
+Connection ~ 8000 1300
 Wire Bus Line
 	4300 6750 4300 7050
 Wire Bus Line
