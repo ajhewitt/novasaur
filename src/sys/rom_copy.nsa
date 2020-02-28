@@ -25,13 +25,13 @@ FNH DZ, PC              # jump to READ_ROM, A=index, L=2
 
 $CONT
 MVHL NA                 # HL->A return value from ROM
-LD HL, $0
-LDZ Y,  $ROM_Y
-ADDL DZ, Y              # [53]->Y
-ADDH A, ND              # A->[X, Y] ** this would normally be NB
-LD HL, $0x10
+LD HL, $IDEN$NULL
+LDZ Y, $ROM_Y
+FNH DZ, Y               # [53]->Y
+FNH A, HLD              # A->[X, Y] ** this would normally be NB
+LD HL, $INC$NULL
 LDZ Y, $ROM_X
-ADDH DZ, ND             # X++
+FNH DZ, HLD             # X++
 LDZ HL, $ZERO?$NULL
 
 FNH A, HLA              # A = X==0 ? 0 : -1

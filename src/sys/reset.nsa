@@ -11,14 +11,15 @@ MVHLZ ND            # store video mode
 
 # ROM Copy
 LD HL, $0
+LD Y, $VSTART
+MULH DZ, ND             # init vstart to 0
 LD Y, $ROM_ID
-MULH DZ, ND             # init 0
-LD HL, $0xB
+MULH DZ, ND             # init rom to 0
 LD Y, $ROM_Y
-MVHLZ ND                # init 11 - v-porch
+MULH DZ, ND             # init v-porch to 0
 LD HL, $0xC
 LD Y, $ROM_N
-MVHLZ ND                # init 12
+MVHLZ ND                # init 12 - copy 13 roms
 
 # Start Video
 LD PG, $ROM_COPY
