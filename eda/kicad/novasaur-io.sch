@@ -368,27 +368,27 @@ Connection ~ 7050 4900
 $Comp
 L Device:R_Pack03_SIP RN?
 U 1 1 5F52EE33
-P 4300 3800
+P 4300 3900
 AR Path="/5DAA3954/5F52EE33" Ref="RN?"  Part="1" 
 AR Path="/5F52EE33" Ref="RN?"  Part="1" 
 AR Path="/5DAA5CD8/5D9A6C5F/5F52EE33" Ref="RN?"  Part="1" 
 AR Path="/5DA1E9BD/5F52EE33" Ref="RN?"  Part="1" 
 AR Path="/5DA1E9C0/5F52EE33" Ref="RN9"  Part="1" 
-F 0 "RN9" V 3750 3750 50  0000 L CNN
-F 1 "220" V 3850 3750 50  0000 L CNN
-F 2 "Resistor_THT:R_Array_SIP6" V 4875 3800 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4300 3800 50  0001 C CNN
-	1    4300 3800
+F 0 "RN9" V 3750 3850 50  0000 L CNN
+F 1 "220" V 3850 3850 50  0000 L CNN
+F 2 "Resistor_THT:R_Array_SIP6" V 4875 3900 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4300 3900 50  0001 C CNN
+	1    4300 3900
 	0    -1   1    0   
 $EndComp
 Wire Wire Line
-	4550 2650 4450 2650
+	4550 2700 4450 2700
 Wire Wire Line
-	4550 2550 4450 2550
+	4550 2600 4450 2600
 Wire Wire Line
-	4450 2950 4550 2950
+	4450 3000 4550 3000
 Wire Wire Line
-	4550 2850 4450 2850
+	4550 2900 4450 2900
 Wire Wire Line
 	4550 1500 4450 1500
 Wire Wire Line
@@ -396,24 +396,24 @@ Wire Wire Line
 Wire Wire Line
 	4450 1900 4550 1900
 Wire Wire Line
-	4550 2650 4550 2600
+	4550 2700 4550 2650
 Wire Wire Line
 	4450 1800 4550 1800
 Wire Wire Line
+	4500 4000 4550 4000
+Wire Wire Line
+	4550 4000 4550 4200
+Wire Wire Line
+	4550 4200 4500 4200
+Wire Wire Line
 	4500 3900 4550 3900
 Wire Wire Line
-	4550 3900 4550 4100
+	4500 3700 4550 3700
 Wire Wire Line
-	4550 4100 4500 4100
-Wire Wire Line
-	4500 3800 4550 3800
-Wire Wire Line
-	4500 3600 4550 3600
-Wire Wire Line
-	4550 3600 4550 3800
-Text Label 4600 3500 0    50   ~ 0
+	4550 3700 4550 3900
+Text Label 4600 3600 0    50   ~ 0
 C6
-Text Label 4600 4200 0    50   ~ 0
+Text Label 4600 4300 0    50   ~ 0
 C7
 Text Label 4600 1400 0    50   ~ 0
 C0
@@ -421,11 +421,11 @@ Text Label 4600 1550 0    50   ~ 0
 C1
 Text Label 4600 1700 0    50   ~ 0
 C2
-Text Label 4600 2450 0    50   ~ 0
+Text Label 4600 2500 0    50   ~ 0
 C3
-Text Label 4600 2600 0    50   ~ 0
+Text Label 4600 2650 0    50   ~ 0
 C4
-Text Label 4600 2750 0    50   ~ 0
+Text Label 4600 2800 0    50   ~ 0
 C5
 Wire Wire Line
 	4550 1800 4550 1900
@@ -442,33 +442,33 @@ Wire Wire Line
 Connection ~ 4550 1550
 Wire Wire Line
 	4550 1550 4550 1500
-Connection ~ 4550 2600
+Connection ~ 4550 2650
 Wire Wire Line
-	4550 2600 4550 2550
+	4550 2650 4550 2600
 Wire Wire Line
-	4550 2850 4550 2950
+	4550 2900 4550 3000
 Wire Wire Line
-	4550 2850 4550 2750
-Connection ~ 4550 2850
+	4550 2900 4550 2800
+Connection ~ 4550 2900
 Wire Wire Line
-	4450 3050 4550 3050
+	4450 3100 4550 3100
 Wire Wire Line
-	4550 3050 4550 2950
-Connection ~ 4550 2950
+	4550 3100 4550 3000
+Connection ~ 4550 3000
 Wire Wire Line
-	4700 3500 4500 3500
+	4700 3600 4500 3600
 Wire Wire Line
-	4700 4200 4500 4200
+	4700 4300 4500 4300
 Wire Wire Line
 	4700 1550 4550 1550
 Wire Wire Line
 	4700 1700 4550 1700
 Wire Wire Line
-	4700 2600 4550 2600
+	4700 2650 4550 2650
 Entry Wire Line
-	4700 3500 4800 3400
+	4700 3600 4800 3500
 Entry Wire Line
-	4700 4200 4800 4100
+	4700 4300 4800 4200
 Entry Wire Line
 	4800 1450 4700 1550
 Entry Wire Line
@@ -476,12 +476,12 @@ Entry Wire Line
 Entry Wire Line
 	4800 1600 4700 1700
 Entry Wire Line
-	4800 2350 4700 2450
+	4800 2400 4700 2500
 Entry Wire Line
-	4800 2650 4700 2750
+	4800 2700 4700 2800
 Entry Wire Line
-	4800 2500 4700 2600
-Connection ~ 4550 4100
+	4800 2550 4700 2650
+Connection ~ 4550 4200
 Text GLabel 4800 1100 1    50   Input ~ 0
 C[0..7]
 Wire Wire Line
@@ -513,15 +513,15 @@ Wire Wire Line
 Wire Wire Line
 	4450 1400 4700 1400
 Wire Wire Line
-	4450 2450 4700 2450
+	4450 2500 4700 2500
 Wire Wire Line
-	4550 2750 4700 2750
+	4550 2800 4700 2800
 Wire Wire Line
 	4450 1700 4550 1700
 Connection ~ 4550 1700
 Wire Wire Line
-	4450 2750 4550 2750
-Connection ~ 4550 2750
+	4450 2800 4550 2800
+Connection ~ 4550 2800
 $Comp
 L power:GNDD #PWR?
 U 1 1 5DC19565
@@ -955,33 +955,33 @@ Wire Wire Line
 Wire Wire Line
 	8250 4350 8250 4100
 $Comp
-L Device:R_Network07_US RN?
+L Device:R_Network08_US RN?
 U 1 1 5DF0AA91
-P 4250 1700
+P 4250 1800
 AR Path="/5DAA3954/5DF0AA91" Ref="RN?"  Part="1" 
 AR Path="/5DAA5CD8/5D9A6C5F/5DF0AA91" Ref="RN?"  Part="1" 
 AR Path="/5DA1E9BD/5DF0AA91" Ref="RN?"  Part="1" 
 AR Path="/5DA1E9C0/5DF0AA91" Ref="RN7"  Part="1" 
-F 0 "RN7" V 3700 1600 50  0000 L CNN
-F 1 "1k" V 3800 1650 50  0000 L CNN
-F 2 "Resistor_THT:R_Array_SIP8" V 4725 1700 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4250 1700 50  0001 C CNN
-	1    4250 1700
+F 0 "RN7" V 3600 1700 50  0000 L CNN
+F 1 "1k" V 3700 1750 50  0000 L CNN
+F 2 "Resistor_THT:R_Array_SIP9" V 4725 1800 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4250 1800 50  0001 C CNN
+	1    4250 1800
 	0    -1   1    0   
 $EndComp
 $Comp
-L Device:R_Network07_US RN?
+L Device:R_Network08_US RN?
 U 1 1 5DF28750
-P 4250 2750
+P 4250 2900
 AR Path="/5DAA3954/5DF28750" Ref="RN?"  Part="1" 
 AR Path="/5DAA5CD8/5D9A6C5F/5DF28750" Ref="RN?"  Part="1" 
 AR Path="/5DA1E9BD/5DF28750" Ref="RN?"  Part="1" 
 AR Path="/5DA1E9C0/5DF28750" Ref="RN8"  Part="1" 
-F 0 "RN8" V 3700 2650 50  0000 L CNN
-F 1 "1k" V 3800 2700 50  0000 L CNN
-F 2 "Resistor_THT:R_Array_SIP8" V 4725 2750 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4250 2750 50  0001 C CNN
-	1    4250 2750
+F 0 "RN8" V 3600 2800 50  0000 L CNN
+F 1 "1k" V 3700 2850 50  0000 L CNN
+F 2 "Resistor_THT:R_Array_SIP9" V 4725 2900 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 4250 2900 50  0001 C CNN
+	1    4250 2900
 	0    -1   1    0   
 $EndComp
 $Comp
@@ -1913,9 +1913,7 @@ rts
 Wire Wire Line
 	3900 6650 4200 6650
 Wire Wire Line
-	4550 4100 4550 4350
-Wire Wire Line
-	4050 2450 3950 2450
+	4050 2500 3950 2500
 Wire Wire Line
 	4050 1400 3750 1400
 Wire Wire Line
@@ -1981,11 +1979,7 @@ b
 Wire Wire Line
 	3600 3750 3750 3750
 Wire Wire Line
-	3600 4050 3950 4050
-Wire Wire Line
-	3600 4350 4550 4350
-Wire Wire Line
-	3950 2450 3950 4050
+	3950 2500 3950 4050
 Wire Wire Line
 	1600 2400 1650 2400
 Wire Wire Line
@@ -2315,6 +2309,18 @@ Wire Wire Line
 Wire Wire Line
 	8000 1050 8200 1050
 Connection ~ 8000 1300
+NoConn ~ 4450 2100
+NoConn ~ 4450 3200
+Wire Wire Line
+	3600 4050 3950 4050
+Wire Wire Line
+	3950 4350 3600 4350
+Wire Wire Line
+	3950 4550 4550 4550
+Wire Wire Line
+	4550 4200 4550 4550
+Wire Wire Line
+	3950 4350 3950 4550
 Wire Bus Line
 	4300 6750 4300 7050
 Wire Bus Line
@@ -2324,7 +2330,7 @@ Wire Bus Line
 Wire Bus Line
 	4950 1100 4950 2000
 Wire Bus Line
-	4800 1100 4800 4100
-Wire Bus Line
 	2850 1400 2850 2200
+Wire Bus Line
+	4800 1100 4800 4200
 $EndSCHEMATC
