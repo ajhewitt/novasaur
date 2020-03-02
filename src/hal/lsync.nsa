@@ -29,11 +29,8 @@ NOP
 NOP
 #30
 NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-LD HL, $NULL$VMC2
+LD HL, $IDEN$NULL
 LDZ Y, $INST
-FNEL DZ, PG          # decode2 jump
+FNH DZ, HL           # instruction cache -> HL
+LD Y, $VMS           # set Y = $VMS on exit
+VMQHL DZ, PGA        # jump to next VMC

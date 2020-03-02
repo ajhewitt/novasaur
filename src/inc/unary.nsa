@@ -14,11 +14,10 @@ $LSL     9
 $ASR     10
 $SWAP    11
 $INCLINE 12
-$CLEAR   13
+$INCPROC 13
 $ZERO?   14
 $FLIP    15
 #FNE
-$VMC2    0
-$VMC3    1
-$V2E     2
-$V2M     3
+$V2E     0
+$V2M     1
+$FORK0   2

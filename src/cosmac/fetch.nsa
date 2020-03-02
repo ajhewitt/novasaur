@@ -9,25 +9,40 @@ PAGE FETCH_PG
 # $PREG:  10> 100
 # $REG0H: 100> 222 Big-endian
 # $REG0L: 101> 111
-LD HL, $INC$NULL
-LDZ Y, $VMS
-FNH DZ, YD          # inc state
-LDZ Y, $PREG        # zero page address of P (Y=10, [10]->100)
-FNH DZ, Y           # load PC; Y = ‘lower’ byte address (y=101)
-#10
-FNFH DZ, XD         # inc value of lower byte put in X  [101]->111->112
-LDZ HL, $ZERO?
-FNH DZ, HL          # check if zero?
-LDP HL, $IDEN$IDEN  # load identity fn if not zero
-LDN HL, $INC$IDEN   # load inc fn if zero after inc
-#20
-LDZ Y, $PREG        # zero page address of P (Y=10, [10]->100)
-FNFL DZ, Y          # load P; Y = ‘upper’ byte address y=100
-FNH DZ, YD          # inc? value of upper byte put in Y [101]->111->111
-FNFL B, HL          # HL=[Y,X]=[222,112]
-#30
+# assume: Y = $VMS
+LD HL, $INC$FORK0
+FNFH DZ, ND        # inc state
+LDZ Y, $PREG       # zero page address of P (Y=10, [10]->100)
+FNH DZ, Y          # load PC; Y = ‘lower’ byte address (y=101)
+FNFH DZ, XD        # inc value of lower byte put in X  [101]->111->112
+LDZ Y, $PREG       # zero page address of P (Y=10, [10]->100)
+FNEL A, PC
+#17
+
+ADDR 0x80
+LD HL, $INC$IDEN   # load inc fn if zero after inc
+FNFL DZ, Y         # load P; Y = ‘upper’ byte address y=100
+FNFH DZ, ND
+FNFL A, Y
+FNFL B, HL         # HL=[Y,X]=[222,112]
+#31
 LD Y, $INST
-MVHLZ ND            # cache instruction (from HL)
+MVHLZ ND           # cache instruction (from HL)
+LDZ Y, $VMS        # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
+
+ADDR 0xC0
+LD HL, $IDEN$NULL  # load inc fn if zero after inc
+FNH DZ, Y          # load P; Y = ‘upper’ byte address y=100
+FNH DZ, Y
+FNFH B, HLA        # HL=[Y,X]=[222,112]
 NOP
-LDZ Y, $VMS         # set Y = $VMS on exit
-VMCHL DZ, PGA       # jump to next VMC
+NOP
+NOP
+NOP
+#30
+NOP
+LD Y, $INST
+MVHLZ ND           # cache instruction (from HL)
+LDZ Y, $VMS        # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC

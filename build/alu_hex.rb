@@ -37,14 +37,14 @@ end
 # H) CONZCONZ - carry/overflow/negative/zero on BA-HL/BA+HL
 #   (sub)(add)
 def print_as(offset, opts = {})
- 
+  # feature not implemented 
 end
 
 # ALU function: VMC (VCPU Decode)
 # Instruction - HL, virtual machine state (VMS) MMMMEXCC - acc
 # L) ESSSLLLL - state/ext/L|N, SSS:0=decode/L, 1=hsync/next:0=line, 1=vpc
 # H) PPPPPPPP - page number
-def print_vmc(offset, opts = {})
+def print_vmp(offset, opts = {})
   16.times.map do |a|
     16.times.map do |b| # b = mode_line/ESSS
       if opts[:high]
@@ -58,13 +58,17 @@ def print_vmc(offset, opts = {})
         end
       else
         d = 16.times.map do |c| # c = EXCC
-          case c&7
-          when 4 #sync on 4 line modes
-            b%4 == 2 ? 0x11 : 0x10 #add one for last line
-          when 7 #sync on 5 line modes
-            b%5 == 3 ? 0x11 : 0x10 #add one for last line
+          if opts[:ext] #decode always on ext - preserve L
+            a
           else
-            a #decode - preserve L
+            case c&7
+            when 4 #sync on 4 line modes
+              b%4 == 2 ? 0x11 : 0x10 #add one for last line
+            when 7 #sync on 5 line modes
+              b%5 == 3 ? 0x11 : 0x10 #add one for last line
+            else
+              a #decode - preserve L
+            end
           end | (c&8)<<4 #move ext bit to MSB
         end
       end
@@ -158,6 +162,14 @@ def print_att(offset)
   end
 end
 
+def inc_line
+  256.times.map do |i|
+    i &= i&7 > 4 ? 0xFC : 0xF8
+    n = i&4 == 0 ? 0x30 : 0x40
+    (i&0xF0) % (n+0x10) == n ? i-n : (i+0x10)&0xFF
+  end
+end
+
 # start of ALU high
 print_ext_addr 0x0002
 # 0x00020000-0x00020FFF: MV high nibble
@@ -166,16 +178,16 @@ print_binary nil, 0x00, high: true, pass: true
 print_binary '+', 0x10,  high: true
 # 0x00022000-0x00022FFF: SUB high nibble
 print_binary '-', 0x20,  high: true
-# 0x00023000-0x00023FFF: AS high nibble
-print_as 0x30, high: true
-# 0x00024000-0x00024FFF: AND high nibble
-print_binary '&', 0x40,  high: true, pass: true
-# 0x00026000-0x00025FFF: OR high nibble
-print_binary '|', 0x50,  high: true, pass: true
-# 0x00027000-0x00026FFF: XOR high nibble
-print_binary '^', 0x60,  high: true, pass: true
-# 0x00027000-0x00027FFF: VMC high nibble
-print_vmc 0x70, high: true
+# 0x00023000-0x00023FFF: AND high nibble
+print_binary '&', 0x30,  high: true, pass: true
+# 0x00024000-0x00024FFF: OR high nibble
+print_binary '|', 0x40,  high: true, pass: true
+# 0x00025000-0x00025FFF: XOR high nibble
+print_binary '^', 0x50,  high: true, pass: true
+# 0x00026000-0x00026FFF: VMP high nibble
+print_vmp 0x60, high: true, ext: false
+# 0x00027000-0x00027FFF: VMQ high nibble
+print_vmp 0x70, high: true, ext: true
 
 # start of ALU low
 print_ext_addr 0x0003
@@ -185,16 +197,16 @@ print_binary nil, 0x00, pass: true
 print_binary '+', 0x10
 # 0x00032000-0x00032FFF: SUB low nibble
 print_binary '-', 0x20
-# 0x00033000-0x00033FFF: AS low nibble
-print_as 0x30, high: false
-# 0x00034000-0x00034FFF: AND low nibble
-print_binary '&', 0x40, pass: true
-# 0x00035000-0x00035FFF: OR low nibble
-print_binary '|', 0x50, pass: true
-# 0x00036000-0x00036FFF: XOR low nibble
-print_binary '^', 0x60, pass: true
-# 0x00037000-0x00037FFF: VMC low nibble
-print_vmc 0x70, high: false
+# 0x00033000-0x00033FFF: AND low nibble
+print_binary '&', 0x30, pass: true
+# 0x00034000-0x00034FFF: OR low nibble
+print_binary '|', 0x40, pass: true
+# 0x00035000-0x00035FFF: XOR low nibble
+print_binary '^', 0x50, pass: true
+# 0x00036000-0x00036FFF: VMP low nibble
+print_vmp 0x60, high: false, ext: false
+# 0x00037000-0x00037FFF: VMQ low nibble
+print_vmp 0x70, high: false, ext: true
 
 # 0x00038000-0x00038FFF: MUL low nibble only
 print_binary '*', 0x80
@@ -208,22 +220,24 @@ print_binary '/', 0x90
 print_av 0xC0
 # 0x0003D000-0x0003DFFF: ATT low nibble only
 print_att 0xD0
+
 # 0x0003E000-0x0003EFFF: FNE low nibble only
-# $VMC2: decode after hsync - idle for now
-print_unary(0xE0, Array.new(256, 0))
-# $VMC3: decode after hsync - idle for now
-print_unary(0xE1, Array.new(256, 0))
 # $V2E: calculate E-reg GPU mode bits from video mode
-print_unary(0xE2, 256.times.map {|i|
+print_unary(0xE0, 256.times.map {|i|
   e = i&1 == 0 ? 0 : 0x10
-  e |= i&2 == 0 ? 0 : 0x40 # rev 3 board
-  i&0x60 == 0x60 ? e : e|0x20 # rev 3 board
+#  e |= i&2 == 0 ? 0 : 0x40 # rev 3 board
+  e |= i&2 == 0 ? 0 : 0x20 # rev 4 board
+#  i&0x60 == 0x60 ? e : e|0x20 # rev 3 board
+  i&0x60 == 0x60 ? e : e|0x40 # rev 4 board
 })
 # $V2M: calculate mode_line from video mode
-print_unary(0xE3, 256.times.map {|i|
+print_unary(0xE1, 256.times.map {|i|
   m = (i<<2)&0x30
   i&0x40 == 0 ? m*4 : (m*5)|4
 })
+# $FORK0
+print_unary(0xE2, [0x80] + Array.new(0xFF, 0xC0))
+
 # 0x0003F000-0x0003FFFF: FNF low nibble only
 # $IDEN: A = A
 print_unary(0xF0, [*0..0xFF])
@@ -250,14 +264,10 @@ print_unary(0xFA, 256.times.map{|i| (i>>1)|(i&0x80)})
 # $SWAP: AB = BA
 print_unary(0xFB, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
 # $INCLINE: (mode_line + 1) % 4|5, cycle = 0
-print_unary(0xFC, 256.times.map {|i|
-  i &= i&7 > 4 ? 0xFC : 0xF8
-  n = i&4 == 0 ? 0x30 : 0x40
-  (i&0xF0) % (n+0x10) == n ? i-n : (i+0x10)&0xFF
-})
-# $CLEAR: A = 0
-print_unary(0xFD, Array.new(256, 0))
+print_unary(0xFC, inc_line)
+# $INCPROC: (mode_line + 1) % 4|5, cycle = 1
+print_unary(0xFD, inc_line.map{|i| i+1})
 # $ZERO?: A = (A == 0) ? 0 : -1
-print_unary(0xFE, [0] + 0xFF.times.map{0xFF})
+print_unary(0xFE, [0] + Array.new(0xFF, 0xFF))
 # $FLIP: A76543210 = A01234567
 print_unary(0xFF, 256.times.map {|i| (sprintf "%08b", i)}.map {|i| i.reverse.to_i(2)})

@@ -16,3 +16,5 @@ $EREG       0xF6
 
 $VMS        0xF8
 $INST       0xF9
+$PREG       0xFA
+$AUDIO      0xFF

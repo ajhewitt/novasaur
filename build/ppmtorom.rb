@@ -16,7 +16,7 @@ end
 file = File.open(ARGV[0])
 exit 1 unless file.first.strip == "P3"
 (x, y) = file.first.split(' ').map(&:to_i)
-z = file.first.to_f * 1.2
+z = file.first.to_f * 1.25
 
 print_ext_addr 0x0001
 file.to_a.map(&:strip).join(' ').split(' ').each_slice(3).each_slice(x).each_with_index do |r, j|

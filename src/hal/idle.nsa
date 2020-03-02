@@ -4,9 +4,11 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE IDLE_PG
 
+# assume: Y = $VMS
 LD HL, $INC$NULL
-LDZ Y, $VMS
 FNH DZ, HLD         # inc virtual machine state
+NOP
+NOP
 NOP
 NOP
 NOP
@@ -39,4 +41,4 @@ LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL         # instruction cache -> HL
 LD Y, $VMS         # set Y = $VMS on exit
-VMCHL DZ, PGA      # jump to next VMC
+VMPHL DZ, PGA      # jump to next VMC

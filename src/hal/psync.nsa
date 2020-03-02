@@ -10,7 +10,7 @@ PAGE PSYNC_PG
 #       0,4,8,12   0  0  0-3
 #       0,5,10     1  1  0-2
 # assumes Y=$VMS
-LDZ HL, $INCLINE$NULL
+LDZ HL, $INCPROC$NULL
 FNH DZ, HLD          # H=mode_line+1, L=EX00
 LD Y, $PMODE
 AVH DZ, SA           # mode_line, pmode —> S
@@ -30,9 +30,53 @@ AVH AZ, ND           # determine mode for next process cycle
 LDP PC, $NEXT_FIELD  # jump at end of field
 #35
 NOP
-LD HL, $NULL$VMC2
-LD Y, $INST
-FNEL DZ, PG          # decode2 jump
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#1.0
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#10
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL
+LD Y, $VMS           # set Y = $VMS on exit
+VMPHL DZ, PGA        # jump to next VMC
 
 $NEXT_FIELD
 #0.36
@@ -60,9 +104,9 @@ NOP
 NOP
 NOP
 #1.30
-LD HL, $INC$NULL
-LDZ Y, $VMS
-FNH DZ, HLD          # skip first machine cycle on decode
-LD HL, $VMC2$NULL
-LD Y, $INST
-FNEH DZ, PGA         # decode jump
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL
+LD Y, $VMS         # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
