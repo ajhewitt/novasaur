@@ -21,5 +21,10 @@ LD HL, $0xC
 LD Y, $ROM_N
 MVHLZ ND                # init 12 - copy 13 roms
 
+# Test Fetch
+LD HL, $TEST1
+LD Y, $PREG
+MVHLZ ND
+
 # Start Video
 LD PG, $ROM_COPY

@@ -15,14 +15,14 @@ FNFH DZ, ND        # inc state
 LDZ Y, $PREG       # zero page address of P (Y=10, [10]->100)
 FNH DZ, Y          # load PC; Y = ‘lower’ byte address (y=101)
 FNFH DZ, XD        # inc value of lower byte put in X  [101]->111->112
-LDZ Y, $PREG       # zero page address of P (Y=10, [10]->100)
+LDZ Y, $PREG
 FNEL A, PC
 #17
 
 ADDR 0x80
 LD HL, $INC$IDEN   # load inc fn if zero after inc
-FNFL DZ, Y         # load P; Y = ‘upper’ byte address y=100
-FNFH DZ, ND
+FNFL DZ, Y         # zero page address of P (Y=10, [10]->100)
+FNFH DZ, ND        # load P; Y = ‘upper’ byte address y=100
 FNFL A, Y
 FNFL B, HL         # HL=[Y,X]=[222,112]
 #31

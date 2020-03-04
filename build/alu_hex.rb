@@ -50,11 +50,11 @@ def print_vmp(offset, opts = {})
       if opts[:high]
         d = case b&7
         when 0 # decode
-          Array.new 16, 0
+          Array.new 16, 100
         when 1 # hsync - lsync,psync
           [1, 2, 0, 0, 0, 0, 0, 0] * 2
         else # future stuff
-          Array.new 16, 0
+          Array.new 16, 100
         end
       else
         d = 16.times.map do |c| # c = EXCC
