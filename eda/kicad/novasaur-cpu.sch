@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "CPU"
-Date "2020-02-20"
+Date "2020-03-01"
 Rev "1.5"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
