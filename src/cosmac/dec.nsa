@@ -1,0 +1,32 @@
+# Decrement RN (DEC)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE DEC_PG
+
+# $REG0H: 100> 222 Big-endian
+# $REG0L: 101> 111
+# assume: Y = $VMS
+
+LD HL, $INC$INST2RNL
+FNFH DZ, ND           # inc VMS
+LD Y, $INST
+FNFL DZ, Y            # Y=101, zpage addr of RNL
+#10
+LDZ HL, $DEC$NULL
+FNH DZ, HLD           # dec of lower byte of RN [101]->111->112
+LDZ HL, $UNDER?$NULL
+FNEH A, NA            # check if minus one
+LDP HL, $DEC$INST2RNH
+LDN HL, $IDEN$INST2RNH
+#22
+LD Y, $INST
+FNFL DZ, Y            # zero page address of P (Y=10, [10]->100)
+FNH DZ, HLD           # load P; Y = ‘upper’ byte address y=100
+NOP
+#30
+LD HL, $70
+LD Y, $VMS            # set Y = $VMS on exit
+ANDH DZ, ND           # clear ext bit
+LD HL, $NOP_INST
+VMPHL DZ, PGA         # jump to next VMC

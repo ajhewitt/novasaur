@@ -235,8 +235,10 @@ print_unary(0xE1, 256.times.map {|i|
   m = (i<<2)&0x30
   i&0x40 == 0 ? m*4 : (m*5)|4
 })
-# $FORK0
-print_unary(0xE2, [0x80] + Array.new(0xFF, 0xC0))
+# $FORK
+print_unary(0xE2, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
+# $UNDER?: A = (A == 0xFF) ? 0 : -1
+print_unary(0xEE, Array.new(0xFF, 0xFF) + [0])
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only
 # $IDEN: A = A
@@ -267,7 +269,7 @@ print_unary(0xFB, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
 print_unary(0xFC, inc_line)
 # $INCPROC: (mode_line + 1) % 4|5, cycle = 1
 print_unary(0xFD, inc_line.map{|i| i+1})
-# $ZERO?: A = (A == 0) ? 0 : -1
+# $OVER?: A = (A == 0) ? 0 : -1
 print_unary(0xFE, [0] + Array.new(0xFF, 0xFF))
 # $FLIP: A76543210 = A01234567
 print_unary(0xFF, 256.times.map {|i| (sprintf "%08b", i)}.map {|i| i.reverse.to_i(2)})

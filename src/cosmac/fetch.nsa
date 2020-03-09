@@ -10,7 +10,7 @@ PAGE FETCH_PG
 # $REG0H: 100> 222 Big-endian
 # $REG0L: 101> 111
 # assume: Y = $VMS
-LD HL, $INC$FORK0
+LD HL, $INC$FORK
 FNFH DZ, ND        # inc state
 LDZ Y, $PREG       # zero page address of P (Y=10, [10]->100)
 FNH DZ, Y          # load PC; Y = ‘lower’ byte address (y=101)
@@ -18,6 +18,22 @@ FNFH DZ, XD        # inc value of lower byte put in X  [101]->111->112
 LDZ Y, $PREG
 FNEL A, PC
 #17
+
+ADDR 0x40
+LD HL, $IDEN$NULL  # load inc fn if zero after inc
+FNH DZ, Y          # load P; Y = ‘upper’ byte address y=100
+FNH DZ, Y
+FNFH B, HLA        # HL=[Y,X]=[222,112]
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+LD Y, $INST
+MVHLZ ND           # cache instruction (from HL)
+LDZ Y, $VMS        # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
 
 ADDR 0x80
 LD HL, $INC$IDEN   # load inc fn if zero after inc

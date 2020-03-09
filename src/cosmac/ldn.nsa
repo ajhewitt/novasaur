@@ -1,0 +1,34 @@
+# Load via RN (LDN)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE LDN_PG
+
+# $DREG - zero page location of the D register
+# $DREG:  10> 100
+# $REG0H: 100> 222 Big-endian
+# $REG0L: 101> 111
+# assume: Y = $VMS
+LD HL, $INC$INST2RNL
+FNFH DZ, ND           # inc VMS
+LD Y, $INST
+FNFL DZ, Y            # Y=101, zpage addr of RNL
+#10
+LD HL, $IDEN$INST2RNH
+FNFH DZ, XA           # X=[101]=111
+LD Y, $INST
+FNFL DZ, Y            # Y=100, zpage addr of RNH
+#20
+FNH DZ, Y             # Y=[100]=222
+FNFH B, NA            # A=[RN]=[222,111]
+LDZ Y, $DREG
+FNFH AZ, ND           # A -> [RN]
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $NOP_INST
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC

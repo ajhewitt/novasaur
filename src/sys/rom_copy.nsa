@@ -32,7 +32,7 @@ FNH A, HLD              # A->[X, Y] ** this would normally be NB
 LD HL, $INC$NULL
 LDZ Y, $ROM_X
 FNH DZ, HLD             # X++
-LDZ HL, $ZERO?$NULL
+LDZ HL, $OVER?$NULL
 
 FNH A, HLA              # A = X==0 ? 0 : -1
 LDP HL, $0x18

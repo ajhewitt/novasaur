@@ -4,6 +4,23 @@ $FETCH_PG      100
 $LSYNC_PG      1
 $PSYNC_PG      2
 
+$FETCH_PG      0x40
+$LDN_PG        0x41
+$INC_PG        0x42
+$DEC_PG        0x43
+# branch
+$LDA_PG        0x50
+$STR_PG        0x51
+$OUT_PG        0x52
+$INP_PG        0x53
+# control
+$GET_PG        0x60
+$PUT_PG        0x61
+# branch
+$SET_PG        0x70
+$LBR_PG        0x71
+# logic
+
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot
 $SET_VMODE     0x82

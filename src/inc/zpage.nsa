@@ -1,5 +1,7 @@
 # zero page assignments
 
+$TEMP       0xE0
+
 $ROM_ID     0xEB        # source rom 0-15 - init to PC jump point
 $ROM_PG     0xEC        # source page 0-15 - init to 0
 $ROM_X      0xED        # x index - ref both src and dest - init to 0
@@ -17,6 +19,10 @@ $EREG       0xF6
 $VMS        0xF8
 $INST       0xF9
 $PREG       0xFA
-$TEST1      0xFB
-$TEST2      0xFC
+$XREG       0xFB
+$DREG       0xFC
+$TEST1      0xFD
+$TEST2      0xFE
 $AUDIO      0xFF
+
+$NOP_INST   0xC4
