@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur TTL Minicomputer"
-Date "2020-03-01"
-Rev "1.5"
+Date "2020-03-08"
+Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -1450,9 +1450,7 @@ Wire Wire Line
 	2750 1600 2350 1600
 Connection ~ 3050 1500
 Wire Wire Line
-	3050 1500 3350 1500
-Wire Wire Line
-	2350 1500 3050 1500
+	2350 1500 2850 1500
 Wire Wire Line
 	4200 3700 4200 4000
 $Comp
@@ -1510,6 +1508,15 @@ F 3 "~" H 4350 5900 50  0001 C CNN
 	1    4150 5900
 	1    0    0    -1  
 $EndComp
+Text GLabel 2850 1400 1    50   Input ~ 0
+~reset
+Wire Wire Line
+	3050 1500 3350 1500
+Wire Wire Line
+	2850 1400 2850 1500
+Connection ~ 2850 1500
+Wire Wire Line
+	2850 1500 3050 1500
 Wire Bus Line
 	4450 5100 4450 6750
 Wire Bus Line
