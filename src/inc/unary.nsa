@@ -24,3 +24,4 @@ $INST2RNL   2
 $INST2RNH   3
 $FORK       4
 $UNDER?     14
+$EXTPG      15

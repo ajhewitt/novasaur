@@ -1,0 +1,98 @@
+# Skip (SKP)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SKP_PG
+
+# $PREG - zero page location of the P register
+# $PREG:  10> 100
+# $REG0H: 100> 222 Big-endian
+# $REG0L: 101> 111
+# assume: Y = $VMS
+LD HL, $INC$FORK
+FNFH DZ, ND        # inc state
+LDZ Y, $PREG       # zero page address of P (Y=10, [10]->100)
+FNH DZ, Y          # Y = lower byte address (y=101)
+FNFH DZ, XD        # inc value of lower byte put in X ([101]->111->112)
+FNEL A, PC
+#15
+
+ADDR 0x40
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $NOP_INST
+LD Y, $VMS         # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
+#43
+
+ADDR 0x80
+LD HL, $INC$IDEN   # load inc since X overflowed after inc
+LD Y, $PREG        # zero page address of P (Y=10, [10]->100)
+FNFL DZ, Y         # Y = upper byte address y=100
+FNH DZ, HLD        # inc value of upper byte ([100]->222->223)
+#24
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+#35
+LD HL, $NOP_INST
+LD Y, $VMS         # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
+#43
+
+ADDR 0xC0
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $NOP_INST
+LD Y, $VMS         # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
+#43

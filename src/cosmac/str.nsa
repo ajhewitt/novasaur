@@ -12,7 +12,7 @@ PAGE STR_PG
 LD HL, $INC$INST2RNL
 FNFH DZ, ND           # inc VMS
 LD Y, $INST
-FNFL DZ, Y            # Y=101, zpage addr of RNL
+FNEL DZ, Y            # Y=101, zpage addr of RNL
 #10
 LD HL, $IDEN$INST2RNH
 FNFH DZ, XA           # X=[101]=111
@@ -20,7 +20,7 @@ LD Y, $DREG
 FNFH DZ, NA           # A = D
 #20
 LD Y, $INST
-FNFL DZ, Y            # Y=100, zpage addr of RNH
+FNEL DZ, Y            # Y=100, zpage addr of RNH
 FNH DZ, Y             # Y=[100]=222
 FNFH A, NB            # [RN]=[222,111]=D
 #30

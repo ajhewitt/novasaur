@@ -11,7 +11,7 @@ PAGE DEC_PG
 LD HL, $INC$INST2RNL
 FNFH DZ, ND           # inc VMS
 LD Y, $INST
-FNFL DZ, Y            # Y=101, zpage addr of RNL
+FNEL DZ, Y            # Y=101, zpage addr of RNL
 #10
 LDZ HL, $DEC$NULL
 FNH DZ, HLD           # dec of lower byte of RN [101]->111->112
@@ -21,12 +21,16 @@ LDP HL, $DEC$INST2RNH
 LDN HL, $IDEN$INST2RNH
 #22
 LD Y, $INST
-FNFL DZ, Y            # zero page address of P (Y=10, [10]->100)
+FNEL DZ, Y            # zero page address of P (Y=10, [10]->100)
 FNH DZ, HLD           # load P; Y = ‘upper’ byte address y=100
 NOP
 #30
-LD HL, $70
-LD Y, $VMS            # set Y = $VMS on exit
-ANDH DZ, ND           # clear ext bit
+NOP
+NOP
+NOP
+NOP
+NOP
 LD HL, $NOP_INST
+LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
+#43

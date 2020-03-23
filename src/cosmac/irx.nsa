@@ -1,27 +1,28 @@
-# Increment RN (INC)
+# Increment register X (IRX)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE INC_PG
+PAGE IRX_PG
 
 # $REG0H: 100> 222 Big-endian
 # $REG0L: 101> 111
 # assume: Y = $VMS
 
-LD HL, $INC$INST2RNL
+LD HL, $INC$NULL
 FNFH DZ, ND           # inc VMS
-LD Y, $INST
-FNEL DZ, Y            # Y=101, zpage addr of RNL
-#10
-FNH DZ, HLD           # inc value of lower byte of RN [101]->111->112
+LD Y, $XREG
+FNH DZ, Y             # Y=101, zpage addr of RNL
+#9
+FNH DZ, HLD           # inc value of lower byte of X [101]->111->112
 LDZ HL, $OVER?$NULL
 FNH A, HLA            # check if zero
-LDP HL, $INC$INST2RNH
-LDN HL, $IDEN$INST2RNH
-#19
-LD Y, $INST
-FNEL DZ, Y            # zero page address of P (Y=10, [10]->100)
-FNH DZ, HLD           # load P; Y = ‘upper’ byte address y=100
+LDP HL, $INC$IDEN
+LDN HL, $IDEN$IDEN
+#18
+LD Y, $XREG
+FNFL DZ, Y            # zero page address of X (Y=10, [10]->100)
+FNH DZ, HLD           # inc value of upper byte of X [100]->222->223
+NOP
 NOP
 NOP
 NOP

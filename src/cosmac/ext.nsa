@@ -1,0 +1,12 @@
+# Extended decode - complete immediate handling
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE EXT_PG
+
+# assume: Y = $VMS
+LD HL, $INC$EXTPG
+FNFH DZ, ND
+LDZ Y, $INST
+FNEL DZ, PG        # jump to page to complete execution
+#10

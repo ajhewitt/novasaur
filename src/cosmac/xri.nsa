@@ -1,11 +1,10 @@
-# fetch
+# XOR immediate (XRI)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE FETCH_PG
+PAGE XRI_PG
 
 # $PREG - zero page location of the P register
-# (SEP instruction updates value of $PREG)
 # $PREG:  10> 100
 # $REG0H: 100> 222 Big-endian
 # $REG0L: 101> 111
@@ -23,47 +22,50 @@ LD HL, $IDEN$NULL  # load iden since X=255
 LDZ Y, $PREG       # zero page address of P (Y=10, [10]->100)
 FNH DZ, Y          # Y = upper byte address y=100
 FNH DZ, Y          # get value of upper byte put in Y ([100]->222)
-FNFH B, HLA        # HL=[Y,X]=[222,112]
+FNFH B, HLA        # HL=[Y,X]=[223,112]
+#26
+LD Y, $DREG
+XORHL DZ, ND        # XOR immediate value in D-register
+#32
 NOP
 NOP
 NOP
-NOP
-#30
-NOP
-LD Y, $INST
-MVHLZ ND           # cache instruction (from HL)
-LDZ Y, $VMS        # set Y = $VMS on exit
+LD HL, $NOP_INST
+LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43
 
 ADDR 0x80
 LD HL, $INC$IDEN   # load inc since X overflowed after inc
-LDZ Y, $PREG       # zero page address of P (Y=10, [10]->100)
+LD Y, $PREG        # zero page address of P (Y=10, [10]->100)
 FNFL DZ, Y         # Y = upper byte address y=100
-FNFH DZ, ND        # inc value of upper byte ([100]->222->223)
-FNFL A, Y          # put in Y
-FNFL B, HL         # HL=[Y,X]=[223,112]
-#31
-LD Y, $INST
-MVHLZ ND           # cache instruction (from HL)
-LDZ Y, $VMS        # set Y = $VMS on exit
+FNH DZ, HLD        # inc value of upper byte ([100]->222->223)
+#24
+LD HL, $IDEN$NULL  # load inc since X overflowed after inc
+FNH A, Y           # put in Y
+FNFH B, NA         # A=[Y,X]=[223,112]
+LD Y, $TEMP
+FNH AZ, HLD        # save immediate value in D-register
+#35
+LD HL, $EXT_INST
+LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43
 
 ADDR 0xC0
-LD HL, $IDEN$NULL  # load iden since X!=0
+LD HL, $IDEN$NULL  # load iden since X=255
 LDZ Y, $PREG       # zero page address of P (Y=10, [10]->100)
 FNH DZ, Y          # Y = upper byte address y=100
 FNH DZ, Y          # get value of upper byte put in Y ([100]->222)
-FNFH B, HLA        # HL=[Y,X]=[222,112]
+FNFH B, HLA        # HL=[Y,X]=[223,112]
+#26
+LD Y, $DREG
+XORHL DZ, ND        # XOR immediate value in D-register
+#32
 NOP
 NOP
 NOP
-NOP
-#30
-NOP
-LD Y, $INST
-MVHLZ ND           # cache instruction (from HL)
-LDZ Y, $VMS        # set Y = $VMS on exit
+LD HL, $NOP_INST
+LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43

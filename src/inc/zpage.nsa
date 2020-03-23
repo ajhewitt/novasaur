@@ -25,4 +25,5 @@ $TEST1      0xFD
 $TEST2      0xFE
 $AUDIO      0xFF
 
+$EXT_INST   0x69
 $NOP_INST   0xC4
