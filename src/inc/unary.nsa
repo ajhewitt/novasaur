@@ -23,5 +23,7 @@ $V2M        1
 $INST2RNL   2
 $INST2RNH   3
 $FORK       4
+$SRC2REG    5
+$DST2REG    6
 $UNDER?     14
 $EXTPG      15

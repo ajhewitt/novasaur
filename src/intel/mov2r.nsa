@@ -1,0 +1,46 @@
+# Move reg or mem src to reg dest (MOV)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE MOV2R_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $SRC2REG$NULL
+LD Y, $INST
+FNEH DZ, YA           # Y = zpage addr of source reg
+#11
+LDNZ PC, $REG_SRC     # zpage > 0x80 for reg source
+
+#MEM_SRC
+LD HL, $IDEN$DST2REG
+LD Y, $LREG
+FNFH DZ, XA           # X = L
+LDZ Y, $HREG
+FNH DZ, Y             # Y = H
+FNFH M, NA            # A = [HL]
+#26
+$REG_DEST
+NOP
+NOP
+LD Y, $INST
+FNEL DZ, Y            # Y = zpage addr of dest reg
+FNH AZ, HLD           # A -> dest reg
+LD HL, $NOP_INST
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43
+
+$REG_SRC
+FNH DZ, HLA           # source reg -> A
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+LD HL, $IDEN$DST2REG
+LD PC, $REG_DEST

@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
 DST = %w[N O1 O2 O3 O4 O5 O6 O7 X E S V Y HL PC PG]
-SRC = %w[I IZ E EZ I IZ E EZ A AZ B BZ A AZ D DZ]
+SRC = %w[I IZ E EZ I IZ E EZ A AZ M MZ A AZ D DZ]
 ALU = %w[MV ADD SUB AND OR XOR VMP VMQ MUL DIV COM SER AV ATT FNE FNF]
 LD = %w[NOP NOPZ LD LDZ LDP LDPZ LDN LDNZ]
-WR = %w[B D]
+WR = %w[M D]
 
 def decode(i, a); a.each_with_index.map{|b, n| i[b] * (2 ** n)}.reduce(:+) end
 def src(i); SRC[decode i,  [3, 4, 10, 11]] end

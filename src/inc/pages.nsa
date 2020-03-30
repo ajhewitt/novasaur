@@ -4,10 +4,14 @@ $LSYNC_PG      1
 $PSYNC_PG      2
 
 $FETCH_PG      0x40
-$EXT_PG        0x41
-$LDN_PG        0x42
-$INC_PG        0x43
-$DEC_PG        0x44
+$IMMED_PG      0x41
+$MOV2R_PG      0x42
+$MOV2M_PG      0x43
+
+$EXT_PG        0x4C
+$LDN_PG        0x4D
+$INC_PG        0x4E
+$DEC_PG        0x4F
 # branch
 $BR_PG         0x50
 $SKP_PG        0x51

@@ -1,6 +1,18 @@
 # zero page assignments
 
+$PCH        0xD0
+$PCL        0xD1
+
 $TEMP       0xE0
+$PIDX       0xE1
+
+$AREG       0xE8
+$BREG       0xEA
+$CREG       0xEB
+$DREG       0xEC
+$EREG       0xED
+$HREG       0xEE
+$LREG       0xEF
 
 $ROM_ID     0xEB        # source rom 0-15 - init to PC jump point
 $ROM_PG     0xEC        # source page 0-15 - init to 0

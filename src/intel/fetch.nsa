@@ -1,0 +1,67 @@
+# fetch
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE FETCH_PG
+
+# $PIDX: 10> 100 - zero page location of the PC
+# $PCH: 100> 222 Big-endian
+# $PCL: 101> 111
+# assume: Y = $VMS
+LD HL, $INC$FORK
+FNFH DZ, ND        # inc state
+LDZ Y, $PIDX       # zero page address of PC (Y=10, [10]->100)
+FNH DZ, Y          # Y = lower byte address (y=101)
+FNFH DZ, XD        # inc value of lower byte put in X ([101]->111->112)
+FNEL A, PC
+#15
+
+ADDR 0x40
+LD HL, $IDEN$NULL  # load iden since X=255
+LDZ Y, $PIDX       # zero page address of PC (Y=10, [10]->100)
+FNH DZ, Y          # Y = upper byte address y=100
+FNH DZ, Y          # get value of upper byte put in Y ([100]->222)
+FNFH M, HLA        # HL=[Y,X]=[222,112]
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+LD Y, $INST
+MVHLZ ND           # cache instruction (from HL)
+LDZ Y, $VMS        # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
+#43
+
+ADDR 0x80
+LD HL, $INC$IDEN   # load inc since X overflowed after inc
+LDZ Y, $PIDX       # zero page address of PC (Y=10, [10]->100)
+FNFL DZ, Y         # Y = upper byte address y=100
+FNFH DZ, ND        # inc value of upper byte ([100]->222->223)
+FNFL A, Y          # put in Y
+FNFL M, HL         # HL=[Y,X]=[223,112]
+#31
+LD Y, $INST
+MVHLZ ND           # cache instruction (from HL)
+LDZ Y, $VMS        # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
+#43
+
+ADDR 0xC0
+LD HL, $IDEN$NULL  # load iden since X!=0
+LDZ Y, $PIDX       # zero page address of P (Y=10, [10]->100)
+FNH DZ, Y          # Y = upper byte address y=100
+FNH DZ, Y          # get value of upper byte put in Y ([100]->222)
+FNFH M, HLA        # HL=[Y,X]=[222,112]
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+LD Y, $INST
+MVHLZ ND           # cache instruction (from HL)
+LDZ Y, $VMS        # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
+#43
