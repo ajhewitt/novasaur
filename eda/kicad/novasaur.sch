@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur TTL Minicomputer"
-Date "2020-03-08"
+Date "2020-03-29"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -634,7 +634,7 @@ Text GLabel 9300 2100 2    50   Output ~ 0
 Text GLabel 9300 1900 2    50   Output ~ 0
 ~xoe
 Text GLabel 9300 2200 2    50   Output ~ 0
-~poe
+~toe
 $Comp
 L 74xx:74LS574 U?
 U 1 1 5EAB438A

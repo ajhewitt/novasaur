@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "CPU"
-Date "2020-03-08"
+Date "2020-03-29"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -700,7 +700,7 @@ alu
 Text GLabel 5700 1800 1    50   Input ~ 0
 PD[0..7]
 Text GLabel 4250 2400 0    50   Input ~ 0
-~poe
+~toe
 $Comp
 L 74xx:74LS574 U?
 U 1 1 5DAE3272
@@ -2171,7 +2171,7 @@ AR Path="/5E39EF69" Ref="TP?"  Part="1"
 AR Path="/5DA1E9BA/5E39EF69" Ref="TP15"  Part="1" 
 AR Path="/5DA1E9BD/5E39EF69" Ref="TP?"  Part="1" 
 F 0 "TP15" H 4300 2550 50  0000 L CNN
-F 1 "~POE" H 4000 2550 50  0001 L CNN
+F 1 "~TOE" H 4000 2550 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4450 2400 50  0001 C CNN
 F 3 "~" H 4450 2400 50  0001 C CNN
 	1    4250 2400
