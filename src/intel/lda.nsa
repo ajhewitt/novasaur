@@ -1,0 +1,97 @@
+# Load accumulator direct (plus fetch)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE LDA_PG
+
+# assume: Y = $VMS
+LD HL, $INC$FORK
+FNFH DZ, ND           # inc state
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#13/10
+
+ADDR 0x20             # PCL = 254, iden PCH, iden PCH, inc PCH
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+#22/7
+LDZ Y, $TEMP
+FNH AZ, HLD           # A -> temp
+LD HL, $INC$NULL
+LD Y, $PCL
+#30/14
+FNFH DZ, XD           # X,PCL = PCL+1
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+LD HL, $IDEN$IDEN
+#39/21
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP
+FNFL DZ, X            # X = low addr
+FNH A, Y              # Y = hi addr
+#49/28
+FNFH M, NA            # A = [XY]
+LD Y, $AREG
+FNH AZ, HLD           # A -> Acc
+LD HL, $INC$IDEN
+LD Y, $PCL
+#60/37
+FNFH DZ, XD           # X,PCL = PCL+1
+LD Y, $PCH
+FNFH DZ, ND           # PCH = PCH+1
+FNFL A, Y             # Y = PCH
+FNFL M, HL            # HL = [PC]
+#74/47
+LD Y, $INST
+MVHLZ ND              # cache instruction (from HL)
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/55
+
+ADDR 0x58             # PCL = 255, iden PCH, inc PCH, iden PCH
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+#22/7
+LDZ Y, $TEMP
+FNH AZ, HLD           # A -> temp
+LD HL, $INC$NULL
+LD Y, $PCL
+#30/14
+FNFH DZ, XD           # X,PCL = PCL+1
+LD Y, $PCH
+FNFH DZ, ND           # PCH = PCH+1
+FNH A, Y              # Y = PCH
+#40/21
+LD HL, $IDEN$IDEN
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP
+FNFL DZ, X            # X = low addr
+#50/29
+FNH A, Y              # Y = hi addr
+FNFH M, NA            # A = [XY]
+LD Y, $AREG
+FNH AZ, HLD           # A -> Acc
+#59/35
+LD HL, $INC$IDEN
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD Y, $PCH
+FNFL DZ, Y            # Y = PCH
+FNFL M, HL            # HL = [PC]
+#74/47
+LD Y, $INST
+MVHLZ ND              # cache instruction (from HL)
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/55
+
+ADDR 0x90             # PCL = 0, inc PCH, iden PCH, iden PCH
+
+
+ADDR 0xC8             # else, iden PCH, iden PCH, iden PCH
+

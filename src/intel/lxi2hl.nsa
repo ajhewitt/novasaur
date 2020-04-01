@@ -1,0 +1,50 @@
+# Load immediate to HL register
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE LXI2HL_PG
+
+# assume: Y = $VMS
+LD HL, $INC$FORK1
+FNFH DZ, ND           # inc state
+LDZ Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#13
+
+ADDR 0x40
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1
+LD HL, $IDEN$NULL
+FNH A, Y              # Y = PCH
+#21
+FNFH M, NA            # A = [PC]
+LD Y, $LREG
+FNH AZ, HLD           # A -> L reg
+NOP
+#29
+LD HL, $MVI2H_INST
+LD Y, $INST
+MVHLZ ND              # rewrite inst
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43
+
+ADDR 0xA0
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+#22
+LD Y, $LREG
+FNH AZ, HLD           # A -> L reg
+NOP
+NOP
+NOP
+#29
+LD HL, $MVI2H_INST
+LD Y, $INST
+MVHLZ ND              # rewrite inst
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

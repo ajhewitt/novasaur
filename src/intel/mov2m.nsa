@@ -8,7 +8,7 @@ PAGE MOV2M_PG
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
 LD HL, $IDEN$SRC2REG
-LDZ Y, $INST
+LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of source reg
 FNH DZ, HLA           # source reg -> A
 LD HL, $IDEN$IDEN

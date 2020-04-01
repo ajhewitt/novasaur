@@ -7,6 +7,13 @@ $FETCH_PG      0x40
 $IMMED_PG      0x41
 $MOV2R_PG      0x42
 $MOV2M_PG      0x43
+$MVI2R_PG      0x44
+$MVI2M_PG      0x45
+$LXI2BC_PG     0x46
+$LXI2DE_PG     0x47
+$LXI2HL_PG     0x48
+$LXI2SP_PG     0x49
+
 
 $EXT_PG        0x4C
 $LDN_PG        0x4D

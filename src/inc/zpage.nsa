@@ -1,10 +1,12 @@
 # zero page assignments
 
-$PCH        0xD0
-$PCL        0xD1
+$PCH        0xE0
+$PCL        0xE1
+$SREG       0xE2
+$PREG       0xE3
 
-$TEMP       0xE0
-$PIDX       0xE1
+
+
 
 $AREG       0xE8
 $BREG       0xEA
@@ -39,3 +41,9 @@ $AUDIO      0xFF
 
 $EXT_INST   0x69
 $NOP_INST   0xC4
+
+$MVI2B_INST 0x06
+$MVI2D_INST 0x16
+$MVI2H_INST 0x26
+$MVI2S_INST 0x01
+
