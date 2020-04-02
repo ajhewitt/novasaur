@@ -1,0 +1,61 @@
+# Load immediate to register (with fetch)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE LXI_PG
+
+# assume: Y = $VMS
+LD HL, $INC2$NULL
+FNH DZ, HLD           # inc state
+LD HL, $INC$FORK3
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#14/11
+
+ADDR 0x20             # PCL = 254, iden PCH, iden PCH, inc PCH
+
+ADDR 0x58             # PCL = 254, iden PCH, inc PCH, iden PCH
+
+ADDR 0x90             # PCL = 0, inc PCH, iden PCH, iden PCH
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$DEST2RPL
+#20/6
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNEL DZ, Y            # Y = zpage addr of low reg
+#30/13
+FNH AZ, HLD           # A -> low reg
+LD HL, $INC$NULL
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+#39/20
+LD HL, $IDEN$DEST2RPH
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+#50/29
+FNEL DZ, Y            # Y = zpage addr of hi reg
+FNH AZ, HLD           # A -> hi reg
+MVHL HLA              # 4-cycle NOP
+NOP
+#60/35
+LD HL, $INC$NULL
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#71/45
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+#80/51
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/55
+
+ADDR 0x90             # else, iden PCH, iden PCH, iden PCH

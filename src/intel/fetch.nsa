@@ -9,7 +9,7 @@ LDZ HL, $INC$NULL
 FNH DZ, HLD        # inc state
 LDZ HL, $SWAP$NULL
 FNH DZ, HLA        # swap post_inc bit to sign
-LDN PC, $0x38
+LDN PC, $0xC8
 NOP
 #10/9
 LD HL, $INC$FORK1
@@ -18,20 +18,12 @@ FNFH DZ, XD        # X,PCL = PCL+1
 FNEL A, PC         # fork on PCL
 #20/17
 
-ADDR 0x38
-#10
-LD HL, $7$IDEN
-ANDH DZ, ND        # clear post_inc bit
-LD Y, $PCL
-FNFL DZ, X         # X = PCL
-#20/8
-#ADDR 0x40         # PCL = 255
-NOP
-NOP
-LD HL, $IDEN$IDEN
+ADDR 0x80          # PCL = 0
 LDZ Y, $PCH
-FNH DZ, Y          # Y = PCH
-FNFL B, HL         # HL = [PC]
+FNH DZ, HLD        # PCH = PCH+1
+LD HL, $IDEN$IDEN
+FNH A, Y           # Y = PCH
+FNFL M, HL         # HL = [PC]
 #31
 LD Y, $INST
 MVHLZ ND           # cache instruction (from HL)
@@ -39,12 +31,20 @@ LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43
 
-ADDR 0xA0          # PCL = 0
-LDZ Y, $PCH
-FNH DZ, HLD        # PCH = PCH+1
+ADDR 0xB8
+#10
+LD HL, $7$IDEN
+ANDH DZ, ND        # clear post_inc bit
+LD Y, $PCL
+FNFL DZ, X         # X = PCL
+#20/8
+#ADDR 0xC0         # else
+NOP
+NOP
 LD HL, $IDEN$IDEN
-FNH A, Y           # Y = PCH
-FNFL B, HL         # HL = [PC]
+LDZ Y, $PCH
+FNH DZ, Y          # Y = PCH
+FNFL M, HL         # HL = [PC]
 #31
 LD Y, $INST
 MVHLZ ND           # cache instruction (from HL)

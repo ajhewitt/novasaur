@@ -1,52 +1,56 @@
-# Load accumulator direct (plus fetch)
+# Load accumulator direct (with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE LDA_PG
 
 # assume: Y = $VMS
-LD HL, $INC$FORK
-FNFH DZ, ND           # inc state
+LD HL, $INC2$NULL
+FNH DZ, HLD           # inc state
+LD HL, $INC$FORK3
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
-#13/10
+#14/11
 
 ADDR 0x20             # PCL = 254, iden PCH, iden PCH, inc PCH
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
-#22/7
-LDZ Y, $TEMP
+#23/7
+LD Y, $TEMP
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
-#30/14
+#31/14
 FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$IDEN
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
-LD HL, $IDEN$IDEN
-#39/21
+#40/21
 FNFH M, NA            # A = [PC]
 LD Y, $TEMP
 FNFL DZ, X            # X = low addr
 FNH A, Y              # Y = hi addr
-#49/28
+#50/28
 FNFH M, NA            # A = [XY]
 LD Y, $AREG
 FNH AZ, HLD           # A -> Acc
-LD HL, $INC$IDEN
+LD HL, $INC$NULL
 LD Y, $PCL
-#60/37
+#61/37
 FNFH DZ, XD           # X,PCL = PCL+1
-LD Y, $PCH
-FNFH DZ, ND           # PCH = PCH+1
-FNFL A, Y             # Y = PCH
-FNFL M, HL            # HL = [PC]
-#74/47
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+#70/44
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
 LD Y, $INST
-MVHLZ ND              # cache instruction (from HL)
+FNH A, HLD            # cache instruction (from HL)
+NOP
+#80/51
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #86/55
@@ -56,42 +60,124 @@ LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
-#22/7
+#23/7
 LDZ Y, $TEMP
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
-#30/14
+#31/14
 FNFH DZ, XD           # X,PCL = PCL+1
-LD Y, $PCH
-FNFH DZ, ND           # PCH = PCH+1
-FNH A, Y              # Y = PCH
-#40/21
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$IDEN
+FNH A, Y              # Y = PCH
+#42/22
 FNFH M, NA            # A = [PC]
 LD Y, $TEMP
 FNFL DZ, X            # X = low addr
-#50/29
+#50/28
 FNH A, Y              # Y = hi addr
 FNFH M, NA            # A = [XY]
 LD Y, $AREG
 FNH AZ, HLD           # A -> Acc
-#59/35
-LD HL, $INC$IDEN
+#59/34
+LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-LD Y, $PCH
-FNFL DZ, Y            # Y = PCH
-FNFL M, HL            # HL = [PC]
-#74/47
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#70/44
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
 LD Y, $INST
-MVHLZ ND              # cache instruction (from HL)
+FNH A, HLD            # cache instruction (from HL)
+NOP
+#80/51
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #86/55
 
 ADDR 0x90             # PCL = 0, inc PCH, iden PCH, iden PCH
-
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+#20/5
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
+LDZ Y, $TEMP
+FNH AZ, HLD           # A -> temp
+#29/11
+LD HL, $INC$NULL
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$IDEN
+LDZ Y, $PCH
+#40/21
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP
+FNFL DZ, X            # X = low addr
+#50/28
+FNH A, Y              # Y = hi addr
+FNFH M, NA            # A = [XY]
+LD Y, $AREG
+FNH AZ, HLD           # A -> Acc
+#59/34
+LD HL, $INC$NULL
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#70/44
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+NOP
+#80/51
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/55
 
 ADDR 0xC8             # else, iden PCH, iden PCH, iden PCH
-
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+#23/7
+LDZ Y, $TEMP
+FNH AZ, HLD           # A -> temp
+LD HL, $INC$NULL
+LD Y, $PCL
+#31/14
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$IDEN
+LD Y, $PCH
+FNH A, Y              # Y = PCH
+#40/21
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP
+FNFL DZ, X            # X = low addr
+FNH A, Y              # Y = hi addr
+#50/28
+FNFH M, NA            # A = [XY]
+LD Y, $AREG
+FNH AZ, HLD           # A -> Acc
+LD HL, $INC$NULL
+#59/35
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#70/44
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+NOP
+NOP
+NOP
+#80/52
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/56

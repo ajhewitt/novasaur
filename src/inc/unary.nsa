@@ -1,6 +1,7 @@
 # Unary function codes
-#FNF, FNH
 $NULL       0
+
+#FNF, FNH
 $IDEN       0
 $INC        1
 $DEC        2
@@ -17,13 +18,21 @@ $INCLINE    12
 $INCPROC    13
 $OVER?      14
 $FLIP       15
+
 #FNE
 $V2E        0
 $V2M        1
-$INST2RNL   2
-$INST2RNH   3
-$FORK       4
-$SRC2REG    5
-$DST2REG    6
+$SRC2REG    2
+$DST2REG    3
+$FORK1      4
+$FORK2      5
+$FORK3      6
+
+
+
+
+
+
+
 $UNDER?     14
 $EXTPG      15

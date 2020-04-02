@@ -5,45 +5,173 @@ INCLUDE ../inc/pages.nsa
 PAGE MVI2M_PG
 
 # assume: Y = $VMS
-LD HL, $INC$FORK1
-FNFH DZ, ND           # inc state
-LDZ Y, $PCL
+LD HL, $INC2$NULL
+FNH DZ, HLD           # inc state
+LD HL, $INC$FORK2
+LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
-#13
+#14/11
 
-ADDR 0x40
-LDZ Y, $PCH
-FNH DZ, HLD           # PCH = PCH+1
-LD HL, $IDEN$IDEN
-FNH A, Y              # Y = PCH
-FNFH M, NA            # A = [PC]
-#24
-LD Y, $LREG
-FNEL DZ, X            # X = L
-LD Y, $HREG
-FNH DZ, Y             # Y = H
-FNFH A, NM            # A -> [HL]
-#36
-LD HL, $NOP_INST
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#44!!!
-
-ADDR 0xA0
+ADDR 0x28             # PCL = 255, iden PCH, inc PCH
 LD HL, $IDEN$IDEN
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
+#20/5
 FNFH M, NA            # A = [PC]
-#22
 LD Y, $LREG
 FNEL DZ, X            # X = L
 LD Y, $HREG
+#30/13
 FNH DZ, Y             # Y = H
 FNFH A, NM            # A -> [HL]
-#34
 NOP
-LD HL, $NOP_INST
+NOP
+NOP
+NOP
+NOP
+#40/21
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#50/31
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $INC$NULL
+#60/41
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+#71/50
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+#80/56
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#43
+#86/60
+
+ADDR 0x70             # PCL = 0, inc PCH, iden PCH
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$IDEN
+#20
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $LREG
+FNEL DZ, X            # X = L
+#30
+LD Y, $HREG
+FNH DZ, Y             # Y = H
+FNFH A, NM            # A -> [HL]
+NOP
+NOP
+NOP
+#40
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#50
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#60
+LD HL, $INC$NULL
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#71
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+#80/56
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/60
+
+ADDR 0xB8             # else, iden PCH, iden PCH
+LD HL, $IDEN$IDEN
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#20/5
+FNFH M, NA            # A = [PC]
+LD Y, $LREG
+FNEL DZ, X            # X = L
+LD Y, $HREG
+#30/13
+FNH DZ, Y             # Y = H
+FNFH A, NM            # A -> [HL]
+NOP
+NOP
+NOP
+NOP
+NOP
+#40/21
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#50/31
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#60/41
+LD HL, $INC$NULL
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#71/51
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+#80/57
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/61

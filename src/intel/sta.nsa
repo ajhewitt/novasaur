@@ -5,46 +5,46 @@ INCLUDE ../inc/pages.nsa
 PAGE STA_PG
 
 # assume: Y = $VMS
+LD HL, $INC2$NULL
+FNH DZ, HLD           # inc state
 LD HL, $INC$FORK2
-FNFH DZ, ND           # inc state
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
-#13
+#14/11
 
-ADDR 0x40             # PCL = 255, iden PCH, inc PCH
+ADDR 0x28             # PCL = 255, iden PCH, inc PCH
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
+#20/5
 FNFH M, NA            # A = [PC]
-#22/7
 LDZ Y, $TEMP
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
-#30/14
+#31/14
 FNFH DZ, XD           # X,PCL = PCL+1
 LD Y, $PCH
 FNFH DZ, ND           # PCH = PCH+1
 FNH A, Y              # Y = PCH
-#40/21
+#41/21
 LD HL, $IDEN$IDEN
 FNFH M, NA            # A = [PC]
 LD Y, $TEMP2
 FNFH AZ, ND           # temp2 = hi addr
-#50/29
+#51/29
 LD Y, $AREG
 FNFH DZ, NA           # A = Acc
 LD Y, $TEMP
 FNFL DZ, X            # X = low addr
-#60/37
-LD Y, $TEMP2
+#61/37
+LDZ Y, $TEMP2
 FNH DZ, Y             # Y = hi addr
 FNFH A, NM            # Acc -> [XY]
 NOP
 NOP
-NOP
-#70/46
+#70/44
 NOP
 NOP
 NOP
@@ -56,10 +56,10 @@ NOP
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/60
+#86/58
 
-ADDR 0x80             # PCL = 0, inc PCH, iden PCH
+ADDR 0x70             # PCL = 0, inc PCH, iden PCH
 
 
-ADDR 0xC0             # else, iden PCH, iden PCH
+ADDR 0xB8             # else, iden PCH, iden PCH
 
