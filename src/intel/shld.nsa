@@ -1,0 +1,120 @@
+# Store H and L direct (with fetch)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SHLD_PG
+
+# assume: Y = $VMS
+LD HL, $3
+ADDH DZ, ND           # inc state
+LD HL, $INC$FORK3
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#15
+
+ADDR 0x20             # PCL = 254, iden PCH, iden PCH, inc PCH
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#21
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP
+FNH AZ, HLD           # A -> temp
+LD HL, $INC$NULL
+#30
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#41
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP2
+FNFH AZ, ND           # temp2 = hi addr
+LD Y, $TEMP
+#51
+FNFH DZ, XA           # X = low addr
+NOP
+NOP
+LD PG, $SHLD1_PG
+#58
+
+ADDR 0x58             # PCL = 255, iden PCH, inc PCH, iden PCH
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#21
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP
+FNH AZ, HLD           # A -> temp
+LD HL, $INC$NULL
+#30
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+#41
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP2
+FNFH AZ, ND           # temp2 = hi addr
+#51
+LD Y, $TEMP
+FNFH DZ, XA           # X = low addr
+LD PG, $SHLD2_PG
+#58
+
+ADDR 0x90             # PCL = 0, inc PCH, iden PCH, iden PCH
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+#21
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP
+FNH AZ, HLD           # A -> temp
+#30
+LD HL, $INC$NULL
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#41
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP2
+FNFH AZ, ND           # temp2 = hi addr
+#51
+LD Y, $TEMP
+FNFH DZ, XA           # X = low addr
+LD PG, $SHLD2_PG
+#58
+
+ADDR 0xC8             # PCL = 254, iden PCH, iden PCH, iden PCH
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#21
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP
+FNH AZ, HLD           # A -> temp
+LD HL, $INC$NULL
+#30
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#41
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP2
+FNFH AZ, ND           # temp2 = hi addr
+LD Y, $TEMP
+#51
+FNFH DZ, XA           # X = low addr
+NOP
+NOP
+LD PG, $SHLD2_PG
+#58

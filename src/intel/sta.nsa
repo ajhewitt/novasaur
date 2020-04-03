@@ -19,14 +19,14 @@ LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 #20/5
 FNFH M, NA            # A = [PC]
-LDZ Y, $TEMP
+LD Y, $TEMP
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
 #31/14
 FNFH DZ, XD           # X,PCL = PCL+1
 LD Y, $PCH
-FNFH DZ, ND           # PCH = PCH+1
+FNFH DZ, ND           # PCH = PCH+1      *** inc PCH ***
 FNH A, Y              # Y = PCH
 #41/21
 LD HL, $IDEN$IDEN
@@ -59,7 +59,93 @@ VMPHL DZ, PGA         # jump to next VMC
 #86/58
 
 ADDR 0x70             # PCL = 0, inc PCH, iden PCH
-
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LDZ HL, $IDEN$NULL
+#20/5
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LDZ Y, $TEMP
+FNH AZ, HLD           # A -> temp
+LD HL, $INC$NULL
+#31/13
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$IDEN
+LDZ Y, $PCH
+#40/21
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP2
+FNFH AZ, ND           # temp2 = hi addr
+#50/29
+LD Y, $AREG
+FNFH DZ, NA           # A = Acc
+LD Y, $TEMP
+FNFL DZ, X            # X = low addr
+#61/37
+LDZ Y, $TEMP2
+FNH DZ, Y             # Y = hi addr
+FNFH A, NM            # Acc -> [XY]
+NOP
+NOP
+#70/44
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/58
 
 ADDR 0xB8             # else, iden PCH, iden PCH
-
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#20/5
+FNFH M, NA            # A = [PC]
+LDZ Y, $TEMP
+FNH AZ, HLD           # A -> temp
+LD HL, $INC$NULL
+LD Y, $PCL
+#31/14
+FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$IDEN
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#40/21
+FNFH M, NA            # A = [PC]
+LD Y, $TEMP2
+FNFH AZ, ND           # temp2 = hi addr
+LD Y, $AREG
+#50/29
+FNFH DZ, NA           # A = Acc
+LD Y, $TEMP
+FNFL DZ, X            # X = low addr
+LDZ Y, $TEMP2
+#60/37
+FNH DZ, Y             # Y = hi addr
+FNFH A, NM            # Acc -> [XY]
+NOP
+NOP
+NOP
+NOP
+NOP
+#70/45
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/59

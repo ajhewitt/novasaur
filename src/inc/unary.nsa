@@ -24,11 +24,11 @@ $V2E        0
 $V2M        1
 $SRC2REG    2
 $DST2REG    3
-$FORK1      4
-$FORK2      5
-$FORK3      6
-
-
+$DST2RPL    4
+$DST2RPH    5
+$FORK1      6
+$FORK2      7
+$FORK3      8
 
 
 
