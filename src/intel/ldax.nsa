@@ -1,0 +1,30 @@
+# Load Indirect through register pair
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE LDAX_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$SRC2RPL
+LD Y, $INST
+FNEL DZ, Y            # Y = zpage addr of high register
+#11
+FNFH DZ, XA           # X = register high
+LD HL, $IDEN$SRC2RPH
+LD Y, $INST
+FNEL DZ, Y            # Y = zpage addr of low register
+#21
+FNH DZ, Y             # Y = regsiter low
+FNFH M, NA            # A = [XY]
+LD Y, $AREG
+FNH AZ, HLD           # A -> Acc
+#30
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LDZ Y, $VMS           # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43
