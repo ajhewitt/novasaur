@@ -1,45 +1,50 @@
-# Store H and L direct - cycle 2
+# Load H and L direct - cycle 2
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE SHLD1_PG
+PAGE LHLD2_PG
 
 # assume: A = X, H = $IDEN
 LDP PC, $BRANCH
-LD Y, $HREG
-FNFH DZ, NA           # A = H
 LDZ Y, $TEMP2
 FNH DZ, Y             # Y = hi addr
-FNFH A, NM            # H -> [XY]
-#71
+FNFH M, NA            # A = [XY]
+LD Y, $HREG
+FNH AZ, HLD           # A -> H
+#70
 LD HL, $INC$NULL
 LD Y, $TEMP
 FNFH DZ, XD           # X = low addr+1
 LDP HL, $INC$NULL     # X was negative, now positive
 LDN HL, $IDEN$NULL
-#81
+#80
 LD Y, $TEMP2
-FNH DZ, HLD          # update temp2
+FNH DZ, Y             # Y = updated hi addr
 LD HL, $IDEN$NULL
+FNFH M, NA            # A = [XY]
 LD Y, $LREG
-FNFH DZ, NA           # A = L
-#92
-LDZ Y, $TEMP2
-FNH DZ, Y             # Y = hi addr
-FNFH A, NM            # L -> [XY]
+#91
+FNH AZ, HLD           # A -> L
 LD HL, $INC$NULL
-#101
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-LDZ Y, $PCH
-FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-#110
+#100
 LD HL, $IDEN$NULL
-FNH A, Y              # Y = PCH
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
+#111
 FNH A, HLD            # cache instruction (from HL)
-#121
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#120
+NOP
 NOP
 NOP
 LD Y, $VMS            # set Y = $VMS on exit
@@ -48,35 +53,38 @@ VMPHL DZ, PGA         # jump to next VMC
 
 #60
 $BRANCH
-LD Y, $HREG
-FNFH DZ, NA           # A = H
 LDZ Y, $TEMP2
 FNH DZ, Y             # Y = hi addr
-#69
-FNFH A, NM            # H -> [XY]
+FNFH M, NA            # A = [XY]
+LD Y, $HREG
+FNH AZ, HLD           # A -> H
+#71
 LD HL, $INC$NULL
 LD Y, $TEMP
 FNFH DZ, XD           # X = low addr+1
-#79
 LD HL, $IDEN$NULL
+#80
+LD Y, $TEMP2
+FNH DZ, Y             # Y = updated hi addr
+FNFH M, NA            # A = [XY]
 LD Y, $LREG
-FNFH DZ, NA           # A = L
-LDZ Y, $TEMP2
-FNH DZ, Y             # Y = hi addr
-#90
-FNFH A, NM            # L -> [XY]
+FNH AZ, HLD           # A -> L
+#91
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
+LD HL, $IDEN$NULL
 #100
 LDZ Y, $PCH
-FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-LD HL, $IDEN$NULL
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
-#111
 LD Y, $INST
 FNH A, HLD            # cache instruction (from HL)
+#111
+NOP
+NOP
+NOP
+NOP
 NOP
 NOP
 NOP

@@ -1,8 +1,8 @@
-# Load H and L direct - cycle 2
+# Store H and L direct - cycle 2
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE LHLD1_PG
+PAGE SHLD2_PG
 
 # assume: A = X, H = $IDEN
 LDP PC, $BRANCH
