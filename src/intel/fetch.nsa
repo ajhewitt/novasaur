@@ -18,7 +18,7 @@ FNFH DZ, XD        # X,PCL = PCL+1
 FNEL A, PC         # fork on PCL
 #20/17
 
-ADDR 0x40          # PCL = 0
+ADDR 0x80          # PCL = 0
 LDZ Y, $PCH
 FNH DZ, HLD        # PCH = PCH+1
 LD HL, $IDEN$IDEN
@@ -31,14 +31,14 @@ LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43
 
-ADDR 0x98
+ADDR 0xB8
 #10
 LD HL, $7$IDEN
 ANDH DZ, ND        # clear post_inc bit
 LD Y, $PCL
 FNFL DZ, X         # X = PCL
 #20/8
-#ADDR 0xA0         # else
+#ADDR 0xC0         # else
 NOP
 NOP
 LD HL, $IDEN$IDEN

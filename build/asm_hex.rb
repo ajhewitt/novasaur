@@ -2,7 +2,7 @@
 
 DST = %w[N O1 O2 O3 O4 O5 O6 O7 X E S V Y HL PC PG]
 SRC = %w[I IZ E EZ I IZ E EZ A AZ M MZ A AZ D DZ]
-ALU = %w[MV ADD SUB AND OR XOR VMP VMQ MUL DIV COM SER AV ATT FNE FNF]
+ALU = %w[MV ADD SUB AF AND OR XOR VMP MUL DIV COM SER AV ATT FNE FNF]
 LD = %w[NOP NOPZ LD LDZ LDP LDPZ LDN LDNZ]
 WR = %w[M D]
 
@@ -30,6 +30,7 @@ end
 
 def inst(i)
   dest = dst(i)
+  return if i[2] == 0 && (dest == 'Y' || (dest == 'X' && i[3] == 0))
   dest += (i[2] == 0 ? WR[i[10]] : 'A') if i[5] == 0
   case decode i, [5, 6, 7]
   when 0

@@ -12,27 +12,27 @@ $ROR        6
 $ROL        7
 $LSR        8
 $LSL        9
-$ASR        10
-$SWAP       11
-$INCLINE    12
-$INCPROC    13
-$OVER?      14
-$FLIP       15
+$ASR       10
+$SWAP      11
+$INCLINE   12
+$INCPROC   13
+$OVER?     14
+$FLIP      15
 
 #FNE
 $V2E        0
 $V2M        1
 $SRC2REG    2
 $DST2REG    3
-$DST2RPL    4
-$DST2RPH    5
+$SRC2RPL    4
+$SRC2RPH    5
 $FORK1      6
 $FORK2      7
 $FORK3      8
+$INVCARRY   9 # invert carry flags
+$DAFLAGS   10 # set flags if nibbles > 9
 
 
 
-
-
-$UNDER?     14
-$EXTPG      15
+$UNDER?    14
+$EXTPG     15

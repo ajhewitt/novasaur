@@ -5,10 +5,10 @@ $PSYNC_PG      2
 
 $FETCH_PG      0x40
 $IMMED_PG      0x41
-$MOV2R_PG      0x42
-$MOV2M_PG      0x43
-$MVI2R_PG      0x44
-$MVI2M_PG      0x45
+$MOVR_PG       0x42
+$MOVM_PG       0x43
+$MVIR_PG       0x44
+$MVIM_PG       0x45
 $LXI_PG        0x46
 $STA_PG        0x47
 $LHLD_PG       0x48
@@ -17,6 +17,16 @@ $LHLD2_PG      0x4A
 $SHLD_PG       0x4B
 $SHLD1_PG      0x4C
 $SHLD2_PG      0x4D
+$LDAX_PG       0x4E
+$STAX_PG       0x4F
+$XCHG_PG       0x50
+$ADDR_PG       0x51
+$ADDM_PG       0x52
+$SUBR_PG       0x53
+$SUBM_PG       0x54
+
+$DAA_PG        0x70
+$CMA_PG        0x71
 
 $EXT_PG        0x4C
 $LDN_PG        0x4D

@@ -1,0 +1,28 @@
+# Subtract memory from accumulator
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SUBM_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$2COM
+LD Y, $LREG
+FNFH DZ, XA           # X = L
+#11
+LDZ Y, $HREG
+FNH DZ, Y             # Y = H
+FNFL M, HL            # HL = -[XY]
+LD Y, $AREG
+#20
+ADDHL DZ, ND          # Acc = Acc - mem
+AFHL A, NA
+LD HL, $INVCARRY$NULL
+#30
+LD Y, $FREG
+FNEH AZ, ND
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

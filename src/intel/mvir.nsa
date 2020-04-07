@@ -2,7 +2,7 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE MVI2R_PG
+PAGE MVIR_PG
 
 # assume: Y = $VMS
 LD HL, $INC$FORK1
@@ -12,7 +12,7 @@ FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
 #13
 
-ADDR 0x40
+ADDR 0x80
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1
 LD HL, $IDEN$DST2REG
@@ -32,7 +32,7 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43
 
-ADDR 0xA0
+ADDR 0xC0
 LD HL, $IDEN$DST2REG
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH

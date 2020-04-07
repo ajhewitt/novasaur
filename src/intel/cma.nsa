@@ -1,0 +1,47 @@
+# Complement Accumulator
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE CMA_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $1COM$NULL
+LDZ Y, $AREG
+FNH DZ, HLD           # 1's complement Acc
+#10
+NOP
+NOP
+LDZ HL, $INC$FORK1
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#22
+
+ADDR 0x80
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+FNH DZ, Y             # Y = PCH
+#30
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43
+
+ADDR 0xC0
+NOP
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#30
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

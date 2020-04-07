@@ -14,7 +14,7 @@ FNEL A, PC
 #14/11
 
 ADDR 0x20             # PCL = 254, iden PCH, iden PCH, inc PCH
-LD HL, $IDEN$DST2RPL
+LD HL, $IDEN$SRC2RPL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 #20/5
@@ -26,7 +26,7 @@ FNH AZ, HLD           # A -> low reg
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-LD HL, $IDEN$DST2RPH
+LD HL, $IDEN$SRC2RPH
 #39/20
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
@@ -58,7 +58,7 @@ VMPHL DZ, PGA         # jump to next VMC
 #86/56
 
 ADDR 0x58             # PCL = 254, iden PCH, inc PCH, iden PCH
-LD HL, $IDEN$DST2RPL
+LD HL, $IDEN$SRC2RPL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 #20/5
@@ -73,7 +73,7 @@ FNFH DZ, XD           # X,PCL = PCL+1
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 #41/21
-LD HL, $IDEN$DST2RPH
+LD HL, $IDEN$SRC2RPH
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
@@ -104,7 +104,7 @@ VMPHL DZ, PGA         # jump to next VMC
 ADDR 0x90             # PCL = 0, inc PCH, iden PCH, iden PCH
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-LD HL, $IDEN$DST2RPL
+LD HL, $IDEN$SRC2RPL
 #20/5
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
@@ -116,7 +116,7 @@ LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 #39/19
-LD HL, $IDEN$DST2RPH
+LD HL, $IDEN$SRC2RPH
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
@@ -146,7 +146,7 @@ VMPHL DZ, PGA         # jump to next VMC
 #86/56
 
 ADDR 0xC8             # else, iden PCH, iden PCH, iden PCH
-LD HL, $IDEN$DST2RPL
+LD HL, $IDEN$SRC2RPL
 LDZ Y, $PCH
 FNH A, Y              # Y = PCH
 #20/5
@@ -158,7 +158,7 @@ FNH AZ, HLD           # A -> low reg
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-LD HL, $IDEN$DST2RPH
+LD HL, $IDEN$SRC2RPH
 LDZ Y, $PCH
 #41/22
 FNH DZ, Y             # Y = PCH

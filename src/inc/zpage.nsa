@@ -9,7 +9,7 @@ $PREG       0xE3
 $TEMP       0xE6
 $TEMP2      0xE7
 $AREG       0xE8
-
+$FREG       0xE9
 $BREG       0xEA
 $CREG       0xEB
 $DREG       0xEC

@@ -1,0 +1,57 @@
+# Exchange registers HL with DE
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE XCHG_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LD Y, $HREG
+FNFH DZ, NA           # A = H
+#11
+LD Y, $TEMP
+FNFH AZ, ND           # A -> temp
+LD Y, $DREG
+FNFH DZ, NA           # A = D
+#21
+LD Y, $HREG
+FNFH AZ, ND           # D -> H
+LD Y, $TEMP
+FNFH DZ, NA           # A = temp
+#31
+LD Y, $DREG
+FNFH AZ, ND           # H -> D
+LD Y, $LREG
+FNFH DZ, NA           # A = L
+#41
+LD Y, $TEMP
+FNFH AZ, ND           # A -> temp
+LD Y, $EREG
+FNFH DZ, NA           # A = E
+#51
+LD Y, $LREG
+FNFH AZ, ND           # E -> L
+LD Y, $TEMP
+FNFH DZ, NA           # A = temp
+#61
+LD Y, $EREG
+FNFH AZ, ND           # L -> E
+NOP
+NOP
+NOP
+NOP
+#70
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86

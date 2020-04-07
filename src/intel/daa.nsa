@@ -1,0 +1,69 @@
+# Decimal Adjust Accumulator (with fetch)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE DAA_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$DAFLAGS
+FNH DZ, HLD           # inc state
+LDZ Y, $AREG
+FNEL DZ, HL           # determine carry flags if nibbles > 9
+LD Y, $FREG
+#11
+ORHL DZ, ND           # overlay carry flags
+LDP HL, $0
+LDN HL, $0x60
+LD Y, $TEMP
+#20
+MVHLZ ND              # add 6 to upper nibble if carry
+LD HL, $SWAP$NULL
+LDZ Y, $FREG
+FNH DZ, HLA           # swap aux-carry to test
+#30
+LDP HL, $0
+LDN HL, $0x60
+LD Y, $TEMP
+ADDH DZ, HLD          # add 6 to lower nibble if aux-carry
+LD Y, $AREG
+#41
+ADDHL DZ, ND          # add decimal adjust to Acc
+AFHL A, NA            # determine flags
+LD HL, $IDEN$NULL
+#51
+LD Y, $FREG
+FNH AZ, HLD           # update flags
+LDZ HL, $INC$FORK1
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#65
+
+ADDR 0x80
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+#71
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0xC0
+NOP
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#71
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86

@@ -1,8 +1,8 @@
-# Move reg src to mem dest (MOV)
+# Add register to accumulator
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE MOV2M_PG
+PAGE ADDR_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
@@ -10,16 +10,15 @@ FNH DZ, HLD           # inc state
 LD HL, $IDEN$SRC2REG
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of source reg
-FNH DZ, HLA           # source reg -> A
-LD HL, $IDEN$IDEN
-LD Y, $LREG
-FNFL DZ, X            # X = L
-#20
-LDZ Y, $HREG
-FNH DZ, Y             # Y = H
-FNFH A, NM            # A -> [HL]
-NOP
-NOP
+#11
+FNH DZ, HL            # source reg -> HL
+LD Y, $AREG
+ADDHL DZ, ND          # Acc = Acc + HL
+#19
+AFHL A, NA
+LD HL, $IDEN$NULL
+LD Y, $FREG
+FNH AZ, HLD
 NOP
 #30
 NOP
@@ -28,6 +27,6 @@ NOP
 NOP
 NOP
 LD HL, $FETCH
-LDZ Y, $VMS           # set Y = $VMS on exit
+LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43

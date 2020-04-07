@@ -33,8 +33,8 @@ end
 
 # ALU function: AS (arithmetic status)
 # HHHHLLLL - HL, BBBBAAAA - acc
-# L) BBBBCZCZ - carry/zero on A-L/A+L (B-H-C/B+H+C)
-# H) CONZCONZ - carry/overflow/negative/zero on BA-HL/BA+HL
+# L) BBBBHZHZ - half-carry/zero on A-L/A+L (B-H-C/B+H+C)
+# H) CHNZCHNZ - carry/half-carry/negative/zero on BA-HL/BA+HL
 #   (sub)(add)
 def print_as(offset, opts = {})
   # feature not implemented 
