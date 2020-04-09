@@ -1,0 +1,83 @@
+# Add immediate to accumulator with carry
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE ACI_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LDZ Y, $FREG
+FNH DZ, HLA           # A = flags
+#10
+LDP HL, $0
+LDN HL, $1            # HL = 1 if carry
+LD Y, $AREG
+ADDHL DZ, ND          # Acc = Acc + HL
+#19
+AFHL A, NA            # A = flags
+LD HL, $0x88
+LD Y, $TEMP
+ANDHL AZ, ND          # save carry flags in temp
+#31
+LD HL, $INC$FORK1
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1      *** inc PCH ***
+FNEL A, PC
+#40
+
+ADDR 0x80
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1
+LD HL, $IDEN$NULL
+FNH A, Y              # Y = PCH
+FNFH M, HLA           # HL = [PC]
+#51
+LD Y, $AREG
+ADDHL DZ, ND          # Acc = Acc + HL
+AFHL A, HLA           # HL = flags
+#61
+LD Y, $TEMP
+ORHL DZ, NA           # A = flags | initial carry flags
+LD HL, $IDEN$NULL
+LDZ Y, $FREG
+#71
+FNH AZ, HLD           # A -> flags
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0xC0
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH A, Y              # Y = PCH
+FNFH M, HLA           # HL = [PC]
+LD Y, $AREG
+#51
+ADDHL DZ, ND          # Acc = Acc + HL
+AFHL A, HLA           # HL = flags
+LD Y, $TEMP
+#61
+ORHL DZ, NA           # A = flags | initial carry flags
+LD HL, $IDEN$NULL
+LDZ Y, $FREG
+FNH AZ, HLD           # A -> flags
+#71
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86

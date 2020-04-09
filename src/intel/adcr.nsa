@@ -1,0 +1,59 @@
+# Add register to accumulator
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE ADCR_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LDZ Y, $FREG
+FNH DZ, HLA           # A = flags
+#10
+LDP HL, $0
+LDN HL, $1            # HL = 1 if carry
+LD Y, $AREG
+ADDHL DZ, ND          # Acc = Acc + HL
+#19
+AFHL A, NA            # A = flags
+LD HL, $0x88
+LD Y, $TEMP
+ANDHL AZ, ND          # initial carry flags -> temp
+#31
+LD HL, $IDEN$SRC2REG
+LD Y, $INST
+FNEL DZ, Y            # Y = zpage addr of source reg
+FNH DZ, HL            # source reg -> HL
+#40
+LD Y, $AREG
+ADDHL DZ, ND          # Acc = Acc + HL
+AFHL A, HLA           # HL = flags
+#50
+LD Y, $TEMP
+ORHL DZ, NA           # A = flags | initial carry flags
+LD HL, $IDEN$NULL
+LDZ Y, $FREG
+#60
+FNH AZ, HLD           # A -> flags
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#70
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86

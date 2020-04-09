@@ -17,7 +17,7 @@ $SWAP      11
 $INCLINE   12
 $INCPROC   13
 $OVER?     14
-$FLIP      15
+$REVERSE   15
 
 #FNE
 $V2E        0
@@ -30,7 +30,7 @@ $FORK1      6
 $FORK2      7
 $FORK3      8
 $INVCARRY   9 # invert carry flags
-$DAFLAGS   10 # set flags if nibbles > 9
+$DACARRY   10 # set carry if nibbles > 9
 
 
 

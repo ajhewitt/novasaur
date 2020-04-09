@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE MVIM_PG
 
 # assume: Y = $VMS
-LD HL, $INC2$NULL
+LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
 LD HL, $INC$FORK2
 LD Y, $PCL

@@ -1,15 +1,15 @@
 # zero page assignments
 
-$PCH        0xE0
-$PCL        0xE1
-$SREG       0xE2
-$PREG       0xE3
+$PCH        0xE0 # PC MSB
+$PCL        0xE1 # PC LSB
+$SPH        0xE2 # SP MSB
+$SPL        0xE3 # SP LSB
 
 
 $TEMP       0xE6
 $TEMP2      0xE7
-$AREG       0xE8
-$FREG       0xE9
+$AREG       0xE8 # Accumulator
+$FREG       0xE9 # Flags - COZNHP00
 $BREG       0xEA
 $CREG       0xEB
 $DREG       0xEC

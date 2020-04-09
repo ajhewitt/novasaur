@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE DAA_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC$DAFLAGS
+LDZ HL, $INC2$DACARRY
 FNH DZ, HLD           # inc state
 LDZ Y, $AREG
 FNEL DZ, HL           # determine carry flags if nibbles > 9
@@ -22,9 +22,9 @@ LDZ Y, $FREG
 FNH DZ, HLA           # swap aux-carry to test
 #30
 LDP HL, $0
-LDN HL, $0x60
+LDN HL, $6
 LD Y, $TEMP
-ADDH DZ, HLD          # add 6 to lower nibble if aux-carry
+ADDL DZ, HL           # add 6 to lower nibble if aux-carry
 LD Y, $AREG
 #41
 ADDHL DZ, ND          # add decimal adjust to Acc

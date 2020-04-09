@@ -24,6 +24,9 @@ $ADDR_PG       0x51
 $ADDM_PG       0x52
 $SUBR_PG       0x53
 $SUBM_PG       0x54
+$ADCR_PG       0x60
+$ADCM_PG       0x61
+$ACI_PG        0x62
 
 $DAA_PG        0x70
 $CMA_PG        0x71

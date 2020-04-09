@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE MOVR_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC$SRC2REG
+LD HL, $INC$SRC2REG
 FNFH DZ, HLD          # inc state
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of source reg

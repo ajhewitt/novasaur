@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE LHLD_PG
 
 # assume: Y = $VMS
-LD HL, $3
+LD HL, $0x30
 ADDH DZ, ND           # inc state
 LD HL, $INC$FORK3
 LD Y, $PCL

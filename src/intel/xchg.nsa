@@ -1,57 +1,73 @@
-# Exchange registers HL with DE
+# Exchange registers HL with DE (with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE XCHG_PG
 
-# assume: Y = $VMS
+# assume: Y = $VMS, ref: https://en.wikipedia.org/wiki/XOR_swap_algorithm
 LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
+# D <-> H
 LD HL, $IDEN$NULL
-LD Y, $HREG
-FNFH DZ, NA           # A = H
-#11
-LD Y, $TEMP
-FNFH AZ, ND           # A -> temp
 LD Y, $DREG
-FNFH DZ, NA           # A = D
-#21
-LD Y, $HREG
-FNFH AZ, ND           # D -> H
-LD Y, $TEMP
-FNFH DZ, NA           # A = temp
-#31
-LD Y, $DREG
-FNFH AZ, ND           # H -> D
-LD Y, $LREG
-FNFH DZ, NA           # A = L
-#41
-LD Y, $TEMP
-FNFH AZ, ND           # A -> temp
+FNH DZ, HLA           # D = 0011 D-start
+#10
+LD Y, $HREG           # H = 1010 H-start
+XORHL DZ, ND          # H = 1001
+LD Y, $DREG           # D = 0011
+XORHL AZ, HLD         # D = 1010 D-end
+#22
+LD Y, $HREG           # H = 1001
+XORHL DZ, ND          # D = 0011 H-end
+# E <-> L
+LD HL, $IDEN$NULL
+#30
 LD Y, $EREG
-FNFH DZ, NA           # A = E
-#51
-LD Y, $LREG
-FNFH AZ, ND           # E -> L
-LD Y, $TEMP
-FNFH DZ, NA           # A = temp
-#61
-LD Y, $EREG
-FNFH AZ, ND           # L -> E
+FNH DZ, HLA           # E = 0011 E-start
+LD Y, $LREG           # L = 1010 L-start
+XORHL DZ, ND          # L = 1001
+#40
+LD Y, $EREG           # E = 0011
+XORHL AZ, HLD         # E = 1010 E-end
+LD Y, $LREG           # L = 1001
+XORHL DZ, ND          # E = 0011 L-end
+#52
+LD HL, $INC$FORK1
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#62
+
+ADDR 0x80
+NOP
+NOP
+NOP
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+#71
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0xC0
 NOP
 NOP
 NOP
 NOP
-#70
 NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-LD HL, $FETCH
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#71
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #86
