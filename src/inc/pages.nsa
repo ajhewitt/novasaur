@@ -39,12 +39,20 @@ $DCRM_PG       0x60
 $INX_PG        0x61
 $DCX_PG        0x62
 $DAD_PG        0x63
+$DAA_PG        0x64
+$ANAR_PG       0x65
+$ANAM_PG       0x66
+$ANI_PG        0x67
+$ORAR_PG       0x68
+$ORAM_PG       0x69
+$ORI_PG        0x6A
+$XRAR_PG       0x6B
+$XRAM_PG       0x6C
+$XRI_PG        0x6D
+$CMPR_PG       0x6E
+$CMPM_PG       0x6F
+$CPI_PG        0x70
 
-$CMPR_PG       0x70
-$CMPM_PG       0x71
-$CPI_PG        0x72
-
-$DAA_PG        0x7E
 $CMA_PG        0x7F
 
 $EXT_PG        0x4C

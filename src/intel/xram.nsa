@@ -1,0 +1,30 @@
+# XOR memory with accumulator
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE XRAM_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$IDEN
+LD Y, $LREG
+FNFH DZ, NA           # X = L
+#11
+LDZ Y, $HREG
+FNH DZ, Y             # Y = H
+FNFL M, HL            # HL = [XY]
+LD Y, $AREG
+#20
+XORHL DZ, ND          # Acc = Acc v HL
+LD HL, $0
+LD Y, $FREG
+AFHL AZ, ND
+#32
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

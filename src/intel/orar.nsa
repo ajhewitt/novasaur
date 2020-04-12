@@ -1,0 +1,33 @@
+# OR register with accumulator
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE ORAR_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$SRC2REG
+LD Y, $INST
+FNEL DZ, Y            # Y = zpage addr of source reg
+#11
+FNH DZ, HL            # source reg -> HL
+LD Y, $AREG
+ORHL DZ, ND           # Acc = Acc | HL
+LD HL, $0
+#21
+LD Y, $FREG
+AFHL AZ, ND
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43
