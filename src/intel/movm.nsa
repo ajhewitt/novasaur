@@ -1,4 +1,4 @@
-# Move reg src to mem dest
+# Move register source to memory destination
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

@@ -1,4 +1,4 @@
-# Store Indirect through register pair
+# Store indirect through register pair
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

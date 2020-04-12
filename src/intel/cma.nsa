@@ -1,4 +1,4 @@
-# Complement Accumulator
+# Complement accumulator
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

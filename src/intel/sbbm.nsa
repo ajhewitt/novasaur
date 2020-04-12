@@ -1,8 +1,8 @@
-# Add register to accumulator with carry
+# Subtract register from accumulator with borrow
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE ADCR_PG
+PAGE SBBM_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL
@@ -12,35 +12,32 @@ LDZ Y, $FREG
 FNH DZ, HLA           # A = flags
 #10
 LDP HL, $0
-LDN HL, $1            # HL = 1 if carry
+LDN HL, $0xFF         # HL = -1 if carry
 LD Y, $AREG
 ADDHL DZ, ND          # Acc = Acc + HL
 #19
 AFHL A, NA            # A = flags
-LD HL, $0x88
+LD HL, $3
 LD Y, $TEMP
-ANDHL AZ, ND          # initial carry flags -> temp
+ANDHL AZ, ND          # inital borrow flags -> temp
 #31
-LD HL, $IDEN$SRC2REG
-LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of source reg
-FNH DZ, HL            # source reg -> HL
+LD HL, $IDEN$2COM
+LD Y, $LREG
+FNFH DZ, NA           # X = L
+LDZ Y, $HREG
 #40
+FNH DZ, Y             # Y = H
+FNFL M, HL            # HL = -[XY]
 LD Y, $AREG
-ADDHL DZ, ND          # Acc = Acc + HL
+ADDHL DZ, ND          # Acc = Acc - HL
+#51
 AFHL A, HLA           # HL = flags
-#50
 LD Y, $TEMP
-ORHL DZ, NA           # A = flags | initial carry flags
-LD HL, $IDEN$NULL
+ORHL DZ, NA           # A = flags | initial borrow flags
+#61
+LD HL, $B2CARRY$NULL
 LDZ Y, $FREG
-#60
-FNH AZ, HLD           # A -> flags
-NOP
-NOP
-NOP
-NOP
-NOP
+FNH AZ, HLD           # A -> flags (borrow to carry)
 NOP
 NOP
 NOP

@@ -1,8 +1,8 @@
-# Subtract register from accumulator
+# Compare register with accumulator
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE SUBR_PG
+PAGE CMPR_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
@@ -13,7 +13,7 @@ FNEL DZ, Y            # Y = zpage addr of source reg
 #11
 FNH DZ, HL            # -(source reg) -> HL
 LD Y, $AREG
-ADDHL DZ, ND          # Acc = Acc - reg
+ADDHL DZ, NA          # A = Acc - reg
 #19
 AFHL A, NA
 LD HL, $B2CARRY$NULL

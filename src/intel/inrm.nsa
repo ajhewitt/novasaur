@@ -1,40 +1,72 @@
-# Decimal adjust accumulator (with fetch)
+# Increment memory (with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE DAA_PG
+PAGE INRM_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC2$DACARRY
+LDZ HL, $INC2$SRC2REG
 FNH DZ, HLD           # inc state
-LDZ Y, $AREG
-FNEL DZ, HL           # determine carry flags if nibbles > 9
-LD Y, $FREG
-#11
-ORHL DZ, ND           # overlay carry flags
-LDP HL, $0
-LDN HL, $0x60
-LD Y, $TEMP
-#20
-MVHLZ ND              # add 6 to upper nibble if carry
-LD HL, $SWAP$NULL
-LDZ Y, $FREG
-FNH DZ, HLA           # swap aux-carry to test
-#30
-LDP HL, $0
-LDN HL, $6
-LD Y, $TEMP
-ADDL DZ, HL           # add 6 to lower nibble if aux-carry
-LD Y, $AREG
-#41
-ADDHL DZ, ND          # add decimal adjust to Acc
-AFHL A, NA            # determine flags
 LD HL, $IDEN$NULL
-#51
 LD Y, $FREG
-FNH AZ, HLD           # update flags
-LDZ HL, $INC$FORK1
+FNFH DZ, NA           # A = flags
+#11
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LDP PC, $RESET_CARRY  # jump on carry
+#28 $SET_CARRY
+NOP
+LD Y, $LREG
+#30
+FNFH DZ, XA           # X = L
+LDZ Y, $HREG
+FNH DZ, Y             # Y = H
+LD HL, $1
+#39
+ADDHL M, NM           # [HL]++
+AFHL AZ, NA
+LD HL, $0x80
+#49
+LD Y, $FREG
+ORHL AZ, ND           # A -> flags and set carry
+LD HL, $INC$FORK1
 LD Y, $PCL
+#59
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#65
+
+$RESET_CARRY
+LD Y, $LREG
+#30
+FNFH DZ, XA           # X = L
+LDZ Y, $HREG
+FNH DZ, Y             # Y = H
+LD HL, $1
+#39
+ADDHL M, NM           # [HL]++
+AFHL AZ, NA
+LD HL, $0x7F
+#49
+LD Y, $FREG
+ANDHL AZ, ND          # A -> flags and reset carry
+LD HL, $INC$FORK1
+LD Y, $PCL
+#59
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
 #65

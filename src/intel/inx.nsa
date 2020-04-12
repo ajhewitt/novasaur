@@ -1,0 +1,35 @@
+# Increment register pair
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE INX_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $INC$SRC2RPL
+LD Y, $INST
+FNEL DZ, Y            # Y = zpage addr of lower register
+#11
+FNH DZ, HLD           # lower register++
+LDZ HL, $OVER?$NULL
+FNH A, HLA
+LDP HL, $INC$SRC2RPH
+LDN HL, $IDEN$SRC2RPH
+#20
+LD Y, $INST
+FNEL DZ, Y            # Y = zpage addr of upper register
+FNH DZ, HLD           # upper register++ if lower overflows
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

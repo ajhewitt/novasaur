@@ -18,7 +18,7 @@ LD Y, $AREG
 #20
 ADDHL DZ, ND          # Acc = Acc - mem
 AFHL A, NA
-LD HL, $INVCARRY$NULL
+LD HL, $B2CARRY$NULL
 #30
 LD Y, $FREG
 FNEH AZ, ND

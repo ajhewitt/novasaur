@@ -1,4 +1,4 @@
-# Load Indirect through register pair
+# Load indirect through register pair
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

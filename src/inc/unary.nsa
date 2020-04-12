@@ -29,7 +29,7 @@ $SRC2RPH    5
 $FORK1      6
 $FORK2      7
 $FORK3      8
-$INVCARRY   9 # invert carry flags
+$B2CARRY    9 # move borrow to carry
 $DACARRY   10 # set carry if nibbles > 9
 
 

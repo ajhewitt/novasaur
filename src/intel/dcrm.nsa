@@ -1,0 +1,100 @@
+# Decrement memory (with fetch)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE DCRM_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC2$SRC2REG
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LD Y, $FREG
+FNFH DZ, NA           # A = flags
+#11
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+LDP PC, $RESET_CARRY  # jump on carry
+#23 $SET_CARRY
+NOP
+LD Y, $LREG
+FNFH DZ, XA           # X = L
+LDZ Y, $HREG
+#30
+FNH DZ, Y             # Y = H
+LD HL, $0xFF
+ADDHL M, NM           # [HL]--
+AFHL AZ, NA
+#42
+LD HL, $B2CARRY$NULL
+FNEH A, NA
+LD HL, $0x80
+LD Y, $FREG
+#51
+ORHL AZ, ND           # A -> flags and set carry
+LD HL, $INC$FORK1
+LD Y, $PCL
+#59
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#65
+
+$RESET_CARRY
+LD Y, $LREG
+FNFH DZ, XA           # X = L
+LDZ Y, $HREG
+#30
+FNH DZ, Y             # Y = H
+LD HL, $0xFF
+ADDHL M, NM           # [HL]--
+AFHL AZ, NA
+#42
+LD HL, $B2CARRY$NULL
+FNEH A, NA
+LD HL, $0x7F
+LD Y, $FREG
+#51
+ANDHL AZ, ND          # A -> flags and reset carry
+LD HL, $INC$FORK1
+LD Y, $PCL
+#59
+FNFH DZ, XD           # X,PCL = PCL+1
+FNEL A, PC
+#65
+
+ADDR 0x80
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+#71
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0xC0
+NOP
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#71
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH A, HLD            # cache instruction (from HL)
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86

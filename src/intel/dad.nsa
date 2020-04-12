@@ -1,0 +1,72 @@
+# Add register pair to HL
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE DAD_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$SRC2RPL
+LD Y, $INST
+FNEL DZ, Y            # Y = zpage addr of lower register
+#11
+FNH DZ, HL            # HL = lower register
+LD Y, $LREG
+ADDHL DZ, ND
+#19
+AFHL A, NA
+LDP HL, $0
+LDN HL, $0x10
+ADDH DZ, ND
+#29
+LD Y, $TEMP
+AFHL AZ, ND
+LD HL, $IDEN$SRC2RPH
+LD Y, $INST
+#39
+FNEL DZ, Y            # Y = zpage addr of upper register
+FNH DZ, HL            # HL = upper register
+LD Y, $LREG
+ADDHL DZ, ND
+#50
+AFHL A, HLA
+LD Y, $TEMP
+ORHL DZ, NA
+#60
+LD Y, $FREG
+LDP PC, $RESET_CARRY
+#SET_CARRY
+LD HL, $0x80
+ORHL DZ, ND
+NOP
+#70
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+$RESET_CARRY
+LD HL, $0x80
+ORHL DZ, ND
+#70
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86

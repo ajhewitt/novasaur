@@ -1,30 +1,27 @@
-# Subtract register from accumulator
+# Compare memory with accumulator
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE SUBR_PG
+PAGE CMPM_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $2COM$SRC2REG
-LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of source reg
+LD HL, $IDEN$2COM
+LD Y, $LREG
+FNFH DZ, XA           # X = L
 #11
-FNH DZ, HL            # -(source reg) -> HL
+LDZ Y, $HREG
+FNH DZ, Y             # Y = H
+FNFL M, HL            # HL = -[XY]
 LD Y, $AREG
-ADDHL DZ, ND          # Acc = Acc - reg
-#19
+#20
+ADDHL DZ, NA          # A = Acc - mem
 AFHL A, NA
 LD HL, $B2CARRY$NULL
+#30
 LD Y, $FREG
 FNEH AZ, ND
-#30
-NOP
-NOP
-NOP
-NOP
-NOP
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC

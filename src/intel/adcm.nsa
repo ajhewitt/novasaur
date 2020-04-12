@@ -1,8 +1,8 @@
-# Add register to accumulator
+# Add memory to accumulator with carry
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE ADCR_PG
+PAGE ADCM_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL

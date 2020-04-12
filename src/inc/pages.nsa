@@ -22,14 +22,30 @@ $STAX_PG       0x4F
 $XCHG_PG       0x50
 $ADDR_PG       0x51
 $ADDM_PG       0x52
-$SUBR_PG       0x53
-$SUBM_PG       0x54
-$ADCR_PG       0x60
-$ADCM_PG       0x61
-$ACI_PG        0x62
+$ADI_PG        0x53
+$ADCR_PG       0x54
+$ADCM_PG       0x55
+$ACI_PG        0x56
+$SUBR_PG       0x57
+$SUBM_PG       0x58
+$SUI_PG        0x59
+$SBBR_PG       0x5A
+$SBBM_PG       0x5B
+$SBI_PG        0x5C
+$INRR_PG       0x5D
+$INRM_PG       0x5E
+$DCRR_PG       0x5F
+$DCRM_PG       0x60
+$INX_PG        0x61
+$DCX_PG        0x62
+$DAD_PG        0x63
 
-$DAA_PG        0x70
-$CMA_PG        0x71
+$CMPR_PG       0x70
+$CMPM_PG       0x71
+$CPI_PG        0x72
+
+$DAA_PG        0x7E
+$CMA_PG        0x7F
 
 $EXT_PG        0x4C
 $LDN_PG        0x4D

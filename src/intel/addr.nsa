@@ -14,11 +14,13 @@ FNEL DZ, Y            # Y = zpage addr of source reg
 FNH DZ, HL            # source reg -> HL
 LD Y, $AREG
 ADDHL DZ, ND          # Acc = Acc + HL
-#19
-AFHL A, NA
-LD HL, $IDEN$NULL
 LD Y, $FREG
-FNH AZ, HLD
+#21
+AFHL AZ, ND
+NOP
+NOP
+NOP
+NOP
 NOP
 #30
 NOP

@@ -1,8 +1,8 @@
-# Add immediate to accumulator with carry
+# Subtract immediate from accumulator with borrow
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE ACI_PG
+PAGE SBI_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL
@@ -12,15 +12,15 @@ LDZ Y, $FREG
 FNH DZ, HLA           # A = flags
 #10
 LDP HL, $0
-LDN HL, $1            # HL = 1 if carry
+LDN HL, $0xFF         # HL = -1 if borrow
 LD Y, $AREG
 ADDHL DZ, ND          # Acc = Acc + HL
 #19
 AFHL A, NA            # A = flags
-LD HL, $0x88
+LD HL, $3
 LD Y, $TEMP
-ANDHL AZ, ND          # save carry flags in temp
-#31
+ANDHL AZ, ND          # save borrow flags in temp
+#30
 LD HL, $INC$FORK1
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
@@ -30,21 +30,20 @@ FNEL A, PC
 ADDR 0x80
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-LD HL, $IDEN$IDEN
+LD HL, $IDEN$2COM
 FNH A, Y              # Y = PCH
-FNFL M, HL            # HL = [PC]
+FNFL M, HL            # HL = -[PC]
 #51
 LD Y, $AREG
 ADDHL DZ, ND          # Acc = Acc + HL
 AFHL A, HLA           # HL = flags
 #61
 LD Y, $TEMP
-ORHL DZ, NA           # A = flags | initial carry flags
-LD HL, $IDEN$NULL
+ORHL DZ, NA           # A = flags | initial borrow
+LD HL, $B2CARRY$NULL
 LDZ Y, $FREG
 #71
-FNH AZ, HLD           # A -> flags
-NOP
+FNEH AZ, ND           # A -> flags (borrow to carry)
 NOP
 NOP
 NOP
@@ -55,22 +54,21 @@ VMPHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0xC0
-LD HL, $IDEN$NULL
+LD HL, $IDEN$2COM
 LDZ Y, $PCH
 FNH A, Y              # Y = PCH
-FNFH M, HLA           # HL = [PC]
+FNFH M, HLA           # HL = -[PC]
 LD Y, $AREG
 #51
 ADDHL DZ, ND          # Acc = Acc + HL
 AFHL A, HLA           # HL = flags
 LD Y, $TEMP
 #61
-ORHL DZ, NA           # A = flags | initial carry flags
-LD HL, $IDEN$NULL
+ORHL DZ, NA           # A = flags | initial borrow
+LD HL, $B2CARRY$NULL
 LDZ Y, $FREG
-FNH AZ, HLD           # A -> flags
-#71
-NOP
+FNEH AZ, ND           # A -> flags (borrow to carry)
+#72
 NOP
 NOP
 NOP

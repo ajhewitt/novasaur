@@ -1,4 +1,4 @@
-# Load H and L direct - cycle 2
+# Load H and L direct - cycle 2.2
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
