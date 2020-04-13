@@ -1,0 +1,56 @@
+# Rotate left
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE RLC_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LDZ Y, $AREG
+FNH DZ, HLA           # A = Acc
+#10
+LD HL, $LSL$NULL
+LDP PC, $RESET_CARRY
+#SET_CARRY
+LDZ Y, $AREG
+FNH DZ, HLD           # shift Acc left
+LD HL, $1
+#19
+ORH DZ, ND            # set LSB of Acc
+LD HL, $0x80
+LD Y, $FREG
+ORHL DZ, ND           # set carry
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43
+
+$RESET_CARRY
+LDZ Y, $AREG
+FNH DZ, HLD           # shift Acc left
+LD HL, $0x7F
+#20
+LD Y, $FREG           
+ANDHL DZ, ND          # reset carry
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

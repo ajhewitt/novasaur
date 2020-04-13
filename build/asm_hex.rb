@@ -57,7 +57,7 @@ def print_data(data)
   printf(":%s%02X\n", hex, -data.reduce(&:+) & 0xff)
 end
 
-is = {}
+is = {"NOP" => [0x80], "NOPZ" => [0x88]}
 
 (2**16).times do |n|
   i = 16.times.each_with_object([]) {|b, a| a[b] = n >> b & 1}
