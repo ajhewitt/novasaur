@@ -5,8 +5,8 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
-Title "GPU"
-Date "2020-03-29"
+Title "Novasaur Retrocomputer"
+Date "2020-03-31"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"

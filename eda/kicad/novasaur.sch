@@ -5,8 +5,8 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
-Title "Novasaur TTL Minicomputer"
-Date "2020-03-29"
+Title "Novasaur Retrocomputer"
+Date "2020-03-31"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -634,7 +634,7 @@ Text GLabel 9300 2100 2    50   Output ~ 0
 Text GLabel 9300 1900 2    50   Output ~ 0
 ~xoe
 Text GLabel 9300 2200 2    50   Output ~ 0
-~toe
+~boe
 $Comp
 L 74xx:74LS574 U?
 U 1 1 5EAB438A
@@ -1471,14 +1471,14 @@ Wire Wire Line
 Text GLabel 6850 2900 0    50   Input ~ 0
 1
 $Comp
-L Connector:TestPoint_Alt TP38
+L Connector:TestPoint_Alt TP29
 U 1 1 5E51CAB2
 P 1350 5900
-AR Path="/5E51CAB2" Ref="TP38"  Part="1" 
+AR Path="/5E51CAB2" Ref="TP29"  Part="1" 
 AR Path="/5DA1E9BA/5E51CAB2" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5E51CAB2" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9C0/5E51CAB2" Ref="TP?"  Part="1" 
-F 0 "TP38" H 1100 6000 50  0000 L CNN
+F 0 "TP29" H 1100 6000 50  0000 L CNN
 F 1 "IHCP" H 1100 6050 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1550 5900 50  0001 C CNN
 F 3 "~" H 1550 5900 50  0001 C CNN
@@ -1493,21 +1493,6 @@ Connection ~ 1350 5900
 Wire Wire Line
 	5600 5900 4150 5900
 Connection ~ 4150 5900
-$Comp
-L Connector:TestPoint_Alt TP37
-U 1 1 5E514E07
-P 4150 5900
-AR Path="/5E514E07" Ref="TP37"  Part="1" 
-AR Path="/5DA1E9BA/5E514E07" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BD/5E514E07" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9C0/5E514E07" Ref="TP?"  Part="1" 
-F 0 "TP37" H 4200 6000 50  0000 L CNN
-F 1 "ILCP" H 3900 6050 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4350 5900 50  0001 C CNN
-F 3 "~" H 4350 5900 50  0001 C CNN
-	1    4150 5900
-	1    0    0    -1  
-$EndComp
 Text GLabel 2850 1400 1    50   Input ~ 0
 ~reset
 Wire Wire Line
@@ -1523,4 +1508,19 @@ Wire Bus Line
 	1050 4700 1050 6750
 Wire Bus Line
 	2750 1800 2750 6000
+$Comp
+L Connector:TestPoint_Alt TP28
+U 1 1 5E514E07
+P 4150 5900
+AR Path="/5E514E07" Ref="TP28"  Part="1" 
+AR Path="/5DA1E9BA/5E514E07" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5E514E07" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9C0/5E514E07" Ref="TP?"  Part="1" 
+F 0 "TP28" H 4200 6000 50  0000 L CNN
+F 1 "ILCP" H 3900 6050 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4350 5900 50  0001 C CNN
+F 3 "~" H 4350 5900 50  0001 C CNN
+	1    4150 5900
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

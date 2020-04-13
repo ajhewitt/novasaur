@@ -5,8 +5,8 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 4 4
-Title "Input & Output"
-Date "2020-03-29"
+Title "Novasaur Retrocomputer"
+Date "2020-03-31"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -186,19 +186,17 @@ NoConn ~ 1650 4550
 $Comp
 L power:VCC #PWR0115
 U 1 1 5D70CEC0
-P 2000 3850
+P 2000 4650
 AR Path="/62D13D9D/5D70CEC0" Ref="#PWR0115"  Part="1" 
 AR Path="/5DAA5CD8/5D9AFF37/5D70CEC0" Ref="#PWR?"  Part="1" 
 AR Path="/5DA1E9C0/5D70CEC0" Ref="#PWR0185"  Part="1" 
-F 0 "#PWR0185" H 2000 3700 50  0001 C CNN
-F 1 "VCC" H 2017 4023 50  0000 C CNN
-F 2 "" H 2000 3850 50  0001 C CNN
-F 3 "" H 2000 3850 50  0001 C CNN
-	1    2000 3850
+F 0 "#PWR0185" H 2000 4500 50  0001 C CNN
+F 1 "VCC" H 2017 4823 50  0000 C CNN
+F 2 "" H 2000 4650 50  0001 C CNN
+F 3 "" H 2000 4650 50  0001 C CNN
+	1    2000 4650
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	1650 4150 2400 4150
 $Comp
 L Connector:DB15_Female_HighDensity_MountingHoles J6
 U 1 1 62D4185E
@@ -213,8 +211,6 @@ F 3 " ~" H 400 4750 50  0001 C CNN
 	1    1350 4350
 	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	1650 3950 2200 3950
 $Comp
 L Connector_Generic:Conn_01x16 J8
 U 1 1 60BFCA13
@@ -501,14 +497,6 @@ Wire Wire Line
 Wire Wire Line
 	2350 2300 2750 2300
 Wire Wire Line
-	2400 4150 2400 4050
-Wire Wire Line
-	2400 4050 2600 4050
-Wire Wire Line
-	2200 3950 2200 3750
-Wire Wire Line
-	2200 3750 2600 3750
-Wire Wire Line
 	1600 1200 1600 1100
 Wire Wire Line
 	4450 1400 4700 1400
@@ -573,7 +561,6 @@ F 3 "http://www.ti.com/lit/ds/symlink/cd4052b.pdf" H 3080 4150 50  0001 C CNN
 $EndComp
 Text GLabel 2450 3450 0    50   Input ~ 0
 mode2
-Connection ~ 2550 3450
 $Comp
 L Connector_Generic:Conn_01x16 J7
 U 1 1 60AB3876
@@ -585,8 +572,6 @@ F 3 "~" H 1850 1900 50  0001 C CNN
 	1    1850 1900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2450 3450 2550 3450
 Wire Wire Line
 	1600 2700 1650 2700
 Wire Wire Line
@@ -759,45 +744,20 @@ $EndComp
 Wire Wire Line
 	2050 6050 2100 6050
 Wire Wire Line
-	1650 4350 2600 4350
+	1650 3850 1750 3850
 Wire Wire Line
-	1650 3850 1800 3850
+	1650 4050 1750 4050
 Wire Wire Line
-	1650 4050 1800 4050
+	1650 4250 1750 4250
 Wire Wire Line
-	1650 4250 1800 4250
+	1650 4650 1750 4650
 Wire Wire Line
-	1650 4650 1800 4650
-Wire Wire Line
-	1650 4750 1800 4750
+	1650 4750 1750 4750
 Wire Wire Line
 	1350 5050 1350 5100
 Connection ~ 1350 5100
 Wire Wire Line
 	1350 5100 1350 5150
-Wire Wire Line
-	1800 5100 1800 4750
-Wire Wire Line
-	1800 5100 1350 5100
-Connection ~ 1800 4750
-Wire Wire Line
-	1800 4650 1800 4550
-Connection ~ 1800 4650
-Connection ~ 1800 4250
-Wire Wire Line
-	1800 4250 1800 4050
-Connection ~ 1800 4050
-Wire Wire Line
-	1800 4050 1800 3850
-Wire Wire Line
-	1800 4750 1800 4650
-Wire Wire Line
-	1800 4550 2000 4550
-Connection ~ 1800 4550
-Wire Wire Line
-	1800 4250 1800 4550
-Wire Wire Line
-	2000 4750 3000 4750
 Connection ~ 3000 4750
 Wire Wire Line
 	3000 4750 3100 4750
@@ -805,8 +765,6 @@ Wire Wire Line
 	3100 4650 3100 4750
 Wire Wire Line
 	3000 4650 3000 4750
-Wire Wire Line
-	2000 4550 2000 4750
 $Comp
 L Device:C C?
 U 1 1 5E84FC16
@@ -1494,21 +1452,6 @@ Connection ~ 1800 6050
 Connection ~ 1800 5950
 Wire Wire Line
 	2100 6050 2250 6050
-$Comp
-L Connector:TestPoint_Alt TP?
-U 1 1 5E74D438
-P 1050 4350
-AR Path="/5E74D438" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E74D438" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BD/5E74D438" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9C0/5E74D438" Ref="TP28"  Part="1" 
-F 0 "TP28" H 800 4450 50  0000 L CNN
-F 1 "HSYNC" H 800 4500 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 4350 50  0001 C CNN
-F 3 "~" H 1250 4350 50  0001 C CNN
-	1    1050 4350
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	2300 5750 2250 5750
 $Comp
@@ -1593,10 +1536,6 @@ Wire Wire Line
 	6950 5000 6950 4900
 Wire Wire Line
 	6250 5000 6250 4900
-Wire Wire Line
-	2000 4450 2000 3850
-Wire Wire Line
-	1650 4450 2000 4450
 Entry Wire Line
 	1150 1400 1250 1500
 Text Label 1250 1500 0    50   ~ 0
@@ -1756,21 +1695,6 @@ Wire Wire Line
 	2350 1500 2650 1500
 Wire Wire Line
 	1250 1500 1650 1500
-$Comp
-L Connector:TestPoint_Alt TP?
-U 1 1 5E6FA207
-P 1050 4550
-AR Path="/5E6FA207" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5E6FA207" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BD/5E6FA207" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9C0/5E6FA207" Ref="TP29"  Part="1" 
-F 0 "TP29" H 1100 4650 50  0000 L CNN
-F 1 "VSYNC" H 800 4700 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1250 4550 50  0001 C CNN
-F 3 "~" H 1250 4550 50  0001 C CNN
-	1    1050 4550
-	-1   0    0    1   
-$EndComp
 $Comp
 L Transistor_BJT:2N3904 Q1
 U 1 1 5E7F79E8
@@ -2215,6 +2139,121 @@ Text GLabel 8250 3300 2    50   Input ~ 0
 1
 Text GLabel 7450 3300 0    50   Output ~ 0
 ~reset
+$Comp
+L Connector_Generic:Conn_01x03 J10
+U 1 1 5E8D84F1
+P 1750 3650
+AR Path="/5DA1E9C0/5E8D84F1" Ref="J10"  Part="1" 
+AR Path="/5E8D84F1" Ref="J?"  Part="1" 
+F 0 "J10" H 1700 4000 50  0000 L CNN
+F 1 "R  G  B" H 1600 3900 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 1750 3650 50  0001 C CNN
+F 3 "~" H 1750 3650 50  0001 C CNN
+	1    1750 3650
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	3000 4850 3000 4750
+Wire Wire Line
+	2550 3450 2450 3450
+Connection ~ 2550 3450
+Wire Wire Line
+	1650 4350 2200 4350
+Wire Wire Line
+	1650 3950 2000 3950
+Wire Wire Line
+	1650 4150 2100 4150
+Wire Wire Line
+	2000 3750 2000 3950
+Wire Wire Line
+	2000 3750 2600 3750
+Wire Wire Line
+	1950 3550 2200 3550
+Wire Wire Line
+	1950 3650 2100 3650
+Wire Wire Line
+	1950 3750 2000 3750
+Connection ~ 2000 3750
+Wire Wire Line
+	1750 3850 1750 4050
+Connection ~ 1750 4050
+Wire Wire Line
+	1750 4050 1750 4250
+Connection ~ 1750 4250
+Wire Wire Line
+	1750 4250 1750 4650
+Connection ~ 1750 4650
+Wire Wire Line
+	1750 4650 1750 4750
+Connection ~ 1750 4750
+Wire Wire Line
+	1750 4750 1750 4850
+Wire Wire Line
+	1750 4850 1750 5100
+Connection ~ 1750 4850
+Wire Wire Line
+	1750 5100 1350 5100
+Wire Wire Line
+	1750 4850 3000 4850
+Wire Wire Line
+	1650 4450 1850 4450
+Wire Wire Line
+	2100 3650 2100 4050
+Connection ~ 2100 4050
+Wire Wire Line
+	2100 4050 2100 4150
+Wire Wire Line
+	2100 4050 2600 4050
+Wire Wire Line
+	2200 3550 2200 4350
+Connection ~ 2200 4350
+Wire Wire Line
+	2200 4350 2600 4350
+Wire Wire Line
+	1850 4750 2000 4750
+Wire Wire Line
+	2000 4750 2000 4650
+Wire Wire Line
+	1850 4450 1850 4750
+Text GLabel 3200 2850 2    50   Input ~ 0
+vsync
+Text GLabel 3200 2750 2    50   Input ~ 0
+hsync
+Wire Wire Line
+	3400 2350 3400 2450
+$Comp
+L power:GNDD #PWR?
+U 1 1 5F8B73E5
+P 3400 2450
+AR Path="/62D13D9D/5F8B73E5" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/5F8B73E5" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9C0/5F8B73E5" Ref="#PWR0181"  Part="1" 
+F 0 "#PWR0181" H 3400 2200 50  0001 C CNN
+F 1 "GNDD" H 3404 2295 50  0000 C CNN
+F 2 "" H 3400 2450 50  0001 C CNN
+F 3 "" H 3400 2450 50  0001 C CNN
+	1    3400 2450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 2650 3250 2650
+Wire Wire Line
+	3250 2350 3400 2350
+Wire Wire Line
+	3250 2650 3250 2350
+$Comp
+L Connector_Generic:Conn_01x03 J11
+U 1 1 5F873810
+P 3000 2750
+AR Path="/5DA1E9C0/5F873810" Ref="J11"  Part="1" 
+AR Path="/5F873810" Ref="J?"  Part="1" 
+F 0 "J11" H 2950 3100 50  0000 L CNN
+F 1 "V  H SYNC" H 2800 3000 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3000 2750 50  0001 C CNN
+F 3 "~" H 3000 2750 50  0001 C CNN
+	1    3000 2750
+	-1   0    0    -1  
+$EndComp
 Wire Bus Line
 	4300 6750 4300 7050
 Wire Bus Line
