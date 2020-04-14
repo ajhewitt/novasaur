@@ -48,7 +48,7 @@ LD HL, $IDEN$NULL
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH A, HLD            # cache instruction (from HL)
+FNH AZ, HLD           # cache instruction (from HL)
 NOP
 #80/51
 LD Y, $VMS            # set Y = $VMS on exit
@@ -90,7 +90,7 @@ LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH A, HLD            # cache instruction (from HL)
+FNH AZ, HLD           # cache instruction (from HL)
 NOP
 #80/51
 LD Y, $VMS            # set Y = $VMS on exit
@@ -132,7 +132,7 @@ LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH A, HLD            # cache instruction (from HL)
+FNH AZ, HLD           # cache instruction (from HL)
 NOP
 #80/51
 LD Y, $VMS            # set Y = $VMS on exit
@@ -173,7 +173,7 @@ FNH DZ, Y             # Y = PCH
 #70/44
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH A, HLD            # cache instruction (from HL)
+FNH AZ, HLD           # cache instruction (from HL)
 NOP
 NOP
 NOP

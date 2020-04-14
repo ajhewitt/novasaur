@@ -1,0 +1,31 @@
+# Skip with fetch
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SKIP_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $3
+LD Y, $PCL
+ADDHL DZ, XD          # PCL = PCL+3
+#12
+AFHL A, NA
+LDP HL, $IDEN$NULL
+LDN HL, $INC$NULL     # INC PCH on carry
+LDZ Y, $PCH
+#21
+FNH DZ, HLD           # PCH = PCH+1?     *** inc? PCH ***
+LDZ HL, $IDEN$NULL
+FNH A, Y              # Y = PCH
+FNFH M, NA            # A = [PC]
+#30
+NOP
+NOP
+NOP
+LD Y, $INST
+FNH AZ, HLD           # HL = cached instruction
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

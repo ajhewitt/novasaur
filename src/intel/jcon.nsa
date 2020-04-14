@@ -1,0 +1,30 @@
+# Conditional jump
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE JCON_PG
+
+# assume: Y = $VMS
+LD HL, $INC$JC2MUL
+FNFH DZ, ND           # inc state
+LD Y, $INST
+FNEL DZ, HL           # HL = multiplier to move flag to MSB
+#10
+LD Y, $FREG
+MULH DZ, NA           # A MSB = flag to test
+LD HL, $SWAP$NULL
+LDZ Y, $INST
+FNH DZ, HL            # HL MSB = sign of flag to test
+#21
+XORHL A, NA           # A MSB = 0 if match
+LDP HL, $JMP_PG
+LDN HL, $SKIP_PG
+NOP
+NOP
+#30
+NOP
+LD Y, $INST
+MVHLZ HLD             # cache instruction (from HL)
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

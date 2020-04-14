@@ -59,7 +59,7 @@ LD HL, $IDEN$NULL
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH A, HLD            # cache instruction (from HL)
+FNH AZ, HLD           # cache instruction (from HL)
 #80/55
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
@@ -112,7 +112,7 @@ LDZ Y, $PCH
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH A, HLD            # cache instruction (from HL)
+FNH AZ, HLD           # cache instruction (from HL)
 #80/55
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
@@ -166,7 +166,7 @@ LDZ Y, $PCH
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH A, HLD            # cache instruction (from HL)
+FNH AZ, HLD           # cache instruction (from HL)
 #80/55
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC

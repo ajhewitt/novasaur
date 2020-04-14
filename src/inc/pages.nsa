@@ -59,6 +59,9 @@ $RAR_PG        0X54
 $CMA_PG        0x55
 $CMC_PG        0x56
 $STC_PG        0x57
+$JMP_PG        0x58
+$JCON_PG       0x59
+$SKIP_PG       0x5A
 
 $EXT_PG        0x4C
 $LDN_PG        0x4D

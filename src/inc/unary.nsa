@@ -31,7 +31,7 @@ $FORK2      7
 $FORK3      8
 $B2CARRY    9 # move borrow to carry
 $DACARRY   10 # set carry if nibbles > 9
-
+$JC2MUL    11
 
 
 $UNDER?    14

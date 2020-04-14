@@ -35,7 +35,7 @@ FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 #111
-FNH A, HLD            # cache instruction (from HL)
+FNH AZ, HLD           # cache instruction (from HL)
 NOP
 NOP
 NOP
@@ -79,7 +79,7 @@ LDZ Y, $PCH
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH A, HLD            # cache instruction (from HL)
+FNH AZ, HLD           # cache instruction (from HL)
 #111
 NOP
 NOP
