@@ -1,14 +1,14 @@
-# Conditional jump
+# Conditional jump (rewrite JMP or SKIP)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE JCON_PG
+PAGE JMP1_PG
 
 # assume: Y = $VMS
-LD HL, $INC$JC2MUL
+LD HL, $INC$CON2MUL
 FNFH DZ, ND           # inc state
 LD Y, $INST
-FNEL DZ, HL           # HL = multiplier to move flag to MSB
+FNEL DZ, HL           # H = multiplier to move flag to MSB
 #10
 LD Y, $FREG
 MULH DZ, NA           # A MSB = flag to test
@@ -17,14 +17,14 @@ LDZ Y, $INST
 FNH DZ, HL            # HL MSB = sign of flag to test
 #21
 XORHL A, NA           # A MSB = 0 if match
-LDP HL, $JMP_PG
-LDN HL, $SKIP_PG
+LDP HL, $JMP_INST
+LDN HL, $SKIP_INST
 NOP
 NOP
 #30
 NOP
 LD Y, $INST
-MVHLZ HLD             # cache instruction (from HL)
+MVHLZ ND              # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43

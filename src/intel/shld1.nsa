@@ -8,23 +8,23 @@ PAGE SHLD1_PG
 LDP PC, $BRANCH
 LD Y, $HREG
 FNFH DZ, NA           # A = H
-LDZ Y, $TEMP2
+LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 FNFH A, NM            # H -> [XY]
 #71
 LD HL, $INC$NULL
-LD Y, $TEMP
+LD Y, $TMPL
 FNFH DZ, XD           # X = low addr+1
 LDP HL, $INC$NULL     # X was negative, now positive
 LDN HL, $IDEN$NULL
 #81
-LD Y, $TEMP2
+LD Y, $TMPH
 FNH DZ, HLD          # update temp2
 LD HL, $IDEN$NULL
 LD Y, $LREG
 FNFH DZ, NA           # A = L
 #92
-LDZ Y, $TEMP2
+LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 FNFH A, NM            # L -> [XY]
 LD HL, $INC$NULL
@@ -50,18 +50,18 @@ VMPHL DZ, PGA         # jump to next VMC
 $BRANCH
 LD Y, $HREG
 FNFH DZ, NA           # A = H
-LDZ Y, $TEMP2
+LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 #69
 FNFH A, NM            # H -> [XY]
 LD HL, $INC$NULL
-LD Y, $TEMP
+LD Y, $TMPL
 FNFH DZ, XD           # X = low addr+1
 #79
 LD HL, $IDEN$NULL
 LD Y, $LREG
 FNFH DZ, NA           # A = L
-LDZ Y, $TEMP2
+LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 #90
 FNFH A, NM            # L -> [XY]

@@ -7,7 +7,8 @@ $SPL        0xE3 # SP LSB
 
 
 $TEMP       0xE6
-$TEMP2      0xE7
+$TMPL       0xE6
+$TMPH       0xE7
 $AREG       0xE8 # Accumulator
 $FREG       0xE9 # Flags - COZNHP00
 $BREG       0xEA
@@ -40,4 +41,7 @@ $TEST1      0xFD
 $TEST2      0xFE
 $AUDIO      0xFF
 
-$FETCH      0
+$FETCH       0
+$SKIP_INST   1
+$JMP_INST    2
+$PUSHPC_INST 3

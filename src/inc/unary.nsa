@@ -21,18 +21,21 @@ $REVERSE   15
 
 #FNE
 $V2E        0
-$V2M        1
-$SRC2REG    2
-$DST2REG    3
-$SRC2RPL    4
-$SRC2RPH    5
-$FORK1      6
-$FORK2      7
-$FORK3      8
-$B2CARRY    9 # move borrow to carry
-$DACARRY   10 # set carry if nibbles > 9
-$JC2MUL    11
+$V2M        0
+$SRC2REG    1
+$DST2REG    2
+$SRC2RPL    3
+$SRC2RPH    4
+$FORK1      5
+$FORK2      6
+$FORK3      7
+$B2CARRY    8 # move borrow to carry
+$DACARRY    9 # set carry if nibbles > 9
+$CON2MUL   10
 
 
+$INCPC?    13
 $UNDER?    14
 $EXTPG     15
+
+#FND

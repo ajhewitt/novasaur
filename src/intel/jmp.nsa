@@ -47,9 +47,10 @@ NOP
 NOP
 NOP
 NOP
-LD Y, $PCH
-#70/46
-FNFL DZ, Y            # Y = PCH
+NOP
+#69/45
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 FNH AZ, HLD           # cache instruction (from HL)
@@ -92,9 +93,10 @@ NOP
 NOP
 NOP
 NOP
-LD Y, $PCH
-#70/46
-FNFL DZ, Y            # Y = PCH
+NOP
+#69/45
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 FNH AZ, HLD           # cache instruction (from HL)
@@ -138,9 +140,10 @@ NOP
 NOP
 NOP
 NOP
-LD Y, $PCH
-#70/47
-FNFL DZ, Y            # Y = PCH
+NOP
+#69/46
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 FNH AZ, HLD           # cache instruction (from HL)

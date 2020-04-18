@@ -36,7 +36,11 @@ end
 # L) BBBBHZHZ - half-carry/zero on A-L/A+L (B-H-C/B+H+C)
 # H) CHNZCHNZ - carry/half-carry/negative/zero on BA-HL/BA+HL
 #   (sub)(add)
-def print_as(offset, opts = {})
+def print_af(offset, opts = {})
+  # feature not implemented 
+end
+
+def print_sh(offset, opts = {})
   # feature not implemented 
 end
 
@@ -58,17 +62,13 @@ def print_vmp(offset, opts = {})
         end
       else
         d = 16.times.map do |c| # c = EXCC
-          if opts[:ext] #decode always on ext - preserve L
-            a
+          case c&7
+          when 4 #sync on 4 line modes
+            b%4 == 2 ? 0x11 : 0x10 #add one for last line
+          when 7 #sync on 5 line modes
+            b%5 == 3 ? 0x11 : 0x10 #add one for last line
           else
-            case c&7
-            when 4 #sync on 4 line modes
-              b%4 == 2 ? 0x11 : 0x10 #add one for last line
-            when 7 #sync on 5 line modes
-              b%5 == 3 ? 0x11 : 0x10 #add one for last line
-            else
-              a #decode - preserve L
-            end
+            a #decode - preserve L
           end | (c&8)<<4 #move ext bit to MSB
         end
       end
@@ -176,18 +176,18 @@ print_ext_addr 0x0002
 print_binary nil, 0x00, high: true, pass: true
 # 0x00021000-0x00021FFF: ADD high nibble
 print_binary '+', 0x10,  high: true
-# 0x00022000-0x00022FFF: SUB high nibble
-print_binary '-', 0x20,  high: true
-# 0x00023000-0x00023FFF: AND high nibble
-print_binary '&', 0x30,  high: true, pass: true
-# 0x00024000-0x00024FFF: OR high nibble
-print_binary '|', 0x40,  high: true, pass: true
-# 0x00025000-0x00025FFF: XOR high nibble
-print_binary '^', 0x50,  high: true, pass: true
-# 0x00026000-0x00026FFF: VMP high nibble
-print_vmp 0x60, high: true, ext: false
-# 0x00027000-0x00027FFF: VMQ high nibble
-print_vmp 0x70, high: true, ext: true
+# 0x00022000-0x00022FFF: AF high nibble
+print_af 0x20,  high: true
+# 0x00023000-0x00023FFF: SH high nibble
+print_sh 0x30, high: true
+# 0x00024000-0x00024FFF: AND high nibble
+print_binary '&', 0x40,  high: true, pass: true
+# 0x00025000-0x00025FFF: OR high nibble
+print_binary '|', 0x50,  high: true, pass: true
+# 0x00026000-0x00026FFF: XOR high nibble
+print_binary '^', 0x60,  high: true, pass: true
+# 0x00027000-0x00027FFF: VMP high nibble
+print_vmp 0x70, high: true
 
 # start of ALU low
 print_ext_addr 0x0003
@@ -195,18 +195,18 @@ print_ext_addr 0x0003
 print_binary nil, 0x00, pass: true
 # 0x00031000-0x00031FFF: ADD low nibble
 print_binary '+', 0x10
-# 0x00032000-0x00032FFF: SUB low nibble
-print_binary '-', 0x20
-# 0x00033000-0x00033FFF: AND low nibble
-print_binary '&', 0x30, pass: true
-# 0x00034000-0x00034FFF: OR low nibble
-print_binary '|', 0x40, pass: true
-# 0x00035000-0x00035FFF: XOR low nibble
-print_binary '^', 0x50, pass: true
-# 0x00036000-0x00036FFF: VMP low nibble
-print_vmp 0x60, high: false, ext: false
-# 0x00037000-0x00037FFF: VMQ low nibble
-print_vmp 0x70, high: false, ext: true
+# 0x00032000-0x00032FFF: AF low nibble
+print_af 0x20
+# 0x00033000-0x00033FFF: SH low nibble
+print_sh 0x30
+# 0x00034000-0x00034FFF: AND low nibble
+print_binary '&', 0x40, pass: true
+# 0x00035000-0x00035FFF: OR low nibble
+print_binary '|', 0x50, pass: true
+# 0x00036000-0x00036FFF: XOR low nibble
+print_binary '^', 0x60, pass: true
+# 0x00037000-0x00037FFF: VMP low nibble
+print_vmp 0x70, high: false
 
 # 0x00038000-0x00038FFF: MUL low nibble only
 print_binary '*', 0x80

@@ -19,7 +19,7 @@ LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 #20/5
 FNFH M, NA            # A = [PC]
-LD Y, $TEMP
+LD Y, $TMPL
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
@@ -31,15 +31,15 @@ FNH A, Y              # Y = PCH
 #41/21
 LD HL, $IDEN$IDEN
 FNFH M, NA            # A = [PC]
-LD Y, $TEMP2
+LD Y, $TMPH
 FNFH AZ, ND           # temp2 = hi addr
 #51/29
 LD Y, $AREG
 FNFH DZ, NA           # A = Acc
-LD Y, $TEMP
+LD Y, $TMPL
 FNFL DZ, X            # X = low addr
 #61/37
-LDZ Y, $TEMP2
+LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 FNFH A, NM            # Acc -> [XY]
 NOP
@@ -65,7 +65,7 @@ LDZ HL, $IDEN$NULL
 #20/5
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
-LDZ Y, $TEMP
+LDZ Y, $TMPL
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
 #31/13
@@ -76,15 +76,15 @@ LDZ Y, $PCH
 #40/21
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
-LD Y, $TEMP2
+LD Y, $TMPH
 FNFH AZ, ND           # temp2 = hi addr
 #50/29
 LD Y, $AREG
 FNFH DZ, NA           # A = Acc
-LD Y, $TEMP
+LD Y, $TMPL
 FNFL DZ, X            # X = low addr
 #61/37
-LDZ Y, $TEMP2
+LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 FNFH A, NM            # Acc -> [XY]
 NOP
@@ -109,7 +109,7 @@ LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 #20/5
 FNFH M, NA            # A = [PC]
-LDZ Y, $TEMP
+LDZ Y, $TMPL
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
@@ -120,14 +120,14 @@ LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 #40/21
 FNFH M, NA            # A = [PC]
-LD Y, $TEMP2
+LD Y, $TMPH
 FNFH AZ, ND           # temp2 = hi addr
 LD Y, $AREG
 #50/29
 FNFH DZ, NA           # A = Acc
-LD Y, $TEMP
+LD Y, $TMPL
 FNFL DZ, X            # X = low addr
-LDZ Y, $TEMP2
+LDZ Y, $TMPH
 #60/37
 FNH DZ, Y             # Y = hi addr
 FNFH A, NM            # Acc -> [XY]

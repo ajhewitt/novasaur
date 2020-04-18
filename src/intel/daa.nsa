@@ -16,7 +16,7 @@ LDP HL, $0
 LDN HL, $0x60
 LD Y, $TEMP
 #20
-MVHLZ ND              # add 6 to upper nibble if carry
+MVHLZ ND              # move 0x60 to temp if carry
 LD HL, $SWAP$NULL
 LDZ Y, $FREG
 FNH DZ, HLA           # swap aux-carry to test
@@ -24,7 +24,7 @@ FNH DZ, HLA           # swap aux-carry to test
 LDP HL, $0
 LDN HL, $6
 LD Y, $TEMP
-ADDL DZ, HL           # add 6 to lower nibble if aux-carry
+ADDL DZ, HL           # add 6 to temp if aux-carry
 LD Y, $AREG
 #41
 ADDHL DZ, ND          # add decimal adjust to Acc

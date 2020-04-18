@@ -1,0 +1,143 @@
+# Push PC from temp to stack (with fetch unless SPH overflow)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE PUSHPC_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD           # inc state
+LD HL, $DEC$FORK2
+LD Y, $SPL
+FNFH DZ, XD           # X,SPL = SPL-1
+FNEL A, PC
+#14
+
+ADDR 0x40             # SPL = 255, dec SPH, iden SPH
+LDZ Y, $SPH
+FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
+LD HL, $IDEN$NULL
+#20
+LD Y, $PCH
+FNFH DZ, NA           # A = PCH
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+#29
+FNFH A, NM            # A -> [SP]
+LD HL, $DEC$NULL
+LD Y, $SPL
+FNFH DZ, XD           # X,SPL = SPL-1
+LD HL, $IDEN$NULL
+#41
+LD Y, $PCH
+FNFH DZ, NA           # A = PCL
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+#50
+FNFH A, NM            # A -> [SP]
+LD Y, $TMPL
+FNFH DZ, NA           # A = lower temp
+LD Y, $PCL
+#60
+FNFH AZ, XD           # X,A -> PCL
+LD Y, $TMPH
+FNFH DZ, NA           # A = upper temp
+LD Y, $PCL
+#70
+FNH AZ, HLD           # A -> PCH
+LD HL, $FETCH
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0x80             # SPL = 0, iden SPH, dec SPH
+LD HL, $IDEN$NULL
+LD Y, $PCH
+FNFH DZ, NA           # A = PCH
+#21
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+FNFH A, NM            # A -> [SP]
+LD HL, $DEC$NULL
+#30
+LD Y, $SPL
+FNFH DZ, XD           # X,SPL = SPL-1
+LDZ Y, $SPH
+FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
+LD HL, $IDEN$NULL
+#41
+LD Y, $PCL
+FNFH DZ, NA           # A = PCL
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+#50
+FNFH A, NM            # A -> [SP]
+LD Y, $TMPL
+FNFH DZ, NA           # A = lower temp
+LD Y, $PCL
+#60
+FNFH AZ, XD           # A -> PCL,X
+LD Y, $TMPH
+FNFH DZ, NA           # A = upper temp
+LD Y, $PCL
+#70
+FNH AZ, HLD           # A -> PCH
+LD HL, $FETCH
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0xC0             # else, iden SPH, iden SPH
+LD HL, $IDEN$NULL
+LD Y, $PCH
+FNFH DZ, NA           # A = PCH
+#21
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+FNFH A, NM            # A -> [SP]
+LD HL, $DEC$NULL
+#30
+LD Y, $SPL
+FNFH DZ, XD           # X,SPL = SPL-1
+LD HL, $IDEN$NULL
+LD Y, $PCH
+#39
+FNFH DZ, NA           # A = PCL
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+FNFH A, NM            # A -> [SP]
+#49
+LD Y, $TMPL
+FNFH DZ, NA           # A = lower temp
+LD Y, $PCL
+FNFH AZ, XD           # X,A -> PCL
+#59
+LD Y, $TMPH
+FNFH DZ, NA           # A = upper temp
+LD Y, $PCL
+FNFH AZ, ND           # A -> PCH
+#69
+FNH A, Y              # Y = A
+FNFH M, NA            # A = [PC]
+NOP
+NOP
+LD Y, $INST
+FNH AZ, HLD           # HL,A -> inst
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86

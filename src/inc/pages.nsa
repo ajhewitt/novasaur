@@ -3,13 +3,14 @@ $IDLE_PG       0    # 43-pc idle VMC
 $LSYNC_PG      1
 $PSYNC_PG      2
 
-$FETCH_PG      0x20
-$IMMED_PG      0x21
-$MOVR_PG       0x22
-$MOVM_PG       0x23
-$MVIR_PG       0x24
-$MVIM_PG       0x25
-$LXI_PG        0x26
+$FETCH_PG      0x1F
+$IMMED_PG      0x20
+$MOVR_PG       0x21
+$MOVM_PG       0x22
+$MVIR_PG       0x23
+$MVIM_PG       0x24
+$LXI_PG        0x25
+$LDA_PG        0x26
 $STA_PG        0x27
 $LHLD_PG       0x28
 $LHLD1_PG      0x29
@@ -60,33 +61,13 @@ $CMA_PG        0x55
 $CMC_PG        0x56
 $STC_PG        0x57
 $JMP_PG        0x58
-$JCON_PG       0x59
+$JMP1_PG       0x59
 $SKIP_PG       0x5A
-
-$EXT_PG        0x4C
-$LDN_PG        0x4D
-$INC_PG        0x4E
-$DEC_PG        0x4F
-# branch
-$BR_PG         0x50
-$SKP_PG        0x51
-$LDA_PG        0x52
-$STR_PG        0x53
-$IRX_PG        0x54
-$OUT_PG        0x55
-$INP_PG        0x56
-# control
-$GET_PG        0x60
-$PUT_PG        0x61
-# branch
-$SET_PG        0x70
-$LBR_PG        0x71
-$LSKP_PG       0x72
-# logic
-$LDI_PG        0x78
-$ORI_PG        0x79
-$ANI_PG        0x7A
-$XRI_PG        0x7B
+$CALL1_PG      0x5B
+$CALL2_PG      0x5C
+$PUSHPC_PG     0x5D
+$RET1_PG       0x5E
+$RET2_PG       0x5F
 
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot

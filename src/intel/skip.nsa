@@ -11,7 +11,7 @@ LD HL, $3
 LD Y, $PCL
 ADDHL DZ, XD          # PCL = PCL+3
 #12
-AFHL A, NA
+AFHL A, NA            # A MSB = carry
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL     # INC PCH on carry
 LDZ Y, $PCH
@@ -25,7 +25,7 @@ NOP
 NOP
 NOP
 LD Y, $INST
-FNH AZ, HLD           # HL = cached instruction
+FNH AZ, HLD           # cache instruction (from HL)
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43

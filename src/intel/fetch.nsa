@@ -7,47 +7,48 @@ PAGE FETCH_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD        # inc state
-LDZ HL, $SWAP$NULL
-FNH DZ, HLA        # swap post_inc bit to sign
-LDN PC, $0xC8
-NOP
-#10/9
+LD HL, $INCPC?$IDEN
+LD Y, $INST
+FNEH DZ, NA        # MSB set for pre-inc
+#11
+LDP PC, $0xB8      # skip pre-inc
 LD HL, $INC$FORK1
 LD Y, $PCL
 FNFH DZ, XD        # X,PCL = PCL+1
 FNEL A, PC         # fork on PCL
-#20/17
+#22
 
 ADDR 0x80          # PCL = 0
 LDZ Y, $PCH
-FNH DZ, HLD        # PCH = PCH+1
-LD HL, $IDEN$IDEN
+FNH DZ, HLD        # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
 FNH A, Y           # Y = PCH
-FNFL M, HL         # HL = [PC]
-#31
+#30
+FNFH M, NA         # A = [PC]
 LD Y, $INST
-MVHLZ ND           # cache instruction (from HL)
+FNH AZ, HLD        # A -> inst cache,HL
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43
 
+#13
 ADDR 0xB8
-#10
-LD HL, $7$IDEN
-ANDH DZ, ND        # clear post_inc bit
 LD Y, $PCL
 FNFL DZ, X         # X = PCL
-#20/8
+NOP
+NOP
+NOP
+NOP
 #ADDR 0xC0         # else
 NOP
 NOP
-LD HL, $IDEN$IDEN
+LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y          # Y = PCH
-FNFL M, HL         # HL = [PC]
-#31
+#30
+FNFH M, NA         # A = [PC]
 LD Y, $INST
-MVHLZ ND           # cache instruction (from HL)
+FNH AZ, HLD        # HL -> inst cache
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43
