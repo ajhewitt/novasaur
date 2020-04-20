@@ -1,0 +1,109 @@
+# Pop register pair
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE POP_PG
+
+# assume: Y = $VMS
+LD HL, $INC2$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$SRC2RPH
+LD Y, $SPL
+FNFH DZ, XA           # X = SPL
+#11
+LD Y, $SPH
+FNH DZ, Y             # Y = SPH
+FNFH M, NA            # A = [SP]
+LD Y, $INST
+#20
+FNEL DZ, Y            # Y = zero page addr of high reg
+FNH DZ, HLD           # A -> high reg
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#40
+NOP
+NOP
+NOP
+NOP
+LD HL, $INC$FORK2
+LD Y, $SPL
+FNFH DZ, XD           # X,SPL = SPL+1
+FNEL A, PC
+#54
+
+ADDR 0x40             # SPL = 255, iden SPH, inc SPH
+FNFH DZ, ND           # SPL = SPL+1 again
+LDZ Y, $SPH
+FNH DZ, HLD           # SPH = SPH+1      *** pre inc SPH ***
+#61
+LD HL, $IDEN$DEC
+FNFL A, Y             # Y = SPH-1
+FNFH M, NA            # A = [SP]
+LD HL, $IDEN$SRC2RPL
+#71
+LD Y, $INST
+FNEL DZ, Y            # Y = zero page addr of low reg
+FNH DZ, HLD           # A -> low reg
+LD HL, $FETCH
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0x80             # SPL = 0, inc SPH, iden SPH
+NOP
+NOP
+NOP
+FNFH DZ, ND           # SPL = SPL+1 again
+#60
+LDZ Y, $SPH
+FNH DZ, HLD           # SPH = SPH+1      *** inc SPH ***
+LDZ HL, $IDEN$SRC2RPL
+FNH A, Y              # Y = SPH
+FNFH M, NA            # A = [SP]
+#71
+LD Y, $INST
+FNEL DZ, Y            # Y = zero page addr of low reg
+FNH DZ, HLD           # A -> low reg
+LD HL, $FETCH
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0xC0             # else, iden SPH, iden SPH, iden SPH
+NOP
+NOP
+NOP
+NOP
+NOP
+#59
+FNFH DZ, ND           # SPL = SPL+1 again
+LD HL, $IDEN$SRC2RPL
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+FNFH M, NA            # A = [SP]
+#71
+LD Y, $INST
+FNEL DZ, Y            # Y = zero page addr of low reg
+FNH DZ, HLD           # A -> low reg
+LD HL, $FETCH
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86

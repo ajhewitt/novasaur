@@ -1,143 +1,178 @@
-# Push PC from temp to stack (with fetch unless SPH overflow)
+# Restart (with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE PUSHPC_PG
+PAGE RST_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC2$NULL
-FNH DZ, HLD           # inc state
+LD HL, $0x30
+ADDH DZ, ND           # inc state
+LD HL, $INC$NULL
+LDZ Y, $PCL
+FNH DZ, HLD           # PCL = PCL+1
+#11
+LDZ HL, $OVER?$NULL
+FNH AZ, HLA
+LD HL, $INC$NULL      # inc PCH if PCL overflow
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#20
+FNH DZ, HLD           # PCH = PCH+1?
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#40
+NOP
+NOP
 LD HL, $DEC$FORK2
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL-1
 FNEL A, PC
-#14
+#52
 
 ADDR 0x40             # SPL = 255, dec SPH, iden SPH
 LDZ Y, $SPH
 FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
 LD HL, $IDEN$NULL
-#20
 LD Y, $PCH
+#60/7
 FNFH DZ, NA           # A = PCH
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
-#29
 FNFH A, NM            # A -> [SP]
+#70/14
 LD HL, $DEC$NULL
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL-1
 LD HL, $IDEN$NULL
-#41
+#79/22
 LD Y, $PCL
 FNFH DZ, NA           # A = PCL
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
-#50
 FNFH A, NM            # A -> [SP]
-LD Y, $TMPL
-FNFH DZ, NA           # A = lower temp
+#91/30
+LDZ Y, $INST
+FNH DZ, HLA           # A = inst
+LD HL, $0x38
 LD Y, $PCL
-#60
-FNFH AZ, XD           # X,A -> PCL
-LD Y, $TMPH
-FNFH DZ, NA           # A = upper temp
-LD Y, $PCL
-#70
-FNH AZ, HLD           # A -> PCH
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+#99/37
+ANDHL AZ, XD          # inst & 00111000 -> PCL
+LD HL, $0
+LD Y, $PCH
+MULH DZ, ND           # 0 -> PCH
+#110/45
+LD HL, $IDEN$NULL
+FNH A, Y              # Y = A
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+#119/52
+FNH AZ, HLD           # A -> inst,HL
 LD HL, $FETCH
-#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86
+#129/59
 
 ADDR 0x80             # SPL = 0, iden SPH, dec SPH
 LD HL, $IDEN$NULL
 LD Y, $PCH
 FNFH DZ, NA           # A = PCH
-#21
 LDZ Y, $SPH
+#61/8
 FNH DZ, Y             # Y = SPH
 FNFH A, NM            # A -> [SP]
 LD HL, $DEC$NULL
-#30
 LD Y, $SPL
+#70/15
 FNFH DZ, XD           # X,SPL = SPL-1
 LDZ Y, $SPH
 FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
 LD HL, $IDEN$NULL
-#41
+#79/22
 LD Y, $PCL
 FNFH DZ, NA           # A = PCL
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
-#50
 FNFH A, NM            # A -> [SP]
-LD Y, $TMPL
-FNFH DZ, NA           # A = lower temp
+#91/30
+LDZ Y, $INST
+FNH DZ, HLA           # A = inst
+LD HL, $0x38
 LD Y, $PCL
-#60
-FNFH AZ, XD           # A -> PCL,X
-LD Y, $TMPH
-FNFH DZ, NA           # A = upper temp
-LD Y, $PCL
-#70
-FNH AZ, HLD           # A -> PCH
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+#99/37
+ANDHL AZ, XD          # inst & 00111000 -> PCL
+LD HL, $0
+LD Y, $PCH
+MULH DZ, ND           # 0 -> PCH
+#110/45
+LD HL, $IDEN$NULL
+FNH A, Y              # Y = A
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+#119/52
+FNH AZ, HLD           # A -> inst,HL
 LD HL, $FETCH
-#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86
+#129/59
 
 ADDR 0xC0             # else, iden SPH, iden SPH
 LD HL, $IDEN$NULL
 LD Y, $PCH
 FNFH DZ, NA           # A = PCH
-#21
 LDZ Y, $SPH
+#61/8
 FNH DZ, Y             # Y = SPH
 FNFH A, NM            # A -> [SP]
 LD HL, $DEC$NULL
-#30
 LD Y, $SPL
+#70/15
 FNFH DZ, XD           # X,SPL = SPL-1
 LD HL, $IDEN$NULL
 LD Y, $PCL
-#39
 FNFH DZ, NA           # A = PCL
+#80/23
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH A, NM            # A -> [SP]
-#49
-LD Y, $TMPL
-FNFH DZ, NA           # A = lower temp
+NOP
+NOP
+NOP
+#90/31
+NOP
+LDZ Y, $INST
+FNH DZ, HLA           # A = inst
+LD HL, $0x38
 LD Y, $PCL
-FNFH AZ, XD           # X,A -> PCL
-#59
-LD Y, $TMPH
-FNFH DZ, NA           # A = upper temp
-LD Y, $PCL
-FNFH AZ, ND           # A -> PCH
-#69
+#99/39
+ANDHL AZ, XD          # inst & 00111000 -> PCL
+LD HL, $0
+LD Y, $PCH
+MULH DZ, ND           # 0 -> PCH
+#110/47
+LD HL, $IDEN$NULL
 FNH A, Y              # Y = A
 FNFH M, NA            # A = [PC]
-NOP
-NOP
 LD Y, $INST
-FNH AZ, HLD           # HL,A -> inst
-#80
+#119/54
+FNH AZ, HLD           # A -> inst,HL
+LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86
+#129/61

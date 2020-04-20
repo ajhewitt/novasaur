@@ -1,0 +1,30 @@
+# Jump HL indirect (with fetch)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE PCHL_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LD Y, $LREG
+FNFH DZ, NA           # A = L
+#11
+LD Y, $PCL
+FNFH AZ, XD           # A -> PCL,X
+LD Y, $HREG
+FNFH DZ, NA           # A = H
+#21
+LD Y, $PCH
+FNFH AZ, ND           # A -> PCH
+FNH DZ, Y             # Y = PCH
+NOP
+NOP
+#30
+FNFH M, NA            # A = [PC]
+LD Y, $INST
+FNH AZ, HLD           # A -> inst cache,HL
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

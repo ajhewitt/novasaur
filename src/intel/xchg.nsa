@@ -32,16 +32,16 @@ XORHL AZ, HLD         # E = 1010 E-end
 LD Y, $LREG           # L = 1001
 XORHL DZ, ND          # E = 0011 L-end
 #52
+NOP
+NOP
+NOP
 LD HL, $INC$FORK1
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
-#62
+#65
 
 ADDR 0x80
-NOP
-NOP
-NOP
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
@@ -55,9 +55,6 @@ VMPHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0xC0
-NOP
-NOP
-NOP
 NOP
 NOP
 LD HL, $IDEN$NULL

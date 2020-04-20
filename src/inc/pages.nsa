@@ -68,6 +68,12 @@ $CALL2_PG      0x5C
 $PUSHPC_PG     0x5D
 $RET1_PG       0x5E
 $RET2_PG       0x5F
+$RST_PG        0x60
+$PCHL_PG       0x61
+$PUSH_PG       0x62
+$POP_PG        0x63
+$XTHL_PG       0x64
+$SPHL_PG       0x65
 
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot

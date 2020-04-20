@@ -17,11 +17,11 @@ LD HL, $IDEN$NULL
 LD Y, $SPL
 #20/18
 FNFH DZ, XA           # X = SPL
-LD Y, $SPH
+LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
 #30/25
-LD Y, $PCL
+LDZ Y, $PCL
 FNH AZ, HLD           # A -> PCL
 LD HL, $INC$FORK2
 LD Y, $SPL
@@ -70,7 +70,7 @@ FNFH DZ, XA           # X = PCL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
-LD Y, $INST
+LDZ Y, $INST
 FNH AZ, HLD           # cache instruction (from HL)
 #80/27
 LD Y, $VMS            # set Y = $VMS on exit
@@ -94,7 +94,7 @@ FNFH DZ, XA           # X = PCL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
-LD Y, $INST
+LDZ Y, $INST
 FNH AZ, HLD           # cache instruction (from HL)
 #80/27
 LD Y, $VMS            # set Y = $VMS on exit
@@ -119,7 +119,7 @@ FNFH DZ, XA           # X = PCL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
-LD Y, $INST
+LDZ Y, $INST
 FNH AZ, HLD           # cache instruction (from HL)
 #80/27
 LD Y, $VMS            # set Y = $VMS on exit

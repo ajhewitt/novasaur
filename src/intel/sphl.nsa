@@ -1,0 +1,34 @@
+# Move HL to SP
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SPHL_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LD Y, $LREG
+FNFH DZ, NA           # A = L
+#11
+LD Y, $SPL
+FNFH AZ, XD           # A -> SPL
+LD Y, $HREG
+FNFH DZ, NA           # A = H
+#21
+LD Y, $SPH
+FNFH AZ, ND           # A -> SPH
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

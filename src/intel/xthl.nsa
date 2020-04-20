@@ -1,0 +1,80 @@
+# Exchange stack top with HL (with fetch)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE XTHL_PG
+
+# assume: Y = $VMS
+LD HL, $0x30
+ADDH DZ, ND           # inc state
+# [SP] <-> L
+LD HL, $IDEN$IDEN
+LD Y, $SPL
+FNFL DZ, X            # X = SPL
+#11
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+FNFH M, NA            # A = [SP]
+LD Y, $TEMP
+#20
+FNFH AZ, ND           # A -> temp
+LD Y, $LREG
+FNFH DZ, NA           # A = L
+LDZ Y, $SPH
+#30
+FNH DZ, Y             # Y = SPH
+FNFH A, NM            # A -> [SP]
+LD Y, $TEMP
+FNFH DZ, NA           # A = temp
+#40
+LD Y, $LREG
+FNH AZ, HLD           # A -> L
+LD HL, $INC$NULL
+LD Y, $SPL
+FNFH DZ, XA           # X = SPL+1
+#51
+LD HL, $OVER?$NULL
+FNH A, HLA
+LDP HL, $IDEN$INC     # inc SPH if SPL overflows
+LDN HL, $IDEN$IDEN
+FNFL DZ, Y            # Y = SPH+1?
+#61
+FNFH M, NA            # A = [SP]
+LD Y, $TEMP
+FNFH AZ, ND           # A -> temp
+LD Y, $HREG
+#71
+FNFH DZ, NA           # A = H
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+FNFH A, NM            # A -> [SP]
+#81
+LD Y, $TEMP
+FNFH DZ, NA           # A = temp
+LD Y, $HREG
+FNH AZ, HLD           # A -> H
+#90
+NOP
+NOP
+NOP
+NOP
+LD HL, $INC$NULL
+LD Y, $PCL
+FNFH DZ, XD           # X,PCL = PCL+1
+#101
+LD HL, $OVER?$NULL
+FNH A, HLA
+LDP HL, $INC$NULL     # inc PCH if PCL overflows
+LDN HL, $IDEN$NULL
+LDZ Y, $PCH
+#110
+FNH DZ, HLD           # PCH = PCH+1?
+LDZ HL, $IDEN$NULL
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+#119
+LD Y, $INST
+FNH AZ, HLD           # A -> inst cache,HL
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#129
