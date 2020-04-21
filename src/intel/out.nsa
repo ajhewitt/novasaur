@@ -1,128 +1,113 @@
-# Move immediate to memory
+# Output to port (with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE MVIM_PG
+PAGE OUT_PG
+$JUMP_ADD      4
+$JUMP_MUL      13
 
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#10
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#20
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
 LD HL, $INC$FORK2
 LD Y, $PCL
-#31
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
-#37
+#14
 
 ADDR 0x40             # PCL = 255, iden PCH, inc PCH
-LD HL, $IDEN$IDEN
+LD HL, $IDEN$NULL
 LDZ Y, $PCH
-#41
 FNH DZ, Y             # Y = PCH
+#20
 FNFH M, NA            # A = [PC]
-LD Y, $LREG
-FNEL DZ, X            # X = L
-#51
-LD Y, $HREG
-FNH DZ, Y             # Y = H
-FNFH A, NM            # A -> [HL]
+LD HL, $JUMP_MUL
+LD Y, $TEMP
+MULH AZ, ND           # A*13 -> temp
+#30
 LD HL, $INC$NULL
-#60
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+#41
 LD HL, $IDEN$NULL
-#71
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
-#80
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86
+#50
+FNH AZ, HLD           # A -> inst cache
+LD HL, $JUMP_ADD
+LD Y, $TEMP
+ADDHL DZ, HLA         # HL = temp+4
+#60
+NOP
+NOP
+NOP
+LD PG, $INOUT_PG
+#65
 
 ADDR 0x80             # PCL = 0, inc PCH, iden PCH
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-#41
-LD HL, $IDEN$IDEN
+LD HL, $IDEN$NULL
+#20
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
-LD Y, $LREG
-#50
-FNEL DZ, X            # X = L
-LD Y, $HREG
-FNH DZ, Y             # Y = H
-FNFH A, NM            # A -> [HL]
-#60
+LD HL, $JUMP_MUL
+LD Y, $TEMP
+#29
+MULH AZ, ND           # A*13 -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
+#39
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-#71
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
-#80
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86
+#50
+FNH AZ, HLD           # A -> inst cache
+LD HL, $JUMP_ADD
+LD Y, $TEMP
+ADDHL DZ, HLA         # HL = temp+4
+#60
+NOP
+NOP
+NOP
+LD PG, $INOUT_PG
+#65
 
 ADDR 0xC0             # else, iden PCH, iden PCH
 NOP
 NOP
 LD HL, $IDEN$IDEN
-#41
 LDZ Y, $PCH
+#20
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
-LD Y, $LREG
-#50
-FNEL DZ, X            # X = L
-LD Y, $HREG
-FNH DZ, Y             # Y = H
-FNFH A, NM            # A -> [HL]
-#60
+LD HL, $JUMP_MUL
+LD Y, $TEMP
+#29
+MULH AZ, ND           # A*13 -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
+#39
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-#71
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
+#50
 FNH AZ, HLD           # A -> inst cache,HL
-#80
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86
+LD HL, $JUMP_ADD
+LD Y, $TEMP
+ADDHL DZ, HLA         # HL = temp+4
+#60
+NOP
+NOP
+NOP
+LD PG, $INOUT_PG
+#65

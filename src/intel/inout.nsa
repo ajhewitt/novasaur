@@ -1,0 +1,152 @@
+# In/Output port jump page
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE INOUT_PG
+
+MVHL PCA              # PC = HL
+#69/4(0*13+4)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH IZ, ND           # I -> acc
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/17(1*13+4)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH IZ, O1D          # I1 -> acc
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/30(2*13+4)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH IZ, O2D          # I2 -> acc
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/43(3*13+4)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH IZ, O3D          # I3 -> acc
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/56(4*13+4)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH IZ, O4D          # I4 -> acc
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/69(5*13+4)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH IZ, O5D          # I5 -> acc
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/82(6*13+4)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH IZ, O6D          # I6 -> acc
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/95(7*13+4)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH IZ, O7D          # I7 -> acc
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/108(0*13+108)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH DZ, NA           # acc -> O0
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/121(1*13+108)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH DZ, O1A          # acc -> O1
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/134(2*13+108)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH DZ, O2A          # acc -> O2
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/147(3*13+108)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH DZ, O3A          # acc -> O3
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/160(4*13+108)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH DZ, O4A          # acc -> O4
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/173(5*13+108)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH DZ, O5A          # acc -> O5
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/186(6*13+108)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH DZ, O6A          # acc -> O6
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/199(7*13+108)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH DZ, O7A          # acc -> O7
+LD Y, $INST
+FNH DZ, HL            # HL = inst cache
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/212

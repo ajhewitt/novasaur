@@ -1,4 +1,4 @@
-# Complement Carry Flag
+# Complement Carry Flag (with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

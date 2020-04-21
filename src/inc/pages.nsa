@@ -74,6 +74,9 @@ $PUSH_PG       0x62
 $POP_PG        0x63
 $XTHL_PG       0x64
 $SPHL_PG       0x65
+$IN_PG         0x66
+$OUT_PG        0x67
+$INOUT_PG      0x68
 
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot
