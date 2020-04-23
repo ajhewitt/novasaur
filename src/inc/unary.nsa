@@ -20,22 +20,21 @@ $OVER?     14
 $REVERSE   15
 
 #FNE
-$V2E        0
-$V2M        0
-$SRC2REG    1
-$DST2REG    2
-$SRC2RPL    3
-$SRC2RPH    4
-$FORK1      5
-$FORK2      6
-$FORK3      7
-$B2CARRY    8 # move borrow to carry
-$DACARRY    9 # set carry if nibbles > 9
-$CON2MUL   10
-
-
-$INCPC?    13
+$SRC2REG    0 # source code to register zpage addr
+$DST2REG    1 # destination code to register zpage addr
+$SRC2RPL    2 # source code to lower register zpage addr
+$SRC2RPH    3 # source code to upper register zpage addr
+$FORK1      4 # 0->0x80,else->0xC0
+$FORK2      5 # 0xFF->0x40,0->0x80,else->0xC0
+$FORK3      6 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+$B2CARRY    7 # move borrow to carry
+$DACARRY    8 # set carry if nibbles > 9
+$CON2MUL    9 # condition code to flag multiplier
+$F2PSW     10 # flags->PSW
+$PSW2F     11 # PSW->flags
+$V2E       12
+$V2M       13
 $UNDER?    14
-$EXTPG     15
+$INCPC?    15
 
 #FND

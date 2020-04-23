@@ -3,6 +3,7 @@ $IDLE_PG       0    # 43-pc idle VMC
 $LSYNC_PG      1
 $PSYNC_PG      2
 
+$PREFETCH_PG   0x1E
 $FETCH_PG      0x1F
 $IMMED_PG      0x20
 $MOVR_PG       0x21
@@ -71,12 +72,14 @@ $RET2_PG       0x5F
 $RST_PG        0x60
 $PCHL_PG       0x61
 $PUSH_PG       0x62
-$POP_PG        0x63
-$XTHL_PG       0x64
-$SPHL_PG       0x65
-$IN_PG         0x66
-$OUT_PG        0x67
-$INOUT_PG      0x68
+$PUSHA_PG      0x63
+$POP_PG        0x64
+$POPA_PG       0x65
+$XTHL_PG       0x66
+$SPHL_PG       0x67
+$IN_PG         0x68
+$OUT_PG        0x69
+$INOUT_PG      0x6A
 
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot

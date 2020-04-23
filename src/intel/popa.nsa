@@ -1,109 +1,72 @@
-# Pop register pair
+# Pop A, PSW (with prefetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE POP_PG
+PAGE POPA_PG
 
 # assume: Y = $VMS
 LD HL, $INC2$NULL
 FNH DZ, HLD           # inc state
-LD HL, $IDEN$SRC2RPH
+LD HL, $IDEN$NULL
 LD Y, $SPL
 FNFH DZ, XA           # X = SPL
 #11
 LD Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
-LD Y, $INST
+LD HL, $PSW2F$NULL
 #20
-FNEL DZ, Y            # Y = zero page addr of high reg
-FNH AZ, HLD           # A -> high reg
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#30
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#40
-NOP
-NOP
-NOP
-NOP
+LD Y, $FREG
+FNH AZ, HLD           # A -> flags
 LD HL, $INC$FORK2
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL+1
+#31
 FNEL A, PC
-#54
+#34
 
 ADDR 0x40             # SPL = 255, iden SPH, inc SPH
 FNFH DZ, ND           # SPL = SPL+1 again
 LDZ Y, $SPH
 FNH DZ, HLD           # SPH = SPH+1      *** pre inc SPH ***
-#61
+#41
 LD HL, $IDEN$DEC
 FNFL A, Y             # Y = SPH-1
 FNFH M, NA            # A = [SP]
-LD HL, $IDEN$SRC2RPL
-#71
-LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of low reg
-FNH AZ, HLD           # A -> low reg
-LD HL, $FETCH
-#80
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86
+LD Y, $AREG
+#51
+FNH AZ, HLD           # A -> acc
+NOP
+LD PG, $PREFETCH_PG
+#55
 
 ADDR 0x80             # SPL = 0, inc SPH, iden SPH
-NOP
-NOP
-NOP
 FNFH DZ, ND           # SPL = SPL+1 again
-#60
 LDZ Y, $SPH
 FNH DZ, HLD           # SPH = SPH+1      *** inc SPH ***
-LDZ HL, $IDEN$SRC2RPL
+#41
+LDZ HL, $IDEN$NULL
 FNH A, Y              # Y = SPH
 FNFH M, NA            # A = [SP]
-#71
-LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of low reg
-FNH AZ, HLD           # A -> low reg
-LD HL, $FETCH
-#80
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86
+LD Y, $AREG
+#50
+FNH AZ, HLD           # A -> acc
+NOP
+LD PG, $PREFETCH_PG
+#55
 
 ADDR 0xC0             # else, iden SPH, iden SPH, iden SPH
-NOP
-NOP
-NOP
-NOP
-NOP
-#59
 FNFH DZ, ND           # SPL = SPL+1 again
-LD HL, $IDEN$SRC2RPL
+LD HL, $IDEN$NULL
 LDZ Y, $SPH
+#41
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
-#71
-LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of low reg
-FNH AZ, HLD           # A -> low reg
-LD HL, $FETCH
-#80
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86
+LD Y, $AREG
+FNH DZ, HLD           # A -> acc
+#50
+NOP
+NOP
+NOP
+LD PG, $PREFETCH_PG
+#55
