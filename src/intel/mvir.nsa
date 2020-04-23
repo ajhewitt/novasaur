@@ -7,47 +7,44 @@ PAGE MVIR_PG
 # assume: Y = $VMS
 LD HL, $INC$FORK1
 FNFH DZ, ND           # inc state
+NOP
+NOP
+NOP
+NOP
 LDZ Y, $PCL
+#11
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
-#13
+#17
 
 ADDR 0x80
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1
+#21
 LD HL, $IDEN$DST2REG
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
-#24
 LD Y, $INST
+#30
 FNEL DZ, Y            # Y = zpage addr of dest reg
 FNH AZ, HLD           # A -> dest reg
-#31
-NOP
-NOP
-NOP
-NOP
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43
 
 ADDR 0xC0
+NOP
+NOP
 LD HL, $IDEN$DST2REG
+#21
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
-#22
 LD Y, $INST
+#30
 FNEL DZ, Y            # Y = zpage addr of dest reg
 FNH AZ, HLD           # A -> dest reg
-NOP
-#30
-NOP
-NOP
-NOP
-NOP
-NOP
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC

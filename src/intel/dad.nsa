@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE DAD_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC$NULL
+LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
 LD HL, $IDEN$SRC2RPL
 LD Y, $INST
@@ -13,60 +13,52 @@ FNEL DZ, Y            # Y = zpage addr of lower register
 #11
 FNH DZ, HL            # HL = lower register
 LD Y, $LREG
-ADDHL DZ, ND
+ADDHL DZ, ND          # L = L + lower register
 #19
-AFHL A, NA
+AFHL A, NA            # A = carry
 LDP HL, $0
-LDN HL, $0x10
-ADDH DZ, ND
-#29
+LDN HL, $1
+LD Y, $HREG
+ADDHL DZ, NA          # H = H+1 if carry
+#32
 LD Y, $TEMP
-AFHL AZ, ND
+AFHL AZ, ND           # temp = carry from H
 LD HL, $IDEN$SRC2RPH
+#40
 LD Y, $INST
-#39
 FNEL DZ, Y            # Y = zpage addr of upper register
 FNH DZ, HL            # HL = upper register
-LD Y, $LREG
-ADDHL DZ, ND
-#50
-AFHL A, HLA
-LD Y, $TEMP
-ORHL DZ, NA
+LD Y, $HREG
+#49
+ADDHL DZ, ND          # H = H + upper register
+AFHL A, HLA           # A = carry
+NOP
+NOP
+NOP
 #60
+NOP
+NOP
+LD Y, $TEMP
+ORHL DZ, NA           # include previous carry
 LD Y, $FREG
-LDP PC, $RESET_CARRY
+#70
+LDP PC, $RESET_CARRY  # branch on carry bit
+
 #SET_CARRY
+NOP
 LD HL, $0x80
 ORHL DZ, ND
-NOP
-#70
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
 LD HL, $FETCH
+#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #86
 
 $RESET_CARRY
-LD HL, $0x80
-ORHL DZ, ND
-#70
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+LD HL, $0x7F
+ANDHL DZ, ND
 LD HL, $FETCH
+#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #86

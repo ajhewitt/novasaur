@@ -39,6 +39,6 @@ NOP
 NOP
 LD HL, $IDEN$NULL
 LDZ Y, $INST
-FNH DZ, HL         # instruction cache -> HL
+FNH DZ, HL         # inst cache -> HL
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC

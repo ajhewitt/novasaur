@@ -7,28 +7,29 @@ PAGE INRM_PG
 # assume: Y = $VMS
 LDZ HL, $INC2$SRC2REG
 FNH DZ, HLD           # inc state
+NOP 
+NOP
+NOP
+NOP
+NOP
+NOP
+#10
+NOP
+NOP
+NOP 
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
 LD HL, $IDEN$NULL
+#21
 LD Y, $FREG
 FNFH DZ, NA           # A = flags
-#11
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#20
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
 LDP PC, $RESET_CARRY  # jump on carry
-#28 $SET_CARRY
+
+#SET_CARRY
 NOP
 LD Y, $LREG
 #30
@@ -79,7 +80,7 @@ LD HL, $IDEN$NULL
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # cache instruction (from HL)
+FNH AZ, HLD           # A -> inst cache,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
@@ -94,7 +95,7 @@ LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # cache instruction (from HL)
+FNH AZ, HLD           # A -> inst cache,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC

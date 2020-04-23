@@ -9,73 +9,71 @@ $JUMP_MUL      13
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
+NOP
+NOP
+NOP
 LD HL, $INC$FORK2
 LD Y, $PCL
+#11
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
-#14
+#17
 
 ADDR 0x40             # PCL = 255, iden PCH, inc PCH
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
+#21
 FNH DZ, Y             # Y = PCH
-#20
 FNFH M, NA            # A = [PC]
 LD HL, $JUMP_MUL
 LD Y, $TEMP
-MULH AZ, ND           # A*13 -> temp
 #30
+MULH AZ, ND           # A*13 -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
+#40
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-#41
 LD HL, $IDEN$NULL
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
+#51
 LD Y, $INST
-#50
-FNH AZ, HLD           # A -> inst cache
+FNH AZ, HLD           # A -> inst cache,HL
 LD HL, $JUMP_ADD
 LD Y, $TEMP
+#59
 ADDHL DZ, HLA         # HL = temp+4
-#60
-NOP
-NOP
-NOP
 LD PG, $INOUT_PG
 #65
 
 ADDR 0x80             # PCL = 0, inc PCH, iden PCH
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+#21
 LD HL, $IDEN$NULL
-#20
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD HL, $JUMP_MUL
+#30
 LD Y, $TEMP
-#29
 MULH AZ, ND           # A*13 -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
-FNFH DZ, XD           # X,PCL = PCL+1
 #39
+FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
+#51
 LD Y, $INST
-#50
-FNH AZ, HLD           # A -> inst cache
+FNH AZ, HLD           # A -> inst cache,HL
 LD HL, $JUMP_ADD
 LD Y, $TEMP
+#59
 ADDHL DZ, HLA         # HL = temp+4
-#60
-NOP
-NOP
-NOP
 LD PG, $INOUT_PG
 #65
 
@@ -83,31 +81,28 @@ ADDR 0xC0             # else, iden PCH, iden PCH
 NOP
 NOP
 LD HL, $IDEN$IDEN
+#21
 LDZ Y, $PCH
-#20
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD HL, $JUMP_MUL
+#30
 LD Y, $TEMP
-#29
 MULH AZ, ND           # A*13 -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
-FNFH DZ, XD           # X,PCL = PCL+1
 #39
+FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
+#51
 LD Y, $INST
-#50
 FNH AZ, HLD           # A -> inst cache,HL
 LD HL, $JUMP_ADD
 LD Y, $TEMP
+#59
 ADDHL DZ, HLA         # HL = temp+4
-#60
-NOP
-NOP
-NOP
 LD PG, $INOUT_PG
 #65

@@ -7,159 +7,119 @@ PAGE CPI_PG
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#10
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
 LD HL, $INC$FORK2
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
-#14/11
+#32
 
 ADDR 0x40             # PCL = 255, iden PCH, inc PCH
 LD HL, $IDEN$2COM
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
-#20/5
 FNFL M, HL            # HL = -[PC]
+#41
 LD Y, $AREG
 ADDHL DZ, NA          # A = Acc - immediate
-#29/11
 AFHL A, NA
+#51
 LD HL, $B2CARRY$NULL
 LD Y, $FREG
 FNEH AZ, ND
-#40/19
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#50/29
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
 LD HL, $INC$NULL
-#60/39
+#60
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
-#71/48
+#71
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # cache instruction (from HL)
-#80/54
+FNH AZ, HLD           # A -> cache inst,HL
+#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/58
+#86
 
 ADDR 0x80             # PCL = 0, inc PCH, iden PCH
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$2COM
-#20/5
 FNH A, Y              # Y = PCH
+#40
 FNFL M, HL            # HL = -[PC]
 LD Y, $AREG
 ADDHL DZ, NA          # A = Acc - immediate
-#31/12
+#49
 AFHL A, NA
 LD HL, $B2CARRY$NULL
 LD Y, $FREG
 FNEH AZ, ND
-#42/20
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#50/28
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#60/38
+#60
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-#71/48
+#71
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # cache instruction (from HL)
-#80/54
+FNH AZ, HLD           # A -> cache inst,HL
+#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/58
+#86
 
 ADDR 0xC0             # else, iden PCH, iden PCH
+NOP
+NOP
 LD HL, $IDEN$2COM
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
-#20/5
+#40
 FNFL M, HL            # HL = -[PC]
 LD Y, $AREG
 ADDHL DZ, NA          # A = Acc - immediate
-#29/11
+#49
 AFHL A, NA
 LD HL, $B2CARRY$NULL
 LD Y, $FREG
 FNEH AZ, ND
-#40/19
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#50/29
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#60/39
+#60
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-#71/49
+#71
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # cache instruction (from HL)
-#80/55
+FNH AZ, HLD           # A -> cache inst,HL
+#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/59
+#86

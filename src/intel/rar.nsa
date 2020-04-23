@@ -28,16 +28,18 @@ NOP
 NOP
 LD HL, $LSR$NULL
 LDP PC, $RESET_CARRY
-#28 $SET_CARRY
+
+#SET_CARRY
 NOP
 LDZ Y, $AREG
+#30
 FNH DZ, HLD           # shift Acc left
 LD HL, $IDEN$NULL
 LDZ Y, $FREG
 FNH DZ, HLA           # A = flags
 LDP HL, $0
-#40
 LDN HL, $0x80
+#41
 LD Y, $AREG
 ORHL DZ, ND           # set MSB of Acc
 LD HL, $0x80
@@ -53,13 +55,14 @@ FNEL A, PC
 
 $RESET_CARRY
 LDZ Y, $AREG
+#30
 FNH DZ, HLD           # shift Acc left
 LD HL, $IDEN$NULL
 LDZ Y, $FREG
 FNH DZ, HLA           # A = flags
 LDP HL, $0
-#40
 LDN HL, $0x80
+#41
 LD Y, $AREG
 ORHL DZ, ND           # set MSB of Acc
 LD HL, $0x7F
@@ -81,7 +84,7 @@ LD HL, $IDEN$NULL
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # cache instruction (from HL)
+FNH AZ, HLD           # A -> inst cache,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
@@ -96,7 +99,7 @@ LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # cache instruction (from HL)
+FNH AZ, HLD           # A -> inst cache,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
