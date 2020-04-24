@@ -1,8 +1,8 @@
-# Conditional return on flag reset (call Fetch or Pull PC with fetch)
+# Conditional return on flag set (call Fetch or Pull PC with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE RET1_PG
+PAGE RETS_PG
 
 # assume: Y = $VMS
 LD HL, $INC2$CON2MUL
@@ -12,7 +12,7 @@ FNEL DZ, HL           # HL = multiplier to move flag to MSB
 #10/8
 LD Y, $FREG
 MULH DZ, NA           # A MSB = flag to test
-LDP PC, $SKIP_RET     # skip return if flag reset
+LDN PC, $SKIP_RET     # skip return if flag set
 LD HL, $IDEN$NULL
 LD Y, $SPL
 #20/18

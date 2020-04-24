@@ -64,11 +64,11 @@ $STC_PG        0x57
 $JMP_PG        0x58
 $JMP1_PG       0x59
 $SKIP_PG       0x5A
-$CALL1_PG      0x5B
-$CALL2_PG      0x5C
+$CALLR_PG      0x5B
+$CALLS_PG      0x5C
 $PUSHPC_PG     0x5D
-$RET1_PG       0x5E
-$RET2_PG       0x5F
+$RETR_PG       0x5E
+$RETS_PG       0x5F
 $RST_PG        0x60
 $PCHL_PG       0x61
 $PUSH_PG       0x62

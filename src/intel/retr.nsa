@@ -1,0 +1,127 @@
+# Conditional return on flag reset (call Fetch or Pull PC with fetch)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE RETR_PG
+
+# assume: Y = $VMS
+LD HL, $INC2$CON2MUL
+FNFH DZ, ND           # inc state
+LD Y, $INST
+FNEL DZ, HL           # HL = multiplier to move flag to MSB
+#10/8
+LD Y, $FREG
+MULH DZ, NA           # A MSB = flag to test
+LDP PC, $SKIP_RET     # skip return if flag reset
+LD HL, $IDEN$NULL
+LD Y, $SPL
+#20/18
+FNFH DZ, XA           # X = SPL
+LDZ Y, $SPH
+FNH DZ, Y             # Y = SPH
+FNFH M, NA            # A = [SP]
+#30/25
+LDZ Y, $PCL
+FNH AZ, HLD           # A -> PCL
+LD HL, $INC$FORK2
+LD Y, $SPL
+FNFH DZ, XD           # X,SPL = SPL+1
+#41/34
+FNEL A, PC
+#44/36
+
+$SKIP_RET
+LD HL, $DEC$NULL
+#19/38
+LDZ Y, $VMS
+FNH DZ, HLD           # decrement VMS, out of here in 1 cycle
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30/48
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43/59
+
+ADDR 0x40             # SPL = 255, iden SPH, inc SPH
+FNFH DZ, ND           # SPL = SPL+1 again
+LDZ Y, $SPH
+#49/4
+FNH DZ, HLD           # SPH = SPH+1      *** pre inc SPH ***
+LD HL, $IDEN$DEC
+FNFL A, Y             # Y = SPH-1
+FNFH M, NA            # A = [SP]
+#59/11
+LD Y, $PCH
+FNFH AZ, ND           # A -> PCH
+LD Y, $PCL
+FNFH DZ, XA           # X = PCL
+#69/19
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LDZ Y, $INST
+FNH AZ, HLD           # A -> inst cache,HL
+#80/27
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/31
+
+ADDR 0x80             # SPL = 0, inc SPH, iden SPH
+FNFH DZ, ND           # SPL = SPL+1 again
+LDZ Y, $SPH
+#49/4
+FNH DZ, HLD           # SPH = SPH+1      *** inc SPH ***
+LD HL, $IDEN$IDEN
+FNFL A, Y             # Y = SPH
+FNFH M, NA            # A = [SP]
+#59/11
+LD Y, $PCH
+FNFH AZ, ND           # A -> PCH
+LD Y, $PCL
+FNFH DZ, XA           # X = PCL
+#69/19
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LDZ Y, $INST
+FNH AZ, HLD           # A -> inst cache,HL
+#80/27
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/31
+
+ADDR 0xC0             # else, iden SPH, iden SPH, iden SPH
+NOP
+NOP
+FNFH DZ, ND           # SPL = SPL+1 again
+#49/4
+LD HL, $IDEN$NULL
+LDZ Y, $SPH
+FNFL DZ, Y            # Y = SPH
+FNFH M, NA            # A = [SP]
+#59/11
+LD Y, $PCH
+FNFH AZ, ND           # A -> PCH
+LD Y, $PCL
+FNFH DZ, XA           # X = PCL
+#69/19
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+FNFH M, NA            # A = [PC]
+LDZ Y, $INST
+FNH AZ, HLD           # A -> inst cache,HL
+#80/27
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/31
