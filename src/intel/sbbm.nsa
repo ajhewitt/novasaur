@@ -35,7 +35,7 @@ AFHL A, HLA           # HL = flags
 LD Y, $TEMP
 ORHL DZ, NA           # A = flags | initial borrow flags
 #61
-LD HL, $B2CARRY$NULL
+LD HL, $SWCARRY$NULL
 LDZ Y, $FREG
 FNH AZ, HLD           # A -> flags (borrow to carry)
 NOP

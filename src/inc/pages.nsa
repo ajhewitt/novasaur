@@ -62,7 +62,7 @@ $CMA_PG        0x55
 $CMC_PG        0x56
 $STC_PG        0x57
 $JMP_PG        0x58
-$JMP1_PG       0x59
+$JMPC_PG       0x59
 $SKIP_PG       0x5A
 $CALLR_PG      0x5B
 $CALLS_PG      0x5C

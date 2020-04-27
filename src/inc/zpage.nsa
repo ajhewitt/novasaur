@@ -1,45 +1,47 @@
 # zero page assignments
 
-$PCH        0xE0 # PC MSB
-$PCL        0xE1 # PC LSB
-$SPH        0xE2 # SP MSB
-$SPL        0xE3 # SP LSB
+#vCPU
+$TEMP       0xE2
+$TMPH       0xE2
+$TMPL       0xE3
+$AREG       0xE0 # Accumulator
+$FREG       0xE1 # Flags - COZNHP00
+$BREG       0xE2
+$CREG       0xE3
+$DREG       0xE4
+$EREG       0xE5
+$HREG       0xE6
+$LREG       0xE7
+$SPH        0xE8 # SP MSB
+$SPL        0xE9 # SP LSB
+$IXH        0xEA # IX MSB
+$IXL        0xEB # IX LSB
+$IYH        0xEC # IY MSB
+$IYL        0xED # IY LSB
+$PCH        0xEE # PC MSB
+$PCL        0xEF # PC LSB
+$INST       0xF0
+$TEMP       0xF1
+$TMPH       0xF2
+$TMPL       0xF3
 
+#HAL
+$PMODE      0xF7
+$PLINE      0xF8
+$VMODE      0xF9
+$VLINE      0xFA
+$VSTART     0xFB
+$SERS       0xFC
+$EREG       0xFD
+$VMS        0xFE
+$AUDIO      0xFF
 
-$TEMP       0xE6
-$TMPL       0xE6
-$TMPH       0xE7
-$AREG       0xE8 # Accumulator
-$FREG       0xE9 # Flags - COZNHP00
-$BREG       0xEA
-$CREG       0xEB
-$DREG       0xEC
-$EREG       0xED
-$HREG       0xEE
-$LREG       0xEF
-
+#ROM copy
 $ROM_ID     0xEB        # source rom 0-15 - init to PC jump point
 $ROM_PG     0xEC        # source page 0-15 - init to 0
 $ROM_X      0xED        # x index - ref both src and dest - init to 0
 $ROM_Y      0xEE        # y index - dest D0 page
 $ROM_N      0xEF        # ROM count
-
-$PMODE      0xF0
-$PLINE      0xF1
-$VMODE      0xF2
-$VLINE      0xF3
-$VSTART     0xF4
-$SERS       0xF5
-$EREG       0xF6
-
-$VMS        0xF8
-$INST       0xF9
-$PREG       0xFA
-$XREG       0xFB
-$DREG       0xFC
-$TEST1      0xFD
-$TEST2      0xFE
-$AUDIO      0xFF
 
 $FETCH       0
 $SKIP_INST   1

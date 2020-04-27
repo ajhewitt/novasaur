@@ -37,7 +37,7 @@ LD HL, $0xFF
 ADDHL DZ, ND          # register--
 AFHL AZ, NA
 #42
-LD HL, $B2CARRY$NULL
+LD HL, $SWCARRY$NULL
 FNEH A, NA
 LD HL, $0x80
 LD Y, $FREG
@@ -58,7 +58,7 @@ LD HL, $0xFF
 ADDHL DZ, ND          # register--
 AFHL AZ, NA
 #42
-LD HL, $B2CARRY$NULL
+LD HL, $SWCARRY$NULL
 FNEH A, NA
 LD HL, $0x7F
 LD Y, $FREG

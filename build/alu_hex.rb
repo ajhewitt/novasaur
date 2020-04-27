@@ -31,20 +31,43 @@ def print_unary(offset, r)
   end
 end
 
-# ALU function: AS (arithmetic status)
-# HHHHLLLL - HL, BBBBAAAA - acc
-# L) BBBBHZHZ - half-carry/zero on A-L/A+L (B-H-C/B+H+C)
-# H) CHNZCHNZ - carry/half-carry/negative/zero on BA-HL/BA+HL
-#   (sub)(add)
+# ALU function: AF (arithmetic flags)
+# XXXXYYYY = BBBBAAAA + HHHHLLLL
+# (BBBBAAAA = XXXXYYYY - HHHHLLLL)
+# L) XXXXHZPL = XXXXYYYY $ LLLL (flags for AAAA +/- LLLL)
+# H) CNZPHOBL = XXXXHZPL $ HHHH
 def print_af(offset, opts = {})
-  # feature not implemented 
+  16.times.map do |a|
+    16.times.map do |b|
+      d = 16.times.map do |c|
+        if opts[:high]
+          r = c & 9                                   # preserve half carry/borrow
+          r |= 0x80 if b < a                          # C - Carry (from bit 7)
+          r |= b >> 3                                 # N - Negative (sign of result)
+          r |= 0x20 if c&4 == 1 && b == 0             # Z - Zero (high if result is 0)
+          r |= ((sprintf('%b', b).split('').map(&:to_i).reduce(&:+) + ((c&2)>>1))%2) << 4
+          r |= 4 if (b&8) < (a&8)                     # O - Overflow (carry from bit 6)
+          r |= 2 unless b < a || (c&4 == 1 && a == 0) # B - Borrow (from bit 7 if subtraction)
+        else
+          r = b << 4                                  # preserve high nibble
+          r |= 8 if c < a                             # H - Half carry (carry from bit 3)
+          r |= 4 if c == 0                            # (half zero)
+          r |= (sprintf('%b', c).split('').map(&:to_i).reduce(&:+)%2) << 1
+          r |= 1 unless c < a || a == 0               # L - Low borrow (from bit 3 if subtraction)
+        end
+        r
+      end
+      print_data([d.size, offset + a, b << 4, 0] + d)
+    end
+  end
 end
 
+# ALU function: Shift? (TBD)
 def print_sh(offset, opts = {})
   # feature not implemented 
 end
 
-# ALU function: VMC (VCPU Decode)
+# ALU function: VMP (Virtual Machine Page/vCPU decode)
 # Instruction - HL, virtual machine state (VMS) MMMMEXCC - acc
 # L) ESSSLLLL - state/ext/L|N, SSS:0=decode/L, 1=hsync/next:0=line, 1=vpc
 # H) PPPPPPPP - page number
@@ -77,6 +100,7 @@ def print_vmp(offset, opts = {})
   end
 end
 
+# ALU function: AV (Audio/Video timings)
 def print_av(offset)
   rom = Array.new(16) { Array.new(255, 0xFF) }
   vid = [[[[480,1,3,28], [480,1,3,28], [480,1,3,28], [480,1,3,28]],
@@ -149,24 +173,59 @@ def print_av(offset)
   end
 end
 
-def print_att(offset)
-  16.times.map do |a|
-    16.times.map do |b|
-      d = 16.times.map do |c|
-        x = (b << 4) + c
-        y = a/-2
-        (x * 2**y).to_i
-      end
-      print_data([d.size, offset + a, b << 4, 0] + d)
-    end
-  end
-end
-
 def inc_line
   256.times.map do |i|
     i &= i&7 > 4 ? 0xFC : 0xF8
     n = i&4 == 0 ? 0x30 : 0x40
     (i&0xF0) % (n+0x10) == n ? i-n : (i+0x10)&0xFF
+  end
+end
+
+# Swap carry with borrow flags (CNZPHOBL->BNZPLOCH)
+def swap_carry
+  256.times.map do |i|
+    r = i & 0x74
+    r |= (i&2)<<6
+    r |= (i&1)<<3
+    r |= (i&0x80)>>6
+    r |= (i&8)>>3
+    r
+  end
+end
+
+# Decimal adjust carry (set carry if nibbles > 9)
+def da_carry
+  256.times.map do |i|
+    r = i
+    r |= 8 if i&0xF > 9
+    r |= 0x80 if i&0xF0 > 0x90
+    r
+  end
+end
+
+# Flags -> PSW (CNZPHOBL->SZ0A0P1C)
+def flags_psw
+  256.times.map do |i|
+   r = 2
+   r |= 0x80 unless i&0x40 == 0
+   r |= 0x40 unless i&0x20 == 0
+   r |= 0x10 unless i&8 == 0
+   r |= 4 unless i&0x10 == 0
+   r |= 1 unless i&0x80 == 0
+   r
+  end
+end
+
+# PSW -> Flags (SZ0A0P1C->CNZPHOBL)
+def psw_flags
+  256.times.map do |i|
+   r = 0
+   r |= 0x80 unless i&1 == 0
+   r |= 0x40 unless i&0x80 == 0
+   r |= 0x20 unless i&0x40 == 0
+   r |= 0x10 unless i&4 == 0
+   r |= 8 unless i&0x10 == 0
+   r
   end
 end
 
@@ -218,12 +277,42 @@ print_binary '/', 0x90
 
 # 0x0003C000-0x0003CFFF: AV low nibble only
 print_av 0xC0
-# 0x0003D000-0x0003DFFF: ATT low nibble only
-print_att 0xD0
+
+# 0x0003D000-0x0003DFFF: FND low nibble only
+# TBD
 
 # 0x0003E000-0x0003EFFF: FNE low nibble only
+REG8=[0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE0, 0xE1].freeze
+# $SRC2REG: source code to register zpage addr (B,C,D,E,F,H,L,A,F)
+print_unary(0xE1, 256.times.map {|i| REG8[i&7]})
+# $DST2REG: destination code to register zpage addr (B,C,D,E,F,H,L,A,F)
+print_unary(0xE0, 256.times.map {|i| REG8[(i&0x38)>>3]})
+# $SRC2RPH: source code to lower register zpage addr (BC,DE,HL,SP)
+REG16H=[0xE2, 0xE4, 0xE6, 0xE8].freeze
+print_unary(0xE2, 256.times.map {|i| REG16H[(i&0x30)>>4]})
+# $SRC2RPL: source code to upper register zpage addr (BC,DE,HL,SP)
+REG16L=[0xE3, 0xE5, 0xE7, 0xE9].freeze
+print_unary(0xE3, 256.times.map {|i| REG16L[(i&0x30)>>4]})
+# $FORK1: 0->0x80,else->0xC0
+print_unary(0xE4, [0x80] + Array.new(0xFF, 0xC0))
+# $FORK2: 0xFF->0x40,0->0x80,else->0xC0
+print_unary(0xE5, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
+# $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+print_unary(0xE6, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
+# $SWCARRY: swap carry with borrow flags (CNZPHOBL->BNZPLOCH)
+print_unary(0xE7, swap_carry)
+# $DACARRY: set carry if nibbles > 9
+print_unary(0xE8, da_carry)
+# $CON2MUL: condition code to flag multiplier (ZCPS->CNZPHOBL)
+CON=[4, 1, 8, 2].freeze
+UNC=[0xC3, 0xC9, 0xCD].freeze # unconditional instructions
+print_unary(0xE9, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
+# $F2PSW: flags->PSW
+print_unary(0xEA, flags_psw)
+# $PSW2F: PSW->flags
+print_unary(0xEB, psw_flags)
 # $V2E: calculate E-reg GPU mode bits from video mode
-print_unary(0xE0, 256.times.map {|i|
+print_unary(0xEC, 256.times.map {|i|
   e = i&1 == 0 ? 0 : 0x10
 #  e |= i&2 == 0 ? 0 : 0x40 # rev 3 board
   e |= i&2 == 0 ? 0 : 0x20 # rev 4 board
@@ -231,14 +320,15 @@ print_unary(0xE0, 256.times.map {|i|
   i&0x60 == 0x60 ? e : e|0x40 # rev 4 board
 })
 # $V2M: calculate mode_line from video mode
-print_unary(0xE1, 256.times.map {|i|
+print_unary(0xED, 256.times.map {|i|
   m = (i<<2)&0x30
   i&0x40 == 0 ? m*4 : (m*5)|4
 })
-# $FORK
-print_unary(0xE2, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
 # $UNDER?: A = (A == 0xFF) ? 0 : -1
 print_unary(0xEE, Array.new(0xFF, 0xFF) + [0])
+# $INCPC?: pre inc PC (0x80) unless PC loaded (0)
+INC=[0xC4, 0xD4, 0xE4, 0xF4, 0xCC, 0xDC, 0xEC, 0xFC, 0xCD] # skip pre-inc after pushpc
+print_unary(0xEF, 256.times.map {|i| INC.include?(i) ? 0 : 0x80})
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only
 # $IDEN: A = A

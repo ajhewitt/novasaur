@@ -16,7 +16,7 @@ LD Y, $AREG
 ADDHL DZ, NA          # A = Acc - reg
 #19
 AFHL A, NA
-LD HL, $B2CARRY$NULL
+LD HL, $SWCARRY$NULL
 LD Y, $FREG
 FNEH AZ, ND
 #30

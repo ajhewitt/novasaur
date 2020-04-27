@@ -46,7 +46,7 @@ AFHL A, HLA           # HL = flags
 LD Y, $TEMP
 ORHL DZ, NA           # A = flags | initial borrow
 #71
-LD HL, $B2CARRY$NULL
+LD HL, $SWCARRY$NULL
 LDZ Y, $FREG
 FNEH AZ, ND           # A -> flags (borrow to carry)
 LD HL, $FETCH
@@ -70,7 +70,7 @@ AFHL A, HLA           # HL = flags
 LD Y, $TEMP
 ORHL DZ, NA           # A = flags | initial borrow
 #71
-LD HL, $B2CARRY$NULL
+LD HL, $SWCARRY$NULL
 LDZ Y, $FREG
 FNEH AZ, ND           # A -> flags (borrow to carry)
 LD HL, $FETCH

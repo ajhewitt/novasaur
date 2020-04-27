@@ -2,7 +2,7 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE JMP1_PG
+PAGE JMPC_PG
 
 # assume: Y = $VMS
 LD HL, $INC$CON2MUL

@@ -43,7 +43,7 @@ LD Y, $AREG
 ADDHL DZ, ND          # Acc = Acc - immediate
 AFHL A, NA
 #51
-LD HL, $B2CARRY$NULL
+LD HL, $SWCARRY$NULL
 LD Y, $FREG
 FNEH AZ, ND
 LD HL, $INC$NULL
@@ -74,7 +74,7 @@ LD Y, $AREG
 ADDHL DZ, ND          # Acc = Acc - immediate
 #49
 AFHL A, NA
-LD HL, $B2CARRY$NULL
+LD HL, $SWCARRY$NULL
 LD Y, $FREG
 FNEH AZ, ND
 #60
@@ -105,7 +105,7 @@ LD Y, $AREG
 ADDHL DZ, ND          # Acc = Acc - immediate
 #49
 AFHL A, NA
-LD HL, $B2CARRY$NULL
+LD HL, $SWCARRY$NULL
 LD Y, $FREG
 FNEH AZ, ND
 #60

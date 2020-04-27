@@ -23,7 +23,7 @@ LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #31
 
-$ADDR 0xC0         # else
+ADDR 0xC0         # else
 NOP
 NOP
 LD HL, $IDEN$NULL
