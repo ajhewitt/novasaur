@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE INOUT_PG
 
 MVHL PCA              # PC = HL
-#69/4(0*13+4)
+#69/2(0*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH IZ, ND           # I -> acc
@@ -14,7 +14,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/17(1*13+4)
+#86/15(1*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH IZ, O1D          # I1 -> acc
@@ -23,7 +23,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/30(2*13+4)
+#86/28(2*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH IZ, O2D          # I2 -> acc
@@ -32,7 +32,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/43(3*13+4)
+#86/41(3*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH IZ, O3D          # I3 -> acc
@@ -41,7 +41,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/56(4*13+4)
+#86/54(4*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH IZ, O4D          # I4 -> acc
@@ -50,7 +50,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/69(5*13+4)
+#86/67(5*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH IZ, O5D          # I5 -> acc
@@ -59,7 +59,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/82(6*13+4)
+#86/80(6*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH IZ, O6D          # I6 -> acc
@@ -68,7 +68,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/95(7*13+4)
+#86/93(7*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH IZ, O7D          # I7 -> acc
@@ -77,7 +77,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/108(0*13+108)
+#86/106(0*13+106)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, NA           # acc -> O0
@@ -86,7 +86,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/121(1*13+108)
+#86/119(1*13+106)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, O1A          # acc -> O1
@@ -95,7 +95,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/134(2*13+108)
+#86/132(2*13+106)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, O2A          # acc -> O2
@@ -104,7 +104,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/147(3*13+108)
+#86/145(3*13+106)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, O3A          # acc -> O3
@@ -113,7 +113,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/160(4*13+108)
+#86/158(4*13+106)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, O4A          # acc -> O4
@@ -122,7 +122,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/173(5*13+108)
+#86/171(5*13+106)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, O5A          # acc -> O5
@@ -131,7 +131,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/186(6*13+108)
+#86/184(6*13+106)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, O6A          # acc -> O6
@@ -140,7 +140,7 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/199(7*13+108)
+#86/197(7*13+106)
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, O7A          # acc -> O7
@@ -149,4 +149,4 @@ FNH DZ, HL            # HL = inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/212
+#86/210

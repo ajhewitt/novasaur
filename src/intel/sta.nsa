@@ -18,30 +18,31 @@ NOP
 NOP
 NOP
 NOP
+NOP
 LD HL, $INC$FORK2
 LD Y, $PCL
+#19
 FNFH DZ, XD           # X,PCL = PCL+1
-#21
 FNEL A, PC
-#24
+#25
 
 ADDR 0x40             # PCL = 255, iden PCH, inc PCH
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
-#30
+#31
 FNFH M, NA            # A = [PC]
 LD Y, $TMPL
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
+#40
 LD Y, $PCL
-#41
 FNFH DZ, XD           # X,PCL = PCL+1
 LD Y, $PCH
-FNFH DZ, ND           # PCH = PCH+1      *** inc PCH ***
-FNH A, Y              # Y = PCH
-#51
+FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$IDEN
+#51
+FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $TMPH
 FNFH AZ, ND           # temp2 = hi addr
@@ -64,23 +65,23 @@ ADDR 0x80             # PCL = 0, inc PCH, iden PCH
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LDZ HL, $IDEN$NULL
-#30
+#31
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LDZ Y, $TMPL
 FNH AZ, HLD           # A -> temp
+#40
 LD HL, $INC$NULL
-#41
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$IDEN
 LDZ Y, $PCH
-#50
+#51
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $TMPH
 FNFH AZ, ND           # temp2 = hi addr
-#60
+#61
 LD Y, $AREG
 FNFH DZ, NA           # A = Acc
 LD Y, $TMPL
@@ -100,28 +101,28 @@ NOP
 NOP
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-#30
+#31
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LDZ Y, $TMPL
 FNH AZ, HLD           # A -> temp
+#40
 LD HL, $INC$NULL
-#41
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$IDEN
 LDZ Y, $PCH
-#50
+#51
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $TMPH
 FNFH AZ, ND           # temp2 = hi addr
-#60
+#61
 LD Y, $AREG
 FNFH DZ, NA           # A = Acc
 LD Y, $TMPL
 FNFL DZ, X            # X = low addr
-#70
+#71
 LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 FNFH A, NM            # Acc -> [XY]

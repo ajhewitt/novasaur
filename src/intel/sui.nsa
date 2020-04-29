@@ -2,7 +2,7 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE SBI_PG
+PAGE SUI_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL

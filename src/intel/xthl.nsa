@@ -10,51 +10,50 @@ ADDH DZ, ND           # inc state
 # [SP] <-> L
 LD HL, $IDEN$IDEN
 LD Y, $SPL
+#9
 FNFL DZ, X            # X = SPL
-#11
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
 LD Y, $TEMP
-#20
+#21
 FNFH AZ, ND           # A -> temp
 LD Y, $LREG
 FNFH DZ, NA           # A = L
 LDZ Y, $SPH
-#30
+#31
 FNH DZ, Y             # Y = SPH
 FNFH A, NM            # A -> [SP]
 LD Y, $TEMP
 FNFH DZ, NA           # A = temp
-#40
+#41
 LD Y, $LREG
 FNH AZ, HLD           # A -> L
 LD HL, $INC$NULL
 LD Y, $SPL
+#49
 FNFH DZ, XA           # X = SPL+1
-#51
 LD HL, $OVER?$NULL
 FNH A, HLA
 LDP HL, $IDEN$INC     # inc SPH if SPL overflows
 LDN HL, $IDEN$IDEN
+#59
 FNFL DZ, Y            # Y = SPH+1?
-#61
 FNFH M, NA            # A = [SP]
 LD Y, $TEMP
 FNFH AZ, ND           # A -> temp
+#70
 LD Y, $HREG
-#71
 FNFH DZ, NA           # A = H
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
+#79
 FNFH A, NM            # A -> [SP]
-#81
 LD Y, $TEMP
 FNFH DZ, NA           # A = temp
 LD Y, $HREG
+#89
 FNH AZ, HLD           # A -> H
-#90
-NOP
 NOP
 NOP
 NOP

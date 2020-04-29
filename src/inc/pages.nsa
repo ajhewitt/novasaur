@@ -3,9 +3,8 @@ $IDLE_PG       0    # 43-pc idle VMC
 $LSYNC_PG      1
 $PSYNC_PG      2
 
-$PREFETCH_PG   0x1E
-$FETCH_PG      0x1F
-$IMMED_PG      0x20
+$PREFETCH_PG   0x1F
+$FETCH_PG      0x20
 $MOVR_PG       0x21
 $MOVM_PG       0x22
 $MVIR_PG       0x23

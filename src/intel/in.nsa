@@ -3,8 +3,8 @@ INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE IN_PG
-$JUMP_ADD      108
-$JUMP_MUL      13
+$JUMP_ADD      106
+$JUMP_MUL      0xD0
 
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL

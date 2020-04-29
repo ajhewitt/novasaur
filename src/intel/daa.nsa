@@ -26,15 +26,17 @@ LDN HL, $6
 LD Y, $TEMP
 ADDL DZ, HL           # add 6 to temp if aux-carry
 LD Y, $AREG
-#41
+#40
 ADDHL DZ, ND          # add decimal adjust to Acc
 AFHL A, NA            # determine flags
 LD HL, $IDEN$NULL
-#51
+#50
 LD Y, $FREG
 FNH AZ, HLD           # update flags
+NOP
 LDZ HL, $INC$FORK1
 LD Y, $PCL
+#59
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
 #65

@@ -20,8 +20,7 @@ AFHL A, NA            # A = flags
 LD HL, $3
 LD Y, $TEMP
 ANDHL AZ, ND          # save borrow flags in temp
-#30
-NOP
+#31
 NOP
 NOP
 NOP

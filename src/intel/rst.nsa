@@ -13,8 +13,8 @@ FNH DZ, HLD           # PCL = PCL+1
 #11
 LDZ HL, $OVER?$NULL
 FNH AZ, HLA
-LD HL, $INC$NULL      # inc PCH if PCL overflow
-LD HL, $IDEN$NULL
+LDP HL, $INC$NULL     # inc PCH if PCL overflow
+LDN HL, $IDEN$NULL
 LDZ Y, $PCH
 #20
 FNH DZ, HLD           # PCH = PCH+1?

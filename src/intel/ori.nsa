@@ -30,16 +30,12 @@ NOP
 NOP
 NOP
 NOP
-NOP
-NOP
-NOP
-NOP
 LD HL, $INC$FORK2
-#31
 LD Y, $PCL
+#29
 FNFH DZ, XD           # X,PCL = PCL+1
 FNEL A, PC
-#39
+#35
 
 ADDR 0x40             # PCL = 255, iden PCH, inc PCH
 LD HL, $IDEN$IDEN
@@ -80,10 +76,11 @@ FNFL M, HL            # HL = [PC]
 LD Y, $AREG
 ORHL DZ, ND          # Acc = Acc + immediate
 #52
+LD HL, $0
 LD Y, $FREG
 AFHL AZ, ND           # set flags
-LD HL, $INC$NULL
 #60
+LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$NULL
@@ -109,10 +106,11 @@ FNFL M, HL            # HL = [PC]
 LD Y, $AREG
 ORHL DZ, ND          # Acc = Acc + immediate
 #52
+LD HL, $0
 LD Y, $FREG
 AFHL AZ, ND           # set flags
-LD HL, $INC$NULL
 #60
+LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$NULL

@@ -130,11 +130,11 @@ LD Y, $TMPH
 FNFH DZ, NA           # A = upper temp
 LD Y, $PCL
 FNFH AZ, ND           # A -> PCH
-#69
+NOP
+#70
+NOP
 FNH A, Y              # Y = A
 FNFH M, NA            # A = [PC]
-NOP
-NOP
 LD Y, $INST
 FNH AZ, HLD           # A -> inst cache,HL
 #80
