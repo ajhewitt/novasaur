@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Novasaur Retrocomputer"
-Date "2020-03-31"
+Date "2020-05-02"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -49,15 +49,15 @@ $EndComp
 Text GLabel 2650 2050 2    50   Output ~ 0
 vsync
 Text GLabel 3050 2450 3    50   Input ~ 0
-C[0..7]
+T[0..7]
 Entry Wire Line
 	3050 2150 3150 2050
 Text Label 3150 2050 0    50   ~ 0
-C3
+T3
 Entry Wire Line
 	3050 2250 3150 2150
 Text Label 3150 2150 0    50   ~ 0
-C7
+T7
 Text Label 1450 1550 0    50   ~ 0
 PD0
 Text Label 1450 1650 0    50   ~ 0
@@ -247,9 +247,9 @@ g
 Text GLabel 9050 1550 2    50   Output ~ 0
 r
 Text GLabel 6650 2450 0    50   Input ~ 0
-ccp
+tcp
 Text GLabel 7850 1350 1    50   Output ~ 0
-C[0..7]
+T[0..7]
 Wire Wire Line
 	7950 2250 8050 2250
 Wire Wire Line
@@ -385,33 +385,33 @@ Entry Wire Line
 Entry Wire Line
 	6450 1550 6350 1450
 Text Label 7650 2050 0    50   ~ 0
-C5
+T5
 Text Label 7950 2250 0    50   ~ 0
-C6
+T6
 Text Label 7950 2150 0    50   ~ 0
-C2
+T2
 Text Label 7950 1950 0    50   ~ 0
-C5
+T5
 Text Label 7950 1850 0    50   ~ 0
-C1
+T1
 Text Label 7950 1650 0    50   ~ 0
-C4
+T4
 Text Label 7950 1550 0    50   ~ 0
-C0
+T0
 Text Label 7650 2250 0    50   ~ 0
-C7
+T7
 Text Label 7650 2150 0    50   ~ 0
-C6
+T6
 Text Label 7650 1950 0    50   ~ 0
-C4
+T4
 Text Label 7650 1850 0    50   ~ 0
-C3
+T3
 Text Label 7650 1750 0    50   ~ 0
-C2
+T2
 Text Label 7650 1650 0    50   ~ 0
-C1
+T1
 Text Label 7650 1550 0    50   ~ 0
-C0
+T0
 Entry Wire Line
 	7850 2150 7750 2250
 Entry Wire Line
@@ -1475,7 +1475,7 @@ AR Path="/5E199218" Ref="TP?"  Part="1"
 AR Path="/5DA1E9BA/5E199218" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5E199218" Ref="TP27"  Part="1" 
 F 0 "TP27" H 6400 2550 50  0000 L CNN
-F 1 "CCP" H 6400 2600 50  0001 L CNN
+F 1 "TCP" H 6400 2600 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6850 2450 50  0001 C CNN
 F 3 "~" H 6850 2450 50  0001 C CNN
 	1    6650 2450

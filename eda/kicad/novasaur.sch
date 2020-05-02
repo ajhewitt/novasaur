@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2020-03-31"
+Date "2020-05-02"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -18,21 +18,6 @@ Wire Wire Line
 	4650 6000 4650 6700
 Wire Wire Line
 	4250 6000 4250 6550
-$Comp
-L novasaur-rescue:SW_Push-Switch SW1
-U 1 1 5E0603B4
-P 3650 1500
-AR Path="/5E0603B4" Ref="SW1"  Part="1" 
-AR Path="/5CDEEC9F/5E0603B4" Ref="SW?"  Part="1" 
-AR Path="/62D13D9D/5E0603B4" Ref="SW?"  Part="1" 
-AR Path="/5DAA5CD8/5E0603B4" Ref="SW?"  Part="1" 
-F 0 "SW1" H 3600 1850 50  0000 L CNN
-F 1 "RESET" H 3550 1750 50  0000 L CNN
-F 2 "FSMRA3JH04:SWITCH_FSMRA3JH04" H 3650 1700 50  0001 C CNN
-F 3 "~" H 3650 1700 50  0001 C CNN
-	1    3650 1500
-	-1   0    0    -1  
-$EndComp
 Text GLabel 1350 1800 0    50   Output ~ 0
 alu
 Wire Bus Line
@@ -134,10 +119,10 @@ PA16
 Text GLabel 1350 1900 0    50   Output ~ 0
 pcent
 Text Label 2500 1700 0    50   ~ 0
-I12
+C12
 Entry Wire Line
 	2650 1700 2750 1800
-Text GLabel 2750 1600 2    50   Input ~ 0
+Text GLabel 3050 1600 2    50   Input ~ 0
 DD[0..7]
 Wire Wire Line
 	4250 6000 4150 6000
@@ -194,15 +179,15 @@ F 3 "" H 1850 4200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text Label 2550 3200 0    50   ~ 0
-I8
+C8
 Text Label 2550 3300 0    50   ~ 0
-I9
+C9
 Text Label 2550 3400 0    50   ~ 0
-I0
+C0
 Text Label 2500 1900 0    50   ~ 0
-I14
+C14
 Text GLabel 2750 6000 3    50   Output ~ 0
-I[0..15]
+C[0..15]
 Entry Wire Line
 	2650 3200 2750 3300
 $Comp
@@ -260,21 +245,21 @@ Entry Wire Line
 Entry Wire Line
 	4450 5800 4350 5700
 Text Label 2550 5000 0    50   ~ 0
-I8
+C8
 Text Label 2550 5100 0    50   ~ 0
-I9
+C9
 Text Label 2500 5200 0    50   ~ 0
-I10
+C10
 Text Label 2500 5300 0    50   ~ 0
-I11
+C11
 Text Label 2500 5400 0    50   ~ 0
-I12
+C12
 Text Label 2500 5500 0    50   ~ 0
-I13
+C13
 Text Label 2500 5600 0    50   ~ 0
-I14
+C14
 Text Label 2500 5700 0    50   ~ 0
-I15
+C15
 Text Label 4200 5000 0    50   ~ 0
 PD0
 Text Label 4200 5100 0    50   ~ 0
@@ -322,7 +307,7 @@ Entry Wire Line
 Entry Wire Line
 	2650 1900 2750 2000
 Text Label 2500 1800 0    50   ~ 0
-I13
+C13
 Entry Wire Line
 	2650 1800 2750 1900
 Text GLabel 1350 1500 0    50   Output ~ 0
@@ -388,21 +373,21 @@ PD1
 Text Label 1150 5000 0    50   ~ 0
 PD0
 Text Label 2850 5700 0    50   ~ 0
-I7
+C7
 Text Label 2850 5600 0    50   ~ 0
-I6
+C6
 Text Label 2850 5500 0    50   ~ 0
-I5
+C5
 Text Label 2850 5400 0    50   ~ 0
-I4
+C4
 Text Label 2850 5300 0    50   ~ 0
-I3
+C3
 Text Label 2850 5200 0    50   ~ 0
-I2
+C2
 Text Label 2850 5100 0    50   ~ 0
-I1
+C1
 Text Label 2850 5000 0    50   ~ 0
-I0
+C0
 Entry Wire Line
 	2750 5800 2650 5700
 Entry Wire Line
@@ -428,7 +413,7 @@ Entry Wire Line
 Entry Wire Line
 	1150 5000 1050 4900
 Text Label 2550 3700 0    50   ~ 0
-I1
+C1
 Text GLabel 1350 3900 0    50   Output ~ 0
 pgcp
 Text GLabel 1350 3400 0    50   Output ~ 0
@@ -474,7 +459,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS138" H 1850 3500 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Text Label 2500 2000 0    50   ~ 0
-I15
+C15
 Entry Wire Line
 	2750 4650 2850 4550
 Entry Wire Line
@@ -512,21 +497,21 @@ Wire Wire Line
 Wire Wire Line
 	2850 4650 3050 4650
 Text Label 2850 4650 0    50   ~ 0
-I0
+C0
 Text Label 2850 4550 0    50   ~ 0
-I1
+C1
 Text Label 2850 4450 0    50   ~ 0
-I2
+C2
 Text Label 2850 4350 0    50   ~ 0
-I3
+C3
 Text Label 2850 4250 0    50   ~ 0
-I4
+C4
 Text Label 2850 4150 0    50   ~ 0
-I5
+C5
 Text Label 2850 4050 0    50   ~ 0
-I6
+C6
 Text Label 2850 3950 0    50   ~ 0
-I7
+C7
 $Comp
 L power:VCC #PWR?
 U 1 1 5DA1E7F9
@@ -616,7 +601,7 @@ s1
 Text GLabel 9300 1800 2    50   Output ~ 0
 ~exec
 Text GLabel 9300 1700 2    50   Output ~ 0
-ccp
+tcp
 Text GLabel 6900 2300 0    50   Input ~ 0
 hblank
 Text GLabel 6900 2500 0    50   Input ~ 0
@@ -695,67 +680,8 @@ F 3 "" H 1850 1000 50  0001 C CNN
 	1    1850 1000
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:GNDD #PWR?
-U 1 1 5DEF95A1
-P 4150 1650
-AR Path="/5CDEEC9F/5DEF95A1" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA5CD8/5DEF95A1" Ref="#PWR?"  Part="1" 
-AR Path="/5DEF95A1" Ref="#PWR0194"  Part="1" 
-F 0 "#PWR0194" H 4150 1400 50  0001 C CNN
-F 1 "GNDD" H 4154 1495 50  0000 C CNN
-F 2 "" H 4150 1650 50  0001 C CNN
-F 3 "" H 4150 1650 50  0001 C CNN
-	1    4150 1650
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4150 1550 4150 1650
-Wire Wire Line
-	4000 1600 4000 1550
-Wire Wire Line
-	4000 1500 3950 1500
-Wire Wire Line
-	4000 1550 4150 1550
-Connection ~ 4000 1550
-Wire Wire Line
-	4000 1550 4000 1500
-Text Label 2500 1600 0    50   ~ 0
+Text Label 2850 1600 0    50   ~ 0
 DD7
-$Comp
-L Device:R_US R?
-U 1 1 5E523FD1
-P 3050 1300
-AR Path="/62D13D9D/5E523FD1" Ref="R?"  Part="1" 
-AR Path="/5DAA19D5/5E523FD1" Ref="R?"  Part="1" 
-AR Path="/5DAA5CD8/5D99DA9F/5E523FD1" Ref="R?"  Part="1" 
-AR Path="/5DA1E9BA/5E523FD1" Ref="R?"  Part="1" 
-AR Path="/5E523FD1" Ref="R1"  Part="1" 
-F 0 "R1" H 3150 1350 50  0000 L CNN
-F 1 "1k" H 3150 1250 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 3090 1290 50  0001 C CNN
-F 3 "~" H 3050 1300 50  0001 C CNN
-	1    3050 1300
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:VCC #PWR?
-U 1 1 5E54FDAD
-P 3050 1100
-AR Path="/5CDEEC9F/5E54FDAD" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA5CD8/5E54FDAD" Ref="#PWR?"  Part="1" 
-AR Path="/5E54FDAD" Ref="#PWR0111"  Part="1" 
-F 0 "#PWR0111" H 3050 950 50  0001 C CNN
-F 1 "VCC" H 3067 1273 50  0000 C CNN
-F 2 "" H 3050 1100 50  0001 C CNN
-F 3 "" H 3050 1100 50  0001 C CNN
-	1    3050 1100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3050 1500 3050 1450
-Wire Wire Line
-	3050 1150 3050 1100
 Wire Wire Line
 	9600 1100 8000 1100
 $Comp
@@ -819,7 +745,7 @@ Wire Wire Line
 Wire Wire Line
 	2850 3200 3150 3200
 Text Label 2850 3100 0    50   ~ 0
-I3
+C3
 Text GLabel 3150 3400 0    50   Input ~ 0
 ~read
 Text GLabel 4150 3200 2    50   Output ~ 0
@@ -843,13 +769,13 @@ Text GLabel 4450 2400 0    50   Input ~ 0
 Text GLabel 5050 2300 2    50   Output ~ 0
 acp
 Text GLabel 4150 3100 2    50   Output ~ 0
-~inoe
+~ioe
 Entry Wire Line
 	2850 2200 2750 2300
 Text Label 2850 2200 0    50   ~ 0
-I13
+C13
 Text Label 2850 3200 0    50   ~ 0
-I12
+C12
 Entry Wire Line
 	2850 3100 2750 3200
 Entry Wire Line
@@ -873,7 +799,7 @@ F0 "sheet5DA1E721" 50
 F1 "novasaur-gpu.sch" 50
 $EndSheet
 Text Label 2850 3700 0    50   ~ 0
-I2
+C2
 Entry Wire Line
 	2850 3700 2750 3800
 $Comp
@@ -980,13 +906,13 @@ $EndComp
 Entry Wire Line
 	2850 2600 2750 2700
 Text Label 2850 2600 0    50   ~ 0
-I10
+C10
 Wire Wire Line
 	2850 2600 4450 2600
 Entry Wire Line
 	2850 1900 2750 2000
 Text Label 2850 1900 0    50   ~ 0
-I11
+C11
 Wire Wire Line
 	2850 2200 4450 2200
 $Comp
@@ -1265,11 +1191,9 @@ F 3 "~" H 6800 5100 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	3950 1600 4000 1600
-Wire Wire Line
 	7600 4650 7500 4650
 Connection ~ 7600 4650
-Text GLabel 6850 3000 0    50   Output ~ 0
+Text GLabel 6600 3100 2    50   Output ~ 0
 DA17
 Wire Wire Line
 	9600 2300 9300 2300
@@ -1447,29 +1371,7 @@ Wire Wire Line
 Wire Wire Line
 	2850 3700 4200 3700
 Wire Wire Line
-	2750 1600 2350 1600
-Connection ~ 3050 1500
-Wire Wire Line
-	2350 1500 2850 1500
-Wire Wire Line
 	4200 3700 4200 4000
-$Comp
-L Connector_Generic:Conn_01x03 J?
-U 1 1 5E60D57E
-P 7050 3000
-AR Path="/5DA1E9C0/5E60D57E" Ref="J?"  Part="1" 
-AR Path="/5E60D57E" Ref="J9"  Part="1" 
-F 0 "J9" H 7000 3350 50  0000 L CNN
-F 1 "RAM" H 6950 3250 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 7050 3000 50  0001 C CNN
-F 3 "~" H 7050 3000 50  0001 C CNN
-	1    7050 3000
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6600 3100 6850 3100
-Text GLabel 6850 2900 0    50   Input ~ 0
-1
 $Comp
 L Connector:TestPoint_Alt TP29
 U 1 1 5E51CAB2
@@ -1479,7 +1381,7 @@ AR Path="/5DA1E9BA/5E51CAB2" Ref="TP?"  Part="1"
 AR Path="/5DA1E9BD/5E51CAB2" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9C0/5E51CAB2" Ref="TP?"  Part="1" 
 F 0 "TP29" H 1100 6000 50  0000 L CNN
-F 1 "IHCP" H 1100 6050 50  0001 L CNN
+F 1 "CHCP" H 1100 6050 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1550 5900 50  0001 C CNN
 F 3 "~" H 1550 5900 50  0001 C CNN
 	1    1350 5900
@@ -1493,21 +1395,8 @@ Connection ~ 1350 5900
 Wire Wire Line
 	5600 5900 4150 5900
 Connection ~ 4150 5900
-Text GLabel 2850 1400 1    50   Input ~ 0
+Text GLabel 2350 1500 2    50   Input ~ 0
 ~reset
-Wire Wire Line
-	3050 1500 3350 1500
-Wire Wire Line
-	2850 1400 2850 1500
-Connection ~ 2850 1500
-Wire Wire Line
-	2850 1500 3050 1500
-Wire Bus Line
-	4450 5100 4450 6750
-Wire Bus Line
-	1050 4700 1050 6750
-Wire Bus Line
-	2750 1800 2750 6000
 $Comp
 L Connector:TestPoint_Alt TP28
 U 1 1 5E514E07
@@ -1517,10 +1406,18 @@ AR Path="/5DA1E9BA/5E514E07" Ref="TP?"  Part="1"
 AR Path="/5DA1E9BD/5E514E07" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9C0/5E514E07" Ref="TP?"  Part="1" 
 F 0 "TP28" H 4200 6000 50  0000 L CNN
-F 1 "ILCP" H 3900 6050 50  0001 L CNN
+F 1 "CLCP" H 3900 6050 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4350 5900 50  0001 C CNN
 F 3 "~" H 4350 5900 50  0001 C CNN
 	1    4150 5900
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	2350 1600 3050 1600
+Wire Bus Line
+	4450 5100 4450 6750
+Wire Bus Line
+	1050 4700 1050 6750
+Wire Bus Line
+	2750 1800 2750 6000
 $EndSCHEMATC

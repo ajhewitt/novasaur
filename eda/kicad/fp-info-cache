@@ -1,4 +1,4 @@
-16350201465891696
+16351788947969696
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -1476,6 +1476,13 @@ Push Button
 0
 4
 4
+Button_Switch_THT
+SW-PBH2U
+
+
+0
+6
+6
 Button_Switch_THT
 SW_CW_GPTS203211B
 SPST Off-On Pushbutton, 1A, 30V, CW Industries P/N GPTS203211B, http://switches-connectors-custom.cwind.com/Asset/GPTS203211BR2.pdf

@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Novasaur Retrocomputer"
-Date "2020-03-31"
+Date "2020-05-02"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -236,13 +236,13 @@ Ei2
 Text Label 3800 6350 0    50   ~ 0
 Ei3
 Text Label 3850 6650 0    50   ~ 0
-I6
+C6
 Text Label 3850 6550 0    50   ~ 0
-I5
+C5
 Text Label 3850 6450 0    50   ~ 0
-I4
+C4
 Text Label 3850 6750 0    50   ~ 0
-I7
+C7
 Wire Wire Line
 	10000 5250 10150 5250
 Wire Wire Line
@@ -397,16 +397,16 @@ PA15
 $Comp
 L power:VCC #PWR?
 U 1 1 5DAE3651
-P 8100 1200
+P 8100 1100
 AR Path="/5F6C0B36/5DAE3651" Ref="#PWR?"  Part="1" 
 AR Path="/5DAA19D5/5DAE3651" Ref="#PWR0169"  Part="1" 
 AR Path="/5DAA5CD8/5D99DA9F/5DAE3651" Ref="#PWR?"  Part="1" 
 AR Path="/5DA1E9BA/5DAE3651" Ref="#PWR0129"  Part="1" 
-F 0 "#PWR0129" H 8100 1050 50  0001 C CNN
-F 1 "VCC" H 8117 1373 50  0000 C CNN
-F 2 "" H 8100 1200 50  0001 C CNN
-F 3 "" H 8100 1200 50  0001 C CNN
-	1    8100 1200
+F 0 "#PWR0129" H 8100 950 50  0001 C CNN
+F 1 "VCC" H 8117 1273 50  0000 C CNN
+F 2 "" H 8100 1100 50  0001 C CNN
+F 3 "" H 8100 1100 50  0001 C CNN
+	1    8100 1100
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -733,23 +733,6 @@ F 3 "http://www.futurlec.com/Datasheet/Memory/628128.pdf" H 3150 2200 50  0001 C
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3150 1200 3150 1100
-$Comp
-L power:VCC #PWR?
-U 1 1 5DAE363F
-P 3150 1100
-AR Path="/5F6C0B36/5DAE363F" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA19D5/5DAE363F" Ref="#PWR0166"  Part="1" 
-AR Path="/5DAA5CD8/5D99DA9F/5DAE363F" Ref="#PWR?"  Part="1" 
-AR Path="/5DA1E9BA/5DAE363F" Ref="#PWR0142"  Part="1" 
-F 0 "#PWR0142" H 3150 950 50  0001 C CNN
-F 1 "VCC" H 3167 1273 50  0000 C CNN
-F 2 "" H 3150 1100 50  0001 C CNN
-F 3 "" H 3150 1100 50  0001 C CNN
-	1    3150 1100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
 	2450 1400 2650 1400
 Wire Wire Line
 	2450 1500 2650 1500
@@ -782,7 +765,7 @@ Wire Wire Line
 Wire Wire Line
 	2450 2900 2650 2900
 Text GLabel 4050 7150 3    50   Input ~ 0
-I[0..15]
+C[0..15]
 Text GLabel 3950 1300 1    50   Input ~ 0
 DD[0..7]
 $Comp
@@ -1397,7 +1380,7 @@ Entry Wire Line
 Text GLabel 3650 2900 2    50   Input ~ 0
 DA17
 Text GLabel 3650 2400 2    50   Input ~ 0
-0
+~dce
 Text GLabel 3650 2600 2    50   Input ~ 0
 ~dwe
 Text GLabel 3650 2500 2    50   Input ~ 0
@@ -2420,7 +2403,7 @@ AR Path="/5DAA19D5/5EE6CB39" Ref="D?"  Part="1"
 AR Path="/5DAA5CD8/5D99DA9F/5EE6CB39" Ref="D?"  Part="1" 
 AR Path="/5DA1E9BA/5EE6CB39" Ref="D1"  Part="1" 
 AR Path="/5EE6CB39" Ref="D?"  Part="1" 
-F 0 "D1" V 2300 5700 50  0000 R CNN
+F 0 "D1" V 2300 6000 50  0000 R CNN
 F 1 "4300H1LC" V 2248 5683 50  0001 R CNN
 F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm" H 2300 5800 50  0001 C CNN
 F 3 "~" H 2300 5800 50  0001 C CNN
@@ -2434,10 +2417,10 @@ P 2300 5450
 AR Path="/62D13D9D/5EE6CB33" Ref="R?"  Part="1" 
 AR Path="/5DAA19D5/5EE6CB33" Ref="R?"  Part="1" 
 AR Path="/5DAA5CD8/5D99DA9F/5EE6CB33" Ref="R?"  Part="1" 
-AR Path="/5DA1E9BA/5EE6CB33" Ref="R2"  Part="1" 
+AR Path="/5DA1E9BA/5EE6CB33" Ref="R1"  Part="1" 
 AR Path="/5EE6CB33" Ref="R?"  Part="1" 
-F 0 "R2" H 2400 5500 50  0000 L CNN
-F 1 "1k" H 2400 5400 50  0000 L CNN
+F 0 "R1" H 2100 5500 50  0000 L CNN
+F 1 "1k" H 2100 5400 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2340 5440 50  0001 C CNN
 F 3 "~" H 2300 5450 50  0001 C CNN
 	1    2300 5450
@@ -2452,6 +2435,21 @@ Wire Wire Line
 	2300 6450 2350 6450
 Wire Wire Line
 	2300 5650 2300 5600
+$Comp
+L power:+BATT #PWR0142
+U 1 1 5EC0EA23
+P 3150 1100
+F 0 "#PWR0142" H 3150 950 50  0001 C CNN
+F 1 "+BATT" H 3165 1273 50  0000 C CNN
+F 2 "" H 3150 1100 50  0001 C CNN
+F 3 "" H 3150 1100 50  0001 C CNN
+	1    3150 1100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3150 1200 3150 1100
+Wire Wire Line
+	8100 1200 8100 1100
 Wire Bus Line
 	4350 3300 4350 3700
 Wire Bus Line
