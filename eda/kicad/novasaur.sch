@@ -1193,7 +1193,7 @@ $EndComp
 Wire Wire Line
 	7600 4650 7500 4650
 Connection ~ 7600 4650
-Text GLabel 6600 3100 2    50   Output ~ 0
+Text GLabel 7050 3300 2    50   Output ~ 0
 DA17
 Wire Wire Line
 	9600 2300 9300 2300
@@ -1414,6 +1414,41 @@ F 3 "~" H 4350 5900 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	2350 1600 3050 1600
+$Comp
+L Device:Jumper_NC_Dual JP1
+U 1 1 5EAEF12E
+P 6950 3100
+F 0 "JP1" H 6950 3339 50  0000 C CNN
+F 1 "RAM" H 6950 3248 50  0000 C CNN
+F 2 "Jumper:SolderJumper-3_P1.3mm_Bridged2Bar12_Pad1.0x1.5mm_NumberLabels" H 6950 3100 50  0001 C CNN
+F 3 "~" H 6950 3100 50  0001 C CNN
+	1    6950 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7050 3300 6950 3300
+Wire Wire Line
+	6950 3300 6950 3200
+$Comp
+L power:VCC #PWR?
+U 1 1 5EAF98E7
+P 7300 3000
+AR Path="/5CDEEC9F/5EAF98E7" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/5EAF98E7" Ref="#PWR?"  Part="1" 
+AR Path="/5EAF98E7" Ref="#PWR0198"  Part="1" 
+F 0 "#PWR0198" H 7300 2850 50  0001 C CNN
+F 1 "VCC" H 7317 3173 50  0000 C CNN
+F 2 "" H 7300 3000 50  0001 C CNN
+F 3 "" H 7300 3000 50  0001 C CNN
+	1    7300 3000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7200 3100 7300 3100
+Wire Wire Line
+	7300 3100 7300 3000
+Wire Wire Line
+	6600 3100 6700 3100
 Wire Bus Line
 	4450 5100 4450 6750
 Wire Bus Line

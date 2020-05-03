@@ -2067,22 +2067,6 @@ F 3 "~" H 2000 3200 50  0001 C CNN
 	1    2000 3200
 	-1   0    0    -1  
 $EndComp
-$Comp
-L Switch:SW_Push_DPDT SW?
-U 1 1 5E9D4FF4
-P 9450 3300
-AR Path="/5E9D4FF4" Ref="SW?"  Part="1" 
-AR Path="/5CDEEC9F/5E9D4FF4" Ref="SW?"  Part="1" 
-AR Path="/62D13D9D/5E9D4FF4" Ref="SW?"  Part="1" 
-AR Path="/5DAA5CD8/5E9D4FF4" Ref="SW?"  Part="1" 
-AR Path="/5DA1E9C0/5E9D4FF4" Ref="SW1"  Part="1" 
-F 0 "SW1" H 9350 3800 50  0000 L CNN
-F 1 "POWER" H 9300 3700 50  0000 L CNN
-F 2 "Button_Switch_THT:SW-PBH2U" H 9450 3500 50  0001 C CNN
-F 3 "~" H 9450 3500 50  0001 C CNN
-	1    9450 3300
-	-1   0    0    -1  
-$EndComp
 Connection ~ 7050 3300
 $Comp
 L Device:R_US R?
@@ -2235,45 +2219,6 @@ Wire Wire Line
 Connection ~ 2550 3450
 Wire Wire Line
 	2500 4450 2600 4450
-Wire Wire Line
-	8550 3400 9250 3400
-Connection ~ 8550 3400
-Wire Wire Line
-	9250 3600 9150 3600
-Wire Wire Line
-	9150 3600 9150 3750
-Wire Wire Line
-	9750 3750 9750 3500
-Wire Wire Line
-	9750 3500 9650 3500
-Wire Wire Line
-	9150 3200 9250 3200
-Connection ~ 9150 3600
-$Comp
-L power:GNDD #PWR?
-U 1 1 5EAA4E5B
-P 9950 3600
-AR Path="/62D13D9D/5EAA4E5B" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/5EAA4E5B" Ref="#PWR?"  Part="1" 
-AR Path="/5DA1E9C0/5EAA4E5B" Ref="#PWR0111"  Part="1" 
-F 0 "#PWR0111" H 9950 3350 50  0001 C CNN
-F 1 "GNDD" H 9954 3445 50  0000 C CNN
-F 2 "" H 9950 3600 50  0001 C CNN
-F 3 "" H 9950 3600 50  0001 C CNN
-	1    9950 3600
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	9150 3750 9750 3750
-Wire Wire Line
-	9950 3500 9750 3500
-Wire Wire Line
-	9950 3500 9950 3600
-Connection ~ 9750 3500
-Text GLabel 9650 3100 2    50   Output ~ 0
-~dce
-Wire Wire Line
-	9150 3200 9150 3600
 Wire Wire Line
 	8250 4100 8550 4100
 Wire Wire Line
@@ -2467,6 +2412,65 @@ Wire Wire Line
 	5450 3300 5450 3200
 Connection ~ 5450 3300
 $Comp
+L Switch:SW_Push_DPDT SW?
+U 1 1 5E9D4FF4
+P 9450 3300
+AR Path="/5E9D4FF4" Ref="SW?"  Part="1" 
+AR Path="/5CDEEC9F/5E9D4FF4" Ref="SW?"  Part="1" 
+AR Path="/62D13D9D/5E9D4FF4" Ref="SW?"  Part="1" 
+AR Path="/5DAA5CD8/5E9D4FF4" Ref="SW?"  Part="1" 
+AR Path="/5DA1E9C0/5E9D4FF4" Ref="SW1"  Part="1" 
+F 0 "SW1" H 9350 3800 50  0000 L CNN
+F 1 "POWER" H 9300 3700 50  0000 L CNN
+F 2 "Button_Switch_THT:SW-PBH2U" H 9450 3500 50  0001 C CNN
+F 3 "~" H 9450 3500 50  0001 C CNN
+	1    9450 3300
+	-1   0    0    -1  
+$EndComp
+Connection ~ 8550 3400
+Wire Wire Line
+	8550 3400 9250 3400
+Wire Wire Line
+	9150 3000 9250 3000
+Wire Wire Line
+	9150 3000 9150 2900
+Wire Wire Line
+	9150 3200 9250 3200
+Wire Wire Line
+	9150 3200 9150 3600
+Wire Wire Line
+	9250 3600 9150 3600
+Wire Wire Line
+	9150 3750 9750 3750
+Connection ~ 9150 3600
+Wire Wire Line
+	9150 3600 9150 3750
+Text GLabel 9650 3100 2    50   Output ~ 0
+~dce
+Wire Wire Line
+	9750 3500 9650 3500
+Wire Wire Line
+	9750 3750 9750 3500
+Connection ~ 9750 3500
+Wire Wire Line
+	9950 3500 9950 3600
+Wire Wire Line
+	9950 3500 9750 3500
+$Comp
+L power:GNDD #PWR?
+U 1 1 5EAA4E5B
+P 9950 3600
+AR Path="/62D13D9D/5EAA4E5B" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/5EAA4E5B" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9C0/5EAA4E5B" Ref="#PWR0111"  Part="1" 
+F 0 "#PWR0111" H 9950 3350 50  0001 C CNN
+F 1 "GNDD" H 9954 3445 50  0000 C CNN
+F 2 "" H 9950 3600 50  0001 C CNN
+F 3 "" H 9950 3600 50  0001 C CNN
+	1    9950 3600
+	1    0    0    -1  
+$EndComp
+$Comp
 L power:+BATT #PWR0197
 U 1 1 5EB76B13
 P 9150 2900
@@ -2477,10 +2481,6 @@ F 3 "" H 9150 2900 50  0001 C CNN
 	1    9150 2900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	9150 3000 9150 2900
-Wire Wire Line
-	9150 3000 9250 3000
 Wire Bus Line
 	4300 6750 4300 7050
 Wire Bus Line
