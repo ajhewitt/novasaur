@@ -46,7 +46,7 @@ def print_af(offset, opts = {})
           r |= b >> 3                                 # N - Negative (sign of result)
           r |= 0x20 if c&4 == 1 && b == 0             # Z - Zero (high if result is 0)
           r |= ((sprintf('%b', b).split('').map(&:to_i).reduce(&:+) + ((c&2)>>1))%2) << 4
-          r |= 4 if (b&8) < (a&8)                     # O - Overflow (carry from bit 6)
+          r |= 4 if (b&7) < (a&7)                     # O - Overflow (carry from bit 6)
           r |= 2 unless b < a || (c&4 == 1 && a == 0) # B - Borrow (from bit 7 if subtraction)
         else
           r = b << 4                                  # preserve high nibble
@@ -173,6 +173,7 @@ def print_av(offset)
   end
 end
 
+# Increment line count in HAL state machine
 def inc_line
   256.times.map do |i|
     i &= i&7 > 4 ? 0xFC : 0xF8
@@ -271,17 +272,17 @@ print_vmp 0x70, high: false
 print_binary '*', 0x80
 # 0x00039000-0x00039FFF: DIV low nibble only
 print_binary '/', 0x90
-# 0x0003A000-0x0003AFFF: COM low nibble only
+# 0x0003A000-0x0003AFFF: COM low nibble only - TBD
 
-# 0x0003B000-0x0003BFFF: SER low nibble only
+# 0x0003B000-0x0003BFFF: SER low nibble only - TBD
 
 # 0x0003C000-0x0003CFFF: AV low nibble only
 print_av 0xC0
 
-# 0x0003D000-0x0003DFFF: FND low nibble only
+# 0x0003D000-0x0003DFFF: FND low nibble only - TBD
 # TBD
 
-# 0x0003E000-0x0003EFFF: FNE low nibble only
+# 0x0003E000-0x0003EFFF: FNE low nibble only - 8080 vCPU related
 REG8=[0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE0, 0xE1].freeze
 # $SRC2REG: source code to register zpage addr (B,C,D,E,F,H,L,A,F)
 print_unary(0xE1, 256.times.map {|i| REG8[i&7]})
@@ -330,7 +331,7 @@ print_unary(0xEE, Array.new(0xFF, 0xFF) + [0])
 INC=[0xC4, 0xD4, 0xE4, 0xF4, 0xCC, 0xDC, 0xEC, 0xFC, 0xCD] # skip pre-inc after pushpc
 print_unary(0xEF, 256.times.map {|i| INC.include?(i) ? 0 : 0x80})
 
-# 0x0003F000-0x0003FFFF: FNF low nibble only
+# 0x0003F000-0x0003FFFF: FNF low nibble only - generic/default functions
 # $IDEN: A = A
 print_unary(0xF0, [*0..0xFF])
 # $INC: A = A + 1

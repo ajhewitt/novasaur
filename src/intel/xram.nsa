@@ -9,7 +9,7 @@ LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
 LD HL, $IDEN$IDEN
 LD Y, $LREG
-FNFH DZ, NA           # X = L
+FNFH DZ, XA           # X = L
 #11
 LDZ Y, $HREG
 FNH DZ, Y             # Y = H

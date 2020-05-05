@@ -183,6 +183,6 @@ src.each_with_index do |l, j|
   end
 end
 
-o[254] = 0x9f if i < 255
+o[254] = 0x9f if i < 255 # add jump to reset vector
 
 o.each_slice(16).each_with_index {|b, i| print_data [b.size, page, i << 4, 0] + b}

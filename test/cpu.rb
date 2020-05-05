@@ -19,14 +19,26 @@ def load_rom
   rom
 end
 
-def set_dst(reg, c, d)
+def set_dst(ram, reg, c, d)
   i = ((c>>8)&3) | ((c&3)<<2)
   reg[PC] = 0 if DST[i] == :PG
   reg[i] = d
+  return unless c&0x400 == 0
+
+  b = c&4 == 0 ? (reg[EO]>>5)&7 : 0
+  x = c&0x800 == 0 ? reg[X] : 0xFF
+puts "WRITE RAM:#{d}->(#{b},#{reg[Y]},#{x})"
+  ram[b][reg[Y]][x] = d
 end
 
-def get_src(reg, c)
-  reg[16 + (((c>>12)&1) | ((c>>2)&2))]
+def get_src(ram, reg, c)
+  i = (c>>12)&1 | (c>>2)&2
+  return reg[16 + i] unless i == 3
+  
+  b = c&4 == 0 ? (reg[EO]>>5)&7 : 0
+  x = c&0x800 == 0 ? reg[X] : 0xFF
+puts "READ RAM:(#{b},#{reg[Y]},#{x})=#{ram[b][reg[Y]][x]}"
+  ram[b][reg[Y]][x]
 end
 
 def get_pc(reg)
@@ -42,10 +54,10 @@ def fetch(rom, reg)
   c | rom[0][get_pc(reg)]
 end
 
-def alu_fn(alu, reg, c, h = true)
+def alu_fn(ram, alu, reg, c, h = true)
   fn = (c&0xF0)<<8
   fn |= h ? (reg[HL]&0xF0)<<4 : (reg[HL]&0x0F)<<8
-  alu[fn | get_src(reg, c)&0xFF]
+  alu[fn | get_src(ram, reg, c)&0xFF]
 end
 
 DST = %I[N O1 O2 O3 O4 O5 O6 O7 X EO S V Y HL PC PG I EI A D]
@@ -60,50 +72,52 @@ reg = Array.new(20, -1)
 reg[PG] = ARGV.first.to_i # execute page
 reg[PC] = 0
 rom = load_rom
-ram = Array.new(0x10000, -1)
+ram = Array.new(8) {|a| Array.new(256) {|b| Array.new(256, 0)}} # [B][Y][X]
+reg[Y] = 254 # $VMS
 n = 0
 while true do
   c = fetch(rom, reg)
   case c>>13
   when 0 # ALUHL+A
-    reg[A] = alu_fn(rom[3], reg, c, false)
-    reg[A] = alu_fn(rom[2], reg, c)
-    set_dst(reg, c, reg[A])
+    reg[A] = alu_fn(ram, rom[3], reg, c, false)
+    set_dst(ram, reg, c, reg[A])
+    reg[A] = alu_fn(ram, rom[2], reg, c)
+    set_dst(ram, reg, c, reg[A])
     n += 4
   when 1 # ALUL
-    x = alu_fn(rom[3], reg, c, false)
-    set_dst(reg, c, x)
+    x = alu_fn(ram, rom[3], reg, c, false)
+    set_dst(ram, reg, c, x)
     n += 3
   when 2 # ALUH+A
-    reg[A] = alu_fn(rom[3], reg, c)
-    set_dst(reg, c, reg[A])
+    reg[A] = alu_fn(ram, rom[3], reg, c)
+    set_dst(ram, reg, c, reg[A])
     n += 3
   when 3 # ROMH
-    x = alu_fn(rom[1], reg, c)
-    set_dst(reg, c, x)
+    x = alu_fn(ram, rom[1], reg, c)
+    set_dst(ram, reg, c, x)
     n += 3
   when 4 # NOP, LD
     n += 1
     next if c&0xF000 == 0x8000
 
     n += 1
-    set_dst(reg, c, rom[0][get_pc(reg)])
+    set_dst(ram, reg, c, rom[0][get_pc(reg)])
   when 5 # LDP, LDN
     n += 1
     if (c>>5)&0x80 == (reg[A]>>7)&0x80
-      set_dst(reg, c, rom[0][get_pc(reg)])
+      set_dst(ram, reg, c, rom[0][get_pc(reg)])
       n += 1
     else
       reg[PC] = reg[PC] + 1
     end
 puts "COND: #{(c>>5)&0x80 == (reg[A]>>7)&0x80}"
   when 6 # FNH+A
-    reg[A] = alu_fn(rom[3], reg, c)
-    set_dst(reg, c, reg[A])
+    reg[A] = alu_fn(ram, rom[3], reg, c)
+    set_dst(ram, reg, c, reg[A])
     n += 2
   when 7 # FNH
-    x = alu_fn(rom[3], reg, c)
-    set_dst(reg, c, x)
+    x = alu_fn(ram, rom[3], reg, c)
+    set_dst(ram, reg, c, x)
     n += 2
   end
   puts "#{n} #{c.to_s(16)}"
