@@ -44,6 +44,7 @@ $ROM_Y      0xEE        # y index - dest D0 page
 $ROM_N      0xEF        # ROM count
 
 $FETCH       0
-$SKIP_INST   1
-$JMP_INST    2
-$PUSHPC_INST 3
+$FETCH2      8
+$SKIP_INST   0x18
+$JMP_INST    0xC3
+$PUSHPC_INST 0x28

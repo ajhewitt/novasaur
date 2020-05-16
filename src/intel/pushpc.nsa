@@ -39,19 +39,15 @@ LD Y, $TMPL
 FNFH DZ, NA           # A = lower temp
 LD Y, $PCL
 #60
-FNFH AZ, XD           # X,A -> PCL
+FNFH AZ, XD           # A -> PCL,X
 LD Y, $TMPH
 FNFH DZ, NA           # A = upper temp
 LD Y, $PCL
 #70
 FNH AZ, HLD           # A -> PCH
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-LD HL, $FETCH
+LD HL, $FETCH2
+LD Y, $INST
+MVHLZ ND              # HL -> inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
@@ -89,13 +85,9 @@ FNFH DZ, NA           # A = upper temp
 LD Y, $PCL
 #70
 FNH AZ, HLD           # A -> PCH
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-LD HL, $FETCH
+LD HL, $FETCH2
+LD Y, $INST
+MVHLZ ND              # HL -> inst cache
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC

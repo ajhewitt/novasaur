@@ -2,7 +2,7 @@
 
 DST = %w[N O1 O2 O3 O4 O5 O6 O7 X E S V Y HL PC PG]
 SRC = %w[I IZ E EZ I IZ E EZ A AZ M MZ A AZ D DZ]
-ALU = %w[MV ADD AF SH AND OR XOR VMP MUL DIV COM SER AV FND FNE FNF]
+ALU = %w[MV ADD AF AND OR XOR SYN VMP MUL DIV COM SER AVT FND FNE FNF]
 LD = %w[NOP NOPZ LD LDZ LDP LDPZ LDN LDNZ]
 WR = %w[M D]
 
@@ -15,7 +15,7 @@ def ld(i, dest)
   n = decode i, [3, 4, 5]
   return LD[n] if n < 2
 
-  return if i[2]  == 0
+  return if i[2].zero?
 
   "#{LD[n]} #{dest},"
 end

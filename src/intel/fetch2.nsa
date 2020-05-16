@@ -1,0 +1,38 @@
+# Fetch - post-inc
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE FETCH2_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD        # inc state
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#10
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#19
+LD HL, $IDEN$NULL
+LD Y, $PCL
+FNFH DZ, XA        # X = PCL
+LDZ Y, $PCH
+FNH DZ, Y          # Y = PCH
+#30
+FNFH M, NA         # A = [PC]
+LD Y, $INST
+FNH AZ, HLD        # HL -> inst cache
+LD Y, $VMS         # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
+#43

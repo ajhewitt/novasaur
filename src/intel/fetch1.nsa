@@ -1,17 +1,21 @@
-# Fetch
+# Fetch - pre-inc
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE FETCH_PG
+PAGE FETCH1_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD        # inc state
-LD HL, $INCPC?$IDEN
-LD Y, $INST
-FNEH DZ, NA        # MSB set for pre-inc
-#11
-LDP PC, $0xB8      # skip pre-inc
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#10
+NOP
+NOP
 LD HL, $INC$FORK1
 LD Y, $PCL
 FNFH DZ, XD        # X,PCL = PCL+1
@@ -31,15 +35,7 @@ LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43
 
-#13
-ADDR 0xB8
-LD Y, $PCL
-FNFL DZ, X         # X = PCL
-NOP
-NOP
-NOP
-NOP
-#ADDR 0xC0         # else
+ADDR 0xC0         # else
 NOP
 NOP
 LD HL, $IDEN$NULL

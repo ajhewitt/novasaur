@@ -62,8 +62,8 @@ def print_af(offset, opts = {})
   end
 end
 
-# ALU function: Shift? (TBD)
-def print_sh(offset, opts = {})
+# ALU function: Syth (wave table + gain)
+def print_syn(offset, opts = {})
   # feature not implemented 
 end
 
@@ -100,8 +100,9 @@ def print_vmp(offset, opts = {})
   end
 end
 
-# ALU function: AV (Audio/Video timings)
-def print_av(offset)
+# ALU function: AVT (Audio/Video timings)
+def print_avt(offset)
+  # Video timing
   rom = Array.new(16) { Array.new(255, 0xFF) }
   vid = [[[[480,1,3,28], [480,1,3,28], [480,1,3,28], [480,1,3,28]],
           [[480,1,3,28], [480,1,3,28], [480,1,3,28], [480,1,3,28]]],
@@ -164,13 +165,21 @@ def print_av(offset)
       k = j
     end
   end
-  # calculate audio, add to ROM here...
+  # Audio timing
+  640.times.map { |i|
+    f = 440 * 2.0**((i-(4*69))/48.0) # middle A (440Hz) MIDI #69 48-EDO
+    n = 0x10000 * f / (412500 / 43) % 0xffff
+    [n.round >> 8, n.round & 0xff]
+  }.flatten.each_slice(8).each_with_index { |a, j|
+    a.each_with_index {|n, i| rom[i+8][j] = n}
+  }
+  # dump ROM table
   rom.each {|a| a[255] = 0x69}
-  rom.each_with_index do |a, j|
-    a.each_slice(16).each_with_index do |b, i|
+  rom.each_with_index { |a, j|
+    a.each_slice(16).each_with_index { |b, i|
       print_data [b.size, offset + j, i << 4, 0] + b
-    end
-  end
+    }
+  }
 end
 
 # Increment line count in HAL state machine
@@ -238,14 +247,14 @@ print_binary nil, 0x00, high: true, pass: true
 print_binary '+', 0x10,  high: true
 # 0x00022000-0x00022FFF: AF high nibble
 print_af 0x20,  high: true
-# 0x00023000-0x00023FFF: SH high nibble
-print_sh 0x30, high: true
-# 0x00024000-0x00024FFF: AND high nibble
-print_binary '&', 0x40,  high: true, pass: true
-# 0x00025000-0x00025FFF: OR high nibble
-print_binary '|', 0x50,  high: true, pass: true
-# 0x00026000-0x00026FFF: XOR high nibble
-print_binary '^', 0x60,  high: true, pass: true
+# 0x00023000-0x00023FFF: AND high nibble
+print_binary '&', 0x30,  high: true, pass: true
+# 0x00024000-0x00024FFF: OR high nibble
+print_binary '|', 0x40,  high: true, pass: true
+# 0x00025000-0x00025FFF: XOR high nibble
+print_binary '^', 0x50,  high: true, pass: true
+# 0x00026000-0x00026FFF: SYN high nibble
+print_syn 0x60, high: true
 # 0x00027000-0x00027FFF: VMP high nibble
 print_vmp 0x70, high: true
 
@@ -257,14 +266,14 @@ print_binary nil, 0x00, pass: true
 print_binary '+', 0x10
 # 0x00032000-0x00032FFF: AF low nibble
 print_af 0x20
-# 0x00033000-0x00033FFF: SH low nibble
-print_sh 0x30
-# 0x00034000-0x00034FFF: AND low nibble
-print_binary '&', 0x40, pass: true
-# 0x00035000-0x00035FFF: OR low nibble
-print_binary '|', 0x50, pass: true
-# 0x00036000-0x00036FFF: XOR low nibble
-print_binary '^', 0x60, pass: true
+# 0x00033000-0x00033FFF: AND low nibble
+print_binary '&', 0x30, pass: true
+# 0x00034000-0x00034FFF: OR low nibble
+print_binary '|', 0x40, pass: true
+# 0x00035000-0x00035FFF: XOR low nibble
+print_binary '^', 0x50, pass: true
+# 0x00036000-0x00036FFF: SH low nibble
+print_syn 0x60
 # 0x00037000-0x00037FFF: VMP low nibble
 print_vmp 0x70, high: false
 
@@ -276,8 +285,8 @@ print_binary '/', 0x90
 
 # 0x0003B000-0x0003BFFF: SER low nibble only - TBD
 
-# 0x0003C000-0x0003CFFF: AV low nibble only
-print_av 0xC0
+# 0x0003C000-0x0003CFFF: AVT low nibble only
+print_avt 0xC0
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - TBD
 # TBD

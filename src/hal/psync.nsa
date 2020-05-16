@@ -11,24 +11,29 @@ PAGE PSYNC_PG
 #       0,5,10     1  1  0-2
 # assumes Y=$VMS
 LDZ HL, $INCPROC$NULL
-FNH DZ, HLD          # H=mode_line+1, L=EX00
+FNH DZ, HLD          # H=mode_line start, L=EX00+1
 LD Y, $PMODE
-AVH DZ, SA           # mode_line, pmode —> S
-LDP HL, $IDEN$NULL   # sign bit low, don’t inc vline
-LDN HL, $INC$NULL    # sign bit high, inc vline
+AVTH DZ, SA          # mode_line, pmode —> S
+#9
+LDP HL, $IDEN$IDEN   # sign bit low, don’t inc vline
+LDN HL, $INC$IDEN    # sign bit high, inc vline
 LD Y, $VLINE
 FNFH DZ, VD          # increment? vline —> V
-#17
+FNFL E, HL           # serial inputs -> H
+#20
+LD Y, $SERS
+COMH DZ, ND          # update serial state
 LD HL, $INC$NULL
 LDZ Y, $PLINE
-FNH DZ, HLD          # increment pline -> A
+#29
+FNH DZ, HLD          # pline = pline+1
 LD HL, $IDEN$NULL
 LDZ Y, $VMODE
-FNH DZ, HL           # load video mode -> H
+FNH DZ, HL           # H = vmode
 LD Y, $PMODE
-AVH AZ, ND           # determine mode for next process cycle
+#39
+AVTH AZ, ND          # determine mode for next process cycle
 LDP PC, $NEXT_FIELD  # jump at end of field
-#35
 NOP
 NOP
 NOP
@@ -36,19 +41,7 @@ NOP
 NOP
 NOP
 NOP
-NOP
-#1.0
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#10
+#50/44
 NOP
 NOP
 NOP
@@ -59,7 +52,7 @@ NOP
 NOP
 NOP
 NOP
-#20
+#60/54
 NOP
 NOP
 NOP
@@ -70,43 +63,42 @@ NOP
 NOP
 NOP
 NOP
-#30
+#70/64
 NOP
-LD HL, $IDEN$NULL
+NOP
+NOP
+NOP
+LD HL, $IDEN$VMP1
 LDZ Y, $INST
-FNH DZ, HL
-LD Y, $VMS           # set Y = $VMS on exit
-VMPHL DZ, PGA        # jump to next VMC
+FNFH DZ, NA           # A = inst cache
+#81
+LD Y, $VMS            # set Y = $VMS on exit
+FNEL A, PG            # jump to next VMC
+#86
 
 $NEXT_FIELD
-#0.36
-LD HL, $0
+LD HL, $IDEN$NULL
 LD Y, $PLINE
-MULH DZ, ND          # reset the process line to start -> A
-#1.0
-LD HL, $IDEN$NULL
+MULH DZ, ND          # 0 -> process line
+#51
 LDZ Y, $VMODE
-FNH DZ, HL           # load video mode -> H
+FNH DZ, HL           # H = video mode
 LD Y, $PMODE
-AVH AZ, ND           # set mode for next process cycle
-#1.11
+AVTH AZ, ND          # set mode for next process cycle
+#60
 LD HL, $IDEN$NULL
-LDZ Y, $VSTART
-FNH DZ, HL           # load start of display -> HL
+LD Y, $VSTART
+FNFH DZ, NA          # A = start of display
 LDZ Y, $VLINE
-MVHLZ ND             # reset vline to start
-#1.23
+FNH AZ, HLD          # reset vline to start
+#71
 NOP
 NOP
 NOP
-NOP
-NOP
-NOP
-NOP
-#1.30
-NOP
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL
-LD Y, $VMS         # set Y = $VMS on exit
-VMPHL DZ, PGA      # jump to next VMC
+LD HL, $IDEN$VMP1
+LD Y, $INST
+FNFH DZ, NA           # A = inst cache
+#81
+LD Y, $VMS            # set Y = $VMS on exit
+FNEL A, PG            # jump to next VMC
+#86

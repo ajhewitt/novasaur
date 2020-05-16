@@ -32,9 +32,11 @@ $DACARRY    8 # set carry if nibbles > 9
 $CON2MUL    9 # condition code to flag multiplier
 $F2PSW     10 # flags->PSW
 $PSW2F     11 # PSW->flags
-$V2E       12
-$V2M       13
+$VMP1      12
+$VMP2      13
 $UNDER?    14
 $INCPC?    15
 
 #FND
+$V2E       14
+$V2M       15
