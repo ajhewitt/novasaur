@@ -1,14 +1,14 @@
-# lsync - horz sync inside process cycle
+# H-sync with audio on standard execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE LSYNC_PG
+PAGE ASYNCE1_PG
 
 # PMODE: column in AV used during process cycle
 # VLINE: line(page) in video ram
-# VMS: [mode_line][e][x][cyc]
-#       0,4,8,12   0  0  0-3
-#       0,5,10     1  1  0-2
+# VMS: [mode_line][e][cyc]
+#       0,4,8,12   0  0-3
+#       0,5,10     1  4-6
 # assume Y = $VMS
 LDZ HL, $INCLINE$NULL
 FNH DZ, HLD           # H=mode_line+1, L=EX00
@@ -38,150 +38,150 @@ ADDR 0x28             # first voice
 LDZ Y, $NOTE1L        # 69
 FNH DZ, HL            # HL = 0xA6
 LD Y, $TONE1L
-#40/42+3
+#40/45
 ADDHL DZ, ND
 AFHL AZ, NA
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL
-#51/50
+#51/53
 LDZ Y, $TONE1H
 FNH DZ, HLD           # inc toneH if carry
 LD HL, $IDEN$NULL
 LDZ Y, $NOTE1H        # 69
 FNH DZ, HL            # HL = 0x0B
-#61/58
+#61/61
 LD Y, $TONE1H
 ADDHL DZ, ND          # A = sample index
 LD HL, $IDEN$NULL
 LDZ Y, $WAVE1
-#71/66
+#71/69
 FNH DZ, HL            # HL = adsr/wave
 LD Y, $AUDIO
 SYNHL A, ND           # synth value -> audio
 LD HL, $IDEN$NULL
-#81/74
+#81/77
 LDZ Y, $NOISE
 FNH DZ, HL            # HL = adsr/noise
 LD Y, $PLINE
 SYNHL DZ, HLA         # HL = noise value
-#91/81
+#91/84
 LD Y, $AUDIO
 ADDHL DZ, ND          # HL +> audio
 LD HL, $3$FORKA
 LD Y, $AMODE
-#101/89
+#101/92
 FNEL DZ, PC           # fork on audio mode {1:0x60, 2:0x70, 3:0xA8}
 
 ADDR 0x60             # 1-voice
 LD HL, $INC2$NULL
 LDZ Y, $VMS
 FNH DZ, HLD           # VMS = VMS+2
-#110/96+7
+#110/101
 NOP
 NOP
 NOP
 NOP
 NOP
 LD PC, $NEXT
-#117/103
+#117/108
 
 ADDR 0x70             # 2-voice
 LD Y, $VMS
 ADDH DZ, ND           # VMS = VMS+3
-#109/107+9
+#109/115
 LD HL, $IDEN$NULL
 LDZ Y, $NOTE2L        # 69
 FNH DZ, HL            # HL = 0xA6
 LD Y, $TONE2L
 ADDHL DZ, ND
-#121/116
+#121/124
 AFHL AZ, NA
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL
 LDZ Y, $TONE2H
-#130/124
+#130/132
 FNH DZ, HLD           # inc toneH if carry
 LD HL, $IDEN$NULL
 LDZ Y, $NOTE2H        # 69
 FNH DZ, HL            # HL = 0x0B
 LD Y, $TONE2H
-#140/132
+#140/140
 ADDHL DZ, ND          # A = sample index
 LD HL, $IDEN$NULL
 LDZ Y, $WAVE2
 FNH DZ, HL            # HL = adsr/wave
-#150/139
+#150/147
 LD Y, $AUDIO
 SYNHL A, HLA          # HL = synth value
 ADDHL DZ, ND          # HL +> audio
-#160/145
+#160/153
 $NEXT
 LD HL, $IDEN$VMP1
 LD Y, $INST
 FNFH DZ, NA           # A = inst
 LD Y, $VMS
 FNEL A, PG            # A -> decode page
-#172/155
+#172/163
 
 ADDR 0xA8             # 3-voice
 LD HL, $IDEN$NULL
 LDZ Y, $NOTE2L        # 69
 FNH DZ, HL            # HL = 0xA6
-#110/160+13
+#110/172
 LD Y, $TONE2L
 ADDHL DZ, ND
 AFHL AZ, NA
-#120/166
+#120/178
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL
 LDZ Y, $TONE2H
 FNH DZ, HLD           # inc toneH if carry
 LD HL, $IDEN$NULL
 LDZ Y, $NOTE2H        # 69
-#131/177
+#131/189
 FNH DZ, HL            # HL = 0x0B
 LD Y, $TONE2H
 ADDHL DZ, ND          # A = sample index
 LD HL, $IDEN$NULL
-#141/184
+#141/196
 LDZ Y, $WAVE2
 FNH DZ, HL            # HL = adsr/wave
 LD Y, $AUDIO
 SYNHL A, HLA          # HL = synth value
-#151/191
+#151/203
 ADDHL DZ, ND          # HL +> audio
 LD HL, $IDEN$NULL
 LDZ Y, $NOTE3L        # 69
 FNH DZ, HL            # HL = 0xA6
-#161/198
+#161/210
 LD Y, $TONE3L
 ADDHL DZ, ND
 AFHL AZ, NA
-#171/204
+#171/216
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL
 LDZ Y, $TONE3H
 FNH DZ, HLD           # inc toneH if carry
 LD HL, $IDEN$NULL
-#180/213
+#180/225
 LDZ Y, $NOTE3H        # 69
 FNH DZ, HL            # HL = 0x0B
 LD Y, $TONE3H
 ADDHL DZ, ND          # A = sample index
-#190/220
+#190/232
 LD HL, $IDEN$NULL
 LDZ Y, $WAVE3
 FNH DZ, HL            # HL = adsr/wave
 LD Y, $AUDIO
 SYNHL A, HLA          # HL = synth value
-#202/229
+#202/241
 ADDHL DZ, ND          # HL +> audio
 NOP
 NOP
 NOP
 NOP
-#210/235
+#210/247
 NOP
 LD Y, $VMS
-LD PG, $LSYNC
-#215/240
+LD PG, $ASYNCE1_PG
+#215/252

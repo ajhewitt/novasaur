@@ -1,7 +1,17 @@
 # All the pages
 $IDLE_PG       0    # 43-pc idle VMC
-$LSYNC_PG      1
-$PSYNC_PG      2
+$ISYNCE1_PG    0x04
+$ISYNCE2_PG    0x05
+$ISYNCF1_PG    0x06
+$ISYNCF2_PG    0x07
+$ASYNCE1_PG    0x08
+$ASYNCE2_PG    0x09
+$ASYNCF1_PG    0x0A
+$ASYNCF2_PG    0x0B
+$PSYNCE1_PG    0x0C
+$PSYNCE2_PG    0x0D
+$PSYNCF1_PG    0x0E
+$PSYNCF2_PG    0x0F
 
 $FETCH1_PG     0x1E
 $FETCH2_PG     0x1F

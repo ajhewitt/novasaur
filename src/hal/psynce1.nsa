@@ -1,14 +1,14 @@
-# psync - horz sync at end of process cycle
+# H-sync at end of process cycle on standard execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE PSYNC_PG
+PAGE PSYNCE1_PG
 
 # PMODE: column in AV used during process cycle
 # VLINE: line(page) in video ram
-# VMS: [mode_line][e][x][cyc]
-#       0,4,8,12   0  0  0-3
-#       0,5,10     1  1  0-2
+# VMS: [mode_line][e][cyc]
+#       0,4,8,12   0  0-3
+#       0,5,10     1  4-6
 # assumes Y=$VMS
 LDZ HL, $INCPROC$NULL
 FNH DZ, HLD          # H=mode_line start, L=EX00+1

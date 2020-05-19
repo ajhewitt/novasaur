@@ -1,9 +1,24 @@
 # zero page assignments
 
+#Sound
+$TONE1L     0xD0
+$TONE1H     0xD1
+$NOTE1L     0xD2
+$NOTE1H     0xD3
+$WAVE1      0xD4
+$TONE2L     0xD5
+$TONE2H     0xD6
+$NOTE2L     0xD7
+$NOTE2H     0xD8
+$WAVE2      0xD9
+$TONE3L     0xDA
+$TONE3H     0xDB
+$NOTE3L     0xDC
+$NOTE3H     0xDD
+$WAVE3      0xDE
+$NOISE      0xDF
+
 #vCPU
-$TEMP       0xE2
-$TMPH       0xE2
-$TMPL       0xE3
 $AREG       0xE0 # Accumulator
 $FREG       0xE1 # Flags - COZNHP00
 $BREG       0xE2
@@ -23,9 +38,10 @@ $PCL        0xEF # PC LSB
 $INST       0xF0
 $TEMP       0xF1
 $TMPH       0xF2
-$TMPL       0xF3
+$TMPL       0xF1
 
 #HAL
+$AMODE      0xF6
 $PMODE      0xF7
 $PLINE      0xF8
 $VMODE      0xF9

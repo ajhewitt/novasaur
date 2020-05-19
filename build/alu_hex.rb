@@ -62,9 +62,22 @@ def print_af(offset, opts = {})
   end
 end
 
-# ALU function: Syth (wave table + gain)
-def print_syn(offset, opts = {})
-  # feature not implemented 
+# ALU function: WTS (wavetable sythesizer)
+# Gain/Wave - HL, sample index - acc
+# L) A = WT[L][A] - wavetable of signed 8-bit samples
+# H) A = 32 + (A / 2**(7-H/3)) - attenuate from -12db in 2dB step
+def print_wts(offset, opts = {})
+  16.times.map do |a|
+    if opts[:high]
+      m = 2**(7-a/3)
+      n = 256.times.map {|i| i&0x80 == 0 ? i : i-0x100}
+      n.map {|i| a.zero? ? 32 : (32 + i/m).round}
+    else
+      # just generate harmonics from 1 to 16
+      h = 128.0 / (a+1)
+      256.times.map {|i| (Math.sin(i * Math::PI/h)*127.5).floor&0xff}
+    end.each_slice(16).each_with_index {|d, b| print_data [d.size, offset + a, b << 4, 0] + d}
+  end
 end
 
 # ALU function: VMP (Virtual Machine Page/vCPU decode)
@@ -253,8 +266,8 @@ print_binary '&', 0x30,  high: true, pass: true
 print_binary '|', 0x40,  high: true, pass: true
 # 0x00025000-0x00025FFF: XOR high nibble
 print_binary '^', 0x50,  high: true, pass: true
-# 0x00026000-0x00026FFF: SYN high nibble
-print_syn 0x60, high: true
+# 0x00026000-0x00026FFF: WTS high nibble
+print_wts 0x60, high: true
 # 0x00027000-0x00027FFF: VMP high nibble
 print_vmp 0x70, high: true
 
@@ -272,8 +285,8 @@ print_binary '&', 0x30, pass: true
 print_binary '|', 0x40, pass: true
 # 0x00035000-0x00035FFF: XOR low nibble
 print_binary '^', 0x50, pass: true
-# 0x00036000-0x00036FFF: SH low nibble
-print_syn 0x60
+# 0x00036000-0x00036FFF: WTS low nibble
+print_wts 0x60
 # 0x00037000-0x00037FFF: VMP low nibble
 print_vmp 0x70, high: false
 
@@ -309,20 +322,22 @@ print_unary(0xE4, [0x80] + Array.new(0xFF, 0xC0))
 print_unary(0xE5, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
 # $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
 print_unary(0xE6, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
+# $FORKA: fork on audio mode {1:0x60, 2:0x70, 3:0xA8}
+print_unary(0xE7, [0x60, 0x60, 0x70, 0xA8] * 64)
 # $SWCARRY: swap carry with borrow flags (CNZPHOBL->BNZPLOCH)
-print_unary(0xE7, swap_carry)
+print_unary(0xE8, swap_carry)
 # $DACARRY: set carry if nibbles > 9
-print_unary(0xE8, da_carry)
+print_unary(0xE9, da_carry)
 # $CON2MUL: condition code to flag multiplier (ZCPS->CNZPHOBL)
 CON=[4, 1, 8, 2].freeze
 UNC=[0xC3, 0xC9, 0xCD].freeze # unconditional instructions
-print_unary(0xE9, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
+print_unary(0xEA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 # $F2PSW: flags->PSW
-print_unary(0xEA, flags_psw)
+print_unary(0xEB, flags_psw)
 # $PSW2F: PSW->flags
-print_unary(0xEB, psw_flags)
+print_unary(0xEC, psw_flags)
 # $V2E: calculate E-reg GPU mode bits from video mode
-print_unary(0xEC, 256.times.map {|i|
+print_unary(0xED, 256.times.map {|i|
   e = i&1 == 0 ? 0 : 0x10
 #  e |= i&2 == 0 ? 0 : 0x40 # rev 3 board
   e |= i&2 == 0 ? 0 : 0x20 # rev 4 board
@@ -330,15 +345,12 @@ print_unary(0xEC, 256.times.map {|i|
   i&0x60 == 0x60 ? e : e|0x40 # rev 4 board
 })
 # $V2M: calculate mode_line from video mode
-print_unary(0xED, 256.times.map {|i|
+print_unary(0xEE, 256.times.map {|i|
   m = (i<<2)&0x30
   i&0x40 == 0 ? m*4 : (m*5)|4
 })
 # $UNDER?: A = (A == 0xFF) ? 0 : -1
-print_unary(0xEE, Array.new(0xFF, 0xFF) + [0])
-# $INCPC?: pre inc PC (0x80) unless PC loaded (0)
-INC=[0xC4, 0xD4, 0xE4, 0xF4, 0xCC, 0xDC, 0xEC, 0xFC, 0xCD] # skip pre-inc after pushpc
-print_unary(0xEF, 256.times.map {|i| INC.include?(i) ? 0 : 0x80})
+print_unary(0xEF, Array.new(0xFF, 0xFF) + [0])
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only - generic/default functions
 # $IDEN: A = A

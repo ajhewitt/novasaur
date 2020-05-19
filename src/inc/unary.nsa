@@ -27,15 +27,15 @@ $SRC2RPL    3 # source code to lower register zpage addr
 $FORK1      4 # 0->0x80,else->0xC0
 $FORK2      5 # 0xFF->0x40,0->0x80,else->0xC0
 $FORK3      6 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$SWCARRY    7 # swap carry with borrow flags
-$DACARRY    8 # set carry if nibbles > 9
-$CON2MUL    9 # condition code to flag multiplier
-$F2PSW     10 # flags->PSW
-$PSW2F     11 # PSW->flags
-$VMP1      12
-$VMP2      13
-$UNDER?    14
-$INCPC?    15
+$FORKA      7
+$SWCARRY    8 # swap carry with borrow flags
+$DACARRY    9 # set carry if nibbles > 9
+$CON2MUL   10 # condition code to flag multiplier
+$F2PSW     11 # flags->PSW
+$PSW2F     12 # PSW->flags
+$VMP1      13
+$VMP2      14
+$UNDER?    15
 
 #FND
 $V2E       14
