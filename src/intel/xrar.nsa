@@ -7,7 +7,7 @@ PAGE XRAR_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $IDEN$SRC2REG
+LD HL, $IDEN$REGMAPL
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of source reg
 #11

@@ -80,16 +80,17 @@ $PUSHPC_PG     0x5D
 $RETR_PG       0x5E
 $RETS_PG       0x5F
 $RST_PG        0x60
-$PCHL_PG       0x61
-$PUSH_PG       0x62
-$PUSHA_PG      0x63
-$POP_PG        0x64
-$POPA_PG       0x65
-$XTHL_PG       0x66
-$SPHL_PG       0x67
-$IN_PG         0x68
-$OUT_PG        0x69
-$INOUT_PG      0x6A
+$RESTART_PG    0x61
+$PCHL_PG       0x62
+$PUSH_PG       0x63
+$PUSHA_PG      0x64
+$POP_PG        0x65
+$POPA_PG       0x66
+$XTHL_PG       0x67
+$SPHL_PG       0x68
+$IN_PG         0x69
+$OUT_PG        0x6A
+$INOUT_PG      0x6B
 
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot

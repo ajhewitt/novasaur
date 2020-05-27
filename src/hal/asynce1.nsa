@@ -57,17 +57,17 @@ LDZ Y, $WAVE1
 #71/69
 FNH DZ, HL            # HL = adsr/wave
 LD Y, $AUDIO
-SYNHL A, ND           # synth value -> audio
+WTSHL A, ND           # synth value -> audio
 LD HL, $IDEN$NULL
 #81/77
 LDZ Y, $NOISE
 FNH DZ, HL            # HL = adsr/noise
 LD Y, $PLINE
-SYNHL DZ, HLA         # HL = noise value
+WTSHL DZ, HLA         # HL = noise value
 #91/84
 LD Y, $AUDIO
 ADDHL DZ, ND          # HL +> audio
-LD HL, $3$FORKA
+LD HL, $3$FORKS
 LD Y, $AMODE
 #101/92
 FNEL DZ, PC           # fork on audio mode {1:0x60, 2:0x70, 3:0xA8}
@@ -112,7 +112,7 @@ LDZ Y, $WAVE2
 FNH DZ, HL            # HL = adsr/wave
 #150/147
 LD Y, $AUDIO
-SYNHL A, HLA          # HL = synth value
+WTSHL A, HLA          # HL = synth value
 ADDHL DZ, ND          # HL +> audio
 #160/153
 $NEXT
@@ -147,7 +147,7 @@ LD HL, $IDEN$NULL
 LDZ Y, $WAVE2
 FNH DZ, HL            # HL = adsr/wave
 LD Y, $AUDIO
-SYNHL A, HLA          # HL = synth value
+WTSHL A, HLA          # HL = synth value
 #151/203
 ADDHL DZ, ND          # HL +> audio
 LD HL, $IDEN$NULL
@@ -173,7 +173,7 @@ LD HL, $IDEN$NULL
 LDZ Y, $WAVE3
 FNH DZ, HL            # HL = adsr/wave
 LD Y, $AUDIO
-SYNHL A, HLA          # HL = synth value
+WTSHL A, HLA          # HL = synth value
 #202/241
 ADDHL DZ, ND          # HL +> audio
 NOP

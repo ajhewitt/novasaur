@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE MOVR_PG
 
 # assume: Y = $VMS
-LD HL, $INC$SRC2REG
+LD HL, $INC$REGMAPL
 FNFH DZ, HLD          # inc state
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of source reg
@@ -13,7 +13,7 @@ FNEL DZ, Y            # Y = zpage addr of source reg
 LDNZ PC, $REG_SRC     # zpage > 0x80 for reg source
 
 #MEM_SRC
-LD HL, $IDEN$DST2REG
+LD HL, $IDEN$REGMAPH
 LD Y, $LREG
 FNFH DZ, XA           # X = L
 LDZ Y, $HREG

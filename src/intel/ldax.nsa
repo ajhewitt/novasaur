@@ -7,12 +7,12 @@ PAGE LDAX_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $IDEN$SRC2RPL
+LD HL, $IDEN$REGMAPL
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of high register
 #11
 FNFH DZ, XA           # X = register high
-LD HL, $IDEN$SRC2RPH
+LD HL, $IDEN$REGMAPH
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of low register
 #21

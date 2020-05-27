@@ -1,126 +1,141 @@
-# Push register pair
+# Restart from temp vector (with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE PUSH_PG
+PAGE RESTART_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#10
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#20
-NOP
-NOP
-NOP
 LD HL, $DEC$FORK2
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL-1
 FNEL A, PC
-#33
+#14
 
 ADDR 0x40             # SPL = 255, dec SPH, iden SPH
 LDZ Y, $SPH
 FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
-LD HL, $IDEN$REGMAPH
-LD Y, $INST
-#41
-FNEL DZ, Y            # Y = zero page addr of high reg
-FNFH DZ, NA           # A = high reg
+LD HL, $IDEN$NULL
+#20
+LD Y, $PCH
+FNFH DZ, NA           # A = PCH
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
-#51
+#29
 FNFH A, NM            # A -> [SP]
 LD HL, $DEC$NULL
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL-1
-#61
-LD HL, $IDEN$REGMAPL
-LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of low reg
-FNFH DZ, NA           # A = low reg
-#71
+#39
+LD HL, $IDEN$NULL
+LD Y, $PCL
+FNFH DZ, NA           # A = PCL
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
+#50
 FNFH A, NM            # A -> [SP]
-LD HL, $FETCH
+LD Y, $TEMP
+FNFH DZ, NA           # A = temp (vector)
+LD Y, $PCL
+#60
+FNFH AZ, XD           # A -> PCL
+LD Y, $PCH
+MULH DZ, ND           # 0 -> PCH
+FNH A, Y              # Y = A
+#70
+FNFH M, NA            # A = [PC]
+NOP
+NOP
+NOP
+LD Y, $INST
+FNH AZ, HLD           # A -> inst,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0x80             # SPL = 0, iden SPH, dec SPH
-LD HL, $IDEN$REGMAPH
-LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of high reg
-#40
-FNFH DZ, NA           # A = high reg
+LD HL, $IDEN$NULL
+LD Y, $PCH
+FNFH DZ, NA           # A = PCH
+#21
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH A, NM            # A -> [SP]
-#50
 LD HL, $DEC$NULL
+#30
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL-1
 LDZ Y, $SPH
 FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
-#61
-LD HL, $IDEN$REGMAPL
-LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of low reg
-FNFH DZ, NA           # A = low reg
-#71
+#39
+LD HL, $IDEN$NULL
+LD Y, $PCL
+FNFH DZ, NA           # A = PCL
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
+#50
 FNFH A, NM            # A -> [SP]
-LD HL, $FETCH
+LD Y, $TEMP
+FNFH DZ, NA           # A = temp (vector)
+LD Y, $PCL
+#60
+FNFH AZ, XD           # A -> PCL
+LD Y, $PCH
+MULH DZ, ND           # 0 -> PCH
+FNH A, Y              # Y = A
+#70
+FNFH M, NA            # A = [PC]
+NOP
+NOP
+NOP
+LD Y, $INST
+FNH AZ, HLD           # A -> inst,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0xC0             # else, iden SPH, iden SPH
-NOP
-NOP
-NOP
-NOP
-LD HL, $IDEN$REGMAPH
-LD Y, $INST
-#41
-FNEL DZ, Y            # Y = zero page addr of high reg
-FNFH DZ, NA           # A = high reg
+LD HL, $IDEN$NULL
+LD Y, $PCH
+FNFH DZ, NA           # A = PCH
+#21
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
-#51
 FNFH A, NM            # A -> [SP]
 LD HL, $DEC$NULL
+#30
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL-1
-#61
-LD HL, $IDEN$REGMAPL
-LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of low reg
-FNFH DZ, NA           # A = low reg
-#71
+LD HL, $IDEN$NULL
+LD Y, $PCL
+#39
+FNFH DZ, NA           # A = PCL
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH A, NM            # A -> [SP]
-LD HL, $FETCH
+NOP
+#50
+NOP
+NOP
+NOP
+LD Y, $TEMP
+FNFH DZ, NA           # A = temp (vector)
+LD Y, $PCL
+#60
+FNFH AZ, XD           # A -> PCL
+LD Y, $PCH
+MULH DZ, ND           # 0 -> PCH
+FNH A, Y              # Y = A
+#70
+FNFH M, NA            # A = [PC]
+NOP
+NOP
+NOP
+LD Y, $INST
+FNH AZ, HLD           # A -> inst,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC

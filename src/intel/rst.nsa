@@ -1,178 +1,50 @@
-# Restart (with fetch)
+# Restart - inc PC, load temp with vector, rewrite instruction
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE RST_PG
 
 # assume: Y = $VMS
-LD HL, $0x30
-ADDH DZ, ND           # inc state
-LD HL, $INC$NULL
-LDZ Y, $PCL
-FNH DZ, HLD           # PCL = PCL+1
-#11
-LDZ HL, $OVER?$NULL
-FNH AZ, HLA
-LDP HL, $INC$NULL     # inc PCH if PCL overflow
-LDN HL, $IDEN$NULL
+LD HL, $INC$FORK1
+FNFH DZ, ND           # inc state
+LD Y, $PCL
+FNFH DZ, ND           # X,PCL = PCL+1
+FNEL A, PC            # fork on PCL
+#13
+
+ADDR 0x80             # PCL = 0
 LDZ Y, $PCH
+FNFH DZ, ND           # PCH = PCH+1      *** inc PCH ***
+LDZ Y, $INST
 #20
-FNH DZ, HLD           # PCH = PCH+1?
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#30
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#40
-NOP
-NOP
-LD HL, $DEC$FORK2
-LD Y, $SPL
-FNFH DZ, XD           # X,SPL = SPL-1
-FNEL A, PC
-#52
-
-ADDR 0x40             # SPL = 255, dec SPH, iden SPH
-LDZ Y, $SPH
-FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
-LD HL, $IDEN$NULL
-LD Y, $PCH
-#60/7
-FNFH DZ, NA           # A = PCH
-LDZ Y, $SPH
-FNH DZ, Y             # Y = SPH
-FNFH A, NM            # A -> [SP]
-#70/14
-LD HL, $DEC$NULL
-LD Y, $SPL
-FNFH DZ, XD           # X,SPL = SPL-1
-LD HL, $IDEN$NULL
-#79/22
-LD Y, $PCL
-FNFH DZ, NA           # A = PCL
-LDZ Y, $SPH
-FNH DZ, Y             # Y = SPH
-FNFH A, NM            # A -> [SP]
-#91/30
-LDZ Y, $INST
-FNH DZ, HLA           # A = inst
-LD HL, $0x38
-LD Y, $PCL
-#99/37
-ANDHL AZ, XD          # inst & 00111000 -> PCL
-LD HL, $0
-LD Y, $PCH
-MULH DZ, ND           # 0 -> PCH
-#110/45
-LD HL, $IDEN$NULL
-FNH A, Y              # Y = A
-FNFH M, NA            # A = [PC]
+FNH DZ, HLA           # A = inst + 1
+LD HL, $RSTVEC$NULL
+LD Y, $TEMP
+FNEH AZ, ND           # rst vector -> temp
+#29
+LD HL, $RESTART_INST
 LD Y, $INST
-#119/52
-FNH AZ, HLD           # A -> inst,HL
-LD HL, $FETCH
+MVHLZ ND              # restart -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#129/59
+#43
 
-ADDR 0x80             # SPL = 0, iden SPH, dec SPH
-LD HL, $IDEN$NULL
-LD Y, $PCH
-FNFH DZ, NA           # A = PCH
-LDZ Y, $SPH
-#61/8
-FNH DZ, Y             # Y = SPH
-FNFH A, NM            # A -> [SP]
-LD HL, $DEC$NULL
-LD Y, $SPL
-#70/15
-FNFH DZ, XD           # X,SPL = SPL-1
-LDZ Y, $SPH
-FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
-LD HL, $IDEN$NULL
-#79/22
-LD Y, $PCL
-FNFH DZ, NA           # A = PCL
-LDZ Y, $SPH
-FNH DZ, Y             # Y = SPH
-FNFH A, NM            # A -> [SP]
-#91/30
-LDZ Y, $INST
-FNH DZ, HLA           # A = inst
-LD HL, $0x38
-LD Y, $PCL
-#99/37
-ANDHL AZ, XD          # inst & 00111000 -> PCL
-LD HL, $0
-LD Y, $PCH
-MULH DZ, ND           # 0 -> PCH
-#110/45
-LD HL, $IDEN$NULL
-FNH A, Y              # Y = A
-FNFH M, NA            # A = [PC]
-LD Y, $INST
-#119/52
-FNH AZ, HLD           # A -> inst,HL
-LD HL, $FETCH
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#129/59
-
-ADDR 0xC0             # else, iden SPH, iden SPH
-LD HL, $IDEN$NULL
-LD Y, $PCH
-FNFH DZ, NA           # A = PCH
-LDZ Y, $SPH
-#61/8
-FNH DZ, Y             # Y = SPH
-FNFH A, NM            # A -> [SP]
-LD HL, $DEC$NULL
-LD Y, $SPL
-#70/15
-FNFH DZ, XD           # X,SPL = SPL-1
-LD HL, $IDEN$NULL
-LD Y, $PCL
-FNFH DZ, NA           # A = PCL
-#80/23
-LDZ Y, $SPH
-FNH DZ, Y             # Y = SPH
-FNFH A, NM            # A -> [SP]
+ADDR 0xC0             # else
 NOP
 NOP
 NOP
-#90/31
+NOP
 NOP
 LDZ Y, $INST
-FNH DZ, HLA           # A = inst
-LD HL, $0x38
-LD Y, $PCL
-#99/39
-ANDHL AZ, XD          # inst & 00111000 -> PCL
-LD HL, $0
-LD Y, $PCH
-MULH DZ, ND           # 0 -> PCH
-#110/47
-LD HL, $IDEN$NULL
-FNH A, Y              # Y = A
-FNFH M, NA            # A = [PC]
+#20
+FNH DZ, HLA           # A = inst + 1
+LD HL, $RSTVEC$NULL
+LD Y, $TEMP
+FNEH AZ, ND           # rst vector -> temp
+#29
+LD HL, $RESTART_INST
 LD Y, $INST
-#119/54
-FNH AZ, HLD           # A -> inst,HL
-LD HL, $FETCH
+MVHLZ ND              # restart -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#129/61
+#43

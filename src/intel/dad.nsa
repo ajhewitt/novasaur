@@ -7,7 +7,7 @@ PAGE DAD_PG
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
-LD HL, $IDEN$SRC2RPL
+LD HL, $IDEN$REGMAPL
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of lower register
 #11
@@ -23,7 +23,7 @@ ADDHL DZ, NA          # H = H+1 if carry
 #32
 LD Y, $TEMP
 AFHL AZ, ND           # temp = carry from H
-LD HL, $IDEN$SRC2RPH
+LD HL, $IDEN$REGMAPH
 #40
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of upper register

@@ -7,7 +7,7 @@ PAGE POP_PG
 # assume: Y = $VMS
 LD HL, $INC2$NULL
 FNH DZ, HLD           # inc state
-LD HL, $IDEN$SRC2RPH
+LD HL, $IDEN$REGMAPH
 LD Y, $SPL
 FNFH DZ, XA           # X = SPL
 #11
@@ -53,7 +53,7 @@ FNH DZ, HLD           # SPH = SPH+1      *** pre inc SPH ***
 LD HL, $IDEN$DEC
 FNFL A, Y             # Y = SPH-1
 FNFH M, NA            # A = [SP]
-LD HL, $IDEN$SRC2RPL
+LD HL, $IDEN$REGMAPL
 #71
 LD Y, $INST
 FNEL DZ, Y            # Y = zero page addr of low reg
@@ -72,7 +72,7 @@ FNFH DZ, ND           # SPL = SPL+1 again
 #60
 LDZ Y, $SPH
 FNH DZ, HLD           # SPH = SPH+1      *** inc SPH ***
-LDZ HL, $IDEN$SRC2RPL
+LDZ HL, $IDEN$REGMAPL
 FNH A, Y              # Y = SPH
 FNFH M, NA            # A = [SP]
 #71
@@ -93,7 +93,7 @@ NOP
 NOP
 #59
 FNFH DZ, ND           # SPL = SPL+1 again
-LD HL, $IDEN$SRC2RPL
+LD HL, $IDEN$REGMAPL
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]

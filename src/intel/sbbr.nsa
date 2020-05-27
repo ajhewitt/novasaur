@@ -21,7 +21,7 @@ LD HL, $3
 LD Y, $TEMP
 ANDHL AZ, ND          # initial borrow flags -> temp
 #31
-LD HL, $IDEN$SRC2REG
+LD HL, $IDEN$REGMAPL
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of source reg
 FNH DZ, HL            # source reg -> HL

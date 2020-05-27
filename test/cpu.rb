@@ -120,8 +120,8 @@ puts "COND: #{(c>>5)&0x80 == (reg[A]>>7)&0x80}"
     set_dst(ram, reg, c, x)
     n += 2
   end
-  puts "#{n} #{c.to_s(16)}"
+  puts "[#{n}] #{reg[PC]}: #{c.to_s(16)}"
   puts reg.to_s
-  break if c == 0x1F7F
+  break if c == 0x1F7F || reg[PC] == 0
 end
 

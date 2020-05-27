@@ -7,7 +7,7 @@ PAGE SUBR_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $2COM$SRC2REG
+LD HL, $2COM$REGMAPL
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of source reg
 #11

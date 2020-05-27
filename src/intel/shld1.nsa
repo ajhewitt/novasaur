@@ -19,7 +19,7 @@ LDP HL, $INC$NULL     # X was negative, now positive
 LDN HL, $IDEN$NULL
 #81
 LD Y, $TMPH
-FNH DZ, HLD          # update temp2
+FNH DZ, HLD          # update temp hi
 LD HL, $IDEN$NULL
 LD Y, $LREG
 FNFH DZ, NA           # A = L

@@ -8,34 +8,34 @@ $DEC        2
 $INC2       3
 $1COM       4
 $2COM       5
-$ROR        6
-$ROL        7
-$LSR        8
-$LSL        9
-$ASR       10
-$SWAP      11
+$LSR        6
+$LSL        7
+$ASR        8
+
+$OVER?     10
+$UNDER?    11
 $INCLINE   12
 $INCPROC   13
-$OVER?     14
+$SWAP      14
 $REVERSE   15
 
 #FNE
-$SRC2REG    0 # source code to register zpage addr
-$DST2REG    1 # destination code to register zpage addr
-$SRC2RPH    2 # source code to upper register zpage addr
-$SRC2RPL    3 # source code to lower register zpage addr
-$FORK1      4 # 0->0x80,else->0xC0
-$FORK2      5 # 0xFF->0x40,0->0x80,else->0xC0
-$FORK3      6 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$FORKA      7
-$SWCARRY    8 # swap carry with borrow flags
-$DACARRY    9 # set carry if nibbles > 9
-$CON2MUL   10 # condition code to flag multiplier
-$F2PSW     11 # flags->PSW
-$PSW2F     12 # PSW->flags
-$VMP1      13
-$VMP2      14
-$UNDER?    15
+$REGMAPH    0 # map dest/hi register to zpage addr
+$REGMAPL    1 # map source/low register to zpage addr
+$F2PSW      2 # flags->PSW
+$PSW2F      3 # PSW->flags
+$SWCARRY    4 # swap carry with borrow flags
+$DACARRY    5 # set carry if nibbles > 9
+$CON2MUL    6 # condition code to flag multiplier
+$RSTVEC     7 # map inst+1 to PCL vector
+$FORKS      8
+$FORKC      9
+$FORKI     10
+$FORK1     11 # 0->0x80,else->0xC0
+$FORK2     12 # 0xFF->0x40,0->0x80,else->0xC0
+$FORK3     13 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+$VMP1      14
+$VMP2      15
 
 #FND
 $V2E       14

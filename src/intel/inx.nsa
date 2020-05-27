@@ -7,15 +7,15 @@ PAGE INX_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $INC$SRC2RPL
+LD HL, $INC$REGMAPL
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of lower register
 #11
 FNH DZ, HLD           # lower register++
 LDZ HL, $OVER?$NULL
 FNH A, HLA
-LDP HL, $INC$SRC2RPH
-LDN HL, $IDEN$SRC2RPH
+LDP HL, $INC$REGMAPH
+LDN HL, $IDEN$REGMAPH
 #20
 LD Y, $INST
 FNEL DZ, Y            # Y = zpage addr of upper register

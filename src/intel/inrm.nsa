@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE INRM_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC2$SRC2REG
+LDZ HL, $INC2$REGMAPL
 FNH DZ, HLD           # inc state
 NOP 
 NOP
