@@ -5,8 +5,8 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
-Title "Novasaur Retrocomputer"
-Date "2020-05-02"
+Title "Central Processing Unit"
+Date "2020-05-24"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -155,12 +155,6 @@ Wire Wire Line
 	3800 6550 3950 6550
 Wire Wire Line
 	3800 6450 3950 6450
-Wire Wire Line
-	3800 6350 3950 6350
-Wire Wire Line
-	3800 6150 3950 6150
-Wire Wire Line
-	3800 6050 3950 6050
 Entry Wire Line
 	3950 6750 4050 6850
 Entry Wire Line
@@ -169,14 +163,6 @@ Entry Wire Line
 	3950 6550 4050 6650
 Entry Wire Line
 	3950 6450 4050 6550
-Entry Wire Line
-	3950 6050 4050 5950
-Entry Wire Line
-	3950 6150 4050 6050
-Entry Wire Line
-	3950 6250 4050 6150
-Entry Wire Line
-	3950 6350 4050 6250
 Text Label 2650 6750 0    50   ~ 0
 PA15
 Text Label 2650 6650 0    50   ~ 0
@@ -225,16 +211,6 @@ Entry Wire Line
 	2550 6750 2650 6650
 Entry Wire Line
 	2550 6850 2650 6750
-Wire Wire Line
-	3950 6250 3800 6250
-Text Label 3800 6050 0    50   ~ 0
-Ei0
-Text Label 3800 6150 0    50   ~ 0
-Ei1
-Text Label 3800 6250 0    50   ~ 0
-Ei2
-Text Label 3800 6350 0    50   ~ 0
-Ei3
 Text Label 3850 6650 0    50   ~ 0
 C6
 Text Label 3850 6550 0    50   ~ 0
@@ -1746,8 +1722,6 @@ Wire Wire Line
 	5600 4000 5550 4000
 Text GLabel 4350 5600 1    50   Input ~ 0
 FD[0..7]
-Text GLabel 4050 5750 1    50   Input ~ 0
-Ei[0..3]
 Wire Wire Line
 	8900 4850 8900 4650
 Wire Wire Line
@@ -2450,14 +2424,20 @@ Wire Wire Line
 	3150 1200 3150 1100
 Wire Wire Line
 	8100 1200 8100 1100
+Text GLabel 3800 6050 2    50   Input ~ 0
+rx
+Text GLabel 3800 6150 2    50   Input ~ 0
+cts
+Text GLabel 3800 6250 2    50   Input ~ 0
+ps2clk
+Text GLabel 3800 6350 2    50   Input ~ 0
+ps2rx
 Wire Bus Line
 	4350 3300 4350 3700
 Wire Bus Line
 	4350 5600 4350 6000
 Wire Bus Line
 	2550 6550 2550 7050
-Wire Bus Line
-	4050 5750 4050 6250
 Wire Bus Line
 	4050 6550 4050 7150
 Wire Bus Line

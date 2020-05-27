@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2020-05-02"
+Date "2020-05-24"
 Rev "1.6"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -601,7 +601,7 @@ s1
 Text GLabel 9300 1800 2    50   Output ~ 0
 ~exec
 Text GLabel 9300 1700 2    50   Output ~ 0
-tcp
+fcp
 Text GLabel 6900 2300 0    50   Input ~ 0
 hblank
 Text GLabel 6900 2500 0    50   Input ~ 0
@@ -1006,15 +1006,15 @@ $EndComp
 $Comp
 L power:GNDD #PWR?
 U 1 1 5D9CBE89
-P 7500 5800
+P 7500 5900
 AR Path="/5CDEEC9F/5D9CBE89" Ref="#PWR?"  Part="1" 
 AR Path="/5DAA5CD8/5D9CBE89" Ref="#PWR?"  Part="1" 
 AR Path="/5D9CBE89" Ref="#PWR0112"  Part="1" 
-F 0 "#PWR0112" H 7500 5550 50  0001 C CNN
-F 1 "GNDD" H 7504 5645 50  0000 C CNN
-F 2 "" H 7500 5800 50  0001 C CNN
-F 3 "" H 7500 5800 50  0001 C CNN
-	1    7500 5800
+F 0 "#PWR0112" H 7500 5650 50  0001 C CNN
+F 1 "GNDD" H 7504 5745 50  0000 C CNN
+F 2 "" H 7500 5900 50  0001 C CNN
+F 3 "" H 7500 5900 50  0001 C CNN
+	1    7500 5900
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1064,7 +1064,7 @@ Text GLabel 9650 4150 2    50   Output ~ 0
 qclk1
 Text GLabel 9650 4050 2    50   Output ~ 0
 pclk1
-Text GLabel 9300 4650 2    50   Output ~ 0
+Text GLabel 9650 4650 2    50   Output ~ 0
 mclk
 Text GLabel 9650 4550 2    50   Output ~ 0
 sclk
@@ -1193,7 +1193,7 @@ $EndComp
 Wire Wire Line
 	7600 4650 7500 4650
 Connection ~ 7600 4650
-Text GLabel 7050 3300 2    50   Output ~ 0
+Text GLabel 7000 3300 2    50   Output ~ 0
 DA17
 Wire Wire Line
 	9600 2300 9300 2300
@@ -1414,41 +1414,81 @@ F 3 "~" H 4350 5900 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	2350 1600 3050 1600
+Wire Wire Line
+	6600 3100 6700 3100
 $Comp
-L Device:Jumper_NC_Dual JP1
-U 1 1 5EAEF12E
-P 6950 3100
-F 0 "JP1" H 6950 3339 50  0000 C CNN
-F 1 "RAM" H 6950 3248 50  0000 C CNN
-F 2 "Jumper:SolderJumper-3_P1.3mm_Bridged2Bar12_Pad1.0x1.5mm_NumberLabels" H 6950 3100 50  0001 C CNN
-F 3 "~" H 6950 3100 50  0001 C CNN
-	1    6950 3100
+L Jumper:SolderJumper_3_Bridged12 JP1
+U 1 1 5EB86903
+P 6900 3100
+F 0 "JP1" H 6900 3305 50  0000 C CNN
+F 1 "RAM" H 6900 3214 50  0000 C CNN
+F 2 "Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm" H 6900 3100 50  0001 C CNN
+F 3 "~" H 6900 3100 50  0001 C CNN
+	1    6900 3100
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7050 3300 6950 3300
+	7000 3300 6900 3300
 Wire Wire Line
-	6950 3300 6950 3200
+	6900 3300 6900 3250
+Wire Wire Line
+	7100 3100 7200 3100
+Wire Wire Line
+	7200 3100 7200 3000
 $Comp
 L power:VCC #PWR?
 U 1 1 5EAF98E7
-P 7300 3000
+P 7200 3000
 AR Path="/5CDEEC9F/5EAF98E7" Ref="#PWR?"  Part="1" 
 AR Path="/5DAA5CD8/5EAF98E7" Ref="#PWR?"  Part="1" 
 AR Path="/5EAF98E7" Ref="#PWR0198"  Part="1" 
-F 0 "#PWR0198" H 7300 2850 50  0001 C CNN
-F 1 "VCC" H 7317 3173 50  0000 C CNN
-F 2 "" H 7300 3000 50  0001 C CNN
-F 3 "" H 7300 3000 50  0001 C CNN
-	1    7300 3000
+F 0 "#PWR0198" H 7200 2850 50  0001 C CNN
+F 1 "VCC" H 7217 3173 50  0000 C CNN
+F 2 "" H 7200 3000 50  0001 C CNN
+F 3 "" H 7200 3000 50  0001 C CNN
+	1    7200 3000
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7200 3100 7300 3100
+	9300 4650 9500 4650
+$Comp
+L Connector:TestPoint_Alt TP38
+U 1 1 5EB702DB
+P 9500 4650
+AR Path="/5EB702DB" Ref="TP38"  Part="1" 
+AR Path="/5DA1E9BA/5EB702DB" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5EB702DB" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9C0/5EB702DB" Ref="TP?"  Part="1" 
+F 0 "TP38" H 9250 4750 50  0000 L CNN
+F 1 "MCLK" H 9250 4800 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 9700 4650 50  0001 C CNN
+F 3 "~" H 9700 4650 50  0001 C CNN
+	1    9500 4650
+	-1   0    0    1   
+$EndComp
+Connection ~ 9500 4650
 Wire Wire Line
-	7300 3100 7300 3000
+	9500 4650 9650 4650
+$Comp
+L Connector:TestPoint_Alt TP37
+U 1 1 5ED34ED6
+P 7500 5850
+AR Path="/5ED34ED6" Ref="TP37"  Part="1" 
+AR Path="/5DA1E9BA/5ED34ED6" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/5ED34ED6" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9C0/5ED34ED6" Ref="TP?"  Part="1" 
+F 0 "TP37" V 7500 6050 50  0000 L CNN
+F 1 "GND" H 7250 6000 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 7700 5850 50  0001 C CNN
+F 3 "~" H 7700 5850 50  0001 C CNN
+	1    7500 5850
+	0    1    1    0   
+$EndComp
 Wire Wire Line
-	6600 3100 6700 3100
+	7500 5800 7500 5850
+Connection ~ 7500 5850
+Wire Wire Line
+	7500 5850 7500 5900
 Wire Bus Line
 	4450 5100 4450 6750
 Wire Bus Line
