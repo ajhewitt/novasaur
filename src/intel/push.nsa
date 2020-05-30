@@ -40,7 +40,7 @@ FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
 LD HL, $IDEN$REGMAPH
 LD Y, $INST
 #41
-FNEL DZ, Y            # Y = zero page addr of high reg
+FNDL DZ, Y            # Y = zero page addr of high reg
 FNFH DZ, NA           # A = high reg
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
@@ -52,7 +52,7 @@ FNFH DZ, XD           # X,SPL = SPL-1
 #61
 LD HL, $IDEN$REGMAPL
 LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of low reg
+FNDL DZ, Y            # Y = zero page addr of low reg
 FNFH DZ, NA           # A = low reg
 #71
 LDZ Y, $SPH
@@ -67,7 +67,7 @@ VMPHL DZ, PGA         # jump to next VMC
 ADDR 0x80             # SPL = 0, iden SPH, dec SPH
 LD HL, $IDEN$REGMAPH
 LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of high reg
+FNDL DZ, Y            # Y = zero page addr of high reg
 #40
 FNFH DZ, NA           # A = high reg
 LDZ Y, $SPH
@@ -82,7 +82,7 @@ FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
 #61
 LD HL, $IDEN$REGMAPL
 LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of low reg
+FNDL DZ, Y            # Y = zero page addr of low reg
 FNFH DZ, NA           # A = low reg
 #71
 LDZ Y, $SPH
@@ -102,7 +102,7 @@ NOP
 LD HL, $IDEN$REGMAPH
 LD Y, $INST
 #41
-FNEL DZ, Y            # Y = zero page addr of high reg
+FNDL DZ, Y            # Y = zero page addr of high reg
 FNFH DZ, NA           # A = high reg
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
@@ -114,7 +114,7 @@ FNFH DZ, XD           # X,SPL = SPL-1
 #61
 LD HL, $IDEN$REGMAPL
 LD Y, $INST
-FNEL DZ, Y            # Y = zero page addr of low reg
+FNDL DZ, Y            # Y = zero page addr of low reg
 FNFH DZ, NA           # A = low reg
 #71
 LDZ Y, $SPH

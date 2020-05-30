@@ -45,7 +45,7 @@ AFHL A, NA
 #51
 LD HL, $SWCARRY$NULL
 LD Y, $FREG
-FNEH AZ, ND
+FNDH AZ, ND
 LD HL, $INC$NULL
 #60
 LD Y, $PCL
@@ -76,7 +76,7 @@ ADDHL DZ, NA          # A = Acc - immediate
 AFHL A, NA
 LD HL, $SWCARRY$NULL
 LD Y, $FREG
-FNEH AZ, ND
+FNDH AZ, ND
 #60
 LD HL, $INC$NULL
 LD Y, $PCL
@@ -107,7 +107,7 @@ ADDHL DZ, NA          # A = Acc - immediate
 AFHL A, NA
 LD HL, $SWCARRY$NULL
 LD Y, $FREG
-FNEH AZ, ND
+FNDH AZ, ND
 #60
 LD HL, $INC$NULL
 LD Y, $PCL

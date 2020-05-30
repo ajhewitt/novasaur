@@ -30,7 +30,7 @@ FNFH DZ, XD           # X,SPL = SPL-1
 #39
 LD HL, $F2PSW$NULL
 LD Y, $FREG
-FNEH DZ, NA           # A = PSW
+FNDH DZ, NA           # A = PSW
 LD HL, $IDEN$NULL
 LDZ Y, $SPH
 #50
@@ -84,7 +84,7 @@ FNH DZ, HLD           # SPH = SPH-1      *** dec SPH ***
 #39
 LD HL, $F2PSW$NULL
 LD Y, $FREG
-FNEH DZ, NA           # A = PSW
+FNDH DZ, NA           # A = PSW
 LD HL, $IDEN$NULL
 LDZ Y, $SPH
 #50
@@ -136,7 +136,7 @@ FNFH DZ, XD           # X,SPL = SPL-1
 LD HL, $F2PSW$NULL
 LD Y, $FREG
 #39
-FNEH DZ, NA           # A = PSW
+FNDH DZ, NA           # A = PSW
 LD HL, $IDEN$NULL
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH

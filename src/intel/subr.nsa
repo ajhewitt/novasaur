@@ -9,7 +9,7 @@ LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
 LD HL, $2COM$REGMAPL
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of source reg
+FNDL DZ, Y            # Y = zpage addr of source reg
 #11
 FNH DZ, HL            # -(source reg) -> HL
 LD Y, $AREG
@@ -18,7 +18,7 @@ ADDHL DZ, ND          # Acc = Acc - reg
 AFHL A, NA
 LD HL, $SWCARRY$NULL
 LD Y, $FREG
-FNEH AZ, ND
+FNDH AZ, ND
 #30
 NOP
 NOP

@@ -27,7 +27,7 @@ FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 #30
-FNEL DZ, Y            # Y = zpage addr of low reg
+FNDL DZ, Y            # Y = zpage addr of low reg
 FNH AZ, HLD           # A -> low reg
 LD HL, $INC$NULL
 LD Y, $PCL
@@ -39,7 +39,7 @@ FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 #51
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of hi reg
+FNDL DZ, Y            # Y = zpage addr of hi reg
 FNH AZ, HLD           # A -> hi reg
 LD HL, $INC$NULL
 #60
@@ -66,7 +66,7 @@ FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 #30
-FNEL DZ, Y            # Y = zpage addr of low reg
+FNDL DZ, Y            # Y = zpage addr of low reg
 FNH AZ, HLD           # A -> low reg
 LD HL, $INC$NULL
 LD Y, $PCL
@@ -79,7 +79,7 @@ FNH A, Y              # Y = PCH
 #50
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of hi reg
+FNDL DZ, Y            # Y = zpage addr of hi reg
 FNH AZ, HLD           # A -> hi reg
 #60
 LD HL, $INC$NULL
@@ -106,7 +106,7 @@ FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 #30
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of low reg
+FNDL DZ, Y            # Y = zpage addr of low reg
 FNH AZ, HLD           # A -> low reg
 LD HL, $INC$NULL
 LD Y, $PCL
@@ -118,7 +118,7 @@ FNH DZ, Y             # Y = PCH
 #50
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of hi reg
+FNDL DZ, Y            # Y = zpage addr of hi reg
 FNH AZ, HLD           # A -> hi reg
 #60
 LD HL, $INC$NULL
@@ -146,7 +146,7 @@ FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 #30
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of low reg
+FNDL DZ, Y            # Y = zpage addr of low reg
 FNH AZ, HLD           # A -> low reg
 LD HL, $INC$NULL
 LD Y, $PCL
@@ -158,7 +158,7 @@ FNH DZ, Y             # Y = PCH
 #50
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of hi reg
+FNDL DZ, Y            # Y = zpage addr of hi reg
 FNH AZ, HLD           # A -> hi reg
 #60
 LD HL, $INC$NULL

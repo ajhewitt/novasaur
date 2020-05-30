@@ -8,7 +8,7 @@ PAGE DAA_PG
 LDZ HL, $INC2$DACARRY
 FNH DZ, HLD           # inc state
 LDZ Y, $AREG
-FNEL DZ, HL           # determine carry flags if nibbles > 9
+FNDL DZ, HL           # determine carry flags if nibbles > 9
 LD Y, $FREG
 #11
 ORHL DZ, ND           # overlay carry flags

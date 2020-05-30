@@ -21,7 +21,7 @@ AFHL A, NA
 LD HL, $SWCARRY$NULL
 #30
 LD Y, $FREG
-FNEH AZ, ND
+FNDH AZ, ND
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC

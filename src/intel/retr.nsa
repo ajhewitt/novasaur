@@ -8,7 +8,7 @@ PAGE RETR_PG
 LD HL, $INC2$CON2MUL
 FNFH DZ, ND           # inc state
 LD Y, $INST
-FNEL DZ, HL           # HL = multiplier to move flag to MSB
+FNDL DZ, HL           # HL = multiplier to move flag to MSB
 #10/8
 LD Y, $FREG
 MULH DZ, NA           # A MSB = flag to test

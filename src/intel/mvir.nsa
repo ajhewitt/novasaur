@@ -26,7 +26,7 @@ FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 #30
-FNEL DZ, Y            # Y = zpage addr of dest reg
+FNDL DZ, Y            # Y = zpage addr of dest reg
 FNH AZ, HLD           # A -> dest reg
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
@@ -43,7 +43,7 @@ FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 #30
-FNEL DZ, Y            # Y = zpage addr of dest reg
+FNDL DZ, Y            # Y = zpage addr of dest reg
 FNH AZ, HLD           # A -> dest reg
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit

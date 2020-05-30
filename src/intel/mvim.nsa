@@ -46,7 +46,7 @@ LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $LREG
-FNEL DZ, X            # X = L
+FNFL DZ, X            # X = L
 #51
 LD Y, $HREG
 FNH DZ, Y             # Y = H
@@ -77,7 +77,7 @@ FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $LREG
 #50
-FNEL DZ, X            # X = L
+FNFL DZ, X            # X = L
 LD Y, $HREG
 FNH DZ, Y             # Y = H
 FNFH A, NM            # A -> [HL]
@@ -107,7 +107,7 @@ FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $LREG
 #50
-FNEL DZ, X            # X = L
+FNFL DZ, X            # X = L
 LD Y, $HREG
 FNH DZ, Y             # Y = H
 FNFH A, NM            # A -> [HL]

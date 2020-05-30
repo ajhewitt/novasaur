@@ -1,7 +1,7 @@
 # Unary function codes
 $NULL       0
 
-#FNF, FNH
+#FNF, FNH - default
 $IDEN       0
 $INC        1
 $DEC        2
@@ -19,24 +19,42 @@ $INCPROC   13
 $SWAP      14
 $REVERSE   15
 
-#FNE
-$REGMAPH    0 # map dest/hi register to zpage addr
-$REGMAPL    1 # map source/low register to zpage addr
-$F2PSW      2 # flags->PSW
-$PSW2F      3 # PSW->flags
-$SWCARRY    4 # swap carry with borrow flags
-$DACARRY    5 # set carry if nibbles > 9
-$CON2MUL    6 # condition code to flag multiplier
-$RSTVEC     7 # map inst+1 to PCL vector
-$FORKS      8
-$FORKC      9
-$FORKI     10
-$FORK1     11 # 0->0x80,else->0xC0
-$FORK2     12 # 0xFF->0x40,0->0x80,else->0xC0
-$FORK3     13 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$VMP1      14
-$VMP2      15
+#FNE - HAL
+$FORKS      0
+$FORKC      1
+$FORKI      2
 
-#FND
-$V2E       14
-$V2M       15
+
+$FORK1      5 # 0->0x80,else->0xC0
+$FORK2      6 # 0xFF->0x40,0->0x80,else->0xC0
+$FORK3      7 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+$V2E        8
+$V2M        9
+
+
+
+
+
+
+
+#FND - CPU
+$VMP1       0
+$VMP2       1
+
+
+$REGMAPH    4 # map dest/hi register to zpage addr
+$REGMAPL    5 # map source/low register to zpage addr
+$F2PSW      6 # flags->PSW
+$PSW2F      7 # PSW->flags
+$SWCARRY    8 # swap carry with borrow flags
+$DACARRY    8 # set carry if nibbles > 9
+$CON2MUL    9 # condition code to flag multiplier
+$RSTVEC    10 # map inst+1 to PCL vector
+
+
+
+
+
+
+#FNC - Math
+

@@ -9,7 +9,7 @@ LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
 LD HL, $IDEN$REGMAPL
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of lower register
+FNDL DZ, Y            # Y = zpage addr of lower register
 #11
 FNH DZ, HL            # HL = lower register
 LD Y, $LREG
@@ -26,7 +26,7 @@ AFHL AZ, ND           # temp = carry from H
 LD HL, $IDEN$REGMAPH
 #40
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of upper register
+FNDL DZ, Y            # Y = zpage addr of upper register
 FNH DZ, HL            # HL = upper register
 LD Y, $HREG
 #49

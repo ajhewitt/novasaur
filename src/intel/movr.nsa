@@ -8,7 +8,7 @@ PAGE MOVR_PG
 LD HL, $INC$REGMAPL
 FNFH DZ, HLD          # inc state
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of source reg
+FNDL DZ, Y            # Y = zpage addr of source reg
 #10
 LDNZ PC, $REG_SRC     # zpage > 0x80 for reg source
 
@@ -25,7 +25,7 @@ NOP
 NOP
 NOP
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of dest reg
+FNDL DZ, Y            # Y = zpage addr of dest reg
 FNH AZ, HLD           # A -> dest reg
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit

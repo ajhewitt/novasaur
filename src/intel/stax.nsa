@@ -9,7 +9,7 @@ LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
 LD HL, $IDEN$REGMAPL
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of high register
+FNDL DZ, Y            # Y = zpage addr of high register
 #11
 FNFH DZ, XA           # X = register high
 LDZ Y, $AREG
@@ -17,7 +17,7 @@ FNH DZ, HLA           # A = Acc
 LD HL, $IDEN$REGMAPH
 #20
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of low register
+FNDL DZ, Y            # Y = zpage addr of low register
 FNH DZ, Y             # Y = regsiter low
 FNFH A, NM            # A -> [XY]
 #30

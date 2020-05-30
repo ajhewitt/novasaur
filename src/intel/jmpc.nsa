@@ -8,7 +8,7 @@ PAGE JMPC_PG
 LD HL, $INC$CON2MUL
 FNFH DZ, ND           # inc state
 LD Y, $INST
-FNEL DZ, HL           # H = multiplier to move flag to MSB
+FNDL DZ, HL           # H = multiplier to move flag to MSB
 #10
 LD Y, $FREG
 MULH DZ, NA           # A MSB = flag to test

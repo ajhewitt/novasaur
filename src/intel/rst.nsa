@@ -20,7 +20,7 @@ LDZ Y, $INST
 FNH DZ, HLA           # A = inst + 1
 LD HL, $RSTVEC$NULL
 LD Y, $TEMP
-FNEH AZ, ND           # rst vector -> temp
+FNDH AZ, ND           # rst vector -> temp
 #29
 LD HL, $RESTART_INST
 LD Y, $INST
@@ -40,7 +40,7 @@ LDZ Y, $INST
 FNH DZ, HLA           # A = inst + 1
 LD HL, $RSTVEC$NULL
 LD Y, $TEMP
-FNEH AZ, ND           # rst vector -> temp
+FNDH AZ, ND           # rst vector -> temp
 #29
 LD HL, $RESTART_INST
 LD Y, $INST

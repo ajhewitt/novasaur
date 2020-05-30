@@ -36,7 +36,7 @@ ADDHL M, NM           # [HL]--
 AFHL AZ, NA
 #42
 LD HL, $SWCARRY$NULL
-FNEH A, NA
+FNDH A, NA
 LD HL, $0x80
 LD Y, $FREG
 #51
@@ -59,7 +59,7 @@ ADDHL M, NM           # [HL]--
 AFHL AZ, NA
 #42
 LD HL, $SWCARRY$NULL
-FNEH A, NA
+FNDH A, NA
 LD HL, $0x7F
 LD Y, $FREG
 #51

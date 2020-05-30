@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE DCRR_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC2$REGMAPL
+LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
 NOP
 NOP
@@ -22,7 +22,7 @@ NOP
 NOP
 NOP
 NOP
-LD HL, $IDEN$NULL
+LD HL, $IDEN$REGMAPL
 #20
 LD Y, $FREG
 FNFH DZ, NA           # A = flags
@@ -31,14 +31,14 @@ LDP PC, $RESET_CARRY  # jump on carry
 #SET_CARRY
 NOP
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of dest reg
+FNDL DZ, Y            # Y = zpage addr of dest reg
 #32
 LD HL, $0xFF
 ADDHL DZ, ND          # register--
 AFHL AZ, NA
 #42
 LD HL, $SWCARRY$NULL
-FNEH A, NA
+FNDH A, NA
 LD HL, $0x80
 LD Y, $FREG
 #51
@@ -52,14 +52,14 @@ FNEL A, PC
 
 $RESET_CARRY
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of dest reg
+FNDL DZ, Y            # Y = zpage addr of dest reg
 #32
 LD HL, $0xFF
 ADDHL DZ, ND          # register--
 AFHL AZ, NA
 #42
 LD HL, $SWCARRY$NULL
-FNEH A, NA
+FNDH A, NA
 LD HL, $0x7F
 LD Y, $FREG
 #51

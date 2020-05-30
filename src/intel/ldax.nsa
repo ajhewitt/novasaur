@@ -9,12 +9,12 @@ LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
 LD HL, $IDEN$REGMAPL
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of high register
+FNDL DZ, Y            # Y = zpage addr of high register
 #11
 FNFH DZ, XA           # X = register high
 LD HL, $IDEN$REGMAPH
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of low register
+FNDL DZ, Y            # Y = zpage addr of low register
 #21
 FNH DZ, Y             # Y = regsiter low
 FNFH M, NA            # A = [XY]

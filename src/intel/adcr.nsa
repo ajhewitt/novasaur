@@ -23,7 +23,7 @@ ANDHL AZ, ND          # initial carry flags -> temp
 #31
 LD HL, $IDEN$REGMAPL
 LD Y, $INST
-FNEL DZ, Y            # Y = zpage addr of source reg
+FNDL DZ, Y            # Y = zpage addr of source reg
 FNH DZ, HL            # source reg -> HL
 #40
 LD Y, $AREG
