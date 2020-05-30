@@ -21,13 +21,13 @@ $REVERSE   15
 
 #FNE - HAL
 $FORKS      0
-$FORKC      1
+$FORKA      1
 $FORKI      2
 
+$FORK1      4 # 0->0x80,else->0xC0
+$FORK2      5 # 0xFF->0x40,0->0x80,else->0xC0
+$FORK3      6 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
 
-$FORK1      5 # 0->0x80,else->0xC0
-$FORK2      6 # 0xFF->0x40,0->0x80,else->0xC0
-$FORK3      7 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
 $V2E        8
 $V2M        9
 
@@ -47,9 +47,9 @@ $REGMAPL    5 # map source/low register to zpage addr
 $F2PSW      6 # flags->PSW
 $PSW2F      7 # PSW->flags
 $SWCARRY    8 # swap carry with borrow flags
-$DACARRY    8 # set carry if nibbles > 9
-$CON2MUL    9 # condition code to flag multiplier
-$RSTVEC    10 # map inst+1 to PCL vector
+$DACARRY    9 # set carry if nibbles > 9
+$CON2MUL   10 # condition code to flag multiplier
+$RSTVEC    11 # map inst+1 to PCL vector
 
 
 

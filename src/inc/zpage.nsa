@@ -41,6 +41,7 @@ $TMPH       0xF2
 $TMPL       0xF1
 
 #HAL
+$SMODE      0xF5
 $AMODE      0xF6
 $PMODE      0xF7
 $PLINE      0xF8

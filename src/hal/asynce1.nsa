@@ -22,7 +22,7 @@ FNFH DZ, VD           # increment? vline —> V
 FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $SERS
-COMH DZ, ND           # update serial state
+SERH DZ, ND           # update serial state
 LD HL, $IDEN$VMP1
 LD Y, $AMODE
 #29/25
