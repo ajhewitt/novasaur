@@ -39,6 +39,9 @@ $INST       0xF0
 $TEMP       0xF1
 $TMPH       0xF2
 $TMPL       0xF1
+$INTREN     0xF2
+$IMASK      0xF3
+$IMODE      0xF4
 
 #HAL
 $SMODE      0xF5
@@ -61,8 +64,9 @@ $ROM_Y      0xEE        # y index - dest D0 page
 $ROM_N      0xEF        # ROM count
 
 $FETCH        0
-$FETCH2       8
+$FETCH2       0x10 
 $JMP_INST     0xC3
-$SKIP_INST    0x18
-$PUSHPC_INST  0x28
+$SKIP_INST    0x08
+$PUSHPC_INST  0x18
+$INTR_INST    0x28
 $RESTART_INST 0x38

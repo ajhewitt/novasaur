@@ -97,7 +97,7 @@ $OUT_PG        0x6A
 $INOUT_PG      0x6B
 
 
-$ITR_PG        0x6E
+$INTR_PG       0x6E
 
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot

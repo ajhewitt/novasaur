@@ -36,7 +36,7 @@ ADDR 0x50             # vectored interupt 5.5
 LDZ Y, $INTREN
 #20
 FNH DZ, HLD           # interupt disable
-LD HL, 0x2C
+LD HL, $0x2C
 LD Y, $TEMP           
 MVHLZ ND              # 5.5 -> temp
 #30
@@ -51,7 +51,7 @@ ADDR 0x78             # vectored interupt 6.5
 LDZ Y, $INTREN
 #20
 FNH DZ, HLD           # interupt disable
-LD HL, 0x34
+LD HL, $0x34
 LD Y, $TEMP     
 MVHLZ ND              # 6.5 -> temp
 #30
@@ -66,7 +66,7 @@ ADDR 0xA0             # vectored interupt 7.5
 LDZ Y, $INTREN
 #20
 FNH DZ, HLD           # interupt disable
-LD HL, 0x3C
+LD HL, $0x3C
 LD Y, $TEMP     
 MVHLZ ND              # 7.5 -> temp
 #30
