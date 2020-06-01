@@ -22,7 +22,7 @@ $REVERSE   15
 #FNE - HAL
 $FORKS      0
 $FORKA      1
-$FORKI      2
+
 
 $FORK1      4 # 0->0x80,else->0xC0
 $FORK2      5 # 0xFF->0x40,0->0x80,else->0xC0
@@ -40,7 +40,7 @@ $V2M        9
 #FND - CPU
 $VMP1       0
 $VMP2       1
-
+$FORKI      2 # 0000->0x28,0001->0x50,001x->0x78,01xx->0xA0,1xxx->C8
 
 $REGMAPH    4 # map dest/hi register to zpage addr
 $REGMAPL    5 # map source/low register to zpage addr

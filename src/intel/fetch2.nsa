@@ -17,14 +17,11 @@ NOP
 NOP
 NOP
 NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#19
 LD HL, $IDEN$NULL
+LD Y, $IMODE
+FNFH DZ, NA
+#20
+LDP PC, $INTR
 LD Y, $PCL
 FNFH DZ, XA        # X = PCL
 LDZ Y, $PCH
@@ -33,6 +30,22 @@ FNH DZ, Y          # Y = PCH
 FNFH M, NA         # A = [PC]
 LD Y, $INST
 FNH AZ, HLD        # HL -> inst cache
+LD Y, $VMS         # set Y = $VMS on exit
+VMPHL DZ, PGA      # jump to next VMC
+#43
+
+# assume: Y = $IMODE
+$INTR
+LDZ HL, $DEC$NULL
+FNH DZ, HLD        # -1 -> interupt mode
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+LD HL, $INTR_INST  # HL = check interupts
+MVHLZ ND           # HL -> inst cache
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43

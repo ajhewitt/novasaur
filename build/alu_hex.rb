@@ -307,35 +307,35 @@ print_avt 0xB0
 
 # VMP2:
 
-
-
+# FORKI: {0000:0x28, 0001:0x50, 001x:0x78, 01xx:0xA0, 1xxx:0xC8}
+print_unary(0xD2, [0x28, 0x50, [0x78]*2, [0xA0]*4, [0xC8]*8].flatten * 16)
 
 
 # $MAPREGH: map instruction to zpage addr of destination register, or high source register pair
 REG8=[0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE0, 0xE1].freeze
 REG16H=[0xE2, 0xE4, 0xE6, 0xE8].freeze
-print_unary(0xE4, 256.times.map { |i|
+print_unary(0xD4, 256.times.map { |i|
   j = i & 0xC7
   (j > 0 && j < 4) ? REG16H[(i&0x30)>>4] : REG8[(i&0x38)>>3]
 })
 # $MAPREGL: map instruction to zpage addr of source register, or low source register pair
 REG16L=[0xE3, 0xE5, 0xE7, 0xE9].freeze
-print_unary(0xE5, 256.times.map { |i|
+print_unary(0xD5, 256.times.map { |i|
   j = i & 0xC7
   (j > 0 && j < 4) ? REG16L[(i&0x30)>>4] : REG8[i&7]
 })
 # $F2PSW: flags->PSW
-print_unary(0xE6, flags_psw)
+print_unary(0xD6, flags_psw)
 # $PSW2F: PSW->flags
-print_unary(0xE7, psw_flags)
+print_unary(0xD7, psw_flags)
 # $SWCARRY: swap carry with borrow flags (CNZPHOBL->BNZPLOCH)
-print_unary(0xE8, swap_carry)
+print_unary(0xD8, swap_carry)
 # $DACARRY: set carry if nibbles > 9
-print_unary(0xE9, da_carry)
+print_unary(0xD9, da_carry)
 # $CON2MUL: condition code to flag multiplier (ZCPS->CNZPHOBL)
 CON=[4, 1, 8, 2].freeze
 UNC=[0xC3, 0xC9, 0xCD].freeze # unconditional instructions
-print_unary(0xEA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
+print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 # $RSTVEC:
 
 
@@ -352,7 +352,7 @@ print_unary(0xEA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 
 # $FORKA: fork on audio mode {1:0x60, 2:0x70, 3:0xA8}
 print_unary(0xE1, [0x60, 0x60, 0x70, 0xA8] * 64)
-# $FORKI: fork on interupt?
+
 
 
 

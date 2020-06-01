@@ -8,7 +8,7 @@ MVHL PCA              # PC = HL
 #69/2(0*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG
-FNFH IZ, ND           # I -> acc
+FNFH IZ, ND           # I0 -> acc
 LD Y, $INST
 FNH DZ, HL            # HL = inst cache
 #80
