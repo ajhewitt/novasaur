@@ -1,0 +1,35 @@
+# Halt - inc PC, rewrite interupt2
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE HLT_PG
+
+# assume: Y = $VMS
+LD HL, $INC$NULL
+FNFH DZ, ND           # inc state
+LD Y, $PCL
+FNH DZ, HLD           # PCL = PCL+1
+LDZ HL, $OVER?$NULL
+#11
+FNH A, HLA            # PCL > 255?
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, HLD           # PCH = PCH+1?     *** inc PCH ***
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#29
+LD HL, $INTR2         # HL = interupt2
+LD Y, $INST
+MVHLZ ND              # HL -> inst cache
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

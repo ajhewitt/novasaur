@@ -17,9 +17,12 @@ $PSYNCE2_PG    0x11
 $PSYNCF1_PG    0x12
 $PSYNCF2_PG    0x13
 
-$FETCH1_PG     0x1E
-$FETCH2_PG     0x1F
-$PREFETCH_PG   0x20
+$FETCH1_PG     0x1B
+$FETCH2_PG     0x1C
+$PREFETCH_PG   0x1D
+$INTR1_PG      0x1E
+$INTR2_PG      0x1F
+$HLT_PG        0x20
 $MOVR_PG       0x21
 $MOVM_PG       0x22
 $MVIR_PG       0x23
@@ -95,9 +98,10 @@ $SPHL_PG       0x68
 $IN_PG         0x69
 $OUT_PG        0x6A
 $INOUT_PG      0x6B
-
-
-$INTR_PG       0x6E
+$EI_PG         0x6C
+$DI_PG         0x6D
+$RIM_PG        0x6E
+$SIM_PG        0x6F
 
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot

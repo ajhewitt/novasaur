@@ -1,8 +1,8 @@
-# Restart on interupt - fetch or disable interupts, load temp, restart
+# Interupt - halt or disable interupts, load temp, restart
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE INTR_PG
+PAGE INTR2_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
@@ -16,24 +16,33 @@ LD HL, $DEC$FORKI
 FNDL A, PC            # fork on state
 #18/14
 
-ADDR 0x28             # no interupt, fetch instruction
-LD HL, $IDEN$NULL
+ADDR 0x28             # no interupt, return to intr2 instruction
+NOP
+NOP
 #20/2
 NOP
-LD Y, $PCL
-FNFH DZ, XA           # X = PCL
-LDZ Y, $PCH
-FNH DZ, Y             # Y = PCH
-#30/10
-FNFH M, NA            # A = [PC]
-LD Y, $INST
-FNH AZ, HLD           # HL -> inst cache
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $INTR2         # HL = INTR2 instruction
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/19
 
 ADDR 0x50             # vectored interupt 5.5
-LDZ Y, $INTREN
+LDZ Y, $INTRS
 #20
 FNH DZ, HLD           # interupt disable
 LD HL, $0x2C
@@ -48,7 +57,7 @@ VMPHL DZ, PGA         # jump to next VMC
 #43
 
 ADDR 0x78             # vectored interupt 6.5
-LDZ Y, $INTREN
+LDZ Y, $INTRS
 #20
 FNH DZ, HLD           # interupt disable
 LD HL, $0x34
@@ -63,7 +72,7 @@ VMPHL DZ, PGA         # jump to next VMC
 #43
 
 ADDR 0xA0             # vectored interupt 7.5
-LDZ Y, $INTREN
+LDZ Y, $INTRS
 #20
 FNH DZ, HLD           # interupt disable
 LD HL, $0x3C
@@ -78,7 +87,7 @@ VMPHL DZ, PGA         # jump to next VMC
 #43
 
 ADDR 0xC8             # non-vectored interupt
-LDZ Y, $INTREN
+LDZ Y, $INTRS
 #20
 FNH DZ, HLD            # interupt disable
 LD HL, $IDEN$NULL

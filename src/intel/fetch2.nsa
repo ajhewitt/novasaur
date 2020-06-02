@@ -21,7 +21,7 @@ LD HL, $IDEN$NULL
 LD Y, $IMODE
 FNFH DZ, NA
 #20
-LDP PC, $INTR
+LDP PC, $CHECK
 LD Y, $PCL
 FNFH DZ, XA        # X = PCL
 LDZ Y, $PCH
@@ -35,7 +35,7 @@ VMPHL DZ, PGA      # jump to next VMC
 #43
 
 # assume: Y = $IMODE
-$INTR
+$CHECK
 LDZ HL, $DEC$NULL
 FNH DZ, HLD        # -1 -> interupt mode
 NOP
@@ -44,7 +44,7 @@ NOP
 NOP
 #30
 NOP
-LD HL, $INTR_INST  # HL = check interupts
+LD HL, $INTR1      # HL = check interupts
 MVHLZ ND           # HL -> inst cache
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
