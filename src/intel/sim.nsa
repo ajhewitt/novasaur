@@ -1,0 +1,39 @@
+# Set interupt mask - IMASK = Acc
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SIM_PG
+
+# assume: Y = $VMS
+LD HL, $INC$NULL
+FNFH DZ, HLD          # inc state
+LD Y, $AREG
+FNFH DZ, NA
+#10
+LD HL, $0x70
+LD Y, $IMASK
+XORH AZ, ND
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH         # HL = Fetch
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

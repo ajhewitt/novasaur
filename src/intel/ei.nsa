@@ -7,9 +7,10 @@ PAGE EI_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $0
-LD Y, $INTRS
-MVHLZ ND              # set interupt enable flag
+LD HL, $0x80
+LDZ Y, $IMASK
+ORH DZ, ND            # set bit3 of $IMASK
+NOP
 #12
 LD HL, $INC$FORK1
 LD Y, $PCL

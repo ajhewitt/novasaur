@@ -7,10 +7,11 @@ PAGE DI_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $0xFF
-LD Y, $INTRS
-MVHLZ ND              # set interupt disable flag
-#12
+LD HL, $0x70
+LDZ Y, $IMASK
+ANDH DZ, ND           # reset bit3 of $IMASK
+#11
+NOP
 LD HL, $INC$FORK1
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1

@@ -9,10 +9,10 @@ LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
 LD HL, $IDEN$NULL
 LDZ Y, $IMASK
-FNH DZ, HL            # L = interupt mask
+FNH DZ, HL            # HL = interupt mask
 #10/8
 ANDH E, NA            # A = masked interupts
-LD HL, $DEC$FORKI
+LD HL, $7$FORKI
 FNDL A, PC            # fork on state
 #18/14
 
@@ -42,14 +42,13 @@ VMPHL DZ, PGA         # jump to next VMC
 #43/19
 
 ADDR 0x50             # vectored interupt 5.5
-LDZ Y, $INTRS
+LDZ Y, $IMASK
 #20
-FNH DZ, HLD           # interupt disable
+ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x2C
 LD Y, $TEMP           
 MVHLZ ND              # 5.5 -> temp
-#30
-NOP
+#31
 LD HL, $RESTART_INST  # HL = check interupts
 MVHLZ ND              # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
@@ -57,14 +56,13 @@ VMPHL DZ, PGA         # jump to next VMC
 #43
 
 ADDR 0x78             # vectored interupt 6.5
-LDZ Y, $INTRS
+LDZ Y, $IMASK
 #20
-FNH DZ, HLD           # interupt disable
+ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x34
 LD Y, $TEMP     
 MVHLZ ND              # 6.5 -> temp
-#30
-NOP
+#31
 LD HL, $RESTART_INST  # HL = check interupts
 MVHLZ ND              # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
@@ -72,14 +70,13 @@ VMPHL DZ, PGA         # jump to next VMC
 #43
 
 ADDR 0xA0             # vectored interupt 7.5
-LDZ Y, $INTRS
+LDZ Y, $IMASK
 #20
-FNH DZ, HLD           # interupt disable
+ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x3C
 LD Y, $TEMP     
 MVHLZ ND              # 7.5 -> temp
-#30
-NOP
+#31
 LD HL, $RESTART_INST  # HL = check interupts
 MVHLZ ND              # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
@@ -87,13 +84,12 @@ VMPHL DZ, PGA         # jump to next VMC
 #43
 
 ADDR 0xC8             # non-vectored interupt
-LDZ Y, $INTRS
+LDZ Y, $IMASK
 #20
-FNH DZ, HLD            # interupt disable
+ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $IDEN$NULL
 LD Y, $TEMP
 FNFH IZ, ND            # I0 -> temp
-NOP
 #30
 NOP
 LD HL, $RESTART_INST   # HL = check interupts
