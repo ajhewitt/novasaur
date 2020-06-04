@@ -16,7 +16,7 @@ LD HL, $7$FORKI
 FNDL A, PC            # fork on state
 #18/14
 
-ADDR 0x28             # no interupt, fetch instruction
+ADDR 0x18             # no interupt, fetch instruction
 LD HL, $IDEN$NULL
 #20/2
 LD Y, $PCL
@@ -32,21 +32,92 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/19
 
-ADDR 0x50             # vectored interupt 5.5
+ADDR 0x30             # non-vectored interupt
 LDZ Y, $IMASK
-#20
+#20/2
 ANDH DZ, ND           # reset bit3 of $IMASK
-LD HL, $0x2C
-LD Y, $TEMP           
-MVHLZ ND              # 5.5 -> temp
-#31
+LD HL, $IDEN$NULL
+LD Y, $TEMP
+FNFH IZ, ND            # I0 -> temp
+#30/10
+NOP
+LD HL, $RESTART_INST   # HL = check interupts
+MVHLZ ND               # HL -> inst cache
+LD Y, $VMS             # set Y = $VMS on exit
+VMPHL DZ, PGA          # jump to next VMC
+#43/19
+
+ADDR 0x48             # vectored interupt 1.5
+LDZ Y, $IMASK
+#20/2
+ANDH DZ, ND           # reset bit3 of $IMASK
+LD HL, $0x0C
+LD Y, $TEMP
+MVHLZ ND              # 1.5 -> temp
+#31/10
 LD HL, $RESTART_INST  # HL = check interupts
 MVHLZ ND              # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#43
+#43/18
 
-ADDR 0x78             # vectored interupt 6.5
+ADDR 0x60             # vectored interupt 2.5
+LDZ Y, $IMASK
+#20/2
+ANDH DZ, ND           # reset bit3 of $IMASK
+LD HL, $0x14
+LD Y, $TEMP
+MVHLZ ND              # 2.5 -> temp
+#31/10
+LD HL, $RESTART_INST  # HL = check interupts
+MVHLZ ND              # HL -> inst cache
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43/18
+
+ADDR 0x78             # vectored interupt 3.5
+LDZ Y, $IMASK
+#20/2
+ANDH DZ, ND           # reset bit3 of $IMASK
+LD HL, $0x1C
+LD Y, $TEMP
+MVHLZ ND              # 3.5 -> temp
+#31/10
+LD HL, $RESTART_INST  # HL = check interupts
+MVHLZ ND              # HL -> inst cache
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43/18
+
+ADDR 0x90             # vectored interupt 4.5
+LDZ Y, $IMASK
+#20/2
+ANDH DZ, ND           # reset bit3 of $IMASK
+LD HL, $0x24
+LD Y, $TEMP
+MVHLZ ND              # 4.5 -> temp
+#31/10
+LD HL, $RESTART_INST  # HL = check interupts
+MVHLZ ND              # HL -> inst cache
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43/18
+
+ADDR 0xA8             # vectored interupt 5.5
+LDZ Y, $IMASK
+#20/2
+ANDH DZ, ND           # reset bit3 of $IMASK
+LD HL, $0x2C
+LD Y, $TEMP           
+MVHLZ ND              # 5.5 -> temp
+#31/10
+LD HL, $RESTART_INST  # HL = check interupts
+MVHLZ ND              # HL -> inst cache
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43/18
+
+ADDR 0xC0             # vectored interupt 6.5
 LDZ Y, $IMASK
 #20
 ANDH DZ, ND           # reset bit3 of $IMASK
@@ -60,7 +131,7 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43
 
-ADDR 0xA0             # vectored interupt 7.5
+ADDR 0xD8             # vectored interupt 7.5
 LDZ Y, $IMASK
 #20
 ANDH DZ, ND           # reset bit3 of $IMASK
@@ -72,19 +143,4 @@ LD HL, $RESTART_INST  # HL = check interupts
 MVHLZ ND              # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#43
-
-ADDR 0xC8             # non-vectored interupt
-LDZ Y, $IMASK
-#20
-ANDH DZ, ND           # reset bit3 of $IMASK
-LD HL, $IDEN$NULL
-LD Y, $TEMP
-FNFH IZ, ND            # I0 -> temp
-#30
-NOP
-LD HL, $RESTART_INST   # HL = check interupts
-MVHLZ ND               # HL -> inst cache
-LD Y, $VMS             # set Y = $VMS on exit
-VMPHL DZ, PGA          # jump to next VMC
 #43

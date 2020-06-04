@@ -5,15 +5,15 @@ INCLUDE ../inc/pages.nsa
 PAGE SIM_PG
 
 # assume: Y = $VMS
-LD HL, $INC$NULL
-FNFH DZ, HLD          # inc state
-LD Y, $AREG
-FNFH DZ, NA
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LDZ Y, $AREG
+FNH DZ, HLA           # A = Acc
 #10
-LD HL, $0x70
+LD HL, $7             # invert mask bits
 LD Y, $IMASK
-XORH AZ, ND
-NOP
+XORHL AZ, ND          # A $ 111 -> Mask
 NOP
 NOP
 #20

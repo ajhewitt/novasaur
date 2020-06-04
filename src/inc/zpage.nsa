@@ -39,8 +39,8 @@ $INST       0xF0
 $TEMP       0xF1
 $TMPH       0xF2
 $TMPL       0xF1
-$IMASK      0xF2 # interup mask - lower nibble, bit3: enable
-$IMODE      0xF3 # check interupt - 0: check, -1: skip
+$IMASK      0xF2 # interrupt mask - lower nibble, bit3: enable
+$IMODE      0xF3 # check interrupt - 0: check, -1: skip
 
 #HAL
 $SMODE      0xF5

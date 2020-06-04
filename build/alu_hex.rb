@@ -204,6 +204,32 @@ def inc_line
   end
 end
 
+# fork on masked interupt
+def fork_intr
+  256.times.map do |i|
+    case 
+    when i & 0x04 != 0 # rst 7.5
+      0xD8
+    when i & 0x02 != 0 # rst 6.5
+      0xC0
+    when i & 0x01 != 0 # rst 5.5
+      0xA8
+    when i & 0x80 != 0 # rst 4.5
+      0x90
+    when i & 0x40 != 0 # rst 3.5
+      0x78
+    when i & 0x20 != 0 # rst 2.5
+      0x60
+    when i & 0x10 != 0 # rst 1.5
+      0x48
+    when i & 0x08 != 0 # intr
+      0x30
+    else               # fetch
+      0x18
+    end
+  end
+end
+
 # Swap carry with borrow flags (CNZPHOBL->BNZPLOCH)
 def swap_carry
   256.times.map do |i|
@@ -308,7 +334,7 @@ print_avt 0xB0
 # VMP2:
 
 # FORKI: {0000:0x28, 0001:0x50, 001x:0x78, 01xx:0xA0, 1xxx:0xC8}
-print_unary(0xD2, [0x28, 0x50, [0x78]*2, [0xA0]*4, [0xC8]*8].flatten * 16)
+print_unary(0xD2, fork_intr)
 
 
 # $MAPREGH: map instruction to zpage addr of destination register, or high source register pair

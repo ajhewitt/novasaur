@@ -1,4 +1,4 @@
-# Read interupt mask - Acc = E, IMASK
+# Read interupt mask - Acc = E, Mask
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -7,19 +7,23 @@ PAGE RIM_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $4$IDEN
-MULH E, NA            # A = E << 2
-#9
-MULH A, NA            # A = E << 4
+LD HL, $SWAP$SWAP
+FNFH E, NA            # A = E << 4
 LD Y, $IMASK
-FNFL DZ, HL           # L = IMASK
-ORL A, HL             # HL = E, IMASK
-#20
-MVHLZ NA              # A = HL
-LD HL, $0x70          # invert mask bits
+#11
+FNFL DZ, HL           # H = Mask
+MVH NA                # A = E, Mask
+LD HL, $7             # invert mask bits
 LD Y, $AREG
-XORH AZ, ND           # A $ 111 -> Acc
-#31
+#21
+XORHL AZ, ND          # A $ 111 -> Acc
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
 NOP
 NOP
 NOP
