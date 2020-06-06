@@ -5,9 +5,8 @@ INCLUDE ../inc/pages.nsa
 PAGE FETCH2_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC$NULL
-FNH DZ, HLD        # inc state
-NOP
+LD HL, $INCCYC$NULL
+FNEH DZ, HLD       # inc state, clear ext flag
 NOP
 NOP
 NOP

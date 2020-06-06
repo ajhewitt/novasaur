@@ -5,8 +5,8 @@ INCLUDE ../inc/pages.nsa
 PAGE FETCH1_PG
 
 # assume: Y = $VMS
-LD HL, $INC$FORK1
-FNFH DZ, ND        # inc state
+LD HL, $INCCYC$FORK1
+FNEH DZ, ND        # inc state, clear ext flag
 LD Y, $PCL
 FNFH DZ, XD        # X,PCL = PCL+1
 FNEL A, PC         # fork on PCL

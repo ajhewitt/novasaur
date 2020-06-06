@@ -35,7 +35,7 @@ end
 # XXXXYYYY = BBBBAAAA + HHHHLLLL
 # (BBBBAAAA = XXXXYYYY - HHHHLLLL)
 # L) XXXXHZPL = XXXXYYYY $ LLLL (flags for AAAA +/- LLLL)
-# H) CNZPHOBL = XXXXHZPL $ HHHH
+# H) CSZPHVBL = XXXXHZPL $ HHHH
 def print_af(offset, opts = {})
   16.times.map do |a|
     16.times.map do |b|
@@ -43,11 +43,11 @@ def print_af(offset, opts = {})
         if opts[:high]
           r = c & 9                                   # preserve half carry/borrow
           r |= 0x80 if b < a                          # C - Carry (from bit 7)
-          r |= b >> 3                                 # N - Negative (sign of result)
-          r |= 0x20 if c&4 == 1 && b == 0             # Z - Zero (high if result is 0)
+          r |= b >> 3                                 # S - Sign of result
+          r |= 0x20 if c&4 != 0 && b == 0             # Z - Zero (high if result is 0)
           r |= ((sprintf('%b', b).split('').map(&:to_i).reduce(&:+) + ((c&2)>>1))%2) << 4
-          r |= 4 if (b&7) < (a&7)                     # O - Overflow (carry from bit 6)
-          r |= 2 unless b < a || (c&4 == 1 && a == 0) # B - Borrow (from bit 7 if subtraction)
+          r |= 4 if ((b&7) < (a&7)) ^ (b < a)         # V - Overflow (carry from bit 6 xor carry)
+          r |= 2 unless b < a || (c&4 != 0 && a == 0) # B - Borrow (from bit 7 if subtraction)
         else
           r = b << 4                                  # preserve high nibble
           r |= 8 if c < a                             # H - Half carry (carry from bit 3)
@@ -230,7 +230,7 @@ def fork_intr
   end
 end
 
-# Swap carry with borrow flags (CNZPHOBL->BNZPLOCH)
+# Swap carry with borrow flags (CSZPHVBL->BSZPLVCH)
 def swap_carry
   256.times.map do |i|
     r = i & 0x74
@@ -252,20 +252,22 @@ def da_carry
   end
 end
 
-# Flags -> PSW (CNZPHOBL->SZ0A0P1C)
+# Flags -> PSW (CSZPHVBL->SZKA0PVC)
 def flags_psw
   256.times.map do |i|
-   r = 2
+   r = 0
    r |= 0x80 unless i&0x40 == 0
    r |= 0x40 unless i&0x20 == 0
+   r |= 0x20 if (i&0x40 == 0) ^ (i&0x04 == 0) # undocumented 8085
    r |= 0x10 unless i&8 == 0
    r |= 4 unless i&0x10 == 0
+   r |= 2 unless i&0x04 == 0 # undocumented 8085
    r |= 1 unless i&0x80 == 0
    r
   end
 end
 
-# PSW -> Flags (SZ0A0P1C->CNZPHOBL)
+# PSW -> Flags (SZKA0PVC->CSZPHV00)
 def psw_flags
   256.times.map do |i|
    r = 0
@@ -274,6 +276,7 @@ def psw_flags
    r |= 0x20 unless i&0x40 == 0
    r |= 0x10 unless i&4 == 0
    r |= 8 unless i&0x10 == 0
+   r |= 4 unless i&0x02 == 0 # undocumented 8085
    r
   end
 end
@@ -374,14 +377,14 @@ print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 
 
 # 0x0003E000-0x0003EFFF: FNE low nibble only - HAL related
+
+
+# $INCCYC: inc, clear ext bit
+print_unary(0xE1, 256.times.map{|i| (i+1)&0xF7})
 # $FORKS: fork on serial mode
 
 # $FORKA: fork on audio mode {1:0x60, 2:0x70, 3:0xA8}
 print_unary(0xE1, [0x60, 0x60, 0x70, 0xA8] * 64)
-
-
-
-
 # $FORK1: 0->0x80,else->0xC0
 print_unary(0xE4, [0x80] + Array.new(0xFF, 0xC0))
 # $FORK2: 0xFF->0x40,0->0x80,else->0xC0
