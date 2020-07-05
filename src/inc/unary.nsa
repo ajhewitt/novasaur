@@ -38,8 +38,8 @@ $V2M        9
 
 
 #FND - CPU
-$VMP1       0
-$VMP2       1
+
+
 $FORKI      2 # 0000->0x28,0001->0x50,001x->0x78,01xx->0xA0,1xxx->C8
 
 $REGMAPH    4 # map dest/hi register to zpage addr

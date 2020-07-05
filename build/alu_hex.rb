@@ -195,6 +195,18 @@ def print_avt(offset)
   }
 end
 
+# ALU function: SSM (Serial State Machine)
+def print_ssm(offset)
+  16.times.map do |a|
+    16.times.map do |b|
+      d = 16.times.map do |c|
+        0x00
+      end
+      print_data([d.size, offset + a, b << 4, 0] + d)
+    end
+  end
+end
+
 # Increment line count in HAL state machine
 def inc_line
   256.times.map do |i|
@@ -323,8 +335,8 @@ print_vmp 0x70, high: false
 print_binary '*', 0x80
 # 0x00039000-0x00039FFF: DIV low nibble only
 print_binary '/', 0x90
-# 0x0003A000-0x0003AFFF: SER low nibble only - TBD
-
+# 0x0003A000-0x0003AFFF: SSM low nibble only
+print_ssm 0xA0
 # 0x0003B000-0x0003BFFF: AVT low nibble only
 print_avt 0xB0
 

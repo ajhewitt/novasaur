@@ -122,6 +122,6 @@ puts "COND: #{(c>>5)&0x80 == (reg[A]>>7)&0x80}"
   end
   puts "[#{n}] #{reg[PC]}: #{c.to_s(16)}"
   puts reg.to_s
-  break if c == 0x1F7F || reg[PC] == 0
+  break if c == 0x1F7F #|| reg[PC] == 0
 end
 

@@ -1,14 +1,16 @@
-# H-sync with serial comms on standard execute
+# H-sync with just standard execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE CSYNCE1_PG
+PAGE NSYNCE_PG
 
 # PMODE: column in AV used during process cycle
 # VLINE: line(page) in video ram
-# VMS: [mode_line][e][cyc]
-#       0,4,8,12   0  0-3
-#       0,5,10     1  4-6
+# VMS: [mode_line][e][cycle count]
+#         0,1,2,3  0  0,1,2,3,4
+#         4,5,6,7  1  0,1,2,3,4
+#    8,9,10,11,12     0,1,2,3
+#        13,14,15     0,1,2,3,4,5
 # assume Y = $VMS
 LDZ HL, $INCLINE$NULL
 FNH DZ, HLD           # H=mode_line+1, L=EX00
@@ -22,16 +24,17 @@ FNFH DZ, VD           # increment? vline —> V
 FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $SERS
-SERH DZ, ND           # update serial state
-LD HL, $IDEN$VMP1
-LD Y, $SMODE
-#29/25
-FNFH DZ, NA           # A = serial mode
-LDP PC, $0x28         # serial comms off if -1
-LD Y, $INST
-FNFH DZ, NA           # A = inst
-LD Y, $VMS
-FNEL A, PG            # A -> decode page
+SSMH DZ, ND           # update serial state
+NOP
+NOP
+NOP
+NOP
+NOP
+#30/26
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
 #43/37
-
-ADDR 0x28             # serial comms code
