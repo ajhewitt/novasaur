@@ -115,79 +115,71 @@ end
 
 # ALU function: AVT (Audio/Video timings)
 def print_avt(offset)
-  # Video timing
-  rom = Array.new(16) { Array.new(255, 0xFF) }
-  vid = [[[[480,1,3,28], [480,1,3,28], [480,1,3,28], [480,1,3,28]],
-          [[480,1,3,28], [480,1,3,28], [480,1,3,28], [480,1,3,28]]],
-         [[[512,45,4,79], [600,1,4,35], [600,1,4,35], [576,13,4,47]],
-          [[600,1,4,35], [600,1,4,35], [600,1,4,35], [600,1,4,35]]],
-         [[[768,3,6,23], [768,3,6,23], [768,3,6,23]],
-          [[768,3,6,23], [768,3,6,23], [750,12,6,32]]],
-         [[[768,13,8,11], [768,13,8,11], [768,13,8,11]],
-          [[768,13,8,11], [768,13,8,11], [750,22,8,20]]]]
-  com = [[[120,1,7], [120,1,7]], [[128,24,8], [150,2,8]],
-         [[153,3,4], [150,6,4]], [[153,5,2], [150,8,2]]]
-  div = [[[2,4,8,16], [3,5,6,10]], [[2,4,8,16], [3,5,6,10]],
-         [[4,8,16], [3,6,10]], [[4,8,16], [3,6,10]]]
-  mod = [[4,15], [16,6]]
-  pos = [[160,164], [179,195]]
+  # Verical timing: [active,back,sync,front]
+  # Process cycles: [active,sync,porch]
+  # Mode-line number(s): [(start..end)],[...]]
+  # Process cycles per pattern: [mode0, mode1,...]
+  # Modulo(s) per mode: [[mode0,...],[mode1,...]
+  vid = [[[480,10,2,33], [160,4,11], [(0..2)], [4,2,8], [[2], [3], [8]]],        # 838x480@60 (vga60)
+         [[480,1,3,28], [120,1,7], [(3..6),(7..10)], [2,5], [[2,8], [4,10]]],    # 670x492@75 (vga75)
+         [[480,11,8,13], [120,5,3], [(3..6),(7..10)], [6,5], [[3,8], [2,10]]],   # 820x494@75 (vgarb)
+         [[600,1,4,35], [150,2,8], [(3..6),(7..10)], [15,12], [[5,10], [3,16]]], # 660x608@60 (svga60)
+         [[600,15,8,17], [150,6,4], [(3..6),(7..10)], [5,12], [[4,10], [3,16]]], # 820x622@60 (svgarb)
+         [[768,3,6,23], [153,3,4], [(11..15)], [4,8,16], [[4], [8], [16]]],      # 520x762@60 (xga60)
+         [[768,13,8,11], [153,5,2], [(11..15)], [6,16], [[3], [16]]]]            # 648x777@60 (xgarb)
   seq = {2=>[14,15,15,14], 3=>[14,15], 4=>[10,11,12,13],
          5=>[10,11,12,13,12,11], 6=>[10,11,12,13,12,11],
          8=>[0,1,2,3,4,5,6,7], 10=>[9,0,1,2,3,4,5,6,7,8],
          16=>[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]}
-  j = 0
-  k = 200
-  4.times.each do |a| # DMT ID: 06h,09h,10h,56h?
-    2.times.each do |b| # %16, %15
-      n = vid[a][b].size # 3, 4
-      n.times.each do |c| # 0-2, 0-3
-        j = k
-        com[a][b].map.reduce(:+).times.each do |d|
-          i = case
-          when d < com[a][b][0] # common active
-            pos[a>>1][b] + (d % mod[a>>1][b])
-          when d < com[a][b][0..1].map.reduce(:+)
-            j += 1
-          end
-          if i
-            l = d * (8-n) # native line
-            (8-n).times.each do |e| # line, 0-3, 0-4
-              if l < vid[a][b][c][0] # native active
-                m = div[a][b][c]
-                s = seq[m][l % seq[m].size]
-                s |= 0x80 if (l % m) == m - 1
-              else
-                s = 0x49
-              end
-              if l < vid[a][b][c][0..1].map.reduce(:+) ||
-                 l >= vid[a][b][c][0..2].map.reduce(:+)
-                s |= 0x20
-              end
-              t = rom[(c * (8-n)) + e][i]
-              exit if t != 255 && t != s
-              rom[(c * (8-n)) + e][i] = s # set S value
-              l += 1
+  rom = Array.new(17) { Array.new(0x100, 0xFF) }
+  a = 0
+  x = [176, 129, 161, 161]
+  y = Array.new 4, 224
+  vid.each do |v|
+    u = 0
+    u = v[0].map {|t| u+=t}
+    v[4].each_with_index do |c, i| # timing columns
+      c.each_with_index do |d, j| # timing columns
+        p = 0
+        t = 0
+        z = v[2][j].last/4
+        v[1].each_with_index do |b, k| # process cycles
+          b.times do
+            q = p%v[3][i]
+            w = case k
+	    when 0
+              x[z]+q
+            when 1
+              y[z]
+            when 2
+              0xFF
             end
-          else
-            i = 255
+            rom[a][p] = w
+            v[2][j].each do |r|
+              s = (t>=u[1] && t<u[2]) ? 0 : 0x20 # vsync active low
+              if t<u[0]
+                s |= seq[d][t%seq[d].size] # set glyph line
+                s |= 0x80 if (t%d).zero? # inc V at start of glyph
+              else
+                s |= 0x49 # hblank active high
+              end
+              if rom[r][w] == 0xFF
+                rom[r][w] = s
+              elsif rom[r][w] != s
+                break
+              end
+              t += 1
+            end
+            p += 1
+            y[z] += 1 if k==1
           end
-          rom[(a * 2) + b][d] = i # set $LMOD
         end
+        x[z] += v[3][i]
       end
-      rom[(a * 2) + b][com[a][b].map.reduce(:+) - 1] = 0 # terminate line
-      k = j
+      a += 1
     end
   end
-  # Audio timing
-  640.times.map { |i|
-    f = 440 * 2.0**((i-(4*69))/48.0) # middle A (440Hz) MIDI #69 48-EDO
-    n = 0x10000 * f / (412500 / 43) % 0xffff
-    [n.round >> 8, n.round & 0xff]
-  }.flatten.each_slice(8).each_with_index { |a, j|
-    a.each_with_index {|n, i| rom[i+8][j] = n}
-  }
   # dump ROM table
-  rom.each {|a| a[255] = 0x69}
   rom.each_with_index { |a, j|
     a.each_slice(16).each_with_index { |b, i|
       print_data [b.size, offset + j, i << 4, 0] + b
