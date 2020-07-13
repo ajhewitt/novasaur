@@ -27,10 +27,11 @@ def print_line(i, j, l, n, s)
 end
 
 # Output video timing for one of 32 modes
-mode = ARGV.first.to_i # 0-18,20-22,24-26,28-30
-n = [4,5][mode >> 4]
-m = (mode & 3) * n
-offset = 0xC000 + ((mode & 0x1C) * 64)
+mode = ARGV.first.to_i
+n = [3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5][mode]
+m = [0,0,0,3,3,3,3,7,7,7,7,3,3,3,3,7,7,7,7,11,11,11,11,11][mode]
+p = [0,1,2,3,4,5,6,7,8,9,10,3,4,5,6,7,8,9,10,11,12,13,14,15][mode]
+offset = 0xB000 + (p * 0x100)
 alu = load_rom[3]
 i = 0
 j = 0
@@ -39,12 +40,9 @@ puts "LINE#: [V, PA] BANK SYNC ACTIVE/BLANK"
 while true
   n.times.each do |l|
     lmod = alu[offset + i]
-    if lmod == 0
-      n.times.each {|l| print_line(i, j, l, n, s)}
-      exit
-    end
+    exit if lmod == 0
     state = (m + l) * 256
-    s = alu[0xC000 + state + lmod]
+    s = alu[0xB000 + state + lmod]
     print_line(i, j, l, n, s)
     j += 1 unless s & 0x80 == 0
   end

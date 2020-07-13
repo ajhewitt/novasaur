@@ -1,11 +1,14 @@
 # Generate palette base on M/C of linear equation.
 # ruby color.rb | pnmtopng > output/color-palette.png
 #Ron 165 ohms [M, C]
-RG=[95.37, 69.06]
-B=[213.23, 66.18]
+#RG=[95.37, 69.06]
+#B=[213.23, 66.18]
 #Ron 150 ohms [M, C]
-#RG=[100, 72]
-#B=[223, 69]
+#RG=[100.0, 72.0]
+#B=[223.0, 69.0]
+#Ron 180 ohms [M, C]
+RG=[91.0, 66.0]
+B=[204.0, 63.0]
 
 R0=150
 R1=300

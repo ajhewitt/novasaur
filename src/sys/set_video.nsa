@@ -54,7 +54,7 @@ MULH DZ, ND         # reset process line -> A
 LD Y, $VMODE
 FNFL DZ, HL         # copy video mode to H
 LD Y, $PMODE
-AVTH AZ, ND         # determine mode for next process cycle
+VIDH AZ, ND         # determine mode for next process cycle
 #1.18
 LD PG, $IDLE_PG
 #1.20

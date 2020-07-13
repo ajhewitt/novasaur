@@ -15,7 +15,7 @@ PAGE PSYNCE_PG
 LDZ HL, $INCPROC$NULL
 FNH DZ, HLD           # H=mode_line start, L=EX00+1
 LD Y, $PMODE
-AVTH DZ, SA           # mode_line, pmode —> S
+VIDH DZ, SA           # mode_line, pmode —> S
 #9
 LDP HL, $IDEN$IDEN    # sign bit low, don’t inc vline
 LDN HL, $INC$IDEN     # sign bit high, inc vline
@@ -24,7 +24,7 @@ FNFH DZ, VD           # increment? vline —> V
 FNFL E, HL            # serial inputs -> H
 #20
 LD Y, $SERS
-SSMH DZ, ND           # update serial state
+SERH DZ, ND           # update serial state
 LD HL, $INC$NULL
 LDZ Y, $PLINE
 #29
@@ -34,7 +34,7 @@ LDZ Y, $VMODE
 FNH DZ, HL            # H = vmode
 LD Y, $PMODE
 #39
-AVTH AZ, ND           # determine mode for next process cycle
+VIDH AZ, ND           # determine mode for next process cycle
 LDP PC, $NEXT_FIELD   # jump at end of field
 NOP
 NOP
@@ -86,7 +86,7 @@ MULH DZ, ND           # 0 -> process line
 LDZ Y, $VMODE
 FNH DZ, HL            # H = video mode
 LD Y, $PMODE
-AVTH AZ, ND           # set mode for next process cycle
+VIDH AZ, ND           # set mode for next process cycle
 #60
 LD HL, $IDEN$NULL
 LD Y, $VSTART

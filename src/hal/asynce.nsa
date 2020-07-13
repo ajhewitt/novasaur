@@ -15,7 +15,7 @@ PAGE ASYNCE_PG
 LDZ HL, $INCLINE$NULL
 FNH DZ, HLD           # H=mode_line+1, L=EX00
 LD Y, $PMODE
-AVTH DZ, SA           # mode_line, pmode —> S
+VIDH DZ, SA           # mode_line, pmode —> S
 #9/7
 LDP HL, $IDEN$IDEN    # sign bit low, don’t inc vline
 LDN HL, $INC$IDEN     # sign bit high, inc vline
@@ -24,7 +24,7 @@ FNFH DZ, VD           # increment? vline —> V
 FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $SERS
-SSMH DZ, ND           # update serial state
+SERH DZ, ND           # update serial state
 LD HL, $IDEN$NULL
 LD Y, $AMODE
 #29/25
@@ -59,13 +59,13 @@ LDZ Y, $WAVE1
 #71/69
 FNH DZ, HL            # HL = adsr/wave
 LD Y, $AUDIO
-WTSHL A, ND           # synth value -> audio
+WAVHL A, ND           # synth value -> audio
 LD HL, $IDEN$NULL
 #81/77
 LDZ Y, $NOISE
 FNH DZ, HL            # HL = adsr/noise
 LD Y, $PLINE
-WTSHL DZ, HLA         # HL = noise value
+WAVHL DZ, HLA         # HL = noise value
 #91/84
 LD Y, $AUDIO
 ADDHL DZ, ND          # HL +> audio
@@ -114,7 +114,7 @@ LDZ Y, $WAVE2
 FNH DZ, HL            # HL = adsr/wave
 #150/147
 LD Y, $AUDIO
-WTSHL A, HLA          # HL = synth value
+WAVHL A, HLA          # HL = synth value
 ADDHL DZ, ND          # HL +> audio
 #160/153
 $NEXT
@@ -149,7 +149,7 @@ LD HL, $IDEN$NULL
 LDZ Y, $WAVE2
 FNH DZ, HL            # HL = adsr/wave
 LD Y, $AUDIO
-WTSHL A, HLA          # HL = synth value
+WAVHL A, HLA          # HL = synth value
 #151/203
 ADDHL DZ, ND          # HL +> audio
 LD HL, $IDEN$NULL
@@ -175,7 +175,7 @@ LD HL, $IDEN$NULL
 LDZ Y, $WAVE3
 FNH DZ, HL            # HL = adsr/wave
 LD Y, $AUDIO
-WTSHL A, HLA          # HL = synth value
+WAVHL A, HLA          # HL = synth value
 #202/241
 ADDHL DZ, ND          # HL +> audio
 NOP

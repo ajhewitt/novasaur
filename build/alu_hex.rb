@@ -62,11 +62,11 @@ def print_af(offset, opts = {})
   end
 end
 
-# ALU function: WTS (wavetable sythesizer)
+# ALU function: WAV (wavetable sythesizer)
 # Gain/Wave - HL, sample index - acc
 # L) A = WT[L][A] - wavetable of signed 8-bit samples
 # H) A = 32 + (A / 2**(7-H/3)) - attenuate from -12db in 2dB step
-def print_wts(offset, opts = {})
+def print_wav(offset, opts = {})
   16.times.map do |a|
     if opts[:high]
       m = 2**(7-a/3)
@@ -113,8 +113,8 @@ def print_vmp(offset, opts = {})
   end
 end
 
-# ALU function: AVT (Audio/Video timings)
-def print_avt(offset)
+# ALU function: VID (Video timings)
+def print_vid(offset)
   # Verical timing: [active,back,sync,front]
   # Process cycles: [active,sync,porch]
   # Mode-line number(s): [(start..end)],[...]]
@@ -131,7 +131,7 @@ def print_avt(offset)
          5=>[10,11,12,13,12,11], 6=>[10,11,12,13,12,11],
          8=>[0,1,2,3,4,5,6,7], 10=>[9,0,1,2,3,4,5,6,7,8],
          16=>[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]}
-  rom = Array.new(17) { Array.new(0x100, 0xFF) }
+  rom = Array.new(16) { Array.new(0x100, 0xFF) }
   a = 0
   x = [176, 129, 161, 161]
   y = Array.new 4, 224
@@ -159,21 +159,19 @@ def print_avt(offset)
               s = (t>=u[1] && t<u[2]) ? 0 : 0x20 # vsync active low
               if t<u[0]
                 s |= seq[d][t%seq[d].size] # set glyph line
-                s |= 0x80 if (t%d).zero? # inc V at start of glyph
+                s |= 0x80 if (t%d)==d-1 # inc V at start of glyph
               else
                 s |= 0x49 # hblank active high
               end
-              if rom[r][w] == 0xFF
-                rom[r][w] = s
-              elsif rom[r][w] != s
-                break
-              end
+              rom[r][w] = s if rom[r][w] == 0xFF
+              exit if rom[r][w] != s # conflict!
               t += 1
             end
             p += 1
             y[z] += 1 if k==1
           end
         end
+        rom[a][p] = 0
         x[z] += v[3][i]
       end
       a += 1
@@ -187,8 +185,8 @@ def print_avt(offset)
   }
 end
 
-# ALU function: SSM (Serial State Machine)
-def print_ssm(offset)
+# ALU function: SER (Serial State Machine)
+def print_ser(offset)
   16.times.map do |a|
     16.times.map do |b|
       d = 16.times.map do |c|
@@ -299,8 +297,8 @@ print_binary '&', 0x30,  high: true, pass: true
 print_binary '|', 0x40,  high: true, pass: true
 # 0x00025000-0x00025FFF: XOR high nibble
 print_binary '^', 0x50,  high: true, pass: true
-# 0x00026000-0x00026FFF: WTS high nibble
-print_wts 0x60, high: true
+# 0x00026000-0x00026FFF: WAV high nibble
+print_wav 0x60, high: true
 # 0x00027000-0x00027FFF: VMP high nibble
 print_vmp 0x70, high: true
 
@@ -318,8 +316,8 @@ print_binary '&', 0x30, pass: true
 print_binary '|', 0x40, pass: true
 # 0x00035000-0x00035FFF: XOR low nibble
 print_binary '^', 0x50, pass: true
-# 0x00036000-0x00036FFF: WTS low nibble
-print_wts 0x60
+# 0x00036000-0x00036FFF: WAV low nibble
+print_wav 0x60
 # 0x00037000-0x00037FFF: VMP low nibble
 print_vmp 0x70, high: false
 
@@ -327,10 +325,10 @@ print_vmp 0x70, high: false
 print_binary '*', 0x80
 # 0x00039000-0x00039FFF: DIV low nibble only
 print_binary '/', 0x90
-# 0x0003A000-0x0003AFFF: SSM low nibble only
-print_ssm 0xA0
-# 0x0003B000-0x0003BFFF: AVT low nibble only
-print_avt 0xB0
+# 0x0003A000-0x0003AFFF: SER low nibble only
+print_ser 0xA0
+# 0x0003B000-0x0003BFFF: VID low nibble only
+print_vid 0xB0
 
 # 0x0003C000-0x0003CFFF: FNC low nibble only - TBD
 # TBD
