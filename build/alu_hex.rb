@@ -185,8 +185,8 @@ def print_vid(offset)
   }
 end
 
-# ALU function: SER (Serial State Machine)
-def print_ser(offset)
+# ALU function: COM (Serial Comms State Machine)
+def print_com(offset)
   16.times.map do |a|
     16.times.map do |b|
       d = 16.times.map do |c|
@@ -325,8 +325,8 @@ print_vmp 0x70, high: false
 print_binary '*', 0x80
 # 0x00039000-0x00039FFF: DIV low nibble only
 print_binary '/', 0x90
-# 0x0003A000-0x0003AFFF: SER low nibble only
-print_ser 0xA0
+# 0x0003A000-0x0003AFFF: COM low nibble only
+print_com 0xA0
 # 0x0003B000-0x0003BFFF: VID low nibble only
 print_vid 0xB0
 
@@ -383,7 +383,7 @@ print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 
 # $INCCYC: inc, clear ext bit
 print_unary(0xE1, 256.times.map{|i| (i+1)&0xF7})
-# $FORKS: fork on serial mode
+# $FORKC: fork on comms mode
 
 # $FORKA: fork on audio mode {1:0x60, 2:0x70, 3:0xA8}
 print_unary(0xE1, [0x60, 0x60, 0x70, 0xA8] * 64)

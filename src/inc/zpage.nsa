@@ -1,66 +1,72 @@
 # zero page assignments
 
 #Sound
-$TONE1L     0xD0
-$TONE1H     0xD1
-$NOTE1L     0xD2
-$NOTE1H     0xD3
-$WAVE1      0xD4
-$TONE2L     0xD5
-$TONE2H     0xD6
-$NOTE2L     0xD7
-$NOTE2H     0xD8
-$WAVE2      0xD9
-$TONE3L     0xDA
-$TONE3H     0xDB
-$NOTE3L     0xDC
-$NOTE3H     0xDD
-$WAVE3      0xDE
-$NOISE      0xDF
+$TONE1L     0xC0
+$TONE1H     0xC1
+$NOTE1L     0xC2
+$NOTE1H     0xC3
+$WAVE1      0xC4
+$TONE2L     0xC5
+$TONE2H     0xC6
+$NOTE2L     0xC7
+$NOTE2H     0xC8
+$WAVE2      0xC9
+$TONE3L     0xCA
+$TONE3H     0xCB
+$NOTE3L     0xCC
+$NOTE3H     0xCD
+$WAVE3      0xCE
+$NOISE      0xCF
 
 #vCPU
-$AREG       0xE0 # Accumulator
-$FREG       0xE1 # Flags - COZNHP00
-$BREG       0xE2
-$CREG       0xE3
-$DREG       0xE4
-$EREG       0xE5
-$HREG       0xE6
-$LREG       0xE7
-$SPH        0xE8 # SP MSB
-$SPL        0xE9 # SP LSB
-$IXH        0xEA # IX MSB
-$IXL        0xEB # IX LSB
-$IYH        0xEC # IY MSB
-$IYL        0xED # IY LSB
-$PCH        0xEE # PC MSB
-$PCL        0xEF # PC LSB
-$INST       0xF0
-$TEMP       0xF1
-$TMPH       0xF2
-$TMPL       0xF1
-$IMASK      0xF2 # interrupt mask - lower nibble, bit3: enable
-$IMODE      0xF3 # check interrupt - 0: check, -1: skip
+$AREG       0xD0 # Accumulator
+$FREG       0xD1 # Flags - COZNHP00
+$BREG       0xD2
+$CREG       0xD3
+$DREG       0xD4
+$EREG       0xD5
+$HREG       0xD6
+$LREG       0xD7
+$SPH        0xD8 # SP MSB
+$SPL        0xD9 # SP LSB
+$IXH        0xDA # IX MSB
+$IXL        0xDB # IX LSB
+$IYH        0xDC # IY MSB
+$IYL        0xDD # IY LSB
+$PCH        0xDE # PC MSB
+$PCL        0xDF # PC LSB
+$INST       0xE0
+$TMPL       0xE1
+$TMPH       0xE2
+$TEMP       0xE1 # alias for TMPL
+$IMASK      0xE3 # interrupt mask - lower nibble, bit3: enable
+$IMODE      0xE4 # check interrupt - 0: check, -1: skip
 
 #HAL
-$SMODE      0xF5
-$AMODE      0xF6
-$PMODE      0xF7
-$PLINE      0xF8
-$VMODE      0xF9
-$VLINE      0xFA
-$VSTART     0xFB
-$SERS       0xFC
-$EREG       0xFD
-$VMS        0xFE
+$VMS        0xEF
+$CMODE      0xF0
+$COMLS      0xF1
+$COMPS      0xF2
+$AMODE      0xF3
+$PMODE      0xF4
+$PLINE      0xF5
+$VMODE      0xF6
+$VLINE      0xF7
+$VSTART     0xF8
+$FRAME      0xF9
+$T0         0xFA
+$T1         0xFB
+$T2         0xFC
+$T3         0xFD
+$EREG       0xFE
 $AUDIO      0xFF
 
 #ROM copy
-$ROM_ID     0xEB        # source rom 0-15 - init to PC jump point
-$ROM_PG     0xEC        # source page 0-15 - init to 0
-$ROM_X      0xED        # x index - ref both src and dest - init to 0
-$ROM_Y      0xEE        # y index - dest D0 page
-$ROM_N      0xEF        # ROM count
+$ROM_ID     0xE5        # source rom 0-15 - init to PC jump point
+$ROM_PG     0xE6        # source page 0-15 - init to 0
+$ROM_X      0xE7        # x index - ref both src and dest - init to 0
+$ROM_Y      0xE8        # y index - dest D0 page
+$ROM_N      0xE9        # ROM count
 
 $FETCH        0
 $FETCH2       0x10

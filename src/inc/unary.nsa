@@ -13,6 +13,7 @@ $LSL        7
 $ASR        8
 
 $OVER?     10
+$ZERO?     10
 $UNDER?    11
 $INCLINE   12
 $INCPROC   13
@@ -22,7 +23,7 @@ $REVERSE   15
 #FNE - HAL
 
 $INCCYC     1
-$FORKS      2
+$FORKC      2
 $FORKA      3
 $FORK1      4 # 0->0x80,else->0xC0
 $FORK2      5 # 0xFF->0x40,0->0x80,else->0xC0
