@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2020-07-04"
-Rev "1.6"
+Date "2020-07-18"
+Rev "1.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -2414,9 +2414,9 @@ Text GLabel 3800 6050 2    50   Input ~ 0
 rx
 Text GLabel 3800 6150 2    50   Input ~ 0
 cts
-Text GLabel 3800 6250 2    50   Input ~ 0
-ps2clk
 Text GLabel 3800 6350 2    50   Input ~ 0
+ps2clk
+Text GLabel 3800 6250 2    50   Input ~ 0
 ps2rx
 Entry Bus Bus
 	5700 900  5800 800 
