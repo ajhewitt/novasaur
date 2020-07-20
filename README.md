@@ -1,21 +1,21 @@
 # Novasaur
-Retro computer built from 1978-era TTL logic chips
+Retrocomputer built from late-70's TTL logic chips
 ```
-                                                        ...
-          |--------------->S->|------->C=}->video        ^
-          |  H->|  +-+        |  +-+     ^              GPU
-          |->V->|->|R|        |  |R|  |->G->audio        v
-          |        |A|<>|->b->|->|O|->|                 ...
-          |->X->|->|M|  |     |  |M|  |->I->[ECU]        ^
-          |->Y->|  +-+  | fn->|  +-+  |                  :
-          |             |     |{=HL<--|                  :
-          |             |     |<-PC<--|                 CPU
-          |             |     |<-Pg<--|                  :
-          | serial->Ei->|<----A<------|->Eo->serial      :
-          |<--------------------------|<>Expansion       v
-                                                        ...
+                                                   ...
+          |--------------->S->|------->F=}->video   ^
+          |  H->|  +-+        |  +-+     ^         GPU
+          |->V->|->|R|        |  |R|  |->G->audio   v
+          |        |A|<>|->b->|->|O|->|            ...
+          |->X->|->|M|  |     |  |M|  |->C->[ECU]   ^
+          |->Y->|  +-+  | fn->|  +-+  |             :
+          |             |     |{=HL<--|             :
+          |             |     |<-PC<--|            CPU
+          |             |     |<-Pg<--|             :
+          |     Rx->Ei->|<----A<------|->Eo->Tx     :
+          |<--------------------------|<---->I/O    v
+                                                   ...
 ```
-Can you browse the Web using pre-1980 TTL logic and memory speeds? The goal of this project is to demonstrate how. Internet connectivity is via an era-appropriate RS232 interface. The machine is upward compatible by a decade to support currently available keyboard and video interfaces (PS/2 and VGA). The video includes a native text mode capable of displaying 96-columns and two bitmapped color graphics modes for retro gaming.
+Can you browse the Web using pre-1980 TTL logic and memory speeds? The goal of this project is to demonstrate how. Internet connectivity is via an era-appropriate RS232 interface. The machine is upward compatible by a decade to support currently available keyboard and video interfaces (PS/2 and VGA). The video includes a native text mode capable of displaying 104-columns and bitmapped color graphics for retro gaming.
 
 ---
 
