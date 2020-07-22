@@ -44,7 +44,7 @@ NOP
 #30
 NOP
 LD HL, $INTR1      # HL = check interupts
-MVHLZ ND           # HL -> inst cache
+MVHL AZ, ND        # HL -> inst cache
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
 #43

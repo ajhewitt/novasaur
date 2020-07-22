@@ -4,7 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE INOUT_PG
 
-MVHL PCA              # PC = HL
+MVHL A, PCA           # PC = HL
 #69/2(0*13+2)
 LD HL, $IDEN$NULL
 LD Y, $AREG

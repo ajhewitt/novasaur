@@ -58,7 +58,7 @@ FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $PUSHPC_INST
 $CACHE_INST
 LD Y, $INST
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 #80/43
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
@@ -95,7 +95,7 @@ NOP
 NOP
 LD HL, $PUSHPC_INST
 LD Y, $INST
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 #80/43
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
@@ -131,7 +131,7 @@ NOP
 NOP
 LD HL, $PUSHPC_INST
 LD Y, $INST
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 #80/43
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
@@ -170,7 +170,7 @@ NOP
 NOP
 LD HL, $PUSHPC_INST
 LD Y, $INST
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 #80/44
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC

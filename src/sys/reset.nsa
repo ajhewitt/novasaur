@@ -5,29 +5,29 @@ INCLUDE ../inc/pages.nsa
 PAGE RESET
 
 LD HL, $0x10
-MVHL EA             # LED off -> E
+MVHL A, EA          # LED off -> E
 LD Y, $0x80         # start of zpage
 
 $MEM_TEST
 LD HL, $0xAA
-MVHLZ ND            # AA -> zpage
+MVHL AZ, ND         # AA -> zpage
 XORHL DZ, NA
 LD HL, $ZERO?$NULL
 FNH A, HLA
 LDN PC, $MEM_TEST   # try again?
 LD HL, $0x55
-MVHLZ ND            # 55 -> zpage
+MVHL AZ, ND         # 55 -> zpage
 XORHL DZ, NA
 LD HL, $ZERO?$NULL
 FNH A, HLA
 LDN PC, $MEM_TEST   # try again?
 
 LD HL, $0x00
-MVHL EA             # LED on -> E
+MVHL A, EA          # LED on -> E
 
 LD HL, $0x31        # VGA, 8x8 text
 LD Y, $VMODE
-MVHLZ ND            # store video mode
+MVHL AZ, ND         # store video mode
 
 # ROM Copy
 LD HL, $0
@@ -39,5 +39,5 @@ LD Y, $ROM_Y
 MULH DZ, ND         # 0 -> ROM Y: V porch = 0
 LD HL, $0xC
 LD Y, $ROM_N
-MVHLZ ND            # 12 -> ROM N: copy 13 roms
+MVHL AZ, ND         # 12 -> ROM N: copy 13 roms
 LD PG, $ROM_COPY

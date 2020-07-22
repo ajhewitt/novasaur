@@ -42,7 +42,7 @@ FNFH IZ, ND            # I0 -> temp
 #30/10
 NOP
 LD HL, $RESTART_INST   # HL = check interupts
-MVHLZ ND               # HL -> inst cache
+MVHL AZ, ND            # HL -> inst cache
 LD Y, $VMS             # set Y = $VMS on exit
 VMPHL DZ, PGA          # jump to next VMC
 #43/19
@@ -53,10 +53,10 @@ LDZ Y, $IMASK
 ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x0C
 LD Y, $TEMP
-MVHLZ ND              # 1.5 -> temp
+MVHL AZ, ND           # 1.5 -> temp
 #31/10
 LD HL, $RESTART_INST  # HL = check interupts
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/18
@@ -67,10 +67,10 @@ LDZ Y, $IMASK
 ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x14
 LD Y, $TEMP
-MVHLZ ND              # 2.5 -> temp
+MVHL AZ, ND           # 2.5 -> temp
 #31/10
 LD HL, $RESTART_INST  # HL = check interupts
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/18
@@ -81,10 +81,10 @@ LDZ Y, $IMASK
 ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x1C
 LD Y, $TEMP
-MVHLZ ND              # 3.5 -> temp
+MVHL AZ, ND           # 3.5 -> temp
 #31/10
 LD HL, $RESTART_INST  # HL = check interupts
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/18
@@ -95,10 +95,10 @@ LDZ Y, $IMASK
 ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x24
 LD Y, $TEMP
-MVHLZ ND              # 4.5 -> temp
+MVHL AZ, ND           # 4.5 -> temp
 #31/10
 LD HL, $RESTART_INST  # HL = check interupts
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/18
@@ -109,10 +109,10 @@ LDZ Y, $IMASK
 ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x2C
 LD Y, $TEMP           
-MVHLZ ND              # 5.5 -> temp
+MVHL AZ, ND           # 5.5 -> temp
 #31/10
 LD HL, $RESTART_INST  # HL = check interupts
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/18
@@ -123,10 +123,10 @@ LDZ Y, $IMASK
 ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x34
 LD Y, $TEMP     
-MVHLZ ND              # 6.5 -> temp
+MVHL AZ, ND           # 6.5 -> temp
 #31
 LD HL, $RESTART_INST  # HL = check interupts
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43
@@ -137,10 +137,10 @@ LDZ Y, $IMASK
 ANDH DZ, ND           # reset bit3 of $IMASK
 LD HL, $0x3C
 LD Y, $TEMP     
-MVHLZ ND              # 7.5 -> temp
+MVHL AZ, ND           # 7.5 -> temp
 #31
 LD HL, $RESTART_INST  # HL = check interupts
-MVHLZ ND              # HL -> inst cache
+MVHL AZ, ND           # HL -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43

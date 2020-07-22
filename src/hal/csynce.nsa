@@ -36,4 +36,9 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/37
 
-ADDR 0x28             # serial comms code
+ADDR 0x28             # handle comms
+
+ADDR 0x40             # keyboard
+
+ADDR 0xC0             # serial
+

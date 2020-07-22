@@ -24,7 +24,7 @@ FNDH AZ, ND           # rst vector -> temp
 #29
 LD HL, $RESTART_INST
 LD Y, $INST
-MVHLZ ND              # restart -> inst cache
+MVHL AZ, ND           # restart -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43
@@ -44,7 +44,7 @@ FNDH AZ, ND           # rst vector -> temp
 #29
 LD HL, $RESTART_INST
 LD Y, $INST
-MVHLZ ND              # restart -> inst cache
+MVHL AZ, ND           # restart -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43

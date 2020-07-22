@@ -1,8 +1,11 @@
 # All the pages
-$IDLE_PG       0    # 43-pc idle VMC
-$NSYNCE_PG     0x04
-$NSYNCF1_PG    0x05
-$NSYNCF2_PG    0x06
+$IDLE_PG       0x00 # 43-pc idle VMC
+$NSYNCE_PG     0x01
+$NSYNCF1_PG    0x02
+$NSYNCF2_PG    0x03
+$TSYNCE_PG     0x04
+$TSYNCF1_PG    0x05
+$TSYNCF2_PG    0x06
 $CSYNCE_PG     0x07
 $CSYNCF1_PG    0x08
 $CSYNCF2_PG    0x09
@@ -12,6 +15,10 @@ $ASYNCF2_PG    0x0C
 $PSYNCE_PG     0x0D
 $PSYNCF1_PG    0x0E
 $PSYNCF2_PG    0x0F
+$RSYNC0_PG     0x10
+$RSYNC1_PG     0x11
+$RSYNC2_PG     0x12
+$RSYNC3_PG     0x13
 
 $FETCH1_PG     0x1B
 $FETCH2_PG     0x1C

@@ -12,7 +12,7 @@ FNFH E, NA            # A = E << 4
 LD Y, $IMASK
 #11
 FNFL DZ, HL           # H = Mask
-MVH NA                # A = E, Mask
+MVH A, NA             # A = E, Mask
 LD HL, $7             # invert mask bits
 LD Y, $AREG
 #21

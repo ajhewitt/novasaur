@@ -16,7 +16,7 @@ LDP HL, $0
 LDN HL, $0x60
 LD Y, $TEMP
 #20
-MVHLZ ND              # move 0x60 to temp if carry
+MVHL AZ, ND           # move 0x60 to temp if carry
 LD HL, $SWAP$NULL
 LDZ Y, $FREG
 FNH DZ, HLA           # swap aux-carry to test

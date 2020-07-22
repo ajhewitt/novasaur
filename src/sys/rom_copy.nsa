@@ -24,7 +24,7 @@ LDZ Y, $ROM_ID
 FNH DZ, PC              # jump to READ_ROM, A=index, L=2
 
 $CONT
-MVHL NA                 # HL->A return value from ROM
+MVHL A, NA              # HL->A return value from ROM
 LD HL, $IDEN$NULL
 LDZ Y, $ROM_Y
 FNH DZ, Y               # [53]->Y
@@ -41,7 +41,7 @@ LDZ Y, $ROM_Y
 ADDH DZ, ND             # Y++ if X=0
 LDZ Y, $ROM_PG
 ADDL DZ, HL             # rom H += 8 if X=0
-MVHLZ ND
+MVHL AZ, ND
 LDP PC, $START          # jump to start if Y<16
 
 LD HL, $0x80

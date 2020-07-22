@@ -22,9 +22,6 @@ end
 
 def alu(i, hl, dest)
   n = decode i,  [12, 13, 14, 15]
-  z = i[3] == 1 ? 'Z' : ''
-  return "MV#{hl}#{z} #{dest}" if n.zero?
-
   "#{ALU[n]}#{hl} #{src(i)}, #{dest}"
 end
 

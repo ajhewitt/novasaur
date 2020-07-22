@@ -31,7 +31,7 @@ LD Y, $COMPS
 FNFH AZ, ND               # comms line state -> comms process state
 DIVL E, HL                # H = ps2 clk
 LD Y, $COMLS
-MVHZ ND                   # H -> ps2 state
+MVH DZ, ND                # H -> ps2 state
 #40/33
 LD HL, $SWAP$NULL
 LDZ Y, $IMASK
@@ -40,7 +40,7 @@ LDP HL, $0xFF             # IMODE: -1
 LDN HL, $0                # IMODE: 0
 #49/42
 LD Y, $IMODE
-MVHLZ ND                  # HL -> IMODE
+MVHL AZ, ND               # HL -> IMODE
 LD HL, $INC$NULL
 LDZ Y, $PLINE
 #59/50
@@ -76,45 +76,46 @@ FNFH DZ, NA               # A = vertical start
 LDZ Y, $VLINE
 FNH AZ, HLD               # vstart -> vline
 #101/92
-LD HL, $DEC$MODEPG
-LD Y, $FRAME
-FNFH DZ, ND               # frame count -1
-LDN PC, $RTC              # update RTC
-NOP
-#110/102
 LD HL, $INC$NULL
+LDZ Y, $FRAME
+FNFH DZ, ND               # frame count +1
+LDP PC, $KBD_SCAN              # scan keyboard on FRAME 0
+NOP
+#110/101
+NOP
+NOP
+NOP
 LDZ Y, $VMS
 FNH DZ, HLD               # VMS +1
 LD HL, $IDEN$NULL
-#119/109
 LDZ Y, $INST
+#121/111
 FNH DZ, HL                # inst cache -> HL
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
-#129/116
+#129/117
 
-$RTC
-#110/116
+$KBD_SCAN
+#110/117
+LD HL, $0x18
+LD Y, $EREG
+ORHL DZ, ED               # E | 00011000 -> E
+LD HL, $INC$NULL
+#120/125
+LDZ Y, $CMODE             # -1(off)->0(kbd,off), 1(serial)->2(kbd,serial)
+FNH DZ, HLD               # kbd scan -> CMODE
+NOP
+NOP                       # LD HL, $FETCH
+NOP
+NOP                       # LD Y, $INST
 NOP
 NOP
+#130
 NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#120
-NOP
-NOP
-NOP
-NOP
+NOP                       # MVHL AZ, ND
+LD HL, $INC2$RTCPG
 LD Y, $VMS
-FNEL DZ, PG               # fork to RTC page
-#129
-#(~150 pc/64 inst for RTC)
-# 3-line/60Hz: FRAME=3, 3VMC,CSYNC
-# 4-line/75Hz: FRAME=4, 2VMC,NSYNC,1VMC
-# 4-line/60Hz: FRAME=3, 2VMC,NSYNC,1VMC
-# 5-line/60Hz: FRAME=3, 1VMC,NSYNC,2VMC
+FNFH DZ, ND               # VMS +2
+#139
+FNEL A, PG                # fork to RTC page
+#142

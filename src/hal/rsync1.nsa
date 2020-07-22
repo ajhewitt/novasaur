@@ -1,0 +1,111 @@
+# RTC sync on video mode 1
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE RSYNC1_PG
+
+# VMS: [mode_line][e][cycle count]
+#         3,4,5,6  x  3,4
+#142
+LD HL, $0xFB
+LD Y, $FRAME
+MVHL AZ, ND               # -5 -> FRAME
+#150
+LD HL, $INC$NULL
+LDZ Y, $T0
+FNH DZ, HLD               # T0 +1
+LDN PC, $RET_RTC0         # return if T0<90
+NOP
+NOP
+NOP
+#160
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#170
+NOP
+NOP
+NOP
+LD HL, $0xA6
+MVHL AZ, ND               # T0 = -90
+#179
+LD HL, $INC$NULL
+LDZ Y, $T1
+FNH DZ, HLD               # T1 +1
+LDN PC, $RET_RTC1         # return if T1<120
+LD HL, $0x88
+#188
+MVHL AZ, ND               # T1 = -120
+LD HL, $INC$NULL
+LDZ Y, $T2
+FNH DZ, HLD               # T2 +1
+LDN PC, $RET_RTC2         # return if T2<120
+#199
+LD HL, $0x88
+MVHL AZ, ND               # T2 = -120
+LD HL, $INC$NULL
+LDZ Y, $T3
+#209
+FNH DZ, HLD               # T3 +1
+LD Y, $VMS                # set Y = $VMS on exit
+LD PG, $NSYNCE_PG         # goto null sync
+#215
+
+$RET_RTC0                 #158 - 15 ticks per second
+NOP
+NOP
+#160
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#172
+
+$RET_RTC1                 #187 - 10 ticks per min
+LD HL, $0xF0
+#189
+ORHL A, NA                # A = T1 | 0xF0
+LDZ HL, $INC$NULL
+FNH A, HLA                # A +1 (A +ve if T1=0x?F)
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+#200
+LDZ Y, $T0
+FNH DZ, HLD               # adjust T0 every 16 T1
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#210
+NOP
+LD Y, $VMS                # set Y = $VMS on exit
+LD PG, $NSYNCE_PG         # goto null sync
+#215
+
+$RET_RTC2                 #200 - 5 ticks per hour
+#200
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#210
+NOP
+LD Y, $VMS                # set Y = $VMS on exit
+LD PG, $NSYNCE_PG         # goto null sync
+#215
