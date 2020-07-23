@@ -1,4 +1,4 @@
-# Rotate right
+# Rotate right with carry
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -11,16 +11,16 @@ LD HL, $REVERSE$NULL
 LDZ Y, $AREG
 FNH DZ, HLA           # A = Acc
 #10
-LD HL, $LSR$NULL
+LD HL, $0x20
 LDP PC, $RESET_CARRY
 #SET_CARRY
-LDZ Y, $AREG
-FNH DZ, HLD           # shift Acc right
+DIVH DZ, ND           # shift Acc right
 LD HL, $0x80
-#19
+#18
 ORHL DZ, ND           # set MSB of Acc
 LD Y, $FREG
 ORHL DZ, ND           # set carry
+NOP
 NOP
 #30
 NOP
@@ -34,12 +34,12 @@ VMPHL DZ, PGA         # jump to next VMC
 #43
 
 $RESET_CARRY
-LDZ Y, $AREG
-FNH DZ, HLD           # shift Acc right
+DIVH DZ, ND           # shift Acc right
 LD HL, $0x7F
-#20
+#19
 LD Y, $FREG           
 ANDHL DZ, ND          # reset carry
+NOP
 NOP
 NOP
 NOP

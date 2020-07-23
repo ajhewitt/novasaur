@@ -1,0 +1,8 @@
+# Delay with audio on execute
+INCLUDE ../inc/pages.nsa
+PAGE DASYNCE_PG
+
+NOP
+NOP
+LD PG, $ASYNCE_PG
+#4

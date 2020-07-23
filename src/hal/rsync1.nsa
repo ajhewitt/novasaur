@@ -1,4 +1,4 @@
-# RTC sync on video mode 1
+# Real-time clock on video mode 1
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -15,48 +15,28 @@ LD HL, $INC$NULL
 LDZ Y, $T0
 FNH DZ, HLD               # T0 +1
 LDN PC, $RET_RTC0         # return if T0<90
-NOP
-NOP
-NOP
-#160
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#170
-NOP
-NOP
-NOP
 LD HL, $0xA6
+#159
 MVHL AZ, ND               # T0 = -90
-#179
 LD HL, $INC$NULL
 LDZ Y, $T1
 FNH DZ, HLD               # T1 +1
-LDN PC, $RET_RTC1         # return if T1<120
+LDN PC, $T0_ADJUST        # return if T1<120
+#170
 LD HL, $0x88
-#188
 MVHL AZ, ND               # T1 = -120
 LD HL, $INC$NULL
 LDZ Y, $T2
+#180
 FNH DZ, HLD               # T2 +1
-LDN PC, $RET_RTC2         # return if T2<120
-#199
+LDN PC, $RET_5TPH         # return if T2<120
 LD HL, $0x88
 MVHL AZ, ND               # T2 = -120
+#189
 LD HL, $INC$NULL
-LDZ Y, $T3
-#209
-FNH DZ, HLD               # T3 +1
-LD Y, $VMS                # set Y = $VMS on exit
-LD PG, $NSYNCE_PG         # goto null sync
-#215
+LD Y, $T3
+FNFH DZ, ND               # T3 +1
+LD PC, $RET_1TPD
 
 $RET_RTC0                 #158 - 15 ticks per second
 NOP
@@ -69,43 +49,46 @@ LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
 #172
 
-$RET_RTC1                 #187 - 10 ticks per min
+$T0_ADJUST                #171 - 10 ticks per min
 LD HL, $0xF0
-#189
 ORHL A, NA                # A = T1 | 0xF0
 LDZ HL, $INC$NULL
 FNH A, HLA                # A +1 (A +ve if T1=0x?F)
-LDP HL, $INC$NULL
+#181
+LDP HL, $INC$NULL        
 LDN HL, $IDEN$NULL
-#200
 LDZ Y, $T0
 FNH DZ, HLD               # adjust T0 every 16 T1
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#210
-NOP
-LD Y, $VMS                # set Y = $VMS on exit
-LD PG, $NSYNCE_PG         # goto null sync
-#215
+LD HL, $INC$NULL
+#190
+LD PC, $RET_10TPM
 
-$RET_RTC2                 #200 - 5 ticks per hour
-#200
+$RET_5TPH                 #184 - 5 ticks per hour
 NOP
 NOP
 NOP
 NOP
 NOP
 NOP
+#190
+NOP
+NOP
+$RET_10TPM                #192 - 10 ticks per min
 NOP
 NOP
 NOP
 NOP
-#210
 NOP
+NOP
+$RET_1TPD                 #198 - 1 tick per day
+NOP
+#199
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS +1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+#209
 LD Y, $VMS                # set Y = $VMS on exit
-LD PG, $NSYNCE_PG         # goto null sync
+VMPHL DZ, PGA             # jump to next VMC
 #215

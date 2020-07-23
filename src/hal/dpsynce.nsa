@@ -1,0 +1,8 @@
+# Delay with comms on execute
+INCLUDE ../inc/pages.nsa
+PAGE DCSYNCE_PG
+
+NOP
+NOP
+LD PG, $CSYNCE_PG
+#4

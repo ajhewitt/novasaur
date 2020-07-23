@@ -80,6 +80,8 @@ def print_wav(offset, opts = {})
   end
 end
 
+SYNC_PG = [5, 6, 7, 0, 2, 3, 4, 0, 2, 3, 4, 0, 1, 2, 3, 4].freeze
+
 # ALU function: VMP (Virtual Machine Page/vCPU decode)
 # Instruction - HL, virtual machine state (VMS) MMMMEXCC - acc
 # L) ESSSLLLL - state/ext/L|N, SSS:0=decode/L, 1=hsync/next:0=line, 1=vpc
@@ -197,13 +199,14 @@ def print_com(offset)
   end
 end
 
+NEXT_LINE = [0x10, 0x20, 0x00,
+       0x40, 0x50, 0x60, 0x30,
+       0x80, 0x90, 0xA0, 0x70,
+ 0xC0, 0xD0, 0xE0, 0xF0, 0xB0].freeze
+
 # Increment line count in HAL state machine
 def inc_line
-  256.times.map do |i|
-    i &= i&7 > 4 ? 0xFC : 0xF8
-    n = i&4 == 0 ? 0x30 : 0x40
-    (i&0xF0) % (n+0x10) == n ? i-n : (i+0x10)&0xFF
-  end
+  256.times.map {|i| (i&8) | NEXT_LINE[i>>4]}
 end
 
 # fork on masked interupt
@@ -367,14 +370,7 @@ print_unary(0xD9, da_carry)
 CON=[4, 1, 8, 2].freeze
 UNC=[0xC3, 0xC9, 0xCD].freeze # unconditional instructions
 print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
-# $RSTVEC:
-
-
-
-
-
-
-
+# $RSTVEC
 
 
 
@@ -394,9 +390,13 @@ print_unary(0xE5, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
 # $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
 print_unary(0xE6, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
 # $RTCPG: 0-2:RSYNC0,3-6:RSYNC1,7-10:RSYNC2,11-15:RSYNC3
-print_unary(0xE7, [0x10]*48 + [0x11]*64 + [0x12]*64 + [0x13]*80)
+print_unary(0xE7, [4]*48 + [5]*64 + [6]*64 + [7]*80)
+# #SSADJ: serial state -1
+print_unary(0xE8, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
+
+
 # $V2E: calculate E-reg GPU mode bits from video mode  **** MOVE ****
-print_unary(0xE8, 256.times.map {|i|
+print_unary(0xEE, 256.times.map {|i|
   e = i&1 == 0 ? 0 : 0x10
 #  e |= i&2 == 0 ? 0 : 0x40 # rev 3 board
   e |= i&2 == 0 ? 0 : 0x20 # rev 4 board
@@ -404,7 +404,7 @@ print_unary(0xE8, 256.times.map {|i|
   i&0x60 == 0x60 ? e : e|0x40 # rev 4 board
 })
 # $V2M: calculate mode_line from video mode  **** MOVE ****
-print_unary(0xE9, 256.times.map {|i|
+print_unary(0xEF, 256.times.map {|i|
   m = (i<<2)&0x30
   i&0x40 == 0 ? m*4 : (m*5)|4
 })
@@ -422,22 +422,15 @@ print_unary(0xF3, [*2..0xFF] + [0,1])
 print_unary(0xF4, 256.times.map{|i| ((-1*i)-1)&0xFF})
 # $2COM: A = -A
 print_unary(0xF5, 256.times.map{|i| (-1*i)&0xFF})
-# $LSR
-print_unary(0xF6, 256.times.map{|i| i>>1})
-# $LSL
-print_unary(0xF7, 256.times.map{|i| (i<<1)&0xFF})
-# $ASR
-print_unary(0xF8, 256.times.map{|i| (i>>1)|(i&0x80)})
+# $OVER?: A = A==0? 0 : -1
+print_unary(0xF6, [0] + Array.new(0xFF, 0xFF))
+# $UNDER?: A = A==0xFF? -1 : 0
+print_unary(0xF7, Array.new(0xFF, 0) + [0xFF])
+# $INCLINE: mode_line+1, cycle = 0
+print_unary(0xF8, inc_line)
+# $INCPROC: mode_line+1, cycle = 1
+print_unary(0xF9, inc_line.map{|i| i+1})
 
-
-# $OVER?: A = (A == 0) ? 0 : -1
-print_unary(0xFA, [0] + Array.new(0xFF, 0xFF))
-# $UNDER?: A = (A == 0xFF) ? -1 : 0
-print_unary(0xFB, Array.new(0xFF, 0) + [0xFF])
-# $INCLINE: (mode_line + 1) % 4|5, cycle = 0
-print_unary(0xFC, inc_line)
-# $INCPROC: $INCLINE + 1 (cycle = 1)
-print_unary(0xFD, inc_line.map{|i| i+1})
 # $SWAP: AB = BA
 print_unary(0xFE, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
 # $REVERSE: A76543210 = A01234567

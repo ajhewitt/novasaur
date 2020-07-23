@@ -1,4 +1,4 @@
-# H-sync with serial comms on standard execute
+# H-sync with comms on execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

@@ -8,15 +8,15 @@ $DEC        2
 $INC2       3
 $1COM       4
 $2COM       5
-$LSR        6
-$LSL        7
-$ASR        8
+$ZERO?      6 # alias
+$OVER?      6
+$UNDER?     7
+$INCLINE    8
+$INCPROC    9
 
-$OVER?     10
-$ZERO?     10
-$UNDER?    11
-$INCLINE   12
-$INCPROC   13
+
+
+
 $SWAP      14
 $REVERSE   15
 
@@ -28,15 +28,15 @@ $FORKA      3
 $FORK1      4 # 0->0x80,else->0xC0
 $FORK2      5 # 0xFF->0x40,0->0x80,else->0xC0
 $FORK3      6 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$RTCPG      7 
-$V2E        8
-$V2M        9
+$RTCPG      7
+$SSADJ      8
 
 
 
 
 
-
+$V2E       14
+$V2M       15
 
 #FND - CPU
 

@@ -1,4 +1,4 @@
-# H-sync at end of process cycle on standard execute
+# H-sync at end of process cycle on execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
