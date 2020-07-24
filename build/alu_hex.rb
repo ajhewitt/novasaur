@@ -83,7 +83,7 @@ end
 SYNC_PG = [5, 6, 7, 0, 2, 3, 4, 0, 2, 3, 4, 0, 1, 2, 3, 4].freeze
 
 # ALU function: VMP (Virtual Machine Page/vCPU decode)
-# Instruction - HL, virtual machine state (VMS) MMMMEXCC - acc
+# Execution Page = HL, virtual machine state (VMS) MMMMECCC
 # L) ESSSLLLL - state/ext/L|N, SSS:0=decode/L, 1=hsync/next:0=line, 1=vpc
 # H) PPPPPPPP - page number
 def print_vmp(offset, opts = {})
@@ -187,12 +187,29 @@ def print_vid(offset)
   }
 end
 
-# ALU function: COM (Serial Comms State Machine)
+# ALU function: COM (Comms State Machine)
+# Next comms state = E [ps2clk,ps2rx,cts,rx], comms state SDSSPDPS
+# Serial State: SS=(SS+1)%4, SS=0 if SD0!=rx
+# Serial Data: SD0=rx, SD1=rx if SS==1 (sample when SS goes 1->2)
+# PS/2 State: PS=ps2clk @start, PS=(PS+1)%4 if PS0!=ps2clk
+# PS/2 Data: (PD1=PD0,PD0=ps2rx) if (PS0==1 && ps2clk==0)
+# @end: #bits = {1:0,2:1,3:1,0:2}[PS]
 def print_com(offset)
-  16.times.map do |a|
-    16.times.map do |b|
-      d = 16.times.map do |c|
-        0x00
+  16.times.map do |a| # E
+    ps2clk = a>>3
+    ps2rx = (a>>2)&1
+    rx = a&1
+    16.times.map do |b| # serial
+      sd = b>>2
+      ss = b&3
+      d = 16.times.map do |c| # ps/2
+        pd = c>>2
+        ps = c&3
+        [(ss==1 ? rx : sd>>1)*2 + rx,
+         (sd&1)==rx ? (ss+1)%4 : 0,
+         ((ps&1)==1 && ps2clk==0) ? (pd*2)+ps2rx : pd,
+         (ps&1)==ps2clk ? ps : (ps+1)%4
+        ].join.to_i(4)
       end
       print_data([d.size, offset + a, b << 4, 0] + d)
     end
