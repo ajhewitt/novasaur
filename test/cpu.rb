@@ -104,13 +104,14 @@ while true do
     set_dst(ram, reg, c, rom[0][get_pc(reg)])
   when 5 # LDP, LDN
     n += 1
-    if (c>>5)&0x80 == (reg[A]>>7)&0x80
+    if (c>>5)&0x80 == reg[A]&0x80
+puts "COND: true"
       set_dst(ram, reg, c, rom[0][get_pc(reg)])
       n += 1
     else
+puts "COND: false"
       reg[PC] = reg[PC] + 1
     end
-puts "COND: #{(c>>5)&0x80 == (reg[A]>>7)&0x80}"
   when 6 # FNH+A
     reg[A] = alu_fn(ram, rom[3], reg, c)
     set_dst(ram, reg, c, reg[A])
@@ -121,7 +122,7 @@ puts "COND: #{(c>>5)&0x80 == (reg[A]>>7)&0x80}"
     n += 2
   end
   puts "[#{n}] #{reg[PC]}: #{c.to_s(16)}"
-  puts reg.to_s
+#  puts reg.to_s
   break if c == 0x1F7F #|| reg[PC] == 0
 end
 

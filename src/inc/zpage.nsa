@@ -43,10 +43,12 @@ $IMASK      0xE3 # interrupt mask - lower nibble, bit3: enable
 $IMODE      0xE4 # check interrupt - 0: check, -1: skip
 
 #HAL
-$VMS        0xEF
-$CMODE      0xF0
-$COMLS      0xF1
-$COMPS      0xF2
+$VMS        0xED
+$CMODE      0xEE
+$COMLS      0xEF
+$COMPS      0xF0
+$PCMAX      0xF1
+$PCCNT      0xF2
 $AMODE      0xF3
 $PMODE      0xF4
 $PLINE      0xF5

@@ -189,10 +189,11 @@ end
 
 # ALU function: COM (Comms State Machine)
 # Next comms state = E [ps2clk,ps2rx,cts,rx], comms state SDSSPDPS
-# Serial State: SS=(SS+1)%4, SS=0 if SD0!=rx
 # Serial Data: SD0=rx, SD1=rx if SS==1 (sample when SS goes 1->2)
-# PS/2 State: PS=ps2clk @start, PS=(PS+1)%4 if PS0!=ps2clk
-# PS/2 Data: (PD1=PD0,PD0=ps2rx) if (PS0==1 && ps2clk==0)
+# Serial State: SS=(SS+1)%4, SS=0 if SD0!=rx
+# @start: PS=ps2clk
+# PS/2 Data: (PD1=PD0, PD0=ps2rx) if (PS0==1 && ps2clk==0)
+# PS/2 State: PS=(PS+1)%4 if PS0!=ps2clk
 # @end: #bits = {1:0,2:1,3:1,0:2}[PS]
 def print_com(offset)
   16.times.map do |a| # E
@@ -207,7 +208,7 @@ def print_com(offset)
         ps = c&3
         [(ss==1 ? rx : sd>>1)*2 + rx,
          (sd&1)==rx ? (ss+1)%4 : 0,
-         ((ps&1)==1 && ps2clk==0) ? (pd*2)+ps2rx : pd,
+         ((ps&1)==1 && ps2clk==0) ? ((pd*2)&3)+ps2rx : pd,
          (ps&1)==ps2clk ? ps : (ps+1)%4
         ].join.to_i(4)
       end
@@ -406,10 +407,12 @@ print_unary(0xE4, [0x80] + Array.new(0xFF, 0xC0))
 print_unary(0xE5, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
 # $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
 print_unary(0xE6, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
-# $RTCPG: 0-2:RSYNC0,3-6:RSYNC1,7-10:RSYNC2,11-15:RSYNC3
-print_unary(0xE7, [4]*48 + [5]*64 + [6]*64 + [7]*80)
+# $ML2FC: mode-line to frame count: 3-6->-5,else->4
+print_unary(0xE7, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
+# $XGA?: mode-line: 0-10->-1,else->0
+print_unary(0xE8, [0xFF]*176 + [0]*80)
 # #SSADJ: serial state -1
-print_unary(0xE8, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
+print_unary(0xE9, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
 
 
 # $V2E: calculate E-reg GPU mode bits from video mode  **** MOVE ****

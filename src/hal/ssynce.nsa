@@ -1,8 +1,8 @@
-# H-sync with comms state adjust on execute
+# H-sync with serial state adjust on execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE KSYNCE_PG
+PAGE SSYNCE_PG
 
 # PMODE: column in AV used during process cycle
 # VLINE: line(page) in video ram

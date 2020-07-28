@@ -79,7 +79,7 @@ FNH AZ, HLD               # vstart -> vline
 LD HL, $INC$NULL
 LDZ Y, $FRAME
 FNFH DZ, ND               # frame count +1
-LDP PC, $KBD_SCAN              # scan keyboard on FRAME 0
+LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0
 NOP
 #110/101
 NOP
@@ -93,29 +93,116 @@ LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
-#129/117
+#129/116
 
 $KBD_SCAN
-#110/117
-LD HL, $0x18
-LD Y, $EREG
-ORHL DZ, ED               # E | 00011000 -> E
-LD HL, $INC$NULL
-#120/125
+#110/116
 LDZ Y, $CMODE             # -1(off)->0(kbd,off), 1(serial)->2(kbd,serial)
 FNH DZ, HLD               # kbd scan -> CMODE
-NOP
-NOP                       # LD HL, $FETCH
-NOP
-NOP                       # LD Y, $INST
-NOP
-NOP
-#130
-NOP
-NOP                       # MVHL AZ, ND
-LD HL, $INC2$RTCPG
+LD HL, $IDEN$NULL
+LD Y, $PCMAX
+FNFH DZ, NA               # PS/2 clk max space
+#121/125
+LDZ Y, $PCCNT
+FNH AZ, HLD               # max space -> PS/2 clk count
+LD HL, $0x18
+LD Y, $EREG
+#129/132
+ORHL DZ, ED               # E | 00011000 -> E
+LD HL, $XGA?$NULL
 LD Y, $VMS
-FNFH DZ, ND               # VMS +2
-#139
-FNEL A, PG                # fork to RTC page
-#142
+FNEH DZ, NA
+#140/140
+LDP PG, $XSYNCE_PG        # jump page if 4-cycle per line
+LDZ HL, $INC2$NULL
+FNH DZ, HLD               # VMS +2
+LD HL, $ML2FC$NULL
+LD Y, $FRAME
+#149/149
+FNEH AZ, ND               # -4/-5 -> Frame count
+LD HL, $INC$NULL
+LDZ Y, $T0
+FNH DZ, HLD               # T0 +1
+LDN PC, $RET_15TPS        # return if T0<90
+NOP
+#160/158
+LD HL, $0xA6
+MVHL AZ, ND               # T0 = -90
+LD HL, $INC$NULL
+LDZ Y, $T1
+#170/166
+FNH DZ, HLD               # T1 +1
+LDN PC, $T0_ADJUST        # return if T1<120
+LD HL, $0x88
+MVHL AZ, ND               # T1 = -120
+LD HL, $INC$NULL
+#181/175
+LDZ Y, $T2
+FNH DZ, HLD               # T2 +1
+LDN PC, $RET_5TPH         # return if T2<120
+LD HL, $0x88
+MVHL AZ, ND               # T2 = -120
+#192/184
+LD HL, $INC$NULL
+LD Y, $T3
+FNFH DZ, ND               # T3 +1
+LDZ Y, $VMS
+#201/192
+FNH DZ, HLD               # VMS +1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+#209/198
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#215/202
+
+$RET_15TPS                #160 - 15 ticks per second
+#160/202
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#172/211
+
+$T0_ADJUST                #174 - 10 ticks per min
+LD HL, $0xF0
+ORHL A, NA                # A = T1 | 0xF0
+#180/215
+LDZ HL, $INC$NULL
+FNH A, HLA                # A +1 (A +ve if T1=0x?F)
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $T0
+FNH DZ, HLD               # adjust T0 every 16 T1
+#191/225
+LD HL, $INC$NULL
+LD PC, $RET_10TPM
+#195/229
+
+$RET_5TPH                 #187 - 5 ticks per hour
+NOP
+NOP
+NOP
+#190/232
+NOP
+NOP
+NOP
+NOP
+NOP
+$RET_10TPM                #195 - 10 ticks per min
+NOP
+NOP
+NOP
+NOP
+#199/241
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS +1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+#209/250
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#215/254

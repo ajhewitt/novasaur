@@ -1,0 +1,136 @@
+# H-sync continuation at end of process cycle on execute with 4-cycles/line
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE XSYNCE_PG
+
+# PMODE: column in VID used during process cycle
+# VLINE: line(page) in video ram
+# VMS: [mode_line][e][cycle count]
+#  11,12,13,14,15     0,1,2,3
+LD HL, $0xFC
+LD Y, $FRAME
+MVHL AZ, ND               # -4 -> Frame count
+#150
+LD HL, $INC$NULL
+LDZ Y, $T0
+FNH DZ, HLD               # T0 +1
+LDN PC, $RET_15TPS        # return if T0<90
+LD HL, $0xA6
+#159
+MVHL AZ, ND               # T0 = -90
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#170                      # Need null sync now
+LD HL, $INCLINE$NULL
+LDZ Y, $VMS
+FNH DZ, HLD               # H=mode_line+1, L=E000
+LD Y, $PMODE
+VIDH DZ, SA               # mode_line, pmode —> S
+#181
+LDP HL, $IDEN$IDEN        # sign bit low, don’t inc vline
+LDN HL, $INC$IDEN         # sign bit high, inc vline
+LD Y, $VLINE
+FNFH DZ, VD               # increment? vline —> V
+#189
+FNFL E, HL                # serial inputs -> H
+LD Y, $COMLS
+COMH DZ, ND               # update comms line state
+LD HL, $INC$NULL
+#199
+LDZ Y, $T1
+FNH DZ, HLD               # T1 +1
+LDN PC, $T0_ADJUST        # return if T1<120
+LD HL, $0x88
+MVHL AZ, ND               # T1 = -120
+#210
+LD HL, $INC$NULL
+LDZ Y, $T2
+FNH DZ, HLD               # T2 +1
+LDN PC, $RET_5TPH         # return if T2<120
+LD HL, $0x88
+#219
+MVHL AZ, ND               # T2 = -120
+LD HL, $INC$NULL
+LD Y, $T3
+FNFH DZ, ND               # T3 +1
+#230
+LD PC, $RET_1TPD
+#232
+
+$RET_15TPS                #158 - 15 ticks per second
+NOP
+NOP
+#160
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD Y, $VMS                # set Y = $VMS on exit
+#170
+LD PG, $NSYNCE_PG         # jump to null sync
+#172
+
+$T0_ADJUST                #205 - 10 ticks per min
+LD HL, $0xF0
+ORHL A, NA                # A = T1 | 0xF0
+#211
+LDZ HL, $INC$NULL
+FNH A, HLA                # A +1 (A +ve if T1=0x?F)
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $T0
+#220
+FNH DZ, HLD               # adjust T0 every 16 T1
+LD HL, $INC$NULL
+LD PC, $RET_10TPM
+#226
+
+$RET_5TPH                 #218 - 5 ticks per hour
+NOP
+NOP
+#220
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+$RET_10TPM                #226 - 10 ticks per min
+NOP
+NOP
+NOP
+NOP
+#230
+NOP
+NOP
+$RET_1TPD                 #232 - 1 tick per day
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#240
+NOP
+NOP
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS +1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+#250
+FNH DZ, HL                # inst cache -> HL
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#258
