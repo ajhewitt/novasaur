@@ -397,8 +397,11 @@ print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 
 # $INCCYC: inc, clear ext bit
 print_unary(0xE1, 256.times.map{|i| (i+1)&0xF7})
-# $FORKC: fork on comms mode {1:0x80, 2:0xC0}
-print_unary(0xE2, [0x80, 0xC0] * 128)
+# $FORKC: fork on comms mode {0:0x20, 1:0x28, [3,5,7,9,B]:0x48, [D,F,11,13,15,17]:0x68}
+print_unary(0xE2, [0x20, 0x28, 0x28, 0x48, 0x48, 0x48, 0x48, 0x48,
+                   0x48, 0x48, 0x48, 0x48, 0x48, 0x68, 0x68, 0x68,
+                   0x68, 0x68, 0x68, 0x68, 0x68, 0x68, 0x68, 0x68,
+                   0,    0,    0,    0,    0,    0,    0,    0] * 8)
 # $FORKA: fork on audio mode {1:0x60, 2:0x70, 3:0xA8}
 print_unary(0xE3, [0x60, 0x60, 0x70, 0xA8] * 64)
 # $FORK1: 0->0x80,else->0xC0
@@ -411,9 +414,14 @@ print_unary(0xE6, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
 print_unary(0xE7, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
 # $XGA?: mode-line: 0-10->-1,else->0
 print_unary(0xE8, [0xFF]*176 + [0]*80)
-# #SSADJ: serial state -1
+# $SSADJ: serial state -1
 print_unary(0xE9, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
-
+# $PS1?: &3==1 ? 0:-1
+print_unary(0xEA, 256.times.map{|i| i&3 == 1 ? 0 : -1})
+# $PS01?: &3==0||1 ? 0:-1
+print_unary(0xEB, 256.times.map{|i| i&3 == 0 || 1 ? 0 : -1})
+# $PSDATA: &C>>2
+print_unary(0xEC, 256.times.map{|i| (i&0xC) >> 2})
 
 # $V2E: calculate E-reg GPU mode bits from video mode  **** MOVE ****
 print_unary(0xEE, 256.times.map {|i|

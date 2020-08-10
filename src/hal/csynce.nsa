@@ -3,6 +3,8 @@ INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE CSYNCE_PG
+$RESET_KEYBOARD   0
+$JSYNCE           0
 
 # PMODE: column in AV used during process cycle
 # VLINE: line(page) in video ram
@@ -25,20 +27,134 @@ FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
-LD HL, $IDEN$NULL
+LD HL, $IDEN$FORKC
 LD Y, $CMODE
-#29/25
-FNFH DZ, NA           # A = serial mode
-LDP PC, $0x28         # serial comms off if -1
+FNEL DZ, PC           # comms  mode fork
+#32/27
+ADDR 0x20             # mode 0: no comms
+NOP
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#43/37
+#43/39
 
-ADDR 0x28             # handle comms
+ADDR 0x28             # mode 1: keyboard idle
+#32/40
+LD HL, $PS1?$NULL
+LDZ Y, $COMLS
+FNEH DZ, NA
+LDN PC, $CLKSTART1    # comm line PS/2 state != 0
+#40/48
+LD HL, $PS01?$NULL
+LD Y, $COMPS
+FNEH DZ, HLA
+LDP PC, $CLKSTART2    # comm process PS/2 state < 2
+LD HL, $INC$NULL
+#50/58
+LDZ Y, $COMIDLE
+FNH DZ, HLD
+LDN PC, $EXIT_IDLE    # idle until timeout
+LD HL, $RESET_KEYBOARD
+LD PG, $JSYNCE
+#59/67
 
-ADDR 0x40             # keyboard
+ADDR 0x48             # mode 3,5,7,9,B: keyboard scan L
+#32/72
+LD HL, $PS01?$NULL
+LD Y, $COMPS
+FNEH DZ, NA
+#39/78
+LDP HL, $2$PSDATA
+LDN HL, $4$PSDATA
+LD Y, $CMODE
+ADDH DZ, ND
+LD Y, $SCANL
+#49/88
+MULH DZ, NA
+LD Y, $COMPS
+FNEL DZ, HL
+LD Y, $SCANL
+LD PC, $EXIT_SCAN
+#61/98
 
-ADDR 0xC0             # serial
+$EXIT_SCAN
+ORH AZ, ND
+NOP
+NOP
+LD PC, $EXIT_1VMC
+#68/104
+
+ADDR 0x68             # mode D,F,11,13,15,17: keyboard scan L
+#32/104
+LD HL, $PS01?$NULL
+LD Y, $COMPS
+FNEH DZ, NA
+#39/110
+LDP HL, $2$PSDATA
+LDN HL, $4$PSDATA
+LD Y, $CMODE
+ADDH DZ, ND
+LD Y, $SCANH
+#49/120
+MULH DZ, NA
+LD Y, $COMPS
+FNEL DZ, HL
+LD Y, $SCANH
+LD PC, $EXIT_SCAN
+#61/130
+
+$CLKSTART1            #41
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+$CLKSTART2            #49
+NOP
+#50/139
+LD HL, $INC2$NULL
+LD Y, $CMODE
+FNH DZ, HLD           # 3 -> comms mode
+$EXIT_IDLE
+LD HL, $0x30
+LD Y, $SCANL
+#60/148
+MVH AZ, ND            # 3 -> scan L
+LD Y, $SCANH
+MVH AZ, ND            # 3 -> scan H
+$EXIT_1VMC
+LD HL, $INC$NULL
+#70/156
+LD Y, $VMS
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/164
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/168
+
+ADDR 0xA8             # mode 19: keyboard complete
+#LD HL, $JMP1
+#LD PG, $JMPPG
+
+ADDR 0xB0
+
+
+ADDR 0xC0
+
+
+ADDR 0xD0
+
+
+ADDR 0xE0
+
+
+ADDR 0xF0
+
 

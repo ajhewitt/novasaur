@@ -21,7 +21,7 @@ AFHL A, NA
 LD HL, $SWCARRY$NULL
 #30
 LD Y, $FREG
-FNDH AZ, ND
+FNDH AZ, ND           # swap carry due to 2's compliment
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC

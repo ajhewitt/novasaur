@@ -72,7 +72,7 @@ reg = Array.new(20, -1)
 reg[PG] = ARGV.first.to_i # execute page
 reg[PC] = 0
 rom = load_rom
-ram = Array.new(8) {|a| Array.new(256) {|b| Array.new(256, 0)}} # [B][Y][X]
+ram = Array.new(8) {|a| Array.new(256) {|b| Array.new(256, 1)}} # [B][Y][X]
 reg[Y] = 254 # $VMS
 n = 0
 while true do
@@ -104,7 +104,7 @@ while true do
     set_dst(ram, reg, c, rom[0][get_pc(reg)])
   when 5 # LDP, LDN
     n += 1
-    if (c>>5)&0x80 == reg[A]&0x80
+    if (c>>5)&0x80 == reg[A].to_i&0x80
 puts "COND: true"
       set_dst(ram, reg, c, rom[0][get_pc(reg)])
       n += 1

@@ -18,7 +18,7 @@ ADDHL DZ, NA          # A = Acc - reg
 AFHL A, NA
 LD HL, $SWCARRY$NULL
 LD Y, $FREG
-FNEH AZ, ND
+FNDH AZ, ND           # swap carry due to 2's compliment
 #30
 NOP
 NOP
