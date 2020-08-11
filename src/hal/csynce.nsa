@@ -3,7 +3,7 @@ INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE CSYNCE_PG
-$RESET_KEYBOARD   0
+$TBD              2
 $JSYNCE           0
 
 # PMODE: column in AV used during process cycle
@@ -31,6 +31,7 @@ LD HL, $IDEN$FORKC
 LD Y, $CMODE
 FNEL DZ, PC           # comms  mode fork
 #32/27
+
 ADDR 0x20             # mode 0: no comms
 NOP
 LDZ Y, $INST
@@ -39,70 +40,74 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/39
 
-ADDR 0x28             # mode 1: keyboard idle
-#32/40
+ADDR 0x28             # mode 19: keyboard scan complete
+LD HL, $TBD           # scan complete label
+LD PG, $JSYNCE        # jump page
+
+ADDR 0x30             # mode 1: keyboard idle
+#32/48
 LD HL, $PS1?$NULL
-LDZ Y, $COMLS
+LD Y, $COMLS
 FNEH DZ, NA
 LDN PC, $CLKSTART1    # comm line PS/2 state != 0
-#40/48
+#40/56
 LD HL, $PS01?$NULL
 LD Y, $COMPS
 FNEH DZ, HLA
 LDP PC, $CLKSTART2    # comm process PS/2 state < 2
 LD HL, $INC$NULL
-#50/58
+#50/66
 LDZ Y, $COMIDLE
 FNH DZ, HLD
 LDN PC, $EXIT_IDLE    # idle until timeout
-LD HL, $RESET_KEYBOARD
-LD PG, $JSYNCE
-#59/67
+LD HL, $TBD           # reset comms label
+LD PG, $JSYNCE        # jump page
+#59/75
 
-ADDR 0x48             # mode 3,5,7,9,B: keyboard scan L
-#32/72
+ADDR 0x50             # mode 3,5,7,9,B: keyboard scan L
+#32/80
 LD HL, $PS01?$NULL
 LD Y, $COMPS
 FNEH DZ, NA
-#39/78
+#39/86
 LDP HL, $2$PSDATA
 LDN HL, $4$PSDATA
 LD Y, $CMODE
 ADDH DZ, ND
 LD Y, $SCANL
-#49/88
+#49/96
 MULH DZ, NA
 LD Y, $COMPS
 FNEL DZ, HL
 LD Y, $SCANL
 LD PC, $EXIT_SCAN
-#61/98
+#61/106
 
 $EXIT_SCAN
 ORH AZ, ND
 NOP
 NOP
 LD PC, $EXIT_1VMC
-#68/104
+#68/112
 
-ADDR 0x68             # mode D,F,11,13,15,17: keyboard scan L
-#32/104
+ADDR 0x70             # mode D,F,11,13,15,17: keyboard scan L
+#32/112
 LD HL, $PS01?$NULL
 LD Y, $COMPS
 FNEH DZ, NA
-#39/110
+#39/118
 LDP HL, $2$PSDATA
 LDN HL, $4$PSDATA
 LD Y, $CMODE
 ADDH DZ, ND
 LD Y, $SCANH
-#49/120
+#49/128
 MULH DZ, NA
 LD Y, $COMPS
 FNEL DZ, HL
 LD Y, $SCANH
 LD PC, $EXIT_SCAN
-#61/130
+#61/138
 
 $CLKSTART1            #41
 NOP
@@ -115,46 +120,76 @@ NOP
 NOP
 $CLKSTART2            #49
 NOP
-#50/139
+#50/147
 LD HL, $INC2$NULL
 LD Y, $CMODE
 FNH DZ, HLD           # 3 -> comms mode
 $EXIT_IDLE
 LD HL, $0x30
 LD Y, $SCANL
-#60/148
+#60/156
 MVH AZ, ND            # 3 -> scan L
 LD Y, $SCANH
 MVH AZ, ND            # 3 -> scan H
 $EXIT_1VMC
 LD HL, $INC$NULL
-#70/156
+#70/164
 LD Y, $VMS
 FNH DZ, HLD
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
-#80/164
+#80/172
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/168
+#86/176
 
-ADDR 0xA8             # mode 19: keyboard complete
-#LD HL, $JMP1
-#LD PG, $JMPPG
+ADDR 0xB0             # mode 2,0x12: serial idle
+#32/176
+LD HL, $0x80
+LD Y, $CMODE
+MULH DZ, NA           # determine if mode > 0x10
+#39/182
+LDP HL, $IDEN$IDEN
+LDN HL, $INC$IDEN
+LDZ Y, $RXWRIDX
+FNFL DZ, Y            # Y = Rx write index
+FNH DZ, HLD           # RxWrIdx+1 if mode > 0x10
+#49/191
+LD HL, $IDEN$NULL
+LDZ Y, $COMPS
+FNH DZ, HLA           # A sign = Rx data
+LDP HL, $SSTART$NULL  # mode 0x4
+LDN HL, $SSTOP$NULL   # mode 0x2
+LDZ Y, $CMODE
+#60/202
+FNEH DZ, ND           # 2 if stop, 4 if start -> comms mode
+LD HL, $TBD           # Tx data label
+LDN PG, $JSYNCE       # jump page if Tx
+LD PC, $EXIT_1VMC     # else exit VMC=1
+#68/210
 
-ADDR 0xB0
-
-
-ADDR 0xC0
-
-
-ADDR 0xD0
-
-
-ADDR 0xE0
-
-
-ADDR 0xF0
-
-
+ADDR 0xE0             # mode 4,6,8,A,C,E,0x10,0x12: serial sample
+#32/224
+LD HL, $RXBUFF
+MVHL A, XA            # X = Rx buffer
+LD HL, $IDEN$NULL
+#40/230
+LDZ Y, $COMPS
+FNH DZ, HLA           # A sign = Rx data
+LDP HL, $SRP$IDEN     # shift right, reset MSB
+LDN HL, $SRN$IDEN     # shift right, set MSB
+LDZ Y, $RXWRIDX
+#49/239
+FNFL DZ, Y            # Y = Rx write index
+FNEH D, ND            # Rx data shift right, set/reset MSB
+LD HL, $INC2$NULL
+LDZ Y, $CMODE
+#59/247
+FNH DZ, HLD           # mode+2
+NOP
+NOP
+LD HL, $TBD           # Tx data label
+LDN PG, $JSYNCE       # jump page if Tx
+LD PC, $EXIT_1VMC     # else exit VMC=1
+#68/256

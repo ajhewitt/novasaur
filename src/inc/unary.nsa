@@ -21,22 +21,22 @@ $SWAP      14
 $REVERSE   15
 
 #FNE - HAL
-
-$INCCYC     1
-$FORKC      2
-$FORKA      3
-$FORK1      4 # 0->0x80,else->0xC0
-$FORK2      5 # 0xFF->0x40,0->0x80,else->0xC0
-$FORK3      6 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$ML2FC      7 # mode-line to frame count: 3-6->-5,else->4
-$XGA?       8 # mode-line>11?: 0-10->-1,else->0
-$SSADJ      9 # serial state -1
-$PS1?      10 # &3==1 ? 0:-1
-$PS01?     11 # &3==0||1 ? 0:-1
-$PSDATA    12 # &C>>2
-
-$V2E       14
-$V2M       15
+$INCCYC     0
+$FORKC      1
+$FORKA      2
+$FORK1      3 # 0->0x80,else->0xC0
+$FORK2      4 # 0xFF->0x40,0->0x80,else->0xC0
+$FORK3      5 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+$ML2FC      6 # mode-line to frame count: 3-6->-5,else->4
+$XGA?       7 # mode-line>11?: 0-10->-1,else->0
+$SSADJ      8 # serial state -1
+$PS1?       9 # &3==1 ? 0:-1
+$PS01?     10 # &3==0||1 ? 0:-1
+$PSDATA    11 # &C>>2
+$SSTOP     12 # &0x81|2
+$SSTART    13 # &0x81|4
+$SRP       14 # >>1
+$SRN       15 # >>1&0x80
 
 #FND - CPU
 
@@ -58,4 +58,5 @@ $RSTVEC    11 # map inst+1 to PCL vector
 
 
 #FNC - Math
-
+$V2E        0
+$V2M        1

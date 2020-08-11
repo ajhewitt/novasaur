@@ -43,14 +43,17 @@ $IMASK      0xE3 # interrupt mask - lower nibble, bit3: enable
 $IMODE      0xE4 # check interrupt - 0: check, -1: skip
 
 #HAL
-$VMS        0xE9
+$RXRDIDX    0xE6
+$RXWRIDX    0xE7
+$PSRDIDX    0xE8
+PSWRIDX     0xE9
 $CMODE      0xEA
 $COMLS      0xEB
 $COMPS      0xEC
 $COMIDLE    0xED
 $SCANL      0xEE
 $SCANH      0xEF
-
+$VMS        0xF0
 $PCMAX      0xF1
 $PCCNT      0xF2
 $AMODE      0xF3
@@ -74,6 +77,7 @@ $ROM_X      0xE7        # x index - ref both src and dest - init to 0
 $ROM_Y      0xE8        # y index - dest D0 page
 $ROM_N      0xE9        # ROM count
 
+#Constants
 $FETCH        0
 $FETCH2       0x10
 $INTR1        0x08
@@ -82,3 +86,5 @@ $SKIP_INST    0x28
 $PUSHPC_INST  0x38
 $RESTART_INST 0xCB
 $JMP_INST     0xC3
+
+$RXBUFF       0xF1

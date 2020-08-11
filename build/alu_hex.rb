@@ -352,7 +352,19 @@ print_com 0xA0
 print_vid 0xB0
 
 # 0x0003C000-0x0003CFFF: FNC low nibble only - TBD
-# TBD
+# $V2E: calculate E-reg GPU mode bits from video mode  **** MOVE ****
+print_unary(0xC0, 256.times.map {|i|
+  e = i&1 == 0 ? 0 : 0x10
+#  e |= i&2 == 0 ? 0 : 0x40 # rev 3 board
+  e |= i&2 == 0 ? 0 : 0x20 # rev 4 board
+#  i&0x60 == 0x60 ? e : e|0x20 # rev 3 board
+  i&0x60 == 0x60 ? e : e|0x40 # rev 4 board
+})
+# $V2M: calculate mode_line from video mode  **** MOVE ****
+print_unary(0xC1, 256.times.map {|i|
+  m = (i<<2)&0x30
+  i&0x40 == 0 ? m*4 : (m*5)|4
+})
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
 # $VMP1:
@@ -393,49 +405,41 @@ print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 
 
 # 0x0003E000-0x0003EFFF: FNE low nibble only - HAL related
-
-
 # $INCCYC: inc, clear ext bit
-print_unary(0xE1, 256.times.map{|i| (i+1)&0xF7})
+print_unary(0xE0, 256.times.map{|i| (i+1)&0xF7})
 # $FORKC: fork on comms mode {0:0x20, 1:0x28, [3,5,7,9,B]:0x48, [D,F,11,13,15,17]:0x68}
-print_unary(0xE2, [0x20, 0x28, 0x28, 0x48, 0x48, 0x48, 0x48, 0x48,
+print_unary(0xE1, [0x20, 0x28, 0x28, 0x48, 0x48, 0x48, 0x48, 0x48,
                    0x48, 0x48, 0x48, 0x48, 0x48, 0x68, 0x68, 0x68,
                    0x68, 0x68, 0x68, 0x68, 0x68, 0x68, 0x68, 0x68,
                    0,    0,    0,    0,    0,    0,    0,    0] * 8)
 # $FORKA: fork on audio mode {1:0x60, 2:0x70, 3:0xA8}
-print_unary(0xE3, [0x60, 0x60, 0x70, 0xA8] * 64)
+print_unary(0xE2, [0x60, 0x60, 0x70, 0xA8] * 64)
 # $FORK1: 0->0x80,else->0xC0
-print_unary(0xE4, [0x80] + Array.new(0xFF, 0xC0))
+print_unary(0xE3, [0x80] + Array.new(0xFF, 0xC0))
 # $FORK2: 0xFF->0x40,0->0x80,else->0xC0
-print_unary(0xE5, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
+print_unary(0xE4, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
 # $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-print_unary(0xE6, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
+print_unary(0xE5, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
 # $ML2FC: mode-line to frame count: 3-6->-5,else->4
-print_unary(0xE7, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
+print_unary(0xE6, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
 # $XGA?: mode-line: 0-10->-1,else->0
-print_unary(0xE8, [0xFF]*176 + [0]*80)
+print_unary(0xE7, [0xFF]*176 + [0]*80)
 # $SSADJ: serial state -1
-print_unary(0xE9, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
+print_unary(0xE8, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
 # $PS1?: &3==1 ? 0:-1
-print_unary(0xEA, 256.times.map{|i| i&3 == 1 ? 0 : -1})
+print_unary(0xE9, 256.times.map{|i| i&3 == 1 ? 0 : 0xFF})
 # $PS01?: &3==0||1 ? 0:-1
-print_unary(0xEB, 256.times.map{|i| i&3 == 0 || 1 ? 0 : -1})
+print_unary(0xEA, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $PSDATA: &C>>2
-print_unary(0xEC, 256.times.map{|i| (i&0xC) >> 2})
-
-# $V2E: calculate E-reg GPU mode bits from video mode  **** MOVE ****
-print_unary(0xEE, 256.times.map {|i|
-  e = i&1 == 0 ? 0 : 0x10
-#  e |= i&2 == 0 ? 0 : 0x40 # rev 3 board
-  e |= i&2 == 0 ? 0 : 0x20 # rev 4 board
-#  i&0x60 == 0x60 ? e : e|0x20 # rev 3 board
-  i&0x60 == 0x60 ? e : e|0x40 # rev 4 board
-})
-# $V2M: calculate mode_line from video mode  **** MOVE ****
-print_unary(0xEF, 256.times.map {|i|
-  m = (i<<2)&0x30
-  i&0x40 == 0 ? m*4 : (m*5)|4
-})
+print_unary(0xEB, 256.times.map{|i| (i&0xC) >> 2})
+# $SSTOP: &0x81|2
+print_unary(0xEC, 256.times.map{|i| (i&0x81) | 2})
+# $SSTART: &0x81|4
+print_unary(0xED, 256.times.map{|i| (i&0x81) | 4})
+# $SRP: >>1
+print_unary(0xEE, 256.times.map{|i| i>>1})
+# $SRN: >>1&0x80
+print_unary(0xEF, 256.times.map{|i| (i>>1) | 0x80})
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only - generic/default functions
 # $IDEN: A = A
