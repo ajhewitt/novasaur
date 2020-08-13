@@ -1,53 +1,56 @@
 # zero page assignments
 
-#Sound
-$TONE1L     0xC0
-$TONE1H     0xC1
-$NOTE1L     0xC2
-$NOTE1H     0xC3
-$WAVE1      0xC4
-$TONE2L     0xC5
-$TONE2H     0xC6
-$NOTE2L     0xC7
-$NOTE2H     0xC8
-$WAVE2      0xC9
-$TONE3L     0xCA
-$TONE3H     0xCB
-$NOTE3L     0xCC
-$NOTE3H     0xCD
-$WAVE3      0xCE
-$NOISE      0xCF
-
 #vCPU
-$AREG       0xD0 # Accumulator
-$FREG       0xD1 # Flags - COZNHP00
-$BREG       0xD2
-$CREG       0xD3
-$DREG       0xD4
-$EREG       0xD5
-$HREG       0xD6
-$LREG       0xD7
-$SPH        0xD8 # SP MSB
-$SPL        0xD9 # SP LSB
-$IXH        0xDA # IX MSB
-$IXL        0xDB # IX LSB
-$IYH        0xDC # IY MSB
-$IYL        0xDD # IY LSB
-$PCH        0xDE # PC MSB
-$PCL        0xDF # PC LSB
-$INST       0xE0
-$TMPL       0xE1
-$TMPH       0xE2
-$TEMP       0xE1 # alias for TMPL
-$IMASK      0xE3 # interrupt mask - lower nibble, bit3: enable
-$IMODE      0xE4 # check interrupt - 0: check, -1: skip
+$INST       0xBA
+$TMPL       0xBB
+$TMPH       0xBC
+$TEMP       0xBD # alias for TMPL
+$IMASK      0xBE # interrupt mask - lower nibble, bit3: enable
+$IMODE      0xBF # check interrupt - 0: check, -1: skip
+$AREG       0xC0 # Accumulator
+$FREG       0xC1 # Flags - COZNHP00
+$BREG       0xC2
+$CREG       0xC3
+$DREG       0xC4
+$EREG       0xC5
+$HREG       0xC6
+$LREG       0xC7
+$SPH        0xC8 # SP MSB
+$SPL        0xC9 # SP LSB
+$IXH        0xCA # IX MSB
+$IXL        0xCB # IX LSB
+$IYH        0xCC # IY MSB
+$IYL        0xCD # IY LSB
+$PCH        0xCE # PC MSB
+$PCL        0xCF # PC LSB
+
+#Sound
+$TONE1L     0xD0
+$TONE1H     0xD1
+$NOTE1L     0xD2
+$NOTE1H     0xD3
+$WAVE1      0xD4
+$TONE2L     0xD5
+$TONE2H     0xD6
+$NOTE2L     0xD7
+$NOTE2H     0xD8
+$WAVE2      0xD9
+$TONE3L     0xDA
+$TONE3H     0xDB
+$NOTE3L     0xDC
+$NOTE3H     0xDD
+$WAVE3      0xDE
+$NOISE      0xDF
 
 #HAL
-$RXRDIDX    0xE6
-$RXWRIDX    0xE7
-$PSRDIDX    0xE8
-PSWRIDX     0xE9
-$CMODE      0xEA
+$RXRDIDX    0xE3
+$RXWRIDX    0xE4
+$TXRDIDX    0xE5
+$TXWRIDX    0xE6
+$PSRDIDX    0xE7
+$PSWRIDX    0xE8
+$TMODE      0xE9
+$RMODE      0xEA
 $COMLS      0xEB
 $COMPS      0xEC
 $COMIDLE    0xED

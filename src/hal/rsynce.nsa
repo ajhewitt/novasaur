@@ -1,0 +1,196 @@
+# H-sync with comms rx on execute
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE RSYNCE_PG
+$TBD              2
+
+# PMODE: column in AV used during process cycle
+# VLINE: line(page) in video ram
+# VMS: [mode_line][e][cycle count]
+#           0,1,2  0  0,1,2,3,4,5
+#         3,4,5,6  1  0,1,2,3,4
+#        7,8,9,10     0,1,2,3,4
+#  11,12,13,14,15     0,1,2,3
+# assume Y = $VMS
+LDZ HL, $INCLINE$NULL
+FNH DZ, HLD           # H=mode_line+1, L=E000
+LD Y, $PMODE
+VIDH DZ, SA           # mode_line, pmode —> S
+#9/7
+LDP HL, $IDEN$IDEN    # sign bit low, don’t inc vline
+LDN HL, $INC$IDEN     # sign bit high, inc vline
+LD Y, $VLINE
+FNFH DZ, VD           # increment? vline —> V
+FNFL E, HL            # serial inputs -> H
+#20/17
+LD Y, $COMLS
+COMH DZ, ND           # update comms line state
+LD HL, $IDEN$FORKC
+LD Y, $RMODE
+FNEL DZ, PC           # comms  mode fork
+#32/27
+
+ADDR 0x20             # mode 0: no comms
+NOP
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43/39
+
+ADDR 0x28             # mode 0x19: keyboard scan complete
+LD HL, $TBD           # scan complete label
+LD PG, $JSYNCE_PG     # jump page
+
+ADDR 0x30             # mode 1: keyboard idle
+#32/48
+LD HL, $PS1?$NULL
+LD Y, $COMLS
+FNEH DZ, NA
+LDN PC, $CLKSTART1    # comm line PS/2 state != 0
+#40/56
+LD HL, $PS01?$NULL
+LD Y, $COMPS
+FNEH DZ, HLA
+LDP PC, $CLKSTART2    # comm process PS/2 state < 2
+LD HL, $INC$NULL
+#50/66
+LDZ Y, $COMIDLE
+FNH DZ, HLD
+LDN PC, $EXIT_IDLE    # idle until timeout
+LD HL, $TBD           # reset comms label
+LD PG, $JSYNCE_PG     # jump page
+#59/75
+
+ADDR 0x50             # mode 3,5,7,9,B: keyboard scan L
+#32/80
+LD HL, $PS01?$NULL
+LD Y, $COMPS
+FNEH DZ, NA           # A = test number of bits
+#39/86
+LDP HL, $4$PSDATA     # 4 bits received
+LDN HL, $2$PSDATA     # 2 bits received
+LD Y, $RMODE
+ADDH DZ, ND           # comms mode +2 or 4
+LD Y, $SCANL
+#49/96
+MULH DZ, NA           # scan L << 1 or 2
+LD Y, $COMPS
+FNEL DZ, HL           # H = ps/2 data
+LD Y, $SCANL
+NOP
+#60/105
+NOP
+$EXIT_SCAN
+ORH AZ, ND            # add ps/2 data to scan
+NOP
+NOP
+LD PC, $EXIT_1VMC     # exit after 1 VMC
+#68/112
+
+ADDR 0x70             # mode D,F,0x11,0x13,0x15,0x17: keyboard scan L
+#32/112
+LD HL, $PS01?$NULL
+LD Y, $COMPS
+FNEH DZ, NA           # A = test number of bits
+#39/118
+LDP HL, $4$PSDATA     # 4 bits received
+LDN HL, $2$PSDATA     # 2 bits received
+LD Y, $RMODE
+ADDH DZ, ND           # comms mode +2 or 4
+LD Y, $SCANH
+#49/128
+MULH DZ, NA           # scan L << 1 or 2
+LD Y, $COMPS
+FNEL DZ, HL           # H = ps/2 data
+LD Y, $SCANH
+LD PC, $EXIT_SCAN     # finish scan on scan high
+#61/138
+
+$CLKSTART1            #41
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+$CLKSTART2            #49
+NOP
+#50/147
+LD HL, $INC2$NULL
+LD Y, $RMODE
+FNH DZ, HLD           # 3 -> comms mode
+$EXIT_IDLE
+LD HL, $0x30
+LD Y, $SCANL
+#60/156
+MVH AZ, ND            # 3 -> scan L
+LD Y, $SCANH
+MVH AZ, ND            # 3 -> scan H
+$EXIT_1VMC
+LD HL, $INC$NULL
+#70/164
+LD Y, $VMS
+FNH DZ, HLD           # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/172
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/176
+
+ADDR 0xB0             # mode 2,0x12: serial idle
+#32/176
+LD HL, $0x80
+LD Y, $RMODE
+MULH DZ, NA           # determine if mode > 0x10
+#39/182
+LDP HL, $IDEN$IDEN
+LDN HL, $INC$IDEN
+LDZ Y, $RXWRIDX
+FNFL DZ, Y            # Y = Rx write index
+FNH DZ, HLD           # RxWrIdx+1 if mode > 0x10
+#49/191
+LD HL, $IDEN$NULL
+LDZ Y, $COMPS
+FNH DZ, HLA           # A sign = Rx data
+LDP HL, $SSTART$NULL  # mode 0x4
+LDN HL, $SSTOP$NULL   # mode 0x2
+LDZ Y, $RMODE
+#60/202
+FNEH DZ, ND           # 2 if stop, 4 if start -> comms mode
+NOP
+NOP
+NOP
+LD PC, $EXIT_1VMC     # else exit VMC=1
+#68/209
+
+ADDR 0xE0             # mode 4,6,8,A,C,E,0x10,0x12: serial sample
+#32/224
+LD HL, $RXBUFF
+MVHL A, XA            # X = Rx buffer
+LD HL, $IDEN$NULL
+#40/230
+LDZ Y, $COMPS
+FNH DZ, HLA           # A sign = Rx data
+LDP HL, $SRP$IDEN     # shift right, reset MSB
+LDN HL, $SRN$IDEN     # shift right, set MSB
+LDZ Y, $RXWRIDX
+#49/239
+FNFL DZ, Y            # Y = Rx write index
+FNEH D, ND            # Rx data shift right, set/reset MSB
+LD HL, $INC2$NULL
+LDZ Y, $RMODE
+#59/247
+FNH DZ, HLD           # mode+2
+NOP
+NOP
+NOP
+NOP
+NOP
+LD PC, $EXIT_1VMC     # else exit VMC=1
+#68/255

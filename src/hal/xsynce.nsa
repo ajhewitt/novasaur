@@ -40,28 +40,30 @@ FNFH DZ, VD               # increment? vline —> V
 #189
 FNFL E, HL                # serial inputs -> H
 LD Y, $COMLS
-COMH DZ, ND               # update comms line state
-LD HL, $INC$NULL
+COMH DZ, NA               # update comms line state
+LD HL, $SSADJ$NULL
 #199
+FNEH AZ, ND               # adjust serial state by -1
+LD HL, $INC$NULL
 LDZ Y, $T1
 FNH DZ, HLD               # T1 +1
 LDN PC, $T0_ADJUST        # return if T1<120
+#209
 LD HL, $0x88
 MVHL AZ, ND               # T1 = -120
-#210
 LD HL, $INC$NULL
 LDZ Y, $T2
+#219
 FNH DZ, HLD               # T2 +1
 LDN PC, $RET_5TPH         # return if T2<120
 LD HL, $0x88
-#219
 MVHL AZ, ND               # T2 = -120
 LD HL, $INC$NULL
+#230
 LD Y, $T3
 FNFH DZ, ND               # T3 +1
-#230
 LD PC, $RET_1TPD
-#232
+#237
 
 $RET_15TPS                #158 - 15 ticks per second
 NOP
@@ -80,45 +82,37 @@ LD Y, $VMS                # set Y = $VMS on exit
 LD PG, $NSYNCE_PG         # jump to null sync
 #172
 
-$T0_ADJUST                #205 - 10 ticks per min
+$T0_ADJUST                #210 - 10 ticks per min
 LD HL, $0xF0
 ORHL A, NA                # A = T1 | 0xF0
-#211
 LDZ HL, $INC$NULL
 FNH A, HLA                # A +1 (A +ve if T1=0x?F)
+#220
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $T0
-#220
 FNH DZ, HLD               # adjust T0 every 16 T1
 LD HL, $INC$NULL
 LD PC, $RET_10TPM
-#226
+#231
 
-$RET_5TPH                 #218 - 5 ticks per hour
-NOP
-NOP
-#220
+$RET_5TPH                 #223 - 5 ticks per hour
 NOP
 NOP
 NOP
 NOP
 NOP
 NOP
-$RET_10TPM                #226 - 10 ticks per min
 NOP
 NOP
-NOP
-NOP
-#230
-NOP
-NOP
-$RET_1TPD                 #232 - 1 tick per day
+$RET_10TPM                #231 - 10 ticks per min
 NOP
 NOP
 NOP
 NOP
 NOP
+NOP
+$RET_1TPD                 #237 - 1 tick per day
 NOP
 NOP
 NOP

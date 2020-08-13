@@ -1,4 +1,4 @@
-# H-sync with just execute
+# H-sync with serial state adjust on execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -24,12 +24,9 @@ FNFH DZ, VD           # increment? vline —> V
 FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
-COMH DZ, ND           # update comms line state
-NOP
-NOP
-NOP
-NOP
-NOP
+COMH DZ, NA           # update comms line state
+LD HL, $SSADJ$NULL
+FNEH AZ, ND           # adjust serial state by -1
 #30/26
 NOP
 LD HL, $IDEN$NULL

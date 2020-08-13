@@ -1,10 +1,9 @@
-# H-sync with comms on execute
+# H-sync with comms tx on execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE CSYNCE_PG
+PAGE TSYNCE_PG
 $TBD              2
-$JSYNCE           0
 
 # PMODE: column in AV used during process cycle
 # VLINE: line(page) in video ram
@@ -28,7 +27,7 @@ FNFL E, HL            # serial inputs -> H
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
 LD HL, $IDEN$FORKC
-LD Y, $CMODE
+LD Y, $TMODE
 FNEL DZ, PC           # comms  mode fork
 #32/27
 
@@ -40,114 +39,10 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/39
 
-ADDR 0x28             # mode 19: keyboard scan complete
-LD HL, $TBD           # scan complete label
-LD PG, $JSYNCE        # jump page
-
-ADDR 0x30             # mode 1: keyboard idle
-#32/48
-LD HL, $PS1?$NULL
-LD Y, $COMLS
-FNEH DZ, NA
-LDN PC, $CLKSTART1    # comm line PS/2 state != 0
-#40/56
-LD HL, $PS01?$NULL
-LD Y, $COMPS
-FNEH DZ, HLA
-LDP PC, $CLKSTART2    # comm process PS/2 state < 2
-LD HL, $INC$NULL
-#50/66
-LDZ Y, $COMIDLE
-FNH DZ, HLD
-LDN PC, $EXIT_IDLE    # idle until timeout
-LD HL, $TBD           # reset comms label
-LD PG, $JSYNCE        # jump page
-#59/75
-
-ADDR 0x50             # mode 3,5,7,9,B: keyboard scan L
-#32/80
-LD HL, $PS01?$NULL
-LD Y, $COMPS
-FNEH DZ, NA
-#39/86
-LDP HL, $2$PSDATA
-LDN HL, $4$PSDATA
-LD Y, $CMODE
-ADDH DZ, ND
-LD Y, $SCANL
-#49/96
-MULH DZ, NA
-LD Y, $COMPS
-FNEL DZ, HL
-LD Y, $SCANL
-LD PC, $EXIT_SCAN
-#61/106
-
-$EXIT_SCAN
-ORH AZ, ND
-NOP
-NOP
-LD PC, $EXIT_1VMC
-#68/112
-
-ADDR 0x70             # mode D,F,11,13,15,17: keyboard scan L
-#32/112
-LD HL, $PS01?$NULL
-LD Y, $COMPS
-FNEH DZ, NA
-#39/118
-LDP HL, $2$PSDATA
-LDN HL, $4$PSDATA
-LD Y, $CMODE
-ADDH DZ, ND
-LD Y, $SCANH
-#49/128
-MULH DZ, NA
-LD Y, $COMPS
-FNEL DZ, HL
-LD Y, $SCANH
-LD PC, $EXIT_SCAN
-#61/138
-
-$CLKSTART1            #41
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-$CLKSTART2            #49
-NOP
-#50/147
-LD HL, $INC2$NULL
-LD Y, $CMODE
-FNH DZ, HLD           # 3 -> comms mode
-$EXIT_IDLE
-LD HL, $0x30
-LD Y, $SCANL
-#60/156
-MVH AZ, ND            # 3 -> scan L
-LD Y, $SCANH
-MVH AZ, ND            # 3 -> scan H
-$EXIT_1VMC
-LD HL, $INC$NULL
-#70/164
-LD Y, $VMS
-FNH DZ, HLD
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL            # inst cache -> HL
-#80/172
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86/176
-
 ADDR 0xB0             # mode 2,0x12: serial idle
 #32/176
 LD HL, $0x80
-LD Y, $CMODE
+LD Y, $TMODE
 MULH DZ, NA           # determine if mode > 0x10
 #39/182
 LDP HL, $IDEN$IDEN
@@ -161,11 +56,11 @@ LDZ Y, $COMPS
 FNH DZ, HLA           # A sign = Rx data
 LDP HL, $SSTART$NULL  # mode 0x4
 LDN HL, $SSTOP$NULL   # mode 0x2
-LDZ Y, $CMODE
+LDZ Y, $TMODE
 #60/202
 FNEH DZ, ND           # 2 if stop, 4 if start -> comms mode
 LD HL, $TBD           # Tx data label
-LDN PG, $JSYNCE       # jump page if Tx
+LDN PG, $JSYNCE_PG    # jump page if Tx
 LD PC, $EXIT_1VMC     # else exit VMC=1
 #68/210
 
@@ -184,12 +79,12 @@ LDZ Y, $RXWRIDX
 FNFL DZ, Y            # Y = Rx write index
 FNEH D, ND            # Rx data shift right, set/reset MSB
 LD HL, $INC2$NULL
-LDZ Y, $CMODE
+LDZ Y, $TMODE
 #59/247
 FNH DZ, HLD           # mode+2
 NOP
 NOP
 LD HL, $TBD           # Tx data label
-LDN PG, $JSYNCE       # jump page if Tx
+LDN PG, $JSYNCE_PG    # jump page if Tx
 LD PC, $EXIT_1VMC     # else exit VMC=1
 #68/256
