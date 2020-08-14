@@ -97,14 +97,14 @@ VMPHL DZ, PGA             # jump to next VMC
 
 $KBD_SCAN
 #110/116
-LDZ Y, $CMODE             # -1(off)->0(kbd,off), 1(serial)->2(kbd,serial)
-FNH DZ, HLD               # kbd scan -> CMODE
+LDZ Y, $RMODE
+FNH DZ, HLD               # set LSB -> RMODE to force keyboard scan
 LD HL, $IDEN$NULL
-LD Y, $PCMAX
-FNFH DZ, NA               # PS/2 clk max space
+LD Y, $KTO
+FNFH DZ, NA               # PS/2 clk timeout
 #121/125
-LDZ Y, $PCCNT
-FNH AZ, HLD               # max space -> PS/2 clk count
+LDZ Y, $KIDLE
+FNH AZ, HLD               # clk timeout -> PS/2 idle count
 LD HL, $0x18
 LD Y, $EREG
 #129/132

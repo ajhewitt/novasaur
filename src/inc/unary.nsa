@@ -22,27 +22,27 @@ $REVERSE   15
 
 #FNE - HAL
 $INCCYC     0
-$FORKC      1
-$FORKA      2
-$FORK1      3 # 0->0x80,else->0xC0
-$FORK2      4 # 0xFF->0x40,0->0x80,else->0xC0
-$FORK3      5 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$ML2FC      6 # mode-line to frame count: 3-6->-5,else->4
-$XGA?       7 # mode-line>11?: 0-10->-1,else->0
-$SSADJ      8 # serial state -1
-$PS1?       9 # &3==1 ? 0:-1
-$PS01?     10 # &3==0||1 ? 0:-1
-$PSDATA    11 # &C>>2
-$SSTOP     12 # &0x81|2
-$SSTART    13 # &0x81|4
+$FORKT      1
+$FORKR      2
+$FORKA      3
+
+$ML2FC      5 # mode-line to frame count: 3-6->-5,else->4
+$XGA?       6 # mode-line>11?: 0-10->-1,else->0
+$RSADJ      7 # serial state -1
+$KS1?       8 # &3==1 ? 0:-1
+$KS01?      9 # &3==0||1 ? 0:-1
+$KDATA     10 # &C>>2
+$KSTART    11 # 0x84?
+$TRSTOP    12 # &0x81|2
+$TRSTART   13 # &0x81|4
 $SRP       14 # >>1
 $SRN       15 # >>1&0x80
 
 #FND - CPU
-
-
-$FORKI      2 # 0000->0x28,0001->0x50,001x->0x78,01xx->0xA0,1xxx->C8
-
+$FORK1      0 # 0->0x80,else->0xC0
+$FORK2      1 # 0xFF->0x40,0->0x80,else->0xC0
+$FORK3      2 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+$FORKI      3 # 0000->0x28,0001->0x50,001x->0x78,01xx->0xA0,1xxx->C8
 $REGMAPH    4 # map dest/hi register to zpage addr
 $REGMAPL    5 # map source/low register to zpage addr
 $F2PSW      6 # flags->PSW

@@ -29,7 +29,7 @@ LD HL, $INC$FORK1
 LD Y, $PCL
 #39
 FNFH DZ, XD           # X,PCL = PCL+1
-FNEL A, PC
+FNDL A, PC
 #45
 
 ADDR 0x80

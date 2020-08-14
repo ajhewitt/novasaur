@@ -41,7 +41,7 @@ FNFH DZ, VD               # increment? vline —> V
 FNFL E, HL                # serial inputs -> H
 LD Y, $COMLS
 COMH DZ, NA               # update comms line state
-LD HL, $SSADJ$NULL
+LD HL, $RSADJ$NULL
 #199
 FNEH AZ, ND               # adjust serial state by -1
 LD HL, $INC$NULL

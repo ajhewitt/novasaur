@@ -26,7 +26,7 @@ FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
-LD HL, $IDEN$FORKC
+LD HL, $IDEN$FORKR
 LD Y, $RMODE
 FNEL DZ, PC           # comms  mode fork
 #32/27
@@ -45,18 +45,18 @@ LD PG, $JSYNCE_PG     # jump page
 
 ADDR 0x30             # mode 1: keyboard idle
 #32/48
-LD HL, $PS1?$NULL
+LD HL, $KS1?$NULL
 LD Y, $COMLS
 FNEH DZ, NA
 LDN PC, $CLKSTART1    # comm line PS/2 state != 0
 #40/56
-LD HL, $PS01?$NULL
+LD HL, $KS01?$NULL
 LD Y, $COMPS
 FNEH DZ, HLA
 LDP PC, $CLKSTART2    # comm process PS/2 state < 2
 LD HL, $INC$NULL
 #50/66
-LDZ Y, $COMIDLE
+LDZ Y, $KIDLE
 FNH DZ, HLD
 LDN PC, $EXIT_IDLE    # idle until timeout
 LD HL, $TBD           # reset comms label
@@ -65,12 +65,12 @@ LD PG, $JSYNCE_PG     # jump page
 
 ADDR 0x50             # mode 3,5,7,9,B: keyboard scan L
 #32/80
-LD HL, $PS01?$NULL
+LD HL, $KS01?$NULL
 LD Y, $COMPS
 FNEH DZ, NA           # A = test number of bits
 #39/86
-LDP HL, $4$PSDATA     # 4 bits received
-LDN HL, $2$PSDATA     # 2 bits received
+LDP HL, $4$KDATA      # 4 bits received
+LDN HL, $2$KDATA      # 2 bits received
 LD Y, $RMODE
 ADDH DZ, ND           # comms mode +2 or 4
 LD Y, $SCANL
@@ -91,12 +91,12 @@ LD PC, $EXIT_1VMC     # exit after 1 VMC
 
 ADDR 0x70             # mode D,F,0x11,0x13,0x15,0x17: keyboard scan L
 #32/112
-LD HL, $PS01?$NULL
+LD HL, $KS01?$NULL
 LD Y, $COMPS
 FNEH DZ, NA           # A = test number of bits
 #39/118
-LDP HL, $4$PSDATA     # 4 bits received
-LDN HL, $2$PSDATA     # 2 bits received
+LDP HL, $4$KDATA      # 4 bits received
+LDN HL, $2$KDATA      # 2 bits received
 LD Y, $RMODE
 ADDH DZ, ND           # comms mode +2 or 4
 LD Y, $SCANH
@@ -118,11 +118,9 @@ NOP
 NOP
 NOP
 $CLKSTART2            #49
-NOP
-#50/147
-LD HL, $INC2$NULL
+LD HL, $KSTART$NULL
 LD Y, $RMODE
-FNH DZ, HLD           # 3 -> comms mode
+FNEH DZ, ND           # 0x84 -> comms mode
 $EXIT_IDLE
 LD HL, $0x30
 LD Y, $SCANL
@@ -158,8 +156,8 @@ FNH DZ, HLD           # RxWrIdx+1 if mode > 0x10
 LD HL, $IDEN$NULL
 LDZ Y, $COMPS
 FNH DZ, HLA           # A sign = Rx data
-LDP HL, $SSTART$NULL  # mode 0x4
-LDN HL, $SSTOP$NULL   # mode 0x2
+LDP HL, $TRSTART$NULL # mode 0x4
+LDN HL, $TRSTOP$NULL  # mode 0x2
 LDZ Y, $RMODE
 #60/202
 FNEH DZ, ND           # 2 if stop, 4 if start -> comms mode

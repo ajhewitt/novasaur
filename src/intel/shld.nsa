@@ -10,7 +10,7 @@ ADDH DZ, ND           # inc state
 LD HL, $INC$FORK3
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-FNEL A, PC
+FNDL A, PC
 #15
 
 ADDR 0x20             # PCL = 254, iden PCH, iden PCH, inc PCH

@@ -26,7 +26,7 @@ FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
-LD HL, $IDEN$FORKC
+LD HL, $IDEN$FORKT
 LD Y, $TMODE
 FNEL DZ, PC           # comms  mode fork
 #32/27
@@ -39,52 +39,3 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/39
 
-ADDR 0xB0             # mode 2,0x12: serial idle
-#32/176
-LD HL, $0x80
-LD Y, $TMODE
-MULH DZ, NA           # determine if mode > 0x10
-#39/182
-LDP HL, $IDEN$IDEN
-LDN HL, $INC$IDEN
-LDZ Y, $RXWRIDX
-FNFL DZ, Y            # Y = Rx write index
-FNH DZ, HLD           # RxWrIdx+1 if mode > 0x10
-#49/191
-LD HL, $IDEN$NULL
-LDZ Y, $COMPS
-FNH DZ, HLA           # A sign = Rx data
-LDP HL, $SSTART$NULL  # mode 0x4
-LDN HL, $SSTOP$NULL   # mode 0x2
-LDZ Y, $TMODE
-#60/202
-FNEH DZ, ND           # 2 if stop, 4 if start -> comms mode
-LD HL, $TBD           # Tx data label
-LDN PG, $JSYNCE_PG    # jump page if Tx
-LD PC, $EXIT_1VMC     # else exit VMC=1
-#68/210
-
-ADDR 0xE0             # mode 4,6,8,A,C,E,0x10,0x12: serial sample
-#32/224
-LD HL, $RXBUFF
-MVHL A, XA            # X = Rx buffer
-LD HL, $IDEN$NULL
-#40/230
-LDZ Y, $COMPS
-FNH DZ, HLA           # A sign = Rx data
-LDP HL, $SRP$IDEN     # shift right, reset MSB
-LDN HL, $SRN$IDEN     # shift right, set MSB
-LDZ Y, $RXWRIDX
-#49/239
-FNFL DZ, Y            # Y = Rx write index
-FNEH D, ND            # Rx data shift right, set/reset MSB
-LD HL, $INC2$NULL
-LDZ Y, $TMODE
-#59/247
-FNH DZ, HLD           # mode+2
-NOP
-NOP
-LD HL, $TBD           # Tx data label
-LDN PG, $JSYNCE_PG    # jump page if Tx
-LD PC, $EXIT_1VMC     # else exit VMC=1
-#68/256
