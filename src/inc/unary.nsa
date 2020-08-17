@@ -8,13 +8,13 @@ $DEC        2
 $INC2       3
 $1COM       4
 $2COM       5
-$ZERO?      6 # alias
-$OVER?      6
-$UNDER?     7
-$INCLINE    8
-$INCPROC    9
-
-
+$LSR        6 # >>1
+$NSR        7 # >>1&0x80
+$ZERO?      8 # alias
+$OVER?      8
+$UNDER?     9
+$INCLINE   10
+$INCPROC   11
 
 
 $SWAP      14
@@ -32,11 +32,11 @@ $RSADJ      7 # serial state -1
 $KS1?       8 # &3==1 ? 0:-1
 $KS01?      9 # &3==0||1 ? 0:-1
 $KDATA     10 # &C>>2
-$KSTART    11 # 0x84?
+$KSTART    11 # 0x84
 $TRSTOP    12 # &0x81|2
 $TRSTART   13 # &0x81|4
-$SRP       14 # >>1
-$SRN       15 # >>1&0x80
+
+
 
 #FND - CPU
 $FORK1      0 # 0->0x80,else->0xC0

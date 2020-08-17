@@ -3,7 +3,8 @@ INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE TSYNCE_PG
-$TBD              2
+$NOTX  100
+$EOT   200
 
 # PMODE: column in AV used during process cycle
 # VLINE: line(page) in video ram
@@ -38,4 +39,80 @@ FNH DZ, HL            # inst cache -> HL
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/39
+
+ADDR 0x30             # mode 2,0x14: transmit idle
+#32/48
+LD HL, $4$2COM
+MULH E, NA            # A sign = CTS
+LDN PC, $NOTX         # jump to no Tx
+LDZ Y, $TXRDIDX
+#40/56
+FNFL DZ, HL           # HL = -TxRdIndex
+LD Y, $TXWRIDX
+ADDHL DZ, NA          # A = TxWrIndex - TxRdIndex
+LD HL, $ZERO?$NULL
+#41/64
+FNH A, HLA            # A = 0 if TxWrIndex == TxRdIndex
+LDP PC, $EOT          # jump to end of Tx
+LD HL, $0x70
+LD Y, $EREG
+ANDH DZ, ED           # 0 -> Tx (start bit)
+#60/73
+LD HL, $TRSTART$NULL
+LD Y, $TMODE
+FNEH DZ, ND           # 4 -> Tx mode
+NOP
+LD HL, $INC$NULL
+#70/82
+LD Y, $VMS
+FNH DZ, HLD           # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/90
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/94
+
+ADDR 0x60             # mode 4,6,8,A,C,E,0x10,0x12: transmit sample
+#32/96
+LD HL, $TXBUFF
+MVHL A, XA            # X = Tx buffer
+LD HL, $INC2$NULL
+#40/102
+LDZ Y, $TMODE
+FNH DZ, HLD           # mode+2
+LD HL, $REVERSE$IDEN
+LDZ Y, $TXRDIDX
+FNFL DZ, Y            # Y = Tx read index
+#51/111
+FNFH D, NA            # A sign = Tx LSB
+LD HL, $LSR$NULL
+LDP PC, $TXHIGH       # jump to set Tx
+#TXLOW
+FNH D, HLD            # Tx byte >> 1
+LD HL, $0x70
+#61/120
+LD Y, $EREG
+ANDH DZ, ED           # Tx reset
+LD PC, $EXIT_1VMC
+$TXHIGH
+FNH D, HLD            # Tx byte >> 1
+#60/127
+LD HL, $0x80
+LD Y, $EREG
+ORH DZ, ED            # Tx set
+NOP
+$EXIT_1VMC
+LD HL, $INC$NULL
+#70/136
+LD Y, $VMS
+FNH DZ, HLD           # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/144
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/148
 

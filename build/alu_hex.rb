@@ -436,10 +436,7 @@ print_unary(0xEB, [0x84] * 256)
 print_unary(0xEC, 256.times.map{|i| (i&0x81) | 2})
 # $RSTART: &0x81|4
 print_unary(0xED, 256.times.map{|i| (i&0x81) | 4})
-# $SRP: >>1
-print_unary(0xEE, 256.times.map{|i| i>>1})
-# $SRN: >>1&0x80
-print_unary(0xEF, 256.times.map{|i| (i>>1) | 0x80})
+
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only - generic/default functions
 # $IDEN: A = A
@@ -454,16 +451,20 @@ print_unary(0xF3, [*2..0xFF] + [0,1])
 print_unary(0xF4, 256.times.map{|i| ((-1*i)-1)&0xFF})
 # $2COM: A = -A
 print_unary(0xF5, 256.times.map{|i| (-1*i)&0xFF})
+# $LSR: >>1
+print_unary(0xF6, 256.times.map{|i| i>>1})
+# $NSR: >>1&0x80
+print_unary(0xF7, 256.times.map{|i| (i>>1) | 0x80})
 # $OVER?: A = A==0? 0 : -1
-print_unary(0xF6, [0] + Array.new(0xFF, 0xFF))
+print_unary(0xF8, [0] + Array.new(0xFF, 0xFF))
 # $UNDER?: A = A==0xFF? -1 : 0
-print_unary(0xF7, Array.new(0xFF, 0) + [0xFF])
+print_unary(0xF9, Array.new(0xFF, 0) + [0xFF])
 # $INCLINE: mode_line+1, cycle = 0
-print_unary(0xF8, inc_line)
+print_unary(0xFA, inc_line)
 # $INCPROC: mode_line+1, cycle = 1
-print_unary(0xF9, inc_line.map{|i| i+1})
+print_unary(0xFB, inc_line.map{|i| i+1})
 
 # $SWAP: AB = BA
 print_unary(0xFE, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
-# $REVERSE: A76543210 = A01234567
+# $REVERSE: 76543210 = 01234567
 print_unary(0xFF, 256.times.map {|i| (sprintf "%08b", i)}.map {|i| i.reverse.to_i(2)})

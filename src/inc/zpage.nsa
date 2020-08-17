@@ -89,4 +89,6 @@ $PUSHPC_INST  0x38
 $RESTART_INST 0xCB
 $JMP_INST     0xC3
 
-$RXBUFF       0xF1
+$KBBUFF       0xF1
+$RXBUFF       0xF2
+$TXBUFF       0xF3

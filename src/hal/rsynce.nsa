@@ -141,7 +141,7 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #86/176
 
-ADDR 0xB0             # mode 2,0x12: serial idle
+ADDR 0xB0             # mode 2,0x12: receive idle
 #32/176
 LD HL, $0x80
 LD Y, $RMODE
@@ -167,7 +167,7 @@ NOP
 LD PC, $EXIT_1VMC     # else exit VMC=1
 #68/209
 
-ADDR 0xE0             # mode 4,6,8,A,C,E,0x10,0x12: serial sample
+ADDR 0xE0             # mode 4,6,8,A,C,E,0x10,0x12: receive sample
 #32/224
 LD HL, $RXBUFF
 MVHL A, XA            # X = Rx buffer
@@ -175,12 +175,12 @@ LD HL, $IDEN$NULL
 #40/230
 LDZ Y, $COMPS
 FNH DZ, HLA           # A sign = Rx data
-LDP HL, $SRP$IDEN     # shift right, reset MSB
-LDN HL, $SRN$IDEN     # shift right, set MSB
+LDP HL, $LSR$IDEN     # shift right, reset MSB
+LDN HL, $NSR$IDEN     # shift right, set MSB
 LDZ Y, $RXWRIDX
 #49/239
 FNFL DZ, Y            # Y = Rx write index
-FNEH D, ND            # Rx data shift right, set/reset MSB
+FNFH D, ND            # Rx data shift right, set/reset MSB
 LD HL, $INC2$NULL
 LDZ Y, $RMODE
 #59/247
