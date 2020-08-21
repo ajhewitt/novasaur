@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2020-07-18"
+Date "2020-08-20"
 Rev "1.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -2326,10 +2326,8 @@ Text GLabel 2050 6350 2    50   Output ~ 0
 tx
 Text GLabel 2350 6450 2    50   Output ~ 0
 rts
-Text GLabel 2050 6550 2    50   Output ~ 0
-mode1
 Text GLabel 2050 6650 2    50   Output ~ 0
-mode2
+mode1
 Text GLabel 2050 6050 2    50   Output ~ 0
 DB0
 Text GLabel 2050 6150 2    50   Output ~ 0
@@ -2337,7 +2335,7 @@ DB1
 Text GLabel 2050 6250 2    50   Output ~ 0
 DB2
 Text GLabel 2050 6750 2    50   Output ~ 0
-mode3
+mode2
 Wire Wire Line
 	2300 5300 2300 5250
 $Comp
@@ -2415,9 +2413,9 @@ rx
 Text GLabel 3800 6150 2    50   Input ~ 0
 cts
 Text GLabel 3800 6350 2    50   Input ~ 0
-ps2clk
+kbdclk
 Text GLabel 3800 6250 2    50   Input ~ 0
-ps2rx
+kbdrx
 Entry Bus Bus
 	5700 900  5800 800 
 Entry Bus Bus
@@ -2430,6 +2428,8 @@ Text GLabel 2350 1300 1    50   Input ~ 0
 DA[0..15]
 Text GLabel 3950 1300 1    50   BiDi ~ 0
 DD[0..7]
+Text GLabel 2050 6550 2    50   Output ~ 0
+kbden
 Wire Bus Line
 	850  800  10150 800 
 Wire Bus Line

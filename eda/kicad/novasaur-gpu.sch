@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2020-07-18"
+Date "2020-08-20"
 Rev "1.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -489,11 +489,11 @@ mode1
 Text GLabel 1650 3850 0    50   Input ~ 0
 0
 Text GLabel 1650 3950 0    50   Input ~ 0
-mode3
+mode2
 Text GLabel 1650 3750 0    50   Input ~ 0
 0
 Text GLabel 1650 4050 0    50   Input ~ 0
-mode3
+mode2
 Wire Wire Line
 	2650 4250 2750 4250
 Wire Wire Line
@@ -1468,7 +1468,7 @@ F 3 "~" H 6850 2450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 9200 2850 0    50   Input ~ 0
-mode3
+mode2
 Text GLabel 1650 4750 0    50   Input ~ 0
 1
 Wire Wire Line
@@ -1541,8 +1541,6 @@ Wire Wire Line
 	5700 3650 5900 3650
 Wire Wire Line
 	9250 3550 9250 4750
-Wire Wire Line
-	2650 1950 3650 1950
 Text GLabel 4250 3450 0    50   Input ~ 0
 1
 $Comp
@@ -1583,12 +1581,10 @@ Wire Wire Line
 	4050 3650 4250 3650
 Wire Wire Line
 	4850 3550 5100 3550
-Text Label 2650 1950 0    50   ~ 0
-mode0
 Text GLabel 1650 2250 0    50   Input ~ 0
 ~hblank
 Text GLabel 2650 2250 2    50   Output ~ 0
-ps2tx
+kbdtx
 $Comp
 L Connector:TestPoint_Alt TP?
 U 1 1 5E144DCF
@@ -1656,6 +1652,10 @@ Wire Wire Line
 	9100 2450 9200 2450
 Text GLabel 9200 2450 2    50   Output ~ 0
 ~hblank
+Text GLabel 2650 1950 2    50   Output ~ 0
+mode0
+Text GLabel 3650 1950 0    50   Input ~ 0
+mode0
 Wire Bus Line
 	3050 2150 3050 2450
 Wire Bus Line
