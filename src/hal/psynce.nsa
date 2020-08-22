@@ -61,7 +61,7 @@ LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
 #86/72
 
-$NEXT_FIELD
+$NEXT_FIELD               #76 - next field, cycle=1
 LD Y, $PLINE
 MULH DZ, ND               # 0 -> pline
 #81/76
@@ -79,14 +79,14 @@ FNH AZ, HLD               # vstart -> vline
 LD HL, $INC$NULL
 LDZ Y, $FRAME
 FNFH DZ, ND               # frame count +1
+LDZ Y, $VMS
+#110/100
+FNH DZ, HLD               # VMS +1 (cycle=2)
 LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0
 NOP
-#110/101
 NOP
 NOP
 NOP
-LDZ Y, $VMS
-FNH DZ, HLD               # VMS +1
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 #121/111
@@ -95,114 +95,104 @@ LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
 #129/116
 
-$KBD_SCAN
-#110/116
-LDZ Y, $RMODE
-FNH DZ, HLD               # set LSB -> RMODE to force keyboard scan
+$KBD_SCAN                 #114 - scan keyboard, cycle=2
+LDZ Y, $TMODE
+FNH DZ, HLD               # set LSB -> TMODE to stop Tx
 LD HL, $IDEN$NULL
+#120/120
 LD Y, $KTO
-FNFH DZ, NA               # PS/2 clk timeout
-#121/125
+FNFH DZ, HLA              # PS/2 clk timeout
 LDZ Y, $KIDLE
 FNH AZ, HLD               # clk timeout -> PS/2 idle count
-LD HL, $0x18
-LD Y, $EREG
-#129/132
-ORHL DZ, ED               # E | 00011000 -> E
 LD HL, $XGA?$NULL
+#131/129
 LD Y, $VMS
 FNEH DZ, NA
-#140/140
 LDP PG, $XSYNCE_PG        # jump page if 4-cycle per line
-LDZ HL, $INC2$NULL
-FNH DZ, HLD               # VMS +2
 LD HL, $ML2FC$NULL
 LD Y, $FRAME
-#149/149
+#141/138
 FNEH AZ, ND               # -4/-5 -> Frame count
 LD HL, $INC$NULL
+LD Y, $VMS
+FNFH DZ, ND               # VMS +1 (cycle=3)
+#151/146
 LDZ Y, $T0
 FNH DZ, HLD               # T0 +1
+NOP
+NOP
+NOP
 LDN PC, $RET_15TPS        # return if T0<90
 NOP
-#160/158
+#160/155
 LD HL, $0xA6
 MVHL AZ, ND               # T0 = -90
 LD HL, $INC$NULL
 LDZ Y, $T1
-#170/166
+#170/163
 FNH DZ, HLD               # T1 +1
 LDN PC, $T0_ADJUST        # return if T1<120
 LD HL, $0x88
 MVHL AZ, ND               # T1 = -120
 LD HL, $INC$NULL
-#181/175
+#181/172
 LDZ Y, $T2
 FNH DZ, HLD               # T2 +1
 LDN PC, $RET_5TPH         # return if T2<120
 LD HL, $0x88
 MVHL AZ, ND               # T2 = -120
-#192/184
+#192/181
 LD HL, $INC$NULL
 LD Y, $T3
 FNFH DZ, ND               # T3 +1
 LDZ Y, $VMS
-#201/192
-FNH DZ, HLD               # VMS +1
+#201/189
+FNH DZ, HLD               # VMS +1 (cycle=4)
+$RET_15TPS                #160 - 15 ticks per second, cycle=3
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
-#209/198
+#209(166)/195
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
-#215/202
+#215(172)/199
 
-$RET_15TPS                #160 - 15 ticks per second
-#160/202
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL                # inst cache -> HL
-LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
-#172/211
-
-$T0_ADJUST                #174 - 10 ticks per min
+$T0_ADJUST                #174 - 10 ticks per min, cycle=3
 LD HL, $0xF0
 ORHL A, NA                # A = T1 | 0xF0
-#180/215
+#180/203
 LDZ HL, $INC$NULL
 FNH A, HLA                # A +1 (A +ve if T1=0x?F)
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $T0
 FNH DZ, HLD               # adjust T0 every 16 T1
-#191/225
+#191/213
 LD HL, $INC$NULL
 LD PC, $RET_10TPM
-#195/229
+#195/217
 
-$RET_5TPH                 #187 - 5 ticks per hour
+$RET_5TPH                 #187 - 5 ticks per hour, cycle=3
 NOP
 NOP
 NOP
-#190/232
-NOP
-NOP
-NOP
-NOP
-NOP
-$RET_10TPM                #195 - 10 ticks per min
+#190/220
 NOP
 NOP
 NOP
 NOP
-#199/241
+NOP
+$RET_10TPM                #195 - 10 ticks per min, cycle=3
+NOP
+NOP
+LD HL, $INC$NULL
+#199/229
 LDZ Y, $VMS
-FNH DZ, HLD               # VMS +1
+FNH DZ, HLD               # VMS +1 (cycle=4)
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
-#209/250
+#209/237
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
-#215/254
+#215/241

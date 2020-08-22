@@ -8,24 +8,30 @@ PAGE XSYNCE_PG
 # VLINE: line(page) in video ram
 # VMS: [mode_line][e][cycle count]
 #  11,12,13,14,15     0,1,2,3
+# assume Y=$VMS, cycle=2
 LD HL, $0xFC
+#140
 LD Y, $FRAME
 MVHL AZ, ND               # -4 -> Frame count
-#150
 LD HL, $INC$NULL
 LDZ Y, $T0
+#150
 FNH DZ, HLD               # T0 +1
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#160
+NOP
+NOP
+NOP
 LDN PC, $RET_15TPS        # return if T0<90
 LD HL, $0xA6
-#159
 MVHL AZ, ND               # T0 = -90
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
 #170                      # Need null sync now
 LD HL, $INCLINE$NULL
 LDZ Y, $VMS
@@ -65,20 +71,11 @@ FNFH DZ, ND               # T3 +1
 LD PC, $RET_1TPD
 #237
 
-$RET_15TPS                #158 - 15 ticks per second
-NOP
-NOP
-#160
-NOP
-NOP
-NOP
-NOP
-NOP
+$RET_15TPS                #165 - 15 ticks per second
 NOP
 NOP
 NOP
 LD Y, $VMS                # set Y = $VMS on exit
-#170
 LD PG, $NSYNCE_PG         # jump to null sync
 #172
 
@@ -120,7 +117,7 @@ NOP
 NOP
 NOP
 LDZ Y, $VMS
-FNH DZ, HLD               # VMS +1
+FNH DZ, HLD               # VMS +1 (cycle=1)
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 #250
