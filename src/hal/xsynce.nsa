@@ -9,17 +9,13 @@ PAGE XSYNCE_PG
 # VMS: [mode_line][e][cycle count]
 #  11,12,13,14,15     0,1,2,3
 # assume Y=$VMS, cycle=2
-LD HL, $0xFC
-#140
+LD HL, $0xFC              #141
 LD Y, $FRAME
 MVHL AZ, ND               # -4 -> Frame count
 LD HL, $INC$NULL
+#151
 LDZ Y, $T0
-#150
 FNH DZ, HLD               # T0 +1
-NOP
-NOP
-NOP
 NOP
 NOP
 NOP
