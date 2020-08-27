@@ -1272,7 +1272,7 @@ Wire Wire Line
 Wire Wire Line
 	5300 7100 5400 7100
 Text GLabel 5300 5950 2    50   Input ~ 0
-kbdtx
+~kbdtx
 Connection ~ 5150 4900
 Connection ~ 5300 7100
 Connection ~ 5400 7100
@@ -2322,7 +2322,7 @@ F 3 "~" H 2750 2950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 4100 5950 0    50   Input ~ 0
-kbden
+~kbden
 $Comp
 L Device:R_US R?
 U 1 1 5F780C3D

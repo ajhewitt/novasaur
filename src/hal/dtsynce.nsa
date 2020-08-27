@@ -1,0 +1,8 @@
+# Delay of comms tx on execute
+INCLUDE ../inc/pages.nsa
+PAGE DTSYNCE_PG
+
+NOP
+NOP
+LD PG, $TSYNCE_PG
+#4

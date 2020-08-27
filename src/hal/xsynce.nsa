@@ -15,7 +15,7 @@ MVHL AZ, ND               # -4 -> Frame count
 LD HL, $INC$NULL
 #151
 LDZ Y, $T0
-FNH DZ, HLD               # T0 +1
+FNH DZ, HLD               # T0+1
 NOP
 NOP
 NOP
@@ -48,7 +48,7 @@ LD HL, $RSADJ$NULL
 FNEH AZ, ND               # adjust serial state by -1
 LD HL, $INC$NULL
 LDZ Y, $T1
-FNH DZ, HLD               # T1 +1
+FNH DZ, HLD               # T1+1
 LDN PC, $T0_ADJUST        # return if T1<120
 #209
 LD HL, $0x88
@@ -56,14 +56,14 @@ MVHL AZ, ND               # T1 = -120
 LD HL, $INC$NULL
 LDZ Y, $T2
 #219
-FNH DZ, HLD               # T2 +1
+FNH DZ, HLD               # T2+1
 LDN PC, $RET_5TPH         # return if T2<120
 LD HL, $0x88
 MVHL AZ, ND               # T2 = -120
 LD HL, $INC$NULL
 #230
 LD Y, $T3
-FNFH DZ, ND               # T3 +1
+FNFH DZ, ND               # T3+1
 LD PC, $RET_1TPD
 #237
 
@@ -79,7 +79,7 @@ $T0_ADJUST                #210 - 10 ticks per min
 LD HL, $0xF0
 ORHL A, NA                # A = T1 | 0xF0
 LDZ HL, $INC$NULL
-FNH A, HLA                # A +1 (A +ve if T1=0x?F)
+FNH A, HLA                # A+1 (A +ve if T1=0x?F)
 #220
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
@@ -113,7 +113,7 @@ NOP
 NOP
 NOP
 LDZ Y, $VMS
-FNH DZ, HLD               # VMS +1 (cycle=1)
+FNH DZ, HLD               # VMS+1 (cycle=1)
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 #250

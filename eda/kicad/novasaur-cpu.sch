@@ -2429,7 +2429,7 @@ DA[0..15]
 Text GLabel 3950 1300 1    50   BiDi ~ 0
 DD[0..7]
 Text GLabel 2050 6550 2    50   Output ~ 0
-kbden
+~kbden
 Wire Bus Line
 	850  800  10150 800 
 Wire Bus Line

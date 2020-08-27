@@ -57,6 +57,6 @@ $RSTVEC    11 # map inst+1 to PCL vector
 
 
 
-#FNC - Math
+#FNC - Extended
 $V2E        0
 $V2M        1

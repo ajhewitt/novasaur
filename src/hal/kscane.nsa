@@ -1,0 +1,184 @@
+# keyboard jump page
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE KSCANE_PG
+
+LD HL, $KS01?$FORKT
+LD Y, $KMODE
+FNEL DZ, PC           # keyboard fork
+#40/6
+
+ADDR 0x08             #40 - mode 2: keyboard idle
+LD Y, $COMPS
+FNEH DZ, NA
+LDN PC, $CLKSTART1    # KS=2|3, clock started last cycle
+LD Y, $COMLS
+FNEH DZ, NA
+#51/18
+LDN PC, $CLKSTART2    # KS=2|3, clock started this cycle
+LD HL, $INC$NULL
+LDZ Y, $KIDLE
+FNH DZ, HLD           # keyboard idle+1
+LDP PC, $TIMEOUT      # timeout when idle>0
+LD HL, $0xC0
+#61/29
+LD Y, $SCANH
+MVH AZ, ND            # XXXX1100 -> scan H
+LD PC, $EXIT
+#68/35
+
+$CLKSTART1            #47 - clock start
+LD HL, $INC2$NULL
+LDZ Y, $KMODE
+#51/39
+FNH DZ, HLD           # 4 -> keyboard mode
+LD HL, $0xC0
+LD Y, $SCANL
+MVH AZ, ND            # XXXX1100 -> scan L
+#60/46
+LD HL, $INC$NULL
+LDZ Y, $VMS
+FNH DZ, HLD           # VMS+1
+LD HL, $KS01?$NULL
+NOP
+NOP
+#70/55
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#80/65
+NOP
+LD PC, $SCAN_LOW      # process first sample
+#83/68
+
+$CLKSTART2            #53 - clock start
+LD HL, $INC2$NULL
+LDZ Y, $KMODE
+FNH DZ, HLD           # 4 -> keyboard mode
+LD HL, $0xC0
+#61/75
+LD Y, $SCANL
+MVH AZ, ND            # XXXX1100 -> scan L
+LD PC, $EXIT
+#68/81
+
+$TIMEOUT              #60 - timeout
+LD HL, $DEC$NULL
+LDZ Y, $TMODE
+FNH DZ, HLD           # tx mode-1
+LD PC, $EXIT
+#68/88
+
+ADDR 0x58             #40 - mode 4-0xC: keyboard scan L
+$SCAN_LOW
+LD Y, $COMPS
+FNEH DZ, NA           # A = test number of bits
+LDP HL, $4$KDATA      # 4 bits received
+LDN HL, $2$KDATA      # 2 bits received
+LD Y, $KMODE
+#50/98
+ADDH DZ, ND           # comms mode +2 or 4
+LD Y, $SCANL
+MULH DZ, NA           # scan L << 1 or 2
+LD Y, $COMPS
+#60/106
+FNEL DZ, HL           # H = ps/2 data
+LD Y, $SCANL
+ORH AZ, ND            # add ps/2 data to scan
+LD HL, $INC$NULL
+#70/114
+LD Y, $VMS
+FNH DZ, HLD           # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/122
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/126
+
+ADDR 0x80             #40 - mode 0xE-0x18: keyboard scan L
+LD Y, $COMPS
+FNEH DZ, NA           # A = test number of bits
+LDP HL, $4$KDATA      # 4 bits received
+LDN HL, $2$KDATA      # 2 bits received
+LD Y, $KMODE
+#50/138
+ADDH DZ, ND           # comms mode +2 or 4
+LD Y, $SCANH
+MULH DZ, NA           # scan L << 1 or 2
+LD Y, $COMPS
+#60/146
+FNEL DZ, HL           # H = ps/2 data
+LD Y, $SCANH
+ORH AZ, ND            # add ps/2 data to scan
+LD HL, $INC$NULL
+#70/154
+LD Y, $VMS
+FNH DZ, HLD           # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/162
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/166
+
+ADDR 0xA8             #40 - mode 0x1A:store sampled byte
+LD HL, $KBBUFF
+MVHL A, XA            # X = Kb buffer
+LD HL, $IDEN$NULL
+LD Y, $SCANL
+#50
+FNH DZ, HLA           # A = scan low
+LDP HL, $0x40         # scan low contains 6 bits
+LDN HL, $0x80         # scan low contains 5 bits
+MULH DZ, NA           # A sign = 1st bit of sample
+LDN PC, $TIMEOUT      # exit if start bit high
+LD HL, $0x24
+#61
+MULH AZ, ND           # upper 4 or 5 bits -> scan low
+LD Y, $SCANH
+MULL DZ, HL           # H = lower 4 or 3 bits
+LD Y, $SCANL
+#71
+ORH DZ, NA            # rest of bits -> A
+LD HL, $IDEN$IDEN
+LDZ Y, $KBWRIDX
+FNFL DZ, Y            # Y = Kb write index
+#81
+FNH A, HLD            # A -> keyboard buffer
+LD HL, $INC$NULL
+LD Y, $KBWRIDX
+FNFH DZ, ND           # Kb write index+1
+#90
+LDZ Y, $VMS
+FNH DZ, HLD           # VMS+1
+LD HL, $0x12          # HL = 18
+LDZ Y, $KIDLE
+MVHL AZ, ND           # 18 -> keyboard idle count
+#102
+LD HL, $0x62
+LD Y, $KMODE
+MVHL AZ, ND           # 0x62 -> keyboard mode (idle)
+NOP
+$EXIT                 #68
+LD HL, $INC$NULL
+#70,113
+LD Y, $VMS
+FNH DZ, HLD           # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80,123
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86,129

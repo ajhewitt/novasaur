@@ -1,8 +1,0 @@
-# Delay of comms rx on execute
-INCLUDE ../inc/pages.nsa
-PAGE DRSYNCE_PG
-
-NOP
-NOP
-LD PG, $RSYNCE_PG
-#4

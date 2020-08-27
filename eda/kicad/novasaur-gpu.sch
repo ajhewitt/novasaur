@@ -1467,7 +1467,7 @@ F 3 "~" H 6850 2450 50  0001 C CNN
 	1    6650 2450
 	1    0    0    -1  
 $EndComp
-Text GLabel 9200 2850 0    50   Input ~ 0
+Text GLabel 9200 2650 0    50   Input ~ 0
 mode2
 Text GLabel 1650 4750 0    50   Input ~ 0
 1
@@ -1523,20 +1523,18 @@ Wire Wire Line
 $Comp
 L 74xx:74LS86 U?
 U 3 1 5E79B6AD
-P 9500 2750
+P 9500 2550
 AR Path="/5E79B6AD" Ref="U?"  Part="3" 
 AR Path="/5DA1E9BD/5E79B6AD" Ref="U1"  Part="3" 
-F 0 "U1" H 9500 2750 50  0000 C CNN
-F 1 "74F86" H 9500 2984 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 9500 2750 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 9500 2750 50  0001 C CNN
-	3    9500 2750
+F 0 "U1" H 9500 2550 50  0000 C CNN
+F 1 "74F86" H 9500 2784 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 9500 2550 50  0001 C CNN
+F 3 "74xx/74ls86.pdf" H 9500 2550 50  0001 C CNN
+	3    9500 2550
 	1    0    0    -1  
 $EndComp
-Text GLabel 9800 2750 2    50   Output ~ 0
+Text GLabel 9800 2550 2    50   Output ~ 0
 hsync
-Wire Wire Line
-	9050 2450 9100 2450
 Wire Wire Line
 	5700 3650 5900 3650
 Wire Wire Line
@@ -1582,9 +1580,9 @@ Wire Wire Line
 Wire Wire Line
 	4850 3550 5100 3550
 Text GLabel 1650 2250 0    50   Input ~ 0
-~hblank
+hblank
 Text GLabel 2650 2250 2    50   Output ~ 0
-kbdtx
+~kbdtx
 $Comp
 L Connector:TestPoint_Alt TP?
 U 1 1 5E144DCF
@@ -1643,19 +1641,12 @@ Wire Wire Line
 Wire Wire Line
 	1250 2450 1650 2450
 Connection ~ 1250 2450
-Wire Wire Line
-	9200 2650 9100 2650
-Wire Wire Line
-	9100 2650 9100 2450
-Connection ~ 9100 2450
-Wire Wire Line
-	9100 2450 9200 2450
-Text GLabel 9200 2450 2    50   Output ~ 0
-~hblank
 Text GLabel 2650 1950 2    50   Output ~ 0
 mode0
 Text GLabel 3650 1950 0    50   Input ~ 0
 mode0
+Wire Wire Line
+	9050 2450 9200 2450
 Wire Bus Line
 	3050 2150 3050 2450
 Wire Bus Line
