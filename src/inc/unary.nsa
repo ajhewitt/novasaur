@@ -22,19 +22,12 @@ $REVERSE   15
 
 #FNE - HAL
 $INCCYC     0
-$FORKT      1
-$FORKR      2
-$FORKA      3
-
-$ML2FC      5 # mode-line to frame count: 3-6->-5,else->4
-$XGA?       6 # mode-line>11?: 0-10->-1,else->0
-$RSADJ      7 # serial state -1
-$KS1?       8 # &3==1 ? 0:-1
-$KS01?      9 # &3==0||1 ? 0:-1
-$KDATA     10 # &C>>2
-$KSTART    11 # 0x84
-$TRSTOP    12 # &0x81|2
-$TRSTART   13 # &0x81|4
+$FORKH      1
+$ML2FC      2 # mode-line to frame count: 3-6->-5,else->4
+$XGA?       3 # mode-line>11?: 0-10->-1,else->0
+$RSADJ      4 # serial state -1
+$KS01?      5 # &3==0||1 ? 0:-1
+$KDATA      6 # &C>>2
 
 
 

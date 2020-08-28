@@ -25,12 +25,12 @@ FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
-LD HL, $IDEN$FORKR
+LD HL, $IDEN$FORKH
 LD Y, $RMODE
 FNEL DZ, PC           # comms  mode fork
 #32/27
 
-ADDR 0x20             # mode 0: no comms
+ADDR 0x20             # mode 0: receive off
 NOP
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
@@ -38,76 +38,142 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/39
 
-ADDR 0x30             # mode 2,0x12: receive idle
-#32/48
-LD HL, $0x80
-LD Y, $RMODE
-MULH DZ, NA           # determine if mode > 0x10
-#39/44
-LDP HL, $IDEN$IDEN
-LDN HL, $INC$IDEN
-LDZ Y, $RXWRIDX
-FNFL DZ, Y            # Y = Rx write index
-FNH DZ, HLD           # RxWrIdx+1 if mode > 0x10
-#49/53
+ADDR 0x30             #32 - mode 1: receive enable
+LD HL, $IDEN$NULL
+LD Y, $RTO
+FNFH DZ, NA           # A = rx timeout
+LD Y, $RIDLE
+#41/56
+FNH AZ, HLD           # A -> rx idle
+LD HL, $INC$NULL
+LDZ Y, $RMODE
+FNH DZ, HLD           # 2 -> rx mode
+LD HL, $0x70
+#51/64
+LD Y, $EREG
+ANDHL DZ, ED          # 0 -> RTS (assert)
+LD PC, $EXIT59
+#59/70
+
+ADDR 0x50             #32 - mode 2: receive start
 LD HL, $IDEN$NULL
 LDZ Y, $COMPS
 FNH DZ, HLA           # A sign = Rx data
-LDP HL, $TRSTART$NULL # mode 0x4
-LDN HL, $TRSTOP$NULL  # mode 0x2
-LDZ Y, $RMODE
-#60/64
-FNEH DZ, ND           # 2 if stop, 4 if start -> comms mode
-NOP
-NOP
-NOP
-NOP
-NOP
+LDP PC, $START
+#39/88
 LD HL, $INC$NULL
-#70/73
-LD Y, $VMS
-FNH DZ, HLD           # VMC+1
+LDZ Y, $RIDLE
+FNH DZ, HLD           # rx idle+1
+LDN PC, $EXIT47       # exit until timeout
+LD HL, $0x10
+LD Y, $EREG
+#50/99
+ORHL DZ, ED           # 1 -> RTS (deassert)
+LD HL, $0xE1
+LD Y, $RMODE
+ANDHL DZ, ND          # 0 -> rx mode (timeout transmission)
+#62/107
+LD PC, $EXIT64
+$START                #40 - start bit
 LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL            # inst cache -> HL
-#80/81
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86/85
+LD Y, $RTO
+FNFH DZ, NA           # A = rx timeout
+LD Y, $RIDLE
+FNH AZ, HLD           # A -> rx idle
+#51/118
+LD HL, $0x24
+LD Y, $RMODE
+MVHL AZ, ND           # 4 -> rx mode
+LD PC, $EXIT61
+#61/126
 
-ADDR 0x60             # mode 4,6,8,A,C,E,0x10,0x12: receive sample
-#32/96
+ADDR 0x80             # mode 4-0x12: receive data bit
 LD HL, $RXBUFF
 MVHL A, XA            # X = Rx buffer
 LD HL, $IDEN$NULL
-#40
+#40/134
 LDZ Y, $COMPS
 FNH DZ, HLA           # A sign = Rx data
 LDP HL, $LSR$IDEN     # shift right, reset MSB
 LDN HL, $NSR$IDEN     # shift right, set MSB
 LDZ Y, $RXWRIDX
-#49
+#49/143
 FNFL DZ, Y            # Y = Rx write index
 FNFH D, ND            # Rx data shift right, set/reset MSB
 LD HL, $INC2$NULL
 LDZ Y, $RMODE
-#59
+#59/151
 FNH DZ, HLD           # mode+2
+LD PC, $EXIT63
+#63/154
+
+ADDR 0xA0             #32 - mode 0x14: receive stop
+LD HL, $0xEE          # HL = -0x12
+LD Y, $RMODE
+ADDHL DZ, ND          # 2 -> Rx mode
+#40/166
+LD HL, $INC$2COM
+LD Y, $VMS
+FNFH DZ, ND           # VMS+1
+LD Y, $RXWRIDX
+#49/174
+FNFH DZ, ND           # A,RxWrIndex+1
+LD Y, $RXRDIDX
+FNFL DZ, HL           # HL = -RxRdIndex
+ADDHL A, NA           # A = RxWrIndex - RxRdIndex
+#61/182
+LD HL, $UNDER?$NULL
+FNH A, HLA            # A = -1 if RxWrIndex == RxRdIndex-1
+LDP PC, $EXIT67       # jump on end of transmission
+LD HL, $0x10
+LD Y, $EREG
+#70/191
+ORHL DZ, ED           # 1 -> RTS (deassert)
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/198
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/202
+
+$EXIT47
+NOP
+NOP
+NOP
+#50/205
 NOP
 NOP
 NOP
 NOP
 NOP
 NOP
+NOP
+NOP
+NOP
+$EXIT59
+NOP
+#60/215
+NOP
+$EXIT61
+NOP
+NOP
+$EXIT63
+NOP
+$EXIT64
+NOP
+NOP
+NOP
+$EXIT67
 NOP
 LD HL, $INC$NULL
-#70
+#70/225
 LD Y, $VMS
 FNH DZ, HLD           # VMC+1
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
-#80
+#80/233
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86
+#86/237

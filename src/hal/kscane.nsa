@@ -4,7 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE KSCANE_PG
 
-LD HL, $KS01?$FORKT
+LD HL, $KS01?$FORKH
 LD Y, $KMODE
 FNEL DZ, PC           # keyboard fork
 #40/6
@@ -90,9 +90,9 @@ LD Y, $SCANL
 MULH DZ, NA           # scan L << 1 or 2
 LD Y, $COMPS
 #60/106
-FNEL DZ, HL           # H = ps/2 data
+FNEL DZ, HL           # H = kbd data
 LD Y, $SCANL
-ORH AZ, ND            # add ps/2 data to scan
+ORH AZ, ND            # add kbd data to scan
 LD HL, $INC$NULL
 #70/114
 LD Y, $VMS
@@ -117,9 +117,9 @@ LD Y, $SCANH
 MULH DZ, NA           # scan L << 1 or 2
 LD Y, $COMPS
 #60/146
-FNEL DZ, HL           # H = ps/2 data
+FNEL DZ, HL           # H = kbd data
 LD Y, $SCANH
-ORH AZ, ND            # add ps/2 data to scan
+ORH AZ, ND            # add kbd data to scan
 LD HL, $INC$NULL
 #70/154
 LD Y, $VMS

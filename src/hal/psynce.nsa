@@ -100,11 +100,11 @@ LDZ Y, $TMODE
 FNH DZ, HLD               # set LSB -> TMODE to stop Tx
 #121/119
 LD HL, $IDEN$NULL
-LD Y, $KTO1
-FNFH DZ, HLA              # PS/2 clk timeout
+LD Y, $KTO
+FNFH DZ, HLA              # kbd clk timeout
 LDZ Y, $KIDLE
 #130/127
-FNH AZ, HLD               # clk timeout -> PS/2 idle count
+FNH AZ, HLD               # clk timeout -> kbd idle count
 LD HL, $XGA?$NULL
 LD Y, $VMS
 FNEH DZ, NA
