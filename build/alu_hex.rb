@@ -367,39 +367,33 @@ print_unary(0xC1, 256.times.map {|i|
 })
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
-# $FORK1: 0->0x80,else->0xC0
-print_unary(0xD0, [0x80] + Array.new(0xFF, 0xC0))
-# $FORK2: 0xFF->0x40,0->0x80,else->0xC0
-print_unary(0xD1, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
-# $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-print_unary(0xD2, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
 # FORKI: {0000:0x28, 0001:0x50, 001x:0x78, 01xx:0xA0, 1xxx:0xC8}
-print_unary(0xD3, fork_intr)
+print_unary(0xD0, fork_intr)
 # $MAPREGH: map instruction to zpage addr of destination register, or high source register pair
 REG8=[0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE0, 0xE1].freeze
 REG16H=[0xE2, 0xE4, 0xE6, 0xE8].freeze
-print_unary(0xD4, 256.times.map { |i|
+print_unary(0xD1, 256.times.map { |i|
   j = i & 0xC7
   (j > 0 && j < 4) ? REG16H[(i&0x30)>>4] : REG8[(i&0x38)>>3]
 })
 # $MAPREGL: map instruction to zpage addr of source register, or low source register pair
 REG16L=[0xE3, 0xE5, 0xE7, 0xE9].freeze
-print_unary(0xD5, 256.times.map { |i|
+print_unary(0xD2, 256.times.map { |i|
   j = i & 0xC7
   (j > 0 && j < 4) ? REG16L[(i&0x30)>>4] : REG8[i&7]
 })
 # $F2PSW: flags->PSW
-print_unary(0xD6, flags_psw)
+print_unary(0xD3, flags_psw)
 # $PSW2F: PSW->flags
-print_unary(0xD7, psw_flags)
+print_unary(0xD4, psw_flags)
 # $SWCARRY: swap carry with borrow flags (CNZPHOBL->BNZPLOCH)
-print_unary(0xD8, swap_carry)
+print_unary(0xD5, swap_carry)
 # $DACARRY: set carry if nibbles > 9
-print_unary(0xD9, da_carry)
+print_unary(0xD6, da_carry)
 # $CON2MUL: condition code to flag multiplier (ZCPS->CNZPHOBL)
 CON=[4, 1, 8, 2].freeze
 UNC=[0xC3, 0xC9, 0xCD].freeze # unconditional instructions
-print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
+print_unary(0xD7, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 # $RSTVEC
 
 
@@ -407,18 +401,24 @@ print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 # 0x0003E000-0x0003EFFF: FNE low nibble only - HAL related
 # $INCCYC: inc, clear ext bit
 print_unary(0xE0, 256.times.map{|i| (i+1)&0xF7})
+# $FORK1: 0->0x80,else->0xC0
+print_unary(0xE1, [0x80] + Array.new(0xFF, 0xC0))
+# $FORK2: 0xFF->0x40,0->0x80,else->0xC0
+print_unary(0xE2, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
+# $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+print_unary(0xE3, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
 # $FORKH: fork on HAL modes
-print_unary(0xE1, [0x60, 0x60, 0x70, 0xA8] * 64)
-# $ML2FC: mode-line to frame count: 3-6->-5,else->4
-print_unary(0xE2, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
-# $XGA?: mode-line: 0-10->-1,else->0
-print_unary(0xE3, [0xFF]*176 + [0]*80)
-# $RSADJ: serial state -1
-print_unary(0xE4, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
+print_unary(0xE4, [0x60, 0x60, 0x70, 0xA8] * 64)
 # $KS01?: &3==0||1 ? 0:-1
 print_unary(0xE5, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C>>2
 print_unary(0xE6, 256.times.map{|i| (i&0xC) >> 2})
+# $ML2FC: mode-line to frame count: 3-6->-5,else->4
+print_unary(0xE7, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
+# $XGA?: mode-line: 0-10->-1,else->0
+print_unary(0xE8, [0xFF]*176 + [0]*80)
+# $RSADJ: serial state -1
+print_unary(0xE9, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
 
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only - generic/default functions

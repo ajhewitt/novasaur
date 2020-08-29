@@ -9,7 +9,7 @@ LD HL, $INC$FORK1
 FNFH DZ, ND           # inc state
 LD Y, $PCL
 FNFH DZ, ND           # X,PCL = PCL+1
-FNDL A, PC            # fork on PCL
+FNEL A, PC            # fork on PCL
 #13
 
 ADDR 0x80             # PCL = 0

@@ -48,7 +48,7 @@ LD HL, $INC$FORK1
 LD Y, $PCL
 #59
 FNFH DZ, XD           # X,PCL = PCL+1
-FNDL A, PC
+FNEL A, PC
 #65
 
 $RESET_CARRY
@@ -69,7 +69,7 @@ LD HL, $INC$FORK1
 LD Y, $PCL
 #59
 FNFH DZ, XD           # X,PCL = PCL+1
-FNDL A, PC
+FNEL A, PC
 #65
 
 ADDR 0x80

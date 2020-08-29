@@ -22,7 +22,7 @@ LD HL, $INC$FORK2
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL+1
 #31
-FNDL A, PC
+FNEL A, PC
 #34
 
 ADDR 0x40             # SPL = 255, iden SPH, inc SPH

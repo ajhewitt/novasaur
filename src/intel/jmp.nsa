@@ -21,7 +21,7 @@ LD HL, $INC$FORK2
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 #20
-FNDL A, PC
+FNEL A, PC
 #23
 
 ADDR 0x40             # PCL = 255, iden PCH, inc PCH

@@ -9,7 +9,7 @@ LD HL, $INCCYC$FORK1
 FNEH DZ, ND        # inc state, clear ext flag
 LD Y, $PCL
 FNFH DZ, XD        # X,PCL = PCL+1
-FNDL A, PC         # fork on PCL
+FNEL A, PC         # fork on PCL
 #13
 
 # assume: Y = $IMODE

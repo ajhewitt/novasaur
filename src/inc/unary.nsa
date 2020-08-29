@@ -22,30 +22,29 @@ $REVERSE   15
 
 #FNE - HAL
 $INCCYC     0
-$FORKH      1
-$ML2FC      2 # mode-line to frame count: 3-6->-5,else->4
-$XGA?       3 # mode-line>11?: 0-10->-1,else->0
-$RSADJ      4 # serial state -1
+$FORK1      1 # 0->0x80,else->0xC0
+$FORK2      2 # 0xFF->0x40,0->0x80,else->0xC0
+$FORK3      3 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+$FORKH      4
 $KS01?      5 # &3==0||1 ? 0:-1
 $KDATA      6 # &C>>2
+$ML2FC      7 # mode-line to frame count: 3-6->-5,else->4
+$XGA?       8 # mode-line>11?: 0-10->-1,else->0
+$RSADJ      9 # serial state -1
+
 
 
 
 #FND - CPU
-$FORK1      0 # 0->0x80,else->0xC0
-$FORK2      1 # 0xFF->0x40,0->0x80,else->0xC0
-$FORK3      2 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$FORKI      3 # 0000->0x28,0001->0x50,001x->0x78,01xx->0xA0,1xxx->C8
-$REGMAPH    4 # map dest/hi register to zpage addr
-$REGMAPL    5 # map source/low register to zpage addr
-$F2PSW      6 # flags->PSW
-$PSW2F      7 # PSW->flags
-$SWCARRY    8 # swap carry with borrow flags
-$DACARRY    9 # set carry if nibbles > 9
-$CON2MUL   10 # condition code to flag multiplier
-$RSTVEC    11 # map inst+1 to PCL vector
-
-
+$FORKI      0 # 0000->0x28,0001->0x50,001x->0x78,01xx->0xA0,1xxx->C8
+$REGMAPH    1 # map dest/hi register to zpage addr
+$REGMAPL    2 # map source/low register to zpage addr
+$F2PSW      3 # flags->PSW
+$PSW2F      4 # PSW->flags
+$SWCARRY    5 # swap carry with borrow flags
+$DACARRY    6 # set carry if nibbles > 9
+$CON2MUL    7 # condition code to flag multiplier
+$RSTVEC     8 # map inst+1 to PCL vector
 
 
 
