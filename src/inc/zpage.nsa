@@ -1,99 +1,98 @@
 # zero page assignments
 
-#vCPU
-$INST       0xBA
-$TMPL       0xBB
-$TMPH       0xBC
-$TEMP       0xBD # alias for TMPL
-$IMASK      0xBE # interrupt mask - lower nibble, bit3: enable
-$IMODE      0xBF # check interrupt - 0: check, -1: skip
-$AREG       0xC0 # Accumulator
-$FREG       0xC1 # Flags - COZNHP00
-$BREG       0xC2
-$CREG       0xC3
-$DREG       0xC4
-$EREG       0xC5
-$HREG       0xC6
-$LREG       0xC7
-$SPH        0xC8 # SP MSB
-$SPL        0xC9 # SP LSB
-$IXH        0xCA # IX MSB
-$IXL        0xCB # IX LSB
-$IYH        0xCC # IY MSB
-$IYL        0xCD # IY LSB
-$PCH        0xCE # PC MSB
-$PCL        0xCF # PC LSB
-
 #Sound
-$TONE1L     0xD0
-$TONE1H     0xD1
-$NOTE1L     0xD2
-$NOTE1H     0xD3
-$WAVE1      0xD4
-$TONE2L     0xD5
-$TONE2H     0xD6
-$NOTE2L     0xD7
-$NOTE2H     0xD8
-$WAVE2      0xD9
-$TONE3L     0xDA
-$TONE3H     0xDB
-$NOTE3L     0xDC
-$NOTE3H     0xDD
-$WAVE3      0xDE
-$NOISE      0xDF
+$TONE1L        0xB0
+$TONE1H        0xB1
+$NOTE1L        0xB2
+$NOTE1H        0xB3
+$WAVE1         0xB4
+$TONE2L        0xB5
+$TONE2H        0xB6
+$NOTE2L        0xB7
+$NOTE2H        0xB8
+$WAVE2         0xB9
+$TONE3L        0xBA
+$TONE3H        0xBB
+$NOTE3L        0xBC
+$NOTE3H        0xBD
+$WAVE3         0xBE
+$NOISE         0xBF
 
 #HAL
+$AMODE         0xC0
+$KMODE         0xC1
+$KTO           0xC2
+$KIDLE         0xC3
+$KSL           0xC4
+$KSH           0xC5
+$KBRDIDX       0xC6
+$KBWRIDX       0xC7
+$RMODE         0xC8
+$RTO           0xC9
+$RIDLE         0xCA
+$RXRDIDX       0xCB
+$RXWRIDX       0xCC
+$TMODE         0xCD
+$TXRDIDX       0xCE
+$TXWRIDX       0xCF
 
-$COMLS      0xE0
-$COMPS      0xE1
-$RMODE      0xE2
-$RTO        0xE3
-$RIDLE      0xE4
-$RXRDIDX    0xE5
-$RXWRIDX    0xE6
-$TMODE      0xE7
-$TXRDIDX    0xE8
-$TXWRIDX    0xE9
-$KMODE      0xEA
-$KTO        0xEB
-$KIDLE      0xEC
-$SCANL      0xED
-$SCANH      0xEE
-$KBRDIDX    0xEF
-$KBWRIDX    0xF0
-$AMODE      0xF1
-$PMODE      0xF2
-$PLINE      0xF3
-$VMODE      0xF4
-$VLINE      0xF5
-$VSTART     0xF6
-$FRAME      0xF7
-$VMS        0xF8
-$T0         0xF9
-$T1         0xFA
-$T2         0xFB
-$T3         0xFC
 
-$EREG       0xFE
-$AUDIO      0xFF
+$PMODE         0xD2
+$PLINE         0xD3
+$FRAME         0xD4
+$COMLS         0xD5
+$COMPS         0xD6
+$VMODE         0xD7
+$VLINE         0xD8
+$VSTART        0xD9
+$ICL           0xDA
+$ICH           0xDB
+$T0            0xDC
+$T1            0xDD
+$T2            0xDE
+$T3            0xDF
+
+#vCPU
+$INST          0xEA
+$TMPL          0xEB
+$TMPH          0xEC
+$TEMP          0xED # alias for TMPL
+$IMASK         0xEE # interrupt mask - lower nibble, bit3: enable
+$IMODE         0xEF # check interrupt - 0: check, -1: skip
+$AREG          0xF0 # Accumulator
+$FREG          0xF1 # Flags - COZNHP00
+$BREG          0xF2
+$CREG          0xF3
+$DREG          0xF4
+$EREG          0xF5
+$HREG          0xF6
+$LREG          0xF7
+$SPH           0xF8 # SP MSB
+$SPL           0xF9 # SP LSB
+$PCH           0xFA # PC MSB
+$PCL           0xFB # PC LSB
+
+$VMS           0xFD
+$EREG          0xFE
+$AUDIO         0xFF
 
 #ROM copy
-$ROM_ID     0xE5        # source rom 0-15 - init to PC jump point
-$ROM_PG     0xE6        # source page 0-15 - init to 0
-$ROM_X      0xE7        # x index - ref both src and dest - init to 0
-$ROM_Y      0xE8        # y index - dest D0 page
-$ROM_N      0xE9        # ROM count
+$ROM_ID        0xE5        # source rom 0-15 - init to PC jump point
+$ROM_PG        0xE6        # source page 0-15 - init to 0
+$ROM_X         0xE7        # x index - ref both src and dest - init to 0
+$ROM_Y         0xE8        # y index - dest D0 page
+$ROM_N         0xE9        # ROM count
 
 #Constants
-$FETCH        0
-$FETCH2       0x10
-$INTR1        0x08
-$INTR2        0x18
-$SKIP_INST    0x28
-$PUSHPC_INST  0x38
-$RESTART_INST 0xCB
-$JMP_INST     0xC3
+$FETCH         0x00
+$FETCH2        0x10
+$INTR1         0x08
+$INTR2         0x18
+$SKIP_INST     0x28
+$PUSHPC_INST   0x38
+$RST2_INST     0xCB
+$JMP_INST      0xC3
 
-$KBBUFF       0xF1
-$RXBUFF       0xF2
-$TXBUFF       0xF3
+$KBBUFF        0xF1
+$RXBUFF        0xF2
+$TXBUFF        0xF3

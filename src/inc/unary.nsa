@@ -25,7 +25,7 @@ $INCCYC     0
 $FORK1      1 # 0->0x80,else->0xC0
 $FORK2      2 # 0xFF->0x40,0->0x80,else->0xC0
 $FORK3      3 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$FORKH      4
+$FORKF      4 # feature fork
 $KS01?      5 # &3==0||1 ? 0:-1
 $KDATA      6 # &C>>2
 $ML2FC      7 # mode-line to frame count: 3-6->-5,else->4

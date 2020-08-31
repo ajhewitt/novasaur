@@ -69,7 +69,7 @@ WAVHL DZ, HLA         # HL = noise value
 #91/84
 LD Y, $AUDIO
 ADDHL DZ, ND          # HL +> audio
-LD HL, $3$FORKH
+LD HL, $3$FORKF
 LD Y, $AMODE
 #101/92
 FNEL DZ, PC           # fork on audio mode {1:0x60, 2:0x70, 3:0xA8}
@@ -185,5 +185,5 @@ NOP
 #210/247
 NOP
 LD Y, $VMS
-LD PG, $PSYNCE_PG
+LD PG, $TSYNCE_PG
 #215/252

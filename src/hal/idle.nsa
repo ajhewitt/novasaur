@@ -1,31 +1,38 @@
-# Idle Page
+# Idle Page (increment idle counter)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE IDLE_PG
 
-# assume: Y = $VMS
-LD HL, $INC$NULL
-FNH DZ, HLD         # inc virtual machine state
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+LDZ Y, $INST
+MVHL AZ, ND           # HL -> inst cache
+LD HL, $INC$FORK1
+LD Y, $VMS
 #10
+FNFH DZ, ND           # VMC+1
+LD Y, $ICL
+FNFH DZ, ND           # ICL+1
+FNEL A, PC            # fork on ICL
+#21
+
+ADDR 0x80             # ICL = 0
+LDZ Y, $ICH
+FNH DZ, HLD           # ICH+1      *** inc ICH ***
 NOP
 NOP
 NOP
 NOP
 NOP
+#30
 NOP
-NOP
-NOP
-NOP
-NOP
-#20
-NOP
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43
+
+ADDR 0xC0             # ICL > 0
 NOP
 NOP
 NOP
@@ -39,6 +46,7 @@ NOP
 NOP
 LD HL, $IDEN$NULL
 LDZ Y, $INST
-FNH DZ, HL         # inst cache -> HL
-LD Y, $VMS         # set Y = $VMS on exit
-VMPHL DZ, PGA      # jump to next VMC
+FNH DZ, HL            # inst cache -> HL
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

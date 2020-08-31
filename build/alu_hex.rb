@@ -82,10 +82,11 @@ end
 
 SYNC_PG = [5, 6, 7, 0, 2, 3, 4, 0, 2, 3, 4, 0, 1, 2, 3, 4].freeze
 
-# ALU function: VMP (Virtual Machine Page/vCPU decode)
-# Execution Page = HL, virtual machine state (VMS) MMMMECCC
-# L) ESSSLLLL - state/ext/L|N, SSS:0=decode/L, 1=hsync/next:0=line, 1=vpc
-# H) PPPPPPPP - page number
+# ALU function: VMP (Virtual Machine Page/interpreter decode)
+# Instruction - HHHHLLLL, virtual machine state (VMS) - MMMMECCC
+# L) A = 0000ZFFF - sync: Z=(L==0), FFF=feature [N,dA,A,dT,T,R,dP,P]
+# L) A = 1ECCLLLL - exec: E=ext, CC=remaining cycles [1,2,3,>3], LLLL
+# H) PG = PPPPPPPP - page number
 def print_vmp(offset, opts = {})
   16.times.map do |a|
     16.times.map do |b| # b = mode_line/ESSS
@@ -115,29 +116,29 @@ def print_vmp(offset, opts = {})
   end
 end
 
+# Verical timing: [active,back,sync,front]
+# Process cycles: [active,sync,porch]
+# Mode-line number(s): [(start..end)],[...]]
+# Process cycles per pattern: [mode0, mode1,...]
+# Modulo(s) per mode: [[mode0,...],[mode1,...]
+VID = [[[480,10,2,33], [160,4,11], [(0..2)], [4,2,8], [[2], [3], [8]]],        # 838x480@60 (vga60)
+       [[480,1,3,28], [120,1,7], [(3..6),(7..10)], [2,5], [[2,8], [4,10]]],    # 670x492@75 (vga75)
+       [[480,11,8,13], [120,5,3], [(3..6),(7..10)], [6,5], [[3,8], [2,10]]],   # 820x494@75 (vgarb)
+       [[600,1,4,35], [150,2,8], [(3..6),(7..10)], [15,12], [[5,10], [3,16]]], # 660x608@60 (svga60)
+       [[600,15,8,17], [150,6,4], [(3..6),(7..10)], [5,12], [[4,10], [3,16]]], # 820x622@60 (svgarb)
+       [[768,3,6,23], [153,3,4], [(11..15)], [4,8,16], [[4], [8], [16]]],      # 520x762@60 (xga60)
+       [[768,13,8,11], [153,5,2], [(11..15)], [6,16], [[3], [16]]]].freeze     # 648x777@60 (xgarb)
+SEQ = {2=>[14,15,15,14], 3=>[14,15], 4=>[10,11,12,13],
+       5=>[10,11,12,13,12,11], 6=>[10,11,12,13,12,11],
+       8=>[0,1,2,3,4,5,6,7], 10=>[9,0,1,2,3,4,5,6,7,8],
+       16=>[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]}.freeze
 # ALU function: VID (Video timings)
 def print_vid(offset)
-  # Verical timing: [active,back,sync,front]
-  # Process cycles: [active,sync,porch]
-  # Mode-line number(s): [(start..end)],[...]]
-  # Process cycles per pattern: [mode0, mode1,...]
-  # Modulo(s) per mode: [[mode0,...],[mode1,...]
-  vid = [[[480,10,2,33], [160,4,11], [(0..2)], [4,2,8], [[2], [3], [8]]],        # 838x480@60 (vga60)
-         [[480,1,3,28], [120,1,7], [(3..6),(7..10)], [2,5], [[2,8], [4,10]]],    # 670x492@75 (vga75)
-         [[480,11,8,13], [120,5,3], [(3..6),(7..10)], [6,5], [[3,8], [2,10]]],   # 820x494@75 (vgarb)
-         [[600,1,4,35], [150,2,8], [(3..6),(7..10)], [15,12], [[5,10], [3,16]]], # 660x608@60 (svga60)
-         [[600,15,8,17], [150,6,4], [(3..6),(7..10)], [5,12], [[4,10], [3,16]]], # 820x622@60 (svgarb)
-         [[768,3,6,23], [153,3,4], [(11..15)], [4,8,16], [[4], [8], [16]]],      # 520x762@60 (xga60)
-         [[768,13,8,11], [153,5,2], [(11..15)], [6,16], [[3], [16]]]]            # 648x777@60 (xgarb)
-  seq = {2=>[14,15,15,14], 3=>[14,15], 4=>[10,11,12,13],
-         5=>[10,11,12,13,12,11], 6=>[10,11,12,13,12,11],
-         8=>[0,1,2,3,4,5,6,7], 10=>[9,0,1,2,3,4,5,6,7,8],
-         16=>[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]}
   rom = Array.new(16) { Array.new(0x100, 0xFF) }
   a = 0
   x = [176, 129, 161, 161]
   y = Array.new 4, 224
-  vid.each do |v|
+  VID.each do |v|
     u = 0
     u = v[0].map {|t| u+=t}
     v[4].each_with_index do |c, i| # timing columns
@@ -160,7 +161,7 @@ def print_vid(offset)
             v[2][j].each do |r|
               s = (t>=u[1] && t<u[2]) ? 0 : 0x20 # vsync active low
               if t<u[0]
-                s |= seq[d][t%seq[d].size] # set glyph line
+                s |= SEQ[d][t%SEQ[d].size] # set glyph line
                 s |= 0x80 if (t%d)==d-1 # inc V at start of glyph
               else
                 s |= 0x49 # hblank active high
@@ -225,6 +226,33 @@ NEXT_LINE = [0x10, 0x20, 0x00,
 # Increment line count in HAL state machine
 def inc_line
   256.times.map {|i| (i&8) | NEXT_LINE[i>>4]}
+end
+
+# fork on HAL feature
+def fork_feature
+  2.times.map do |i|
+    4.times.map do |j|
+      case i
+      when 0 # async
+        [0x60, 0x60, 0x70, 0xA8] * 8
+      when 1 # rsync
+        [0x20, 0x30, 0x50, 0x50, 0x80, 0x80, 0x80, 0x80,
+         0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 
+         0x80, 0x80, 0x80, 0x80, 0xA0, 0xA0, 0x20, 0x20,
+         0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20]
+      when 2 # tsync
+        [0x20, 0xE0, 0x30, 0xE0, 0x70, 0x70, 0x70, 0x70,
+         0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 
+         0x70, 0x70, 0x70, 0x70, 0xB0, 0xB0, 0x20, 0x20,
+         0xF0, 0x28, 0xF0, 0x28, 0x20, 0x20, 0x20, 0x20]
+      when 3 # kscan
+        [0x08, 0x08, 0x08, 0x08, 0x58, 0x58, 0x58, 0x58,
+         0x58, 0x58, 0x58, 0x58, 0x58, 0x58, 0x80, 0x80, 
+         0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80,
+         0x80, 0x80, 0xA8, 0xA8, 0x08, 0x08, 0x08, 0x08]
+      end
+    end
+  end.flatten
 end
 
 # fork on masked interupt
@@ -407,8 +435,8 @@ print_unary(0xE1, [0x80] + Array.new(0xFF, 0xC0))
 print_unary(0xE2, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
 # $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
 print_unary(0xE3, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
-# $FORKH: fork on HAL modes
-print_unary(0xE4, [0x60, 0x60, 0x70, 0xA8] * 64)
+# $FORKF: fork on HAL feature
+print_unary(0xE4, fork_feature)
 # $KS01?: &3==0||1 ? 0:-1
 print_unary(0xE5, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C>>2

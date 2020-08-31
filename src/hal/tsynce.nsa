@@ -25,7 +25,7 @@ FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
-LD HL, $IDEN$FORKH
+LD HL, $IDEN$FORKF
 LD Y, $TMODE
 FNEL DZ, PC           # comms  mode fork
 #32/27
@@ -38,46 +38,35 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/39
 
-ADDR 0x30             #32 - mode 2: transmit start
-LD HL, $4$2COM
+ADDR 0x28             #32 - mode 0x19,0x1B: keyboard jump page
+LD PG, $KSCANE_PG
+#34/42
+
+ADDR 0x30             #32 - mode 0x02: transmit start
+LD HL, $0x40
 MULH E, NA            # A sign = CTS
-LDN PC, $END39        # jump on not clear to send
-LDZ Y, $TXRDIDX
+LDN PC, $NOT_CTS      # jump on not clear to send
+LD HL, $INC2$NULL
 #40/56
-FNFL DZ, HL           # HL = -TxRdIndex
-LD Y, $TXWRIDX
-ADDHL DZ, NA          # A = TxWrIndex - TxRdIndex
-LD HL, $ZERO?$NULL
-#41/64
-FNH A, HLA            # A = 0 if TxWrIndex == TxRdIndex
-LDP PC, $END45        # jump on buffer empty
+FNH DZ, HLD           # 4 -> Tx mode
 LD HL, $0x70
 LD Y, $EREG
 ANDH DZ, ED           # 0 -> Tx (start bit)
-#60/73
-LD HL, $INC2$NULL
-LDZ Y, $TMODE
-FNH DZ, HLD           # 4 -> Tx mode
-LD PC, $EXIT68
-#68/80
+LD PC, $EXIT51
+#51/65
 
-$END39
-NOP
-#40/81
-NOP
-NOP
+$NOT_CTS              #39
+LD HL, $0xFE
+ADDHL DZ, ND          # Tx mode-2
 NOP
 NOP
 NOP
-$END45
-LD HL, $0xE1
-LD Y, $TMODE
-#49/90
-ANDHL AZ, ND          # 0 -> tx mode (end transmission)
-LD PC, $STOP55
-#55/94
-
-$STOP42
+NOP
+NOP
+#50/74
+$EXIT50
+NOP
+$EXIT51
 NOP
 NOP
 NOP
@@ -86,96 +75,118 @@ NOP
 NOP
 NOP
 NOP
-$STOP50
-#50/102
+NOP
+#60/83
 NOP
 NOP
 NOP
 NOP
 NOP
-$STOP55
 NOP
 NOP
-NOP
-NOP
-#59/111
-LD HL, $0x80
-LD Y, $EREG
-ORH DZ, ED            # 1 -> Tx (stop bit)
-LD PC, $EXIT68
-#68/119
-
-ADDR 0x80             #32 - mode 4-0x13: transmit data bit
-LD HL, $TXBUFF
-MVHL A, XA            # X = Tx buffer
-LD HL, $INC2$NULL
-#40/134
-LDZ Y, $TMODE
-FNH DZ, HLD           # mode+2
-LD HL, $REVERSE$IDEN
-LDZ Y, $TXRDIDX
-FNFL DZ, Y            # Y = Tx read index
-#51/143
-FNFH D, NA            # A sign = Tx LSB
-LD HL, $LSR$NULL
-LDP PC, $TXHIGH       # jump to set Tx
-#TXLOW
-FNH D, HLD            # Tx byte >> 1
-LD HL, $0x70
-#61/152
-LD Y, $EREG
-ANDH DZ, ED           # Tx reset
-LD PC, $EXIT68
-$TXHIGH
-FNH D, HLD            # Tx byte >> 1
-#60/159
-LD HL, $0x80
-LD Y, $EREG
-ORH DZ, ED            # Tx set
 NOP
 $EXIT68
 LD HL, $INC$NULL
-#70/168
+#70/92
 LD Y, $VMS
 FNH DZ, HLD           # VMC+1
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
-#80/176
+#80/100
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/180
+#86/104
 
-ADDR 0xC0             #32 - mode 0x14,0x15: transmit stop
-LD HL, $0xEE          # HL = -0x12
+ADDR 0x70             #32 - mode 0x04-0x13: transmit data bit
+LD HL, $TXBUFF
+MVHL A, XA            # X = Tx buffer
+LD HL, $INC2$NULL
+#40/118
+LDZ Y, $TMODE
+FNH DZ, HLD           # mode+2
+LD HL, $REVERSE$IDEN
+LDZ Y, $TXRDIDX
+FNFL DZ, Y            # Y = Tx read index
+#51/127
+FNFH D, NA            # A sign = Tx LSB
+LD HL, $LSR$NULL
+LDP PC, $TX_HIGH      # jump to set Tx
+#TX_LOW
+FNH D, HLD            # Tx byte >> 1
+LD HL, $0x70
+#61/136
+LD Y, $EREG
+ANDH DZ, ED           # Tx reset
+LD PC, $EXIT68
+$TX_HIGH
+FNH D, HLD            # Tx byte >> 1
+#60/143
+LD HL, $0x80
+LD Y, $EREG
+ORH DZ, ED            # Tx set
+NOP
+LD HL, $INC$NULL
+#70/152
+LD Y, $VMS
+FNH DZ, HLD           # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/160
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/164
+
+ADDR 0xB0             #32 - mode 0x14,0x15: transmit stop
+LD HL, $INC$2COM
+LD Y, $VMS
+FNFH DZ, ND           # VMS+1
+LD Y, $TXRDIDX
+#41/184
+FNFH DZ, ND           # A,TxRdIndex+1
+LD Y, $TXWRIDX
+FNFL DZ, HL           # HL = -TxWrIndex
+#49/190
+ADDHL A, NA           # A = TxRdIndex - TxWrIndex
+LDZ HL, $ZERO?$NULL
+FNH A, HLA            # A = 0 if TxRdIndex == TxWrIndex
+LDP HL, $0xEC         # -0x14
+LDN HL, $0xEE         # -0x12
+#60/199
 LD Y, $TMODE
-ADDHL DZ, ND          # 2 -> Tx mode
-#40/198
-LD PC, $STOP42
-#42/200
+ADDHL DZ, ND          # 0,2 -> Tx mode
+LD HL, $0x80
+LD Y, $EREG
+#70/207
+ORH DZ, ED            # 1 -> Tx (stop bit)
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/215
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/219
 
-ADDR 0xD0             #32 - mode 1,3: keyboard start
+ADDR 0xE0             #32 - mode 0x01,0x03: keyboard start
 LD HL, $0x18
 LD Y, $TMODE
 ADDHL DZ, ND          # mode+0x18 (0x19,0x1B)
-#40/214
+#40/230
 LD HL, $0x20
 LD Y, $EREG
 ANDHL DZ, ED          # kbd clock enable
-LD PC, $STOP50
-#50/222
+LD PC, $EXIT50
+#50/238
 
-ADDR 0xE0             #32 - mode 0x18,0x1A: keyboard stop
+ADDR 0xF0             #32 - mode 0x18,0x1A: keyboard stop
 LD HL, $0xE8
 LD Y, $TMODE
 ADDHL DZ, ND          # mode-0x18 (0,2)
-#40/230
+#40/246
 LD HL, $0xDF
 LD Y, $EREG
 ORHL DZ, ED           # kbd clock disable
-LD PC, $STOP50
-#50/238
-
-ADDR 0xF0             #32 - mode 0x19,0x1B: keyboard jump page
-LD PG, $KSCANE_PG
-#34/242
+LD PC, $EXIT50
+#50/254

@@ -25,7 +25,7 @@ FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
-LD HL, $IDEN$FORKH
+LD HL, $IDEN$FORKF
 LD Y, $RMODE
 FNEL DZ, PC           # comms  mode fork
 #32/27
@@ -38,7 +38,7 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/39
 
-ADDR 0x30             #32 - mode 1: receive enable
+ADDR 0x30             #32 - mode 0x01: receive enable
 LD HL, $IDEN$NULL
 LD Y, $RTO
 FNFH DZ, NA           # A = rx timeout
@@ -55,7 +55,7 @@ ANDHL DZ, ED          # 0 -> RTS (assert)
 LD PC, $EXIT59
 #59/70
 
-ADDR 0x50             #32 - mode 2: receive start
+ADDR 0x50             #32 - mode 0x02: receive start
 LD HL, $IDEN$NULL
 LDZ Y, $COMPS
 FNH DZ, HLA           # A sign = Rx data
@@ -87,7 +87,7 @@ MVHL AZ, ND           # 4 -> rx mode
 LD PC, $EXIT61
 #61/126
 
-ADDR 0x80             # mode 4-0x12: receive data bit
+ADDR 0x80             # mode 0x04-0x12: receive data bit
 LD HL, $RXBUFF
 MVHL A, XA            # X = Rx buffer
 LD HL, $IDEN$NULL
