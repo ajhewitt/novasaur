@@ -17,7 +17,7 @@ def print_binary(op, offset, opts = {})
       d = 16.times.map do |c|
         x = (b << 4) + c
         y = a << (opts[:high] ? 4 : 0)
-        y = 0x10 if (op == '/' && a == 0)
+        y = 0x10 if (op == '/' && a == 0) # reassign divide-by-zero
         ((op ? x.send(op, y) : y) & 0xff) | (x & mask)
       end
       print_data([d.size, offset + a, b << 4, 0] + d)
@@ -80,35 +80,39 @@ def print_wav(offset, opts = {})
   end
 end
 
-SYNC_PG = [5, 6, 7, 0, 2, 3, 4, 0, 2, 3, 4, 0, 1, 2, 3, 4].freeze
-
-# ALU function: VMP (Virtual Machine Page/interpreter decode)
+ML2FEATURE = [1,3,6,2,4,5,7,2,4,5,7,0,2,4,5,7].freeze
+FFF2SYNC_PG = [0,1,2,3,4,6,7,8].freeze
+ML2LEN = [6,6,6,5,5,5,5,5,5,5,5,4,4,4,4,4].freeze
+INST_PG = Array.new(2, [0x8B] * 256).freeze
+INST_CC = Array.new(2, [1] * 256).freeze
+IDLE_PG = 0xFE
+# ALU function: VMP (Virtual Machine Page)
 # Instruction - HHHHLLLL, virtual machine state (VMS) - MMMMECCC
-# L) A = 0000ZFFF - sync: Z=(L==0), FFF=feature [N,dA,A,dT,T,R,dP,P]
-# L) A = 1ECCLLLL - exec: E=ext, CC=remaining cycles [1,2,3,>3], LLLL
+# L) A = 0ECCLLLL - vcpu: E=ext, CC=remaining cycles [0,1,2,3+], LLLL
+# L) A = 0E00ZFFF - sync: Z=(L==0), FFF=feature [N,dA,A,dT,T,R,dP,P]
 # H) PG = PPPPPPPP - page number
 def print_vmp(offset, opts = {})
   16.times.map do |a|
-    16.times.map do |b| # b = mode_line/ESSS
-      if opts[:high]
-        d = case b&7
-        when 0 # decode
-          Array.new 16, 100
-        when 1 # hsync - lsync,psync
-          [1, 2, 0, 0, 0, 0, 0, 0] * 2
-        else # future stuff
-          Array.new 16, 100
+    16.times.map do |b|
+      if opts[:high] # a=HHHH, b=0ECC
+        d = 16.times.map do |c|
+          if b&3 == 0 # end of line - sync page - c=ZFFF
+            pg = FFF2SYNC_PG[c&7] + 0xE0
+            pg += 10 if c&8==8 && a==0 # syncf1
+            pg += 20 if c&8==8 && a==1 # syncf2
+            pg # else synce
+          else # fetch/exec inst page - c=LLLL
+            inst = (a<<4) | c
+            ext = (b>>2) & 1
+            INST_CC[ext][inst] > b&3 ? IDLE_PG : INST_PG[ext][inst]
+          end
         end
-      else
-        d = 16.times.map do |c| # c = EXCC
-          case c&7
-          when 4 #sync on 4 line modes
-            b%4 == 2 ? 0x11 : 0x10 #add one for last line
-          when 7 #sync on 5 line modes
-            b%5 == 3 ? 0x11 : 0x10 #add one for last line
-          else
-            a #decode - preserve L
-          end | (c&8)<<4 #move ext bit to MSB
+      else # a=LLLL, b=MMMM
+        d = 16.times.map do |c| # c=ECCC
+          zf = ML2FEATURE[b]
+          zf |= 8 if a==0
+          cc = (ML2LEN[b] - c&7).clamp(0, 3)
+          ((c&8)<<3) | (cc<<4) | (cc==0 ? zf : a)
         end
       end
       print_data([d.size, offset + a, b << 4, 0] + d)
@@ -368,7 +372,7 @@ print_binary '^', 0x50, pass: true
 # 0x00036000-0x00036FFF: WAV low nibble
 print_wav 0x60
 # 0x00037000-0x00037FFF: VMP low nibble
-print_vmp 0x70, high: false
+print_vmp 0x70
 
 # 0x00038000-0x00038FFF: MUL low nibble only
 print_binary '*', 0x80
