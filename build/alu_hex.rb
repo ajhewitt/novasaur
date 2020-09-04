@@ -80,26 +80,26 @@ def print_wav(offset, opts = {})
   end
 end
 
-ML2FEATURE = [1,3,6,2,4,5,7,2,4,5,7,0,2,4,5,7].freeze
-FFF2SYNC_PG = [0,1,2,3,4,6,7,8].freeze
+ML2SYNC_PG = [1,3,7,2,4,6,8,2,4,6,8,0,2,4,6,8].freeze
 ML2LEN = [6,6,6,5,5,5,5,5,5,5,5,4,4,4,4,4].freeze
-INST_PG = Array.new(2, [0x8B] * 256).freeze
+INST_PG = Array.new(2, [0xFE] * 256).freeze
 INST_CC = Array.new(2, [1] * 256).freeze
 IDLE_PG = 0xFE
 # ALU function: VMP (Virtual Machine Page)
 # Instruction - HHHHLLLL, virtual machine state (VMS) - MMMMECCC
-# L) A = 0ECCLLLL - vcpu: E=ext, CC=remaining cycles [0,1,2,3+], LLLL
-# L) A = 0E00ZFFF - sync: Z=(L==0), FFF=feature [N,dA,A,dT,T,R,dP,P]
-# H) PG = PPPPPPPP - page number
+# L) 0ECCLLLL = MMMMECCC $ LLLL - vcpu: E, CC=remaining cycles [0,1,2,3+], LLLL
+# H) PPPPPPPP = 0ECCLLLL $ HHHH
+# L) 0Z00MMMM = MMMMECCC $ LLLL - sync: Z=(L==0), CC=0, MMMM
+# H) PPPPPPPP = 0Z00MMMM $ HHHH
 def print_vmp(offset, opts = {})
   16.times.map do |a|
     16.times.map do |b|
-      if opts[:high] # a=HHHH, b=0ECC
+      if opts[:high] # a=HHHH, b=0ECC,0Z00
         d = 16.times.map do |c|
-          if b&3 == 0 # end of line - sync page - c=ZFFF
-            pg = FFF2SYNC_PG[c&7] + 0xE0
-            pg += 10 if c&8==8 && a==0 # syncf1
-            pg += 20 if c&8==8 && a==1 # syncf2
+          if b&3 == 0 # end of line - sync page - c=MMMM
+            pg = ML2SYNC_PG[c] + 0xE0
+            pg += 10 if b&4==4 && a==0 # syncf1
+            pg += 20 if b&4==4 && a==1 # syncf2
             pg # else synce
           else # fetch/exec inst page - c=LLLL
             inst = (a<<4) | c
@@ -109,10 +109,16 @@ def print_vmp(offset, opts = {})
         end
       else # a=LLLL, b=MMMM
         d = 16.times.map do |c| # c=ECCC
-          zf = ML2FEATURE[b]
-          zf |= 8 if a==0
           cc = (ML2LEN[b] - c&7).clamp(0, 3)
-          ((c&8)<<3) | (cc<<4) | (cc==0 ? zf : a)
+          if cc.zero?
+            e = b
+            e |= 0x40 if a.zero?
+            e
+          else
+            e = a
+            e |= 0x40 unless (c&8).zero?
+            e | cc<<4
+          end
         end
       end
       print_data([d.size, offset + a, b << 4, 0] + d)
@@ -229,14 +235,14 @@ NEXT_LINE = [0x10, 0x20, 0x00,
 
 # Increment line count in HAL state machine
 def inc_line
-  256.times.map {|i| (i&8) | NEXT_LINE[i>>4]}
+  256.times.map {|i| NEXT_LINE[i>>4] | (i&8)}
 end
 
 # fork on HAL feature
 def fork_feature
   2.times.map do |i|
     4.times.map do |j|
-      case i
+      case j
       when 0 # async
         [0x60, 0x60, 0x70, 0xA8] * 8
       when 1 # rsync
@@ -383,20 +389,9 @@ print_com 0xA0
 # 0x0003B000-0x0003BFFF: VID low nibble only
 print_vid 0xB0
 
+
 # 0x0003C000-0x0003CFFF: FNC low nibble only - TBD
-# $V2E: calculate E-reg GPU mode bits from video mode  **** MOVE ****
-print_unary(0xC0, 256.times.map {|i|
-  e = i&1 == 0 ? 0 : 0x10
-#  e |= i&2 == 0 ? 0 : 0x40 # rev 3 board
-  e |= i&2 == 0 ? 0 : 0x20 # rev 4 board
-#  i&0x60 == 0x60 ? e : e|0x20 # rev 3 board
-  i&0x60 == 0x60 ? e : e|0x40 # rev 4 board
-})
-# $V2M: calculate mode_line from video mode  **** MOVE ****
-print_unary(0xC1, 256.times.map {|i|
-  m = (i<<2)&0x30
-  i&0x40 == 0 ? m*4 : (m*5)|4
-})
+
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
 # FORKI: {0000:0x28, 0001:0x50, 001x:0x78, 01xx:0xA0, 1xxx:0xC8}
@@ -445,12 +440,14 @@ print_unary(0xE4, fork_feature)
 print_unary(0xE5, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C>>2
 print_unary(0xE6, 256.times.map{|i| (i&0xC) >> 2})
-# $ML2FC: mode-line to frame count: 3-6->-5,else->4
-print_unary(0xE7, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
-# $XGA?: mode-line: 0-10->-1,else->0
-print_unary(0xE8, [0xFF]*176 + [0]*80)
 # $RSADJ: serial state -1
-print_unary(0xE9, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
+print_unary(0xE7, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
+# $ML2FC: mode-line to frame count: 3-6->-5,else->4
+print_unary(0xE8, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
+# $ML2ADJ: mode-line to frame count: 0-2->0xE0,else->0xF0
+print_unary(0xE9, [0xE0]*48 + [0xF0]*208)
+# $XGA?: mode-line: 0-10->-1,else->0
+print_unary(0xEA, [0xFF]*176 + [0]*80)
 
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only - generic/default functions

@@ -22,12 +22,37 @@ LD HL, $ZERO?$NULL
 FNH A, HLA
 LDN PC, $MEM_TEST   # try again?
 
+# set E-reg
 LD HL, $0x00
-MVHL A, EA          # LED on -> E
-
-LD HL, $0x31        # VGA, 8x8 text
+LD Y, $EREG
+MVHL DZ, ED         # LED on
+LD HL, $0x30
 LD Y, $VMODE
-MVHL AZ, ND         # store video mode
+MVHL DZ, ND         # 3 -> video mode
+LD HL, $0x00
+LD Y, $VMS
+MVHL DZ, ND         # 0 -> mode line
+
+#turn off features
+LD HL, $0xFF
+LD Y, $AMODE
+MVHL DZ, ND
+LD HL, $0x20
+LD Y, $RMODE
+MVHL DZ, ND
+LD HL, $0x40
+LD Y, $TMODE
+MVHL DZ, ND
+LD HL, $0x60
+LD Y, $KMODE
+MVHL DZ, ND
+LD HL, $0x00
+LD Y, $IMODE
+MVHL DZ, ND
+
+LD HL, $0xEB
+LD Y, $INST
+MVHL DZ, ND
 
 # ROM Copy
 LD HL, $0

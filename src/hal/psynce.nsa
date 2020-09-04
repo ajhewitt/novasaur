@@ -73,7 +73,7 @@ VIDH AZ, ND               # VID(vmode,pline) -> pmode
 LD HL, $IDEN$NULL
 LD Y, $VSTART
 FNFH DZ, NA               # A = vertical start
-LDZ Y, $VLINE
+LD Y, $VLINE
 FNH AZ, HLD               # vstart -> vline
 #101/92
 LD HL, $INC$NULL
@@ -82,7 +82,8 @@ FNFH DZ, ND               # VMS+1 (cycle=2)
 LDZ Y, $FRAME
 #110/100
 FNH DZ, HLD               # frame count+1
-LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0
+#LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0
+NOP #skip above
 NOP
 NOP
 NOP
@@ -100,7 +101,7 @@ LD HL, $IDEN$NULL
 LD Y, $KTO
 FNFH DZ, NA               # A = kbd clk timeout
 #121/122
-LDZ Y, $KIDLE
+LD Y, $KIDLE
 FNH AZ, HLD               # timeout -> kbd idle count
 LD HL, $0x10
 LD Y, $TMODE
@@ -120,15 +121,14 @@ LD Y, $VMS
 FNFH DZ, ND               # VMS+1 (cycle=3)
 LDZ Y, $T0
 FNH DZ, HLD               # T0+1
-LDN PC, $RET_15TPS        # return if T0<90
-NOP
-#160/157
+LDN PC, $EXIT160          # return if T0<90
+#159/156
 LD HL, $0xA6
 MVHL AZ, ND               # T0 = -90
-LD HL, $INC$NULL
+LD HL, $INC$ML2ADJ
 LDZ Y, $T1
-#170/165
-FNH DZ, HLD               # T1+1
+#169/164
+FNFH DZ, ND               # T1+1
 LDN PC, $T0_ADJUST        # return if T1<120
 LD HL, $0x88
 MVHL AZ, ND               # T1 = -120
@@ -136,7 +136,7 @@ LD HL, $INC$NULL
 #181/174
 LDZ Y, $T2
 FNH DZ, HLD               # T2+1
-LDN PC, $RET_5TPH         # return if T2<120
+LDN PC, $EXIT187          # return if T2<120
 LD HL, $0x88
 MVHL AZ, ND               # T2 = -120
 #192/183
@@ -155,21 +155,21 @@ VMPHL DZ, PGA             # jump to next VMC
 #215/201
 
 $T0_ADJUST                #174 - 10 ticks per min, cycle=3
-LD HL, $0xF0
-ORHL A, NA                # A = T1 | 0xF0
-#180/205
-LDZ HL, $INC$NULL
+LD Y, $VMS
+FNEL DZ, HL               # HL = 0xF0/0xE0
+#179/205
+ORHL A, NA                # A = T1 | 0xF0/0XE0
+LD HL, $INC$NULL
 FNH A, HLA                # A+1 (A +ve if T1=0x?F)
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
+#190/214
 LDZ Y, $T0
 FNH DZ, HLD               # adjust T0 every 16 T1
-#191/215
-LD HL, $INC$NULL
-LD PC, $RET_10TPM
-#195/219
+LD PC, $EXIT196
+#196/219
 
-$RET_5TPH                 #187 - 5 ticks per hour, cycle=3
+$EXIT187                  #187 - 5 ticks per hour, cycle=3
 NOP
 NOP
 NOP
@@ -179,14 +179,14 @@ NOP
 NOP
 NOP
 NOP
-$RET_10TPM                #195 - 10 ticks per min, cycle=3
 NOP
+$EXIT196                  #195 - 10 ticks per min, cycle=3
 NOP
 LD HL, $INC$NULL
 #199/231
 LDZ Y, $VMS
 FNH DZ, HLD               # VMS+1 (cycle=4)
-$RET_15TPS                #160 - 15 ticks per second, cycle=3
+$EXIT160                  #160 - 15 ticks per second, cycle=3
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL

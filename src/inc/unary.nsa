@@ -28,9 +28,10 @@ $FORK3      3 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
 $FORKF      4 # feature fork
 $KS01?      5 # &3==0||1 ? 0:-1
 $KDATA      6 # &C>>2
-$ML2FC      7 # mode-line to frame count: 3-6->-5,else->4
-$XGA?       8 # mode-line>11?: 0-10->-1,else->0
-$RSADJ      9 # serial state -1
+$RSADJ      7 # serial state -1
+$ML2FC      8 # mode-line to frame count: 3-6->-5,else->4
+$ML2ADJ     9 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
+$XGA?      10 # mode-line>11?: 0-10->-1,else->0
 
 
 
@@ -50,5 +51,3 @@ $RSTVEC     8 # map inst+1 to PCL vector
 
 
 #FNC - Extended
-$V2E        0
-$V2M        1

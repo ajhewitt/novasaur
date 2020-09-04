@@ -4,6 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE IDLE_PG
 
+# assumes Y=$VMS
 LDZ Y, $INST
 MVHL AZ, ND           # HL -> inst cache
 LD HL, $INC$FORK1

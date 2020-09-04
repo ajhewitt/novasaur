@@ -53,12 +53,16 @@ $T2            0xDE
 $T3            0xDF
 
 #vCPU
-$INST          0xEA
-$TMPL          0xEB
-$TMPH          0xEC
-$TEMP          0xED # alias for TMPL
-$IMASK         0xEE # interrupt mask - lower nibble, bit3: enable
-$IMODE         0xEF # check interrupt - 0: check, -1: skip
+$INST          0xE7
+$TEMP          0xE8 # alias for TMPL
+$TMPL          0xE8
+$TMPH          0xE9
+$IMASK         0xEA # interrupt mask - lower nibble, bit3: enable
+$IMODE         0xEB # check interrupt - 0: check, -1: skip
+$IXL           0xEC
+$IXH           0xED
+$IYL           0xEE
+$IYH           0xEF
 $AREG          0xF0 # Accumulator
 $FREG          0xF1 # Flags - COZNHP00
 $BREG          0xF2
@@ -77,11 +81,11 @@ $EREG          0xFE
 $AUDIO         0xFF
 
 #ROM copy
-$ROM_ID        0xE5        # source rom 0-15 - init to PC jump point
-$ROM_PG        0xE6        # source page 0-15 - init to 0
-$ROM_X         0xE7        # x index - ref both src and dest - init to 0
-$ROM_Y         0xE8        # y index - dest D0 page
-$ROM_N         0xE9        # ROM count
+$ROM_ID        0xE0        # source rom 0-15 - init to PC jump point
+$ROM_PG        0xE1        # source page 0-15 - init to 0
+$ROM_X         0xE2        # x index - ref both src and dest - init to 0
+$ROM_Y         0xE3        # y index - dest D0 page
+$ROM_N         0xE4        # ROM count
 
 #Constants
 $FETCH         0x00
