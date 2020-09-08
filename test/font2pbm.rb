@@ -3,7 +3,7 @@
 # to generate a 2048×128 bitmap image as a PNG
 # ruby test/font2pbm.rb | pnmtopng > docs/font.png
 
-filename = 'chips/rom/font.hex'
+filename = 'build/output/font.hex'
 file = File.open filename
 rom = []
 file.each do |l|

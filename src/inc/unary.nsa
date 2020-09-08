@@ -32,7 +32,7 @@ $RSADJ      7 # serial state -1
 $ML2FC      8 # mode-line to frame count: 3-6->-5,else->4
 $ML2ADJ     9 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
 $XGA?      10 # mode-line>11?: 0-10->-1,else->0
-
+$MASK2MODE 11 # &8==0 ? -1:0
 
 
 

@@ -25,76 +25,86 @@ FNFL E, HL                # H = serial inputs
 #20/17
 LD Y, $COMLS
 COMH DZ, ND               # update comms line state
-LD HL, $IDEN$8
-LD Y, $COMPS
+LD HL, $IDEN$NULL
+LDZ Y, $COMPS
 #29/25
-FNFH AZ, ND               # comms line state -> comms process state
-DIVL E, HL                # H = ps2 clk
+FNH AZ, HLD               # comms line state -> comms process state
+LD HL, $1$MASK2MODE
 LD Y, $COMLS
-MVH DZ, ND                # H -> ps2 state
-#40/33
-LD HL, $SWAP$NULL
-LDZ Y, $IMASK
-FNH DZ, HLA               # A = IMASK<<4
-LDP HL, $0xFF             # IMODE: -1
-LDN HL, $0                # IMODE: 0
-#49/42
+ANDH AZ, ND               # reset ps2 state/data
+LD Y, $IMASK
+#40
+FNEL DZ, HL               # HL = IMODE
 LD Y, $IMODE
 MVHL AZ, ND               # HL -> IMODE
 LD HL, $INC$NULL
+#51
 LDZ Y, $PLINE
-#59/50
 FNH DZ, HLD               # A,pline = pline+1
 LD HL, $IDEN$NULL
 LDZ Y, $VMODE
 FNH DZ, HL                # H = vmode
+#61
 LD Y, $PMODE
-#69/58
 VIDH AZ, ND               # VID(vmode,pline) -> pmode
-LD HL, $IDEN$NULL
 LDP PC, $NEXT_FIELD       # jump if pmode zero?
 NOP
+NOP
+NOP
+#70
+NOP
+NOP
+NOP
+NOP
+LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
-#80/68
+#80
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
-#86/72
+#86
 
-$NEXT_FIELD               #76 - next field, cycle=1
+$NEXT_FIELD               #68 - next field, cycle=1
+LD HL, $IDEN$NULL
 LD Y, $PLINE
-MULH DZ, ND               # 0 -> pline
-#81/76
+MULH DZ, ND               # 0 -> A,pline
 LDZ Y, $VMODE
 FNH DZ, HL                # H = vmode
 LD Y, $PMODE
+#81
 VIDH AZ, ND               # VID(vmode,pline) -> pmode
-#90/83
 LD HL, $IDEN$NULL
 LD Y, $VSTART
 FNFH DZ, NA               # A = vertical start
+#91
 LD Y, $VLINE
 FNH AZ, HLD               # vstart -> vline
-#101/92
 LD HL, $INC$NULL
 LD Y, $VMS
+#99
 FNFH DZ, ND               # VMS+1 (cycle=2)
 LDZ Y, $FRAME
-#110/100
 FNH DZ, HLD               # frame count+1
 #LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0
 NOP #skip above
 NOP
 NOP
 NOP
+#110
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
 NOP
 LD HL, $IDEN$NULL
 LDZ Y, $INST
-#121/111
+#121
 FNH DZ, HL                # inst cache -> HL
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
-#129/116
+#129
 
 $KBD_SCAN                 #114 - scan keyboard, cycle=2
 LD HL, $IDEN$NULL

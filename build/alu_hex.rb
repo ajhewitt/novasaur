@@ -80,8 +80,8 @@ def print_wav(offset, opts = {})
   end
 end
 
-ML2SYNC_PG = [1,3,7,2,4,6,8,2,4,6,8,0,2,4,6,8].freeze
-ML2LEN = [6,6,6,5,5,5,5,5,5,5,5,4,4,4,4,4].freeze
+ML2SYNC_PG = [3,7,1,4,6,8,2,4,6,8,2,2,4,6,8,0].freeze
+ML2LEN = [5,5,5,4,4,4,4,4,4,4,4,3,3,3,3,3].freeze
 INST_PG = Array.new(2, [0xFE] * 256).freeze
 INST_CC = Array.new(2, [1] * 256).freeze
 IDLE_PG = 0xFE
@@ -232,10 +232,18 @@ NEXT_LINE = [0x10, 0x20, 0x00,
        0x40, 0x50, 0x60, 0x30,
        0x80, 0x90, 0xA0, 0x70,
  0xC0, 0xD0, 0xE0, 0xF0, 0xB0].freeze
-
 # Increment line count in HAL state machine
 def inc_line
   256.times.map {|i| NEXT_LINE[i>>4] | (i&8)}
+end
+
+NEXT_PROC = [0x21, 0x21, 0x21,
+       0x61, 0x61, 0x61, 0x61,
+       0xA1, 0xA1, 0xA1, 0xA1,
+ 0xF1, 0xF1, 0xF1, 0xF1, 0xF1].freeze
+# Increment line count in HAL state machine
+def inc_proc
+  256.times.map {|i| NEXT_PROC[i>>4] | (i&8)}
 end
 
 # fork on HAL feature
@@ -448,7 +456,8 @@ print_unary(0xE8, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
 print_unary(0xE9, [0xE0]*48 + [0xF0]*208)
 # $XGA?: mode-line: 0-10->-1,else->0
 print_unary(0xEA, [0xFF]*176 + [0]*80)
-
+# $MASK2MODE: IMASK enable bit (3) 0->-1, 1->0
+print_unary(0xEB, 256.times.map{|i| i&8==0 ? 0xFF : 0})
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only - generic/default functions
 # $IDEN: A = A
@@ -473,8 +482,8 @@ print_unary(0xF8, [0] + Array.new(0xFF, 0xFF))
 print_unary(0xF9, Array.new(0xFF, 0) + [0xFF])
 # $INCLINE: mode_line+1, cycle = 0
 print_unary(0xFA, inc_line)
-# $INCPROC: mode_line+1, cycle = 1
-print_unary(0xFB, inc_line.map{|i| i+1})
+# $INCPROC: reset mode_line, cycle = 1
+print_unary(0xFB, inc_proc)
 
 # $SWAP: AB = BA
 print_unary(0xFE, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})

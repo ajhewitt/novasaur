@@ -40,10 +40,9 @@ FNH DZ, HLD        # -1 -> interupt mode
 NOP
 NOP
 NOP
-NOP
-#30
-NOP
+#29
 LD HL, $INTR1      # HL = check interupts
+LD Y, $INST
 MVHL AZ, ND        # HL -> inst cache
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC

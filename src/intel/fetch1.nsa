@@ -16,9 +16,9 @@ FNEL A, PC         # fork on PCL
 $CHECK
 LDZ HL, $DEC$NULL
 FNH DZ, HLD        # -1 -> interupt mode
-#30
-NOP
+#29
 LD HL, $INTR1      # HL = check interupts
+LD Y, $INST
 MVHL AZ, ND        # HL -> inst cache
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
@@ -30,9 +30,9 @@ FNH DZ, HLD        # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
 LD Y, $IMODE
 #21
-FNFH DZ, NA
-LDP PC, $CHECK
-NOP
+FNH DZ, HLA        # A = IMODE
+LDP PC, $CHECK     # jump if interrupts enabled
+LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH A, Y           # Y = PCH
 #30
@@ -51,9 +51,9 @@ NOP
 LD HL, $IDEN$NULL
 LD Y, $IMODE
 #21
-FNFH DZ, NA
-LDP PC, $CHECK
-NOP
+FNH DZ, HLA        # A = IMODE
+LDP PC, $CHECK     # jump if interrupts enabled
+LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y          # Y = PCH
 #30
