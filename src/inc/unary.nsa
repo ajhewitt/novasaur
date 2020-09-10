@@ -25,16 +25,18 @@ $INCCYC     0
 $FORK1      1 # 0->0x80,else->0xC0
 $FORK2      2 # 0xFF->0x40,0->0x80,else->0xC0
 $FORK3      3 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$FORKF      4 # feature fork
-$KS01?      5 # &3==0||1 ? 0:-1
-$KDATA      6 # &C>>2
-$RSADJ      7 # serial state -1
-$ML2FC      8 # mode-line to frame count: 3-6->-5,else->4
-$ML2ADJ     9 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
-$XGA?      10 # mode-line>11?: 0-10->-1,else->0
-$MASK2MODE 11 # &8==0 ? -1:0
-
-
+$FORKJ      4 # feature fork (audio, rx, tx/kb)
+$FORKK      5 # keyboard fork
+$KS01?      6 # &3==0||1 ? 0:-1
+$KDATA      7 # &C>>2
+$TKTOG      8 # 81->C2->98,83->E2->9A
+$RSADJ      9 # serial state -1
+$ML2FC     10 # mode-line to frame count: 3-6->-5,else->4
+$ML2ADJ    11 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
+$XGA?      12 # mode-line>11?: 0-10->-1,else->0
+$MASK2MODE 13 # &8==0 ? -1:0
+$FREQL     14
+$FREQH     15
 
 #FND - CPU
 $FORKI      0 # 0000->0x28,0001->0x50,001x->0x78,01xx->0xA0,1xxx->C8

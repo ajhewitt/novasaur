@@ -25,9 +25,9 @@ FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
-LD HL, $IDEN$FORKF
+LD HL, $IDEN$FORKJ
 LD Y, $TMODE
-FNEL DZ, PC           # comms  mode fork
+FNEL DZ, PC           # mode fork
 #32/27
 
 ADDR 0x20             #32 - mode 0: no comms
@@ -38,7 +38,7 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/39
 
-ADDR 0x28             #32 - mode 0x19,0x1B: keyboard jump page
+ADDR 0x28             #32 - mode 0xCx: keyboard jump page
 LD PG, $KSCANE_PG
 #34/42
 
@@ -62,25 +62,19 @@ NOP
 NOP
 NOP
 NOP
+$EXIT49
 NOP
 #50/74
 $EXIT50
 NOP
 $EXIT51
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+LD HL, $IDEN$NULL
+LD Y, $KTO
+FNFH DZ, NA               # A = kbd clk timeout
+LD Y, $KIDLE
 #60/83
-NOP
-NOP
-NOP
-NOP
+FNH AZ, HLD               # timeout -> kbd idle count
+LD HL, $0x10
 NOP
 NOP
 NOP
@@ -170,22 +164,22 @@ VMPHL DZ, PGA         # jump to next VMC
 #86/219
 
 ADDR 0xE0             #32 - mode 0x01,0x03: keyboard start
-LD HL, $0x18
+LD HL, $TKTOG$NULL
 LD Y, $TMODE
-ADDHL DZ, ND          # mode+0x18 (0x19,0x1B)
-#40/230
-LD HL, $0x20
+FNEH DZ, ND           # tx mode -> keyboard mode
+#39/230
+LD HL, $0xDF
 LD Y, $EREG
 ANDHL DZ, ED          # kbd clock enable
-LD PC, $EXIT50
-#50/238
+LD PC, $EXIT49
+#49/238
 
-ADDR 0xF0             #32 - mode 0x18,0x1A: keyboard stop
+ADDR 0xF0             #32 - mode 0x18-0x1B: keyboard stop
 LD HL, $0xE8
 LD Y, $TMODE
-ADDHL DZ, ND          # mode-0x18 (0,2)
+ADDHL DZ, ND          # mode-0x18 (0-3)
 #40/246
-LD HL, $0xDF
+LD HL, $0x20
 LD Y, $EREG
 ORHL DZ, ED           # kbd clock disable
 LD PC, $EXIT50

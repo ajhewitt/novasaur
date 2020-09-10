@@ -20,7 +20,7 @@ $NOISE         0xBF
 
 #HAL
 $AMODE         0xC0
-$KMODE         0xC1
+
 $KTO           0xC2
 $KIDLE         0xC3
 $KSL           0xC4
@@ -36,17 +36,17 @@ $TMODE         0xCD
 $TXRDIDX       0xCE
 $TXWRIDX       0xCF
 
-
-$PMODE         0xD2
-$PLINE         0xD3
-$FRAME         0xD4
-$COMLS         0xD5
-$COMPS         0xD6
-$VMODE         0xD7
-$VLINE         0xD8
-$VSTART        0xD9
-$ICL           0xDA
-$ICH           0xDB
+$PMODE         0xD1
+$PLINE         0xD2
+$FRAME         0xD3
+$COMLS         0xD4
+$COMPS         0xD5
+$VMODE         0xD6
+$VLINE         0xD7
+$VSTART        0xD8
+$ICL           0xD9
+$ICH           0xDA
+$ICSNAP        0xDB
 $T0            0xDC
 $T1            0xDD
 $T2            0xDE
