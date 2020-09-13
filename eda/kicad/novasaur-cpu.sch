@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2020-08-20"
+Date "2020-09-10"
 Rev "1.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -2327,7 +2327,7 @@ tx
 Text GLabel 2350 6450 2    50   Output ~ 0
 rts
 Text GLabel 2050 6650 2    50   Output ~ 0
-mode1
+vdac
 Text GLabel 2050 6050 2    50   Output ~ 0
 DB0
 Text GLabel 2050 6150 2    50   Output ~ 0
@@ -2335,7 +2335,7 @@ DB1
 Text GLabel 2050 6250 2    50   Output ~ 0
 DB2
 Text GLabel 2050 6750 2    50   Output ~ 0
-mode2
+text
 Wire Wire Line
 	2300 5300 2300 5250
 $Comp

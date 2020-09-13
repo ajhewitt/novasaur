@@ -7,10 +7,10 @@
 # 0-7: 8x8 glyph fonts
 # 8: underline - last row of mod10 fonts, all 0's or 1's for underline
 # 9: blank - first row of mod10 fonts/low-res graphics, all 0's
-# 10-13: top 4 rows of 8x6 glyph fonts (followed by rows 6,7)
-# 14,15: dither patterns
+# 10,11: hi-res dither
+# 12-15: lo-res dither
 # 16-31: 8x16 glyph fonts
-DITHER = [
+HIRES = [
   [0b1100,
    0b1100],
   [0b1000,
@@ -19,6 +19,26 @@ DITHER = [
    0b0010],
   [0b1001,
    0b0110]
+]
+LORESL = [
+  [0b0000,
+   0b0000],
+  [0b1010,
+   0b0000],
+  [0b1010,
+   0b1010],
+  [0b1111,
+   0b1010]
+]
+LORESR = [
+  [0b0000,
+   0b0000],
+  [0b0101,
+   0b0000],
+  [0b0101,
+   0b1010],
+  [0b1111,
+   0b0101]
 ]
 
 def print_ext_addr(addr)
@@ -73,11 +93,11 @@ def print_font(filename, offset)
 end
 
 
-def print_dither(offset)
+def print_dither(offset, pattern)
   4.times.each do |a|
     32.times.each do |b|
       print_data([0x10, offset + (a << 5) + (b >> 4) , (b << 4) & 0xf0, 0] +
-        16.times.map {DITHER[a][b >> 4] * 0x11})
+        16.times.map {pattern[a][b >> 4] * 0x11})
     end
   end
 end
@@ -96,7 +116,9 @@ end
 
 # start of ALU high
 print_ext_addr 0x0002
-print_dither 0x8E
+print_dither 0x8A, HIRES
+print_dither 0x8C, LORESL
+print_dither 0x8E, LORESR
 
 # 0x00028000-0x000287FF: thick serif 8x8 font
 # IBM PC BIOS. ca. 1981

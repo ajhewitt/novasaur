@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2020-08-20"
+Date "2020-09-10"
 Rev "1.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -483,15 +483,11 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS163" H 2200 6450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 3500 3550 0    50   Input ~ 0
-mode1
+text
 Text GLabel 1700 3850 0    50   Input ~ 0
 0
-Text GLabel 1700 3950 0    50   Input ~ 0
-mode2
 Text GLabel 1700 3750 0    50   Input ~ 0
 0
-Text GLabel 1700 4050 0    50   Input ~ 0
-mode2
 Wire Wire Line
 	2700 4250 2800 4250
 Wire Wire Line
@@ -1465,8 +1461,6 @@ F 3 "~" H 6900 2450 50  0001 C CNN
 	1    6700 2450
 	1    0    0    -1  
 $EndComp
-Text GLabel 9250 2650 0    50   Input ~ 0
-mode2
 Text GLabel 1700 4750 0    50   Input ~ 0
 1
 Connection ~ 9300 3550
@@ -1501,21 +1495,8 @@ Wire Wire Line
 	7700 2750 7700 4450
 Wire Wire Line
 	7700 4450 8100 4450
-$Comp
-L 74xx:74LS86 U?
-U 3 1 5E79B6AD
-P 9550 2550
-AR Path="/5E79B6AD" Ref="U?"  Part="3" 
-AR Path="/5DA1E9BD/5E79B6AD" Ref="U1"  Part="3" 
-F 0 "U1" H 9550 2550 50  0000 C CNN
-F 1 "74F86" H 9550 2784 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 9550 2550 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 9550 2550 50  0001 C CNN
-	3    9550 2550
-	1    0    0    -1  
-$EndComp
-Text GLabel 9850 2550 2    50   Output ~ 0
-hsync
+Text GLabel 9100 2450 2    50   Output ~ 0
+~hsync
 Wire Wire Line
 	5750 3650 5950 3650
 Wire Wire Line
@@ -1603,12 +1584,6 @@ Wire Wire Line
 	4700 2050 5100 2050
 Wire Wire Line
 	4700 2150 5100 2150
-Text GLabel 2700 1950 2    50   Output ~ 0
-mode0
-Text GLabel 3700 1950 0    50   Input ~ 0
-mode0
-Wire Wire Line
-	9100 2450 9250 2450
 Wire Wire Line
 	1350 2250 1700 2250
 Wire Wire Line
@@ -1650,6 +1625,12 @@ F 3 "~" H 1400 2450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 1200 2450
+Text GLabel 1700 4050 0    50   Input ~ 0
+0
+Text GLabel 1700 3950 0    50   Input ~ 0
+0
+Wire Wire Line
+	2700 1950 3700 1950
 Wire Bus Line
 	3100 2150 3100 2450
 Wire Bus Line
