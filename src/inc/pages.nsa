@@ -8,123 +8,123 @@ $ROM_COPY      0x83
 
 
 
-
-
-
-$FETCH1_PG     0x8B
-$FETCH2_PG     0x8C
-$PREFETCH_PG   0x8D
-$INTR1_PG      0x8E
-$INTR2_PG      0x8F
-$HLT_PG        0x90
-$MOVR_PG       0x91
-$MOVM_PG       0x92
-$MVIR_PG       0x93
-$MVIM_PG       0x94
-$LXI_PG        0x95
-$LDA_PG        0x96
-$STA_PG        0x97
-$LHLD_PG       0x98
-$LHLD1_PG      0x99
-$LHLD2_PG      0x9A
-$SHLD_PG       0x9B
-$SHLD1_PG      0x9C
-$SHLD2_PG      0x9D
-$LDAX_PG       0x9E
-$STAX_PG       0x9F
-$XCHG_PG       0xA0
-$ADDR_PG       0xA1
-$ADDM_PG       0xA2
-$ADI_PG        0xA3
-$ADCR_PG       0xA4
-$ADCM_PG       0xA5
-$ACI_PG        0xA6
-$SUBR_PG       0xA7
-$SUBM_PG       0xA8
-$SUI_PG        0xA9
-$SBBR_PG       0xAA
-$SBBM_PG       0xAB
-$SBI_PG        0xAC
-$INRR_PG       0xAD
-$INRM_PG       0xAE
-$DCRR_PG       0xAF
-$DCRM_PG       0xB0
-$INX_PG        0xB1
-$DCX_PG        0xB2
-$DAD_PG        0xB3
-$DAA_PG        0xB4
-$ANAR_PG       0xB5
-$ANAM_PG       0xB6
-$ANI_PG        0xB7
-$ORAR_PG       0xB8
-$ORAM_PG       0xB9
-$ORI_PG        0xBA
-$XRAR_PG       0xBB
-$XRAM_PG       0xBC
-$XRI_PG        0xBD
-$CMPR_PG       0xBE
-$CMPM_PG       0xBF
-$CPI_PG        0xC0
-$RLC_PG        0XC1
-$RRC_PG        0XC2
-$RAL_PG        0XC3
-$RAR_PG        0XC4
-$CMA_PG        0xC5
-$CMC_PG        0xC6
-$STC_PG        0xC7
-$JMP_PG        0xC8
-$JMPC_PG       0xC9
-$SKIP_PG       0xCA
-$CALLR_PG      0xCB
-$CALLS_PG      0xCC
-$PUSHPC_PG     0xCD
-$RETR_PG       0xCE
-$RETS_PG       0xCF
-$RST_PG        0xD0
-$RST2_PG       0xD1
-$PCHL_PG       0xD2
-$PUSH_PG       0xD3
-$PUSHA_PG      0xD4
-$POP_PG        0xD5
-$POPA_PG       0xD6
-$XTHL_PG       0xD7
-$SPHL_PG       0xD8
-$IN_PG         0xD9
-$OUT_PG        0xDA
-$INOUT_PG      0xDB
-$EI_PG         0xDC
-$DI_PG         0xDD
-$RIM_PG        0xDE
-$SIM_PG        0xDF
-$NSYNCE_PG     0xE0
-$DASYNCE_PG    0xE1
-$ASYNCE_PG     0xE2
-$DTSYNCE_PG    0xE3
-$TSYNCE_PG     0xE4
-$KSCANE_PG     0xE5
-$RSYNCE_PG     0xE6
-$DPSYNCE_PG    0xE7
-$PSYNCE_PG     0xE8
-$XSYNCE_PG     0xE9
-$NSYNCF1_PG    0xEA
-$DASYNCF1_PG   0xEB
-$ASYNCF1_PG    0xEC
-$DTSYNCF1_PG   0xED
-$TSYNCF1_PG    0xEE
-$KSCANF1_PG    0xEF
-$RSYNCF1_PG    0xF0
-$DPSYNCF1_PG   0xF1
-$PSYNCF1_PG    0xF2
-$XSYNCF1_PG    0xF3
-$NSYNCF2_PG    0xF4
-$DASYNCF2_PG   0xF5
-$ASYNCF2_PG    0xF6
-$DTSYNCF2_PG   0xF7
-$TSYNCF2_PG    0xF8
-$KSCANF2_PG    0xF9
-$RSYNCF2_PG    0xFA
-$DPSYNCF2_PG   0xFB
-$PSYNCF2_PG    0xFC
+$HLT_PG        0x88 # 8080 instruction set
+$MOVR_PG       0x89
+$MOVM_PG       0x8A
+$MVIR_PG       0x8B
+$MVIM_PG       0x8C
+$LXI_PG        0x8D
+$LDA_PG        0x8E
+$STA_PG        0x8F
+$LHLD_PG       0x90
+$LHLD1_PG      0x91
+$LHLD2_PG      0x92
+$SHLD_PG       0x93
+$SHLD1_PG      0x94
+$SHLD2_PG      0x95
+$LDAX_PG       0x96
+$STAX_PG       0x97
+$XCHG_PG       0x98
+$ADDR_PG       0x99
+$ADDM_PG       0x9A
+$ADI_PG        0x9B
+$ADCR_PG       0x9C
+$ADCM_PG       0x9D
+$ACI_PG        0x9E
+$SUBR_PG       0x9F
+$SUBM_PG       0xA0
+$SUI_PG        0xA1
+$SBBR_PG       0xA2
+$SBBM_PG       0xA3
+$SBI_PG        0xA4
+$INRR_PG       0xA5
+$INRM_PG       0xA6
+$DCRR_PG       0xA7
+$DCRM_PG       0xA8
+$INX_PG        0xA9
+$DCX_PG        0xAA
+$DAD_PG        0xAB
+$DAA_PG        0xAC
+$ANAR_PG       0xAD
+$ANAM_PG       0xAE
+$ANI_PG        0xAF
+$ORAR_PG       0xB0
+$ORAM_PG       0xB1
+$ORI_PG        0xB2
+$XRAR_PG       0xB3
+$XRAM_PG       0xB4
+$XRI_PG        0xB5
+$CMPR_PG       0xB6
+$CMPM_PG       0xB7
+$CPI_PG        0xB8
+$RLC_PG        0XB9
+$RRC_PG        0XBA
+$RAL_PG        0XBB
+$RAR_PG        0XBC
+$CMA_PG        0xBD
+$CMC_PG        0xBE
+$STC_PG        0xBF
+$JMP_PG        0xC0
+$JMPC_PG       0xC1
+$SKIP_PG       0xC2
+$CALLR_PG      0xC3
+$CALLS_PG      0xC4
+$PUSHPC_PG     0xC5
+$RETR_PG       0xC6
+$RETS_PG       0xC7
+$RST_PG        0xC8
+$RST2_PG       0xC9
+$PCHL_PG       0xCA
+$PUSH_PG       0xCB
+$PUSHA_PG      0xCC
+$POP_PG        0xCD
+$POPA_PG       0xCE
+$XTHL_PG       0xCF
+$SPHL_PG       0xD0
+$IN_PG         0xD1
+$OUT_PG        0xD2
+$INOUT_PG      0xD3
+$EI_PG         0xD4
+$DI_PG         0xD5
+$RIM_PG        0xD6
+$SIM_PG        0xD7
+$FETCH1_PG     0xD8 # 8080 support
+$FETCH2_PG     0xD9
+$PREFETCH_PG   0xDA
+$INTR1_PG      0xDB
+$INTR2_PG      0xDC
+$NSYNCE_PG     0xDD # null sync on execute
+$DASYNCE_PG    0xDE # delayed audio
+$ASYNCE_PG     0xDF # audio
+$DTSYNCE_PG    0xE0 # delayed transmit
+$TSYNCE_PG     0xE1 # transmit
+$KSCANE_PG     0xE2 # keyboard
+$RSYNCE_PG     0xE3 # receive
+$DPSYNCE_PG    0xE4 # delayed process
+$PSYNCE_PG     0xE5 # process
+$ADSRE_PG      0xE6 # ADSR
+$XSYNCE_PG     0xE7 # XGA process extension
+$NSYNCF1_PG    0xE8 # sync on fetch1
+$DASYNCF1_PG   0xE9
+$ASYNCF1_PG    0xEA
+$DTSYNCF1_PG   0xEB
+$TSYNCF1_PG    0xEC
+$KSCANF1_PG    0xED
+$RSYNCF1_PG    0xEE
+$DPSYNCF1_PG   0xEF
+$PSYNCF1_PG    0xF0
+$ADSRF1_PG     0xF1
+$XSYNCF1_PG    0xF2
+$NSYNCF2_PG    0xF3 # sync on fetch2
+$DASYNCF2_PG   0xF4
+$ASYNCF2_PG    0xF5
+$DTSYNCF2_PG   0xF6
+$TSYNCF2_PG    0xF7
+$KSCANF2_PG    0xF8
+$RSYNCF2_PG    0xF9
+$DPSYNCF2_PG   0xFA
+$PSYNCF2_PG    0xFB
+$ADSRF2_PG     0xFC
 $XSYNCF2_PG    0xFD
 $IDLE_PG       0xFE # 43-pc idle VMC
 $BOOT_PG       0xFF # hardware reset

@@ -1,0 +1,16 @@
+# H-sync continuation at end of process cycle on execute for ADSR control
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE ADSRE_PG
+
+# assumes Y=$AMODE
+NOP                       #115 every frame if audio on
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+#121
+FNH DZ, HL                # inst cache -> HL
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#129

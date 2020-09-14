@@ -97,9 +97,9 @@ def print_vmp(offset, opts = {})
       if opts[:high] # a=HHHH, b=0ECC,0Z00
         d = 16.times.map do |c|
           if b&3 == 0 # end of line - sync page - c=MMMM
-            pg = ML2SYNC_PG[c] + 0xE0
-            pg += 10 if b&4==4 && a==0 # syncf1
-            pg += 20 if b&4==4 && a==1 # syncf2
+            pg = ML2SYNC_PG[c] + 0xDD
+            pg += 11 if b&4==4 && a==0 # syncf1
+            pg += 22 if b&4==4 && a==1 # syncf2
             pg # else synce
           else # fetch/exec inst page - c=LLLL
             inst = (a<<4) | c
@@ -131,14 +131,18 @@ end
 # Mode-line number(s): [(start..end)],[...]]
 # Process cycles per pattern: [mode0, mode1,...]
 # Modulo(s) per mode: [[mode0,...],[mode1,...]
-VID = [[[480,10,8,27], [160,6,9], [(0..2)], [4,2,4,8], [[2], [3], [4], [8]]],                  #VGAW@60
-       [[480,1,3,28], [120,1,7], [(3..6),(7..10)], [1,3,5,4], [[2,4], [3,6], [5,10], [8,16]]], #VGA@75
-       [[600,1,4,35], [144,8,8], [(3..6),(7..10)], [1,3,5,4], [[2,4], [3,6], [5,10], [8,16]]], #SVGA@60
-       [[768,3,6,23], [150,6,4], [(11..15)], [4,4,8,16], [[4], [5], [8], [16]]]]               #XGA@60
-SEQ = {2=>[10,11,11,10], 3=>[10,11], 4=>[12,13,14,15],
-       5=>[12,13,14,15], 6=>[12,13,14,15],
-       8=>[0,1,2,3,4,5,6,7], 10=>[0,1,2,3,4,5,6,7,8,9],
-       16=>[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]}.freeze
+# Pattern index per mode: [[mode0,...],[mode1,...]
+VID = [[[480,10,2,33], [160,4,11], [(0..2)], [4,2,4,8],
+        [[2], [3], [4], [8]], [[0], [1], [2], [3]]],                    #VGA@60
+       [[480,1,3,28], [120,1,7], [(3..6),(7..10)], [1,3,5,4],
+        [[2,4], [3,6], [5,10], [8,16]], [[0,2], [1,2], [2,4], [3,5]]],  #VGA@75
+       [[600,1,4,35], [144,8,8], [(3..6),(7..10)], [1,3,5,4],
+        [[2,4], [3,6], [5,10], [8,16]],  [[0,2], [1,2], [2,4], [3,5]]], #SVGA@60
+       [[768,3,6,23], [150,6,4], [(11..15)], [4,4,8,16],
+        [[4], [5], [8], [16]], [[0], [1], [2], [5]]]].freeze            #XGA@60
+PAT = [[10,11,11,10], [10,11], [12,13,14,15],                           # mod2/4/5, mod3, mod4/5/6/8
+       [0,1,2,3,4,5,6,7], [0,1,2,3,4,5,6,7,8,9],                        # mod8, mod10
+       [16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]].freeze        # mod16
 # ALU function: VID (Video timings)
 def print_vid(offset)
   rom = Array.new(16) { Array.new(0x100, 0xFF) }
@@ -149,6 +153,7 @@ def print_vid(offset)
     v[4].each_with_index do |c, i| # timing columns
       m = 0
       c.each_with_index do |d, j| # timing columns
+        pat = PAT[v[5][i][j]]
         m = 0
         n = 0
         u = case
@@ -178,8 +183,8 @@ def print_vid(offset)
             v[2][j].each do |r|
               s = (t>=u[1] && t<u[2]) ? 0 : 0x20 # vsync active low
               if t<u[0]
-                s |= SEQ[d][t%SEQ[d].size] # set glyph line
-                s |= 0x80 if (t%d)==d-1 # inc V at start of glyph
+                s |= pat[t%pat.size] # set glyph line
+                s |= 0x80 if (t%d)==0 # inc V at start of glyph
               else
                 s |= 0x49 # hblank active high
               end

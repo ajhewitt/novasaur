@@ -26,10 +26,10 @@ LDN PC, $MEM_TEST   # try again?
 LD HL, $0x60
 LD Y, $EREG
 MVHL DZ, ED         # LED on
-LD HL, $0xD0
+LD HL, $0x30
 LD Y, $VMODE
 MVHL DZ, ND         # 3 -> video mode
-LD HL, $0xE0
+LD HL, $0x10
 LD Y, $VMS
 MVHL DZ, ND         # 0 -> mode line
 
@@ -37,14 +37,11 @@ MVHL DZ, ND         # 0 -> mode line
 LD HL, $0xFF
 LD Y, $AMODE
 MVHL AZ, ND
-LD HL, $0x20
+LD HL, $0x40
 LD Y, $RMODE
 MVHL AZ, ND
-LD HL, $0x40
+LD HL, $0x80
 LD Y, $TMODE
-MVHL AZ, ND
-LD HL, $0x60
-LD Y, $KMODE
 MVHL AZ, ND
 LD HL, $0x00
 LD Y, $IMASK

@@ -85,15 +85,12 @@ LD Y, $VMS
 FNFH DZ, ND               # VMS+1 (cycle=2)
 LDZ Y, $FRAME
 FNH DZ, HLD               # frame count+1
+LD HL, $IDEN$NULL
 LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0
-NOP
-NOP
-NOP
-#110/107
-NOP
-NOP
-NOP
-NOP
+LD Y, $AMODE
+#111/108
+FNH DZ, HLA
+LDP PG, $ADSRE_PG         # update ADSR if audio on
 NOP
 NOP
 NOP
@@ -105,9 +102,7 @@ LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
 #129/123
 
-$KBD_SCAN                 #108 - scan keyboard, cycle=2
-LD HL, $IDEN$NULL
-#110/125
+$KBD_SCAN                 #110 - scan keyboard, cycle=2
 LD Y, $ICH
 FNFH DZ, NA               # A = idle count high
 LD Y, $ICSNAP
