@@ -16,9 +16,9 @@ $UNDER?     9
 $INCLINE   10
 $INCPROC   11
 
-
-$SWAP      14
-$REVERSE   15
+$SWAP      13
+$REVERSE   14
+#AUDIO     15
 
 #FNE - HAL
 $INCCYC     0

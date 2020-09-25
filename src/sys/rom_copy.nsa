@@ -51,7 +51,7 @@ LD HL, $DEC$NULL
 LDZ Y,  $ROM_N
 FNH DZ, HLD
 LDP PC, $INIT
-LD PG, $PSYNCE_PG       # start video loop
+LD PG, $RESTART         # restart
 
 ADDR 0x80
 $READ_ROM               # n = 0:40,1:48,2:50..F:B8

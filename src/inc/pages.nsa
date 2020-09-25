@@ -2,8 +2,8 @@
 
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot
-$SET_VMODE     0x82
-$ROM_COPY      0x83
+$ROM_COPY      0x82
+
 
 
 

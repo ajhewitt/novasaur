@@ -31,6 +31,7 @@ def inst(i)
   dest += (i[2] == 0 ? WR[i[10]] : 'A') if i[5] == 0
   case decode i, [5, 6, 7]
   when 0
+    return if dst(i) == 'HL'
     "#{alu(i, 'HL', dest)}"
   when 1
     "#{alu(i, 'L', dest)}"  if i[2] == 1

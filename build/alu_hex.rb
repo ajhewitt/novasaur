@@ -32,25 +32,25 @@ def print_unary(offset, r)
 end
 
 # ALU function: AF (arithmetic flags)
-# XXXXYYYY = BBBBAAAA + HHHHLLLL
-# (BBBBAAAA = XXXXYYYY - HHHHLLLL)
+# ADD: XXXXYYYY = BBBBAAAA + HHHHLLLL
+# AF: A = XXXXYYYY, HL = HHHHLLLL (BBBBAAAA = XXXXYYYY - HHHHLLLL)
 # L) XXXXHZPL = XXXXYYYY $ LLLL (flags for AAAA +/- LLLL)
 # H) CSZPHVBL = XXXXHZPL $ HHHH
 def print_af(offset, opts = {})
   16.times.map do |a|
     16.times.map do |b|
       d = 16.times.map do |c|
-        if opts[:high]
+        if opts[:high] # a=HHHH, b=XXXX, c=HZPL
           r = c & 9                                   # preserve half carry/borrow
-          r |= 0x80 if b < a                          # C - Carry (from bit 7)
+          r |= 0x80 if (b-(c>>3)) < a                 # C - Carry (from bit 7)
           r |= b >> 3                                 # S - Sign of result
           r |= 0x20 if c&4 != 0 && b == 0             # Z - Zero (high if result is 0)
           r |= ((sprintf('%b', b).split('').map(&:to_i).reduce(&:+) + ((c&2)>>1))%2) << 4
           r |= 4 if ((b&7) < (a&7)) ^ (b < a)         # V - Overflow (carry from bit 6 xor carry)
           r |= 2 unless b < a || (c&4 != 0 && a == 0) # B - Borrow (from bit 7 if subtraction)
-        else
+        else # a=LLLL, b=XXXX, c=YYYY
           r = b << 4                                  # preserve high nibble
-          r |= 8 if c < a                             # H - Half carry (carry from bit 3)
+          r |= 8 if c < a # YYYY < LLLL               # H - Half carry (carry from bit 3)
           r |= 4 if c == 0                            # (half zero)
           r |= (sprintf('%b', c).split('').map(&:to_i).reduce(&:+)%2) << 1
           r |= 1 unless c < a || a == 0               # L - Low borrow (from bit 3 if subtraction)
@@ -69,13 +69,27 @@ end
 def print_wav(offset, opts = {})
   16.times.map do |a|
     if opts[:high]
-      m = 2**(7-a/3)
-      n = 256.times.map {|i| i&0x80 == 0 ? i : i-0x100}
-      n.map {|i| a.zero? ? 32 : (32 + i/m).round}
+      #m = 2**(7-a/3)
+      #n = 256.times.map {|i| i&0x80 == 0 ? i : i-0x100}
+      case a>>2
+      when 0
+        [0]*256
+      when 1
+        256.times.map {|i| (i>>1)|(i&0x80)}.map {|i| (i>>1)|(i&0x80)}
+      when 2
+        256.times.map {|i| (i>>1)|(i&0x80)}
+      else
+        256.times.to_a
+      end
+      #n.map {|i| a.zero? ? 32 : (32 + i/m).round}
     else
       # just generate harmonics from 1 to 16
       h = 128.0 / (a+1)
-      256.times.map {|i| (Math.sin(i * Math::PI/h)*127.5).floor&0xff}
+      if a>13
+        256.times.map {|i| rand(256)}
+      else
+        256.times.map {|i| (Math.sin(i * Math::PI/h)*127.5).floor&0xff}
+      end
     end.each_slice(16).each_with_index {|d, b| print_data [d.size, offset + a, b << 4, 0] + d}
   end
 end
@@ -267,7 +281,7 @@ def fork_feature(keyboard = false)
      0x88, 0x88, 0xB0, 0xB0, 0x08, 0x08, 0x08, 0x08] * 8
    ].flatten
   else
-   [[0x60, 0x60, 0x70, 0xA8] * 16,                        # 00:audio
+   [[0x20, 0x30, 0x40, 0x70] * 16,                        # 00:audio
     [0x20, 0x30, 0x50, 0x50, 0x80, 0x80, 0x80, 0x80,
      0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 
      0x80, 0x80, 0x80, 0x80, 0xA0, 0xA0, 0x20, 0x20,
@@ -286,23 +300,23 @@ def fork_intr
   256.times.map do |i|
     case 
     when i & 0x04 != 0 # rst 7.5
-      0xD8
+      0xD0
     when i & 0x02 != 0 # rst 6.5
-      0xC0
+      0xB8
     when i & 0x01 != 0 # rst 5.5
-      0xA8
+      0xA0
     when i & 0x80 != 0 # rst 4.5
-      0x90
+      0x88
     when i & 0x40 != 0 # rst 3.5
-      0x78
+      0x70
     when i & 0x20 != 0 # rst 2.5
-      0x60
+      0x58
     when i & 0x10 != 0 # rst 1.5
-      0x48
+      0x40
     when i & 0x08 != 0 # intr
-      0x30
+      0x28
     else               # fetch
-      0x18
+      0x10
     end
   end
 end
@@ -498,6 +512,9 @@ print_unary(0xFA, inc_line)
 print_unary(0xFB, inc_proc)
 
 # $SWAP: AB = BA
-print_unary(0xFE, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
+print_unary(0xFD, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
 # $REVERSE: 76543210 = 01234567
-print_unary(0xFF, 256.times.map {|i| (sprintf "%08b", i)}.map {|i| i.reverse.to_i(2)})
+print_unary(0xFE, 256.times.map {|i| (sprintf "%08b", i)}.map {|i| i.reverse.to_i(2)})
+# $AUDIO: 76543210 = 01234567
+print_unary(0xFF, 256.times.map {|i| (sprintf "%08b", i^0x80)}.map {|i| i.reverse.to_i(2)})
+

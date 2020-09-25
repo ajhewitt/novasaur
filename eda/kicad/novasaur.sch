@@ -1469,43 +1469,6 @@ F 3 "74xx/74ls86.pdf" H 7200 1600 50  0001 C CNN
 	2    7200 1600
 	1    0    0    -1  
 $EndComp
-$Comp
-L 74xx:74LS86 U1
-U 3 1 5F83F460
-P 9450 5500
-AR Path="/5F83F460" Ref="U1"  Part="3" 
-AR Path="/5DA1E9BD/5F83F460" Ref="U?"  Part="3" 
-F 0 "U1" H 9450 5500 50  0000 C CNN
-F 1 "74F86" H 9450 5734 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 9450 5500 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 9450 5500 50  0001 C CNN
-	3    9450 5500
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	9150 5400 9100 5400
-Wire Wire Line
-	9100 5400 9100 5600
-Wire Wire Line
-	9100 5600 9150 5600
-$Comp
-L power:GNDD #PWR?
-U 1 1 5F84F512
-P 9100 5800
-AR Path="/5CDEEC9F/5F84F512" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA5CD8/5F84F512" Ref="#PWR?"  Part="1" 
-AR Path="/5F84F512" Ref="#PWR0203"  Part="1" 
-F 0 "#PWR0203" H 9100 5550 50  0001 C CNN
-F 1 "GNDD" H 9104 5645 50  0000 C CNN
-F 2 "" H 9100 5800 50  0001 C CNN
-F 3 "" H 9100 5800 50  0001 C CNN
-	1    9100 5800
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	9100 5600 9100 5800
-Connection ~ 9100 5600
-NoConn ~ 9750 5500
 Wire Bus Line
 	4450 5100 4450 6750
 Wire Bus Line

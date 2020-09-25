@@ -7,8 +7,8 @@
 # 0-7: 8x8 glyph fonts
 # 8: underline - last row of mod10 fonts, all 0's or 1's for underline
 # 9: blank - first row of mod10 fonts/low-res graphics, all 0's
-# 10,11: hi-res dither
-# 12-15: lo-res dither
+# 10-13: lo-res dither
+# 14,15: hi-res dither
 # 16-31: 8x16 glyph fonts
 HIRES = [
   [0b1100,

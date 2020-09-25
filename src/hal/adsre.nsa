@@ -4,13 +4,63 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE ADSRE_PG
 
-# assumes Y=$AMODE
-NOP                       #115 every frame if audio on
+# assumes Y=$AMODE, cycle=1
+NOP                       #108 every even frame @30Hz
 NOP
+#110
+LD HL, $0x10
+LD Y, $EREG
+XORHL DZ, ED
+NOP
+NOP
+#120
+#LD HL, $INC$NULL
+#LDZ Y, $WAVE2
+#FNH DZ, HLD
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#130
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#140
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#150
+NOP
+NOP
+NOP
+NOP
+LD HL, $INC2$NULL
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS+2 (cycle=3)
+#160
 LD HL, $IDEN$NULL
 LDZ Y, $INST
-#121
 FNH DZ, HL                # inst cache -> HL
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
-#129
+#172

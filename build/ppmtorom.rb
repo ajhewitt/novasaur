@@ -30,3 +30,6 @@ file.to_a.map(&:strip).join(' ').split(' ').each_slice(3).each_slice(x).each_wit
   l += Array.new(240-x, 0)
   l.each_slice(16).each_with_index {|b, i| print_data [b.size, j, i << 4, 0] + b}
 end
+(y..255).each do |i|
+  16.times {|j| print_data [16, i, j << 4, 0] + Array.new(16, 0)}
+end

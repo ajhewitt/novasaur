@@ -72,8 +72,8 @@ reg = Array.new(20, -1)
 reg[PG] = ARGV.first.to_i # execute page
 reg[PC] = 0
 rom = load_rom
-ram = Array.new(8) {|a| Array.new(256) {|b| Array.new(256, 0)}} # [B][Y][X]
-ram[0][0xCD][0xFF]=0xE2
+ram = Array.new(8) {|a| Array.new(256) {|b| Array.new(256, 0x00)}} # [B][Y][X]
+ram[0][176][0xFF]=0xE2
 reg[Y] = 254 # $VMS
 n = 0
 while true do

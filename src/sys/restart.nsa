@@ -1,0 +1,77 @@
+# restart vector
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE RESTART
+
+# set E-reg
+LD HL, $0x00
+LD Y, $EREG
+MVHL AZ, ED         # LED on
+LD HL, $0x90
+LD Y, $VMODE
+MVHL AZ, ND         # 3 -> video mode
+LD HL, $0x50
+LD Y, $VMS
+MVHL AZ, ND         # 0 -> mode line
+LD HL, $0xFF
+LD Y, $VSTART
+MVHL AZ, ND         # 0 -> vstart
+
+#turn on audio
+LD HL, $0x0D
+LD Y, $NOTE1H
+MVHL AZ, ND
+LD HL, $0xF7
+LD Y, $NOTE1L
+MVHL AZ, ND
+LD HL, $0x40
+LD Y, $WAVE1
+MVHL AZ, ND
+
+LD HL, $0x11
+LD Y, $NOTE2H
+MVHL AZ, ND
+LD HL, $0x98
+LD Y, $NOTE2L
+MVHL AZ, ND
+LD HL, $0x40
+LD Y, $WAVE2
+MVHL AZ, ND
+
+LD HL, $0x14
+LD Y, $NOTE3H
+MVHL AZ, ND
+LD HL, $0xEC
+LD Y, $NOTE3L
+MVHL AZ, ND
+LD HL, $0x40
+LD Y, $WAVE3
+MVHL AZ, ND
+
+LD HL, $0x4E
+LD Y, $NOISE
+MVHL AZ, ND
+LD HL, $0x03
+LD Y, $AMODE
+MVHL AZ, ND
+LD HL, $0x00
+LD Y, $AUDIO
+MVHL AZ, ND
+
+#turn off features
+LD HL, $0x40
+LD Y, $RMODE
+MVHL AZ, ND
+LD HL, $0x80
+LD Y, $TMODE
+MVHL AZ, ND
+LD HL, $0x00
+LD Y, $IMASK
+MVHL AZ, ND
+
+LD HL, $0xEB
+LD Y, $INST
+MVHL DZ, ND
+
+LD PG, $PSYNCE_PG       # start video loop

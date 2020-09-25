@@ -81,11 +81,11 @@ $EREG          0xFE
 $AUDIO         0xFF
 
 #ROM copy
-$ROM_ID        0xE0        # source rom 0-15 - init to PC jump point
-$ROM_PG        0xE1        # source page 0-15 - init to 0
-$ROM_X         0xE2        # x index - ref both src and dest - init to 0
-$ROM_Y         0xE3        # y index - dest D0 page
-$ROM_N         0xE4        # ROM count
+$ROM_ID        0xFA        # source rom 0-15 - init to PC jump point
+$ROM_PG        0xFB        # source page 0-15 - init to 0
+$ROM_X         0xFC        # x index - ref both src and dest - init to 0
+$ROM_Y         0xFD        # y index - dest D0 page
+$ROM_N         0xFE        # ROM count
 
 #Constants
 $FETCH         0x00

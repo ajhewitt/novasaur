@@ -22,47 +22,13 @@ LD HL, $ZERO?$NULL
 FNH A, HLA
 LDN PC, $MEM_TEST   # try again?
 
-# set E-reg
-LD HL, $0x60
-LD Y, $EREG
-MVHL DZ, ED         # LED on
-LD HL, $0x30
-LD Y, $VMODE
-MVHL DZ, ND         # 3 -> video mode
-LD HL, $0x10
-LD Y, $VMS
-MVHL DZ, ND         # 0 -> mode line
-
-#turn off features
-LD HL, $0xFF
-LD Y, $AMODE
-MVHL AZ, ND
-LD HL, $0x40
-LD Y, $RMODE
-MVHL AZ, ND
-LD HL, $0x80
-LD Y, $TMODE
-MVHL AZ, ND
-LD HL, $0x00
-LD Y, $IMASK
-MVHL AZ, ND
-
-LD HL, $0xEB
-LD Y, $INST
-MVHL DZ, ND
-
-LD PG, $PSYNCE_PG       # start video loop
-
-
 # ROM Copy
 LD HL, $0
-LD Y, $VSTART
-MULH DZ, ND         # 0 -> vstart
 LD Y, $ROM_ID
 MULH DZ, ND         # 0 -> rom ID
 LD Y, $ROM_Y
 MULH DZ, ND         # 0 -> ROM Y: V porch = 0
-LD HL, $0xA
+LD HL, $0xE
 LD Y, $ROM_N
-MVHL AZ, ND         # 10 -> ROM N: copy 11 roms
+MVHL AZ, ND         # 14 -> ROM N: copy 15 roms
 LD PG, $ROM_COPY
