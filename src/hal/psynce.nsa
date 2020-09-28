@@ -85,11 +85,19 @@ FNH DZ, HLD               # frame count+1
 #101
 #LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0, cycle=1
 NOP #skip KBD_SCAN
-LD HL, $REVERSE$NULL
-FNH AZ, HLA
-LDN PG, $ADSRE_PG         # ADSR on ODD FRAME, cycle=1
-LD PC, $EXIT109
-#109
+LD HL, $DEC$NULL
+LDZ Y, $AMODE
+FNH DZ, HLA               # negative if AMODE = 0
+LDN PC, $EXIT110          # exit if audio off
+#110
+LD HL, $FETCH
+LD Y, $INST
+MVHL AZ, ND               # cache fetch
+LD HL, $IDEN$ADSRPG
+#120
+LD Y, $FRAME
+FNEL DZ, PG               # jump to envelope channel, cycle=1
+#124
 
 $KBD_SCAN                 #103 - scan keyboard, cycle=1
 NOP
@@ -173,18 +181,12 @@ LD PC, $EXIT196
 #196
 
 $EXIT187                  #187 - 5 ticks per hour, cycle=3
-NOP
-NOP
-NOP
-#190
-NOP
-NOP
-NOP
-NOP
-NOP
-$EXIT109                  #109 cycle=1
+MVHL A, NA                # NOP
+#191
+MVHL A, NA                # NOP
 NOP
 $EXIT196                  #196 - 10 ticks per min, cycle=3
+$EXIT110                  #110 cycle=1
 NOP
 LD HL, $INC$NULL
 #199,113

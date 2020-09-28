@@ -9,45 +9,48 @@ $INC2       3
 $1COM       4
 $2COM       5
 $LSR        6 # >>1
-$NSR        7 # >>1&0x80
+$LSL        7 # <<1
 $ZERO?      8 # alias
 $OVER?      8
 $UNDER?     9
 $INCLINE   10
 $INCPROC   11
-
+$NSR       12 # >>1&0x80
 $SWAP      13
 $REVERSE   14
 #AUDIO     15
 
 #FNE - HAL
 $INCCYC     0
-$FORK1      1 # 0->0x80,else->0xC0
-$FORK2      2 # 0xFF->0x40,0->0x80,else->0xC0
-$FORK3      3 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-$FORKJ      4 # feature fork (audio, rx, tx/kb)
-$FORKK      5 # keyboard fork
-$KS01?      6 # &3==0||1 ? 0:-1
-$KDATA      7 # &C>>2
-$TKTOG      8 # 81->C2->98,83->E2->9A
-$RSADJ      9 # serial state -1
-$ML2FC     10 # mode-line to frame count: 3-6->-5,else->4
-$ML2ADJ    11 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
-$XGA?      12 # mode-line>11?: 0-10->-1,else->0
-$MASK2MODE 13 # &8==0 ? -1:0
+$FORKJ      1 # feature fork (audio, rx, tx/kb)
+$FORKK      2 # keyboard fork
+$ADSRPG     3 # FRAME->ADSR Page
+$KS01?      4 # &3==0||1 ? 0:-1
+$KDATA      5 # &C>>2
+$TKTOG      6 # 81->C2->98,83->E2->9A
+$RSADJ      7 # serial state -1
+$ML2FC      8 # mode-line to frame count: 3-6->-5,else->4
+$ML2ADJ     9 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
+$XGA?      10 # mode-line>11?: 0-10->-1,else->0
+$MASK2MODE 11 # &8==0 ? -1:0
+$SUS2LEV   12 # sustain to level
+
 $FREQL     14
 $FREQH     15
 
 #FND - CPU
 $FORKI      0 # 0000->0x28,0001->0x50,001x->0x78,01xx->0xA0,1xxx->C8
-$REGMAPH    1 # map dest/hi register to zpage addr
-$REGMAPL    2 # map source/low register to zpage addr
-$F2PSW      3 # flags->PSW
-$PSW2F      4 # PSW->flags
-$SWCARRY    5 # swap carry with borrow flags
-$DACARRY    6 # set carry if nibbles > 9
-$CON2MUL    7 # condition code to flag multiplier
-$RSTVEC     8 # map inst+1 to PCL vector
+$FORK1      1 # 0->0x80,else->0xC0
+$FORK2      2 # 0xFF->0x40,0->0x80,else->0xC0
+$FORK3      3 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+$REGMAPH    4 # map dest/hi register to zpage addr
+$REGMAPL    5 # map source/low register to zpage addr
+$F2PSW      6 # flags->PSW
+$PSW2F      7 # PSW->flags
+$SWCARRY    8 # swap carry with borrow flags
+$DACARRY    9 # set carry if nibbles > 9
+$CON2MUL   10 # condition code to flag multiplier
+$RSTVEC    11 # map inst+1 to PCL vector
 
 
 

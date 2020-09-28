@@ -1,22 +1,45 @@
 # zero page assignments
 
-#Sound
-$TONE1L        0xB0
-$TONE1H        0xB1
-$NOTE1L        0xB2
-$NOTE1H        0xB3
-$WAVE1         0xB4
-$TONE2L        0xB5
-$TONE2H        0xB6
-$NOTE2L        0xB7
-$NOTE2H        0xB8
-$WAVE2         0xB9
-$TONE3L        0xBA
-$TONE3H        0xBB
-$NOTE3L        0xBC
-$NOTE3H        0xBD
-$WAVE3         0xBE
-$NOISE         0xBF
+# sound voice 0
+$WAVE0         0x9A
+$ATTACK0       0x9B
+$DECAY0        0x9C
+$SUSTAIN0      0x9D
+$RELEASE0      0x9E
+$DELTA0        0x9F
+# sound voice 1
+$WAVE1         0xA0
+$NOTE1L        0xA1
+$NOTE1H        0xA2
+$ATTACK1       0xA3
+$DECAY1        0xA4
+$SUSTAIN1      0xA5
+$RELEASE1      0xA6
+$DELTA1        0xA7
+$TONE1L        0xA8
+$TONE1H        0xA9
+# sound voice 2
+$WAVE2         0xAA
+$NOTE2L        0xAB
+$NOTE2H        0xAC
+$ATTACK2       0xAD
+$DECAY2        0xAE
+$SUSTAIN2      0xAF
+$RELEASE2      0xB0
+$DELTA2        0xB1
+$TONE2L        0xB2
+$TONE2H        0xB3
+# sound voice 3
+$WAVE3         0xB4
+$NOTE3L        0xB5
+$NOTE3H        0xB6
+$ATTACK3       0xB7
+$DECAY3        0xB8
+$SUSTAIN3      0xB9
+$RELEASE3      0xBA
+$DELTA3        0xBB
+$TONE3L        0xBC
+$TONE3H        0xBD
 
 #HAL
 $AMODE         0xC0

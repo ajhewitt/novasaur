@@ -19,6 +19,10 @@ LD Y, $VSTART
 MVHL AZ, ND         # 0 -> vstart
 
 #turn on audio
+LD HL, $0x0E
+LD Y, $WAVE0
+MVHL AZ, ND
+
 LD HL, $0x0D
 LD Y, $NOTE1H
 MVHL AZ, ND
@@ -49,9 +53,6 @@ LD HL, $0x40
 LD Y, $WAVE3
 MVHL AZ, ND
 
-LD HL, $0x4E
-LD Y, $NOISE
-MVHL AZ, ND
 LD HL, $0x03
 LD Y, $AMODE
 MVHL AZ, ND

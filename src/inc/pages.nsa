@@ -7,7 +7,7 @@ $ROM_COPY      0x82
 
 
 
-
+$IDLE_PG       0x87 # 43-pc idle VMC
 $HLT_PG        0x88 # 8080 instruction set
 $MOVR_PG       0x89
 $MOVM_PG       0x8A
@@ -93,38 +93,38 @@ $FETCH2_PG     0xD9
 $PREFETCH_PG   0xDA
 $INTR1_PG      0xDB
 $INTR2_PG      0xDC
-$NSYNCE_PG     0xDD # null sync on execute
-$DASYNCE_PG    0xDE # delayed audio
-$ASYNCE_PG     0xDF # audio
-$DTSYNCE_PG    0xE0 # delayed transmit
-$TSYNCE_PG     0xE1 # transmit
-$KSCANE_PG     0xE2 # keyboard
-$RSYNCE_PG     0xE3 # receive
-$DPSYNCE_PG    0xE4 # delayed process
-$PSYNCE_PG     0xE5 # process
-$ADSRE_PG      0xE6 # ADSR
-$XSYNCE_PG     0xE7 # XGA process extension
-$NSYNCF1_PG    0xE8 # sync on fetch1
-$DASYNCF1_PG   0xE9
-$ASYNCF1_PG    0xEA
-$DTSYNCF1_PG   0xEB
-$TSYNCF1_PG    0xEC
-$KSCANF1_PG    0xED
-$RSYNCF1_PG    0xEE
-$DPSYNCF1_PG   0xEF
-$PSYNCF1_PG    0xF0
-$ADSRF1_PG     0xF1
-$XSYNCF1_PG    0xF2
-$NSYNCF2_PG    0xF3 # sync on fetch2
-$DASYNCF2_PG   0xF4
-$ASYNCF2_PG    0xF5
-$DTSYNCF2_PG   0xF6
-$TSYNCF2_PG    0xF7
-$KSCANF2_PG    0xF8
-$RSYNCF2_PG    0xF9
-$DPSYNCF2_PG   0xFA
-$PSYNCF2_PG    0xFB
-$ADSRF2_PG     0xFC
-$XSYNCF2_PG    0xFD
-$IDLE_PG       0xFE # 43-pc idle VMC
+$ADSRE0_PG     0xDD # ADSR voice 0
+$ADSRE1_PG     0xDE # ADSR voice 1
+$ADSRE2_PG     0xDF # ADSR voice 2
+$ADSRE3_PG     0xE0 # ADSR voice 3
+$NSYNCE_PG     0xE1 # null sync on execute
+$DASYNCE_PG    0xE2 # delayed audio
+$ASYNCE_PG     0xE3 # audio
+$DTSYNCE_PG    0xE4 # delayed transmit
+$TSYNCE_PG     0xE5 # transmit
+$KSCANE_PG     0xE6 # keyboard
+$RSYNCE_PG     0xE7 # receive
+$DPSYNCE_PG    0xE8 # delayed process
+$PSYNCE_PG     0xE9 # process
+$XSYNCE_PG     0xEA # XGA process extension
+$NSYNCF1_PG    0xEB # sync on fetch1
+$DASYNCF1_PG   0xEC
+$ASYNCF1_PG    0xED
+$DTSYNCF1_PG   0xEE
+$TSYNCF1_PG    0xEF
+$KSCANF1_PG    0xF0
+$RSYNCF1_PG    0xF1
+$DPSYNCF1_PG   0xF2
+$PSYNCF1_PG    0xF3
+$XSYNCF1_PG    0xF4
+$NSYNCF2_PG    0xF5 # sync on fetch2
+$DASYNCF2_PG   0xF6
+$ASYNCF2_PG    0xF7
+$DTSYNCF2_PG   0xF8
+$TSYNCF2_PG    0xF9
+$KSCANF2_PG    0xFA
+$RSYNCF2_PG    0xFB
+$DPSYNCF2_PG   0xFC
+$PSYNCF2_PG    0xFD
+$XSYNCF2_PG    0xFE
 $BOOT_PG       0xFF # hardware reset

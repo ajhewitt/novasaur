@@ -157,7 +157,7 @@ ADDHL DZ, ND          # audio + HL -> audio
 #180
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
-LDZ Y, $NOISE
+LDZ Y, $WAVE0
 FNH DZ, HL            # HL = amp/noise odd or even
 LD Y, $PLINE
 #189

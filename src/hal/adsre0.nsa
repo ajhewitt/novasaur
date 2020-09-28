@@ -1,0 +1,201 @@
+# Envelope generator at end of frame
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE ADSRE0_PG
+
+# WAVE=LLLLWWWW
+# P,A,D,S registers, where P—> A, D, 0
+# start L=0,P—>A
+# 1) L=L+A, until L carry then L=max(15),P—>D
+# 2) L=L-D, until L carry then L=min(0),P=0(sustain)
+# assumes Y=$FRAME, H=$IDEN, cycle=1
+LDZ Y, $DELTA0            #124 delta pointer
+FNEH DZ, YA               # Y = delta register
+LDPZ PC, $SUSTAIN         # +ve means no delta (sustain)
+#130
+FNH DZ, HLA               # A = SDDDD000
+LD HL, $LSL$NULL
+FNH A, HL                 # HL = DDDD0000
+LD Y, $WAVE0
+LDP PC, $ATTACKING        # attacking if delta is +ve
+#139
+ADDHL DZ, ND              # L + D -> L
+AFHL A, NA                # check carry
+LDN PC, $CONT147          # -ve delta should carry, next check
+LD HL, $0xF0
+#150
+ORHL DZ, ND               # set LLLL to max
+LD HL, $DECAY0
+LD Y, $DELTA0
+MVHL AZ, ND               # decay register -> delta pointer
+LD PC, $EXIT164
+#164
+$ATTACKING                #140
+ADDHL DZ, ND              # L + D -> L
+AFHL A, NA                # check carry
+LDP PC, $EXIT150          # +ve delta should notcarry, continue
+LD HL, $0x0F
+#151
+ANDHL DZ, ND              # set LLLL to min
+LD HL, $0
+LD Y, $DELTA0
+MULH AZ, ND               # 0 (sustain) -> delta pointer
+LD PC, $EXIT164
+#164
+
+$SUSTAIN                  #131 check to see if sustain had changed
+LDZ Y, $WAVE0
+FNH DZ, HL                # HL = LLLLWWWW
+LD Y, $SUSTAIN0
+ADDH DZ, NA               # A = 1111LLLL + LLLL
+#140
+LDN PC, $ATTACK
+LD HL, $ZERO?$NULL
+FNH A, HLA                # sustain == sustain?
+LD HL, $RELEASE0
+LD Y, $DELTA0
+LDN PC, $EXIT151          # sustain unchanged, exit
+#150
+MVHL AZ, ND               # release register -> delta pointer
+$EXIT154
+LD HL, $INC2$NULL
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS+2 (cycle=3)
+#160
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#172
+
+$ATTACK                   #142 start attack
+LD HL, $ATTACK0
+LD Y, $DELTA0
+MVHL AZ, ND               # attack register -> delta pointer
+#150
+$EXIT150
+NOP
+$EXIT151
+NOP
+LD PC, $EXIT154
+
+$CONT147
+LD HL, $IDEN$NULL
+LDZ Y, $WAVE0
+FNH DZ, HL                # HL = LLLLWWWW
+LD Y, $SUSTAIN0
+ADDH DZ, NA               # A = 1111LLLL + LLLL
+#160
+LDP PC, $EXIT162          # sustain not met, still decaying
+NOP
+NOP
+NOP
+LD HL, $XGA?$NULL
+LD Y, $VMS
+FNEH DZ, NA
+LDN PG, $CONT173
+#172
+LDZ HL, $INCLINE$NULL
+FNH DZ, HLD               # H=mode_line+1, L=E000
+LD Y, $PMODE
+VIDH DZ, SA               # mode_line, pmode —> S
+#181
+LDP HL, $IDEN$IDEN        # sign bit low, don’t inc vline
+LDN HL, $INC$IDEN         # sign bit high, inc vline
+LD Y, $VLINE
+FNFH DZ, VD               # increment? vline —> V
+#189
+FNFL E, HL                # serial inputs -> H
+LD Y, $COMLS
+COMH DZ, NA               # update comms line state
+LD HL, $RSADJ$NULL
+#199
+FNEH AZ, ND               # adjust serial state by -1
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+#210
+MVHL A, NA                # NOP
+LD HL, $INC$IDEN
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS+1 (cycle=1)
+#220
+NOP
+LD PC, $CONT223
+
+$EXIT162
+NOP
+NOP
+$EXIT164
+LD HL, $XGA?$NULL
+LD Y, $VMS
+FNEH DZ, NA
+LDN PG, $EXIT173
+#172
+LDZ HL, $INCLINE$NULL
+FNH DZ, HLD               # H=mode_line+1, L=E000
+LD Y, $PMODE
+VIDH DZ, SA               # mode_line, pmode —> S
+#181
+LDP HL, $IDEN$IDEN        # sign bit low, don’t inc vline
+LDN HL, $INC$IDEN         # sign bit high, inc vline
+LD Y, $VLINE
+FNFH DZ, VD               # increment? vline —> V
+#189
+FNFL E, HL                # serial inputs -> H
+LD Y, $COMLS
+COMH DZ, NA               # update comms line state
+LD HL, $RSADJ$NULL
+#199
+FNEH AZ, ND               # adjust serial state by -1
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+#209
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#215
+
+$EXIT173
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+#181
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+#189
+MVHL A, NA                # NOP
+LD HL, $0x30
+LD Y, $VMS
+ADDH DZ, ND               # VMS+3 (cycle=4)
+#200
+LD PC, $EXIT202
+#202
+
+$CONT173
+LD HL, $0x30
+LD Y, $VMS
+ADDH DZ, ND               # VMS+3 (cycle=4)
+#180
+$CONT223
+LD HL, $SUS2LEV$SWAP
+LD Y, $SUSTAIN0
+FNEH DZ, NA               # A = LLLL0000
+LD Y, $WAVE0
+#189
+FNFL DZ, HL               # HL = WWWWAAAA
+MVH AZ, ND                # LLLLWWWW -> WAVE
+LD HL, $0
+LD Y, $DELTA0
+#199
+MULH DZ, ND               # 0 (sustain) -> delta pointer
+$EXIT202
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+#209,252
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#215,258

@@ -111,9 +111,9 @@ def print_vmp(offset, opts = {})
       if opts[:high] # a=HHHH, b=0ECC,0Z00
         d = 16.times.map do |c|
           if b&3 == 0 # end of line - sync page - c=MMMM
-            pg = ML2SYNC_PG[c] + 0xDD
-            pg += 11 if b&4==4 && a==0 # syncf1
-            pg += 22 if b&4==4 && a==1 # syncf2
+            pg = ML2SYNC_PG[c] + 0xE1
+            pg += 10 if b&4==4 && a==0 # syncf1
+            pg += 20 if b&4==4 && a==1 # syncf2
             pg # else synce
           else # fetch/exec inst page - c=LLLL
             inst = (a<<4) | c
@@ -426,31 +426,37 @@ print_vid 0xB0
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
 # FORKI: {0000:0x28, 0001:0x50, 001x:0x78, 01xx:0xA0, 1xxx:0xC8}
 print_unary(0xD0, fork_intr)
+# $FORK1: 0->0x80,else->0xC0
+print_unary(0xD1, [0x80] + Array.new(0xFF, 0xC0))
+# $FORK2: 0xFF->0x40,0->0x80,else->0xC0
+print_unary(0xD2, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
+# $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+print_unary(0xD3, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
 # $MAPREGH: map instruction to zpage addr of destination register, or high source register pair
 REG8=[0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE0, 0xE1].freeze
 REG16H=[0xE2, 0xE4, 0xE6, 0xE8].freeze
-print_unary(0xD1, 256.times.map { |i|
+print_unary(0xD4, 256.times.map { |i|
   j = i & 0xC7
   (j > 0 && j < 4) ? REG16H[(i&0x30)>>4] : REG8[(i&0x38)>>3]
 })
 # $MAPREGL: map instruction to zpage addr of source register, or low source register pair
 REG16L=[0xE3, 0xE5, 0xE7, 0xE9].freeze
-print_unary(0xD2, 256.times.map { |i|
+print_unary(0xD5, 256.times.map { |i|
   j = i & 0xC7
   (j > 0 && j < 4) ? REG16L[(i&0x30)>>4] : REG8[i&7]
 })
 # $F2PSW: flags->PSW
-print_unary(0xD3, flags_psw)
+print_unary(0xD6, flags_psw)
 # $PSW2F: PSW->flags
-print_unary(0xD4, psw_flags)
+print_unary(0xD7, psw_flags)
 # $SWCARRY: swap carry with borrow flags (CNZPHOBL->BNZPLOCH)
-print_unary(0xD5, swap_carry)
+print_unary(0xD8, swap_carry)
 # $DACARRY: set carry if nibbles > 9
-print_unary(0xD6, da_carry)
+print_unary(0xD9, da_carry)
 # $CON2MUL: condition code to flag multiplier (ZCPS->CNZPHOBL)
 CON=[4, 1, 8, 2].freeze
 UNC=[0xC3, 0xC9, 0xCD].freeze # unconditional instructions
-print_unary(0xD7, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
+print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 # $RSTVEC
 
 
@@ -458,32 +464,30 @@ print_unary(0xD7, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 # 0x0003E000-0x0003EFFF: FNE low nibble only - HAL related
 # $INCCYC: inc, clear ext bit
 print_unary(0xE0, 256.times.map{|i| (i+1)&0xF7})
-# $FORK1: 0->0x80,else->0xC0
-print_unary(0xE1, [0x80] + Array.new(0xFF, 0xC0))
-# $FORK2: 0xFF->0x40,0->0x80,else->0xC0
-print_unary(0xE2, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
-# $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-print_unary(0xE3, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
 # $FORKJ: fork on HAL feature
-print_unary(0xE4, fork_feature)
+print_unary(0xE1, fork_feature)
 # $FORKK: fork on HAL feature
-print_unary(0xE5, fork_feature(true))
+print_unary(0xE2, fork_feature(true))
+# $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
+print_unary(0xE3, [0xE0]*253 + [0xDF,0xDE,0xDD])
 # $KS01?: &3==0||1 ? 0:-1
-print_unary(0xE6, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
+print_unary(0xE4, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C>>2
-print_unary(0xE7, 256.times.map{|i| (i&0xC) >> 2})
+print_unary(0xE5, 256.times.map{|i| (i&0xC) >> 2})
 # $TKTOG: toggle tx mode <-> keyboard mode
-print_unary(0xE8, 256.times.map{|i| i&0x40==0 ? ((i&2)<<4)|0xC2 : ((i&0x20)>>4)|0x98})
+print_unary(0xE6, 256.times.map{|i| i&0x40==0 ? ((i&2)<<4)|0xC2 : ((i&0x20)>>4)|0x98})
 # $RSADJ: serial state -1
-print_unary(0xE9, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
+print_unary(0xE7, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
 # $ML2FC: mode-line to frame count: 3-6->-5,else->4
-print_unary(0xEA, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
+print_unary(0xE8, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
 # $ML2ADJ: mode-line to frame count: 0-2->0xE0,else->0xF0
-print_unary(0xEB, [0xE0]*48 + [0xF0]*208)
+print_unary(0xE9, [0xE0]*48 + [0xF0]*208)
 # $XGA?: mode-line: 0-10->-1,else->0
-print_unary(0xEC, [0xFF]*176 + [0]*80)
+print_unary(0xEA, [0xFF]*176 + [0]*80)
 # $MASK2MODE: IMASK enable bit (3) 0->-1, 1->0
-print_unary(0xED, 256.times.map{|i| i&8==0 ? 0xFF : 0})
+print_unary(0xEB, 256.times.map{|i| i&8==0 ? 0xFF : 0})
+# $SUS2LEV: sustain to level
+print_unary(0xEC, 256.times.map{|i| ((-1*i)&0xF)<<4})
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only - generic/default functions
 # $IDEN: A = A
@@ -500,8 +504,8 @@ print_unary(0xF4, 256.times.map{|i| ((-1*i)-1)&0xFF})
 print_unary(0xF5, 256.times.map{|i| (-1*i)&0xFF})
 # $LSR: >>1
 print_unary(0xF6, 256.times.map{|i| i>>1})
-# $NSR: >>1&0x80
-print_unary(0xF7, 256.times.map{|i| (i>>1) | 0x80})
+# $LSL: <<1
+print_unary(0xF7, 256.times.map{|i| (i<<1)&0xFF})
 # $OVER?: A = A==0? 0 : -1
 print_unary(0xF8, [0] + Array.new(0xFF, 0xFF))
 # $UNDER?: A = A==0xFF? -1 : 0
@@ -510,7 +514,8 @@ print_unary(0xF9, Array.new(0xFF, 0) + [0xFF])
 print_unary(0xFA, inc_line)
 # $INCPROC: reset mode_line, cycle = 1
 print_unary(0xFB, inc_proc)
-
+# $NSR: >>1&0x80
+print_unary(0xFC, 256.times.map{|i| (i>>1) | 0x80})
 # $SWAP: AB = BA
 print_unary(0xFD, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
 # $REVERSE: 76543210 = 01234567
