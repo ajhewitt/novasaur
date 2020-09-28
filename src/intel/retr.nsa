@@ -27,7 +27,7 @@ LD HL, $INC$FORK2
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL+1
 #41/34
-FNEL A, PC
+FNDL A, PC
 #44/36
 
 $SKIP_RET

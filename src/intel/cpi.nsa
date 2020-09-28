@@ -30,7 +30,7 @@ NOP
 LD HL, $INC$FORK2
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-FNEL A, PC
+FNDL A, PC
 #32
 
 ADDR 0x40             # PCL = 255, iden PCH, inc PCH

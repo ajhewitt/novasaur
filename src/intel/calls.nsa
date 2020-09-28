@@ -17,7 +17,7 @@ LD Y, $PCL
 LDN PC, $SKIP_CALL    # skip call if flag set
 #20/18
 FNFH DZ, XD           # X,PCL = PCL+1
-FNEL A, PC
+FNDL A, PC
 #26/22
 $SKIP_CALL
 LD HL, $DEC$NULL

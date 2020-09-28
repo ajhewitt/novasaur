@@ -14,7 +14,7 @@ NOP
 LDZ Y, $PCL
 #11
 FNFH DZ, XD           # X,PCL = PCL+1
-FNEL A, PC
+FNDL A, PC
 #17
 
 ADDR 0x80

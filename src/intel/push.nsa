@@ -31,7 +31,7 @@ NOP
 LD HL, $DEC$FORK2
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL-1
-FNEL A, PC
+FNDL A, PC
 #33
 
 ADDR 0x40             # SPL = 255, dec SPH, iden SPH

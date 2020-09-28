@@ -10,7 +10,7 @@ FNH DZ, HLD           # inc state
 LD HL, $DEC$FORK2
 LD Y, $SPL
 FNFH DZ, XD           # X,SPL = SPL-1
-FNEL A, PC
+FNDL A, PC
 #14
 
 ADDR 0x40             # SPL = 255, dec SPH, iden SPH

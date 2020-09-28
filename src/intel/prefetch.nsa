@@ -7,7 +7,7 @@ PAGE PREFETCH_PG
 LD HL, $INC$FORK1
 LD Y, $PCL
 FNFH DZ, XD        # X,PCL = PCL+1
-FNEL A, PC         # fork on PCL
+FNDL A, PC         # fork on PCL
 #10
 
 ADDR 0x80          # PCL = 0

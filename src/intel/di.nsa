@@ -15,7 +15,7 @@ NOP
 LD HL, $INC$FORK1
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-FNEL A, PC
+FNDL A, PC
 #22
 
 ADDR 0x80

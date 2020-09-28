@@ -13,7 +13,7 @@ LD Y, $VMS
 FNFH DZ, ND           # VMC+1
 LD Y, $ICL
 FNFH DZ, ND           # ICL+1
-FNEL A, PC            # fork on ICL
+FNDL A, PC            # fork on ICL
 #21
 
 ADDR 0x80             # ICL = 0
