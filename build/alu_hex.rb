@@ -64,32 +64,25 @@ end
 
 # ALU function: WAV (wavetable sythesizer)
 # Gain/Wave - HL, sample index - acc
-# L) A = WT[L][A] - wavetable of signed 8-bit samples
-# H) A = 32 + (A / 2**(7-H/3)) - attenuate from -12db in 2dB step
+# L) A = signed 7-bit sample of bandlimited (L even) square (L odd) or sawtooth
+# H) A = attenuate from -12db in -2dB steps to mute
 def print_wav(offset, opts = {})
+  h = 16.times.map do |n|                             # fundamental (f), harmonics (2f-16f)
+    f = 128.0/(n.to_f+1.0)
+    256.times.map {|i| Math.sin(i.to_f * Math::PI/f)}
+  end
   16.times.map do |a|
     if opts[:high]
-      #m = 2**(7-a/3)
-      #n = 256.times.map {|i| i&0x80 == 0 ? i : i-0x100}
-      case a>>2
-      when 0
-        [0]*256
-      when 1
-        256.times.map {|i| (i>>1)|(i&0x80)}.map {|i| (i>>1)|(i&0x80)}
-      when 2
-        256.times.map {|i| (i>>1)|(i&0x80)}
-      else
-        256.times.to_a
-      end
-      #n.map {|i| a.zero? ? 32 : (32 + i/m).round}
+      m = a.zero? ? 0 : 2.0**(a.to_f/3.0-7.0)         # mute,-40,-38..-12 dB
+      [*0..255].pack('C*').unpack('c*').map {|i| (i.to_f*m).round&0xFF}
     else
-      # just generate harmonics from 1 to 16
-      h = 128.0 / (a+1)
-      if a>13
-        256.times.map {|i| rand(256)}
-      else
-        256.times.map {|i| (Math.sin(i * Math::PI/h)*127.5).floor&0xff}
+      w = 256.times.map do |i|
+        l = h.first(a+1).each_with_index.map do |j,k| # limit band to a+1
+          a.even? && k.odd? ? 0 : j[i]/(k+1)          # skip even harmonics on even a
+        end.reduce(&:+)                               # sum harmonics
       end
+      s = 127.5 / w.max.to_f                          # scale to -128 -> 127
+      w.map {|i| (i.to_f*s).floor&0xFF}
     end.each_slice(16).each_with_index {|d, b| print_data [d.size, offset + a, b << 4, 0] + d}
   end
 end
@@ -372,6 +365,29 @@ def psw_flags
   end
 end
 
+# MIDI to Note H/L (20vmc/line, 18vmc/line)
+def note(opts = {})
+  [412500.0/43.0, 1375000.0/131.0].map do |t|
+    128.times.map do |n|
+      f = 440.0 * 2.0**((n-69).to_f/12.0)
+      x = 65536.0 * f / t
+      x /= 256.0 if opts[:high]
+      x.round&0xFF
+    end
+  end.flatten
+end
+
+# MIDI to max WAVE bandlimit (20vmc/line, 18vmc/line)
+def wave(max = 15)
+  [412500.0/43.0, 1375000.0/131.0].map do |t|
+    l = max.times.map {|i| t/(i+2).to_f}
+    128.times.map do |n|
+      f = 440.0 * 2.0**((n-69).to_f/12.0)
+      l.map {|i| i>f ? 1:0}.reduce(&:+)
+    end
+  end.flatten
+end
+
 # start of ALU high
 print_ext_addr 0x0002
 # 0x00020000-0x00020FFF: MV high nibble
@@ -488,6 +504,12 @@ print_unary(0xEA, [0xFF]*176 + [0]*80)
 print_unary(0xEB, 256.times.map{|i| i&8==0 ? 0xFF : 0})
 # $SUS2LEV: sustain to level
 print_unary(0xEC, 256.times.map{|i| ((-1*i)&0xF)<<4})
+# WAVE: wave number bandlimit
+print_unary(0xED, wave)
+# $FREQL: low byte of note
+print_unary(0xEE, note)
+# $FREQH: high byte of note
+print_unary(0xEF, note(high:true))
 
 # 0x0003F000-0x0003FFFF: FNF low nibble only - generic/default functions
 # $IDEN: A = A

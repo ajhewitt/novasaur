@@ -34,9 +34,9 @@ $ML2ADJ     9 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
 $XGA?      10 # mode-line>11?: 0-10->-1,else->0
 $MASK2MODE 11 # &8==0 ? -1:0
 $SUS2LEV   12 # sustain to level
-
-$FREQL     14
-$FREQH     15
+$WAVE      13 # MIDI->WAV bandlimited
+$FREQL     14 # MIDI->TONE delta L
+$FREQH     15 # MIDI->TONE delta H
 
 #FND - CPU
 $FORKI      0 # 0000->0x28,0001->0x50,001x->0x78,01xx->0xA0,1xxx->C8

@@ -90,9 +90,8 @@ LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
 LDN PC, $EXIT110          # exit if audio off
 #110
-LD HL, $FETCH
-LD Y, $INST
-MVHL AZ, ND               # cache fetch
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
 LD HL, $IDEN$ADSRPG
 #120
 LD Y, $FRAME

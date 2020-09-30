@@ -10,20 +10,20 @@ PAGE ADSRE0_PG
 # 1) L=L+A, until L carry then L=max(15),P—>D
 # 2) L=L-D, until L carry then L=min(0),P=0(sustain)
 # assumes Y=$FRAME, H=$IDEN, cycle=1
-LDZ Y, $DELTA0            #124 delta pointer
+LD Y, $DELTA0             #124 delta pointer
 FNEH DZ, YA               # Y = delta register
-LDPZ PC, $SUSTAIN         # +ve means no delta (sustain)
+LDPZ PC, $SUSTAINING      # positive means no delta (sustain)
 #130
-FNH DZ, HLA               # A = SDDDD000
+FNH DZ, HLA               # A = SDDDDVVV (used to test sign)
 LD HL, $LSL$NULL
-FNH A, HL                 # HL = DDDD0000
+FNH A, HL                 # HL = DDDDVVV0
 LD Y, $WAVE0
-LDP PC, $ATTACKING        # attacking if delta is +ve
+LDN PC, $DECAYING         # decaying if delta is negative
 #139
-ADDHL DZ, ND              # L + D -> L
+ADDHL DZ, ND              # LLLLWWWW + DDDDVVV0 -> WAVE
 AFHL A, NA                # check carry
-LDN PC, $CONT147          # -ve delta should carry, next check
 LD HL, $0xF0
+LDP PC, $EXIT151          # positive delta should not carry, exit attacking
 #150
 ORHL DZ, ND               # set LLLL to max
 LD HL, $DECAY0
@@ -31,10 +31,10 @@ LD Y, $DELTA0
 MVHL AZ, ND               # decay register -> delta pointer
 LD PC, $EXIT164
 #164
-$ATTACKING                #140
-ADDHL DZ, ND              # L + D -> L
+$DECAYING                 #140
+ADDHL DZ, ND              # LLLLWWWW + DDDDVVV0 -> WAVE
 AFHL A, NA                # check carry
-LDP PC, $EXIT150          # +ve delta should notcarry, continue
+LDN PC, $CONT150          # negative delta should carry, continue
 LD HL, $0x0F
 #151
 ANDHL DZ, ND              # set LLLL to min
@@ -44,18 +44,18 @@ MULH AZ, ND               # 0 (sustain) -> delta pointer
 LD PC, $EXIT164
 #164
 
-$SUSTAIN                  #131 check to see if sustain had changed
+$SUSTAINING               #131 check to see if sustain had changed
 LDZ Y, $WAVE0
 FNH DZ, HL                # HL = LLLLWWWW
 LD Y, $SUSTAIN0
 ADDH DZ, NA               # A = 1111LLLL + LLLL
 #140
-LDN PC, $ATTACK
+LDN PC, $ATTACK           # level < sustain?
 LD HL, $ZERO?$NULL
-FNH A, HLA                # sustain == sustain?
+FNH A, HLA                # level == sustain?
 LD HL, $RELEASE0
 LD Y, $DELTA0
-LDN PC, $EXIT151          # sustain unchanged, exit
+LDN PC, $EXIT151          # sustain unchanged, exit sustaining,else exit releasing
 #150
 MVHL AZ, ND               # release register -> delta pointer
 $EXIT154
@@ -75,28 +75,26 @@ LD HL, $ATTACK0
 LD Y, $DELTA0
 MVHL AZ, ND               # attack register -> delta pointer
 #150
-$EXIT150
 NOP
 $EXIT151
 NOP
 LD PC, $EXIT154
 
-$CONT147
+$CONT150
 LD HL, $IDEN$NULL
 LDZ Y, $WAVE0
 FNH DZ, HL                # HL = LLLLWWWW
 LD Y, $SUSTAIN0
 ADDH DZ, NA               # A = 1111LLLL + LLLL
-#160
-LDP PC, $EXIT162          # sustain not met, still decaying
+#161
 NOP
-NOP
-NOP
+LDP PC, $EXIT164          # sustain not met, still decaying
 LD HL, $XGA?$NULL
 LD Y, $VMS
 FNEH DZ, NA
+#170
+NOP
 LDN PG, $CONT173
-#172
 LDZ HL, $INCLINE$NULL
 FNH DZ, HLD               # H=mode_line+1, L=E000
 LD Y, $PMODE
@@ -124,9 +122,6 @@ FNH DZ, HLD               # VMS+1 (cycle=1)
 NOP
 LD PC, $CONT223
 
-$EXIT162
-NOP
-NOP
 $EXIT164
 LD HL, $XGA?$NULL
 LD Y, $VMS
