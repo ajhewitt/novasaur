@@ -368,11 +368,11 @@ end
 # MIDI to Note H/L (20vmc/line, 18vmc/line)
 def note(opts = {})
   [412500.0/43.0, 1375000.0/131.0].map do |t|
-    128.times.map do |n|
-      f = 440.0 * 2.0**((n-69).to_f/12.0)
-      x = 65536.0 * f / t
-      x /= 256.0 if opts[:high]
-      x.round&0xFF
+    128.times.map do |m|
+      f = 440.0 * 2.0**((m-69).to_f/12.0)
+      n = (65536.0 * f / t).round
+      n >>= 8 if opts[:high]
+      n&0xFF
     end
   end.flatten
 end
@@ -380,7 +380,7 @@ end
 # MIDI to max WAVE bandlimit (20vmc/line, 18vmc/line)
 def wave(max = 15)
   [412500.0/43.0, 1375000.0/131.0].map do |t|
-    l = max.times.map {|i| t/(i+2).to_f}
+    l = max.times.map {|i| t/((i+2)*2).to_f}
     128.times.map do |n|
       f = 440.0 * 2.0**((n-69).to_f/12.0)
       l.map {|i| i>f ? 1:0}.reduce(&:+)
