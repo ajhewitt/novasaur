@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2020-09-10"
+Date "2020-10-01"
 Rev "1.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -939,7 +939,7 @@ AR Path="/5DAA3954/5DA1E820" Ref="RN?"  Part="1"
 AR Path="/5DAA5CD8/5DA1E820" Ref="RN?"  Part="1" 
 AR Path="/5DA1E820" Ref="RN1"  Part="1" 
 F 0 "RN1" V 3550 4450 50  0000 L CNN
-F 1 "1k" V 3450 4450 50  0000 L CNN
+F 1 "680" V 3450 4450 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP9" V 3725 4250 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 3250 4250 50  0001 C CNN
 	1    3250 4250

@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 4 4
 Title "Input/Output"
-Date "2020-09-10"
+Date "2020-10-01"
 Rev "1.7"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -20,34 +20,6 @@ Wire Wire Line
 	1750 6550 2400 6550
 Wire Wire Line
 	1750 6450 2350 6450
-$Comp
-L power:GNDD #PWR0194
-U 1 1 6453E58C
-P 4450 5700
-AR Path="/62D13D9D/6453E58C" Ref="#PWR0194"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/6453E58C" Ref="#PWR?"  Part="1" 
-AR Path="/5DA1E9C0/6453E58C" Ref="#PWR0173"  Part="1" 
-F 0 "#PWR0173" H 4450 5450 50  0001 C CNN
-F 1 "GNDD" H 4454 5545 50  0000 C CNN
-F 2 "" H 4450 5700 50  0001 C CNN
-F 3 "" H 4450 5700 50  0001 C CNN
-	1    4450 5700
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C C10
-U 1 1 62E12DE2
-P 4450 5500
-AR Path="/62D13D9D/62E12DE2" Ref="C10"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/62E12DE2" Ref="C?"  Part="1" 
-AR Path="/5DA1E9C0/62E12DE2" Ref="C17"  Part="1" 
-F 0 "C17" H 4550 5550 50  0000 L CNN
-F 1 "1u" H 4550 5450 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm" H 4450 5500 50  0001 C CNN
-F 3 "~" H 4450 5500 50  0001 C CNN
-	1    4450 5500
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	2350 6750 2400 6750
 Wire Wire Line
@@ -616,138 +588,6 @@ Wire Wire Line
 Wire Wire Line
 	8350 4450 8350 4200
 $Comp
-L power:VEE #PWR0181
-U 1 1 632180F4
-P 8550 2300
-AR Path="/62D13D9D/632180F4" Ref="#PWR0181"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/632180F4" Ref="#PWR?"  Part="1" 
-AR Path="/5DA1E9C0/632180F4" Ref="#PWR0168"  Part="1" 
-F 0 "#PWR0168" H 8550 2150 50  0001 C CNN
-F 1 "VEE" H 8567 2473 50  0000 C CNN
-F 2 "" H 8550 2300 50  0001 C CNN
-F 3 "" H 8550 2300 50  0001 C CNN
-	1    8550 2300
-	1    0    0    1   
-$EndComp
-$Comp
-L Amplifier_Operational:NJM4580 U40
-U 1 1 62F110BB
-P 8650 2000
-AR Path="/62D13D9D/62F110BB" Ref="U40"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/62F110BB" Ref="U?"  Part="1" 
-AR Path="/5DA1E9C0/62F110BB" Ref="U40"  Part="1" 
-F 0 "U40" H 8650 2000 50  0000 C CNN
-F 1 "NJM4580" H 8750 1800 50  0000 C CNN
-F 2 "Package_SIP:SIP-8_19x3mm_P2.54mm" H 8650 2000 50  0001 C CNN
-F 3 "http://www.njr.com/semicon/PDF/NJM4580_E.pdf" H 8650 2000 50  0001 C CNN
-	1    8650 2000
-	1    0    0    1   
-$EndComp
-$Comp
-L Amplifier_Operational:NJM4580 U?
-U 3 1 631997B8
-P 8650 2000
-AR Path="/631997B8" Ref="U?"  Part="3" 
-AR Path="/62D13D9D/631997B8" Ref="U40"  Part="3" 
-AR Path="/5DAA5CD8/5D9AFF37/631997B8" Ref="U?"  Part="3" 
-AR Path="/5DA1E9C0/631997B8" Ref="U40"  Part="3" 
-F 0 "U40" H 8800 1700 50  0001 L CNN
-F 1 "NJM4580" H 8700 1750 50  0001 L CNN
-F 2 "Package_SIP:SIP-8_19x3mm_P2.54mm" H 8650 2000 50  0001 C CNN
-F 3 "http://www.njr.com/semicon/PDF/NJM4580_E.pdf" H 8650 2000 50  0001 C CNN
-	3    8650 2000
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:VDD #PWR0182
-U 1 1 6323900D
-P 8550 1700
-AR Path="/62D13D9D/6323900D" Ref="#PWR0182"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/6323900D" Ref="#PWR?"  Part="1" 
-AR Path="/5DA1E9C0/6323900D" Ref="#PWR0169"  Part="1" 
-F 0 "#PWR0169" H 8550 1550 50  0001 C CNN
-F 1 "VDD" H 8567 1873 50  0000 C CNN
-F 2 "" H 8550 1700 50  0001 C CNN
-F 3 "" H 8550 1700 50  0001 C CNN
-	1    8550 1700
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5550 2300 5700 2300
-Wire Wire Line
-	5700 1500 5550 1500
-Wire Wire Line
-	5700 1600 5550 1600
-Wire Wire Line
-	5700 1700 5550 1700
-Wire Wire Line
-	5700 1800 5550 1800
-Wire Wire Line
-	5700 1900 5550 1900
-Wire Wire Line
-	5700 2000 5550 2000
-Wire Wire Line
-	5700 2100 5550 2100
-Wire Wire Line
-	5700 2200 5550 2200
-Text GLabel 5450 1300 1    50   Input ~ 0
-G[0..7]
-Text Label 5550 1500 0    50   ~ 0
-G0
-Text Label 5550 2000 0    50   ~ 0
-G5
-Text Label 5550 2200 0    50   ~ 0
-G7
-Text Label 5550 2100 0    50   ~ 0
-G6
-Text Label 5550 1900 0    50   ~ 0
-G4
-Text Label 5550 1800 0    50   ~ 0
-G3
-Text Label 5550 1700 0    50   ~ 0
-G2
-Text Label 5550 1600 0    50   ~ 0
-G1
-Entry Wire Line
-	5550 1600 5450 1500
-Entry Wire Line
-	5550 1500 5450 1400
-Entry Wire Line
-	5550 2200 5450 2100
-Entry Wire Line
-	5550 2100 5450 2000
-Entry Wire Line
-	5550 2000 5450 1900
-Entry Wire Line
-	5550 1900 5450 1800
-Entry Wire Line
-	5550 1800 5450 1700
-Entry Wire Line
-	5550 1700 5450 1600
-$Comp
-L Device:R_Network09_US RN?
-U 1 1 5F1A9A91
-P 5900 1900
-AR Path="/5DAA3954/5F1A9A91" Ref="RN?"  Part="1" 
-AR Path="/5DAA5CD8/5D9A6C5F/5F1A9A91" Ref="RN?"  Part="1" 
-AR Path="/5DA1E9BD/5F1A9A91" Ref="RN?"  Part="1" 
-AR Path="/5DA1E9C0/5F1A9A91" Ref="RN6"  Part="1" 
-F 0 "RN6" V 5250 1900 50  0000 C CNN
-F 1 "R2R10k" V 5350 1900 50  0000 C CNN
-F 2 "Resistor_THT:R_Array_SIP10" V 6475 1900 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5900 1900 50  0001 C CNN
-	1    5900 1900
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	9250 2500 9200 2500
-Wire Wire Line
-	9200 2500 9200 2250
-Wire Wire Line
-	9450 2300 9450 2250
-Wire Wire Line
-	9450 2250 9200 2250
-$Comp
 L Connector:TestPoint_Alt TP?
 U 1 1 5E0B8FD5
 P 6350 3400
@@ -801,20 +641,6 @@ F 1 "GNDD" H 8154 3745 50  0000 C CNN
 F 2 "" H 8150 3900 50  0001 C CNN
 F 3 "" H 8150 3900 50  0001 C CNN
 	1    8150 3900
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:VCC #PWR0188
-U 1 1 6353E1F8
-P 4450 4900
-AR Path="/62D13D9D/6353E1F8" Ref="#PWR0188"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/6353E1F8" Ref="#PWR?"  Part="1" 
-AR Path="/5DA1E9C0/6353E1F8" Ref="#PWR0180"  Part="1" 
-F 0 "#PWR0180" H 4450 4750 50  0001 C CNN
-F 1 "VCC" H 4467 5073 50  0000 C CNN
-F 2 "" H 4450 4900 50  0001 C CNN
-F 3 "" H 4450 4900 50  0001 C CNN
-	1    4450 4900
 	1    0    0    -1  
 $EndComp
 Text GLabel 9400 5000 2    50   Output ~ 0
@@ -976,37 +802,6 @@ F 3 "" H 2550 1300 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	4450 5700 4450 5650
-Wire Wire Line
-	5200 7100 5200 7050
-NoConn ~ 4900 6650
-NoConn ~ 4900 6850
-Wire Wire Line
-	5300 7100 5300 7050
-Wire Wire Line
-	5100 7100 5100 7050
-Wire Wire Line
-	5100 7100 5200 7100
-Connection ~ 5200 7100
-Wire Wire Line
-	5200 7100 5300 7100
-Wire Wire Line
-	5200 7100 5200 7200
-$Comp
-L power:GNDD #PWR0196
-U 1 1 645B9F75
-P 5200 7200
-AR Path="/62D13D9D/645B9F75" Ref="#PWR0196"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/645B9F75" Ref="#PWR?"  Part="1" 
-AR Path="/5DA1E9C0/645B9F75" Ref="#PWR0178"  Part="1" 
-F 0 "#PWR0178" H 5200 6950 50  0001 C CNN
-F 1 "GNDD" H 5204 7045 50  0000 C CNN
-F 2 "" H 5200 7200 50  0001 C CNN
-F 3 "" H 5200 7200 50  0001 C CNN
-	1    5200 7200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
 	7150 4200 7550 4200
 $Comp
 L Connector:Barrel_Jack_Switch J1
@@ -1125,8 +920,6 @@ Wire Wire Line
 	7150 5000 7550 5000
 Wire Wire Line
 	6350 5000 6750 5000
-Wire Wire Line
-	4450 4900 4450 5000
 Wire Wire Line
 	5950 4450 5950 4200
 Text GLabel 7550 3500 0    50   Output ~ 0
@@ -1739,20 +1532,6 @@ Wire Wire Line
 	4450 2050 3750 2050
 $Comp
 L Device:R_US R?
-U 1 1 5FE27D6D
-P 7400 3700
-AR Path="/62D13D9D/5FE27D6D" Ref="R?"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/5FE27D6D" Ref="R?"  Part="1" 
-AR Path="/5DA1E9C0/5FE27D6D" Ref="R9"  Part="1" 
-F 0 "R9" V 7500 3550 50  0000 L CNN
-F 1 "10k" V 7500 3700 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 7440 3690 50  0001 C CNN
-F 3 "~" H 7400 3700 50  0001 C CNN
-	1    7400 3700
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:R_US R?
 U 1 1 5EF679C5
 P 4150 1500
 AR Path="/62D13D9D/5EF679C5" Ref="R?"  Part="1" 
@@ -1945,73 +1724,6 @@ Connection ~ 7650 6200
 Wire Wire Line
 	7650 6200 8150 6200
 $Comp
-L novasaur-rescue:Mini-DIN-6-Connector J4
-U 1 1 62F30DA5
-P 5200 6750
-AR Path="/62D13D9D/62F30DA5" Ref="J4"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/62F30DA5" Ref="J?"  Part="1" 
-AR Path="/5DA1E9C0/62F30DA5" Ref="J2"  Part="1" 
-F 0 "J2" H 5200 7150 50  0000 C CNN
-F 1 "KEYBOARD" H 5200 7050 50  0000 C CNN
-F 2 "5749180-1:TE_5749180-1" H 5200 6750 50  0001 C CNN
-F 3 "http://service.powerdynamics.com/ec/Catalog17/Section%2011.pdf" H 5200 6750 50  0001 C CNN
-	1    5200 6750
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5500 6750 5550 6750
-Wire Wire Line
-	5550 6750 5550 7100
-Wire Wire Line
-	5550 7100 5300 7100
-Connection ~ 5300 7100
-Wire Wire Line
-	4900 6750 4750 6750
-Wire Wire Line
-	9200 2250 9200 2000
-Connection ~ 9200 2250
-Wire Wire Line
-	7700 2100 7750 2100
-$Comp
-L Device:C C5
-U 1 1 630955FF
-P 7950 2100
-AR Path="/62D13D9D/630955FF" Ref="C5"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/630955FF" Ref="C?"  Part="1" 
-AR Path="/5DA1E9C0/630955FF" Ref="C20"  Part="1" 
-F 0 "C20" V 8200 2100 50  0000 C CNN
-F 1 "0.1u" V 8100 2100 50  0000 C CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 7988 1950 50  0001 C CNN
-F 3 "~" H 7950 2100 50  0001 C CNN
-	1    7950 2100
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:C C7
-U 1 1 630964B4
-P 6850 2350
-AR Path="/62D13D9D/630964B4" Ref="C7"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/630964B4" Ref="C?"  Part="1" 
-AR Path="/5DA1E9C0/630964B4" Ref="C18"  Part="1" 
-F 0 "C18" H 6650 2400 50  0000 C CNN
-F 1 "3.3n" H 6650 2300 50  0000 C CNN
-F 2 "Capacitor_THT:C_Disc_D3.0mm_W2.0mm_P2.50mm" H 6888 2200 50  0001 C CNN
-F 3 "~" H 6850 2350 50  0001 C CNN
-	1    6850 2350
-	1    0    0    -1  
-$EndComp
-$Comp
-L Transistor_BJT:2N3904 Q3
-U 1 1 602F14CB
-P 6350 2000
-F 0 "Q3" H 6300 2350 50  0000 L CNN
-F 1 "2N3904" H 6100 2250 50  0000 L CNN
-F 2 "Package_TO_SOT_THT:TO-92_HandSolder" H 6550 1925 50  0001 L CIN
-F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 6350 2000 50  0001 L CNN
-	1    6350 2000
-	-1   0    0    -1  
-$EndComp
-$Comp
 L novasaur-rescue:AudioJack2_Ground-Connector J3
 U 1 1 62F191E6
 P 9450 2500
@@ -2019,314 +1731,136 @@ AR Path="/62D13D9D/62F191E6" Ref="J3"  Part="1"
 AR Path="/5DAA5CD8/5D9AFF37/62F191E6" Ref="J?"  Part="1" 
 AR Path="/5DA1E9C0/62F191E6" Ref="J6"  Part="1" 
 AR Path="/62F191E6" Ref="J3"  Part="1" 
-F 0 "J6" H 9500 2100 50  0000 R CNN
-F 1 "AUDIO OUT" H 9650 2200 50  0000 R CNN
+F 0 "J6" H 9500 2000 50  0000 R CNN
+F 1 "AUDIO OUT" H 9650 2100 50  0000 R CNN
 F 2 "Connector_Audio:Jack_3.5mm_CUI_SJ1-3533NG_Horizontal" H 9450 2500 50  0001 C CNN
 F 3 "~" H 9450 2500 50  0001 C CNN
 	1    9450 2500
 	-1   0    0    1   
 $EndComp
-$Comp
-L Device:R_US R?
-U 1 1 5E73030F
-P 8200 2350
-AR Path="/62D13D9D/5E73030F" Ref="R?"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/5E73030F" Ref="R?"  Part="1" 
-AR Path="/5DA1E9C0/5E73030F" Ref="R8"  Part="1" 
-F 0 "R8" H 8300 2300 50  0000 L CNN
-F 1 "3.3k" H 8300 2400 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 8240 2340 50  0001 C CNN
-F 3 "~" H 8200 2350 50  0001 C CNN
-	1    8200 2350
-	-1   0    0    1   
-$EndComp
-Connection ~ 7750 2100
-Wire Wire Line
-	7750 2100 7800 2100
 Wire Wire Line
 	2650 3550 2650 3400
 Connection ~ 2650 3550
-$Comp
-L Amplifier_Operational:NJM4580 U40
-U 2 1 62F128C6
-P 7400 2100
-AR Path="/62D13D9D/62F128C6" Ref="U40"  Part="2" 
-AR Path="/5DAA5CD8/5D9AFF37/62F128C6" Ref="U?"  Part="2" 
-AR Path="/5DA1E9C0/62F128C6" Ref="U40"  Part="2" 
-F 0 "U40" H 7350 2100 50  0000 C CNN
-F 1 "NJM4580" H 7500 2300 50  0001 C CNN
-F 2 "Package_SIP:SIP-8_19x3mm_P2.54mm" H 7400 2100 50  0001 C CNN
-F 3 "http://www.njr.com/semicon/PDF/NJM4580_E.pdf" H 7400 2100 50  0001 C CNN
-	2    7400 2100
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
-	7100 2200 7050 2200
-Wire Wire Line
-	8350 1900 8200 1900
-Wire Wire Line
-	8200 1900 8200 2200
-Wire Wire Line
-	8350 2100 8100 2100
-Connection ~ 9200 2000
-Wire Wire Line
-	8200 2500 8200 2600
-Connection ~ 8200 2600
-Wire Wire Line
-	8200 2600 6850 2600
-Wire Wire Line
-	7050 2450 7750 2450
-Wire Wire Line
-	7050 2200 7050 2450
-Wire Wire Line
-	7750 2100 7750 2450
-Wire Wire Line
-	6850 2500 6850 2600
-Wire Wire Line
-	6850 2000 6850 2200
-Wire Wire Line
-	7050 2200 7050 1900
-Connection ~ 7050 2200
-Wire Wire Line
-	6850 2000 7100 2000
-Wire Wire Line
-	6100 1500 6250 1500
-Connection ~ 6250 1500
-Wire Wire Line
-	6250 1500 6250 1800
-Wire Wire Line
-	6550 2000 6650 2000
-Wire Wire Line
-	6250 2600 6850 2600
-Connection ~ 6850 2600
-Wire Wire Line
-	6250 1300 6250 1500
-Wire Wire Line
-	6250 1300 6850 1300
-Wire Wire Line
-	7750 1500 8200 1500
-Wire Wire Line
-	7750 1250 7750 1500
-Wire Wire Line
-	6850 1300 6850 1250
-Connection ~ 7050 1300
-Wire Wire Line
-	6950 1300 7050 1300
-Wire Wire Line
-	7150 1250 7150 1300
-Wire Wire Line
-	6950 1300 6950 1250
-Wire Wire Line
-	7050 1600 7050 1300
-Wire Wire Line
-	7050 1300 7150 1300
-$Comp
-L Device:R_Pack04_SIP RN9
-U 1 1 5FEA9E0C
-P 7350 1050
-F 0 "RN9" H 6650 1150 50  0000 C CNN
-F 1 "10k" H 6650 1050 50  0000 C CNN
-F 2 "Resistor_THT:R_Array_SIP8" V 7925 1050 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 7350 1050 50  0001 C CNN
-	1    7350 1050
-	-1   0    0    -1  
-$EndComp
-Text GLabel 7550 1250 3    50   Input ~ 0
-~hsync
-Connection ~ 8200 1900
-Wire Wire Line
-	8200 1500 8200 1900
-Wire Wire Line
-	7850 1300 7850 1250
-Wire Wire Line
-	7450 1500 6650 1500
-Wire Wire Line
-	7450 1250 7450 1500
-Wire Wire Line
-	6650 1500 6650 2000
-Wire Wire Line
-	6850 2000 6850 1400
-Wire Wire Line
-	6850 1400 7250 1400
-Wire Wire Line
-	7250 1400 7250 1250
-Connection ~ 6850 2000
-Wire Wire Line
-	5800 5650 5950 5650
+	5600 5850 5750 5850
 $Comp
 L Transistor_BJT:2N3904 Q1
 U 1 1 6055889D
-P 5450 5950
-F 0 "Q1" H 5200 5850 50  0000 L CNN
-F 1 "2N3904" H 5100 5750 50  0000 L CNN
-F 2 "Package_TO_SOT_THT:TO-92_HandSolder" H 5650 5875 50  0001 L CIN
-F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 5450 5950 50  0001 L CNN
-	1    5450 5950
+P 5150 6150
+F 0 "Q1" H 5000 6450 50  0000 L CNN
+F 1 "2N3904" H 4900 6350 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_HandSolder" H 5350 6075 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 5150 6150 50  0001 L CNN
+	1    5150 6150
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5950 5650 5950 5750
+	5750 5850 5750 5950
 $Comp
 L power:GNDD #PWR?
 U 1 1 605806A6
-P 5950 6150
+P 5750 6350
 AR Path="/62D13D9D/605806A6" Ref="#PWR?"  Part="1" 
 AR Path="/5DAA5CD8/5D9AFF37/605806A6" Ref="#PWR?"  Part="1" 
 AR Path="/5DA1E9C0/605806A6" Ref="#PWR0202"  Part="1" 
-F 0 "#PWR0202" H 5950 5900 50  0001 C CNN
-F 1 "GNDD" H 5954 5995 50  0000 C CNN
-F 2 "" H 5950 6150 50  0001 C CNN
-F 3 "" H 5950 6150 50  0001 C CNN
-	1    5950 6150
+F 0 "#PWR0202" H 5750 6100 50  0001 C CNN
+F 1 "GNDD" H 5754 6195 50  0000 C CNN
+F 2 "" H 5750 6350 50  0001 C CNN
+F 3 "" H 5750 6350 50  0001 C CNN
+	1    5750 6350
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GNDD #PWR?
 U 1 1 6055EB6F
-P 5550 6150
+P 5250 6350
 AR Path="/62D13D9D/6055EB6F" Ref="#PWR?"  Part="1" 
 AR Path="/5DAA5CD8/5D9AFF37/6055EB6F" Ref="#PWR?"  Part="1" 
 AR Path="/5DA1E9C0/6055EB6F" Ref="#PWR0194"  Part="1" 
-F 0 "#PWR0194" H 5550 5900 50  0001 C CNN
-F 1 "GNDD" H 5554 5995 50  0000 C CNN
-F 2 "" H 5550 6150 50  0001 C CNN
-F 3 "" H 5550 6150 50  0001 C CNN
-	1    5550 6150
+F 0 "#PWR0194" H 5250 6100 50  0001 C CNN
+F 1 "GNDD" H 5254 6195 50  0000 C CNN
+F 2 "" H 5250 6350 50  0001 C CNN
+F 3 "" H 5250 6350 50  0001 C CNN
+	1    5250 6350
 	1    0    0    -1  
 $EndComp
 $Comp
 L Transistor_BJT:2N3904 Q2
 U 1 1 6055A232
-P 6050 5950
-F 0 "Q2" H 5800 5850 50  0000 L CNN
-F 1 "2N3904" H 5700 5750 50  0000 L CNN
-F 2 "Package_TO_SOT_THT:TO-92_HandSolder" H 6250 5875 50  0001 L CIN
-F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 6050 5950 50  0001 L CNN
-	1    6050 5950
+P 5850 6150
+F 0 "Q2" H 5700 6450 50  0000 L CNN
+F 1 "2N3904" H 5600 6350 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_HandSolder" H 6050 6075 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 5850 6150 50  0001 L CNN
+	1    5850 6150
 	-1   0    0    -1  
 $EndComp
-Text GLabel 5150 5450 1    50   Input ~ 0
+Text GLabel 4550 6150 0    50   Input ~ 0
 ~kbden
-Text GLabel 6350 5450 1    50   Input ~ 0
+Text GLabel 6450 6150 2    50   Input ~ 0
 ~kbdtx
 Wire Wire Line
-	5500 6650 5700 6650
+	5250 5950 5250 5850
 Wire Wire Line
-	5550 5750 5550 5650
-Wire Wire Line
-	5550 5650 5700 5650
-$Comp
-L Device:C C?
-U 1 1 5F6FBE90
-P 7050 1750
-AR Path="/62D13D9D/5F6FBE90" Ref="C?"  Part="1" 
-AR Path="/5DAA5CD8/5D9AFF37/5F6FBE90" Ref="C?"  Part="1" 
-AR Path="/5DA1E9C0/5F6FBE90" Ref="C19"  Part="1" 
-F 0 "C19" H 7300 1800 50  0000 C CNN
-F 1 "3.3n" H 7300 1700 50  0000 C CNN
-F 2 "Capacitor_THT:C_Disc_D3.0mm_W2.0mm_P2.50mm" H 7088 1600 50  0001 C CNN
-F 3 "~" H 7050 1750 50  0001 C CNN
-	1    7050 1750
-	1    0    0    -1  
-$EndComp
-Connection ~ 4750 5000
-Wire Wire Line
-	4750 5000 5550 5000
-Connection ~ 4450 5000
-Wire Wire Line
-	4450 5000 4750 5000
-Wire Wire Line
-	3200 5000 4450 5000
-Wire Wire Line
-	4450 5000 4450 5350
-Wire Wire Line
-	4750 5000 4750 6750
+	5250 5850 5400 5850
 $Comp
 L Device:R_US R?
 U 1 1 5F84F520
-P 5550 5350
+P 5250 5500
 AR Path="/62D13D9D/5F84F520" Ref="R?"  Part="1" 
 AR Path="/5DAA5CD8/5D9AFF37/5F84F520" Ref="R?"  Part="1" 
 AR Path="/5DA1E9C0/5F84F520" Ref="R4"  Part="1" 
-F 0 "R4" H 5650 5400 50  0000 L CNN
-F 1 "10k" H 5650 5300 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5590 5340 50  0001 C CNN
-F 3 "~" H 5550 5350 50  0001 C CNN
-	1    5550 5350
+F 0 "R4" H 5350 5550 50  0000 L CNN
+F 1 "10k" H 5350 5450 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5290 5490 50  0001 C CNN
+F 3 "~" H 5250 5500 50  0001 C CNN
+	1    5250 5500
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R_US R?
 U 1 1 5F86C900
-P 5150 5700
+P 4750 6150
 AR Path="/62D13D9D/5F86C900" Ref="R?"  Part="1" 
 AR Path="/5DAA5CD8/5D9AFF37/5F86C900" Ref="R?"  Part="1" 
 AR Path="/5DA1E9C0/5F86C900" Ref="R2"  Part="1" 
-F 0 "R2" H 5250 5750 50  0000 L CNN
-F 1 "10k" H 5250 5650 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5190 5690 50  0001 C CNN
-F 3 "~" H 5150 5700 50  0001 C CNN
-	1    5150 5700
-	1    0    0    -1  
+F 0 "R2" V 4950 6100 50  0000 L CNN
+F 1 "10k" V 4850 6100 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4790 6140 50  0001 C CNN
+F 3 "~" H 4750 6150 50  0001 C CNN
+	1    4750 6150
+	0    -1   -1   0   
 $EndComp
 $Comp
 L Device:R_US R?
 U 1 1 5F88A19E
-P 6350 5700
+P 6250 6150
 AR Path="/62D13D9D/5F88A19E" Ref="R?"  Part="1" 
 AR Path="/5DAA5CD8/5D9AFF37/5F88A19E" Ref="R?"  Part="1" 
 AR Path="/5DA1E9C0/5F88A19E" Ref="R3"  Part="1" 
-F 0 "R3" H 6450 5750 50  0000 L CNN
-F 1 "10k" H 6450 5650 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 6390 5690 50  0001 C CNN
-F 3 "~" H 6350 5700 50  0001 C CNN
-	1    6350 5700
-	1    0    0    -1  
+F 0 "R3" V 6450 6100 50  0000 L CNN
+F 1 "10k" V 6350 6100 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 6290 6140 50  0001 C CNN
+F 3 "~" H 6250 6150 50  0001 C CNN
+	1    6250 6150
+	0    -1   -1   0   
 $EndComp
 $Comp
 L Device:R_US R?
 U 1 1 5F95206C
-P 5950 5350
+P 5750 5500
 AR Path="/62D13D9D/5F95206C" Ref="R?"  Part="1" 
 AR Path="/5DAA5CD8/5D9AFF37/5F95206C" Ref="R?"  Part="1" 
 AR Path="/5DA1E9C0/5F95206C" Ref="R5"  Part="1" 
-F 0 "R5" H 6050 5400 50  0000 L CNN
-F 1 "10k" H 6050 5300 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5990 5340 50  0001 C CNN
-F 3 "~" H 5950 5350 50  0001 C CNN
-	1    5950 5350
+F 0 "R5" H 5850 5550 50  0000 L CNN
+F 1 "10k" H 5850 5450 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5790 5490 50  0001 C CNN
+F 3 "~" H 5750 5500 50  0001 C CNN
+	1    5750 5500
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5550 5650 5550 5500
-Connection ~ 5550 5650
-Wire Wire Line
-	5950 5650 5950 5500
-Connection ~ 5950 5650
-Wire Wire Line
-	5800 6850 5500 6850
-Wire Wire Line
-	5700 7000 5700 6650
-Wire Wire Line
-	5800 7000 5800 6850
-Wire Wire Line
-	5150 5950 5250 5950
-Wire Wire Line
-	6250 5950 6350 5950
-Wire Wire Line
-	5150 5850 5150 5950
-Wire Wire Line
-	5150 5550 5150 5450
-Wire Wire Line
-	6350 5550 6350 5450
-Wire Wire Line
-	6350 5950 6350 5850
-Wire Wire Line
-	5550 5200 5550 5000
-Wire Wire Line
-	5550 5000 5950 5000
-Wire Wire Line
-	5950 5200 5950 5000
+	5550 5000 5750 5000
 Connection ~ 5950 5000
 Wire Wire Line
 	5950 5000 6350 5000
@@ -2334,24 +1868,206 @@ Wire Wire Line
 	5950 5000 5950 4750
 Wire Wire Line
 	5550 5000 5550 4750
-Wire Wire Line
-	5700 5650 5700 6650
-Connection ~ 5700 6650
-Wire Wire Line
-	5800 5650 5800 6850
-Connection ~ 5800 6850
-Text GLabel 5700 7000 3    50   Output ~ 0
+Text GLabel 5750 6750 2    50   Output ~ 0
 kbdclk
-Text GLabel 5800 7000 3    50   Output ~ 0
+Text GLabel 5750 6950 2    50   Output ~ 0
 kbdrx
+$Comp
+L Connector_Generic:Conn_01x02 J5
+U 1 1 5F6CCEC8
+P 9450 1400
+F 0 "J5" H 9400 1650 50  0000 L CNN
+F 1 "AUDIO" H 9350 1550 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 9450 1400 50  0001 C CNN
+F 3 "~" H 9450 1400 50  0001 C CNN
+	1    9450 1400
+	1    0    0    -1  
+$EndComp
+NoConn ~ 4550 6750
+NoConn ~ 4550 6950
+$Comp
+L novasaur-rescue:Mini-DIN-6-Connector J4
+U 1 1 62F30DA5
+P 4850 6850
+AR Path="/62D13D9D/62F30DA5" Ref="J4"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/62F30DA5" Ref="J?"  Part="1" 
+AR Path="/5DA1E9C0/62F30DA5" Ref="J2"  Part="1" 
+F 0 "J2" H 4850 7250 50  0000 C CNN
+F 1 "KEYBOARD" H 4850 7150 50  0000 C CNN
+F 2 "5749180-1:TE_5749180-1" H 4850 6850 50  0001 C CNN
+F 3 "http://service.powerdynamics.com/ec/Catalog17/Section%2011.pdf" H 4850 6850 50  0001 C CNN
+	1    4850 6850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5200 6850 5200 7200
+Connection ~ 4950 7200
+Wire Wire Line
+	5200 7200 4950 7200
+Wire Wire Line
+	5150 6850 5200 6850
+$Comp
+L power:GNDD #PWR0196
+U 1 1 645B9F75
+P 4850 7300
+AR Path="/62D13D9D/645B9F75" Ref="#PWR0196"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/645B9F75" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9C0/645B9F75" Ref="#PWR0178"  Part="1" 
+F 0 "#PWR0178" H 4850 7050 50  0001 C CNN
+F 1 "GNDD" H 4854 7145 50  0000 C CNN
+F 2 "" H 4850 7300 50  0001 C CNN
+F 3 "" H 4850 7300 50  0001 C CNN
+	1    4850 7300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4850 7200 4850 7300
+Wire Wire Line
+	4850 7200 4950 7200
+Connection ~ 4850 7200
+Wire Wire Line
+	4750 7200 4850 7200
+Wire Wire Line
+	4750 7200 4750 7150
+Wire Wire Line
+	4950 7200 4950 7150
+Wire Wire Line
+	4850 7200 4850 7150
+$Comp
+L power:VCC #PWR?
+U 1 1 5FB38FA3
+P 4450 6750
+AR Path="/62D13D9D/5FB38FA3" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/5FB38FA3" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9C0/5FB38FA3" Ref="#PWR0167"  Part="1" 
+F 0 "#PWR0167" H 4450 6600 50  0001 C CNN
+F 1 "VCC" H 4467 6923 50  0000 C CNN
+F 2 "" H 4450 6750 50  0001 C CNN
+F 3 "" H 4450 6750 50  0001 C CNN
+	1    4450 6750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4450 6750 4450 6850
+Wire Wire Line
+	4550 6850 4450 6850
+Wire Wire Line
+	5400 5850 5400 6750
+Wire Wire Line
+	5150 6950 5600 6950
+Wire Wire Line
+	5600 5850 5600 6950
+Wire Wire Line
+	6050 6150 6100 6150
+Wire Wire Line
+	6400 6150 6450 6150
+Wire Wire Line
+	5750 5850 5750 5650
+Connection ~ 5750 5850
+Wire Wire Line
+	5250 5850 5250 5650
+Connection ~ 5250 5850
+Wire Wire Line
+	5750 5350 5750 5000
+Wire Wire Line
+	5250 5350 5250 5000
+Connection ~ 5750 5000
+Wire Wire Line
+	5750 5000 5950 5000
+Wire Wire Line
+	4900 6150 4950 6150
+Connection ~ 5250 5000
+Wire Wire Line
+	5250 5000 5550 5000
+Wire Wire Line
+	5150 6750 5400 6750
+Wire Wire Line
+	4550 6150 4600 6150
+Connection ~ 5600 6950
+Wire Wire Line
+	4450 5000 5250 5000
+Connection ~ 4450 5000
+Wire Wire Line
+	4450 4900 4450 5000
+$Comp
+L power:VCC #PWR0188
+U 1 1 6353E1F8
+P 4450 4900
+AR Path="/62D13D9D/6353E1F8" Ref="#PWR0188"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/6353E1F8" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9C0/6353E1F8" Ref="#PWR0180"  Part="1" 
+F 0 "#PWR0180" H 4450 4750 50  0001 C CNN
+F 1 "VCC" H 4467 5073 50  0000 C CNN
+F 2 "" H 4450 4900 50  0001 C CNN
+F 3 "" H 4450 4900 50  0001 C CNN
+	1    4450 4900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 5000 4450 5000
+Wire Wire Line
+	4450 5000 4450 5350
+Wire Wire Line
+	4450 5700 4450 5650
+$Comp
+L Device:C C10
+U 1 1 62E12DE2
+P 4450 5500
+AR Path="/62D13D9D/62E12DE2" Ref="C10"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/62E12DE2" Ref="C?"  Part="1" 
+AR Path="/5DA1E9C0/62E12DE2" Ref="C17"  Part="1" 
+F 0 "C17" H 4550 5550 50  0000 L CNN
+F 1 "1u" H 4550 5450 50  0000 L CNN
+F 2 "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm" H 4450 5500 50  0001 C CNN
+F 3 "~" H 4450 5500 50  0001 C CNN
+	1    4450 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GNDD #PWR0194
+U 1 1 6453E58C
+P 4450 5700
+AR Path="/62D13D9D/6453E58C" Ref="#PWR0194"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/6453E58C" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9C0/6453E58C" Ref="#PWR0173"  Part="1" 
+F 0 "#PWR0173" H 4450 5450 50  0001 C CNN
+F 1 "GNDD" H 4454 5545 50  0000 C CNN
+F 2 "" H 4450 5700 50  0001 C CNN
+F 3 "" H 4450 5700 50  0001 C CNN
+	1    4450 5700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5600 6950 5750 6950
+Wire Wire Line
+	5400 6750 5750 6750
+Connection ~ 5400 6750
+Wire Wire Line
+	9200 1400 9250 1400
+Wire Wire Line
+	9450 2250 9200 2250
+Wire Wire Line
+	9450 2250 9450 2300
+Wire Wire Line
+	9200 1400 9200 2050
+Wire Wire Line
+	9250 2500 9200 2500
+Wire Wire Line
+	9200 2500 9200 2250
+Connection ~ 9200 2250
+Connection ~ 9200 2050
+Wire Wire Line
+	9200 2050 9200 2250
+Wire Wire Line
+	9050 1500 9250 1500
 $Comp
 L Device:R_US R?
 U 1 1 5F8819B0
 P 8850 3700
 AR Path="/62D13D9D/5F8819B0" Ref="R?"  Part="1" 
 AR Path="/5DAA5CD8/5D9AFF37/5F8819B0" Ref="R?"  Part="1" 
-AR Path="/5DA1E9C0/5F8819B0" Ref="R10"  Part="1" 
-F 0 "R10" V 8750 3550 50  0000 L CNN
+AR Path="/5DA1E9C0/5F8819B0" Ref="R11"  Part="1" 
+F 0 "R11" V 8750 3550 50  0000 L CNN
 F 1 "10k" V 8750 3750 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 8890 3690 50  0001 C CNN
 F 3 "~" H 8850 3700 50  0001 C CNN
@@ -2359,18 +2075,163 @@ F 3 "~" H 8850 3700 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Connector_Generic:Conn_01x02 J5
-U 1 1 5F6CCEC8
-P 9450 1300
-F 0 "J5" H 9400 1550 50  0000 L CNN
-F 1 "AUDIO" H 9350 1450 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 9450 1300 50  0001 C CNN
-F 3 "~" H 9450 1300 50  0001 C CNN
-	1    9450 1300
+L Device:R_US R?
+U 1 1 5FE27D6D
+P 7400 3700
+AR Path="/62D13D9D/5FE27D6D" Ref="R?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/5FE27D6D" Ref="R?"  Part="1" 
+AR Path="/5DA1E9C0/5FE27D6D" Ref="R10"  Part="1" 
+F 0 "R10" V 7500 3500 50  0000 L CNN
+F 1 "10k" V 7500 3700 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 7440 3690 50  0001 C CNN
+F 3 "~" H 7400 3700 50  0001 C CNN
+	1    7400 3700
+	0    1    1    0   
+$EndComp
+$Comp
+L power:VEE #PWR0181
+U 1 1 632180F4
+P 8750 2350
+AR Path="/62D13D9D/632180F4" Ref="#PWR0181"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/632180F4" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9C0/632180F4" Ref="#PWR0168"  Part="1" 
+F 0 "#PWR0168" H 8750 2200 50  0001 C CNN
+F 1 "VEE" H 8750 2500 50  0000 C CNN
+F 2 "" H 8750 2350 50  0001 C CNN
+F 3 "" H 8750 2350 50  0001 C CNN
+	1    8750 2350
+	1    0    0    1   
+$EndComp
+$Comp
+L power:VDD #PWR0182
+U 1 1 6323900D
+P 8750 1750
+AR Path="/62D13D9D/6323900D" Ref="#PWR0182"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/6323900D" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9C0/6323900D" Ref="#PWR0169"  Part="1" 
+F 0 "#PWR0169" H 8750 1600 50  0001 C CNN
+F 1 "VDD" H 8750 1900 50  0000 C CNN
+F 2 "" H 8750 1750 50  0001 C CNN
+F 3 "" H 8750 1750 50  0001 C CNN
+	1    8750 1750
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6250 2600 6250 2200
+	9050 1500 9050 1600
+$Comp
+L power:GNDD #PWR?
+U 1 1 5FC34EDE
+P 9050 1600
+AR Path="/62D13D9D/5FC34EDE" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/5FC34EDE" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9C0/5FC34EDE" Ref="#PWR0203"  Part="1" 
+F 0 "#PWR0203" H 9050 1350 50  0001 C CNN
+F 1 "GNDD" H 9054 1445 50  0000 C CNN
+F 2 "" H 9050 1600 50  0001 C CNN
+F 3 "" H 9050 1600 50  0001 C CNN
+	1    9050 1600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9150 2050 9200 2050
+Wire Wire Line
+	8100 1950 8150 1950
+Wire Wire Line
+	8500 2600 9250 2600
+Wire Wire Line
+	8500 1950 8550 1950
+Connection ~ 8500 1950
+Wire Wire Line
+	8450 1950 8500 1950
+$Comp
+L Device:C C5
+U 1 1 630955FF
+P 7950 1950
+AR Path="/62D13D9D/630955FF" Ref="C5"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/630955FF" Ref="C?"  Part="1" 
+AR Path="/5DA1E9C0/630955FF" Ref="C20"  Part="1" 
+F 0 "C20" V 8200 1950 50  0000 C CNN
+F 1 "1u" V 8100 1950 50  0000 C CNN
+F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 7988 1800 50  0001 C CNN
+F 3 "~" H 7950 1950 50  0001 C CNN
+	1    7950 1950
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	8500 2150 8500 2600
+Wire Wire Line
+	8550 2150 8500 2150
+$Comp
+L Amplifier_Operational:NJM4580 U?
+U 3 1 631997B8
+P 8850 2050
+AR Path="/631997B8" Ref="U?"  Part="3" 
+AR Path="/62D13D9D/631997B8" Ref="U40"  Part="3" 
+AR Path="/5DAA5CD8/5D9AFF37/631997B8" Ref="U?"  Part="3" 
+AR Path="/5DA1E9C0/631997B8" Ref="U40"  Part="3" 
+F 0 "U40" H 9000 1750 50  0001 L CNN
+F 1 "NJM4580" H 8900 1800 50  0001 L CNN
+F 2 "Package_SIP:SIP-8_19x3mm_P2.54mm" H 8850 2050 50  0001 C CNN
+F 3 "http://www.njr.com/semicon/PDF/NJM4580_E.pdf" H 8850 2050 50  0001 C CNN
+	3    8850 2050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Amplifier_Operational:NJM4580 U40
+U 1 1 62F110BB
+P 8850 2050
+AR Path="/62D13D9D/62F110BB" Ref="U40"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/62F110BB" Ref="U?"  Part="1" 
+AR Path="/5DA1E9C0/62F110BB" Ref="U40"  Part="1" 
+F 0 "U40" H 8850 2050 50  0000 C CNN
+F 1 "NJM4580" H 9000 1850 50  0000 C CNN
+F 2 "Package_SIP:SIP-8_19x3mm_P2.54mm" H 8850 2050 50  0001 C CNN
+F 3 "http://www.njr.com/semicon/PDF/NJM4580_E.pdf" H 8850 2050 50  0001 C CNN
+	1    8850 2050
+	1    0    0    1   
+$EndComp
+Connection ~ 8500 2600
+Wire Wire Line
+	6200 2600 6850 2600
+Wire Wire Line
+	6850 2600 8500 2600
+Connection ~ 6850 2600
+Wire Wire Line
+	6850 2500 6850 2600
+Wire Wire Line
+	6100 1500 6200 1500
+Wire Wire Line
+	6500 1950 6550 1950
+Wire Wire Line
+	6550 1950 6550 1850
+Wire Wire Line
+	6550 1550 6550 1350
+Wire Wire Line
+	6200 1750 6200 1500
+Connection ~ 6200 2600
+Wire Wire Line
+	6200 2150 6200 2600
+Wire Wire Line
+	5550 2600 6200 2600
+$Comp
+L Device:R_US R?
+U 1 1 5FCC413D
+P 6550 1700
+AR Path="/62D13D9D/5FCC413D" Ref="R?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/5FCC413D" Ref="R?"  Part="1" 
+AR Path="/5DA1E9C0/5FCC413D" Ref="R8"  Part="1" 
+F 0 "R8" H 6650 1650 50  0000 L CNN
+F 1 "330" H 6600 1750 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 6590 1690 50  0001 C CNN
+F 3 "~" H 6550 1700 50  0001 C CNN
+	1    6550 1700
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5550 2600 5550 2700
+Connection ~ 5550 2600
+Wire Wire Line
+	5550 2300 5550 2600
 $Comp
 L power:GNDD #PWR?
 U 1 1 5F78ECE3
@@ -2385,32 +2246,194 @@ F 3 "" H 5550 2700 50  0001 C CNN
 	1    5550 2700
 	1    0    0    -1  
 $EndComp
+Text GLabel 6550 1350 1    50   Input ~ 0
+~hsync
+$Comp
+L Transistor_BJT:2N3904 Q3
+U 1 1 602F14CB
+P 6300 1950
+F 0 "Q3" H 6000 1850 50  0000 L CNN
+F 1 "2N3904" H 6000 1750 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_HandSolder" H 6500 1875 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 6300 1950 50  0001 L CNN
+	1    6300 1950
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Device:R_Network09_US RN?
+U 1 1 5F1A9A91
+P 5900 1900
+AR Path="/5DAA3954/5F1A9A91" Ref="RN?"  Part="1" 
+AR Path="/5DAA5CD8/5D9A6C5F/5F1A9A91" Ref="RN?"  Part="1" 
+AR Path="/5DA1E9BD/5F1A9A91" Ref="RN?"  Part="1" 
+AR Path="/5DA1E9C0/5F1A9A91" Ref="RN6"  Part="1" 
+F 0 "RN6" V 5250 1900 50  0000 C CNN
+F 1 "R2R10k" V 5350 1900 50  0000 C CNN
+F 2 "Resistor_THT:R_Array_SIP10" V 6475 1900 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5900 1900 50  0001 C CNN
+	1    5900 1900
+	0    1    1    0   
+$EndComp
+Entry Wire Line
+	5550 1700 5450 1600
+Entry Wire Line
+	5550 1800 5450 1700
+Entry Wire Line
+	5550 1900 5450 1800
+Entry Wire Line
+	5550 2000 5450 1900
+Entry Wire Line
+	5550 2100 5450 2000
+Entry Wire Line
+	5550 2200 5450 2100
+Entry Wire Line
+	5550 1500 5450 1400
+Entry Wire Line
+	5550 1600 5450 1500
+Text Label 5550 1600 0    50   ~ 0
+G1
+Text Label 5550 1700 0    50   ~ 0
+G2
+Text Label 5550 1800 0    50   ~ 0
+G3
+Text Label 5550 1900 0    50   ~ 0
+G4
+Text Label 5550 2100 0    50   ~ 0
+G6
+Text Label 5550 2200 0    50   ~ 0
+G7
+Text Label 5550 2000 0    50   ~ 0
+G5
+Text Label 5550 1500 0    50   ~ 0
+G0
+Text GLabel 5450 1300 1    50   Input ~ 0
+G[0..7]
 Wire Wire Line
-	5550 2300 5550 2600
+	5700 2200 5550 2200
 Wire Wire Line
-	6250 2600 5550 2600
-Connection ~ 6250 2600
-Connection ~ 5550 2600
+	5700 2100 5550 2100
 Wire Wire Line
-	5550 2600 5550 2700
+	5700 2000 5550 2000
 Wire Wire Line
-	8200 2600 9050 2600
+	5700 1900 5550 1900
 Wire Wire Line
-	7850 1300 9200 1300
-Connection ~ 9200 1300
+	5700 1800 5550 1800
 Wire Wire Line
-	9200 1300 9250 1300
+	5700 1700 5550 1700
 Wire Wire Line
-	9200 1300 9200 2000
+	5700 1600 5550 1600
 Wire Wire Line
-	8950 2000 9200 2000
+	5700 1500 5550 1500
 Wire Wire Line
-	9250 1400 9050 1400
+	5550 2300 5700 2300
+$Comp
+L Device:R_US R?
+U 1 1 5E73030F
+P 8300 1950
+AR Path="/62D13D9D/5E73030F" Ref="R?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/5E73030F" Ref="R?"  Part="1" 
+AR Path="/5DA1E9C0/5E73030F" Ref="R9"  Part="1" 
+F 0 "R9" V 8500 1900 50  0000 L CNN
+F 1 "10k" V 8400 1900 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 8340 1940 50  0001 C CNN
+F 3 "~" H 8300 1950 50  0001 C CNN
+	1    8300 1950
+	0    -1   -1   0   
+$EndComp
 Wire Wire Line
-	9050 1400 9050 2600
-Connection ~ 9050 2600
+	8500 1950 8500 1500
+$Comp
+L Device:C C7
+U 1 1 630964B4
+P 6850 2350
+AR Path="/62D13D9D/630964B4" Ref="C7"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/630964B4" Ref="C?"  Part="1" 
+AR Path="/5DA1E9C0/630964B4" Ref="C18"  Part="1" 
+F 0 "C18" H 6600 2400 50  0000 C CNN
+F 1 "330p" H 6600 2300 50  0000 C CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W2.0mm_P2.50mm" H 6888 2200 50  0001 C CNN
+F 3 "~" H 6850 2350 50  0001 C CNN
+	1    6850 2350
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	9050 2600 9250 2600
+	7750 1950 7800 1950
+Wire Wire Line
+	6850 1950 7100 1950
+Wire Wire Line
+	6850 1950 6850 2200
+$Comp
+L Device:C C?
+U 1 1 5F6FBE90
+P 7050 1700
+AR Path="/62D13D9D/5F6FBE90" Ref="C?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/5F6FBE90" Ref="C?"  Part="1" 
+AR Path="/5DA1E9C0/5F6FBE90" Ref="C19"  Part="1" 
+F 0 "C19" H 7300 1750 50  0000 C CNN
+F 1 "330p" H 7300 1650 50  0000 C CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W2.0mm_P2.50mm" H 7088 1550 50  0001 C CNN
+F 3 "~" H 7050 1700 50  0001 C CNN
+	1    7050 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Amplifier_Operational:NJM4580 U40
+U 2 1 62F128C6
+P 7400 2050
+AR Path="/62D13D9D/62F128C6" Ref="U40"  Part="2" 
+AR Path="/5DAA5CD8/5D9AFF37/62F128C6" Ref="U?"  Part="2" 
+AR Path="/5DA1E9C0/62F128C6" Ref="U40"  Part="2" 
+F 0 "U40" H 7350 2050 50  0000 C CNN
+F 1 "NJM4580" H 7500 2250 50  0001 C CNN
+F 2 "Package_SIP:SIP-8_19x3mm_P2.54mm" H 7400 2050 50  0001 C CNN
+F 3 "http://www.njr.com/semicon/PDF/NJM4580_E.pdf" H 7400 2050 50  0001 C CNN
+	2    7400 2050
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	7750 2050 7750 1950
+Wire Wire Line
+	7700 2050 7750 2050
+Wire Wire Line
+	7050 2150 7050 1850
+Wire Wire Line
+	7100 2150 7050 2150
+Connection ~ 7750 2050
+Wire Wire Line
+	7750 2050 7750 2400
+Connection ~ 7050 2150
+Wire Wire Line
+	7050 2150 7050 2400
+Wire Wire Line
+	7050 2400 7750 2400
+Connection ~ 9200 1400
+Wire Wire Line
+	7550 1400 9200 1400
+Wire Wire Line
+	7550 1350 7550 1400
+Wire Wire Line
+	7450 1500 8500 1500
+Wire Wire Line
+	7450 1500 7450 1350
+Wire Wire Line
+	7150 1350 7150 1400
+Connection ~ 6200 1500
+Wire Wire Line
+	6200 1500 7250 1500
+Wire Wire Line
+	7250 1350 7250 1500
+Wire Wire Line
+	7150 1400 7050 1400
+Wire Wire Line
+	7050 1550 7050 1400
+Connection ~ 6850 1950
+Wire Wire Line
+	6850 1350 6850 1950
+Connection ~ 7050 1400
+Wire Wire Line
+	6950 1400 7050 1400
+Wire Wire Line
+	6950 1350 6950 1400
 Wire Bus Line
 	3350 2300 3350 2600
 Wire Bus Line
@@ -2421,4 +2444,15 @@ Wire Bus Line
 	5450 1300 5450 2100
 Wire Bus Line
 	4900 1300 4900 4100
+$Comp
+L Device:R_Pack03_SIP RN9
+U 1 1 5FEA9E0C
+P 7250 1150
+F 0 "RN9" H 6750 1250 50  0000 C CNN
+F 1 "100k" H 6750 1150 50  0000 C CNN
+F 2 "Resistor_THT:R_Array_SIP6" V 7825 1150 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 7250 1150 50  0001 C CNN
+	1    7250 1150
+	-1   0    0    -1  
+$EndComp
 $EndSCHEMATC
