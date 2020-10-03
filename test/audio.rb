@@ -19,14 +19,7 @@ def load_rom
   rom
 end
 
-def print_line(i, j, l, n, s)
-  puts "#{(i * n) + l}: [#{j}, #{s & 0xF}] #{
-          (s & 0x10) >> 4} #{
-          (s & 0x20) == 0 ? '#' : '.'} #{
-          (s & 0x40) == 0 ? 'A' : 'B'}"
-end
-
-# Output video timing for one of 32 modes
+# Output CSV containing one wave per column
 alu = load_rom[3]
 offset = 0x6000
 256.times do |a|

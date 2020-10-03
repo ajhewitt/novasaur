@@ -88,7 +88,7 @@ NOP #skip KBD_SCAN
 LD HL, $DEC$NULL
 LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
-LDN PC, $EXIT110          # exit if audio off
+LD PC, $EXIT110          # exit if audio off, cycle=1  *** debug was LDN
 #110
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
