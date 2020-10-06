@@ -84,11 +84,11 @@ LDZ Y, $FRAME
 FNH DZ, HLD               # frame count+1
 #101
 #LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0, cycle=1
-NOP #skip KBD_SCAN
+NOP #skip KBD_SCAN   *** DEBUG
 LD HL, $DEC$NULL
 LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
-LD PC, $EXIT110          # exit if audio off, cycle=1  *** debug was LDN
+LDN PC, $EXIT110          # exit if audio off, cycle=1
 #110
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP

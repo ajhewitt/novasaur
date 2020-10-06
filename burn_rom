@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# ATMEL OTP - AT27C020@DIP32
+# SST NOR FLASH - SST39SF020A
+# GLS NOR FLASH - SST27SF020@DIP32
+
+minipro -p "SST39SF020A" -w "build/output/rom.hex" -f ihex

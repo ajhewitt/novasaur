@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'distribution'
 
 def print_ext_addr(addr)
   print_data [2, 0, 0, 4, (addr >> 8) & 0xff, addr & 0xff]
@@ -62,27 +63,35 @@ def print_af(offset, opts = {})
   end
 end
 
+MAX_VOICE = 13
 # ALU function: WAV (wavetable sythesizer)
 # Gain/Wave - HL, sample index - acc
 # L) A = signed 7-bit sample of bandlimited (L even) square (L odd) or sawtooth
-# H) A = attenuate from -12db in -2dB steps to mute
+# H) A = attenuate from -12db in -1.5dB steps to mute
 def print_wav(offset, opts = {})
-  h = 16.times.map do |n|                             # fundamental (f), harmonics (2f-16f)
+  normal = Distribution::Normal.rng                     # RNG with mean 0, sigma 1
+  h = 16.times.map do |n|                               # fundamental (f), harmonics (2f-16f)
     f = 128.0/(n.to_f+1.0)
     256.times.map {|i| Math.sin(i.to_f * Math::PI/f)}
   end
   16.times.map do |a|
     if opts[:high]
-      m = a.zero? ? 0 : 2.0**(a.to_f/3.0-7.0)         # mute,-40,-38..-12 dB
+      m = a.zero? ? 0 : 2.0**(a.to_f/4.0-5.75)          # mute,-33..-12 dB
       [*0..255].pack('C*').unpack('c*').map {|i| (i.to_f*m).round&0xFF}
     else
-      w = 256.times.map do |i|
-        l = h.first(a+1).each_with_index.map do |j,k| # limit band to a+1
-          a.even? && k.odd? ? 0 : j[i]/(k+1)          # skip even harmonics on even a
-        end.reduce(&:+)                               # sum harmonics
+      if a > MAX_VOICE                                  # noise in position 14 and 15
+        300.times.map { (normal.call*48).round }.       # normal dist scaled by 48
+          select {|i| i.between? -128, 127}.            # select within dynamic range
+            first(256).map {|i| i&0xFF}                 # sample 256 and convert to byte
+      else
+        w = 256.times.map do |i|
+          l = h.first(a+1).each_with_index.map do |j,k| # limit band to a+1
+            a.even? && k.odd? ? 0 : j[i]/(k+1)          # skip even harmonics on even a
+          end.reduce(&:+)                               # sum harmonics
+        end
+        s = 127.5 / w.max.to_f                          # scale to -128 -> 127
+        w.map {|i| (i.to_f*s).floor&0xFF}
       end
-      s = 127.5 / w.max.to_f                          # scale to -128 -> 127
-      w.map {|i| (i.to_f*s).floor&0xFF}
     end.each_slice(16).each_with_index {|d, b| print_data [d.size, offset + a, b << 4, 0] + d}
   end
 end
@@ -373,15 +382,15 @@ def note(opts = {})
       f = 440.0 * 2.0**((m-69).to_f/12.0)
       n = (65536.0 * f / t).round
       n >>= 8 if opts[:high]
-      n&0xFF
+      f>t/2 ? 0 : n&0xFF
     end
   end.flatten
 end
 
 # MIDI to max WAVE bandlimit (20vmc/line, 18vmc/line)
-def wave(max = 15)
+def wave
   [412500.0/43.0, 1375000.0/131.0].map do |t|
-    l = max.times.map {|i| t/((i+2)*2).to_f}
+    l = MAX_VOICE.times.map {|i| t/((i+2)*2).to_f}
     128.times.map do |n|
       f = 440.0 * 2.0**((n-69).to_f/12.0)
       l.map {|i| i>f ? 1:0}.reduce(&:+)
@@ -486,7 +495,8 @@ print_unary(0xE1, fork_feature)
 # $FORKK: fork on HAL feature
 print_unary(0xE2, fork_feature(true))
 # $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
-print_unary(0xE3, [0xE0]*253 + [0xDF,0xDE,0xDD])
+#print_unary(0xE3, [0xE0]*253 + [0xDF,0xDE,0xDD])
+print_unary(0xE3, [0xE0,0xDF,0xDE,0xDD]*64) # *** DEBUG
 # $KS01?: &3==0||1 ? 0:-1
 print_unary(0xE4, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C>>2
@@ -500,7 +510,7 @@ print_unary(0xE8, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
 # $ML2ADJ: mode-line to frame count: 0-2->0xE0,else->0xF0
 print_unary(0xE9, [0xE0]*48 + [0xF0]*208)
 # $XGA?: mode-line: 0-10->-1,else->0
-print_unary(0xEA, [0xFF]*176 + [0]*80)
+print_unary(0xEA, [0xFF]*0xB0 + [0]*0x50)
 # $MASK2MODE: IMASK enable bit (3) 0->-1, 1->0
 print_unary(0xEB, 256.times.map{|i| i&8==0 ? 0xFF : 0})
 # $SUS2LEV: sustain to level
