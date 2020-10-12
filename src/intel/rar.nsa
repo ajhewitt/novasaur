@@ -24,7 +24,7 @@ NOP
 NOP
 NOP
 #19
-LD HL, $REVERSE$NULL
+LD HL, $ROR$NULL
 LDZ Y, $AREG
 FNH DZ, HLA           # A = Acc
 LD HL, $0x20

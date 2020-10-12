@@ -99,7 +99,7 @@ LD HL, $INC2$NULL
 #40/118
 LDZ Y, $TMODE
 FNH DZ, HLD           # mode+2
-LD HL, $REVERSE$IDEN
+LD HL, $ROR$IDEN
 LDZ Y, $TXRDIDX
 FNFL DZ, Y            # Y = Tx read index
 #51/127

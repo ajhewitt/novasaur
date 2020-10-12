@@ -98,9 +98,9 @@ end
 
 ML2SYNC_PG = [3,7,1,4,6,8,2,4,6,8,2,2,4,6,8,0].freeze
 ML2LEN = [5,5,5,4,4,4,4,4,4,4,4,3,3,3,3,3].freeze
-INST_PG = Array.new(2, [0xFE] * 256).freeze
-INST_CC = Array.new(2, [1] * 256).freeze
-IDLE_PG = 0x87
+INST_PG = Array.new(2, [0xDD] * 256).freeze # 8080 inst page decoding
+INST_CC = Array.new(2, [1] * 256).freeze # 8080 inst cycle counts
+IDLE_PG = 0xDD
 # ALU function: VMP (Virtual Machine Page)
 # Instruction - HHHHLLLL, virtual machine state (VMS) - MMMMECCC
 # L) 0ECCLLLL = MMMMECCC $ LLLL - vcpu: E, CC=remaining cycles [0,1,2,3+], LLLL
@@ -113,15 +113,14 @@ def print_vmp(offset, opts = {})
       if opts[:high] # a=HHHH, b=0ECC,0Z00
         d = 16.times.map do |c|
           if b&3 == 0 # end of line - sync page - c=MMMM
-            pg = 0xE1 + ML2SYNC_PG[c]
-            pg += 10 if b&4==4 && a==0 # syncf1
-            pg += 20 if b&4==4 && a==1 # syncf2
+            pg = 0xE4 + ML2SYNC_PG[c]
+            pg += 9 if b&4==4 && a==0 # syncf1
+            pg += 18 if b&4==4 && a==1 # syncf2
             pg # else synce
           else # fetch/exec inst page - c=LLLL
             inst = (a<<4) | c
             ext = (b>>2) & 1
-            #INST_CC[ext][inst] > b&3 ? IDLE_PG : INST_PG[ext][inst]
-            IDLE_PG
+            INST_CC[ext][inst] > b&3 ? IDLE_PG : INST_PG[ext][inst]
           end
         end
       else # a=LLLL, b=MMMM
@@ -495,8 +494,8 @@ print_unary(0xE1, fork_feature)
 # $FORKK: fork on HAL feature
 print_unary(0xE2, fork_feature(true))
 # $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
-#print_unary(0xE3, [0xE0]*253 + [0xDF,0xDE,0xDD])
-print_unary(0xE3, [0xE0,0xDF,0xDE,0xDD]*64) # *** DEBUG
+#print_unary(0xE3, [0xE3]*253 + [0xE2,0xE1,0xE0])
+print_unary(0xE3, [0xE3,0xE2,0xE1,0xE0]*64) # *** DEBUG
 # $KS01?: &3==0||1 ? 0:-1
 print_unary(0xE4, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C>>2
@@ -505,18 +504,18 @@ print_unary(0xE5, 256.times.map{|i| (i&0xC) >> 2})
 print_unary(0xE6, 256.times.map{|i| i&0x40==0 ? ((i&2)<<4)|0xC2 : ((i&0x20)>>4)|0x98})
 # $RSADJ: serial state -1
 print_unary(0xE7, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
-# $ML2FC: mode-line to frame count: 3-6->-5,else->4
-print_unary(0xE8, [0xFC]*48 + [0xFB]*64 + [0xFC]*144)
+# $XGA?: mode-line: 0-10->-1,else->0
+print_unary(0xE8, [0xFF]*0xB0 + [0]*0x50)
 # $ML2ADJ: mode-line to frame count: 0-2->0xE0,else->0xF0
 print_unary(0xE9, [0xE0]*48 + [0xF0]*208)
-# $XGA?: mode-line: 0-10->-1,else->0
-print_unary(0xEA, [0xFF]*0xB0 + [0]*0x50)
 # $MASK2MODE: IMASK enable bit (3) 0->-1, 1->0
-print_unary(0xEB, 256.times.map{|i| i&8==0 ? 0xFF : 0})
+print_unary(0xEA, 256.times.map{|i| i&8==0 ? 0xFF : 0})
 # $SUS2LEV: sustain to level
-print_unary(0xEC, 256.times.map{|i| ((-1*i)&0xF)<<4})
-# WAVE: wave number bandlimit
-print_unary(0xED, wave)
+print_unary(0xEB, 256.times.map{|i| ((-1*i)&0xF)<<4})
+# SQRWAV: square wave number bandlimit
+print_unary(0xEC, wave.map {|i| i&0xFE})
+# SAWWAV: sawtooth wave number bandlimit
+print_unary(0xED, wave.map {|i| i&1==0 && i>0?i-1:i})
 # $FREQL: low byte of note
 print_unary(0xEE, note)
 # $FREQH: high byte of note
@@ -549,10 +548,10 @@ print_unary(0xFA, inc_line)
 print_unary(0xFB, inc_proc)
 # $NSR: >>1&0x80
 print_unary(0xFC, 256.times.map{|i| (i>>1) | 0x80})
-# $SWAP: AB = BA
-print_unary(0xFD, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
-# $REVERSE: 76543210 = 01234567
-print_unary(0xFE, 256.times.map {|i| (sprintf "%08b", i)}.map {|i| i.reverse.to_i(2)})
-# $AUDIO: 76543210 = 01234567
+# $ROR: >>1|LSB
+print_unary(0xFD, 256.times.map {|i| (i>>1) | (i<<7)&0x80})
+# $SWAP: BA = AB
+print_unary(0xFE, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
+# AUDIO: 76543210 = 01234567^1
 print_unary(0xFF, 256.times.map {|i| (sprintf "%08b", i^0x80)}.map {|i| i.reverse.to_i(2)})
 

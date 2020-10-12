@@ -7,7 +7,7 @@ PAGE RRC_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $REVERSE$NULL
+LD HL, $ROR$NULL
 LDZ Y, $AREG
 FNH DZ, HLA           # A = Acc
 #10

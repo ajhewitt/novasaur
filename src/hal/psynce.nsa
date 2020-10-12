@@ -90,8 +90,8 @@ LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
 LDN PC, $EXIT110          # exit if audio off, cycle=1
 #110
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
+MVHL A, NA                # NOP LD HL, $FETCH; LD Y, $INST
+MVHL A, NA                # NOP MVHL AZ, ND
 LD HL, $IDEN$ADSRPG
 #120
 LD Y, $FRAME
@@ -99,38 +99,37 @@ FNEL DZ, PG               # jump to envelope channel, cycle=1
 #124
 
 $KBD_SCAN                 #103 - scan keyboard, cycle=1
-NOP
-NOP
-NOP
-NOP
-LD HL, $IDEN$NULL
-LD Y, $ICH
-#111
-FNFH DZ, NA               # A = idle count high
-LD Y, $ICSNAP
-FNFH AZ, ND               # idle count high -> count snapshot
-LD Y, $ICH
-#121
-MULH AZ, ND
 LD HL, $0x10
 LD Y, $TMODE
 ORH DZ, ND                # set LSB -> TMODE to stop Tx
-#131
+#110
+MVHL A, NA                # NOP LD HL, $FETCH; LD Y, $INST
+MVHL A, NA                # NOP MVHL AZ, ND
 LD HL, $XGA?$NULL
+#120
 LD Y, $VMS
 FNEH DZ, NA
-LDP PG, $XSYNCE_PG        # jump page if 4-cycle per line
-LD HL, $ML2FC$NULL
-#141
-LD Y, $FRAME
-FNEH AZ, ND               # -4/-5 -> Frame count
-LD HL, $INC2$NULL
-LD Y, $VMS
-#150
+LDP PG, $XPSYNCE_PG       # jump page if 4-cycle per line
+LDZ HL, $INC2$NULL
 FNH DZ, HLD               # VMS+2 (cycle=3)
+#130
+LD HL, $IDEN$NULL
+LDZ Y, $VMODE
+FNH DZ, HLA               # A = 00xx,01xx,10xx,11xx
+LDP HL, $LSL$NULL
+LDN HL, $LSR$NULL
+FNH A, HLA                # A = 0xxx,1xxx,010x,011x
+#141
+LDP HL, $0xFC             # -4
+LDN HL, $0xFB             # -5
+LD Y, $FRAME
+MVHL AZ, ND               # vmode==01xx?-5:-4 -> Frame count
+#150
 LD HL, $INC$NULL
 LDZ Y, $T0
 FNH DZ, HLD               # T0+1
+NOP
+NOP
 LDN PC, $EXIT160          # return if T0<90
 #159
 LD HL, $0xA6
@@ -180,9 +179,15 @@ LD PC, $EXIT196
 #196
 
 $EXIT187                  #187 - 5 ticks per hour, cycle=3
-MVHL A, NA                # NOP
-#191
-MVHL A, NA                # NOP
+NOP
+NOP
+NOP
+#190
+NOP
+NOP
+NOP
+NOP
+NOP
 NOP
 $EXIT196                  #196 - 10 ticks per min, cycle=3
 $EXIT110                  #110 cycle=1

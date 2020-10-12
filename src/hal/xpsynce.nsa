@@ -2,16 +2,31 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE XSYNCE_PG
+PAGE XPSYNCE_PG
 
 # PMODE: column in VID used during process cycle
 # VLINE: line(page) in video ram
 # VMS: [mode_line][e][cycle count]
 #  11,12,13,14,15     0,1,2,3
 # assume Y=$VMS, cycle=1
-LD HL, $0xFC              #140
+LD HL, $0xFC              #127
 LD Y, $FRAME
+#131
 MVHL AZ, ND               # -4 -> Frame count
+NOP
+NOP
+NOP
+NOP
+NOP
+#140
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
 NOP
 NOP
 #150
@@ -47,26 +62,26 @@ COMH DZ, NA               # update comms line state
 LD HL, $RSADJ$NULL
 #199
 FNEH AZ, ND               # adjust serial state by -1
-LD HL, $INC$NULL
+LD HL, $INC$ML2ADJ
 LDZ Y, $T1
-FNH DZ, HLD               # T1+1
+FNFH DZ, ND               # T1+1
 LDN PC, $T0_ADJUST        # return if T1<120
-#209
+#210
 LD HL, $0x88
 MVHL AZ, ND               # T1 = -120
 LD HL, $INC$NULL
 LDZ Y, $T2
-#219
+#220
 FNH DZ, HLD               # T2+1
-LDN PC, $EXIT223          # return if T2<120
+LDN PC, $EXIT224          # return if T2<120
 LD HL, $0x88
 MVHL AZ, ND               # T2 = -120
 LD HL, $INC$NULL
-#230
+#231
 LD Y, $T3
 FNFH DZ, ND               # T3+1
-LD PC, $EXIT237
-#237
+LD PC, $EXIT238
+#238
 
 $EXIT165                  #165 - 15 ticks per second
 NOP
@@ -76,23 +91,22 @@ LD Y, $VMS                # set Y = $VMS on exit
 LD PG, $NSYNCE_PG         # jump to null sync
 #172
 
-$T0_ADJUST                #210 - 10 ticks per min, cycle=3
+$T0_ADJUST                #211 - 10 ticks per min, cycle=3
 LD Y, $VMS
 FNEL DZ, HL               # HL = 0xF0/0xE0
 ORHL A, NA                # A = T1 | 0xF0/0XE0
+#220
 LD HL, $INC$NULL
-#221
 FNH A, HLA                # A+1 (A +ve if T1=0x?F)
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $T0
 FNH DZ, HLD               # adjust T0 every 16/32 T1
-#230
-LD PC, $EXIT232
-#232
+#231
+LD PC, $EXIT233
+#233
 
-$EXIT223                  #223 - 5 ticks per hour
-NOP
+$EXIT224                  #224 - 5 ticks per hour
 NOP
 NOP
 NOP
@@ -102,14 +116,14 @@ NOP
 #230
 NOP
 NOP
-$EXIT232                  #232 - 10 ticks per min
+NOP
+$EXIT233                  #233 - 10 ticks per min
 NOP
 NOP
 NOP
 NOP
 NOP
-$EXIT237                  #237 - 1 tick per day
-NOP
+$EXIT238                  #238 - 1 tick per day
 NOP
 NOP
 #240

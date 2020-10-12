@@ -2,39 +2,39 @@
 $NULL       0
 
 #FNF, FNH - default
-$IDEN       0
-$INC        1
-$DEC        2
-$INC2       3
-$1COM       4
-$2COM       5
-$LSR        6 # >>1
-$LSL        7 # <<1
-$ZERO?      8 # alias
-$OVER?      8
-$UNDER?     9
-$INCLINE   10
-$INCPROC   11
+$IDEN       0 # A = A
+$INC        1 # A = A+1
+$DEC        2 # A = A-1
+$INC2       3 # A = A+2
+$1COM       4 # A = ~A
+$2COM       5 # A = -A
+$LSR        6 # A>>1
+$LSL        7 # A<<1
+$ZERO?      8 # alias for over?
+$OVER?      8 # 0 if 0, else -1
+$UNDER?     9 # -1 if -1, else 0
+$INCLINE   10 # ML +1, cyc=0
+$INCPROC   11 # ML reset, cyc=1
 $NSR       12 # >>1&0x80
-$SWAP      13
-$REVERSE   14
-#AUDIO     15
+$ROR       13 # >>1|LSB<<7
+$SWAP      14 # AB -> BA
+#AUDIO     15 # flip sign, reverse bits
 
 #FNE - HAL
-$INCCYC     0
+$INCCYC     0 # cyc+1, ext=0
 $FORKJ      1 # feature fork (audio, rx, tx/kb)
 $FORKK      2 # keyboard fork
 $ADSRPG     3 # FRAME->ADSR Page
-$KS01?      4 # &3==0||1 ? 0:-1
-$KDATA      5 # &C>>2
+$KS01?      4 # A&3==0||1 ? 0:-1
+$KDATA      5 # A&C>>2
 $TKTOG      6 # 81->C2->98,83->E2->9A
 $RSADJ      7 # serial state -1
-$ML2FC      8 # mode-line to frame count: 3-6->-5,else->4
+$XGA?       8 # mode-line>11?: 0-10->-1,else->0
 $ML2ADJ     9 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
-$XGA?      10 # mode-line>11?: 0-10->-1,else->0
-$MASK2MODE 11 # &8==0 ? -1:0
-$SUS2LEV   12 # sustain to level
-$WAVE      13 # MIDI->WAV bandlimited
+$MASK2MODE 10 # &8==0 ? -1:0
+$SUS2LEV   11 # sustain to level
+$SQRWAV    12 # MIDI->bandlimited Square WAV
+$SAWWAV    13 # MIDI->bandlimited Sawtooth WAV
 $FREQL     14 # MIDI->TONE delta L
 $FREQH     15 # MIDI->TONE delta H
 
