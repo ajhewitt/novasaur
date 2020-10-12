@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2020-10-01"
-Rev "1.7"
+Date "2020-10-10"
+Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -852,21 +852,6 @@ $EndComp
 Text GLabel 5050 3100 2    50   Output ~ 0
 ~aoe
 $Comp
-L 74xx:74LS08 U?
-U 3 1 5DCA46DE
-P 4750 3100
-AR Path="/5CDEEC9F/5DCA46DE" Ref="U?"  Part="3" 
-AR Path="/5DAA5CD8/5DCA46DE" Ref="U?"  Part="3" 
-AR Path="/5DCA46DE" Ref="U3"  Part="3" 
-AR Path="/5DA1E9BD/5DCA46DE" Ref="U?"  Part="3" 
-F 0 "U3" H 4750 3100 50  0000 C CNN
-F 1 "74F08" H 4750 2900 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4750 3100 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 4750 3100 50  0001 C CNN
-	3    4750 3100
-	1    0    0    1   
-$EndComp
-$Comp
 L 74xx:74LS32 U?
 U 3 1 5E6A8202
 P 4750 2300
@@ -1091,17 +1076,6 @@ Text GLabel 9650 4250 2    50   Output ~ 0
 pclk2
 Wire Wire Line
 	9300 4550 9500 4550
-$Comp
-L 74xx:74LS86 U1
-U 1 1 5D9EA8C5
-P 7600 3950
-F 0 "U1" H 7600 3950 50  0000 C CNN
-F 1 "74F86" H 7600 4184 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7600 3950 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 7600 3950 50  0001 C CNN
-	1    7600 3950
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	5550 3700 5600 3700
 Wire Wire Line
@@ -1317,8 +1291,6 @@ Wire Wire Line
 Wire Wire Line
 	7900 2600 8300 2600
 Wire Wire Line
-	4200 4000 5600 4000
-Wire Wire Line
 	4400 3750 5550 3750
 Wire Wire Line
 	2850 1900 6900 1900
@@ -1468,6 +1440,40 @@ F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7200 1600 50  0001 C CNN
 F 3 "74xx/74ls86.pdf" H 7200 1600 50  0001 C CNN
 	2    7200 1600
 	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4200 4000 5600 4000
+$Comp
+L 74xx:74LS11 U?
+U 2 1 5FA4FFFA
+P 4750 3100
+AR Path="/5DA1E9BD/5FA4FFFA" Ref="U?"  Part="2" 
+AR Path="/5FA4FFFA" Ref="U3"  Part="2" 
+F 0 "U3" H 4750 3100 50  0000 C CNN
+F 1 "74F11" H 4750 3334 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4750 3100 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS11" H 4750 3100 50  0001 C CNN
+	2    4750 3100
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	4400 3200 4400 3100
+Wire Wire Line
+	4400 3100 4450 3100
+Connection ~ 4400 3200
+$Comp
+L 74xx:74LS86 U1
+U 4 1 5F86670E
+P 7600 3950
+AR Path="/5F86670E" Ref="U1"  Part="4" 
+AR Path="/5DA1E9BD/5F86670E" Ref="U?"  Part="4" 
+AR Path="/5DA1E9BA/5F86670E" Ref="U?"  Part="4" 
+F 0 "U1" H 7600 3950 50  0000 C CNN
+F 1 "74F86" H 7600 4184 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7600 3950 50  0001 C CNN
+F 3 "74xx/74ls86.pdf" H 7600 3950 50  0001 C CNN
+	4    7600 3950
+	0    -1   1    0   
 $EndComp
 Wire Bus Line
 	4450 5100 4450 6750

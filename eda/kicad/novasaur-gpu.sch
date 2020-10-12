@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2020-10-01"
-Rev "1.7"
+Date "2020-10-10"
+Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -482,7 +482,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS163" H 2200 6450 50  0001 C CNN
 	1    2200 6450
 	1    0    0    -1  
 $EndComp
-Text GLabel 4350 3850 0    50   Input ~ 0
+Text GLabel 4300 3750 0    50   Input ~ 0
 text
 Text GLabel 1700 3850 0    50   Input ~ 0
 0
@@ -912,9 +912,9 @@ Entry Wire Line
 	6100 5050 6200 5150
 Entry Wire Line
 	6100 5350 6200 5450
-Text GLabel 6900 3550 0    50   Input ~ 0
+Text GLabel 5900 3700 0    50   Input ~ 0
 nclk
-Text GLabel 6050 3850 0    50   Input ~ 0
+Text GLabel 5900 3600 0    50   Input ~ 0
 sclk
 Text Label 3050 3750 0    50   ~ 0
 H0
@@ -1319,7 +1319,7 @@ Text GLabel 7900 5550 3    50   Output ~ 0
 G[0..7]
 Text GLabel 6700 5550 0    50   Input ~ 0
 pclk2
-Text GLabel 9400 3650 2    50   Output ~ 0
+Text GLabel 9400 3600 2    50   Output ~ 0
 s1
 Text GLabel 5900 5650 2    50   Input ~ 0
 ~voe
@@ -1359,36 +1359,6 @@ Entry Wire Line
 	1500 2150 1400 2050
 Wire Wire Line
 	1500 2150 1700 2150
-$Comp
-L 74xx:74LS08 U?
-U 2 1 5DCE5E0A
-P 7200 3650
-AR Path="/5CDEEC9F/5DCE5E0A" Ref="U?"  Part="2" 
-AR Path="/5DAA5CD8/5DCE5E0A" Ref="U?"  Part="2" 
-AR Path="/5DCE5E0A" Ref="U?"  Part="2" 
-AR Path="/5DA1E9BD/5DCE5E0A" Ref="U3"  Part="2" 
-F 0 "U3" H 7200 3650 50  0000 C CNN
-F 1 "74F08" H 7200 3850 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7200 3650 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 7200 3650 50  0001 C CNN
-	2    7200 3650
-	1    0    0    1   
-$EndComp
-$Comp
-L 74xx:74LS08 U?
-U 1 1 5DCE5E10
-P 6350 3750
-AR Path="/5CDEEC9F/5DCE5E10" Ref="U?"  Part="1" 
-AR Path="/5DAA5CD8/5DCE5E10" Ref="U?"  Part="1" 
-AR Path="/5DCE5E10" Ref="U?"  Part="1" 
-AR Path="/5DA1E9BD/5DCE5E10" Ref="U3"  Part="1" 
-F 0 "U3" H 6350 3750 50  0000 C CNN
-F 1 "74F08" H 6350 3550 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 6350 3750 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 6350 3750 50  0001 C CNN
-	1    6350 3750
-	1    0    0    -1  
-$EndComp
 $Comp
 L Connector:TestPoint_Alt TP?
 U 1 1 5E10A07A
@@ -1447,8 +1417,6 @@ F 3 "~" H 6900 2450 50  0001 C CNN
 $EndComp
 Text GLabel 1700 4750 0    50   Input ~ 0
 1
-Wire Wire Line
-	9300 3650 9400 3650
 $Comp
 L 74xx:74LS157 U?
 U 1 1 5F980CCE
@@ -1480,42 +1448,8 @@ Wire Wire Line
 	7700 4450 8100 4450
 Text GLabel 9100 2450 2    50   Output ~ 0
 ~hsync
-Text GLabel 5150 3550 0    50   Input ~ 0
-1
-$Comp
-L 74xx:74LS86 U?
-U 4 1 5E72FE45
-P 5450 3650
-AR Path="/5E72FE45" Ref="U?"  Part="4" 
-AR Path="/5DA1E9BD/5E72FE45" Ref="U1"  Part="4" 
-AR Path="/5DA1E9BA/5E72FE45" Ref="U?"  Part="4" 
-F 0 "U1" H 5450 3650 50  0000 C CNN
-F 1 "74F86" H 5450 3884 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5450 3650 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 5450 3650 50  0001 C CNN
-	4    5450 3650
-	1    0    0    1   
-$EndComp
-$Comp
-L 74xx:74LS08 U?
-U 4 1 5E79B5B5
-P 4650 3750
-AR Path="/5DAA3954/5E79B5B5" Ref="U?"  Part="4" 
-AR Path="/5DAA5CD8/5E79B5B5" Ref="U?"  Part="4" 
-AR Path="/5E79B5B5" Ref="U?"  Part="4" 
-AR Path="/5DA1E9BD/5E79B5B5" Ref="U3"  Part="4" 
-AR Path="/5DA1E9C0/5E79B5B5" Ref="U?"  Part="4" 
-F 0 "U3" H 4650 3750 50  0000 C CNN
-F 1 "74F08" H 4650 3550 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4650 3750 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 4650 3750 50  0001 C CNN
-	4    4650 3750
-	1    0    0    1   
-$EndComp
 Wire Wire Line
 	3050 3750 3500 3750
-Wire Wire Line
-	4950 3750 5150 3750
 Text GLabel 2700 2250 2    50   Output ~ 0
 ~kbdtx
 $Comp
@@ -1625,29 +1559,85 @@ $EndComp
 $Comp
 L 74xx:74LS86 U?
 U 3 1 5F723456
-P 3800 3650
+P 5400 3500
 AR Path="/5F723456" Ref="U?"  Part="3" 
 AR Path="/5DA1E9BD/5F723456" Ref="U1"  Part="3" 
+F 0 "U1" H 5400 3500 50  0000 C CNN
+F 1 "74F86" H 5400 3734 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5400 3500 50  0001 C CNN
+F 3 "74xx/74ls86.pdf" H 5400 3500 50  0001 C CNN
+	3    5400 3500
+	1    0    0    -1  
+$EndComp
+Text GLabel 3500 3550 0    50   Input ~ 0
+1
+$Comp
+L 74xx:74LS11 U3
+U 1 1 5F83CB24
+P 6200 3600
+F 0 "U3" H 6200 3600 50  0000 C CNN
+F 1 "74F11" H 6200 3834 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 6200 3600 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS11" H 6200 3600 50  0001 C CNN
+	1    6200 3600
+	1    0    0    -1  
+$EndComp
+Text GLabel 4150 3350 0    50   Input ~ 0
+~hsync
+Wire Wire Line
+	4300 3550 4250 3550
+Wire Wire Line
+	4250 3350 4150 3350
+Wire Wire Line
+	4900 3650 5000 3650
+Wire Wire Line
+	5000 3350 4250 3350
+Connection ~ 4250 3350
+Wire Wire Line
+	4250 3350 4250 3550
+$Comp
+L 74xx:74LS11 U?
+U 3 1 5FA63205
+P 4600 3650
+AR Path="/5FA63205" Ref="U?"  Part="3" 
+AR Path="/5DA1E9BD/5FA63205" Ref="U3"  Part="3" 
+F 0 "U3" H 4600 3650 50  0000 C CNN
+F 1 "74F11" H 4600 3884 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4600 3650 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS11" H 4600 3650 50  0001 C CNN
+	3    4600 3650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9300 3600 9300 4750
+Connection ~ 9300 3600
+Wire Wire Line
+	9300 3600 9400 3600
+Wire Wire Line
+	5100 3600 5000 3600
+Wire Wire Line
+	5000 3600 5000 3650
+Wire Wire Line
+	5100 3400 5000 3400
+Wire Wire Line
+	5000 3400 5000 3350
+$Comp
+L 74xx:74LS86 U1
+U 1 1 5F8424E4
+P 3800 3650
 F 0 "U1" H 3800 3650 50  0000 C CNN
 F 1 "74F86" H 3800 3884 50  0001 C CNN
 F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 3800 3650 50  0001 C CNN
 F 3 "74xx/74ls86.pdf" H 3800 3650 50  0001 C CNN
-	3    3800 3650
-	1    0    0    1   
+	1    3800 3650
+	1    0    0    -1  
 $EndComp
-Text GLabel 3500 3550 0    50   Input ~ 0
-1
 Wire Wire Line
-	9300 3650 9300 4750
-Connection ~ 9300 3650
+	4100 3650 4300 3650
 Wire Wire Line
-	4100 3650 4350 3650
+	5700 3500 5900 3500
 Wire Wire Line
-	6650 3750 6900 3750
-Wire Wire Line
-	7500 3650 9300 3650
-Wire Wire Line
-	5750 3650 6050 3650
+	6500 3600 9300 3600
 Wire Bus Line
 	3100 2150 3100 2450
 Wire Bus Line

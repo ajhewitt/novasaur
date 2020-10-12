@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 4 4
 Title "Input/Output"
-Date "2020-10-01"
-Rev "1.7"
+Date "2020-10-10"
+Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
 Comment2 ""
@@ -875,22 +875,6 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS139" H 8650 5600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74xx:74LS08 U?
-U 5 1 63199762
-P 8150 5600
-AR Path="/5CDEEC9F/63199762" Ref="U?"  Part="5" 
-AR Path="/63199762" Ref="U?"  Part="5" 
-AR Path="/62D13D9D/63199762" Ref="U2"  Part="5" 
-AR Path="/5DAA5CD8/5D9AFF37/63199762" Ref="U?"  Part="5" 
-AR Path="/5DA1E9C0/63199762" Ref="U3"  Part="5" 
-F 0 "U3" H 8050 5650 50  0000 L CNN
-F 1 "74F08" H 8000 5550 50  0000 L CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 8150 5600 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 8150 5600 50  0001 C CNN
-	5    8150 5600
-	1    0    0    -1  
-$EndComp
-$Comp
 L 74xx:74LS32 U?
 U 5 1 63199778
 P 7650 5600
@@ -1322,22 +1306,6 @@ F 3 "" H 2550 2800 50  0001 C CNN
 	1    2550 2800
 	0    1    1    0   
 $EndComp
-$Comp
-L Connector:TestPoint_Alt TP?
-U 1 1 5EF37DC4
-P 7650 3700
-AR Path="/5EF37DC4" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BA/5EF37DC4" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9BD/5EF37DC4" Ref="TP?"  Part="1" 
-AR Path="/5DA1E9C0/5EF37DC4" Ref="TP38"  Part="1" 
-F 0 "TP38" H 7600 3950 50  0000 L CNN
-F 1 "RESET" H 7400 3850 50  0001 L CNN
-F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 7850 3700 50  0001 C CNN
-F 3 "~" H 7850 3700 50  0001 C CNN
-	1    7650 3700
-	-1   0    0    1   
-$EndComp
-Connection ~ 7650 3700
 Wire Wire Line
 	8550 3500 8600 3500
 Wire Wire Line
@@ -1355,17 +1323,6 @@ Wire Wire Line
 Wire Wire Line
 	8550 4000 8550 4200
 Connection ~ 9150 4000
-Wire Wire Line
-	8150 3800 8150 3850
-Connection ~ 8150 3850
-Wire Wire Line
-	8150 3850 8150 3900
-Wire Wire Line
-	7950 4200 7950 3850
-Wire Wire Line
-	7950 3850 8150 3850
-Wire Wire Line
-	7550 4200 7950 4200
 Wire Wire Line
 	8600 3700 8700 3700
 Wire Wire Line
@@ -2434,16 +2391,6 @@ Wire Wire Line
 	6950 1400 7050 1400
 Wire Wire Line
 	6950 1350 6950 1400
-Wire Bus Line
-	3350 2300 3350 2600
-Wire Bus Line
-	3150 1500 3150 2300
-Wire Bus Line
-	1250 1800 1250 2600
-Wire Bus Line
-	5450 1300 5450 2100
-Wire Bus Line
-	4900 1300 4900 4100
 $Comp
 L Device:R_Pack03_SIP RN9
 U 1 1 5FEA9E0C
@@ -2455,4 +2402,55 @@ F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 7250 1150 50  0001 C CNN
 	1    7250 1150
 	-1   0    0    -1  
 $EndComp
+Wire Wire Line
+	8150 3800 8150 3850
+Wire Wire Line
+	8350 4200 8350 3850
+Wire Wire Line
+	8350 3850 8150 3850
+Connection ~ 8150 3850
+Wire Wire Line
+	8150 3850 8150 3900
+$Comp
+L Switch:SW_Push SW2
+U 1 1 5F8FCEDE
+P 7650 3950
+F 0 "SW2" V 7604 4098 50  0000 L CNN
+F 1 "RESET" V 7695 4098 50  0000 L CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch2.54mm_Drill0.8mm" H 7650 4150 50  0001 C CNN
+F 3 "~" H 7650 4150 50  0001 C CNN
+	1    7650 3950
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7550 4200 7650 4200
+Wire Wire Line
+	7650 3750 7650 3700
+Connection ~ 7650 3700
+Wire Wire Line
+	7650 4150 7650 4200
+Connection ~ 7650 4200
+Wire Wire Line
+	7650 4200 7950 4200
+$Comp
+L 74xx:74LS11 U3
+U 4 1 5F956C3E
+P 8150 5600
+F 0 "U3" H 8050 5650 50  0000 L CNN
+F 1 "74F11" H 8050 5550 50  0000 L CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 8150 5600 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS11" H 8150 5600 50  0001 C CNN
+	4    8150 5600
+	1    0    0    -1  
+$EndComp
+Wire Bus Line
+	3350 2300 3350 2600
+Wire Bus Line
+	3150 1500 3150 2300
+Wire Bus Line
+	5450 1300 5450 2100
+Wire Bus Line
+	1250 1800 1250 2600
+Wire Bus Line
+	4900 1300 4900 4100
 $EndSCHEMATC
