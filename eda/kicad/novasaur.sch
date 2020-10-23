@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2020-10-10"
+Date "2020-10-15"
 Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -938,7 +938,7 @@ AR Path="/5E2B88BD" Ref="TP36"  Part="1"
 AR Path="/5DA1E9BA/5E2B88BD" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5E2B88BD" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9C0/5E2B88BD" Ref="TP?"  Part="1" 
-F 0 "TP36" H 8050 5600 50  0000 L CNN
+F 0 "TP36" H 8050 5650 50  0000 L CNN
 F 1 "DCLK" H 7750 5650 50  0001 L CNN
 F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 8200 5500 50  0001 C CNN
 F 3 "~" H 8200 5500 50  0001 C CNN
@@ -1412,7 +1412,7 @@ AR Path="/5EB702DB" Ref="TP37"  Part="1"
 AR Path="/5DA1E9BA/5EB702DB" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5EB702DB" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9C0/5EB702DB" Ref="TP?"  Part="1" 
-F 0 "TP37" H 9250 4750 50  0000 L CNN
+F 0 "TP37" H 9250 4800 50  0000 L CNN
 F 1 "MCLK" H 9250 4800 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 9700 4650 50  0001 C CNN
 F 3 "~" H 9700 4650 50  0001 C CNN
