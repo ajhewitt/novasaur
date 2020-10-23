@@ -7,8 +7,12 @@
 # 0-7: 8x8 glyph fonts
 # 8: underline - last row of mod10 fonts, all 0's or 1's for underline
 # 9: blank - first row of mod10 fonts/low-res graphics, all 0's
-# 10-13: lo-res dither
-# 14,15: hi-res dither
+# 10: 1100 1000 0001 1001
+# 11: 1100 0100 0010 0110
+# 12: 1111 1001 0000 1001
+# 13: 1111 0110 0000 0110
+# 14: 0000 0000 0110 0110
+# 15: 0000 0000 1001 1001
 # 16-31: 8x16 glyph fonts
 HIRES = [
   [0b1100,
@@ -21,24 +25,24 @@ HIRES = [
    0b0110]
 ]
 LORESL = [
+  [0b1111,
+   0b1111],
+  [0b1001,
+   0b0110],
   [0b0000,
    0b0000],
-  [0b1010,
-   0b0000],
-  [0b1010,
-   0b1010],
-  [0b1111,
-   0b1010]
+  [0b1001,
+   0b0110]
 ]
 LORESR = [
   [0b0000,
    0b0000],
-  [0b0101,
+  [0b0000,
    0b0000],
-  [0b0101,
-   0b1010],
-  [0b1111,
-   0b0101]
+  [0b0110,
+   0b1001],
+  [0b0110,
+   0b1001]
 ]
 
 def print_ext_addr(addr)
@@ -137,18 +141,18 @@ print_underline 0xA8, false
 print_font 'fonts/Bm437_CompaqThin_8x16.txt', 0xB0
 
 # 0x0002D000-0x0002DFFF: thick san-serif 8x8 font
-# Chips and Technologies, Inc. 82C435 Enhanced Graphics Controller. ca. 1985
+# Phoenix Enhanced Video BIOS PLUS (Chips 82C435) ca. 1985
 print_font 'fonts/Bm437_PhoenixEGA_8x8.txt', 0xC0
 print_underline 0xC8, false
 # 0x0002D000-0x0002DFFF: thick san-serif 8x16 font
-# Chips and Technologies, Inc. 82C435 Enhanced Graphics Controller. ca. 1985
+# Phoenix Enhanced Video BIOS PLUS (Chips 82C435) ca. 1985
 print_font 'fonts/Bm437_PhoenixEGA_8x16.txt', 0xD0
 
 # 0x0002D000-0x0002DFFF: thick san-serif 8x8 font
-# Chips and Technologies, Inc. 82C435 Enhanced Graphics Controller. ca. 1985
+# Phoenix Enhanced Video BIOS PLUS (Chips 82C435) ca. 1985
 print_font 'fonts/Bm437_PhoenixEGA_8x8.txt', 0xE0
 print_underline 0xE8, true
 # 0x0002D000-0x0002DFFF: thick san-serif 8x14 font
-# Chips and Technologies, Inc. 82C435 Enhanced Graphics Controller. ca. 1985
+# Phoenix Enhanced Video BIOS PLUS (Chips 82C435) ca. 1985
 print_font 'fonts/Bm437_PhoenixEGA_8x14.txt', 0xF0
 print_underline 0xFE, true

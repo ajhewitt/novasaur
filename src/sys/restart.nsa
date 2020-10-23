@@ -8,10 +8,10 @@ PAGE RESTART
 LD HL, $0x00
 LD Y, $EREG
 MVHL AZ, ED         # LED on
-LD HL, $0x50
+LD HL, $0x00
 LD Y, $VMODE
 MVHL AZ, ND         # 3 -> video mode
-LD HL, $0x50
+LD HL, $0x10
 LD Y, $VMS
 MVHL AZ, ND         # 0 -> mode line
 LD HL, $0xFF
@@ -48,10 +48,10 @@ MVHL AZ, ND
 LD HL, $ATTACK1
 LD Y, $DELTA1
 MVHL AZ, ND
-LD HL, $0x42 # +2
+LD HL, $0x40 # +2
 LD Y, $ATTACK1
 MVHL AZ, ND
-LD HL, $0xDF # -2
+LD HL, $0xE8 # -2
 LD Y, $DECAY1
 MVHL AZ, ND
 LD HL, $0x88 # -1
@@ -80,17 +80,17 @@ LD HL, $0x01  #OVERRIDE WAVE
 LD Y, $WAVE2
 ORHL AZ, ND
 #ADSR Voice 2
-LD HL, $ATTACK2
-LD Y, $DELTA2
+LD HL, $ATTACK0
+LD Y, $DELTA0
 MVHL AZ, ND
-LD HL, $0x40 # +2
-LD Y, $ATTACK2
+LD HL, $0x60 # +2
+LD Y, $ATTACK0
 MVHL AZ, ND
-LD HL, $0xD0 # -2
-LD Y, $DECAY2
+LD HL, $0xC0 # -2
+LD Y, $DECAY0
 MVHL AZ, ND
 LD HL, $0x88 # -1
-LD Y, $RELEASE2
+LD Y, $RELEASE0
 MVHL AZ, ND
 
 # Voice 3
@@ -115,25 +115,30 @@ LD HL, $0xC1
 LD Y, $WAVE3
 ORHL AZ, ND
 #ADSR Voice 3
-LD HL, $ATTACK3
-LD Y, $DELTA3
-MVHL AZ, ND
-LD HL, $0x40 # +2
-LD Y, $ATTACK3
-MVHL AZ, ND
-LD HL, $0xD0 # -2
-LD Y, $DECAY3
-MVHL AZ, ND
-LD HL, $0x88 # -1
-LD Y, $RELEASE3
-MVHL AZ, ND
+#LD HL, $ATTACK3
+#LD Y, $DELTA3
+#MVHL AZ, ND
+#LD HL, $0x40 # +2
+#LD Y, $ATTACK3
+#MVHL AZ, ND
+#LD HL, $0xD0 # -2
+#LD Y, $DECAY3
+#MVHL AZ, ND
+#LD HL, $0x88 # -1
+#LD Y, $RELEASE3
+#MVHL AZ, ND
 
 # Audio control
-LD HL, $0x03 # number of voices
+LD HL, $0x01 # number of voices
 LD Y, $AMODE
 MVHL AZ, ND
 LD HL, $0x00
 LD Y, $AUDIO
+MVHL AZ, ND
+
+#keyboard
+LD HL, $0xE0
+LD Y, $KTO
 MVHL AZ, ND
 
 #turn off features

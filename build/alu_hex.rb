@@ -494,12 +494,11 @@ print_unary(0xE1, fork_feature)
 # $FORKK: fork on HAL feature
 print_unary(0xE2, fork_feature(true))
 # $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
-#print_unary(0xE3, [0xE3]*253 + [0xE2,0xE1,0xE0])
-print_unary(0xE3, [0xE3,0xE2,0xE1,0xE0]*64) # *** DEBUG
+print_unary(0xE3, [0xE3]*253 + [0xE2,0xE1,0xE0])
 # $KS01?: &3==0||1 ? 0:-1
 print_unary(0xE4, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
-# $KDATA: &C>>2
-print_unary(0xE5, 256.times.map{|i| (i&0xC) >> 2})
+# $KDATA: &C<<2
+print_unary(0xE5, 256.times.map{|i| (i&0xC) << 2})
 # $TKTOG: toggle tx mode <-> keyboard mode
 print_unary(0xE6, 256.times.map{|i| i&0x40==0 ? ((i&2)<<4)|0xC2 : ((i&0x20)>>4)|0x98})
 # $RSADJ: serial state -1
@@ -548,10 +547,9 @@ print_unary(0xFA, inc_line)
 print_unary(0xFB, inc_proc)
 # $NSR: >>1&0x80
 print_unary(0xFC, 256.times.map{|i| (i>>1) | 0x80})
-# $ROR: >>1|LSB
-print_unary(0xFD, 256.times.map {|i| (i>>1) | (i<<7)&0x80})
 # $SWAP: BA = AB
-print_unary(0xFE, 256.times.map {|i| ((i>>4)|(i<<4))&0xFF})
+print_unary(0xFD, 256.times.map {|i| ((i>>4) | (i<<4))&0xFF})
+# $REVERSE: 76543210 = 01234567
+print_unary(0xFE, 256.times.map {|i| sprintf("%08b",i).reverse.to_i(2)})
 # AUDIO: 76543210 = 01234567^1
-print_unary(0xFF, 256.times.map {|i| (sprintf "%08b", i^0x80)}.map {|i| i.reverse.to_i(2)})
-
+print_unary(0xFF, 256.times.map {|i| sprintf("%08b",i).reverse.to_i(2)^1})

@@ -16,9 +16,9 @@ $UNDER?     9 # -1 if -1, else 0
 $INCLINE   10 # ML +1, cyc=0
 $INCPROC   11 # ML reset, cyc=1
 $NSR       12 # >>1&0x80
-$ROR       13 # >>1|LSB<<7
-$SWAP      14 # AB -> BA
-#AUDIO     15 # flip sign, reverse bits
+$SWAP      13 # AB -> BA
+$REVERSE   14 # reverse bits
+#AUDIO     15 # reverse bits, flip sign
 
 #FNE - HAL
 $INCCYC     0 # cyc+1, ext=0
@@ -26,7 +26,7 @@ $FORKJ      1 # feature fork (audio, rx, tx/kb)
 $FORKK      2 # keyboard fork
 $ADSRPG     3 # FRAME->ADSR Page
 $KS01?      4 # A&3==0||1 ? 0:-1
-$KDATA      5 # A&C>>2
+$KDATA      5 # A&C<<2
 $TKTOG      6 # 81->C2->98,83->E2->9A
 $RSADJ      7 # serial state -1
 $XGA?       8 # mode-line>11?: 0-10->-1,else->0

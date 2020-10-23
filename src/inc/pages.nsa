@@ -104,8 +104,8 @@ $NSYNCE_PG     0xE4 # null sync on execute
 $DASYNCE_PG    0xE5 # delayed audio
 $ASYNCE_PG     0xE6 # audio
 $DTSYNCE_PG    0xE7 # delayed transmit
-$TSYNCE_PG     0x00 # transmit   ****** DEBUG
-$TESTE_PG      0xE8 #            ****** DEBUG
+$TSYNCE_PG     0xE8 # transmit   ****** DEBUG
+$TESTE_PG      0x00 #            ****** DEBUG
 $KSCANE_PG     0xE9 # keyboard
 $RSYNCE_PG     0xEA # receive
 $DPSYNCE_PG    0xEB # delayed process

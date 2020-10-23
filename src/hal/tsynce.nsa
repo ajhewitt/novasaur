@@ -46,7 +46,7 @@ ADDR 0x30             #32 - mode 0x02: transmit start
 LD HL, $0x40
 MULH E, NA            # A sign = CTS
 LDN PC, $NOT_CTS      # jump on not clear to send
-LD HL, $INC2$NULL
+LDZ HL, $INC2$NULL
 #40/56
 FNH DZ, HLD           # 4 -> Tx mode
 LD HL, $0x70
@@ -82,7 +82,7 @@ NOP
 $EXIT68
 LD HL, $INC$NULL
 #70/92
-LD Y, $VMS
+LDZ Y, $VMS
 FNH DZ, HLD           # VMC+1
 LD HL, $IDEN$NULL
 LDZ Y, $INST
@@ -99,7 +99,7 @@ LD HL, $INC2$NULL
 #40/118
 LDZ Y, $TMODE
 FNH DZ, HLD           # mode+2
-LD HL, $ROR$IDEN
+LD HL, $REVERSE$IDEN
 LDZ Y, $TXRDIDX
 FNFL DZ, Y            # Y = Tx read index
 #51/127
@@ -122,7 +122,7 @@ ORH DZ, ED            # Tx set
 NOP
 LD HL, $INC$NULL
 #70/152
-LD Y, $VMS
+LDZ Y, $VMS
 FNH DZ, HLD           # VMC+1
 LD HL, $IDEN$NULL
 LDZ Y, $INST

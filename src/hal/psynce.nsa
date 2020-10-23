@@ -83,8 +83,7 @@ LD HL, $INC$NULL
 LDZ Y, $FRAME
 FNH DZ, HLD               # frame count+1
 #101
-#LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0, cycle=1
-NOP #skip KBD_SCAN   *** DEBUG
+LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0, cycle=1
 LD HL, $DEC$NULL
 LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
