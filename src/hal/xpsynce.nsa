@@ -45,8 +45,8 @@ LDN PC, $EXIT165          # return if T0<90
 LD HL, $0xA6
 MVHL AZ, ND               # T0 = -90
 #170                      # Need null sync now
-LD HL, $INCLINE$NULL
-LDZ Y, $VMS
+LD Y, $VMS
+LDZ HL, $INCLINE$NULL
 FNH DZ, HLD               # H=mode_line+1, L=E000
 LD Y, $PMODE
 VIDH DZ, SA               # mode_line, pmode —> S
@@ -127,8 +127,7 @@ $EXIT238                  #238 - 1 tick per day
 NOP
 NOP
 #240
-NOP
-NOP
+LD HL, $INC$IDEN
 LDZ Y, $VMS
 FNH DZ, HLD               # VMS+1 (cycle=1)
 LD HL, $IDEN$NULL

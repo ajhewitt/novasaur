@@ -1,44 +1,44 @@
-# keyboard jump page
+# keyboard scan jump page
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE KSCANE_PG
 
 LD HL, $KS01?$FORKK
-FNEL DZ, PC           # keyboard fork
+FNEL DZ, PC               # keyboard fork
 #39/4
 
-ADDR 0x08             #39 - mode 0x02: keyboard idle
+ADDR 0x08                 #39 - mode 0x02: keyboard idle
 LD Y, $COMPS
 FNEH DZ, NA
-LDN PC, $CLKSTART1    # KS=2|3, clock started last cycle
+LDN PC, $CLKSTART1        # KS=2|3, clock started last cycle
 LD Y, $COMLS
 FNEH DZ, NA
 #50/18
-LDN PC, $CLKSTART2    # KS=2|3, clock started this cycle
+LDN PC, $CLKSTART2        # KS=2|3, clock started this cycle
 LD HL, $INC$NULL
 LDZ Y, $KIDLE
-FNH DZ, HLD           # keyboard idle+1
-LDP PC, $TIMEOUT59    # timeout when idle>0
+FNH DZ, HLD               # keyboard idle+1
+LDP PC, $TIMEOUT59        # timeout when idle>0
 LD HL, $0xC0
 #60/29
 LD Y, $KSH
-MVH AZ, ND            # XXXX1100 -> scan H
+MVH AZ, ND                # XXXX1100 -> scan H
 LD PC, $EXIT67
 #67/35
 
-$CLKSTART1            #46 - clock start
+$CLKSTART1                #46 - clock start
 LD HL, $INC2$NULL
 LDZ Y, $TMODE
 #50/39
-FNH DZ, HLD           # 4 -> keyboard mode
+FNH DZ, HLD               # 4 -> keyboard mode
 LD HL, $0xC0
 LD Y, $KSL
-MVH AZ, ND            # XXXX1100 -> scan L
+MVH AZ, ND                # XXXX1100 -> scan L
 LD HL, $INC$NULL
 #61/48
 LDZ Y, $VMS
-FNH DZ, HLD           # VMS+1
+FNH DZ, HLD               # VMS+1
 LD HL, $KS01?$NULL
 NOP
 NOP
@@ -55,133 +55,136 @@ NOP
 NOP
 NOP
 #80/66
-LD PC, $SCAN_LOW      # process first sample
+LD PC, $SCAN_LOW          # process first sample
 #82/68
 
-$CLKSTART2            #52 - clock start
+$CLKSTART2                #52 - clock start
 LD HL, $INC2$NULL
 LDZ Y, $TMODE
-FNH DZ, HLD           # 4 -> keyboard mode
+FNH DZ, HLD               # 4 -> keyboard mode
 LD HL, $0xC0
 #60/75
 LD Y, $KSL
-MVH AZ, ND            # XXXX1100 -> scan L
+MVH AZ, ND                # XXXX1100 -> scan L
 LD PC, $EXIT67
 #67/81
 
-$TIMEOUT59            #59 - timeout
+$TIMEOUT59                #59 - timeout
 LD HL, $TKTOG$NULL
 LD Y, $TMODE
-FNEH DZ, ND           # kb mode -> tx mode
+FNEH DZ, ND               # kb mode -> tx mode
 LD PC, $EXIT68
 #68/89
 
-ADDR 0x60             #39,82 - mode 0x04-0x0C: keyboard scan L
+ADDR 0x60                 #39,82 - mode 0x04-0x0C: keyboard scan L
 $SCAN_LOW
 LD Y, $COMPS
-FNEH DZ, NA           # A = test number of bits
-LDP HL, $4$KDATA      # 2 bits received
-LDN HL, $2$KDATA      # 1 bits received
+FNEH DZ, NA               # A = test number of bits
+LDP HL, $4$KDATA          # 2 bits received
+LDN HL, $2$KDATA          # 1 bits received
 LD Y, $TMODE
 #49,92/105
-ADDH DZ, ND           # comms mode +2 or 4
+ADDH DZ, ND               # comms mode +2 or 4
 LD Y, $KSL
-MULH DZ, NA           # A = scan L << 1 or 2
+MULH DZ, NA               # A = scan L << 1 or 2
 LD Y, $COMPS
 #59,102/113
-FNEL DZ, HL           # H = kbd data
+FNEL DZ, HL               # H = kbd data
 LD Y, $KSL
-ORH AZ, ND            # add kbd data to scan
-NOP
-LD HL, $INC$NULL
-#70,113/122
-LDZ Y, $VMS
-FNH DZ, HLD           # VMC+1
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL            # inst cache -> HL
-#80,123/130
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86,129/134
-
-ADDR 0x88             #39 - mode 0x0E-0x18: keyboard scan H
-LD Y, $COMPS
-FNEH DZ, NA           # A = test number of bits
-LDP HL, $4$KDATA      # 2 bits received
-LDN HL, $2$KDATA      # 1 bits received
-LD Y, $TMODE
-#49/146
-ADDH DZ, ND           # comms mode +2 or 4
-LD Y, $KSH
-MULH DZ, NA           # A = scan L << 1 or 2
-LD Y, $COMPS
-#59/152
-FNEL DZ, HL           # H = kbd data
-LD Y, $KSH
-ORH AZ, ND            # add kbd data to scan
-NOP
-LD HL, $INC$NULL
-#70/160
-LDZ Y, $VMS
-FNH DZ, HLD           # VMC+1
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL            # inst cache -> HL
-#80/168
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#86/172
-
-ADDR 0xB0             #39 - mode 0x1A: store sampled byte
-LD HL, $KBBUFF
-MVHL A, XA            # X = Kb buffer
-LD HL, $IDEN$NULL
-LDZ Y, $KSL
-FNH DZ, HLA           # A = scan low
-#51
-LDP HL, $0x40         # scan low contains 6 bits
-LDN HL, $0x80         # scan low contains 5 bits
-MULH A, NA            # A sign = 1st bit of sample
-LDN PC, $TIMEOUT59    # exit if start bit high
-LD HL, $0x24
-#60
-MULH AZ, ND           # upper 4 or 5 bits -> scan low
-LD Y, $KSH
-MULL DZ, HL           # H = lower 4 or 3 bits
-LD Y, $KSL
-#70
-ORH DZ, NA            # rest of bits -> A
-LD HL, $REVERSE$IDEN
-LDZ Y, $KBWRIDX
-FNFL DZ, Y            # Y = Kb write index
-#80
-FNH A, HLD            # A -> keyboard buffer
-LD HL, $INC$NULL
-LD Y, $KBWRIDX
-FNFH DZ, ND           # Kb write index+1
-LDZ Y, $VMS
-#91
-FNH DZ, HLD           # VMS+1
-LD HL, $0xE8          # HL = -24 (idle timeout)
-LDZ Y, $KIDLE
-MVHL AZ, ND           # -24 -> keyboard idle count
-#101
-LD HL, $0xE8          # -0x18 (redundant by coincidence)
-LD Y, $TMODE
-ADDHL DZ, ND          # 2 -> keyboard mode (idle)
-NOP
-#110
+ORH AZ, ND                # add kbd data to scan
 $EXIT67
 NOP
 $EXIT68
 LD HL, $INC$NULL
+#70,113/122
 LDZ Y, $VMS
-FNH DZ, HLD           # VMC+1
+FNH DZ, HLD               # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+#80,123/130
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#86,129/134
+
+ADDR 0x88                 #39 - mode 0x0E-0x18: keyboard scan H
+LD Y, $COMPS
+FNEH DZ, NA               # A = test number of bits
+LDP HL, $4$KDATA          # 2 bits received
+LDN HL, $2$KDATA          # 1 bits received
+LD Y, $TMODE
+#49/146
+ADDH DZ, ND               # comms mode +2 or 4
+LD Y, $KSH
+MULH DZ, NA               # A = scan L << 1 or 2
+LD Y, $COMPS
+#59/152
+FNEL DZ, HL               # H = kbd data
+LD Y, $KSH
+ORH AZ, ND                # add kbd data to scan
+NOP
+LD HL, $INC$NULL
+#70/160
+LDZ Y, $VMS
+FNH DZ, HLD               # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+#80/168
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#86/172
+
+ADDR 0xB0                 #39 - mode 0x1A: store sampled byte
+LD HL, $KSBUFF
+MVHL A, XA                # X = Kbd scan buffer
+LD HL, $IDEN$NULL
+LDZ Y, $KSL
+FNH DZ, HLA               # A = scan low
+#51
+LDP HL, $0x40             # scan low contains 6 bits
+LDN HL, $0x80             # scan low contains 5 bits
+MULH A, NA                # A sign = 1st bit of sample
+LDN PC, $TIMEOUT59        # exit if start bit high
+LD HL, $0x24
+#60
+MULH AZ, ND               # upper 4 or 5 bits -> scan low
+LD Y, $KSH
+MULL DZ, HL               # H = lower 4 or 3 bits
+LD Y, $KSL
+#70
+ORH DZ, NA                # rest of bits -> A
+LD HL, $REVERSE$IDEN
+LD Y, $KSWRIDX
+FNFL DZ, Y                # Y = Kbd scan write index
+#80
+FNFH A, ND                # A -> keyboard buffer
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $INC$NULL
+#90
+LDZ Y, $KSWRIDX
+FNH DZ, HLD               # Kbd scan write index+1
+LD HL, $2COM$NULL
+LDZ Y, $KTO
+FNH DZ, HLA               # A = -kbd clk timeout
+#100
+LD HL, $IDEN$NULL
+LD Y, $KIDLE
+FNH AZ, HLD               # timeout -> kbd idle count
+LD HL, $INC2$NULL
+LD Y, $TMODE
+#110
+FNFH DZ, ND               # 0x1C -> keyboard mode (decode)
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS+2
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 #121
-FNH DZ, HL            # inst cache -> HL
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+FNH DZ, HL                # inst cache -> HL
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
 #129

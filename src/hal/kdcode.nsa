@@ -1,0 +1,35 @@
+# keyboard decode
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE KDCODE_PG
+
+NOP                   #42
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#50
+LD HL, $0x10
+LD Y, $EREG
+XORHL DZ, ED
+NOP
+NOP
+#60
+LD HL, $0xE6          # -0x1A
+LD Y, $TMODE
+ADDHL DZ, ND          # 2 -> keyboard mode (idle)
+LD HL, $INC$NULL
+#70
+LDZ Y, $VMS
+FNH DZ, HLD           # VMS+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86

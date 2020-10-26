@@ -38,22 +38,31 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #43/39
 
-ADDR 0x28             #32 - mode 0xCx: keyboard jump page
+ADDR 0x28             #32 - mode 0xC2-0xDB: keyboard scan page
 LD PG, $KSCANE_PG
 #34/42
 
-ADDR 0x30             #32 - mode 0x02: transmit start
+ADDR 0x30             #32 - mode 0xDC: scan decode page
+NOP                   # NOP LD HL, $FETCH
+NOP
+NOP                   # NOP LD Y, $INST
+NOP
+MVHL A, NA            # NOP MVHL AZ, ND
+LD PG, $KDCODE_PG
+#42/56
+
+ADDR 0x38             #32 - mode 0x02: transmit start
 LD HL, $0x40
 MULH E, NA            # A sign = CTS
 LDN PC, $NOT_CTS      # jump on not clear to send
 LDZ HL, $INC2$NULL
-#40/56
+#40/64
 FNH DZ, HLD           # 4 -> Tx mode
 LD HL, $0x70
 LD Y, $EREG
 ANDH DZ, ED           # 0 -> Tx (start bit)
 LD PC, $EXIT51
-#51/65
+#51/73
 
 $NOT_CTS              #39
 LD HL, $0xFE
@@ -64,73 +73,74 @@ NOP
 NOP
 $EXIT49
 NOP
-#50/74
+#50/82
 $EXIT50
 NOP
 $EXIT51
+LD HL, $2COM$NULL
+LDZ Y, $KTO
+FNH DZ, HLA               # A = -kbd clk timeout
 LD HL, $IDEN$NULL
-LD Y, $KTO
-FNFH DZ, NA               # A = kbd clk timeout
 LD Y, $KIDLE
-#60/83
+#61/92
 FNH AZ, HLD               # timeout -> kbd idle count
-LD HL, $0x10
+NOP
 NOP
 NOP
 NOP
 NOP
 $EXIT68
 LD HL, $INC$NULL
-#70/92
+#70/100
 LDZ Y, $VMS
 FNH DZ, HLD           # VMC+1
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
-#80/100
+#80/108
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/104
+#86/112
 
 ADDR 0x70             #32 - mode 0x04-0x13: transmit data bit
 LD HL, $TXBUFF
 MVHL A, XA            # X = Tx buffer
 LD HL, $INC2$NULL
-#40/118
+#40/126
 LDZ Y, $TMODE
 FNH DZ, HLD           # mode+2
 LD HL, $REVERSE$IDEN
 LDZ Y, $TXRDIDX
 FNFL DZ, Y            # Y = Tx read index
-#51/127
+#51/135
 FNFH D, NA            # A sign = Tx LSB
 LD HL, $LSR$NULL
 LDP PC, $TX_HIGH      # jump to set Tx
 #TX_LOW
 FNH D, HLD            # Tx byte >> 1
 LD HL, $0x70
-#61/136
+#61/144
 LD Y, $EREG
 ANDH DZ, ED           # Tx reset
 LD PC, $EXIT68
 $TX_HIGH
 FNH D, HLD            # Tx byte >> 1
-#60/143
+#60/151
 LD HL, $0x80
 LD Y, $EREG
 ORH DZ, ED            # Tx set
 NOP
 LD HL, $INC$NULL
-#70/152
+#70/160
 LDZ Y, $VMS
 FNH DZ, HLD           # VMC+1
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
-#80/160
+#80/168
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86/164
+#86/172
 
 ADDR 0xB0             #32 - mode 0x14,0x15: transmit stop
 LD HL, $INC$2COM

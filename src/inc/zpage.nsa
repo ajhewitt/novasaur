@@ -42,14 +42,14 @@ $TONE3L        0xBC
 $TONE3H        0xBD
 
 #HAL
-$AMODE         0xC0
-
-$KTO           0xC2
-$KIDLE         0xC3
-$KSL           0xC4
-$KSH           0xC5
-$KBRDIDX       0xC6
-$KBWRIDX       0xC7
+$KTO           0xC0
+$KIDLE         0xC1
+$KSL           0xC2
+$KSH           0xC3
+$KSRDIDX       0xC4
+$KSWRIDX       0xC5
+$KCRDIDX       0xC6
+$KCWRIDX       0xC7
 $RMODE         0xC8
 $RTO           0xC9
 $RIDLE         0xCA
@@ -58,7 +58,7 @@ $RXWRIDX       0xCC
 $TMODE         0xCD
 $TXRDIDX       0xCE
 $TXWRIDX       0xCF
-
+$AMODE         0xD0
 $PMODE         0xD1
 $PLINE         0xD2
 $FRAME         0xD3
@@ -67,9 +67,9 @@ $COMPS         0xD5
 $VMODE         0xD6
 $VLINE         0xD7
 $VSTART        0xD8
-$ICL           0xD9
-$ICH           0xDA
-$ICSNAP        0xDB
+
+$ICL           0xDA
+$ICH           0xDB
 $T0            0xDC
 $T1            0xDD
 $T2            0xDE
@@ -120,6 +120,7 @@ $PUSHPC_INST   0x38
 $RST2_INST     0xCB
 $JMP_INST      0xC3
 
-$KBBUFF        0x21
-$RXBUFF        0x22
-$TXBUFF        0x23
+$KSBUFF        0x30
+$KCBUFF        0x31
+$RXBUFF        0x32
+$TXBUFF        0x33

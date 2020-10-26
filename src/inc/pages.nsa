@@ -88,14 +88,14 @@ $EI_PG         0xD4
 $DI_PG         0xD5
 $RIM_PG        0xD6
 $SIM_PG        0xD7
-$FETCH1_PG     0xD8 # 0xD8-0xDD: 8080 support
+$FETCH1_PG     0xD8 # 0xD8-0xDC: 8080 support
 $FETCH2_PG     0xD9
 $PREFETCH_PG   0xDA
 $INTR1_PG      0xDB
 $INTR2_PG      0xDC
 $IDLE_PG       0xDD # 43-pc idle VMC
-
-$XPSYNCE_PG    0xDF
+$XPSYNCE_PG    0xDE
+$KDCODE_PG     0xDF
 $ADSRE0_PG     0xE0 # ADSR voice 0
 $ADSRE1_PG     0xE1 # ADSR voice 1
 $ADSRE2_PG     0xE2 # ADSR voice 2

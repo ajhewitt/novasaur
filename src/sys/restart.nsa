@@ -8,10 +8,10 @@ PAGE RESTART
 LD HL, $0x00
 LD Y, $EREG
 MVHL AZ, ED         # LED on
-LD HL, $0x00
+LD HL, $0xC0
 LD Y, $VMODE
 MVHL AZ, ND         # 3 -> video mode
-LD HL, $0x10
+LD HL, $0xB0
 LD Y, $VMS
 MVHL AZ, ND         # 0 -> mode line
 LD HL, $0xFF
@@ -137,7 +137,7 @@ LD Y, $AUDIO
 MVHL AZ, ND
 
 #keyboard
-LD HL, $0xE0
+LD HL, $0x30
 LD Y, $KTO
 MVHL AZ, ND
 

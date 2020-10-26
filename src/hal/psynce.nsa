@@ -102,7 +102,10 @@ LD HL, $0x10
 LD Y, $TMODE
 ORH DZ, ND                # set LSB -> TMODE to stop Tx
 #110
-MVHL A, NA                # NOP LD HL, $FETCH; LD Y, $INST
+NOP                       # NOP LD HL, $FETCH
+NOP
+NOP                       # NOP LD Y, $INST
+NOP
 MVHL A, NA                # NOP MVHL AZ, ND
 LD HL, $XGA?$NULL
 #120
@@ -124,11 +127,11 @@ LDN HL, $0xFB             # -5
 LD Y, $FRAME
 MVHL AZ, ND               # vmode==01xx?-5:-4 -> Frame count
 #150
+NOP
+NOP
 LD HL, $INC$NULL
 LDZ Y, $T0
 FNH DZ, HLD               # T0+1
-NOP
-NOP
 LDN PC, $EXIT160          # return if T0<90
 #159
 LD HL, $0xA6
