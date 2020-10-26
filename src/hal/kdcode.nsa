@@ -4,18 +4,15 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE KDCODE_PG
 
-NOP                   #42
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#50
-LD HL, $0x10
+LD HL, $0x10          #42
 LD Y, $EREG
 XORHL DZ, ED
+#50
+LD HL, $IDEN$NULL
+LDZ Y, $KSCAN
+FNH DZ, HLA          # A = keyboard scan code
+NOP
+NOP
 NOP
 NOP
 #60

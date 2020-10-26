@@ -77,13 +77,13 @@ NOP
 $EXIT50
 NOP
 $EXIT51
-LD HL, $2COM$NULL
-LDZ Y, $KTO
-FNH DZ, HLA               # A = -kbd clk timeout
 LD HL, $IDEN$NULL
+LDZ Y, $KTO
+FNFH DZ, NA               # A = -kbd clk timeout
 LD Y, $KIDLE
-#61/92
+#60/91
 FNH AZ, HLD               # timeout -> kbd idle count
+NOP
 NOP
 NOP
 NOP

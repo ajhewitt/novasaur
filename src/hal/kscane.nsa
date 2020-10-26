@@ -159,20 +159,17 @@ LD Y, $KSWRIDX
 FNFL DZ, Y                # Y = Kbd scan write index
 #80
 FNFH A, ND                # A -> keyboard buffer
-NOP
-NOP
-NOP
-NOP
-NOP
+LD HL, $IDEN$NULL
+LD Y, $KSCAN
+FNH AZ, HLD               # A -> scan cache
+#89
 LD HL, $INC$NULL
-#90
 LDZ Y, $KSWRIDX
 FNH DZ, HLD               # Kbd scan write index+1
-LD HL, $2COM$NULL
-LDZ Y, $KTO
-FNH DZ, HLA               # A = -kbd clk timeout
-#100
 LD HL, $IDEN$NULL
+LDZ Y, $KTO
+#99
+FNFH DZ, NA               # A = kbd clk timeout
 LD Y, $KIDLE
 FNH AZ, HLD               # timeout -> kbd idle count
 LD HL, $INC2$NULL
