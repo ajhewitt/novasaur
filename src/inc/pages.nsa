@@ -6,8 +6,8 @@ $ROM_COPY      0x82
 
 
 
-
-
+$FETCH1_PG     0x86
+$FETCH2_PG     0x87
 $HLT_PG        0x88 # 0x88-0xD7: 8080 instruction set
 $MOVR_PG       0x89
 $MOVM_PG       0x8A
@@ -88,44 +88,43 @@ $EI_PG         0xD4
 $DI_PG         0xD5
 $RIM_PG        0xD6
 $SIM_PG        0xD7
-$FETCH1_PG     0xD8 # 0xD8-0xDC: 8080 support
-$FETCH2_PG     0xD9
-$PREFETCH_PG   0xDA
-$INTR1_PG      0xDB
-$INTR2_PG      0xDC
-$IDLE_PG       0xDD # 43-pc idle VMC
-$XPSYNCE_PG    0xDE
-$KDCODE_PG     0xDF
-$ADSRE0_PG     0xE0 # ADSR voice 0
-$ADSRE1_PG     0xE1 # ADSR voice 1
-$ADSRE2_PG     0xE2 # ADSR voice 2
-$ADSRE3_PG     0xE3 # ADSR voice 3
-$NSYNCE_PG     0xE4 # null sync on execute
-$DASYNCE_PG    0xE5 # delayed audio
-$ASYNCE_PG     0xE6 # audio
-$DTSYNCE_PG    0xE7 # delayed transmit
-$TSYNCE_PG     0xE8 # transmit   ****** DEBUG
-$TESTE_PG      0x00 #            ****** DEBUG
-$KSCANE_PG     0xE9 # keyboard
-$RSYNCE_PG     0xEA # receive
-$DPSYNCE_PG    0xEB # delayed process
-$PSYNCE_PG     0xEC # process
-$NSYNCF1_PG    0xED # sync on fetch1
-$DASYNCF1_PG   0xEE
-$ASYNCF1_PG    0xEF
-$DTSYNCF1_PG   0xF0
-$TSYNCF1_PG    0xF1
-$KSCANF1_PG    0xF2
-$RSYNCF1_PG    0xF3
-$DPSYNCF1_PG   0xF4
-$PSYNCF1_PG    0xF5
-$NSYNCF2_PG    0xF6 # sync on fetch2
-$DASYNCF2_PG   0xF7
-$ASYNCF2_PG    0xF8
-$DTSYNCF2_PG   0xF9
-$TSYNCF2_PG    0xFA
-$KSCANF2_PG    0xFB
-$RSYNCF2_PG    0xFC
-$DPSYNCF2_PG   0xFD
-$PSYNCF2_PG    0xFE
+$PREFETCH_PG   0xD8
+$INTR1_PG      0xD9
+$INTR2_PG      0xDA
+$IDLE_PG       0xDB # 43-pc idle VMC
+$ADSRE0_PG     0xDC # ADSR voice 0
+$ADSRE1_PG     0xDD # ADSR voice 1
+$ADSRE2_PG     0xDE # ADSR voice 2
+$ADSRE3_PG     0xDF # ADSR voice 3
+$NSYNCE_PG     0xE0 # null sync on execute
+$DASYNCE_PG    0xE1 # delayed audio
+$ASYNCE_PG     0xE2 # audio
+$DTSYNCE_PG    0xE3 # delayed transmit
+$TSYNCE_PG     0xE4 # transmit
+$KSCANE_PG     0xE5 # keyboard
+$KDCODE_PG     0xE6
+$RSYNCE_PG     0xE7 # receive
+$DPSYNCE_PG    0xE8 # delayed process
+$PSYNCE_PG     0xE9 # process
+$NSYNCF1_PG    0xEA # sync on fetch1
+$DASYNCF1_PG   0xEB
+$ASYNCF1_PG    0xEC
+$DTSYNCF1_PG   0xED
+$TSYNCF1_PG    0xEE
+$KSCANF1_PG    0xEF
+$KDCODF1_PG    0xF0
+$RSYNCF1_PG    0xF1
+$DPSYNCF1_PG   0xF2
+$PSYNCF1_PG    0xF3
+$NSYNCF2_PG    0xF4 # sync on fetch2
+$DASYNCF2_PG   0xF5
+$ASYNCF2_PG    0xF6
+$DTSYNCF2_PG   0xF7
+$TSYNCF2_PG    0xF8
+$KSCANF2_PG    0xF9
+$KDCODF1_PG    0xFA
+$RSYNCF2_PG    0xFB
+$DPSYNCF2_PG   0xFC
+$PSYNCF2_PG    0xFD
+$XPSYNCE_PG    0xFE
 $BOOT_PG       0xFF # hardware reset

@@ -4,29 +4,211 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE KDCODE_PG
 
-LD HL, $0x10          #42
-LD Y, $EREG
-XORHL DZ, ED
-#50
-LD HL, $IDEN$NULL
-LDZ Y, $KSCAN
-FNH DZ, HLA          # A = keyboard scan code
+#KMODE: 000EBSCA
+#assume H=$IDEN
+LDZ Y, $KSCAN         #34
+FNH DZ, HLA           # A=keyboard scan code
+LDP PC, $SCAN40       # scan code
+LD HL, $LSL$NULL
+#41/7
+FNH A, HLA            # F0->E0,E0->C0,83->07
+LDP PC, $SCAN45       # scan code > 0x7F
+LD HL, $0x40
+MULH A, NA            # E0->80,C0->00
+#49/14
+LDP HL, $0x10         # 0xE0 scan code
+LDN HL, $0x08         # 0xF0 scan code
+LD Y, $KMODE
+ORHL DZ, ND
+LD HL, $INC$NULL
+#60/24
+LD PC, $EXIT62
+#62/26
+
+$SCAN40
+LD HL, $SC2MASK$NULL
+FNCH A, NA            # A=mask update (update on MSB low)
+LDP PC, $MASK47       # update mask
+LD HL, $KCBUFF
+MVHL A, XA            # X=keyboard code buffer
+#52/36
+LD HL, $IDEN$FORKK
+FNFH DZ, NA           # A=keyboard scan code
+LD Y, $KMODE
+FNEL DZ, PC           # fork on keyboard mode (000EBSCA)
+#62/44
+
+$SCAN45
+LD Y, $KMODE
+LDZ HL, $SWAP$NULL
+FNH DZ, HLA           # A=swapped keyboard mode (make on MSB low)
+#51/49
+LDP PC, $MAKE53
+LD HL, $0xE7          # 11100111
+ANDHL DZ, ND          # clear B,E mode bits
+LD HL, $INC$NULL
+#60/58
+LD PC, $EXIT62
+#62/60
+
+$MAKE53
+LD HL, $KCBUFF
+MVHL A, XA            # X=keyboard code buffer
+#52/64
+LD HL, $0x7F          # -0x81
+LD Y, $KSCAN
+ADDHL DZ, NA          # A=keyboard scan code - 0x81
+#60/70
+LD HL, $SCAN0$IDEN
+LD PC, $CONT64
+#64/74
+
+$MASK47
+LD Y, $KMODE
+LDZ HL, $SWAP$NULL
+#51/78
+FNH DZ, HLA           # A=swapped keyboard mode (make on MSB low)
+LD HL, $SC2MASK$1COM
+LD Y, $KSCAN
+LDP PC, $MAKE59       # jump on make
+FNCH DZ, NA           # A=mask bit
+#61/87
+FNFL A, HL            # A=inverse mask
+LD Y, $KMODE
+ANDHL DZ, ND          # reset mask bit
+#70/93
+LD PC, $EXIT72
+#72/95
+
+$MAKE59
+FNCH DZ, HLA          # A=mask bit
+LD Y, $KMODE
+ORHL DZ, ND           # set mask bit
+LD PC, $EXIT70
+#70/103
+
+ADDR 0x68             # DEFAULT62
+LD HL, $SCAN0$IDEN
+LD PC, $CONT66
+#66
+
+ADDR 0x70
+LD HL, $0x80          # SHIFT62
+ANDHL A, NA
+LD HL, $SCAN0$IDEN
+#70
+LD PC, $CONT72
+
+ADDR 0x78             # EXTENDED62
+LD HL, $SCAN1$IDEN
+LD PC, $CONT66
+#66
+
+ADDR 0x80
+LD HL, $0x80          # CONTROL62
+ANDHL A, NA
+LD HL, $SCAN1$IDEN
+#70
+LD PC, $CONT72
+
+ADDR 0x88             # ALT62
+LD HL, $SCAN2$IDEN
+LD PC, $CONT66
+#66
+
+#ADDR 0x90
+
+#ADDR 0x98
+
+ADDR 0xA0
+LD HL, $0x80          # EXTCTRLALT62
+ANDHL A, NA
+LD HL, $SCAN2$IDEN
+#70/166
+FNCH A, NA            # A=ascii
+LDP PC, $EXIT75       # exit if positive
+FNFL A, PG            # load page register
+#77/172
+
+$CONT64
+NOP
+NOP
+$CONT66
 NOP
 NOP
 NOP
 NOP
-#60
+#70/178
+NOP
+NOP
+$CONT72
+LDZ Y, $KCWRIDX
+FNH DZ, Y             # Y=keyboard code write index
+FNCH A, ND            # ascii -> kbd code buffer
+#79/185
+LD HL, $INC$NULL
+LDZ Y, $KCWRIDX
+FNH DZ, HLD
+LD PC, $EXIT87
+#87/192
+
+ADDR 0xC0             # BREAK62
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#70
+$EXIT70
+NOP
+NOP
+$EXIT72
+NOP
+NOP
+NOP
+$EXIT75
+NOP
+NOP
+NOP
+NOP
+NOP
+#80
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+$EXIT87
+NOP
+NOP
+NOP
+#90
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $0xE7          # 11100111
+LD Y, $KMODE
+#99
+ANDHL DZ, ND          # clear B,E mode bits
+LD HL, $INC2$NULL
+$EXIT62
+LDZ Y, $VMS
+FNH DZ, HLD           # VMS+2,+1
+#109,66
 LD HL, $0xE6          # -0x1A
 LD Y, $TMODE
 ADDHL DZ, ND          # 2 -> keyboard mode (idle)
-LD HL, $INC$NULL
-#70
-LDZ Y, $VMS
-FNH DZ, HLD           # VMS+1
 LD HL, $IDEN$NULL
+#119,76
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
-#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#86
+#129,86

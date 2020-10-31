@@ -43,13 +43,8 @@ LD PG, $KSCANE_PG
 #34/42
 
 ADDR 0x30             #32 - mode 0xDC: scan decode page
-NOP                   # NOP LD HL, $FETCH
-NOP
-NOP                   # NOP LD Y, $INST
-NOP
-MVHL A, NA            # NOP MVHL AZ, ND
 LD PG, $KDCODE_PG
-#42/56
+#44/50
 
 ADDR 0x38             #32 - mode 0x02: transmit start
 LD HL, $0x40
@@ -79,7 +74,7 @@ NOP
 $EXIT51
 LD HL, $IDEN$NULL
 LDZ Y, $KTO
-FNFH DZ, NA               # A = -kbd clk timeout
+FNFH DZ, NA               # A = kbd clk timeout
 LD Y, $KIDLE
 #60/91
 FNH AZ, HLD               # timeout -> kbd idle count

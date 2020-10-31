@@ -56,3 +56,7 @@ $RSTVEC    11 # map inst+1 to PCL vector
 
 
 #FNC - Extended
+$SCAN0      0 #lower/upper scan code->ascii
+$SCAN1      1 #extended/control scan code->ascii
+$SCAN2      2 #alt/ext-ctrl-alt scan code->ascii
+$SC2MASK    3 #scan code->kmode mask bit

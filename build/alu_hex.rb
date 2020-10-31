@@ -98,9 +98,9 @@ end
 
 ML2SYNC_PG = [3,7,1,4,6,8,2,4,6,8,2,2,4,6,8,0].freeze
 ML2LEN = [5,5,5,4,4,4,4,4,4,4,4,3,3,3,3,3].freeze
-INST_PG = Array.new(2, [0xDD] * 256).freeze # 8080 inst page decoding
+IDLE_PG = 0xDB
+INST_PG = Array.new(2, [IDLE_PG] * 256).freeze # 8080 inst page decoding
 INST_CC = Array.new(2, [1] * 256).freeze # 8080 inst cycle counts
-IDLE_PG = 0xDD
 # ALU function: VMP (Virtual Machine Page)
 # Instruction - HHHHLLLL, virtual machine state (VMS) - MMMMECCC
 # L) 0ECCLLLL = MMMMECCC $ LLLL - vcpu: E, CC=remaining cycles [0,1,2,3+], LLLL
@@ -113,9 +113,9 @@ def print_vmp(offset, opts = {})
       if opts[:high] # a=HHHH, b=0ECC,0Z00
         d = 16.times.map do |c|
           if b&3 == 0 # end of line - sync page - c=MMMM
-            pg = 0xE4 + ML2SYNC_PG[c]
-            pg += 9 if b&4==4 && a==0 # syncf1
-            pg += 18 if b&4==4 && a==1 # syncf2
+            pg = 0xE0 + ML2SYNC_PG[c]
+            pg += 10 if b&4==4 && a==0 # syncf1
+            pg += 20 if b&4==4 && a==1 # syncf2
             pg # else synce
           else # fetch/exec inst page - c=LLLL
             inst = (a<<4) | c
@@ -497,7 +497,7 @@ print_unary(0xE1, fork_feature)
 # $FORKK: fork on HAL feature
 print_unary(0xE2, fork_feature(true))
 # $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
-print_unary(0xE3, [0xE3]*253 + [0xE2,0xE1,0xE0])
+print_unary(0xE3, [0xDF,0xDE,0xDD,0xDC]*64)
 # $KS01?: &3==0||1 ? 0:-1
 print_unary(0xE4, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C<<2
