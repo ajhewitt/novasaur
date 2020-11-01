@@ -4,7 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE KDCODE_PG
 
-#KMODE: 000EBSCA
+#KMODE: 000EBCAS
 #assume H=$IDEN
 LDZ Y, $KSCAN         #34
 FNH DZ, HLA           # A=keyboard scan code
@@ -35,7 +35,7 @@ MVHL A, XA            # X=keyboard code buffer
 LD HL, $IDEN$FORKK
 FNFH DZ, NA           # A=keyboard scan code
 LD Y, $KMODE
-FNEL DZ, PC           # fork on keyboard mode (000EBSCA)
+FNEL DZ, PC           # fork on keyboard mode (000EBCAS)
 #62/44
 
 $SCAN45
@@ -54,14 +54,14 @@ LD PC, $EXIT62
 $MAKE53
 LD HL, $KCBUFF
 MVHL A, XA            # X=keyboard code buffer
-#52/64
+#59/64
 LD HL, $0x7F          # -0x81
 LD Y, $KSCAN
 ADDHL DZ, NA          # A=keyboard scan code - 0x81
-#60/70
+#67/70
 LD HL, $SCAN0$IDEN
-LD PC, $CONT64
-#64/74
+LD PC, $CONT71
+#71/74
 
 $MASK47
 LD Y, $KMODE
@@ -130,27 +130,25 @@ LDP PC, $EXIT75       # exit if positive
 FNFL A, PG            # load page register
 #77/172
 
-$CONT64
-NOP
-NOP
 $CONT66
 NOP
 NOP
 NOP
 NOP
-#70/178
+#70/176
 NOP
+$CONT71
 NOP
 $CONT72
 LDZ Y, $KCWRIDX
 FNH DZ, Y             # Y=keyboard code write index
 FNCH A, ND            # ascii -> kbd code buffer
-#79/185
+#79/183
 LD HL, $INC$NULL
 LDZ Y, $KCWRIDX
 FNH DZ, HLD
 LD PC, $EXIT87
-#87/192
+#87/190
 
 ADDR 0xC0             # BREAK62
 NOP
