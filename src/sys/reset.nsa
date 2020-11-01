@@ -22,7 +22,7 @@ LD HL, $ZERO?$NULL
 FNH A, HLA
 LDN PC, $MEM_TEST   # try again?
 
-#LD PG, $RESTART         # restart
+LD PG, $CLR_SCRN    # clear screen
 
 # ROM Copy
 LD HL, $0

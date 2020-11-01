@@ -469,10 +469,11 @@ print_com 0xA0
 # 0x0003B000-0x0003BFFF: VID low nibble only
 print_vid 0xB0
 
-
+LOWER = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, '`', nil, nil, nil, nil, nil, nil, 'q', '1', nil, nil, nil, 'z', 's', 'a', 'w', '2', nil, nil, 'c', 'x', 'd', 'e', '4', '3', nil, nil, ' ', 'v', 'f', 't', 'r', '5', nil, nil, 'n', 'b', 'h', 'g', 'y', '6', nil, nil, nil, 'm', 'j', 'u', '7', '8', nil, nil, ',', 'k', 'i', 'o', '0', '9', nil, nil, '.', '/', 'l', ';', 'p', '-', nil, nil, nil, '\'', nil, '[', '=', nil, nil, nil, nil, nil, ']', nil, '\\', nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, '1', nil, '4', '7', nil, nil, nil, '0', '.', '2', '5', '6', '8', nil, nil, nil, '+', '3', '-', '*', '9', nil, nil].freeze
+UPPER = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, '~', nil, nil, nil, nil, nil, nil, 'Q', '!', nil, nil, nil, 'Z', 'S', 'A', 'W', '@', nil, nil, 'C', 'X', 'D', 'E', '$', '#', nil, nil, ' ', 'V', 'F', 'T', 'R', '%', nil, nil, 'N', 'B', 'H', 'G', 'Y', '^', nil, nil, nil, 'M', 'J', 'U', '&', '*', nil, nil, '<', 'K', 'I', 'O', ')', '(', nil, nil, '>', '?', 'L', ':', 'P', '_', nil, nil, nil, '"', nil, '{', '+', nil, nil, nil, nil, nil, '}', nil, '|', nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil].freeze
 # 0x0003C000-0x0003CFFF: FNC low nibble only
 # $SCAN0: default/shift
-print_unary(0xC0, Array.new(0x100, 0))
+print_unary(0xC0, (LOWER+UPPER).map {|c| c ? c.ord : 0})
 # $SCAN1: extended/control
 print_unary(0xC1, Array.new(0x100, 0))
 # $SCAN2: alt/ext-ctrl-alt
@@ -515,7 +516,6 @@ CON=[4, 1, 8, 2].freeze
 UNC=[0xC3, 0xC9, 0xCD].freeze # unconditional instructions
 print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 # $RSTVEC
-
 
 
 # 0x0003E000-0x0003EFFF: FNE low nibble only - HAL related

@@ -3,7 +3,7 @@
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot
 $ROM_COPY      0x82
-
+$CLR_SCRN      0x83
 
 
 $FETCH1_PG     0x86

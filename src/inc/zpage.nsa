@@ -122,7 +122,7 @@ $PUSHPC_INST   0x38
 $RST2_INST     0xCB
 $JMP_INST      0xC3
 
-$KSBUFF        0x30
+$KSBUFF        0x2F
 $KCBUFF        0x31
 $RXBUFF        0x32
 $TXBUFF        0x33

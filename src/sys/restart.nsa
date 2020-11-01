@@ -5,13 +5,13 @@ INCLUDE ../inc/pages.nsa
 PAGE RESTART
 
 # set E-reg
-LD HL, $0x00
+LD HL, $0xC0
 LD Y, $EREG
 MVHL AZ, ED         # LED on
-LD HL, $0xC0
+LD HL, $0xF0
 LD Y, $VMODE
 MVHL AZ, ND         # 3 -> video mode
-LD HL, $0xB0
+LD HL, $0xE0
 LD Y, $VMS
 MVHL AZ, ND         # 0 -> mode line
 LD HL, $0xFF
@@ -140,6 +140,9 @@ MVHL AZ, ND
 LD HL, $0xD8    # -40
 LD Y, $KTO
 MVHL AZ, ND
+LD HL, $0
+LD Y, $KMODE
+MULH AZ, ND
 
 #turn off features
 LD HL, $0x40
