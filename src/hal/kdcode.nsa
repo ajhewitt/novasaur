@@ -118,9 +118,7 @@ LD PC, $CONT66
 
 #ADDR 0x90
 
-#ADDR 0x98
-
-ADDR 0xA0
+ADDR 0x98
 LD HL, $0x80          # EXTCTRLALT62
 ORHL A, NA
 LD HL, $SCAN2$IDEN
@@ -144,11 +142,15 @@ LDZ Y, $KCWRIDX
 FNH DZ, Y             # Y=keyboard code write index
 FNCH A, ND            # ascii -> kbd code buffer
 #79/183
-LD HL, $INC$NULL
+LD HL, $ZERO?$NULL
+FNH A, HLA            # ascii null?
+LDP HL, $IDEN$NULL
+LDN HL, $INC$NULL
 LDZ Y, $KCWRIDX
-FNH DZ, HLD
-LD PC, $EXIT87
-#87/190
+FNH DZ, HLD           # inc kbd wr index if not null
+#90/193
+LD PC, $EXIT92
+#92/195
 
 ADDR 0xC0             # BREAK62
 NOP
@@ -181,13 +183,13 @@ NOP
 NOP
 NOP
 NOP
-$EXIT87
 NOP
 NOP
 NOP
 #90
 NOP
 NOP
+$EXIT92
 NOP
 NOP
 NOP
