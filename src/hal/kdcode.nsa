@@ -139,18 +139,18 @@ $CONT71
 NOP
 $CONT72
 LDZ Y, $KCWRIDX
-FNH DZ, Y             # Y=keyboard code write index
+FNFL DZ, Y            # Y=keyboard code write index
 FNCH A, ND            # ascii -> kbd code buffer
-#79/183
+#80/183
 LD HL, $ZERO?$NULL
 FNH A, HLA            # ascii null?
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL
 LDZ Y, $KCWRIDX
 FNH DZ, HLD           # inc kbd wr index if not null
-#90/193
-LD PC, $EXIT92
-#92/195
+#91/193
+LD PC, $EXIT93
+#93/195
 
 ADDR 0xC0             # BREAK62
 NOP
@@ -189,8 +189,8 @@ NOP
 #90
 NOP
 NOP
-$EXIT92
 NOP
+$EXIT93
 NOP
 NOP
 LD HL, $0xE7          # 11100111

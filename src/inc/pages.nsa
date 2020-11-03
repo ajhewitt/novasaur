@@ -98,7 +98,8 @@ $ADSRE2_PG     0xDE # ADSR voice 2
 $ADSRE3_PG     0xDF # ADSR voice 3
 $NSYNCE_PG     0xE0 # null sync on execute
 $DASYNCE_PG    0xE1 # delayed audio
-$ASYNCE_PG     0xE2 # audio
+$ASYNCE_PG     0x00 # audio
+$TERM_PG       0xE2 #*** test - overide audio thread
 $DTSYNCE_PG    0xE3 # delayed transmit
 $TSYNCE_PG     0xE4 # transmit
 $KSCANE_PG     0xE5 # keyboard
