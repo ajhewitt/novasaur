@@ -110,7 +110,7 @@ FNFL DZ, Y            # Y = Tx read index
 #51/135
 FNFH D, NA            # A sign = Tx LSB
 LD HL, $LSR$NULL
-LDP PC, $TX_HIGH      # jump to set Tx
+LDN PC, $TX_HIGH      # jump to set Tx
 #TX_LOW
 FNH D, HLD            # Tx byte >> 1
 LD HL, $0x70
