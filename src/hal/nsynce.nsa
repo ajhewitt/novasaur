@@ -25,8 +25,11 @@ FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
 COMH DZ, NA           # update comms line state
-LD HL, $RSADJ$NULL
-FNEH AZ, ND           # adjust serial state by -1
+NOP
+NOP
+NOP
+NOP
+NOP
 #30/26
 NOP
 LD HL, $IDEN$NULL

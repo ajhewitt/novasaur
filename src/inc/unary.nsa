@@ -28,7 +28,7 @@ $ADSRPG     3 # FRAME->ADSR Page
 $KS01?      4 # A&3==0||1 ? 0:-1
 $KDATA      5 # A&C<<2
 $TKTOG      6 # 81->C2->98,83->E2->9A
-$RSADJ      7 # serial state -1
+$RXS2M      7 # Rx state to mult/mode
 $XGA?       8 # mode-line>11?: 0-10->-1,else->0
 $ML2ADJ     9 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
 $MASK2MODE 10 # &8==0 ? -1:0

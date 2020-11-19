@@ -128,5 +128,5 @@ $JMP_INST      0xC3
 
 $KSBUFF        0xF0
 $KCBUFF        0xF1
-$RXBUFF        0xF2
+$RXBUFF        0x41
 $TXBUFF        0xF3

@@ -227,9 +227,9 @@ def print_vid(offset)
 end
 
 # ALU function: COM (Comms State Machine)
-# Next comms state = E [ps2clk,ps2rx,cts,rx], comms state SDSSPDPS
-# Serial Data: SD0=rx, SD1=rx if SS==1 (sample when SS goes 1->2)
-# Serial State: SS=(SS+1)%4, SS=0 if SD0!=rx
+# Next comms state = E [ps2clk,ps2rx,cts,rx], comms state SSSDPDPS
+# Serial Data: (RX0,RX-1,RX-2)
+# Serial State: RX0 & RX-1 & RX-2
 # @start: PS=ps2clk
 # PS/2 Data: (PD1=PD0, PD0=ps2rx) if (PS0==1 && ps2clk==0)
 # PS/2 State: PS=(PS+1)%4 if PS0!=ps2clk
@@ -240,16 +240,15 @@ def print_com(offset)
     ps2rx = (a>>2)&1
     rx = a&1
     16.times.map do |b| # serial
-      sd = b>>2
-      ss = b&3
+      sd = (rx<<2) + (b&3)
+      sd += 8 if sd==7
       d = 16.times.map do |c| # ps/2
         pd = c>>2
         ps = c&3
-        [(ss==1 ? rx : sd>>1)*2 + rx,
-         (sd&1)==rx ? (ss+1)%4 : 0,
-         ((ps&1)==1 && ps2clk==0) ? ((pd*2)&3)+ps2rx : pd,
-         (ps&1)==ps2clk ? ps : (ps+1)%4
-        ].join.to_i(4)
+        (sd<<4) + [
+          ((ps&1)==1 && ps2clk==0) ? ((pd*2)&3)+ps2rx : pd,
+          (ps&1)==ps2clk ? ps : (ps+1)%4
+        ].join.to_i(4)                                      # 2-digit quaternary to byte
       end
       print_data([d.size, offset + a, b << 4, 0] + d)
     end
@@ -290,7 +289,7 @@ def fork_feature(keyboard = false)
    [[0x20, 0x30, 0x40, 0x70] * 16,                        # 00:audio
     [0x20, 0x30, 0x50, 0x50, 0x80, 0x80, 0x80, 0x80,
      0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 
-     0x80, 0x80, 0x80, 0x80, 0xA0, 0xA0, 0x20, 0x20,
+     0x80, 0x80, 0x80, 0x80, 0xA0, 0xA0, 0xA0, 0xA0,
      0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20] * 2, # 01:rx
     [0x20, 0xE0, 0x38, 0xE0, 0x70, 0x70, 0x70, 0x70,
      0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 0x70, 
@@ -326,6 +325,34 @@ def fork_intr
       0x28
     else               # fetch
       0x10
+    end
+  end
+end
+
+# Rx state to multiplier/mode
+# state=N765M321
+# 2:NXXY,8:NXYY,4:NYYY,0:NXYX
+# NXYYMYYX:(3 bits)-double
+# NXXYMYXX:(5 bits)-skip
+def rxstate_mulmode
+  256.times.map do |i|
+    mode = case (i>>4)&7
+    when 0 #000
+      0x40 + 8
+    when 1 #001 100
+      0x20 + (i&7==4 ? 4 : 8)
+    when 2 #010 invalid!
+      8
+    when 3 #011 110
+      0x80 + (i&7==6 ? 6 : 8)
+    when 4 #100 001
+      0x80 + (i&7==1 ? 6 : 8)
+    when 5 #101 invalid!
+      8
+    when 6 #110 011
+      0x20 + (i&7==3 ? 4 : 8)
+    else #111
+      0x40 + 8
     end
   end
 end
@@ -545,8 +572,8 @@ print_unary(0xE4, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 print_unary(0xE5, 256.times.map{|i| (i&0xC) << 2})
 # $TKTOG: tx/kbd mode toggle 10xxxxQx->11Q00010, 11QxxxxK->100110QK
 print_unary(0xE6, 256.times.map{|i| i&0x40==0 ? ((i&2)<<4)|0xC2 : ((i&0x20)>>4)|0x98|(i&1)})
-# $RSADJ: serial state -1
-print_unary(0xE7, 256.times.map{|i| (i&0x30).zero? ? i|0x30 : i-0x10})
+# $RXS2M: Rx serial to multiplier/mode
+print_unary(0xE7, rxstate_mulmode)
 # $XGA?: mode-line: 0-10->-1,else->0
 print_unary(0xE8, [0xFF]*0xB0 + [0]*0x50)
 # $ML2ADJ: mode-line to frame count: 0-2->0xE0,else->0xF0
