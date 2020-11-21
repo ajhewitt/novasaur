@@ -120,7 +120,7 @@ LD Y, $TERM_ROW
 MVHL AZ, ND
 
 #turn off features
-LD HL, $0x41
+LD HL, $0x60
 LD Y, $RMODE
 MVHL AZ, ND
 LD HL, $0x80

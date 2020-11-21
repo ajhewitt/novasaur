@@ -104,7 +104,7 @@ FNH DZ, HLD               # adjust T0 every 16/32 T1
 LD PC, $EXIT228
 #228
 
-$EXIT224                  #219 - 5 ticks per hour
+$EXIT219                  #219 - 5 ticks per hour
 NOP
 #220
 NOP
