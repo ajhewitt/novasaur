@@ -7,7 +7,7 @@ PAGE RESTART
 # set E-reg
 LD HL, $0xD0
 LD Y, $EREG
-MVHL AZ, ED         # LED on
+MVHL AZ, ED         # LED off
 LD HL, $0xA0
 LD Y, $VMODE
 MVHL AZ, ND         # 3 -> video mode

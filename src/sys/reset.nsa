@@ -4,8 +4,8 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE RESET
 
-LD HL, $0x10
-MVHL A, EA          # LED off -> E
+LD HL, $0x00
+MVHL A, EA          # LED on -> E
 LD Y, $0x80         # start of zpage
 
 $MEM_TEST
