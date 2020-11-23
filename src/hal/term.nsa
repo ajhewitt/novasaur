@@ -26,86 +26,80 @@ FNFL E, HL            # serial inputs -> H
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
 LD HL, $2COM$NULL
-LDZ Y, $KCWRIDX
-FNH DZ, HL            # HL=-write index
+LDZ Y, $RXWRIDX
+FNH DZ, HL            # HL=-rx write index
 #31
-LD Y, $KCRDIDX
-ADDHL DZ, NA          # A=read-write index
-LDP PC, $EXIT39       # exit if read >= write
-LD HL, $KCBUFF
+LD Y, $RXRDIDX
+ADDHL DZ, NA          # A=rx read-rx write index
+LDN PC, $RX39         # receive byte if rx read < rx write
+LD HL, $2COM$NULL
 #40
+LDZ Y, $KCWRIDX
+FNH DZ, HL            # HL=-kc write index
+LD Y, $KCRDIDX
+ADDHL DZ, NA          # A=kc read-kc write index
+#50
+LDP PC, $EXIT52       # exit if kc read >= kc write
+LD HL, $KCBUFF
 MVHL A, XA
-LDZ HL, $IDEN$NULL
-FNH DZ, Y             # Y=read index
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # kc read index+1
+#61
+LD HL, $IDEN$DEC
+FNFL DZ, Y            # Y=kc read index-1
 FNFH D, NA            # A=char
-#51
 LD Y, $TERM_TEMP
+#71
 FNH AZ, HLD           # A->temp
 LD HL, $0xF8          # HL=-BS
 ADDHL A, NA           # A=char-BS
-#61
 LD HL, $ZERO?$NULL
+#81
 FNH A, HLA            # char==BS?
-LDP PC, $BS67
+LDP PC, $BS85
 LDZ HL, $IDEN$NULL
 FNH DZ, HLA           # A=temp
-#70
+$CONT88
 LD HL, $0xF6          # HL=-CR
+#90
 ADDHL A, NA           # A=char-CR
 LD HL, $ZERO?$NULL
 FNH A, HLA            # char==CR?
-#80
-LDP PC, $CR82
+LDP PC, $CR100
 LD HL, $INC2$NULL
+#101
 LD Y, $TERM_COL
 FNFH DZ, XD           # X=col+2
 LD HL, $IDEN$NULL
-#90
 LD Y, $TERM_TEMP
+#110
 FNFH DZ, NA           # A=char
 LDZ Y, $TERM_ROW
 FNH DZ, Y             # Y=row
-#99
 FNFH A, ND            # A->[X,Y]
+#120
 NOP
-$CONT103
-LD HL, $INC$NULL
-LDZ Y, $KCRDIDX
-FNH DZ, HLD
-#109
+$CONT121
 LD HL, $TXBUFF
 MVHL A, XA
 LD HL, $IDEN$NULL
 LD Y, $TERM_TEMP
-#119
-FNFH DZ, NA
+#131
+FNFH DZ, NA           # A = temp
 LDZ Y, $TXWRIDX
 FNH DZ, Y
-FNH A, HLD
+FNH A, HLD            # A -> tx wr buff
+#140
 LD HL, $INC$NULL
-#130
 LDZ Y, $TXWRIDX
-FNH DZ, HLD
+FNH DZ, HLD           # tx wr buff +1
 LD HL, $0x20
 LDZ Y, $TMODE
-ORHL DZ, ND
-#142
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
 #150
-NOP
-NOP
-NOP
-NOP
+ORHL DZ, ND           # enable tx
 LD HL, $IDEN$3
 LDZ Y, $VMS
-ADDHL DZ, ND          # VMC+2
+ADDHL DZ, ND          # VMC+3
 #162
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
@@ -113,42 +107,74 @@ LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #172
 
-$BS67
+$RX39
+NOP
+#40
+NOP
+MVHL A, NA
+MVHL A, NA
+LD HL, $RXBUFF
+#51
+MVHL A, XA
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # rx read index+1
+LD HL, $IDEN$DEC
+#61
+FNFL DZ, Y            # Y=rx read index-1
+FNFH D, NA            # A=char
+LD Y, $TERM_TEMP
+FNH AZ, HLD           # A->temp
+#71
+LD HL, $0xF3          # HL=-CR
+ADDHL A, NA           # A=char-CR
+LD HL, $ZERO?$NULL
+FNH A, HLA            # char==CR?
+#81
+LDP PC, $EXIT83
+LDZ HL, $IDEN$NULL
+FNH DZ, HLA
+LD PC, $CONT88
+
+$BS85
 LD HL, $IDEN$IDEN
 LD Y, $TERM_COL
-#71
+#89
 FNFL DZ, X
 LDZ Y, $TERM_ROW
 FNH DZ, Y
 MULH A, ND
-#81
+#99
 LD HL, $0xFE
 LD Y, $TERM_COL
 ADDHL DZ, XD
 MVHL A, NA
+#111
 MVHL A, NA
 MVHL A, NA
-LD PC, $CONT103
+#119
+LD PC, $CONT121
 
-$CR82
+$CR100
 LD HL, $INC$NULL
 LD Y, $VSTART
 FNFH DZ, ND           # vstart+1
 LDZ Y, $TERM_ROW
-#91
 FNH DZ, HLD           # row+1
+#111
 LD HL, $0x17
 LD Y, $TERM_COL
 MVHL AZ, ND           # col=23
-#101
-LD PC, $CONT103
+LD PC, $CONT121
 
-$EXIT39
+$EXIT83
+LD HL, $INC$IDEN
+LDZ Y, $VMS
+FNH DZ, HLD           # VMC+1
 NOP
-#40
+#90
+NOP
 MVHL A, NA
-MVHL A, NA
-MVHL A, NA
+$EXIT52
 MVHL A, NA
 MVHL A, NA
 #60
