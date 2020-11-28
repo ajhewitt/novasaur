@@ -60,7 +60,7 @@ MVHL AZ, ND           # 0x40 -> rx mode (off)
 LD PC, $EXIT50
 #50/70
 
-ADDR 0x48             #32 - mode 0x42: rx idle/start, adjust timing
+ADDR 0x48             #32 - mode 0x42: rx idle/start bit, adjust timing
 LDZ Y, $COMPS
 FNH DZ, HL            # H = serial process state (n-1)
 LD Y, $COMLS          # Y = point to serial line state (n)
@@ -125,7 +125,7 @@ FNH DZ, HLD           # rx mode + 2 -> rx mode (bit n+1)
 LD PC, $EXIT68
 #68/168
 
-ADDR 0xA8             #32 - mode 0x58: receive stop
+ADDR 0xA8             #32 - mode 0x58: receive stop bit
 LD HL, $INC$2COM
 LD Y, $RXWRIDX
 FNFH DZ, ND           # A,RxWrIndex+1

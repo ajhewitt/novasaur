@@ -25,6 +25,7 @@ FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
 COMH DZ, ND           # update comms line state
+# end of sync code
 LD HL, $2COM$NULL
 LDZ Y, $RXWRIDX
 FNH DZ, HL            # HL=-rx write index
@@ -94,9 +95,9 @@ LD HL, $INC$NULL
 LDZ Y, $TXWRIDX
 FNH DZ, HLD           # tx wr buff +1
 LD HL, $0x20
-LDZ Y, $TMODE
+LD Y, $TMODE
 #150
-ORHL DZ, ND           # enable tx
+ORHL DZ, ND           # enable -> tx mode
 LD HL, $IDEN$3
 LDZ Y, $VMS
 ADDHL DZ, ND          # VMC+3
@@ -161,9 +162,9 @@ FNFH DZ, ND           # vstart+1
 LDZ Y, $TERM_ROW
 FNH DZ, HLD           # row+1
 #111
-LD HL, $0x17
+LD HL, $0x17          # Scaler=15(0x0F), LCD=23(0x17)
 LD Y, $TERM_COL
-MVHL AZ, ND           # col=23
+MVHL AZ, ND           # start -> term column
 LD PC, $CONT121
 
 $EXIT83

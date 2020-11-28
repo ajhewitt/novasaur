@@ -4,6 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE KSCANE_PG
 
+# assume Y = $TMODE
 LD HL, $KS01?$FORKK
 FNEL DZ, PC               # keyboard fork
 #39/4
