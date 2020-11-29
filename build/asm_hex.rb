@@ -77,110 +77,120 @@ is.reject! { |k, v| k.end_with? " N" }
 vars = {}
 if filename = ARGV.first
   if filename.upcase == 'BOOT'
-    src = []
+    srcs = []
     page = 'BOOT'
     vars[page] = 0xFF
+  elsif File.directory? filename
+    dirname = filename
+    dir = Dir.children filename
+    srcs = dir.map do |f|
+      n = File.expand_path f, filename
+      File.open(n).readlines.map(&:chomp)
+    end
   else
+    dirname = File.dirname filename
     file = File.open filename
-    src = file.readlines.map(&:chomp)
+    srcs = [file.readlines.map(&:chomp)]
     page = nil
   end
 else
   require 'json'
-  abort JSON.pretty_generate is.map {|k,v|
+  puts JSON.pretty_generate is.map {|k,v|
     k += " $BYTE" if k.start_with? 'LD'
     [k, v.map {|x| sprintf("%02x",x)}.join.upcase]
   }.sort_by {|_k,v| v}.to_h
+  exit
 end
 
-addrs = {}
-incs = []
-i = 0
-src.each_with_index do |l, j|
-  a = l.partition('#').first
-  next if a.empty?
+srcs.each do |src|
+  addrs = {}
+  incs = []
+  i = 0
+  src.each_with_index do |l, j|
+    a = l.partition('#').first
+    next if a.empty?
 
-  if a&.start_with? '$'
-    b = a.split
-    k = b.first[1..-1]
-    if b.size > 1
-      vars[k] = b[1]
-    else
-      vars[k] = i
-    end
-  else
-    b = a.partition('$')
-    c = b.first.strip
-    d = c.split
-    next if d.empty?
-
-    case d.first.upcase
-    when 'PAGE'
-      abort("#{j}: PAGE? #{d[1]}") unless page = d[1].strip
-    when 'INCLUDE'
-      incs << d[1]
-    when 'ADDR'
-      i = Integer(d[1].strip) rescue abort("#{j}: ADDR? #{d[1]}")
-    else
-      abort("#{j}: SYNTAX? #{c}") if is[c].nil?
-      addrs[j] = i
-      i += is[c].size
-      i += 1 if b[1] == '$'
-      abort("#{j}: END_OF_PAGE?") if i > 256
-    end
-  end
-end
-
-incs.each do |incname|
-  dir = filename.rpartition '/'
-  incfile = File.open [dir.first, incname].join(dir[1])
-  incfile.readlines.map(&:chomp).each do |l|
-    a = l.partition('#').first.strip
-    b = a.split.first
-    next unless b&.start_with? '$'
-
-    d = a.partition /\s+/
-    e = d.first[1..-1]&.strip
-    vars[e] = d[2].strip if vars[e].nil?
-  end
-end
-
-page = Integer(vars[page]) rescue abort("NO_PAGE? #{page}")
-
-o = Array.new 256, 128
-src.each_with_index do |l, j|
-  a = l.partition(/\$|#/)
-  b = a.first.strip
-  next unless c = is[b]
-
-  i = addrs[j]
-  c.each do |k|
-    o[i] = k
-    i += 1
-  end
-  if a[1] == '$'
-    c = a[2].split.first
-    d = c.split '$'
-    e = d.first
-    if vars[e].nil?
-      v = Integer(e) rescue abort("#{j}:UNDEF? $#{e}")
-    else
-      v = Integer(vars[e]) rescue abort("#{j}: SYNTAX? $#{e}")
-    end
-    if d.size > 1
-      v <<= 4
-      if vars[d[1]].nil?
-        v += Integer(d[1]) rescue abort("#{j}:UNDEF? $#{d[1]}")
+    if a&.start_with? '$'
+      b = a.split
+      k = b.first[1..-1]
+      if b.size > 1
+        vars[k] = b[1]
       else
-        v += Integer(vars[d[1]]) rescue abort("#{j}: SYNTAX? $#{d[1]}")
+        vars[k] = i
+      end
+    else
+      b = a.partition('$')
+      c = b.first.strip
+      d = c.split
+      next if d.empty?
+
+      case d.first.upcase
+      when 'PAGE'
+        abort("#{j}: PAGE? #{d[1]}") unless page = d[1].strip
+      when 'INCLUDE'
+        incs << d[1]
+      when 'ADDR'
+        i = Integer(d[1].strip) rescue abort("#{j}: ADDR? #{d[1]}")
+      else
+        abort("#{j}: SYNTAX? #{c}") if is[c].nil?
+        addrs[j] = i
+        i += is[c].size
+        i += 1 if b[1] == '$'
+        abort("#{j}: END_OF_PAGE?") if i > 256
       end
     end
-    abort("#{j}: OVERFLOW? $#{c}, 0x#{v.to_s(16).upcase}") if v > 255
-    o[i] = v
-    i += 1
   end
+
+  incs.each do |incname|
+    n = File.expand_path incname, dirname
+    incfile = File.open n
+    incfile.readlines.map(&:chomp).each do |l|
+      a = l.partition('#').first.strip
+      b = a.split.first
+      next unless b&.start_with? '$'
+
+      d = a.partition /\s+/
+      e = d.first[1..-1]&.strip
+      vars[e] = d[2].strip if vars[e].nil?
+    end
+  end
+
+  page = Integer(vars[page]) rescue abort("NO_PAGE? #{page}")
+
+  o = Array.new 256, 128
+  src.each_with_index do |l, j|
+    a = l.partition(/\$|#/)
+    b = a.first.strip
+    next unless c = is[b]
+
+    i = addrs[j]
+    c.each do |k|
+      o[i] = k
+      i += 1
+    end
+    if a[1] == '$'
+      c = a[2].split.first
+      d = c.split '$'
+      e = d.first
+      if vars[e].nil?
+        v = Integer(e) rescue abort("#{j}:UNDEF? $#{e}")
+      else
+        v = Integer(vars[e]) rescue abort("#{j}: SYNTAX? $#{e}")
+      end
+      if d.size > 1
+        v <<= 4
+        if vars[d[1]].nil?
+          v += Integer(d[1]) rescue abort("#{j}:UNDEF? $#{d[1]}")
+        else
+          v += Integer(vars[d[1]]) rescue abort("#{j}: SYNTAX? $#{d[1]}")
+        end
+      end
+      abort("#{j}: OVERFLOW? $#{c}, 0x#{v.to_s(16).upcase}") if v > 255
+      o[i] = v
+      i += 1
+    end
+  end
+
+  o[254] = 0x9f if i < 255 # add jump to reset vector
+  o.each_slice(16).each_with_index {|b, i| print_data [b.size, page, i << 4, 0] + b}
 end
-
-o[254] = 0x9f if i < 255 # add jump to reset vector
-
-o.each_slice(16).each_with_index {|b, i| print_data [b.size, page, i << 4, 0] + b}
