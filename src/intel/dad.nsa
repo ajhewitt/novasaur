@@ -19,7 +19,7 @@ AFHL A, NA            # A = carry
 LDP HL, $0
 LDN HL, $1
 LD Y, $HREG
-ADDHL DZ, NA          # H = H+1 if carry
+ADDHL DZ, NA          # A = H+1 if carry
 #32
 LD Y, $TEMP
 AFHL AZ, ND           # temp = carry from H
@@ -31,12 +31,10 @@ FNH DZ, HL            # HL = upper register
 LD Y, $HREG
 #49
 ADDHL DZ, ND          # H = H + upper register
-AFHL A, HLA           # A = carry
-NOP
-NOP
-NOP
-#60
-NOP
+AFHL A, NA            # A = carry
+LD HL, $IDEN$NULL
+FNH A, HL             # HL = carry
+#61
 NOP
 LD Y, $TEMP
 ORHL DZ, NA           # include previous carry

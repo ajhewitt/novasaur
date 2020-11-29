@@ -18,8 +18,8 @@ ADDHL DZ, ND          # Acc = Acc + HL
 #19
 AFHL A, NA            # A = flags
 LD HL, $0x88
-LD Y, $TEMP
-ANDHL AZ, ND          # inital carry flags -> temp
+LD Y, $FREG
+ANDHL AZ, ND          # inital carry -> flags
 #31
 LD HL, $IDEN$IDEN
 LD Y, $LREG
@@ -31,13 +31,14 @@ FNFL M, HL            # HL = [XY]
 LD Y, $AREG
 ADDHL DZ, ND          # Acc = Acc + HL
 #51
-AFHL A, HLA           # HL = flags
-LD Y, $TEMP
-ORHL DZ, NA           # A = flags | initial carry flags
-#61
+AFHL A, NA            # A = flags
 LD HL, $IDEN$NULL
-LDZ Y, $FREG
-FNH AZ, HLD           # A -> flags
+FNH A, HL             # HL = flags
+LD Y, $FREG
+#61
+ORHL DZ, ND           # flags | initial carry -> flags
+NOP
+NOP
 NOP
 NOP
 NOP
@@ -51,6 +52,7 @@ NOP
 NOP
 NOP
 LD HL, $FETCH
+#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #86

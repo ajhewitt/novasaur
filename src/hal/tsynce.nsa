@@ -46,27 +46,28 @@ ADDR 0x30             #32 - mode 0xDC: scan decode page
 LD PG, $KDCODE_PG
 #34/50
 
-ADDR 0x38             #32 - mode 0x82,0xA2: transmit idle/start bit
+ADDR 0x38             #32 - mode 0x82,0xA0: transmit idle/start bit
 LD HL, $0x81
 ANDHL DZ, ND          # reset mode
 LD HL, $4$NULL
 #40/62
 MULH E, NA            # A sign = CTS
 LDN PC, $EXIT45       # jump on not clear to send
-LD HL, $4$NULL
 ADDH DZ, ND           # mode+4
 LD HL, $7$NULL
-#51/72
 LD Y, $EREG
+#51/72
 ANDH DZ, ED           # 0 -> Tx (start bit)
-$EXIT56
+$EXIT54
+NOP
+NOP
+NOP
 LD HL, $IDEN$NULL
 LD Y, $KTO
-#60/80
+#61/81
 FNFH DZ, NA           # A = kbd clk timeout
 LD Y, $KIDLE
 FNH AZ, HLD           # timeout -> kbd idle count
-NOP
 $EXIT68
 LD HL, $INC$NULL
 #70/88
@@ -89,11 +90,10 @@ NOP
 #50/105
 $EXIT50
 NOP
+$EXIT51
 NOP
-NOP
-NOP
-LD PC, $EXIT56
-#56/111
+LD PC, $EXIT54
+#54/109
 
 ADDR 0x70             #32 - mode 0x84-0x93: transmit data bit
 LD HL, $TXBUFF
@@ -174,9 +174,8 @@ FNEH DZ, ND           # tx mode -> keyboard mode
 LD HL, $0xDF
 LD Y, $EREG
 ANDHL DZ, ED          # kbd clock enable
-NOP
-LD PC, $EXIT50
-#51/239
+LD PC, $EXIT51
+#50/238
 
 ADDR 0xF0             #32 - mode 0x98-0x9B: keyboard stop
 LD HL, $0xE8

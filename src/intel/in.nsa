@@ -3,106 +3,111 @@ INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE IN_PG
-$JUMP_ADD      106
-$JUMP_MUL      0xD0
+$JUMP_ADD      74
+$JUMP_MUL      0x90
 
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
 NOP
 NOP
-NOP
 LD HL, $INC$FORK2
 LD Y, $PCL
-#11
+#10
 FNFH DZ, XD           # X,PCL = PCL+1
 FNDL A, PC
-#17
+#16
 
 ADDR 0x40             # PCL = 255, iden PCH, inc PCH
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-#21
+#20
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD HL, $JUMP_MUL
 LD Y, $TEMP
-#30
-MULH AZ, ND           # A*13 -> temp
+#29
+MULH AZ, ND           # A*9 -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-#40
 LDZ Y, $PCH
+#41
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
-#51
+#50
 LD Y, $INST
 FNH AZ, HLD           # A -> inst cache,HL
 LD HL, $JUMP_ADD
 LD Y, $TEMP
-#59
-ADDHL DZ, HLA         # HL = temp+4
+#60
+ADDHL DZ, NA          # A = temp+74
+LD Y, $AREG
+LD HL, $IDEN$IDEN
 LD PG, $INOUT_PG
-#65
+#70
 
 ADDR 0x80             # PCL = 0, inc PCH, iden PCH
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-#21
+#20
 LD HL, $IDEN$NULL
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD HL, $JUMP_MUL
-#30
 LD Y, $TEMP
-MULH AZ, ND           # A*13 -> temp
+#31
+MULH AZ, ND           # A*9 -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
-#39
 FNFH DZ, XD           # X,PCL = PCL+1
+#41
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
-#51
+#50
 LD Y, $INST
 FNH AZ, HLD           # A -> inst cache,HL
 LD HL, $JUMP_ADD
 LD Y, $TEMP
-#59
-ADDHL DZ, HLA         # HL = temp+4
+#60
+ADDHL DZ, NA          # A = temp+74
+LD Y, $AREG
+LD HL, $IDEN$IDEN
 LD PG, $INOUT_PG
-#65
+#70
 
 ADDR 0xC0             # else, iden PCH, iden PCH
 NOP
 NOP
 LD HL, $IDEN$IDEN
-#21
+#20
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD HL, $JUMP_MUL
-#30
 LD Y, $TEMP
-MULH AZ, ND           # A*13 -> temp
+#31
+MULH AZ, ND           # A*9 -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
-#39
 FNFH DZ, XD           # X,PCL = PCL+1
+#41
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
-#51
+#50
 LD Y, $INST
 FNH AZ, HLD           # A -> inst cache,HL
 LD HL, $JUMP_ADD
 LD Y, $TEMP
-#59
-ADDHL DZ, HLA         # HL = temp+4
+#60
+ADDHL DZ, NA          # A = temp+74
+LD Y, $AREG
+LD HL, $IDEN$IDEN
 LD PG, $INOUT_PG
-#65
+#70

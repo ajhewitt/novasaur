@@ -18,37 +18,38 @@ ADDHL DZ, ND          # Acc = Acc + HL
 #19
 AFHL A, NA            # A = flags
 LD HL, $0x88
-LD Y, $TEMP
+LD Y, $FREG
 ANDHL AZ, ND          # save carry flags in temp
 #31
 NOP
 NOP
 NOP
 NOP
+NOP
+NOP
 LD HL, $INC$FORK1
 LD Y, $PCL
-#39
+#41
 FNFH DZ, XD           # X,PCL = PCL+1
 FNDL A, PC
-#45
+#47
 
 ADDR 0x80
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-LD HL, $IDEN$IDEN
 #51
+LD HL, $IDEN$IDEN
 FNH A, Y              # Y = PCH
 FNFL M, HL            # HL = [PC]
 LD Y, $AREG
+#60
 ADDHL DZ, ND          # Acc = Acc + HL
-#62
-AFHL A, HLA           # HL = flags
-LD Y, $TEMP
-ORHL DZ, NA           # A = flags | initial carry flags
-#72
+AFHL A, NA            # A = new flags
 LD HL, $IDEN$NULL
-LDZ Y, $FREG
-FNH AZ, HLD           # A -> flags
+#70
+FNH AZ, HL            # HL = new flags
+LD Y, $FREG
+ORHL DZ, ND           # A = flags | initial carry flags
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
@@ -59,20 +60,19 @@ ADDR 0xC0
 NOP
 NOP
 LD HL, $IDEN$NULL
-LDZ Y, $PCH
 #51
+LDZ Y, $PCH
 FNH A, Y              # Y = PCH
 FNFH M, HLA           # HL = [PC]
 LD Y, $AREG
+#60
 ADDHL DZ, ND          # Acc = Acc + HL
-#62
-AFHL A, HLA           # HL = flags
-LD Y, $TEMP
-ORHL DZ, NA           # A = flags | initial carry flags
-#72
+AFHL A, NA            # A = new flags
 LD HL, $IDEN$NULL
-LDZ Y, $FREG
-FNH AZ, HLD           # A -> flags
+#70
+FNH AZ, HL            # HL = new flags
+LD Y, $FREG
+ORHL DZ, NA           # A = flags | initial carry flags
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit

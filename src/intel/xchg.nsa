@@ -10,27 +10,27 @@ FNH DZ, HLD           # inc state
 # D <-> H
 LD HL, $IDEN$NULL
 LD Y, $DREG
-FNH DZ, HLA           # D = 0011 D-start
+FNH DZ, HL            # HL = D
 #10
-LD Y, $HREG           # H = 1010 H-start
-XORHL DZ, ND          # H = 1001
-LD Y, $DREG           # D = 0011
-XORHL AZ, HLD         # D = 1010 D-end
+LD Y, $HREG
+XORHL DZ, NA          # A = D$H
+LD Y, $DREG
+XORHL AZ, ND          # D$A -> D
 #22
-LD Y, $HREG           # H = 1001
-XORHL DZ, ND          # D = 0011 H-end
+LD Y, $HREG
+MVHL AZ, ND           # D -> H
 # E <-> L
 LD HL, $IDEN$NULL
 #30
 LD Y, $EREG
-FNH DZ, HLA           # E = 0011 E-start
-LD Y, $LREG           # L = 1010 L-start
-XORHL DZ, ND          # L = 1001
+FNH DZ, HL            # HL = E
+LD Y, $LREG
+XORHL DZ, NA          # A = E$L
 #40
-LD Y, $EREG           # E = 0011
-XORHL AZ, HLD         # E = 1010 E-end
-LD Y, $LREG           # L = 1001
-XORHL DZ, ND          # E = 0011 L-end
+LD Y, $EREG
+XORHL AZ, ND          # E$A -> E
+LD Y, $LREG
+MVHL AZ, ND           # E -> L
 #52
 NOP
 NOP
