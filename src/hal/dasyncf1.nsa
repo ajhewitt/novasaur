@@ -1,0 +1,8 @@
+# Delay of audio on fetch1
+INCLUDE ../inc/pages.nsa
+PAGE DASYNCF1_PG
+
+NOP
+NOP
+LD PG, $ASYNCF1_PG
+#4

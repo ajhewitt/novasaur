@@ -1,8 +1,8 @@
-# keyboard decode on execute
+# keyboard decode on fetch1
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE KDCODE_PG
+PAGE KDCODF1_PG
 
 #KMODE: 000EBCAS
 #assume H=$IDEN
@@ -205,10 +205,9 @@ FNH DZ, HLD           # VMS+2,+1
 LD HL, $0xE6          # -0x1A
 LD Y, $TMODE
 ADDHL DZ, ND          # 2 -> keyboard mode (idle)
-LD HL, $IDEN$NULL
-#119,76
-LDZ Y, $INST
-FNH DZ, HL            # inst cache -> HL
+MVHL A, NA            # NOP
+#121,78
+LD HL, $FETCH         # HL = fetch
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
 #129,86

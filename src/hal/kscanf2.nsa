@@ -1,8 +1,8 @@
-# keyboard scan jump page on execute
+# keyboard scan jump page on fetch2
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE KSCANE_PG
+PAGE KSCANF2_PG
 
 # assume Y = $TMODE
 LD HL, $KS01?$FORKK
@@ -100,9 +100,8 @@ LD HL, $INC$NULL
 #70,113/122
 LDZ Y, $VMS
 FNH DZ, HLD               # VMC+1
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL                # inst cache -> HL
+MVHL A, NA                # NOP
+LD HL, $FETCH2            # HL = fetch2
 #80,123/130
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
@@ -128,9 +127,8 @@ LD HL, $INC$NULL
 #70/160
 LDZ Y, $VMS
 FNH DZ, HLD               # VMC+1
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL                # inst cache -> HL
+MVHL A, NA                # NOP
+LD HL, $FETCH2            # HL = fetch2
 #80/168
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
@@ -179,10 +177,9 @@ LD Y, $TMODE
 FNFH DZ, ND               # 0x1C -> keyboard mode (decode)
 LDZ Y, $VMS
 FNH DZ, HLD               # VMS+2
-LD HL, $IDEN$NULL
-LDZ Y, $INST
+MVHL A, NA                # NOP
 #121
-FNH DZ, HL                # inst cache -> HL
+LD HL, $FETCH2            # HL = fetch2
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
 #129

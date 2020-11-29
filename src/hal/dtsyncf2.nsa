@@ -1,0 +1,8 @@
+# Delay of comms tx on fetch2
+INCLUDE ../inc/pages.nsa
+PAGE DTSYNCF2_PG
+
+NOP
+NOP
+LD PG, $TSYNCF2_PG
+#4

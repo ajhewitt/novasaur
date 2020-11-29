@@ -1,8 +1,8 @@
-# H-sync at end of process cycle on execute
+# H-sync at end of process cycle on fetch2
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE PSYNCE_PG
+PAGE PSYNCF2_PG
 
 # PMODE: column in VID used during process cycle
 # VLINE: line(page) in video ram
@@ -56,9 +56,8 @@ NOP
 NOP
 NOP
 NOP
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL                # inst cache -> HL
+MVHL A, NA                # NOP
+LD HL, $FETCH2            # HL = fetch2
 #80
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
@@ -89,8 +88,9 @@ LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
 LDN PC, $EXIT110          # exit if audio off, cycle=1
 #110
-MVHL A, NA                # NOP LD HL, $FETCH; LD Y, $INST
-MVHL A, NA                # NOP MVHL AZ, ND
+LD HL, $FETCH 
+LD Y, $INST
+MVHL AZ, ND               # fetch -> inst cache
 LD HL, $IDEN$ADSRPG
 #120
 LD Y, $FRAME
@@ -102,8 +102,9 @@ LD HL, $0x10
 LD Y, $TMODE
 ORH DZ, ND                # set LSB -> TMODE to stop Tx
 #110
-MVHL A, NA                # NOP LD HL, $FETCH; LD Y, $INST
-MVHL A, NA                # NOP MVHL AZ, ND
+LD HL, $FETCH 
+LD Y, $INST
+MVHL AZ, ND               # fetch -> inst cache
 LD HL, $XGA?$NULL
 #120
 LD Y, $VMS
@@ -154,9 +155,8 @@ FNFH DZ, ND               # T3+1
 LDZ Y, $VMS
 #201
 FNH DZ, HLD               # VMS+1 (cycle=4)
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL                # inst cache -> HL
+MVHL A, NA                # NOP
+LD HL, $FETCH2            # HL = fetch2
 #209
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
@@ -196,9 +196,8 @@ LD HL, $INC$NULL
 LDZ Y, $VMS
 FNH DZ, HLD               # VMS+1 (cycle=4,2)
 $EXIT160                  #160 - 15 ticks per second, cycle=3
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL                # inst cache -> HL
+MVHL A, NA                # NOP
+LD HL, $FETCH2            # HL = fetch2
 #209,166,123
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC

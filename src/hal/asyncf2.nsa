@@ -1,0 +1,175 @@
+# H-sync with audio on fetch2
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE ASYNCF2_PG
+
+# PMODE: column in AV used during process cycle
+# VLINE: line(page) in video ram
+# VMS: [mode_line][e][cycle count]
+#           0,1,2  0  0,1,2,3,4,5
+#         3,4,5,6  1  0,1,2,3,4
+#        7,8,9,10     0,1,2,3,4
+#  11,12,13,14,15     0,1,2,3
+# assume Y = $VMS
+LDZ HL, $INCLINE$NULL
+FNH DZ, HLD           # H=mode_line+1, L=E000
+LD Y, $PMODE
+VIDH DZ, SA           # mode_line, pmode —> S
+#9/7
+LDP HL, $IDEN$IDEN    # sign bit low, don’t inc vline
+LDN HL, $INC$IDEN     # sign bit high, inc vline
+LD Y, $VLINE
+FNFH DZ, VD           # increment? vline —> V
+FNFL E, HL            # serial inputs -> H
+#20/17
+LD Y, $COMLS
+COMH DZ, ND           # update comms line state
+LD HL, $IDEN$FORKJ
+LD Y, $AMODE
+FNEL DZ, PC           # audio mode fork
+#32/27
+
+ADDR 0x20             #32 - 0 voices
+NOP
+FNH A, HL             # NOP
+LD HL, $FETCH2        # HL = fetch2
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43/40
+
+ADDR 0x30             #32 - 1 voice
+LD HL, $IDEN$2
+LD Y, $AUDIO
+MULH DZ, ND
+LD PC, $EXIT41
+#41/56
+
+ADDR 0x40             #32 - 2 voices
+LDZ Y, $NOTE2L
+FNH DZ, HL            # HL = 0xA6
+LD Y, $TONE2L
+ADDHL DZ, ND          # tone L + 0xA6 -> tone L
+#42/71
+AFHL A, NA
+LDP HL, $IDEN$NULL
+LDN HL, $INC$NULL
+LDZ Y, $NOTE2H
+#51/79
+FNH DZ, HL            # HL = 0x0B or 0x0C
+LD Y, $TONE2H
+ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
+LD HL, $IDEN$NULL
+#61/86
+LDZ Y, $WAVE2
+FNH DZ, HL            # HL = amp/wave
+LD Y, $AUDIO
+WAVHL AZ, ND          # synth value -> audio
+#71/93
+NOP
+NOP
+NOP
+NOP
+LD HL, $IDEN$3
+LD PC, $EXIT79
+#79/101
+
+ADDR 0x70             #32 - 3 voices
+LDZ Y, $NOTE3L
+FNH DZ, HL            # HL = 0xA6
+LD Y, $TONE3L
+ADDHL DZ, ND          # tone L + 0xA6 -> tone L
+#42
+AFHL A, NA
+LDP HL, $IDEN$NULL
+LDN HL, $INC$NULL
+LDZ Y, $NOTE3H
+#51
+FNH DZ, HL            # HL = 0x0B or 0x0C
+LD Y, $TONE3H
+ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
+LD HL, $IDEN$NULL
+#61
+LDZ Y, $WAVE3
+FNH DZ, HL            # HL = amp/wave
+LD Y, $AUDIO
+WAVHL AZ, ND          # synth value -> audio
+#71
+LD HL, $IDEN$NULL
+LDZ Y, $NOTE2L
+FNH DZ, HL            # HL = 0xA6
+LD Y, $TONE2L
+#79
+ADDHL DZ, ND          # tone L + 0xA6 -> tone L
+AFHL A, NA
+LDP HL, $IDEN$NULL
+LDN HL, $INC$NULL
+#90
+LDZ Y, $NOTE2H
+FNH DZ, HL            # HL = 0x0B or 0x0C
+LD Y, $TONE2H
+ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
+#100
+LD HL, $IDEN$NULL
+LDZ Y, $WAVE2
+FNH DZ, HL            # HL = amp/wave
+LD Y, $AUDIO
+WAVHL A, NA           # A = synth value
+#112
+LD HL, $IDEN$NULL
+FNH A, HL             # HL = synth value
+ADDHL DZ, ND          # audio + HL -> audio
+#120
+LD HL, $IDEN$4
+$EXIT79               #79 + 215-122=172
+NOP
+NOP
+NOP
+NOP
+NOP
+$EXIT41               #41 + 215-127=129
+LD Y, $VMS
+#129
+ADDHL DZ, ND
+LDZ Y, $NOTE1L
+FNH DZ, HL            # HL = 0xA6
+LD Y, $TONE1L
+#139
+ADDHL DZ, ND          # tone L + 0xA6 -> tone L
+AFHL A, NA
+LDP HL, $IDEN$NULL
+LDN HL, $INC$NULL
+#150
+LDZ Y, $NOTE1H
+FNH DZ, HL            # HL = 0x0B or 0x0C
+LD Y, $TONE1H
+ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
+#160
+LD HL, $IDEN$NULL
+LDZ Y, $WAVE1
+FNH DZ, HL            # HL = amp/wave
+LD Y, $AUDIO
+WAVHL A, NA           # A = synth value
+#172
+LD HL, $IDEN$NULL
+FNH A, HL             # HL = synth value
+ADDHL DZ, ND          # audio + HL -> audio
+#180
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $WAVE0
+FNH DZ, HL            # HL = amp/noise odd or even
+LD Y, $PLINE
+#189
+WAVHL DZ, NA          # A = noise value
+LD HL, $IDEN$NULL
+FNH A, HL
+LD Y, $AUDIO
+#199
+ADDHL DZ, ND          # audio + HL -> audio
+MVHL A, NA            # NOP
+LD HL, $FETCH2        # HL = fetch2
+#209
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#215

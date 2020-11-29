@@ -1,0 +1,186 @@
+# H-sync with comms tx on fetch1
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE TSYNCF1_PG
+
+# PMODE: column in AV used during process cycle
+# VLINE: line(page) in video ram
+# VMS: [mode_line][e][cycle count]
+#           0,1,2  0  0,1,2,3,4,5
+#         3,4,5,6  1  0,1,2,3,4
+#        7,8,9,10     0,1,2,3,4
+#  11,12,13,14,15     0,1,2,3
+# assume Y = $VMS
+LDZ HL, $INCLINE$NULL
+FNH DZ, HLD           # H=mode_line+1, L=E000
+LD Y, $PMODE
+VIDH DZ, SA           # mode_line, pmode —> S
+#9/7
+LDP HL, $IDEN$IDEN    # sign bit low, don’t inc vline
+LDN HL, $INC$IDEN     # sign bit high, inc vline
+LD Y, $VLINE
+FNFH DZ, VD           # increment? vline —> V
+FNFL E, HL            # serial inputs -> H
+#20/17
+LD Y, $COMLS
+COMH DZ, ND           # update comms line state
+LD HL, $IDEN$FORKJ
+LD Y, $TMODE
+FNEL DZ, PC           # mode fork
+#32/27
+
+ADDR 0x20             #32 - mode 0x80: no comms
+NOP
+FNH A, HL             # NOP
+LD HL, $FETCH         # HL = fetch
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43/39
+
+ADDR 0x28             #32 - mode 0xC2-0xDB: keyboard scan page
+LD PG, $KSCANF1_PG
+#34/42
+
+ADDR 0x30             #32 - mode 0xDC: scan decode page
+LD PG, $KDCODF1_PG
+#34/50
+
+ADDR 0x38             #32 - mode 0x82,0xA0: transmit idle/start bit
+LD HL, $0x81
+ANDHL DZ, ND          # reset mode
+LD HL, $4$NULL
+#40/62
+MULH E, NA            # A sign = CTS
+LDN PC, $EXIT45       # jump on not clear to send
+ADDH DZ, ND           # mode+4
+LD HL, $7$NULL
+LD Y, $EREG
+#51/72
+ANDH DZ, ED           # 0 -> Tx (start bit)
+$EXIT54
+NOP
+NOP
+NOP
+LD HL, $IDEN$NULL
+LD Y, $KTO
+#61/81
+FNFH DZ, NA           # A = kbd clk timeout
+LD Y, $KIDLE
+FNH AZ, HLD           # timeout -> kbd idle count
+$EXIT68
+LD HL, $INC$NULL
+#70/88
+LDZ Y, $VMS
+FNH DZ, HLD           # VMC+1
+MVHL A, NA            # NOP
+LD HL, $FETCH         # HL = fetch
+#80/96
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/100
+
+$EXIT45
+NOP
+NOP
+NOP
+NOP
+NOP
+#50/105
+$EXIT50
+NOP
+$EXIT51
+NOP
+LD PC, $EXIT54
+#54/109
+
+ADDR 0x70             #32 - mode 0x84-0x93: transmit data bit
+LD HL, $TXBUFF
+MVHL A, XA            # X = Tx buffer
+LD HL, $INC2$NULL
+#40/126
+LDZ Y, $TMODE
+FNH DZ, HLD           # mode+2
+LD HL, $REVERSE$IDEN
+LDZ Y, $TXRDIDX
+FNFL DZ, Y            # Y = Tx read index
+#51/135
+FNFH D, NA            # A sign = Tx LSB
+LD HL, $LSR$NULL
+LDN PC, $TX_HIGH      # jump to set Tx
+#TX_LOW
+FNH D, HLD            # Tx byte >> 1
+LD HL, $7$NULL
+#61/144
+LD Y, $EREG
+ANDH DZ, ED           # Tx reset
+LD PC, $EXIT68
+$TX_HIGH
+FNH D, HLD            # Tx byte >> 1
+#60/151
+LD HL, $8$NULL
+LD Y, $EREG
+ORH DZ, ED            # Tx set
+NOP
+LD HL, $INC$NULL
+#70/160
+LDZ Y, $VMS
+FNH DZ, HLD           # VMC+1
+MVHL A, NA            # NOP
+LD HL, $FETCH         # HL = fetch
+#80/168
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/172
+
+ADDR 0xB0             #32 - mode 0x94,0x95: transmit stop bit
+LD HL, $INC$2COM
+LD Y, $VMS
+FNFH DZ, ND           # VMS+1
+LD Y, $TXRDIDX
+#41/184
+FNFH DZ, ND           # A,TxRdIndex+1
+LD Y, $TXWRIDX
+FNFL DZ, HL           # HL = -TxWrIndex
+#49/190
+ADDHL A, NA           # A = TxRdIndex - TxWrIndex
+LDZ HL, $ZERO?$NULL
+FNH A, HLA            # A = 0 if TxRdIndex == TxWrIndex
+LDP HL, $0xEC         # -0x14
+LDN HL, $0xEE         # -0x12
+#60/199
+LD Y, $TMODE
+ADDHL DZ, ND          # 0,2 -> mode
+LD HL, $8$NULL
+LD Y, $EREG
+#70/207
+ORH DZ, ED            # 1 -> Tx (stop bit)
+NOP
+MVHL A, NA            # NOP
+LD HL, $FETCH         # HL = fetch
+#80/215
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/219
+
+ADDR 0xE0             #32 - mode 0x81,0x83: keyboard start
+LD HL, $TKTOG$NULL
+LD Y, $TMODE
+FNEH DZ, ND           # tx mode -> keyboard mode
+#39/230
+LD HL, $0xDF
+LD Y, $EREG
+ANDHL DZ, ED          # kbd clock enable
+LD PC, $EXIT51
+#50/238
+
+ADDR 0xF0             #32 - mode 0x98-0x9B: keyboard stop
+LD HL, $0xE8
+LD Y, $TMODE
+ADDHL DZ, ND          # mode-0x18 (0-3)
+#40/246
+LD HL, $0x20
+LD Y, $EREG
+ORHL DZ, ED           # kbd clock disable
+LD PC, $EXIT50
+#51/254

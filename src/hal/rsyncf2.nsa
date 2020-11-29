@@ -1,0 +1,194 @@
+# H-sync with comms rx on fetch2
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE RSYNCF2_PG
+
+# PMODE: column in AV used during process cycle
+# VLINE: line(page) in video ram
+# VMS: [mode_line][e][cycle count]
+#           0,1,2  0  0,1,2,3,4,5
+#         3,4,5,6  1  0,1,2,3,4
+#        7,8,9,10     0,1,2,3,4
+#  11,12,13,14,15     0,1,2,3
+# assume Y = $VMS
+LDZ HL, $INCLINE$NULL
+FNH DZ, HLD           # H=mode_line+1, L=E000
+LD Y, $PMODE
+VIDH DZ, SA           # mode_line, pmode —> S
+#9/7
+LDP HL, $IDEN$IDEN    # sign bit low, don’t inc vline
+LDN HL, $INC$IDEN     # sign bit high, inc vline
+LD Y, $VLINE
+FNFH DZ, VD           # increment? vline —> V
+FNFL E, HL            # serial inputs -> H
+#20/17
+LD Y, $COMLS
+COMH DZ, ND           # update comms line state
+LD HL, $IDEN$FORKJ
+LD Y, $RMODE
+FNEL DZ, PC           # comms  mode fork
+#32/27
+
+ADDR 0x20             # mode 0x40: receive off
+NOP
+FNH A, HL             # NOP
+LD HL, $FETCH2        # HL = fetch2
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43/39
+
+ADDR 0x28             #32 - mode 0x60: rx conn open
+LD HL, $0xEF
+LD Y, $EREG
+ANDHL DZ, ED          # 0 -> RTS (assert)
+#40/46
+LD HL, $0x42
+LD Y, $RMODE
+MVHL AZ, ND           # 0x42 -> rx mode (idle)
+LD PC, $EXIT50
+#50/54
+
+ADDR 0x38             #32 - mode 0x43: rx conn close
+LD HL, $0x10
+LD Y, $EREG
+ORHL DZ, ED           # 1 -> RTS (deassert)
+#40/62
+LD HL, $0x40
+LD Y, $RMODE
+MVHL AZ, ND           # 0x40 -> rx mode (off)
+LD PC, $EXIT50
+#50/70
+
+ADDR 0x48             #32 - mode 0x42: rx idle/start bit, adjust timing
+LDZ Y, $COMPS
+FNH DZ, HL            # H = serial process state (n-1)
+LD Y, $COMLS          # Y = point to serial line state (n)
+MVH DZ, NA            # A = [n, n-1]
+#41/79
+LDN PC, $EXIT43       # exit on stop bit
+LD HL, $RXS2M$NULL
+LD Y, $RMULT
+FNEH AZ, ND           # serial state -> [mult,mode] -> serial multiplier
+LD HL, $SWAP$NULL
+#51/89
+FNH A, HL             # H = mode
+LD Y, $RMODE
+ADDH DZ, ND           # rx mode + H -> rx mode (skip, double, bit 0)
+LD PC, $EXIT60
+#60/96
+
+ADDR 0x60             #32 - mode 0x44: skip data bit
+LD HL, $4$NULL
+LD Y, $RMODE
+ADDH DZ, ND           # rx mode + 4 -> rx mode (bit 0)
+LD PC, $EXIT41
+#41/88
+
+ADDR 0x68             #32 - mode 0x46: receive double bits
+LD HL, $RXBUFF
+MVHL A, XA            # X = Rx buffer
+LD HL, $LSL$NULL
+#40/110
+LDZ Y, $COMLS         # line state = SCABXXXX
+FNH DZ, HLA           # A = CABXXXX0
+LD HL, $IDEN$NULL
+LDZ Y, $RXWRIDX
+FNH D, Y              # Y = Rx write index
+#50/119
+FNH A, HLD            # CABXXXX0 -> Rx data
+LD HL, $6$NULL
+LDZ Y, $RMODE
+ADDH DZ, ND           # rx mode + 6 -> rx mode (bit 2)
+LD PC, $EXIT61
+#61/128
+
+ADDR 0x80             #32 - mode 0x48-0x57: receive data bit
+LD HL, $RXBUFF
+MVHL A, XA            # X = Rx buffer
+LD HL, $IDEN$NULL
+#40/134
+LDZ Y, $RMULT
+FNH DZ, HL            # H = serial multiplier
+LD Y, $COMLS
+MULH DZ, NA           # A sign = Rx data bit
+#49/141
+LDP HL, $LSR$IDEN     # shift right, reset MSB
+LDN HL, $NSR$IDEN     # shift right, set MSB
+LD Y, $RXWRIDX
+FNFL DZ, Y            # Y = Rx write index
+FNFH D, ND            # Rx data shift right, set/reset MSB
+#60/151
+LD HL, $INC2$NULL
+LDZ Y, $RMODE
+FNH DZ, HLD           # rx mode + 2 -> rx mode (bit n+1)
+LD PC, $EXIT68
+#68/168
+
+ADDR 0xA8             #32 - mode 0x58: receive stop bit
+LD HL, $INC$2COM
+LD Y, $RXWRIDX
+FNFH DZ, ND           # A,RxWrIndex+1
+LD Y, $RXRDIDX
+#41/176
+FNFL DZ, HL           # HL = -RxRdIndex
+ADDHL A, NA           # A = RxWrIndex - RxRdIndex
+LD HL, $UNDER?$NULL
+#50/182
+FNH A, HLA            # A = -1 if RxWrIndex == RxRdIndex-1
+LDP HL, $0xEA         # HL = -0x16 (idle: 0x42 -> rx mode)
+LDN HL, $0xEB         # HL = -0x15 (close: 0x43 -> rx mode)
+LD Y, $RMODE
+ADDHL DZ, ND          # idle or close -> rx mode
+#61/191
+LD PC, $EXIT63
+#63/193
+
+$EXIT41
+NOP
+NOP
+$EXIT43
+NOP
+NOP
+NOP
+NOP
+NOP
+$EXIT48
+NOP
+NOP
+#50/202
+$EXIT50
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#60/212
+$EXIT60
+NOP
+$EXIT61
+NOP
+NOP
+$EXIT63
+NOP
+NOP
+NOP
+NOP
+NOP
+$EXIT68
+LD HL, $INC$NULL
+#70/222
+LDZ Y, $VMS
+FNH DZ, HLD           # VMC+1
+$EXIT74
+MVHL A, NA            # NOP
+LD HL, $FETCH2        # HL = fetch2
+#80/230
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86/234

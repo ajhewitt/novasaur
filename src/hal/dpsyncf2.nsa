@@ -1,0 +1,8 @@
+# Delay at end of process cycle on fetch2
+INCLUDE ../inc/pages.nsa
+PAGE DPSYNCF2_PG
+
+NOP
+NOP
+LD PG, $PSYNCF2_PG
+#4
