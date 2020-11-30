@@ -85,11 +85,11 @@ NOP
 NOP
 NOP
 NOP
+$EXIT49
 NOP
 #50/105
 $EXIT50
 NOP
-$EXIT51
 NOP
 LD PC, $EXIT54
 #54/109
@@ -171,8 +171,8 @@ FNEH DZ, ND           # tx mode -> keyboard mode
 LD HL, $0xDF
 LD Y, $EREG
 ANDHL DZ, ED          # kbd clock enable
-LD PC, $EXIT51
-#50/238
+LD PC, $EXIT49
+#49/238
 
 ADDR 0xF0             #32 - mode 0x98-0x9B: keyboard stop
 LD HL, $0xE8
@@ -183,4 +183,4 @@ LD HL, $0x20
 LD Y, $EREG
 ORHL DZ, ED           # kbd clock disable
 LD PC, $EXIT50
-#51/254
+#50/254

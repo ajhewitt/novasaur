@@ -88,6 +88,7 @@ LD HL, $DEC$NULL
 LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
 LDN PC, $EXIT110          # exit if audio off, cycle=1
+NOP
 #110
 MVHL A, NA                # NOP LD HL, $FETCH; LD Y, $INST
 MVHL A, NA                # NOP MVHL AZ, ND
