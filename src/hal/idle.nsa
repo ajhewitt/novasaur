@@ -7,41 +7,20 @@ PAGE IDLE_PG
 # assumes Y=$VMS
 LDZ Y, $INST
 MVHL AZ, ND           # HL -> inst cache
-LD HL, $INC$FORK1
-LD Y, $VMS
+LD HL, $INC$NULL
+LDZ Y, $VMS
 #10
-FNFH DZ, ND           # VMC+1
-LD Y, $ICL
-FNFH DZ, ND           # ICL+1
-FNDL A, PC            # fork on ICL
-#21
-
-ADDR 0x80             # ICL = 0
+FNH DZ, HLD           # VMC+1
+LD HL, $INC$NULL
+LDZ Y, $ICL
+FNH DZ, HLD           # ICL+1
+LD HL, $OVER?$NULL
+#20
+FNH A, HLA            # ICL overflow?
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
 LDZ Y, $ICH
-FNH DZ, HLD           # ICH+1      *** inc ICH ***
-NOP
-NOP
-NOP
-NOP
-NOP
-#30
-NOP
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL            # inst cache -> HL
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#43
-
-ADDR 0xC0             # ICL > 0
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+FNH DZ, HLD           # ICH+1 if ICL overflowed
 NOP
 #30
 NOP

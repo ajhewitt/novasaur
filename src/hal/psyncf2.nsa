@@ -89,9 +89,9 @@ FNH DZ, HLA               # negative if AMODE = 0
 LDN PC, $EXIT110          # exit if audio off, cycle=1
 NOP
 #110
-LD HL, $FETCH 
+LD HL, $FETCH2
 LD Y, $INST
-MVHL AZ, ND               # fetch -> inst cache
+MVHL AZ, ND               # fetch2 -> inst cache
 LD HL, $IDEN$ADSRPG
 #120
 LD Y, $FRAME
@@ -103,9 +103,9 @@ LD HL, $0x10
 LD Y, $TMODE
 ORH DZ, ND                # set LSB -> TMODE to stop Tx
 #110
-LD HL, $FETCH 
+LD HL, $FETCH2
 LD Y, $INST
-MVHL AZ, ND               # fetch -> inst cache
+MVHL AZ, ND               # fetch2 -> inst cache
 LD HL, $XGA?$NULL
 #120
 LD Y, $VMS

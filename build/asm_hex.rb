@@ -77,7 +77,7 @@ is.reject! { |k, v| k.end_with? " N" }
 vars = {}
 if filename = ARGV.first
   if filename.upcase == 'BOOT'
-    srcs = []
+    srcs = [[]]
     page = 'BOOT'
     vars[page] = 0xFF
   elsif File.directory? filename

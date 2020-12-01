@@ -8,7 +8,7 @@
 echo "Assemble Firmware"
 echo ":020000040000FA" > build/output/rom.hex
 
-for f in src/sys src/hal src/dev src/intel
+for f in src/sys src/hal src/intel src/dev
 do
   echo $f
   build/asm_hex.rb $f >> build/output/rom.hex

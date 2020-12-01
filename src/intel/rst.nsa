@@ -1,4 +1,4 @@
-# Restart - inc PC, load temp with vector, rewrite instruction
+# Restart - inc PC, vector->temp, RST2->inst
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

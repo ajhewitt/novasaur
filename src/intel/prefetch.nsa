@@ -4,35 +4,38 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE PREFETCH_PG
 
-LD HL, $INC$FORK1
+LD HL, $INC$FORK1  #55
 LD Y, $PCL
+#59
 FNFH DZ, XD        # X,PCL = PCL+1
 FNDL A, PC         # fork on PCL
-#10
+#65
 
 ADDR 0x80          # PCL = 0
 LDZ Y, $PCH
 FNH DZ, HLD        # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
+#71
 FNH A, Y           # Y = PCH
 FNFH M, NA         # A = [PC]
-#21
 LD Y, $INST
 FNH AZ, HLD        # A -> inst cache,HL
+#80
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
-#31
+#86
 
 ADDR 0xC0         # else
 NOP
 NOP
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
+#71
 FNH DZ, Y          # Y = PCH
 FNFH M, NA         # A = [PC]
-#21
 LD Y, $INST
 FNH AZ, HLD        # HL -> inst cache
+#80
 LD Y, $VMS         # set Y = $VMS on exit
 VMPHL DZ, PGA      # jump to next VMC
-#31
+#86

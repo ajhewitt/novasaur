@@ -5,18 +5,18 @@ INCLUDE ../inc/pages.nsa
 PAGE KSCANF1_PG
 
 # assume Y = $TMODE
-LD HL, $KS01?$FORKK
+LD HL, $KS01?$FORKK       #34
 FNEL DZ, PC               # keyboard fork
 #39/4
 
 ADDR 0x08                 #39 - mode 0x02: keyboard idle
 LD Y, $COMPS
 FNEH DZ, NA
-LDN PC, $CLKSTART1        # KS=2|3, clock started last cycle
+LDN PC, $CLKSTART46       # KS=2|3, clock started last cycle
 LD Y, $COMLS
 FNEH DZ, NA
 #50/18
-LDN PC, $CLKSTART2        # KS=2|3, clock started this cycle
+LDN PC, $CLKSTART52       # KS=2|3, clock started this cycle
 LD HL, $INC$NULL
 LDZ Y, $KIDLE
 FNH DZ, HLD               # keyboard idle+1
@@ -28,7 +28,7 @@ MVH AZ, ND                # XXXX1100 -> scan H
 LD PC, $EXIT67
 #67/35
 
-$CLKSTART1                #46 - clock start
+$CLKSTART46               #46 - clock start
 LD HL, $INC2$NULL
 LDZ Y, $TMODE
 #50/39
@@ -56,10 +56,10 @@ NOP
 NOP
 NOP
 #80/66
-LD PC, $SCAN_LOW          # process first sample
+LD PC, $SCAN_LOW82        # process first sample
 #82/68
 
-$CLKSTART2                #52 - clock start
+$CLKSTART52               #52 - clock start
 LD HL, $INC2$NULL
 LDZ Y, $TMODE
 FNH DZ, HLD               # 4 -> keyboard mode
@@ -78,7 +78,7 @@ LD PC, $EXIT68
 #68/89
 
 ADDR 0x60                 #39,82 - mode 0x04-0x0C: keyboard scan L
-$SCAN_LOW
+$SCAN_LOW82
 LD Y, $COMPS
 FNEH DZ, NA               # A = test number of bits
 LDP HL, $4$KDATA          # 2 bits received

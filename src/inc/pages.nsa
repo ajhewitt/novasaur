@@ -1,4 +1,9 @@
 # All the pages
+$IDLE_PG       0x00 # 43-pc idle VMC
+$EXT1_PG       0x01
+$EXT2_PG       0x02
+$EXT3_PG       0x03
+
 # 0x00-0x7F: extended CPU instructions
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot
@@ -8,7 +13,7 @@ $CLR_SCRN      0x83
 
 $FETCH1_PG     0x86
 $FETCH2_PG     0x87
-$HLT_PG        0x88 # 0x88-0xD7: 8080 instruction set
+$HLT_PG        0x88 # 0x88-0xDB: 8080 instruction set
 $MOVR_PG       0x89
 $MOVM_PG       0x8A
 $MVIR_PG       0x8B
@@ -79,19 +84,19 @@ $PUSH_PG       0xCB
 $PUSHA_PG      0xCC
 $POP_PG        0xCD
 $POPA_PG       0xCE
-$XTHL_PG       0xCF
-$SPHL_PG       0xD0
-$IN_PG         0xD1
-$OUT_PG        0xD2
-$INOUT_PG      0xD3
-$EI_PG         0xD4
-$DI_PG         0xD5
-$RIM_PG        0xD6
-$SIM_PG        0xD7
-$PREFETCH_PG   0xD8
-$INTR1_PG      0xD9
-$INTR2_PG      0xDA
-$IDLE_PG       0xDB # 43-pc idle VMC
+$PREFETCH_PG   0xCF
+$XTHL_PG       0xD0
+$SPHL_PG       0xD1
+$IN_PG         0xD2
+$OUT_PG        0xD3
+$INOUT_PG      0xD4
+$EI_PG         0xD5
+$DI_PG         0xD6
+$RIM_PG        0xD7
+$SIM_PG        0xD8
+$DSUB_PG       0xD9
+$INTR1_PG      0xDA
+$INTR2_PG      0xDB
 $ADSRE0_PG     0xDC # ADSR voice 0
 $ADSRE1_PG     0xDD # ADSR voice 1
 $ADSRE2_PG     0xDE # ADSR voice 2
