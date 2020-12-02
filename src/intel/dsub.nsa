@@ -1,0 +1,147 @@
+# DSUB: HL=HL-BC (hidden instruction)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE DSUB_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD           # inc state
+LD HL, $2COM$NULL
+LDZ Y, $CREG
+FNH DZ, HL            # HL = -C
+#10/8
+LD Y, $LREG
+ADDHL DZ, ND          # L-C -> L
+AFHL A, NA            # A = flags
+#20/14
+LD HL, $SWCARRY$FORK2
+LD Y, $TEMP
+FNDH AZ, ND           # A swapped -> temp
+LDP PC, $NO_BO29
+LD Y, $HREG
+#30/24
+FNDL DZ, PC
+#33/26
+
+$NO_BO29
+LD HL, $2COM$NULL
+LDZ Y, $BREG
+FNH DZ, HL            # HL = -B
+LD Y, $HREG
+ADDHL DZ, ND          # H-B -> H
+#41/35
+AFHL A, NA            # A = flags
+LD HL, $SWCARRY$NULL
+LD Y, $FREG
+#49/41
+FNDH AZ, ND           # A swapped -> flags
+LD HL, $0x40
+LD Y, $TEMP
+MULH DZ, NA           # A sign = initial zero
+#59/49
+LDP HL, $0xDF
+LDN HL, $0xFF
+LDZ Y, $FREG
+ANDHL DZ, ND          # flags&intial zero -> flags
+NOP
+NOP
+#70/59
+LD PC, $EXIT72
+#71/61
+
+ADDR 0x40             # H = 255, borrow from L-C
+LD HL, $1COM$NULL
+LDZ Y, $BREG
+FNH DZ, HL            # HL = -B-1
+LD Y, $HREG
+#41
+ADDHL DZ, ND          # H-B -> H
+AFHL A, NA            # A = flags
+LD HL, $SWCARRY$NULL
+#51
+LD Y, $FREG
+FNDH AZ, ND           # A swapped -> flags
+LD HL, $0x40
+LD Y, $TEMP
+#60
+MULH DZ, NA           # A sign = initial zero
+LDP HL, $0xDF
+LDN HL, $0xFF
+LDZ Y, $FREG
+ANDHL DZ, ND          # flags&intial zero -> flags
+#72
+$EXIT72
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0x80             # H = 0, borrow from L-C, with borrow
+LD HL, $1COM$NULL
+LDZ Y, $BREG
+FNH DZ, HL            # HL = -B-1
+LD Y, $HREG
+#41
+ADDHL DZ, ND          # H-B -> H
+AFHL A, NA            # A = flags
+LD HL, $SWCARRY$NULL
+#51
+LD Y, $FREG
+FNDH AZ, ND           # A swapped -> flags
+LD HL, $0x40
+LD Y, $TEMP
+#60
+MULH DZ, NA           # A sign = initial zero
+LDP HL, $0xDF
+LDN HL, $0xFF
+LDZ Y, $FREG
+ANDHL DZ, NA          # A = flags&intial zero
+#72
+LD HL, $0x80
+ORHL AZ, ND           # A|set borrow -> flags
+LD HL, $FETCH
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
+
+ADDR 0xC0             # else, borrow from L-C
+LD HL, $1COM$NULL
+LDZ Y, $BREG
+FNH DZ, HL            # HL = -B-1
+LD Y, $HREG
+#41
+ADDHL DZ, ND          # H-B -> H
+AFHL A, NA            # A = flags
+LD HL, $SWCARRY$NULL
+#51
+LD Y, $FREG
+FNDH AZ, ND           # A swapped -> flags
+LD HL, $0x40
+LD Y, $TEMP
+#60
+MULH DZ, NA           # A sign = initial zero
+LDP HL, $0xDF
+LDN HL, $0xFF
+LDZ Y, $FREG
+ANDHL DZ, ND          # flags&intial zero -> flags
+#72
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
