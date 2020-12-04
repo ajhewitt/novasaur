@@ -6,44 +6,44 @@ PAGE FETCH1_PG
 
 # assume: Y = $VMS
 LD HL, $INCCYC$FORK1
-FNEH DZ, ND        # inc state, clear ext flag
+FNEH DZ, ND            # inc state, clear ext flag
 LD Y, $PCL
-FNFH DZ, XD        # X,PCL = PCL+1
-FNDL A, PC         # fork on PCL
+FNFH DZ, XD            # X,PCL = PCL+1
+FNDL A, PC             # fork on PCL
 #13
 
 # assume: Y = $IMODE
 $CHECK
 LDZ HL, $DEC$NULL
-FNH DZ, HLD        # -1 -> interupt mode
+FNH DZ, HLD            # -1 -> interupt mode
 #29
-LD HL, $INTR1      # HL = check interupts
+LD HL, $INTR1_INST     # HL = check interupts
 LD Y, $INST
-MVHL AZ, ND        # HL -> inst cache
-LD Y, $VMS         # set Y = $VMS on exit
-VMPHL DZ, PGA      # jump to next VMC
+MVHL AZ, ND            # HL -> inst cache
+LD Y, $VMS             # set Y = $VMS on exit
+VMPHL DZ, PGA          # jump to next VMC
 #43
 
-ADDR 0x80          # PCL = 0
+ADDR 0x80              # PCL = 0
 LDZ Y, $PCH
-FNH DZ, HLD        # PCH = PCH+1      *** inc PCH ***
+FNH DZ, HLD            # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
 LD Y, $IMODE
 #21
-FNH DZ, HLA        # A = IMODE
-LDP PC, $CHECK     # jump if interrupts enabled
+FNH DZ, HLA            # A = IMODE
+LDP PC, $CHECK         # jump if interrupts enabled
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-FNH A, Y           # Y = PCH
+FNH A, Y               # Y = PCH
 #30
-FNFH M, NA         # A = [PC]
+FNFH M, NA             # A = [PC]
 LD Y, $INST
-FNH AZ, HLD        # A -> inst cache,HL
-LD Y, $VMS         # set Y = $VMS on exit
-VMPHL DZ, PGA      # jump to next VMC
+FNH AZ, HLD            # A -> inst cache,HL
+LD Y, $VMS             # set Y = $VMS on exit
+VMPHL DZ, PGA          # jump to next VMC
 #43
 
-ADDR 0xC0         # else
+ADDR 0xC0             # else
 NOP
 NOP
 NOP
@@ -51,15 +51,15 @@ NOP
 LD HL, $IDEN$NULL
 LD Y, $IMODE
 #21
-FNH DZ, HLA        # A = IMODE
-LDP PC, $CHECK     # jump if interrupts enabled
+FNH DZ, HLA            # A = IMODE
+LDP PC, $CHECK         # jump if interrupts enabled
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-FNH DZ, Y          # Y = PCH
+FNH DZ, Y              # Y = PCH
 #30
-FNFH M, NA         # A = [PC]
+FNFH M, NA             # A = [PC]
 LD Y, $INST
-FNH AZ, HLD        # HL -> inst cache
-LD Y, $VMS         # set Y = $VMS on exit
-VMPHL DZ, PGA      # jump to next VMC
+FNH AZ, HLD            # HL -> inst cache
+LD Y, $VMS             # set Y = $VMS on exit
+VMPHL DZ, PGA          # jump to next VMC
 #43

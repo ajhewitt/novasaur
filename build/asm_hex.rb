@@ -130,13 +130,13 @@ srcs.each do |src|
       when 'INCLUDE'
         incs << d[1]
       when 'ADDR'
-        i = Integer(d[1].strip) rescue abort("#{j}: ADDR? #{d[1]}")
+        i = Integer(d[1].strip) rescue abort("#{page}[#{j}]: ADDR? #{d[1]}")
       else
-        abort("#{j}: SYNTAX? #{c}") if is[c].nil?
+        abort("#{page}[#{j}]: SYNTAX? #{c}") if is[c].nil?
         addrs[j] = i
         i += is[c].size
         i += 1 if b[1] == '$'
-        abort("#{j}: END_OF_PAGE?") if i > 256
+        abort("#{page}[#{j}]: END_OF_PAGE?") if i > 256
       end
     end
   end
@@ -173,19 +173,19 @@ srcs.each do |src|
       d = c.split '$'
       e = d.first
       if vars[e].nil?
-        v = Integer(e) rescue abort("#{j}:UNDEF? $#{e}")
+        v = Integer(e) rescue abort("#{page}[#{j}]: UNDEF? $#{e}")
       else
-        v = Integer(vars[e]) rescue abort("#{j}: SYNTAX? $#{e}")
+        v = Integer(vars[e]) rescue abort("#{page}[#{j}]: SYNTAX? $#{e}")
       end
       if d.size > 1
         v <<= 4
         if vars[d[1]].nil?
-          v += Integer(d[1]) rescue abort("#{j}:UNDEF? $#{d[1]}")
+          v += Integer(d[1]) rescue abort("#{page}[#{j}]: UNDEF? $#{d[1]}")
         else
-          v += Integer(vars[d[1]]) rescue abort("#{j}: SYNTAX? $#{d[1]}")
+          v += Integer(vars[d[1]]) rescue abort("#{page}[#{j}]: SYNTAX? $#{d[1]}")
         end
       end
-      abort("#{j}: OVERFLOW? $#{c}, 0x#{v.to_s(16).upcase}") if v > 255
+      abort("#{page}[#{j}]: OVERFLOW? $#{c}, 0x#{v.to_s(16).upcase}") if v > 255
       o[i] = v
       i += 1
     end

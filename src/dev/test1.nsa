@@ -2,8 +2,7 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-#PAGE TESTE_PG
-PAGE NULL
+PAGE TEST_PG
 
 # PMODE: column in AV used during process cycle
 # VLINE: line(page) in video ram

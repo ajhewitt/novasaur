@@ -5,22 +5,22 @@ INCLUDE ../inc/pages.nsa
 PAGE IDLE_PG
 
 # assumes Y=$VMS
-LDZ Y, $INST
+LD Y, $INST
 MVHL AZ, ND           # HL -> inst cache
 LD HL, $INC$NULL
 LDZ Y, $VMS
 #10
-FNH DZ, HLD           # VMC+1
-LD HL, $INC$NULL
+FNFH DZ, ND           # VMC+1
 LDZ Y, $ICL
 FNH DZ, HLD           # ICL+1
 LD HL, $OVER?$NULL
-#20
 FNH A, HLA            # ICL overflow?
+#21
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $ICH
 FNH DZ, HLD           # ICH+1 if ICL overflowed
+NOP
 NOP
 #30
 NOP

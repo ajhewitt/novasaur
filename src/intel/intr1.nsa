@@ -6,141 +6,85 @@ PAGE INTR1_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
-FNH DZ, HLD           # inc state
+FNH DZ, HLD               # inc state
 LD HL, $IDEN$NULL
 LDZ Y, $IMASK
-FNH DZ, HL            # HL = interupt mask
+FNH DZ, HL                # HL = interupt mask
 #10/8
-ANDH E, NA            # A = masked interupts
+ANDH E, NA                # A = masked interupts
 LD HL, $7$FORKI
-FNDL A, PC            # fork on state
+FNDL A, PC                # fork on state
 #18/14
 
-ADDR 0x10             # no interupt, fetch instruction
+ADDR 0x20                 # no interupt, fetch instruction
 LD HL, $IDEN$NULL
 #20/2
 LD Y, $PCL
-FNFH DZ, XA           # X = PCL
+FNFH DZ, XA               # X = PCL
 LDZ Y, $PCH
-FNH DZ, Y             # Y = PCH
+FNH DZ, Y                 # Y = PCH
 NOP
 #30/10
-FNFH M, NA            # A = [PC]
+FNFH M, NA                # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # HL -> inst cache
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+FNH AZ, HLD               # HL -> inst cache
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
 #43/19
 
-ADDR 0x28             # non-vectored interupt
+ADDR 0x40                 # non-vectored interupt
 LD Y, $IMASK
 #20/2
-ANDH DZ, ND           # reset bit3 of $IMASK
+ANDH DZ, ND               # reset bit3 of $IMASK
 LD HL, $IDEN$NULL
 LD Y, $TEMP
-FNFH IZ, ND           # I0 -> temp
+FNFH IZ, ND               # I0 -> temp
 #30/10
 NOP
-LD HL, $RST2_INST     # HL = check interupts
-MVHL AZ, ND           # HL -> inst cache
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+LD HL, $RST2_INST         # HL = check interupts
+MVHL AZ, ND               # HL -> inst cache
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
 #43/19
 
-ADDR 0x40             # vectored interupt 1.5
+ADDR 0x60                 # vectored interupt 5.5
 LD Y, $IMASK
 #20/2
-ANDH DZ, ND           # reset bit3 of $IMASK
-LD HL, $0x0C
-LD Y, $TEMP
-MVHL AZ, ND           # 1.5 -> temp
-#31/10
-LD HL, $RST2_INST     # HL = check interupts
-MVHL AZ, ND           # HL -> inst cache
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#43/18
-
-ADDR 0x58             # vectored interupt 2.5
-LD Y, $IMASK
-#20/2
-ANDH DZ, ND           # reset bit3 of $IMASK
-LD HL, $0x14
-LD Y, $TEMP
-MVHL AZ, ND           # 2.5 -> temp
-#31/10
-LD HL, $RST2_INST     # HL = check interupts
-MVHL AZ, ND           # HL -> inst cache
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#43/18
-
-ADDR 0x70             # vectored interupt 3.5
-LD Y, $IMASK
-#20/2
-ANDH DZ, ND           # reset bit3 of $IMASK
-LD HL, $0x1C
-LD Y, $TEMP
-MVHL AZ, ND           # 3.5 -> temp
-#31/10
-LD HL, $RST2_INST     # HL = check interupts
-MVHL AZ, ND           # HL -> inst cache
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#43/18
-
-ADDR 0x88             # vectored interupt 4.5
-LD Y, $IMASK
-#20/2
-ANDH DZ, ND           # reset bit3 of $IMASK
-LD HL, $0x24
-LD Y, $TEMP
-MVHL AZ, ND           # 4.5 -> temp
-#31/10
-LD HL, $RST2_INST     # HL = check interupts
-MVHL AZ, ND           # HL -> inst cache
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
-#43/18
-
-ADDR 0xA0             # vectored interupt 5.5
-LD Y, $IMASK
-#20/2
-ANDH DZ, ND           # reset bit3 of $IMASK
+ANDH DZ, ND               # reset bit3 of $IMASK
 LD HL, $0x2C
 LD Y, $TEMP           
-MVHL AZ, ND           # 5.5 -> temp
+MVHL AZ, ND               # 5.5 -> temp
 #31/10
-LD HL, $RST2_INST     # HL = check interupts
-MVHL AZ, ND           # HL -> inst cache
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+LD HL, $RST2_INST         # HL = check interupts
+MVHL AZ, ND               # HL -> inst cache
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
 #43/18
 
-ADDR 0xB8             # vectored interupt 6.5
+ADDR 0x80                 # vectored interupt 6.5
 LD Y, $IMASK
 #20
-ANDH DZ, ND           # reset bit3 of $IMASK
+ANDH DZ, ND               # reset bit3 of $IMASK
 LD HL, $0x34
 LD Y, $TEMP     
-MVHL AZ, ND           # 6.5 -> temp
+MVHL AZ, ND               # 6.5 -> temp
 #31
-LD HL, $RST2_INST     # HL = check interupts
-MVHL AZ, ND           # HL -> inst cache
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+LD HL, $RST2_INST         # HL = check interupts
+MVHL AZ, ND               # HL -> inst cache
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
 #43
 
-ADDR 0xD0             # vectored interupt 7.5
+ADDR 0xA0                 # vectored interupt 7.5
 LD Y, $IMASK
 #20
-ANDH DZ, ND           # reset bit3 of $IMASK
+ANDH DZ, ND               # reset bit3 of $IMASK
 LD HL, $0x3C
 LD Y, $TEMP     
-MVHL AZ, ND           # 7.5 -> temp
+MVHL AZ, ND               # 7.5 -> temp
 #31
-LD HL, $RST2_INST     # HL = check interupts
-MVHL AZ, ND           # HL -> inst cache
-LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+LD HL, $RST2_INST         # HL = check interupts
+MVHL AZ, ND               # HL -> inst cache
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
 #43

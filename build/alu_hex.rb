@@ -159,7 +159,7 @@ def print_vmp(offset, opts = {})
             i += (b<<6) & 0x100
             pg = i<<1
             cc = pg+1
-            cc<INST.size && b&3>=INST[cc] ? INST[pg] : IDLE_PG
+            INST[pg].nil? || b&3<INST[cc] ? IDLE_PG : INST[pg]
           end
         end
       else # a=LLLL, b=MMMM
@@ -221,7 +221,7 @@ def print_vid(offset)
         end.map {|t| n+=t}
         p = 0
         t = 0
-        v[1].each_with_index do |b, k| # process cycles
+        v[1].each_with_index do |b, k| # process blocks
           b.times do
             q = p%v[3][i]
             w = case k
@@ -313,9 +313,9 @@ def inc_proc
   256.times.map {|i| NEXT_PROC[i>>4] | (i&8)}
 end
 
-# fork on HAL feature
-def fork_feature
- [[0x20, 0x30, 0x40, 0x70] * 16,                        # 0-3:audio
+# fork on HAL feature - audio, rx, tx, tx/kbd context switch
+FORK_HAL = [
+  [0x20, 0x30, 0x40, 0x70] * 16,                        # 0-3:audio
   [0x20, 0x38, 0x48, 0x38, 0x60, 0x60, 0x68, 0x68,      # 4:rx
    0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80,
    0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80,      # 5:rx
@@ -336,13 +336,12 @@ def fork_feature
    0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28,
    0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28,      # D,F:kbd
    0x28, 0x28, 0x28, 0x28, 0x30, 0x30, 0x30, 0x30] * 2
- ].flatten
-end
+].flatten.freeze
 
-# fork on keyboard
-def fork_keyboard
+# fork on keyboard scan and decode
+FORK_KBD = [
 # |-> none  <-|->  alt  <-|-> ctrl  <-|->ctrl-alt<-|    000EBCAS
- [[0x68, 0x70, 0x88, 0x88, 0x80, 0x80, 0x80, 0x80,      # make
+  [0x68, 0x70, 0x88, 0x88, 0x80, 0x80, 0x80, 0x80,      # make
    0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0,      # break
    0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x98, 0x98,      # ext-make
    0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0] * 4, # ext-break
@@ -350,31 +349,28 @@ def fork_keyboard
    0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x88, 0x88,
    0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88,
    0x88, 0x88, 0xB0, 0xB0, 0x08, 0x08, 0x08, 0x08] * 4  # tx:scan
- ].flatten
-end
+].flatten.freeze
+
+SCAN_LO = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '`', nil, nil, nil, nil, nil, nil, 'q', '1', nil, nil, nil, 'z', 's', 'a', 'w', '2', nil, nil, 'c', 'x', 'd', 'e', '4', '3', nil, nil, ' ', 'v', 'f', 't', 'r', '5', nil, nil, 'n', 'b', 'h', 'g', 'y', '6', nil, nil, nil, 'm', 'j', 'u', '7', '8', nil, nil, ',', 'k', 'i', 'o', '0', '9', nil, nil, '.', '/', 'l', ';', 'p', '-', nil, nil, nil, '\'', nil, '[', '=', nil, nil, nil, nil, "\n", ']', nil, '\\', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, '1', nil, '4', '7', nil, nil, nil, '0', '.', '2', '5', '6', '8', "\e", nil, nil, '+', '3', '-', '*', '9', nil, nil].freeze
+
+SCAN_UP = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '~', nil, nil, nil, nil, nil, nil, 'Q', '!', nil, nil, nil, 'Z', 'S', 'A', 'W', '@', nil, nil, 'C', 'X', 'D', 'E', '$', '#', nil, nil, ' ', 'V', 'F', 'T', 'R', '%', nil, nil, 'N', 'B', 'H', 'G', 'Y', '^', nil, nil, nil, 'M', 'J', 'U', '&', '*', nil, nil, '<', 'K', 'I', 'O', ')', '(', nil, nil, '>', '?', 'L', ':', 'P', '_', nil, nil, nil, '"', nil, '{', '+', nil, nil, nil, nil, "\n", '}', nil, '|', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\e", nil, nil, nil, nil, nil, nil, nil, nil, nil].freeze
+
+SCAN_EX = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '`', nil, nil, nil, nil, nil, nil, 'q', '1', nil, nil, nil, 'z', 's', 'a', 'w', '2', nil, nil, 'c', 'x', 'd', 'e', '4', '3', nil, nil, ' ', 'v', 'f', 't', 'r', '5', nil, nil, 'n', 'b', 'h', 'g', 'y', '6', nil, nil, nil, 'm', 'j', 'u', '7', '8', nil, nil, ',', 'k', 'i', 'o', '0', '9', nil, nil, '.', '/', 'l', ';', 'p', '-', nil, nil, nil, '\'', nil, '[', '=', nil, nil, nil, nil, "\n", ']', nil, '\\', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, '1', nil, '4', '7', nil, nil, nil, '0', '.', '2', '5', '6', '8', "\e", nil, nil, '+', '3', '-', '*', '9', nil, nil].freeze
 
 # fork on masked interupt
 def fork_intr
   256.times.map do |i|
     case 
     when i & 0x04 != 0 # rst 7.5
-      0xD0
-    when i & 0x02 != 0 # rst 6.5
-      0xB8
-    when i & 0x01 != 0 # rst 5.5
       0xA0
-    when i & 0x80 != 0 # rst 4.5
-      0x88
-    when i & 0x40 != 0 # rst 3.5
-      0x70
-    when i & 0x20 != 0 # rst 2.5
-      0x58
-    when i & 0x10 != 0 # rst 1.5
-      0x40
+    when i & 0x02 != 0 # rst 6.5
+      0x80
+    when i & 0x01 != 0 # rst 5.5
+      0x60
     when i & 0x08 != 0 # intr
-      0x28
+      0x40
     else               # fetch
-      0x10
+      0x20
     end
   end
 end
@@ -462,7 +458,7 @@ def psw_flags
   end
 end
 
-# MIDI to Note H/L (20vmc/line, 18vmc/line)
+# MIDI to Note H/L (20vmc/block, 18vmc/block)
 def note(opts = {})
   [412500.0/43.0, 1375000.0/131.0].map do |t|
     128.times.map do |m|
@@ -474,7 +470,7 @@ def note(opts = {})
   end.flatten
 end
 
-# MIDI to max WAVE bandlimit (20vmc/line, 18vmc/line)
+# MIDI to max WAVE bandlimit (20vmc/block, 18vmc/block)
 def wave
   [412500.0/43.0, 1375000.0/131.0].map do |t|
     l = MAX_VOICE.times.map {|i| t/((i+2)*2).to_f}
@@ -561,14 +557,11 @@ print_com 0xA0
 # 0x0003B000-0x0003BFFF: VID low nibble only
 print_vid 0xB0
 
-LOWER = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '`', nil, nil, nil, nil, nil, nil, 'q', '1', nil, nil, nil, 'z', 's', 'a', 'w', '2', nil, nil, 'c', 'x', 'd', 'e', '4', '3', nil, nil, ' ', 'v', 'f', 't', 'r', '5', nil, nil, 'n', 'b', 'h', 'g', 'y', '6', nil, nil, nil, 'm', 'j', 'u', '7', '8', nil, nil, ',', 'k', 'i', 'o', '0', '9', nil, nil, '.', '/', 'l', ';', 'p', '-', nil, nil, nil, '\'', nil, '[', '=', nil, nil, nil, nil, "\n", ']', nil, '\\', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, '1', nil, '4', '7', nil, nil, nil, '0', '.', '2', '5', '6', '8', "\e", nil, nil, '+', '3', '-', '*', '9', nil, nil].freeze
-UPPER = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '~', nil, nil, nil, nil, nil, nil, 'Q', '!', nil, nil, nil, 'Z', 'S', 'A', 'W', '@', nil, nil, 'C', 'X', 'D', 'E', '$', '#', nil, nil, ' ', 'V', 'F', 'T', 'R', '%', nil, nil, 'N', 'B', 'H', 'G', 'Y', '^', nil, nil, nil, 'M', 'J', 'U', '&', '*', nil, nil, '<', 'K', 'I', 'O', ')', '(', nil, nil, '>', '?', 'L', ':', 'P', '_', nil, nil, nil, '"', nil, '{', '+', nil, nil, nil, nil, "\n", '}', nil, '|', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\e", nil, nil, nil, nil, nil, nil, nil, nil, nil].freeze
-EXTEND = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '`', nil, nil, nil, nil, nil, nil, 'q', '1', nil, nil, nil, 'z', 's', 'a', 'w', '2', nil, nil, 'c', 'x', 'd', 'e', '4', '3', nil, nil, ' ', 'v', 'f', 't', 'r', '5', nil, nil, 'n', 'b', 'h', 'g', 'y', '6', nil, nil, nil, 'm', 'j', 'u', '7', '8', nil, nil, ',', 'k', 'i', 'o', '0', '9', nil, nil, '.', '/', 'l', ';', 'p', '-', nil, nil, nil, '\'', nil, '[', '=', nil, nil, nil, nil, "\n", ']', nil, '\\', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, '1', nil, '4', '7', nil, nil, nil, '0', '.', '2', '5', '6', '8', "\e", nil, nil, '+', '3', '-', '*', '9', nil, nil].freeze
 # 0x0003C000-0x0003CFFF: FNC low nibble only
 # $SCAN0: default/shift
-print_unary(0xC0, (LOWER+UPPER).map {|c| c ? c.ord : 0})
+print_unary(0xC0, (SCAN_LO+SCAN_UP).map {|c| c ? c.ord : 0})
 # $SCAN1: extended/control
-print_unary(0xC1, EXTEND.map {|c| c ? c.ord : 0}+Array.new(0x80, 0))
+print_unary(0xC1, SCAN_EX.map {|c| c ? c.ord : 0}+Array.new(0x80, 0))
 # $SCAN2: alt/ext-ctrl-alt
 print_unary(0xC2, Array.new(0x80, 0)+ctrl_alt_page)
 # $SC2MASK: scan code->keyboard mode bit mask
@@ -613,11 +606,11 @@ print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 
 # 0x0003E000-0x0003EFFF: FNE low nibble only - HAL related
 # $INCCYC: inc, clear ext bit
-print_unary(0xE0, 256.times.map{|i| (i+1)&0xF7})
+print_unary(0xE0, 256.times.map{|i| (i&0xF0) + (i+1)%8})
 # $FORKJ: fork on HAL features (audio/rx/tx)
-print_unary(0xE1, fork_feature)
+print_unary(0xE1, FORK_HAL)
 # $FORKK: fork on keyboard
-print_unary(0xE2, fork_keyboard)
+print_unary(0xE2, FORK_KBD)
 # $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
 print_unary(0xE3, [0xDF,0xDE,0xDD,0xDC]*64)
 # $KS01?: &3==0||1 ? 0:-1
