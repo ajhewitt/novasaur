@@ -164,7 +164,7 @@ def print_vmp(offset, opts = {})
         end
       else # a=LLLL, b=MMMM
         d = 16.times.map do |c| # c=ECCC
-          cc = (ML2LEN[b] - c&7).clamp(0, 3)
+          cc = (ML2LEN[b] - (c&7)).clamp(0, 3)
           if cc.zero?
             e = b
             e |= 0x40 unless a.zero?
@@ -568,7 +568,7 @@ print_unary(0xC2, Array.new(0x80, 0)+ctrl_alt_page)
 print_unary(0xC3, kmode_mask)
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
-# FORKI: {0000:0x28, 0001:0x50, 001x:0x78, 01xx:0xA0, 1xxx:0xC8}
+# FORKI: fork on interrupt
 print_unary(0xD0, fork_intr)
 # $FORK1: 0->0x80,else->0xC0
 print_unary(0xD1, [0x80] + Array.new(0xFF, 0xC0))

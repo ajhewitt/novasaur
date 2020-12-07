@@ -3,9 +3,9 @@ $IDLE_PG       0x00 # 43-pc idle VMC
 $EXT1_PG       0x01
 $EXT2_PG       0x02
 $EXT3_PG       0x03
-
+# 0x04-0x7F: extended CPU instructions
 $TEST_PG       0x7F
-# 0x00-0x7F: extended CPU instructions
+# 0x80-0x85: system
 $RESET         0x80 # reset vector - hard reboot
 $RESTART       0x81 # restart vector - soft reboot
 $ROM_COPY      0x82

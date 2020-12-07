@@ -45,7 +45,7 @@ LD Y, $TERM_ROW
 MVHL AZ, ND
 
 #turn off features
-LD HL, $0x60
+LD HL, $0x60 #0x60=on,0x40=off
 LD Y, $RMODE
 MVHL AZ, ND
 LD HL, $0x80
@@ -53,9 +53,6 @@ LD Y, $TMODE
 MVHL AZ, ND
 LD HL, $0xFF
 LD Y, $TXRDIDX
-MVHL AZ, ND
-LD HL, $0x00
-LD Y, $IMASK
 MVHL AZ, ND
 
 #CPU
@@ -66,11 +63,9 @@ LD Y, $PCL
 MULH AZ, ND
 LD Y, $PCH
 MULH AZ, XD  # X = 0, PC = 0x0000
-LD HL, $FETCH2
-LD Y, $INST
-MVHL AZ, ND
-LD Y, $0x00
+LD Y, $0x00  # Y = 0
 LD HL, $0x76 # HLT
 MVHL A, ND   # HLT -> [0,0]
 
-LD PG, $PSYNCE_PG       # start video loop
+LD Y, $VMS
+LD PG, $PSYNCF2_PG       # start video loop

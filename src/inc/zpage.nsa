@@ -117,11 +117,11 @@ $TERM_ROW      0x82
 #Constants
 $FETCH         0x00
 $FETCH2        0x10
-$INTR1_INST    0x08
-$INTR2_INST    0x18
-$SKIP_INST     0x28
-$PUSHPC_INST   0x38
-$RST2_INST     0xCB
+$RST2_INST     0x18
+$INTR1_INST    0x28
+$INTR2_INST    0x38
+$SKIP_INST     0xCB
+$PUSHPC_INST   0xD9
 $JMP_INST      0xC3
 
 $KSBUFF        0xF0
