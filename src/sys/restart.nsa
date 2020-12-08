@@ -62,10 +62,34 @@ MULH AZ, ND  # IMASK = 0 (disable)
 LD Y, $PCL
 MULH AZ, ND
 LD Y, $PCH
-MULH AZ, XD  # X = 0, PC = 0x0000
+MULH AZ, XD  # PC = 0x0000
 LD Y, $0x00  # Y = 0
-LD HL, $0x76 # HLT
+LD HL, $0x3E # HLT
 MVHL A, ND   # HLT -> [0,0]
+LD HL, $1
+MVHL A, XA
+LD HL, $0x44 # HLT
+MVHL A, ND   # HLT -> [0,1]
+LD HL, $2
+MVHL A, XA
+LD HL, $0x32 # HLT
+MVHL A, ND   # HLT -> [0,2]
+LD HL, $3
+MVHL A, XA
+LD HL, $0x21 # HLT
+MVHL A, ND   # HLT -> [0,3]
+LD HL, $4
+MVHL A, XA
+LD HL, $0x21 # HLT
+MVHL A, ND   # HLT -> [0,4]
+LD HL, $5
+MVHL A, XA
+LD HL, $0x76 # HLT
+MVHL A, ND   # HLT -> [0,5]
+LD HL, $6
+MVHL A, XA
+LD HL, $0x76 # HLT
+MVHL A, ND   # HLT -> [0,6]
 
 LD Y, $VMS
 LD PG, $PSYNCF2_PG       # start video loop

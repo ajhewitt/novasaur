@@ -54,10 +54,11 @@ def fetch(rom, reg)
   c | rom[0][get_pc(reg)]
 end
 
-def alu_fn(ram, alu, reg, c, h = true)
+def alu_fn(ram, alu, reg, c, h = true, a = false)
   fn = (c&0xF0)<<8
   fn |= h ? (reg[HL]&0xF0)<<4 : (reg[HL]&0x0F)<<8
-  alu[fn | get_src(ram, reg, c)&0xFF]
+  src = a ? reg[A] : get_src(ram, reg, c)&0xFF
+  alu[fn | src]
 end
 
 DST = %I[N O1 O2 O3 O4 O5 O6 O7 X EO S V Y HL PC PG I EI A D]
@@ -69,61 +70,77 @@ Y=12; HL=13; PC=14; PG=15
 I=16; EI=17; A=18; D=19
 # simulate page
 reg = Array.new(20, -1)
-reg[PG] = ARGV.first.to_i # execute page
-reg[PC] = 0
+page = ARGV.first.to_i # execute page
 rom = load_rom
-ram = Array.new(8) {|a| Array.new(256) {|b| Array.new(256, 0xFE)}} # [B][Y][X]
-ram[0][176][0xFF]=0xE2
-reg[Y] = 254 # $VMS
-n = 0
-while true do
-  c = fetch(rom, reg)
-  case c>>13
-  when 0 # ALUHL+A
-    reg[A] = alu_fn(ram, rom[3], reg, c, false)
-    set_dst(ram, reg, c, reg[A])
-    reg[A] = alu_fn(ram, rom[2], reg, c)
-    set_dst(ram, reg, c, reg[A])
-    n += 4
-  when 1 # ALUL
-    x = alu_fn(ram, rom[3], reg, c, false)
-    set_dst(ram, reg, c, x)
-    n += 3
-  when 2 # ALUH+A
-    reg[A] = alu_fn(ram, rom[3], reg, c)
-    set_dst(ram, reg, c, reg[A])
-    n += 3
-  when 3 # ROMH
-    x = alu_fn(ram, rom[1], reg, c)
-    set_dst(ram, reg, c, x)
-    n += 3
-  when 4 # NOP, LD
-    n += 1
-    next if c&0xF000 == 0x8000
+ram = Array.new(8) {|a| Array.new(256) {|b| Array.new(256, 0x00)}} # [B][Y][X]
+ram[0][0x00][0x00]=0x3E
+ram[0][0x00][0x01]=0x44
+ram[0][0x00][0x02]=0x32
+ram[0][0x00][0x03]=0x21
+ram[0][0x00][0x04]=0x21
+ram[0][0x00][0x05]=0x76
 
-    n += 1
-    set_dst(ram, reg, c, rom[0][get_pc(reg)])
-  when 5 # LDP, LDN
-    n += 1
-    if (c>>5)&0x80 == reg[A].to_i&0x80
-puts "COND: true"
-      set_dst(ram, reg, c, rom[0][get_pc(reg)])
+ram[0][0xFA][0xFF]=0x00    # $PCL
+ram[0][0xFB][0xFF]=0x00    # $PCH
+ram[0][0xFD][0xFF]=0xA0    # $VMS
+reg[EI]=0x00
+reg[EO]=0x00
+reg[PG] = page
+reg[PC] = 0
+reg[Y] = 0xFD # $VMS
+7.times do |q|
+  n = 0
+  while true do
+    c = fetch(rom, reg)
+    case c>>13
+    when 0 # ALUHL+A
+      reg[A] = alu_fn(ram, rom[3], reg, c, false)
+      set_dst(ram, reg, c, reg[A])
+      reg[A] = alu_fn(ram, rom[2], reg, c, true, true)
+      set_dst(ram, reg, c, reg[A])
+      n += 4
+    when 1 # ALUL
+      x = alu_fn(ram, rom[3], reg, c, false)
+      set_dst(ram, reg, c, x)
+      n += 3
+    when 2 # ALUH+A
+      reg[A] = alu_fn(ram, rom[3], reg, c)
+      set_dst(ram, reg, c, reg[A])
+      n += 3
+    when 3 # ROMH
+      x = alu_fn(ram, rom[1], reg, c)
+      set_dst(ram, reg, c, x)
+      n += 3
+    when 4 # NOP, LD
       n += 1
-    else
-puts "COND: false"
-      reg[PC] = reg[PC] + 1
-    end
-  when 6 # FNH+A
-    reg[A] = alu_fn(ram, rom[3], reg, c)
-    set_dst(ram, reg, c, reg[A])
-    n += 2
-  when 7 # FNH
-    x = alu_fn(ram, rom[3], reg, c)
-    set_dst(ram, reg, c, x)
-    n += 2
-  end
-  puts "[#{n}] #{reg[PC]}: #{c.to_s(16)}"
-#  puts reg.to_s
-  break if c == 0x1F7F #|| reg[PC] == 0
-end
+      next if c&0xF000 == 0x8000
 
+      n += 1
+      set_dst(ram, reg, c, rom[0][get_pc(reg)])
+    when 5 # LDP, LDN
+      n += 1
+      if (c>>5)&0x80 == reg[A].to_i&0x80
+puts "COND: true"
+        set_dst(ram, reg, c, rom[0][get_pc(reg)])
+        n += 1
+      else
+puts "COND: false"
+        reg[PC] = reg[PC] + 1
+      end
+    when 6 # FNH+A
+      reg[A] = alu_fn(ram, rom[3], reg, c)
+      set_dst(ram, reg, c, reg[A])
+      n += 2
+    when 7 # FNH
+      x = alu_fn(ram, rom[3], reg, c)
+      set_dst(ram, reg, c, x)
+      n += 2
+    end
+    puts "[#{n}] #{reg[PC]}: #{c.to_s(16)}" # if c == 0x1F7F
+    puts reg.to_s
+    break if c == 0x1F7F #|| reg[PC] == 0
+  end
+puts "|###|-->  INST:#{ram[0][0xE7][0xFF]} MEM: #{ram[0][0x21][0x21]}  <--|###|"
+#  pp (0xA0..0xA7).map {|i| ram[0][i][0xFF].to_s(16)}
+#puts "#{ram[0][0xA0][0xFF]>>4},#{(-1*ram[0][0xA5][0xFF])&0xff}"
+end

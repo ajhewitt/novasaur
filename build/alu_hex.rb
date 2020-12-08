@@ -577,17 +577,15 @@ print_unary(0xD2, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
 # $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
 print_unary(0xD3, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
 # $MAPREGH: map instruction to zpage addr of destination register, or high source register pair
-REG8=[0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE0, 0xE1].freeze
-REG16H=[0xE2, 0xE4, 0xE6, 0xE8].freeze
+REG8=[0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF1, 0xF0].freeze
+REG16H=[0xF2, 0xF4, 0xF6, 0xF8].freeze
 print_unary(0xD4, 256.times.map { |i|
-  j = i & 0xC7
-  (j > 0 && j < 4) ? REG16H[(i&0x30)>>4] : REG8[(i&0x38)>>3]
+  (i&0xC4).zero? || (i>0xC0) ? REG16H[(i&0x30)>>4] : REG8[(i&0x38)>>3]
 })
 # $MAPREGL: map instruction to zpage addr of source register, or low source register pair
-REG16L=[0xE3, 0xE5, 0xE7, 0xE9].freeze
+REG16L=[0xF3, 0xF5, 0xF7, 0xF9].freeze
 print_unary(0xD5, 256.times.map { |i|
-  j = i & 0xC7
-  (j > 0 && j < 4) ? REG16L[(i&0x30)>>4] : REG8[i&7]
+  (i&0xC4).zero? || (i>0xC0) ? REG16L[(i&0x30)>>4] : REG8[i&7]
 })
 # $F2PSW: flags->PSW
 print_unary(0xD6, flags_psw)
@@ -605,28 +603,28 @@ print_unary(0xDA, 256.times.map {|i| UNC.include?(i) ? 0 : CON[(i&0x30)>>4]})
 
 
 # 0x0003E000-0x0003EFFF: FNE low nibble only - HAL related
-# $INCCYC: inc, clear ext bit
-print_unary(0xE0, 256.times.map{|i| (i&0xF0) + (i+1)%8})
-# $FORKJ: fork on HAL features (audio/rx/tx)
-print_unary(0xE1, FORK_HAL)
-# $FORKK: fork on keyboard
-print_unary(0xE2, FORK_KBD)
-# $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
-print_unary(0xE3, [0xDF,0xDE,0xDD,0xDC]*64)
-# $KS01?: &3==0||1 ? 0:-1
-print_unary(0xE4, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
-# $KDATA: &C<<2
-print_unary(0xE5, 256.times.map{|i| (i&0xC) << 2})
-# $TKTOG: tx/kbd mode toggle 10xxxxQx->11Q00010, 11QxxxxK->100110QK
-print_unary(0xE6, 256.times.map{|i| i&0x40==0 ? ((i&2)<<4)|0xC2 : ((i&0x20)>>4)|0x98|(i&1)})
-# $RXS2M: Rx serial to multiplier/mode
-print_unary(0xE7, rxstate_mulmode)
 # $XGA?: mode-line: 0-10->-1,else->0
-print_unary(0xE8, [0xFF]*0xB0 + [0]*0x50)
+print_unary(0xE0, [0xFF]*0xB0 + [0]*0x50)
+# $INCCYC: inc, clear ext bit
+print_unary(0xE1, 256.times.map{|i| (i&0xF0) + (i+1)%8})
+# $FORKJ: fork on HAL features (audio/rx/tx)
+print_unary(0xE2, FORK_HAL)
+# $FORKK: fork on keyboard
+print_unary(0xE3, FORK_KBD)
 # $ML2ADJ: mode-line to frame count: 0-2->0xE0,else->0xF0
-print_unary(0xE9, [0xE0]*48 + [0xF0]*208)
+print_unary(0xE4, [0xE0]*48 + [0xF0]*208)
 # $MASK2MODE: IMASK enable bit (3) 0->-1, 1->0
-print_unary(0xEA, 256.times.map{|i| i&8==0 ? 0xFF : 0})
+print_unary(0xE5, 256.times.map{|i| i&8==0 ? 0xFF : 0})
+# $RXS2M: Rx serial to multiplier/mode
+print_unary(0xE6, rxstate_mulmode)
+# $TKTOG: tx/kbd mode toggle 10xxxxQx->11Q00010, 11QxxxxK->100110QK
+print_unary(0xE7, 256.times.map{|i| i&0x40==0 ? ((i&2)<<4)|0xC2 : ((i&0x20)>>4)|0x98|(i&1)})
+# $KS01?: &3==0||1 ? 0:-1
+print_unary(0xE8, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
+# $KDATA: &C<<2
+print_unary(0xE9, 256.times.map{|i| (i&0xC) << 2})
+# $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
+print_unary(0xEA, [0xDF,0xDE,0xDD,0xDC]*64)
 # $SUS2LEV: sustain to level
 print_unary(0xEB, 256.times.map{|i| ((-1*i)&0xF)<<4})
 # SQRWAV: square wave number bandlimit

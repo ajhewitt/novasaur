@@ -31,7 +31,8 @@ LD HL, $IDEN$NULL
 LD Y, $IMODE
 #21
 FNH DZ, HLA            # A = IMODE
-LDP PC, $CHECK         # jump if interrupts enabled
+NOP # *** DEBUG
+#LDP PC, $CHECK         # jump if interrupts enabled
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH A, Y               # Y = PCH
@@ -52,7 +53,8 @@ LD HL, $IDEN$NULL
 LD Y, $IMODE
 #21
 FNH DZ, HLA            # A = IMODE
-LDP PC, $CHECK         # jump if interrupts enabled
+NOP # *** DEBUG
+#LDP PC, $CHECK         # jump if interrupts enabled
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y              # Y = PCH

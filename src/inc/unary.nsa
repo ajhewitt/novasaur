@@ -21,17 +21,17 @@ $REVERSE   14 # reverse bits
 #AUDIO     15 # reverse bits, flip sign
 
 #FNE - HAL
-$INCCYC     0 # cyc+1, ext=0
-$FORKJ      1 # feature fork (audio, rx, tx/kb)
-$FORKK      2 # keyboard fork
-$ADSRPG     3 # FRAME->ADSR Page
-$KS01?      4 # A&3==0||1 ? 0:-1
-$KDATA      5 # A&C<<2
-$TKTOG      6 # 81->C2->98,83->E2->9A
-$RXS2M      7 # Rx state to mult/mode
-$XGA?       8 # mode-line>11?: 0-10->-1,else->0
-$ML2ADJ     9 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
-$MASK2MODE 10 # &8==0 ? -1:0
+$XGA?       0 # mode-line>11?: 0-10->-1,else->0
+$INCCYC     1 # cyc+1, ext=0
+$FORKJ      2 # feature fork (audio, rx, tx/kb)
+$FORKK      3 # keyboard fork
+$ML2ADJ     4 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
+$MASK2MODE  5 # &8==0 ? -1:0
+$RXS2M      6 # Rx state to mult/mode
+$TKTOG      7 # 81->C2->98,83->E2->9A
+$KS01?      8 # A&3==0||1 ? 0:-1
+$KDATA      9 # A&C<<2
+$ADSRPG    10 # FRAME->ADSR Page
 $SUS2LEV   11 # sustain to level
 $SQRWAV    12 # MIDI->bandlimited Square WAV
 $SAWWAV    13 # MIDI->bandlimited Sawtooth WAV
