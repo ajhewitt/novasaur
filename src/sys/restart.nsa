@@ -64,32 +64,52 @@ MULH AZ, ND
 LD Y, $PCH
 MULH AZ, XD  # PC = 0x0000
 LD Y, $0x00  # Y = 0
-LD HL, $0x3E # HLT
+LD HL, $0x21 # HLT
 MVHL A, ND   # HLT -> [0,0]
-LD HL, $1
+LD HL, $0x01
 MVHL A, XA
-LD HL, $0x44 # HLT
+LD HL, $0x21 # HLT
 MVHL A, ND   # HLT -> [0,1]
-LD HL, $2
+LD HL, $0x02
 MVHL A, XA
-LD HL, $0x32 # HLT
+LD HL, $0x21 # HLT
 MVHL A, ND   # HLT -> [0,2]
-LD HL, $3
+LD HL, $0x03
 MVHL A, XA
-LD HL, $0x21 # HLT
+LD HL, $0x77 # HLT
 MVHL A, ND   # HLT -> [0,3]
-LD HL, $4
+LD HL, $0x04
 MVHL A, XA
-LD HL, $0x21 # HLT
+LD HL, $0x24 # HLT
 MVHL A, ND   # HLT -> [0,4]
-LD HL, $5
+LD HL, $0x05
 MVHL A, XA
-LD HL, $0x76 # HLT
+LD HL, $0xC2 # HLT
 MVHL A, ND   # HLT -> [0,5]
-LD HL, $6
+LD HL, $0x06
 MVHL A, XA
-LD HL, $0x76 # HLT
+LD HL, $0x03 # HLT
 MVHL A, ND   # HLT -> [0,6]
+LD HL, $0x07
+MVHL A, XA
+LD HL, $0x00 # HLT
+MVHL A, ND   # HLT -> [0,7]
+LD HL, $0x08
+MVHL A, XA
+LD HL, $0x3C # HLT
+MVHL A, ND   # HLT -> [0,8]
+LD HL, $0x09
+MVHL A, XA
+LD HL, $0xC3 # HLT
+MVHL A, ND   # HLT -> [0,9]
+LD HL, $0x0A
+MVHL A, XA
+LD HL, $0x03 # HLT
+MVHL A, ND   # HLT -> [0,A]
+LD HL, $0x0B
+MVHL A, XA
+LD HL, $0x00 # HLT
+MVHL A, ND   # HLT -> [0,B]
 
 LD Y, $VMS
 LD PG, $PSYNCF2_PG       # start video loop

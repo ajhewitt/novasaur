@@ -142,7 +142,7 @@ NOP
 NOP
 LD HL, $IDEN$REGMAPL
 LDZ Y, $PCH
-FNH A, Y              # Y = PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 #30
 LD Y, $INST

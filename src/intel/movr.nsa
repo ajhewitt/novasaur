@@ -10,21 +10,23 @@ FNFH DZ, HLD          # inc state
 LD Y, $INST
 FNDL DZ, Y            # Y = zpage addr of source reg
 #10
-LDNZ PC, $REG_SRC     # zpage > 0x80 for reg source
+LD HL, $IDEN$REGMAPH
+LDN PC, $REG_SRC     # zpage > 0x80 for reg source
+#14
 
 #MEM_SRC
-LD HL, $IDEN$REGMAPH
 LD Y, $LREG
 FNFH DZ, XA           # X = L
 LDZ Y, $HREG
+#20
 FNH DZ, Y             # Y = H
 FNFH M, NA            # A = [HL]
-#25
 $REG_DEST
 NOP
 NOP
 NOP
 LD Y, $INST
+#30
 FNDL DZ, Y            # Y = zpage addr of dest reg
 FNH AZ, HLD           # A -> dest reg
 LD HL, $FETCH
@@ -37,10 +39,7 @@ FNFH DZ, NA           # source reg -> A
 NOP
 NOP
 NOP
-NOP
-NOP
 #20
-NOP
 NOP
 NOP
 NOP

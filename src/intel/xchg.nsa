@@ -9,7 +9,7 @@ LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
 # D <-> H
 LD HL, $IDEN$NULL
-LD Y, $DREG
+LDZ Y, $DREG
 FNH DZ, HL            # HL = D
 #10
 LD Y, $HREG
@@ -22,7 +22,7 @@ MVHL AZ, ND           # D -> H
 # E <-> L
 LD HL, $IDEN$NULL
 #30
-LD Y, $EREG
+LDZ Y, $EREG
 FNH DZ, HL            # HL = E
 LD Y, $LREG
 XORHL DZ, NA          # A = E$L
@@ -44,7 +44,7 @@ FNDL A, PC
 ADDR 0x80
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-LD HL, $IDEN$NULL
+LDZ HL, $IDEN$NULL
 #71
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]

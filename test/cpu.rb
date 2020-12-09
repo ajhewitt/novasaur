@@ -37,7 +37,7 @@ def get_src(ram, reg, c)
   
   b = c&4 == 0 ? (reg[EO]>>5)&7 : 0
   x = c&0x800 == 0 ? reg[X] : 0xFF
-puts "READ RAM:(#{b},#{reg[Y]},#{x})=#{ram[b][reg[Y]][x]}"
+#puts "READ RAM:(#{b},#{reg[Y]},#{x})=#{ram[b][reg[Y]][x]}"
   ram[b][reg[Y]][x]
 end
 
@@ -73,13 +73,19 @@ reg = Array.new(20, -1)
 page = ARGV.first.to_i # execute page
 rom = load_rom
 ram = Array.new(8) {|a| Array.new(256) {|b| Array.new(256, 0x00)}} # [B][Y][X]
-ram[0][0x00][0x00]=0x3E
-ram[0][0x00][0x01]=0x44
-ram[0][0x00][0x02]=0x32
-ram[0][0x00][0x03]=0x21
-ram[0][0x00][0x04]=0x21
-ram[0][0x00][0x05]=0x76
-
+ram[0][0x00][0x00]=0x21
+ram[0][0x00][0x01]=0x21
+ram[0][0x00][0x02]=0x21
+ram[0][0x00][0x03]=0x77
+ram[0][0x00][0x04]=0x24
+ram[0][0x00][0x05]=0xC2
+ram[0][0x00][0x06]=0x03
+ram[0][0x00][0x07]=0x00
+ram[0][0x00][0x08]=0x3C
+ram[0][0x00][0x09]=0xC3
+ram[0][0x00][0x0A]=0x03
+ram[0][0x00][0x0B]=0x00
+ram[0][0xF0][0xFF]=0xDD
 ram[0][0xFA][0xFF]=0x00    # $PCL
 ram[0][0xFB][0xFF]=0x00    # $PCH
 ram[0][0xFD][0xFF]=0xA0    # $VMS
@@ -88,7 +94,8 @@ reg[EO]=0x00
 reg[PG] = page
 reg[PC] = 0
 reg[Y] = 0xFD # $VMS
-7.times do |q|
+1300.times do |q|
+  ram[0][0xFD][0xFF]=0xA0    # $VMS
   n = 0
   while true do
     c = fetch(rom, reg)
@@ -120,11 +127,11 @@ reg[Y] = 0xFD # $VMS
     when 5 # LDP, LDN
       n += 1
       if (c>>5)&0x80 == reg[A].to_i&0x80
-puts "COND: true"
+#puts "COND: true"
         set_dst(ram, reg, c, rom[0][get_pc(reg)])
         n += 1
       else
-puts "COND: false"
+#puts "COND: false"
         reg[PC] = reg[PC] + 1
       end
     when 6 # FNH+A
@@ -136,11 +143,11 @@ puts "COND: false"
       set_dst(ram, reg, c, x)
       n += 2
     end
-    puts "[#{n}] #{reg[PC]}: #{c.to_s(16)}" # if c == 0x1F7F
-    puts reg.to_s
+    #puts "[#{n}] #{reg[PC]}: #{c.to_s(16)}" # if c == 0x1F7F
+    #puts reg.to_s
     break if c == 0x1F7F #|| reg[PC] == 0
   end
-puts "|###|-->  INST:#{ram[0][0xE7][0xFF]} MEM: #{ram[0][0x21][0x21]}  <--|###|"
+puts "|###|-->  INST:#{ram[0][0xE7][0xFF]} A:#{ram[0][0xF0][0xFF]} H:#{ram[0][0xF6][0xFF]} L:#{ram[0][0xF7][0xFF]} MEM:#{ram[0][0x21][0x21]}  <--|###|"
 #  pp (0xA0..0xA7).map {|i| ram[0][i][0xFF].to_s(16)}
 #puts "#{ram[0][0xA0][0xFF]>>4},#{(-1*ram[0][0xA5][0xFF])&0xff}"
 end

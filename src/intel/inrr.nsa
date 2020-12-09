@@ -28,7 +28,7 @@ NOP
 NOP
 NOP 
 NOP
-LD HL, $IDEN$REGMAPL
+LD HL, $IDEN$REGMAPH
 LD Y, $FREG
 FNFH DZ, NA           # A = flags
 #30
