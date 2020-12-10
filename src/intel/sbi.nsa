@@ -57,7 +57,7 @@ NOP
 NOP
 LD HL, $IDEN$2COM
 LDZ Y, $PCH
-FNH A, Y              # Y = PCH
+FNH DZ, Y             # Y = PCH
 #50
 FNFH M, HLA           # HL = -[PC]
 LD Y, $AREG

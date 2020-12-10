@@ -64,9 +64,9 @@ VMPHL DZ, PGA         # jump to next VMC
 ADDR 0x80             # PCL = 0, inc PCH, iden PCH
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-LDZ HL, $IDEN$NULL
+LD HL, $IDEN$NULL
 #31
-FNH DZ, Y             # Y = PCH
+FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LDZ Y, $TMPL
 FNH AZ, HLD           # A -> temp

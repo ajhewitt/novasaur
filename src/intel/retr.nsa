@@ -106,7 +106,7 @@ NOP
 NOP
 FNFH DZ, ND           # SPL = SPL+1 again
 #49/4
-LD HL, $IDEN$NULL
+LD HL, $IDEN$IDEN
 LDZ Y, $SPH
 FNFL DZ, Y            # Y = SPH
 FNFH M, NA            # A = [SP]

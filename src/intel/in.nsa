@@ -66,7 +66,7 @@ FNFH DZ, XD           # X,PCL = PCL+1
 #41
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-FNH A, Y              # Y = PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 #50
 LD Y, $INST
@@ -98,7 +98,7 @@ FNFH DZ, XD           # X,PCL = PCL+1
 #41
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-FNH A, Y              # Y = PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 #50
 LD Y, $INST

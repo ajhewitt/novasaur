@@ -22,7 +22,7 @@ ADDR 0x80
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
-FNH DZ, Y             # Y = PCH
+FNH A, Y              # Y = PCH
 #30
 FNFH M, NA            # A = [PC]
 LD Y, $INST

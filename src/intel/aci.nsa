@@ -62,7 +62,7 @@ NOP
 LD HL, $IDEN$NULL
 #51
 LDZ Y, $PCH
-FNH A, Y              # Y = PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, HLA           # HL = [PC]
 LD Y, $AREG
 #60

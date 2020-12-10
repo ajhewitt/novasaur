@@ -28,14 +28,13 @@ ADDR 0x80              # PCL = 0
 LDZ Y, $PCH
 FNH DZ, HLD            # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
-LD Y, $IMODE
+LDZ Y, $IMODE
 #21
 FNH DZ, HLA            # A = IMODE
-NOP # *** DEBUG
-#LDP PC, $CHECK         # jump if interrupts enabled
+LDP PC, $CHECK         # jump if interrupts enabled
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-FNH A, Y               # Y = PCH
+FNH DZ, Y              # Y = PCH
 #30
 FNFH M, NA             # A = [PC]
 LD Y, $INST
@@ -50,11 +49,10 @@ NOP
 NOP
 NOP
 LD HL, $IDEN$NULL
-LD Y, $IMODE
+LDZ Y, $IMODE
 #21
 FNH DZ, HLA            # A = IMODE
-NOP # *** DEBUG
-#LDP PC, $CHECK         # jump if interrupts enabled
+LDP PC, $CHECK         # jump if interrupts enabled
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y              # Y = PCH
