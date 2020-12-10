@@ -1,79 +1,75 @@
-# Exchange stack top with HL (with fetch)
+# Exchange stack top with HL
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE XTHL_PG
 
-# assume: Y = $VMS
-LD HL, $0x30
-ADDH DZ, ND           # inc state
+# assume: Y = $VMS, ref: https://en.wikipedia.org/wiki/XOR_swap_algorithm
+LDZ HL, $INC2$NULL
+FNH DZ, HLD           # inc state
 # [SP] <-> L
 LD HL, $IDEN$IDEN
 LD Y, $SPL
-#9
 FNFL DZ, X            # X = SPL
+#11
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
-FNFH M, NA            # A = [SP]
-LD Y, $TEMP
-#21
-FNFH AZ, ND           # A -> temp
+FNFL M, HL            # HL = [SP]
 LD Y, $LREG
-FNFH DZ, NA           # A = L
+#20
+XORHL DZ, NA          # A = [SP]$L
 LDZ Y, $SPH
-#31
 FNH DZ, Y             # Y = SPH
-FNFH A, NM            # A -> [SP]
-LD Y, $TEMP
-FNFH DZ, NA           # A = temp
-#41
+XORHL A, NM           # [SP]$A -> [SP]
+#32
 LD Y, $LREG
-FNH AZ, HLD           # A -> L
-LD HL, $INC$NULL
+MVHL AZ, ND           # [SP] -> L
+# [SP+1] <-> H
+LD HL, $INC$FORK1
+#40
 LD Y, $SPL
-#49
 FNFH DZ, XA           # X = SPL+1
-LD HL, $OVER?$NULL
-FNH A, HLA
-LDP HL, $IDEN$INC     # inc SPH if SPL overflows
-LDN HL, $IDEN$IDEN
-#59
-FNFL DZ, Y            # Y = SPH+1?
-FNFH M, NA            # A = [SP]
-LD Y, $TEMP
-FNFH AZ, ND           # A -> temp
-#70
+FNDL A, PC
+#48
+
+ADDR 0x80             # inc SPH
+LD HL, $IDEN$INC
+#50
+FNFL DZ, Y            # Y = SPH+1
+FNFH M, HLA           # HL = [SP+1]
 LD Y, $HREG
-FNFH DZ, NA           # A = H
+XORHL DZ, NA          # A = [SP+1]$H
+#62
 LDZ Y, $SPH
-FNH DZ, Y             # Y = SPH
-#79
-FNFH A, NM            # A -> [SP]
-LD Y, $TEMP
-FNFH DZ, NA           # A = temp
+FNFL DZ, Y            # Y = SPH+1
+XORHL A, NM           # [SP+1]$A -> [SP+1]
+#71
 LD Y, $HREG
-#89
-FNH AZ, HLD           # A -> H
+MVHL AZ, ND           # [SP+1] -> H
+LD HL, $FETCH
 NOP
-NOP
-NOP
-LD HL, $INC$NULL
-LD Y, $PCL
-FNFH DZ, XD           # X,PCL = PCL+1
-#101
-LD HL, $OVER?$NULL
-FNH A, HLA
-LDP HL, $INC$NULL     # inc PCH if PCL overflows
-LDN HL, $IDEN$NULL
-LDZ Y, $PCH
-#110
-FNH DZ, HLD           # PCH = PCH+1?
-LDZ HL, $IDEN$NULL
-FNH DZ, Y             # Y = PCH
-FNFH M, NA            # A = [PC]
-#119
-LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
+#80
 LD Y, $VMS            # set Y = $VMS on exit
 VMPHL DZ, PGA         # jump to next VMC
-#129
+#86
+
+ADDR 0xC0
+LD HL, $IDEN$IDEN
+#50
+FNFL DZ, Y            # Y = SPH
+FNFH M, HLA           # HL = [SP+1]
+LD Y, $HREG
+XORHL DZ, NA          # A = [SP+1]$H
+#62
+LDZ Y, $SPH
+FNFL DZ, Y            # Y = SPH+1?
+XORHL A, NM           # [SP+1]$A -> [SP+1]
+#71
+LD Y, $HREG
+MVHL AZ, ND           # [SP+1] -> H
+LD HL, $FETCH
+NOP
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#86
