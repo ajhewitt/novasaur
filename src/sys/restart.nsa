@@ -111,5 +111,8 @@ MVHL A, XA
 LD HL, $0x00 # HLT
 MVHL A, ND   # HLT -> [0,B]
 
+LD HL, $FETCH2
+LD Y, $INST
+MVHL AZ, ND
 LD Y, $VMS
-LD PG, $PSYNCF2_PG       # start video loop
+LD PG, $PSYNCE_PG       # start video loop
