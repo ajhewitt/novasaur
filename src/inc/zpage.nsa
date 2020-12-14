@@ -104,6 +104,8 @@ $EREG          0xFE
 $AUDIO         0xFF
 
 #ROM copy
+$CLR_X         0xF8        # clr_scrn X
+$CLR_Y         0xF9        # clr_scrn Y
 $ROM_ID        0xFA        # source rom 0-15 - init to PC jump point
 $ROM_PG        0xFB        # source page 0-15 - init to 0
 $ROM_X         0xFC        # x index - ref both src and dest - init to 0

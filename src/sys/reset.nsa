@@ -22,15 +22,14 @@ LD HL, $ZERO?$NULL
 FNH A, HLA
 LDN PC, $MEM_TEST   # try again?
 
-LD PG, $CLR_SCRN    # clear screen
-
 # ROM Copy
 LD HL, $0
 LD Y, $ROM_ID
 MULH DZ, ND         # 0 -> rom ID
 LD Y, $ROM_Y
 MULH DZ, ND         # 0 -> ROM Y: V porch = 0
-LD HL, $0xE
+LD HL, $1
 LD Y, $ROM_N
-MVHL AZ, ND         # 14 -> ROM N: copy 15 roms
-LD PG, $ROM_COPY
+MVHL AZ, ND         # 1 -> ROM N: copy 1 roms
+
+LD PG, $CLR_SCRN

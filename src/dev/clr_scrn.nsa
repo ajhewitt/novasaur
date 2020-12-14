@@ -5,37 +5,37 @@ INCLUDE ../inc/pages.nsa
 PAGE CLR_SCRN
 
 LD HL, $0
-LD Y, $0xF9
+LD Y, $CLR_X
 MULH AZ, ND            # X=0
 LD HL, $0xF0
-LD Y, $0xF8
+LD Y, $CLR_Y
 MVHL AZ, ND            # Y=0xF0
 
 $START
 LD HL, $IDEN$IDEN
-LD Y, $0xF9
+LD Y, $CLR_X
 FNFL DZ, X             # set X
-LDZ Y, $0xF8
+LDZ Y, $CLR_Y
 FNH DZ, Y              # set Y
 LD HL, $0x20           # *** fill with black bg, green fg, font 0
 MVHL A, ND             # 0x20 ->[X,Y]
 LD HL, $IDEN$INC
-LD Y, $0xF9
+LD Y, $CLR_X
 FNFL DZ, X             # set X+1
-LDZ Y, $0xF8
+LDZ Y, $CLR_Y
 FNH DZ, Y              # set Y
 MULH A, ND             # 0->[X+1,Y]
 LD HL, $INC2$NULL
-LDZ Y, $0xF9
+LDZ Y, $CLR_X
 FNH DZ, HLD             # X=X+2
 LD HL, $ZERO?$NULL
 FNH A, HLA              # X==0?
 LDN PC, $START          # loop if X!=0
 LD HL, $DEC$NULL
-LDZ Y, $0xF8
+LDZ Y, $CLR_Y
 FNH DZ, HLD             # Y=Y-1
 LD HL, $UNDER?$NULL
 FNH A, HLA              # Y==0?
 LDP PC, $START          # loop if Y!=0
 
-LD PG, $RESTART         # restart
+LD PG, $ROM_COPY        # copy code rom
