@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2020-10-15"
+Date "2020-12-12"
 Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -1484,8 +1484,6 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS11" H 6200 3600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5050 3400 5050 3350
-Wire Wire Line
 	5100 3600 5000 3600
 Wire Wire Line
 	5000 3600 5000 3650
@@ -1502,12 +1500,12 @@ AR Path="/5FE5FA60" Ref="TP?"  Part="1"
 AR Path="/5DA1E9BA/5FE5FA60" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5FE5FA60" Ref="TP23"  Part="1" 
 AR Path="/5DA1E9C0/5FE5FA60" Ref="TP?"  Part="1" 
-F 0 "TP23" H 3100 3500 50  0000 L CNN
+F 0 "TP23" V 3050 3550 50  0000 L CNN
 F 1 "~VBLANK" H 2800 3500 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3250 3350 50  0001 C CNN
 F 3 "~" H 3250 3350 50  0001 C CNN
 	1    3050 3350
-	-1   0    0    1   
+	0    -1   -1   0   
 $EndComp
 Text Label 5000 2250 0    50   ~ 0
 PA15
@@ -1627,8 +1625,6 @@ Wire Wire Line
 Wire Wire Line
 	3050 2150 3050 3350
 Wire Wire Line
-	5100 3400 5050 3400
-Wire Wire Line
 	4100 3650 4300 3650
 Wire Wire Line
 	6500 3600 9300 3600
@@ -1642,8 +1638,12 @@ Wire Wire Line
 	4200 3550 4200 3350
 Connection ~ 4200 3350
 Wire Wire Line
-	4200 3350 5050 3350
+	4200 3350 5000 3350
 Connection ~ 3050 3350
+Wire Wire Line
+	5000 3400 5000 3350
+Wire Wire Line
+	5000 3400 5100 3400
 Wire Bus Line
 	3200 2150 3200 2450
 Wire Bus Line

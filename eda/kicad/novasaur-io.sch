@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 4 4
 Title "Input/Output"
-Date "2020-10-15"
+Date "2020-12-12"
 Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -1789,12 +1789,12 @@ kbdrx
 $Comp
 L Connector_Generic:Conn_01x02 J5
 U 1 1 5F6CCEC8
-P 9450 1400
-F 0 "J5" H 9400 1650 50  0000 L CNN
-F 1 "AUDIO" H 9350 1550 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 9450 1400 50  0001 C CNN
-F 3 "~" H 9450 1400 50  0001 C CNN
-	1    9450 1400
+P 9600 1400
+F 0 "J5" H 9550 1650 50  0000 L CNN
+F 1 "AUDIO" H 9500 1550 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 9600 1400 50  0001 C CNN
+F 3 "~" H 9600 1400 50  0001 C CNN
+	1    9600 1400
 	1    0    0    -1  
 $EndComp
 NoConn ~ 4550 6750
@@ -1957,8 +1957,6 @@ Wire Wire Line
 	5400 6750 5750 6750
 Connection ~ 5400 6750
 Wire Wire Line
-	9200 1400 9250 1400
-Wire Wire Line
 	9450 2250 9200 2250
 Wire Wire Line
 	9450 2250 9450 2300
@@ -1972,8 +1970,6 @@ Connection ~ 9200 2250
 Connection ~ 9200 2050
 Wire Wire Line
 	9200 2050 9200 2250
-Wire Wire Line
-	9050 1500 9250 1500
 $Comp
 L Device:R_US R?
 U 1 1 5F8819B0
@@ -2031,19 +2027,19 @@ F 3 "" H 8750 1750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	9050 1500 9050 1600
+	9350 1500 9350 1550
 $Comp
 L power:GNDD #PWR?
 U 1 1 5FC34EDE
-P 9050 1600
+P 9350 1550
 AR Path="/62D13D9D/5FC34EDE" Ref="#PWR?"  Part="1" 
 AR Path="/5DAA5CD8/5D9AFF37/5FC34EDE" Ref="#PWR?"  Part="1" 
 AR Path="/5DA1E9C0/5FC34EDE" Ref="#PWR0203"  Part="1" 
-F 0 "#PWR0203" H 9050 1350 50  0001 C CNN
-F 1 "GNDD" H 9054 1445 50  0000 C CNN
-F 2 "" H 9050 1600 50  0001 C CNN
-F 3 "" H 9050 1600 50  0001 C CNN
-	1    9050 1600
+F 0 "#PWR0203" H 9350 1300 50  0001 C CNN
+F 1 "GNDD" H 9354 1395 50  0000 C CNN
+F 2 "" H 9350 1550 50  0001 C CNN
+F 3 "" H 9350 1550 50  0001 C CNN
+	1    9350 1550
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -2453,6 +2449,13 @@ Wire Wire Line
 	7350 1750 7050 1750
 Wire Wire Line
 	7050 1750 7050 1400
+Connection ~ 7050 1400
+Wire Wire Line
+	7050 1400 7150 1400
+Wire Wire Line
+	9200 1400 9400 1400
+Wire Wire Line
+	9350 1500 9400 1500
 Wire Bus Line
 	3350 2300 3350 2600
 Wire Bus Line
@@ -2463,7 +2466,4 @@ Wire Bus Line
 	1250 1800 1250 2600
 Wire Bus Line
 	4900 1300 4900 4100
-Connection ~ 7050 1400
-Wire Wire Line
-	7050 1400 7150 1400
 $EndSCHEMATC
