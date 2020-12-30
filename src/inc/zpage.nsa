@@ -1,91 +1,91 @@
 # zero page assignments
 
 # sound voice 0
-$WAVE0         0x9A
-$ATTACK0       0x9B
-$DECAY0        0x9C
-$SUSTAIN0      0x9D
-$RELEASE0      0x9E
-$DELTA0        0x9F
+$WAVE0         0xA0
+$ATTACK0       0xA1
+$DECAY0        0xA2
+$SUSTAIN0      0xA3
+$RELEASE0      0xA4
+$DELTA0        0xA5
 # sound voice 1
-$WAVE1         0xA0
-$NOTE1L        0xA1
-$NOTE1H        0xA2
-$ATTACK1       0xA3
-$DECAY1        0xA4
-$SUSTAIN1      0xA5
-$RELEASE1      0xA6
-$DELTA1        0xA7
-$TONE1L        0xA8
-$TONE1H        0xA9
+$WAVE1         0xA6
+$NOTE1L        0xA7
+$NOTE1H        0xA8
+$ATTACK1       0xA9
+$DECAY1        0xAA
+$SUSTAIN1      0xAB
+$RELEASE1      0xAC
+$DELTA1        0xAD
+$TONE1L        0xAE
+$TONE1H        0xAF
 # sound voice 2
-$WAVE2         0xAA
-$NOTE2L        0xAB
-$NOTE2H        0xAC
-$ATTACK2       0xAD
-$DECAY2        0xAE
-$SUSTAIN2      0xAF
-$RELEASE2      0xB0
-$DELTA2        0xB1
-$TONE2L        0xB2
-$TONE2H        0xB3
+$WAVE2         0xB0
+$NOTE2L        0xB1
+$NOTE2H        0xB2
+$ATTACK2       0xB3
+$DECAY2        0xB4
+$SUSTAIN2      0xB5
+$RELEASE2      0xB6
+$DELTA2        0xB7
+$TONE2L        0xB8
+$TONE2H        0xB9
 # sound voice 3
-$WAVE3         0xB4
-$NOTE3L        0xB5
-$NOTE3H        0xB6
-$ATTACK3       0xB7
-$DECAY3        0xB8
-$SUSTAIN3      0xB9
-$RELEASE3      0xBA
-$DELTA3        0xBB
-$TONE3L        0xBC
-$TONE3H        0xBD
-
+$WAVE3         0xBA
+$NOTE3L        0xBB
+$NOTE3H        0xBC
+$ATTACK3       0xBD
+$DECAY3        0xBE
+$SUSTAIN3      0xBF
+$RELEASE3      0xC0
+$DELTA3        0xC1
+$TONE3L        0xC2
+$TONE3H        0xC3
 #HAL
-$KTO           0xC0
-$KIDLE         0xC1
-$KSL           0xC2
-$KSH           0xC3
-$KSCAN         0xC4
-$KMODE         0xC5
-$KSRDIDX       0xC6
-$KSWRIDX       0xC7
-$KCRDIDX       0xC8
-$KCWRIDX       0xC9
-$RMULT         0xCA
-$RMODE         0xCB
-$RXRDIDX       0xCC
-$RXWRIDX       0xCD
-$TMODE         0xCE
-$TXRDIDX       0xCF
-$TXWRIDX       0xD0
-$AMODE         0xD1
-$PMODE         0xD2
-$PLINE         0xD3
-$FRAME         0xD4
-$COMLS         0xD5
-$COMPS         0xD6
-$VMODE         0xD7
-$VLINE         0xD8
-$VSTART        0xD9
-$ICL           0xDA
-$ICH           0xDB
-$T0            0xDC
-$T1            0xDD
-$T2            0xDE
-$T3            0xDF
-
+$KTO           0xC4
+$KIDLE         0xC5
+$KSL           0xC6
+$KSH           0xC7
+$KSCAN         0xC8
+$KMODE         0xC9
+$KSRDIDX       0xCA
+$KSWRIDX       0xCB
+$KCRDIDX       0xCC
+$KCWRIDX       0xCD
+$RMULT         0xCE
+$RMODE         0xCF
+$RXRDIDX       0xD0
+$RXWRIDX       0xD1
+$TMODE         0xD2
+$TXRDIDX       0xD3
+$TXWRIDX       0xD4
+$AMODE         0xD5
+$PMODE         0xD6
+$PLINE         0xD7
+$FRAME         0xD8
+$COMLS         0xD9
+$COMPS         0xDA
+$VMODE         0xDB
+$VLINE         0xDC
+$VSTART        0xDD
+$VTIME         0xDE
+#RTC
+$TIME0         0xE0 # 15tps, max 90 - 6s
+$TIME1         0xE1 # 10tpm, max 120 - 12m
+$TIME2         0xE2 # 5tph, max 120 - 1d
+$TIME3         0xE3 # 1tpd, max 256 - 0.7y
+$ICL           0xE4
+$ICH           0xE5
+$VMS           0xE6
+$EREG          0xE7
+$CSWIDX        0xE8
+$CSWPC         0xE9
+$CPUX0         0xEA
+$CPUX1         0xEB
 #vCPU
-$INST          0xE7
-$TEMP          0xE8 # alias for TMPL
-$TMPL          0xE8
-$TMPH          0xE9
-$IMASK         0xEA # interrupt mask - lower nibble, bit3: enable
-$IMODE         0xEB # check interrupt - 0: check, -1: skip
-$IXL           0xEC
-$IXH           0xED
-$IYL           0xEE
-$IYH           0xEF
+$INST          0xEC # instruction cache
+$EXT           0xED # extended mode cache
+$IMODE         0xEE # check interrupt - 0: check, -1: skip
+$IMASK         0xEF # interrupt mask - lower nibble, bit3: enable
 $AREG          0xF0 # Accumulator
 $FREG          0xF1 # Flags - COZNHP00
 $BREG          0xF2
@@ -98,9 +98,9 @@ $SPH           0xF8 # SP MSB
 $SPL           0xF9 # SP LSB
 $PCH           0xFA # PC MSB
 $PCL           0xFB # PC LSB
-
-$VMS           0xFD
-$EREG          0xFE
+$TMPH          0xFC # 16-bit temp MSB
+$TMPL          0xFD # 16-bit temp LSB
+$TEMP          0xFE # 8-bit temp
 $AUDIO         0xFF
 
 #ROM copy
@@ -125,8 +125,11 @@ $INTR2_INST    0x38
 $SKIP_INST     0xCB
 $PUSHPC_INST   0xD9
 $JMP_INST      0xC3
+$CSW_INST      0xF0
 
-$KSBUFF        0xF0
-$KCBUFF        0xF1
-$RXBUFF        0xF2
-$TXBUFF        0xF3
+$KSBUFF        0xF8
+$KCBUFF        0xF9
+$RXBUFF        0xFA
+$TXBUFF        0xFB
+
+$CPU_SEQ       0xFE

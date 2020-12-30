@@ -4,6 +4,7 @@ $EXT1_PG       0x01
 $EXT2_PG       0x02
 $EXT3_PG       0x03
 # 0x04-0x7F: extended CPU instructions
+$CSWE_PG       0x70
 $TEST_PG       0x7F
 # 0x80-0x85: system
 $RESET         0x80 # reset vector - hard reboot
@@ -122,5 +123,5 @@ $ADSRE0_PG     0xFA # ADSR voice 0
 $ADSRE1_PG     0xFB # ADSR voice 1
 $ADSRE2_PG     0xFC # ADSR voice 2
 $ADSRE3_PG     0xFD # ADSR voice 3
-$XPSYNCE_PG    0xFE
+$RTCE_PG       0xFE
 $BOOT_PG       0xFF # hardware reset

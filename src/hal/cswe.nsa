@@ -1,0 +1,201 @@
+# context switch
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE CSWE_PG
+
+# assume Y = $VMS
+LDZ HL, $INC2$IDEN
+FNFH DZ, ND               # VMS+2
+LD Y, $CPUX0
+FNFL DZ, X                # X = running CPU column
+#10/8
+LD HL, $0x38              # 56 bytes per cycle
+LD Y, $CSWPC
+ADDHL DZ, PCD             # PC + 56
+#18/14
+
+ADDR 0x10
+LD HL, $IDEN$NULL         # backup 1/2: zpage -> running CPU col
+#20/2
+LDZ Y, $0xEE
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xEF
+FNH D, HLD
+#30/10
+LD HL, $IDEN$NULL
+LDZ Y, $0xF0
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xF1
+#40/19
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xF2
+FNH D, HLD
+LD HL, $IDEN$NULL
+#50/27
+LDZ Y, $0xF3
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xF4
+FNH D, HLD
+#60/35
+LD HL, $IDEN$NULL
+LDZ Y, $0xF5
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xF6
+#70/44
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xF7
+FNH D, HLD
+LD HL, $CSW_INST
+#80/52
+LD Y, $VMS
+VMPHL DZ, PCA
+#86/56
+
+ADDR 0x48
+LD HL, $IDEN$NULL         # backup 2/2: zpage -> running CPU col
+#20/2
+LDZ Y, $0xF8
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xF9
+FNH D, HLD
+#30/10
+LD HL, $IDEN$NULL
+LDZ Y, $0xFA
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xFB
+#40/19
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xFC
+FNH D, HLD
+LD HL, $IDEN$NULL
+#50/27
+LDZ Y, $0xFD
+FNH D, HLD
+LD HL, $IDEN$NULL
+LDZ Y, $0xFE
+FNH D, HLD
+#60/35
+LD HL, $IDEN$NULL
+LDZ Y, $CPUX1
+FNH DZ, HLA               # A = next CPU col
+LD HL, $IDEN$NULL
+LDZ Y, $CPUX0
+#70/44
+FNH DZ, HLD               # A -> running CPU col
+NOP
+NOP
+MVHL A, NA                # NOP
+LD HL, $CSW_INST
+#80/51
+LD Y, $VMS
+VMPHL DZ, PCA
+#86/55
+
+ADDR 0x80
+LD HL, $IDEN$NULL         # restore 1/2: running CPU col -> zpage
+#20/2
+LD Y, $0xFE
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xFD
+FNH DZ, HLD
+#30/10
+LD HL, $IDEN$NULL
+LD Y, $0xFC
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xFB
+#40/19
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xFA
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+#50/27
+LD Y, $0xF9
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xF8
+FNH DZ, HLD
+#60/35
+LD HL, $IDEN$NULL
+LD Y, $0xF7
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xF6
+#70/44
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xF5
+FNH DZ, HLD
+LD HL, $CSW_INST
+#80/52
+LD Y, $VMS
+VMPHL DZ, PCA
+#86/56
+
+ADDR 0xB8
+LD HL, $IDEN$NULL         # restore 2/2: running CPU col -> zpage
+#20/2
+LD Y, $0xF4
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xF3
+FNH DZ, HLD
+#30/10
+LD HL, $IDEN$NULL
+LD Y, $0xF2
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xF1
+#40/19
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xF0
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+#50/27
+LD Y, $0xEF
+FNH DZ, HLD
+LD HL, $IDEN$NULL
+LD Y, $0xEE
+FNH DZ, HLD
+#60/35
+LD HL, $IDEN$NULL
+LD Y, $EXT
+FNH DZ, HLA               # A sign = extended cache
+LDN HL, $EXIT68           # leave in extended mode
+LD HL, $0x70
+LD Y, $VMS
+#71/46
+ANDH DZ, ND               # clear extended bit
+LD HL, $IDEN$NULL
+LD Y, $INST
+FNH DZ, HLD               # restore instruction
+#80/53
+LD Y, $VMS
+VMPHL DZ, PCA
+#86/57
+
+$EXIT68
+NOP
+NOP
+#70/2
+MVHL A, NA                # NOP
+LD HL, $IDEN$NULL
+LD Y, $INST
+FNH DZ, HLD               # restore instruction
+#80/9
+LD Y, $VMS
+VMPHL DZ, PCA
+#86/13

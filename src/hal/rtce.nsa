@@ -1,0 +1,184 @@
+# H-sync on process cycle continuation to real-time clock on execute
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE RTCE_PG
+
+# assume cycle=1
+LD HL, $IDEN$NULL         #120
+LDZ Y, $VMODE
+FNH DZ, HLA               # A = 00xx,01xx,10xx,11xx
+LDP HL, $LSL$NULL
+LDN HL, $LSR$NULL
+FNH A, HLA                # A = 0xxx,1xxx,010x,011x
+#131
+LDP HL, $0xFC             # -4
+LDN HL, $0xFB             # -5
+LD Y, $FRAME
+MVHL AZ, ND               # vmode==01xx?-5:-4 -> Frame count
+#140
+LD HL, $INC$NULL
+LDZ Y, $TIME0
+FNH DZ, HLD               # TIME0+1
+LDN PC, $EXIT148          # return if TIME0<90
+LD HL, $0xA6
+#149
+MVHL AZ, ND               # TIME0 = -90
+LD HL, $INC2$NULL
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS+2 (cycle=3)
+#159
+LD HL, $XGA?$NULL         
+FNEH DZ, NA
+LDP PC, $XGA166           # jump if 4-cycle per line
+LD HL, $INC$ML2ADJ
+LDZ Y, $TIME1
+#169
+FNFH DZ, ND               # TIME1+1
+LDN PC, $T0_ADJ174        # return if TIME1<120
+LD HL, $0x88
+MVHL AZ, ND               # TIME1 = -120
+LD HL, $INC$NULL
+#181
+LDZ Y, $TIME2
+FNH DZ, HLD               # TIME2+1
+LDN PC, $EXIT187          # return if TIME2<120
+LD HL, $0x88
+MVHL AZ, ND               # TIME2 = -120
+#192
+LD HL, $INC$NULL
+LD Y, $TIME3
+FNFH DZ, ND               # TIME3+1
+LDZ Y, $VMS
+#201
+FNH DZ, HLD               # VMS+1 (cycle=4)
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+#209
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#215
+
+$T0_ADJ174                #174 - 10 ticks per min, cycle=3
+LD Y, $VMS
+FNEL DZ, HL               # HL = 0xF0/0xE0
+#179
+ORHL A, NA                # A = TIME1 | 0xF0/0XE0
+LD HL, $INC$NULL
+FNH A, HLA                # A+1 (A +ve if TIME1=0x?F)
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+#190
+LDZ Y, $TIME0
+FNH DZ, HLD               # adjust TIME0 every 16/32 TIME1
+LD PC, $EXIT196
+#196
+
+$XGA166
+NOP
+NOP
+NOP
+NOP
+#170                      # Need null sync now
+LD Y, $VMS
+LDZ HL, $INCLINE$NULL
+FNH DZ, HLD               # H=mode_line+1, L=E000
+LD Y, $PMODE
+VIDH DZ, SA               # mode_line, pmode —> S
+#181
+LDP HL, $IDEN$IDEN        # sign bit low, don’t inc vline
+LDN HL, $INC$IDEN         # sign bit high, inc vline
+LD Y, $VLINE
+FNFH DZ, VD               # increment? vline —> V
+#189
+FNFL E, HL                # serial inputs -> H
+LD Y, $COMLS
+COMH DZ, NA               # update comms line state
+LD HL, $INC$ML2ADJ
+LDZ Y, $TIME1
+#201
+FNFH DZ, ND               # TIME1+1
+LDN PC, $T0_ADJ206        # return if TIME1<120
+LD HL, $0x88
+MVHL AZ, ND               # TIME1 = -120
+#211
+LD HL, $INC$NULL
+LDZ Y, $TIME2
+FNH DZ, HLD               # TIME2+1
+LDN PC, $EXIT219          # return if TIME2<120
+LD HL, $0x88
+#220
+MVHL AZ, ND               # TIME2 = -120
+LD HL, $INC$NULL
+LD Y, $TIME3
+FNFH DZ, ND               # TIME3+1
+#231
+LD PC, $EXIT233
+#233
+
+$T0_ADJ206                #206 - 10 ticks per min, cycle=3
+LD Y, $VMS
+FNEL DZ, HL               # HL = 0xF0/0xE0
+#211
+ORHL A, NA                # A = TIME1 | 0xF0/0XE0
+LD HL, $INC$NULL
+FNH A, HLA                # A+1 (A +ve if TIME1=0x?F)
+#219
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $TIME0
+FNH DZ, HLD               # adjust TIME0 every 16/32 TIME1
+LD PC, $EXIT228
+#228
+
+$EXIT148
+LD HL, $INC2$NULL
+#150
+NOP
+NOP
+LD PC, $EXIT156
+#156
+
+$EXIT219                  #219 - 5 ticks per hour
+NOP
+#220
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+$EXIT228                  #228 - 10 ticks per min
+NOP
+NOP
+#230,187
+$EXIT187                  #187 - 5 ticks per hour, cycle=3
+NOP
+NOP
+NOP
+$EXIT233                  #233 - 1 tick per day
+#190
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+$EXIT196                  #196 - 10 ticks per min, cycle=3
+NOP
+#240
+LD HL, $INC$NULL
+#199,156,113
+$EXIT156
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS+1 (cycle=4,2,1)
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
+#209,166,123
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#258,215,172,129

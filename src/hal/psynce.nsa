@@ -48,14 +48,11 @@ FNH DZ, HL                # H = vmode
 LD Y, $PMODE
 VIDH AZ, ND               # VID(vmode,pline) -> pmode
 LDP PC, $NEXT_FIELD       # jump if pmode zero?
-NOP
-NOP
-NOP
-#70
-NOP
-NOP
-NOP
-NOP
+LD HL, $DEC$NULL
+LDZ Y, $VTIME
+#71
+FNH DZ, HLD               # vertical counter timeout
+LDN PC, $CSW              # jump if context switch neg?
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
@@ -87,8 +84,8 @@ LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0, cycle=1
 LD HL, $DEC$NULL
 LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
-LDN PC, $EXIT110          # exit if audio off, cycle=1
 NOP
+LDN PC, $EXIT111          # exit if audio off, cycle=1
 #110
 MVHL A, NA                # NOP LD HL, $FETCH; LD Y, $INST
 MVHL A, NA                # NOP MVHL AZ, ND
@@ -105,102 +102,85 @@ ORH DZ, ND                # set LSB -> TMODE to stop Tx
 #110
 MVHL A, NA                # NOP LD HL, $FETCH; LD Y, $INST
 MVHL A, NA                # NOP MVHL AZ, ND
-LD HL, $XGA?$NULL
+LD PG, $RTCE_PG
 #120
-LD Y, $VMS
-FNEH DZ, NA
-LDP PG, $XPSYNCE_PG       # jump page if 4-cycle per line
-LDZ HL, $INC2$NULL
-FNH DZ, HLD               # VMS+2 (cycle=3)
-#130
+
+$CSW                      #75 Y=$VTIME
+LDZ HL, $75
+FNH DZ, HLD               # 75 -> VTIME
+LD HL, $CPU_SEQ
+#81
+MVHL A, XA                # X = CPU sequence col
+LD HL, $INC$NULL
+LDZ Y, $CSWIDX
+FNH DZ, HLD               # context switch index+1
+#91
 LD HL, $IDEN$NULL
-LDZ Y, $VMODE
-FNH DZ, HLA               # A = 00xx,01xx,10xx,11xx
-LDP HL, $LSL$NULL
-LDN HL, $LSR$NULL
-FNH A, HLA                # A = 0xxx,1xxx,010x,011x
+FNH A, Y                  # Y = context switch index
+FNFH D, NA                # A = next CPUX
+LDP PC, $EXIT100          # exit if positive
+LD Y, $CPUX1
+#101
+FNH AZ, HLD               # A -> next CPUX
+LD Y, $CPUX0
+XORHL DZ, NA              # A = CPUX1 diff CPUX0
+LD HL, $SWAP$NULL
+#111
+FNH A, HL                 # H = AL
+LD Y, $EREG
+XORH DZ, ED               # update bank using CPUX delta
+LD HL, $IDEN$IDEN
+#120
+LD Y, $CPUX0
+FNFL DZ, X                # X = running CPUX
+LDZ Y, $INST
+FNH D, HLD                # inst -> running CPU col
+LD HL, $IDEN$NULL
+#131
+LDZ Y, $VMS
+FNH DZ, HLA               # A = VMS
+LD HL, $SWAP$NULL
+LD Y, $EXT
+FNH A, HLD                # ext sign -> running CPU col
 #141
-LDP HL, $0xFC             # -4
-LDN HL, $0xFB             # -5
-LD Y, $FRAME
-MVHL AZ, ND               # vmode==01xx?-5:-4 -> Frame count
+LD HL, $0xD8
+LD Y, $CSWPC
+MVHL AZ, ND               # -40 -> CSW PC (jump page PC+56=0x10)
+NOP
 #150
 NOP
-NOP
-LD HL, $INC$NULL
-LDZ Y, $T0
-FNH DZ, HLD               # T0+1
-LDN PC, $EXIT160          # return if T0<90
-#159
-LD HL, $0xA6
-MVHL AZ, ND               # T0 = -90
-LD HL, $INC$ML2ADJ
-LDZ Y, $T1
-#169
-FNFH DZ, ND               # T1+1
-LDN PC, $T0_ADJUST        # return if T1<120
-LD HL, $0x88
-MVHL AZ, ND               # T1 = -120
-LD HL, $INC$NULL
-#181
-LDZ Y, $T2
-FNH DZ, HLD               # T2+1
-LDN PC, $EXIT187          # return if T2<120
-LD HL, $0x88
-MVHL AZ, ND               # T2 = -120
-#192
-LD HL, $INC$NULL
-LD Y, $T3
-FNFH DZ, ND               # T3+1
-LDZ Y, $VMS
-#201
-FNH DZ, HLD               # VMS+1 (cycle=4)
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL                # inst cache -> HL
-#209
-LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
-#215
-
-$T0_ADJUST                #174 - 10 ticks per min, cycle=3
+LD HL, $0xA0
 LD Y, $VMS
-FNEL DZ, HL               # HL = 0xF0/0xE0
-#179
-ORHL A, NA                # A = T1 | 0xF0/0XE0
-LD HL, $INC$NULL
-FNH A, HLA                # A+1 (A +ve if T1=0x?F)
-LDP HL, $INC$NULL
-LDN HL, $IDEN$NULL
-#190
-LDZ Y, $T0
-FNH DZ, HLD               # adjust T0 every 16/32 T1
-LD PC, $EXIT196
-#196
-
-$EXIT187                  #187 - 5 ticks per hour, cycle=3
-NOP
-NOP
-NOP
-#190
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-$EXIT196                  #196 - 10 ticks per min, cycle=3
-$EXIT110                  #110 cycle=1
-NOP
-LD HL, $INC$NULL
-#199,113
-LDZ Y, $VMS
-FNH DZ, HLD               # VMS+1 (cycle=4,2)
-$EXIT160                  #160 - 15 ticks per second, cycle=3
-LD HL, $IDEN$NULL
+ORH DZ, ND                # VMS+ext+2 (cycle=3)
+LD HL, $CSW_INST
+#160
 LDZ Y, $INST
-FNH DZ, HL                # inst cache -> HL
-#209,166,123
+MVHL AZ, ND               # HL -> inst cache
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
-#215,172,129
+#172
+
+$EXIT100
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#110
+NOP
+$EXIT111
+LD HL, $INC$NULL
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS+1 (cycle=2)
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+#121
+FNH DZ, HL                # inst cache -> HL
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#129

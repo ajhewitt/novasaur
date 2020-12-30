@@ -7,7 +7,7 @@ PAGE KDCODF1_PG
 #KMODE: 000EBCAS
 #assume H=$IDEN
 LDZ Y, $KSCAN         #34
-FNH DZ, HLA           # A=keyboard scan code
+FNH DZ, HLA           # A=kbd scan code
 LDP PC, $SCAN40       # scan code
 LD HL, $LSL$NULL
 #41/7
@@ -30,18 +30,18 @@ LD HL, $SC2MASK$NULL
 FNCH A, NA            # A=mask update (update on MSB low)
 LDP PC, $MASK47       # update mask
 LD HL, $KCBUFF
-MVHL A, XA            # X=keyboard code buffer
+MVHL A, XA            # X=kbd code buffer
 #52/36
 LD HL, $IDEN$FORKK
-FNFH DZ, NA           # A=keyboard scan code
+FNFH DZ, NA           # A=kbd scan code
 LD Y, $KMODE
-FNEL DZ, PC           # fork on keyboard mode (000EBCAS)
+FNEL DZ, PC           # fork on kbd mode (000EBCAS)
 #62/44
 
 $SCAN45
 LD Y, $KMODE
 LDZ HL, $SWAP$NULL
-FNH DZ, HLA           # A=swapped keyboard mode (make on MSB low)
+FNH DZ, HLA           # A=swapped kbd mode (make on MSB low)
 #51/49
 LDP PC, $MAKE53
 LD HL, $0xE7          # 11100111
@@ -53,11 +53,11 @@ LD PC, $EXIT62
 
 $MAKE53
 LD HL, $KCBUFF
-MVHL A, XA            # X=keyboard code buffer
+MVHL A, XA            # X=kbd code buffer
 #59/64
 LD HL, $0x7F          # -0x81
 LD Y, $KSCAN
-ADDHL DZ, NA          # A=keyboard scan code - 0x81
+ADDHL DZ, NA          # A=kbd scan code - 0x81
 #67/70
 LD HL, $SCAN0$IDEN
 LD PC, $CONT71
@@ -67,7 +67,7 @@ $MASK47
 LD Y, $KMODE
 LDZ HL, $SWAP$NULL
 #51/78
-FNH DZ, HLA           # A=swapped keyboard mode (make on MSB low)
+FNH DZ, HLA           # A=swapped kbd mode (make on MSB low)
 LD HL, $SC2MASK$1COM
 LD Y, $KSCAN
 LDP PC, $MAKE59       # jump on make
@@ -139,7 +139,7 @@ $CONT71
 NOP
 $CONT72
 LDZ Y, $KCWRIDX
-FNFL DZ, Y            # Y=keyboard code write index
+FNFL DZ, Y            # Y=kbd code write index
 FNCH A, ND            # ascii -> kbd code buffer
 #80/183
 LD HL, $ZERO?$NULL
@@ -204,7 +204,7 @@ FNH DZ, HLD           # VMS+2,+1
 #109,66
 LD HL, $0xE6          # -0x1A
 LD Y, $TMODE
-ADDHL DZ, ND          # 2 -> keyboard mode (idle)
+ADDHL DZ, ND          # 2 -> kbd mode (idle)
 MVHL A, NA            # NOP
 #121,78
 LD HL, $FETCH         # HL = fetch
