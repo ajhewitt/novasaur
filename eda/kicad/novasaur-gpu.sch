@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2020-12-12"
+Date "2020-12-30"
 Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2020"
@@ -1501,7 +1501,7 @@ AR Path="/5DA1E9BA/5FE5FA60" Ref="TP?"  Part="1"
 AR Path="/5DA1E9BD/5FE5FA60" Ref="TP23"  Part="1" 
 AR Path="/5DA1E9C0/5FE5FA60" Ref="TP?"  Part="1" 
 F 0 "TP23" V 3050 3550 50  0000 L CNN
-F 1 "~VBLANK" H 2800 3500 50  0001 L CNN
+F 1 "VENABLE" H 2800 3500 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3250 3350 50  0001 C CNN
 F 3 "~" H 3250 3350 50  0001 C CNN
 	1    3050 3350
