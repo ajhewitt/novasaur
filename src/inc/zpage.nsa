@@ -67,7 +67,7 @@ $COMPS         0xDA
 $VMODE         0xDB
 $VLINE         0xDC
 $VSTART        0xDD
-$VTIME         0xDE
+$CSLINE        0xDE
 #RTC
 $TIME0         0xE0 # 15tps, max 90 - 6s
 $TIME1         0xE1 # 10tpm, max 120 - 12m
@@ -77,11 +77,11 @@ $ICL           0xE4
 $ICH           0xE5
 $VMS           0xE6
 $EREG          0xE7
-$CSWIDX        0xE8
+$CTXIDX        0xE8
 $CSWPC         0xE9
-$CPUX0         0xEA
-$CPUX1         0xEB
-#vCPU
+$CTX0          0xEA
+$CTX1          0xEB
+#8080CPU
 $INST          0xEC # instruction cache
 $EXT           0xED # extended mode cache
 $IMODE         0xEE # check interrupt - 0: check, -1: skip
@@ -132,4 +132,4 @@ $KCBUFF        0xF9
 $RXBUFF        0xFA
 $TXBUFF        0xFB
 
-$CPU_SEQ       0xFE
+$CTX_SEQ       0xFE

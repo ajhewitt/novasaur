@@ -137,6 +137,8 @@ LD HL, $INC2$NULL
 #150
 NOP
 NOP
+NOP
+NOP
 LD PC, $EXIT156
 #156
 
@@ -154,7 +156,7 @@ NOP
 $EXIT228                  #228 - 10 ticks per min
 NOP
 NOP
-#230,187
+#230
 $EXIT187                  #187 - 5 ticks per hour, cycle=3
 NOP
 NOP

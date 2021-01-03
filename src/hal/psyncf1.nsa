@@ -49,10 +49,10 @@ LD Y, $PMODE
 VIDH AZ, ND               # VID(vmode,pline) -> pmode
 LDP PC, $NEXT_FIELD       # jump if pmode zero?
 LD HL, $DEC$NULL
-LDZ Y, $VTIME
+LDZ Y, $CSLINE
 #71
 FNH DZ, HLD               # vertical counter timeout
-LDN PC, $CSW              # jump if context switch neg?
+LDN PC, $CTX_SWITCH       # jump if context switch line neg?
 NOP
 NOP
 NOP
@@ -86,8 +86,8 @@ LDP PC, $KBD_SCAN         # scan keyboard on FRAME 0, cycle=1
 LD HL, $DEC$NULL
 LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
+LDN PC, $EXIT110          # exit if audio off, cycle=1
 NOP
-LDN PC, $EXIT111          # exit if audio off, cycle=1
 #110
 LD HL, $FETCH
 LD Y, $INST
@@ -109,44 +109,44 @@ MVHL AZ, ND               # fetch -> inst cache
 LD PG, $RTCE_PG
 #120
 
-$CSW                      #75 Y=$VTIME
+$CTX_SWITCH               #75 Y=$CSLINE
 LDZ HL, $75
-FNH DZ, HLD               # 75 -> VTIME
-LD HL, $CPU_SEQ
+FNH DZ, HLD               # 75 -> CSLINE
+LD HL, $CTX_SEQ
 #81
-MVHL A, XA                # X = CPU sequence col
+MVHL A, XA                # X = CTX sequence col
 LD HL, $INC$NULL
-LDZ Y, $CSWIDX
+LDZ Y, $CTXIDX
 FNH DZ, HLD               # context switch index+1
 #91
 LD HL, $IDEN$NULL
 FNH A, Y                  # Y = context switch index
-FNFH D, NA                # A = next CPUX
-LDP PC, $EXIT100          # exit if positive
-LD Y, $CPUX1
+FNFH D, NA                # A = next CTX col
+LD PC, $EXIT100          # exit if positive
+LD Y, $CTX1
 #101
-FNH AZ, HLD               # A -> next CPUX
-LD Y, $CPUX0
-XORHL DZ, NA              # A = CPUX1 diff CPUX0
+FNH AZ, HLD               # A -> next CTX col
+LD Y, $CTX0
+XORHL DZ, NA              # A = CTX1 diff CTX0
 LD HL, $SWAP$NULL
 #111
 FNH A, HL                 # H = AL
 LD Y, $EREG
-XORH DZ, ED               # update bank using CPUX delta
+XORH DZ, ED               # update bank using CTX delta
 LD HL, $IDEN$IDEN
 #120
-LD Y, $CPUX0
-FNFL DZ, X                # X = running CPUX
+LD Y, $CTX0
+FNFL DZ, X                # X = running CTX col
 LD HL, $FETCH
 LD Y, $INST
 #129
-MVHL A, ND                # fetch -> running CPU col
+MVHL A, ND                # fetch -> running CTX col
 LDZ Y, $VMS
 FNH DZ, HLA               # A = VMS
 LD HL, $SWAP$NULL
 LD Y, $EXT
 #141
-FNH A, HLD                # ext sign -> running CPU col
+FNH A, HLD                # ext sign -> running CTX col
 LD HL, $0xD8
 LD Y, $CSWPC
 MVHL AZ, ND               # -40 -> CSW PC (jump page PC+56=0x10)
@@ -174,8 +174,8 @@ NOP
 NOP
 NOP
 #110
+$EXIT110
 NOP
-$EXIT111
 NOP
 NOP
 NOP

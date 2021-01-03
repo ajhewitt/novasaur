@@ -8,10 +8,10 @@ PAGE RESTART
 LD HL, $0xD0
 LD Y, $EREG
 MVHL AZ, ED         # LED off
-LD HL, $0xF0
+LD HL, $0xA0        # F=XGA48,A=SVGA60
 LD Y, $VMODE
 MVHL AZ, ND         # 3 -> video mode
-LD HL, $0xE0
+LD HL, $0x90        # E=XGA48,9=SVGA60
 LD Y, $VMS
 MVHL AZ, ND         # 0 -> mode line
 LD HL, $0x1F

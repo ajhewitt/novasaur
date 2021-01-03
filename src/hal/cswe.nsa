@@ -7,8 +7,8 @@ PAGE CSWE_PG
 # assume Y = $VMS
 LDZ HL, $INC2$IDEN
 FNFH DZ, ND               # VMS+2
-LD Y, $CPUX0
-FNFL DZ, X                # X = running CPU column
+LD Y, $CTX0
+FNFL DZ, X                # X = running CTX col
 #10/8
 LD HL, $0x38              # 56 bytes per cycle
 LD Y, $CSWPC
@@ -16,7 +16,7 @@ ADDHL DZ, PCD             # PC + 56
 #18/14
 
 ADDR 0x10
-LD HL, $IDEN$NULL         # backup 1/2: zpage -> running CPU col
+LD HL, $IDEN$NULL         # backup 1/2: zpage -> running CTX col
 #20/2
 LDZ Y, $0xEE
 FNH D, HLD
@@ -59,7 +59,7 @@ VMPHL DZ, PCA
 #86/56
 
 ADDR 0x48
-LD HL, $IDEN$NULL         # backup 2/2: zpage -> running CPU col
+LD HL, $IDEN$NULL         # backup 2/2: zpage -> running CTX col
 #20/2
 LDZ Y, $0xF8
 FNH D, HLD
@@ -86,12 +86,12 @@ LDZ Y, $0xFE
 FNH D, HLD
 #60/35
 LD HL, $IDEN$NULL
-LDZ Y, $CPUX1
-FNH DZ, HLA               # A = next CPU col
+LDZ Y, $CTX1
+FNH DZ, HLA               # A = next CTX col
 LD HL, $IDEN$NULL
-LDZ Y, $CPUX0
+LDZ Y, $CTX0
 #70/44
-FNH DZ, HLD               # A -> running CPU col
+FNH DZ, HLD               # A -> running CTX col
 NOP
 NOP
 MVHL A, NA                # NOP
@@ -102,7 +102,7 @@ VMPHL DZ, PCA
 #86/55
 
 ADDR 0x80
-LD HL, $IDEN$NULL         # restore 1/2: running CPU col -> zpage
+LD HL, $IDEN$NULL         # restore 1/2: running CTX col -> zpage
 #20/2
 LD Y, $0xFE
 FNH DZ, HLD
@@ -145,7 +145,7 @@ VMPHL DZ, PCA
 #86/56
 
 ADDR 0xB8
-LD HL, $IDEN$NULL         # restore 2/2: running CPU col -> zpage
+LD HL, $IDEN$NULL         # restore 2/2: running CTX col -> zpage
 #20/2
 LD Y, $0xF4
 FNH DZ, HLD
