@@ -6,10 +6,10 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2020-12-30"
+Date "2021-01-01"
 Rev "1.8"
 Comp ""
-Comment1 "(c) A J Hewitt 2020"
+Comment1 "(c) A J Hewitt 2021"
 Comment2 ""
 Comment3 ""
 Comment4 ""
