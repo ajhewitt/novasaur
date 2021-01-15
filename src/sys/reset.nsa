@@ -1,35 +1,158 @@
-# reset vector
+# Reset Vector
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE RESET
 
-LD HL, $0x00
-MVHL A, EA          # LED on -> E
-LD Y, $0x80         # start of zpage
+LD HL, $0x01
+MVHL A, EA              # bank1,LED on->E
+MULH A, XA              # X=0
+LD Y, $0                # Y=0
 
-$MEM_TEST
+$PREFLIGHT
 LD HL, $0xAA
-MVHL AZ, ND         # AA -> zpage
-XORHL DZ, NA
+MVHL A, NM              # AA->[0x10000]
+XORHL M, NA             # A=[0x10000]$AA
 LD HL, $ZERO?$NULL
-FNH A, HLA
-LDN PC, $MEM_TEST   # try again?
+FNH A, HLA              # A==0?
+LDN PC, $PREFLIGHT      # try again?
 LD HL, $0x55
-MVHL AZ, ND         # 55 -> zpage
-XORHL DZ, NA
+MVHL A, NM              # 55->[0x10000]
+XORHL M, NA             # A=[0x10000]$55
 LD HL, $ZERO?$NULL
-FNH A, HLA
-LDN PC, $MEM_TEST   # try again?
+FNH A, HLA              # A==0?
+LDN PC, $PREFLIGHT      # try again?
+
+LD HL, $0x10
+MVHL A, EA              # bank0,LED off->E
+LD HL, $0
+LD Y, $0x80
+MULH AZ, ND             # 0->zpageY
+$ROW1
+LDZ HL, $IDEN$NULL
+FNH DZ, Y               # Y=zpageY
+LD HL, $0xFF
+MVHL AZ, XD             # X=FF, FF->zpageX
+$FILL1
+LD HL, $INC$NULL
+FNFH DZ, XD             # X+1->zpageX
+FNH A, HLD              # A->[YYXX]
+LD HL, $OVER?$NULL
+FNH A, HLA              # X==0?
+LDN PC, $FILL1          # loop if X<=255
+LD HL, $INC$NULL
+LDZ Y, $0x80
+FNH DZ, HLD             # Y+1->zpageY
+LDP PC, $ROW1           # loop if Y<80
+
+LD HL, $0x00
+MVHL A, EA              # bank0,LED on->E
+LD Y, $0x80
+MULH AZ, ND             # 0->zpageY
+$ROW2
+LDZ HL, $IDEN$NULL
+FNH DZ, Y               # Y=zpageY
+LD HL, $0
+MULL A, X               # X=0, 0->zpageX
+$CHECK2
+LDZ HL, $INC$NULL
+FNH DZ, HL              # HL=zpageX+1
+XORHL D, ND             # X$[YYXX]->[YYXX]
+LD HL, $ZERO?$NULL
+FNH D, HLA              # [YYXX]==0?
+LDN PC, $0              # retest if !0
+LD HL, $INC$NULL
+FNFH DZ, XD             # X+1->zpageX
+LD HL, $UNDER?$NULL
+FNH A, HLA              # X==FF?
+LDP PC, $CHECK2         # loop if X>0
+LD HL, $0
+MULH A, ND              # 0->[YYFF]
+LD HL, $INC$NULL
+LDZ Y, $0x80
+FNH DZ, HLD             # Y+1->zpageY
+LDP PC, $ROW2           # loop if Y<80
+
+LD HL, $0x10
+MVHL A, EA              # bank0,LED off->E
+LD HL, $0x80
+LD Y, $0x7F
+MVHL AZ, ND             # 80->zpageY
+$ROW3
+LDZ HL, $IDEN$NULL
+FNH DZ, Y               # Y=zpageY
+LD HL, $0xFF
+MVHL AZ, XD             # X=FF, FF->zpageX
+$FILL3
+LD HL, $INC$NULL
+FNFH DZ, XD             # X+1->zpageX
+FNH A, HLD              # A->[YYXX]
+LD HL, $OVER?$NULL
+FNH A, HLA              # X==0?
+LDN PC, $FILL3          # loop if X<=255
+LD HL, $INC$NULL
+LDZ Y, $0x7F
+FNH DZ, HLD             # Y+1->zpageY
+LDN PC, $ROW3           # loop if Y>80
+
+LD HL, $0x00
+MVHL A, EA              # bank0,LED on->E
+LD HL, $0x80
+LD Y, $0x7F
+MVHL AZ, ND             # 0x80->zpageY
+$ROW4
+LDZ HL, $IDEN$NULL
+FNH DZ, Y               # Y=zpageY
+LD HL, $0
+MULL A, X               # X=0, 0->zpageX
+$CHECK4
+LDZ HL, $INC$NULL
+FNH DZ, HL              # HL=zpageX+1
+XORHL D, ND             # X$[YYXX]->[YYXX]
+LD HL, $ZERO?$NULL
+FNH D, HLA              # [YYXX]==0?
+LDN PC, $0              # retest if !0
+LD HL, $INC$NULL
+FNFH DZ, XD             # X+1->zpageX
+LD HL, $UNDER?$NULL
+FNH A, HLA              # X==FF?
+LDP PC, $CHECK4         # loop if X>0
+LD HL, $0
+MULH A, ND              # 0->[YYFF]
+LD HL, $INC$NULL
+LDZ Y, $0x7F
+FNH DZ, HLD             # Y+1->zpageY
+LDN PC, $ROW4           # loop if Y>80
+
+LD Y, $0xFF             # Y=FF
+LD HL, $0x11
+MVHL A, EA              # bank1,LED off->E
+LD HL, $0xAA
+MVHL AZ, NM             # AA->[1FFFF]
+LD HL, $0x17
+MVHL A, EA              # bank7,LED off->E
+LD HL, $0x55
+MVHL AZ, NM             # 55->[7FFFF]
+LD HL, $0x11
+MVHL A, EA              # bank1,LED off->E
+LD HL, $0xAA
+XORHL MZ, NA            # A=AA$[1FFFF]
+LD HL, $ZERO?$NULL
+LD Y, $MEMSIZE
+FNH AZ, HLD             # 00|FF->$MEMSIZE (0=512k,-1=128k)
+
+LD HL, $0x10
+LD Y, $EREG
+MVHL AZ, ED             # bank0,LED off->E
 
 # ROM Copy
 LD HL, $0
 LD Y, $ROM_ID
-MULH DZ, ND         # 0 -> rom ID
+MULH DZ, ND             # 0 -> rom ID
 LD Y, $ROM_Y
-MULH DZ, ND         # 0 -> ROM Y: V porch = 0
+MULH DZ, ND             # 0 -> ROM Y: V porch = 0
 LD HL, $1
 LD Y, $ROM_N
-MVHL AZ, ND         # 1 -> ROM N: copy 1 roms
+MVHL AZ, ND             # 1 -> ROM N: copy 1 roms
 
 LD PG, $CLR_SCRN

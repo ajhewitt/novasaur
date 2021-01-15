@@ -68,6 +68,7 @@ $VMODE         0xDB
 $VLINE         0xDC
 $VSTART        0xDD
 $CSLINE        0xDE
+$MEMSIZE       0xDF
 #RTC
 $TIME0         0xE0 # 15tps, max 90 - 6s
 $TIME1         0xE1 # 10tpm, max 120 - 12m
@@ -125,7 +126,7 @@ $INTR2_INST    0x38
 $SKIP_INST     0xCB
 $PUSHPC_INST   0xD9
 $JMP_INST      0xC3
-$CSW_INST      0xF0
+$CSW_INST      0x01
 
 $KSBUFF        0xF8
 $KCBUFF        0xF9
