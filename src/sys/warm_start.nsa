@@ -1,8 +1,8 @@
-# restart vector
+# Warm Start
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE RESTART
+PAGE WARM_START
 
 # set E-reg
 LD HL, $0xD0

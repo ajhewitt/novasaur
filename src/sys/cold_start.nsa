@@ -1,29 +1,30 @@
-# Reset Vector
+# Cold Start - memory test, blank bank0, set MEMSIZE
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE RESET
+PAGE COLD_START
 
-LD HL, $0x01
+LD HL, $0x01            # LED ON for preflight
 MVHL A, EA              # bank1,LED on->E
 MULH A, XA              # X=0
 LD Y, $0                # Y=0
-
 $PREFLIGHT
 LD HL, $0xAA
 MVHL A, NM              # AA->[0x10000]
+XORHL A, NA             # A=0
 XORHL M, NA             # A=[0x10000]$AA
 LD HL, $ZERO?$NULL
 FNH A, HLA              # A==0?
 LDN PC, $PREFLIGHT      # try again?
 LD HL, $0x55
 MVHL A, NM              # 55->[0x10000]
+XORHL A, NA             # A=0
 XORHL M, NA             # A=[0x10000]$55
 LD HL, $ZERO?$NULL
 FNH A, HLA              # A==0?
 LDN PC, $PREFLIGHT      # try again?
 
-LD HL, $0x10
+LD HL, $0x10            # LED OFF for fill
 MVHL A, EA              # bank0,LED off->E
 LD HL, $0
 LD Y, $0x80
@@ -45,7 +46,7 @@ LDZ Y, $0x80
 FNH DZ, HLD             # Y+1->zpageY
 LDP PC, $ROW1           # loop if Y<80
 
-LD HL, $0x00
+LD HL, $0x00            # LED ON for check
 MVHL A, EA              # bank0,LED on->E
 LD Y, $0x80
 MULH AZ, ND             # 0->zpageY
@@ -73,7 +74,7 @@ LDZ Y, $0x80
 FNH DZ, HLD             # Y+1->zpageY
 LDP PC, $ROW2           # loop if Y<80
 
-LD HL, $0x10
+LD HL, $0x10            # LED OFF for fill
 MVHL A, EA              # bank0,LED off->E
 LD HL, $0x80
 LD Y, $0x7F
@@ -95,7 +96,7 @@ LDZ Y, $0x7F
 FNH DZ, HLD             # Y+1->zpageY
 LDN PC, $ROW3           # loop if Y>80
 
-LD HL, $0x00
+LD HL, $0x00            # LED OFF for check
 MVHL A, EA              # bank0,LED on->E
 LD HL, $0x80
 LD Y, $0x7F
@@ -124,17 +125,17 @@ LDZ Y, $0x7F
 FNH DZ, HLD             # Y+1->zpageY
 LDN PC, $ROW4           # loop if Y>80
 
+LD HL, $0x11            # LED OFF to set MEMSIZE
 LD Y, $0xFF             # Y=FF
-LD HL, $0x11
 MVHL A, EA              # bank1,LED off->E
 LD HL, $0xAA
 MVHL AZ, NM             # AA->[1FFFF]
-LD HL, $0x17
-MVHL A, EA              # bank7,LED off->E
+LD HL, $0x13
+MVHL A, EA              # bank3->E
 LD HL, $0x55
 MVHL AZ, NM             # 55->[7FFFF]
 LD HL, $0x11
-MVHL A, EA              # bank1,LED off->E
+MVHL A, EA              # bank1->E
 LD HL, $0xAA
 XORHL MZ, NA            # A=AA$[1FFFF]
 LD HL, $ZERO?$NULL
