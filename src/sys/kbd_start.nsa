@@ -4,15 +4,15 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE KBD_START
 
-LD HL, $0x64              # retry 100 times
+LD HL, $0x07              # retry 7 times
 LD Y, $TEMP
-MVHL AZ, ND               # 100->TEMP
+MVHL AZ, ND               # 7->TEMP
 
-# (1)  Bring the Clock line low for at least 100us - delay 125us (128*8)
+# (1)  Bring the Clock line low for at least 100us - delay 124us (128*8 cycles)
 $RESET
 LD HL, $0x20
 LD Y, $EREG
-ORHL DZ, ND               # kbdclk low
+ORHL DZ, ED               # kbdclk low
 LD HL, $0x80
 MVHL A, NA                # A=128
 $DELAY1
@@ -22,7 +22,7 @@ LD HL, $DEC$NULL
 FNH A, HLA                # A=A-1
 LDP PC, $DELAY1           # delay until -1
 
-# (2)  Bring the Data line low - delay 60us (80*6)
+# (2)  Bring the Data line low - delay 52us (72*6 cycles)
 LD HL, $0
 MULL A, S                 # reset scan reg
 NOP
@@ -37,9 +37,10 @@ NOP
 NOP
 NOP
 NOP
+NOP
 MULL A, S                 # kbdtx low
-LD HL, $0x50              # dealy 80
-MVHL A, NA                # A=80
+LD HL, $0x48              # dealy 72
+MVHL A, NA                # A=72
 $DELAY2
 LD HL, $DEC$NULL
 FNH A, HLA                # A=A-1
@@ -48,38 +49,35 @@ LDP PC, $DELAY2           # delay until -1
 # (3)  Release the Clock line
 LD HL, $0xDF
 LD Y, $EREG
-ANDHL DZ, ND              # kbdclk high
+ANDHL DZ, ED              # kbdclk high
 
-# (4)  Wait for the device to bring the Clock line low - delay 186us (128*12 cycles)
-LD HL, $0x20
-LD Y, $EREG
-ORHL DZ, ND               # kbdclk low
+# (4)  Wait for the device to bring the Clock line low - wait 186us (128*12 cycles)
 LD HL, $0x80              # delay 128
 LD Y, $TMPL
 MVHL AZ, ND               # 128->TMPL
 $DELAY4
 LD HL, $IDEN$NULL
 FNFH E, NA                # A sign=kbd clk
-LDN PC, $CONT5            # continue if clk low
+LDP PC, $CONT5            # continue if clk low
 LDZ HL, $DEC$NULL
 FNH DZ, HLD               # TMPL-1->TMPL
 LDP PC, $DELAY4           # delay until -1
 LD PC, $RETRY             # timed out, retry
 
-# (5)  Release the Data line - transmit 10 high bits (FF+odd patiry+stop)
+# (5)  Release the Data line - transmit FF, patiry, stop (10 high bits)
 $CONT5
 LD HL, $0x00
 MVHL A, SA
 MVHL A, SA                # kbdtx high
 
-# (6) Wait for the device to bring Data low - delay for 10 bits (20*50us)
-LD HL, $0x14              # loop 20
+# (6) Wait for the device to bring Data low - wait for 10 bits/1.2ms (15*80us)
+LD HL, $0x0F              # loop 15
 LD Y, $TMPH
-MVHL AZ, ND               # 20->TMPH
+MVHL AZ, ND               # 15->TMPH
 $LOOP6
-LD HL, $0x22              # delay 34
+LD HL, $0x37              # delay 55
 LD Y, $TMPL
-MVHL AZ, ND               # 34->TMPL
+MVHL AZ, ND               # 55->TMPL
 $DELAY6
 LD HL, $LSL$NULL
 FNFH E, NA                # A sign=kbd data
@@ -93,7 +91,7 @@ FNH DZ, HLD               # TMPH-1->TMPH
 LDP PC, $LOOP6            # loop until 0
 LD PC, $RETRY             # timed out, retry
 
-# (7) Wait for the device to release Data
+# (7) Wait for the device to release Data - wait 186us (128*12 cycles)
 $CONT7
 LD HL, $0x80              # delay 128
 LD Y, $TMPL
@@ -113,9 +111,10 @@ LD HL, $IDEN$NULL
 FNFH E, NA                # A sign=kbd clk
 LDP PC, $RETRY            # retry if kbd clk low
 
-# (9)  Bring the Clock and Data lines low - delay 625us (25*25us)
+# (9)  Bring the Clock and Data lines low - delay 600us (15*40us)
 LD HL, $0
 MULL A, S                 # reset scan reg
+NOP
 NOP
 NOP
 NOP
@@ -131,51 +130,58 @@ NOP
 MULL A, S                 # kbdtx low
 LD HL, $0x20
 LD Y, $EREG
-ORHL DZ, ND               # kbdclk low
-LD HL, $0x19              # loop 25
+ORHL DZ, ED               # kbdclk low
+LD HL, $0x0F              # loop 15
 LD Y, $TMPH
-MVHL AZ, ND               # 25->TMPH
+MVHL AZ, ND               # 15->TMPH
 $LOOP9
-LD HL, $0x22              # delay 34
-MVHL A, NA                # A=34
+LD HL, $0x37              # delay 55
+MVHL A, NA                # A=55
 $DELAY9
 LD HL, $DEC$NULL
 FNH A, HLA                # A=A-1
 LDP PC, $DELAY9           # delay until -1
 LD HL, $DEC$NULL
-LDZ Y, $TMPH
 FNH DZ, HLD               # TMPH-1->TMPH
 LDP PC, $LOOP9            # loop until 0
 
 # (10) Release the Clock and Data lines
 LD HL, $0xDF
 LD Y, $EREG
-ANDHL DZ, ND              # kbdclk high
+ANDHL DZ, ED              # kbdclk high
 LD HL, $0x00
 MVHL A, SA
 MVHL A, SA                # kbdtx high
 LD PC, $EXIT
 
-# (0)  Retry after 10ms delay (108*93us)
+# (0)  Retry after 300ms delay
 $RETRY
-LD HL, $0x6C              # loop 108
-LD Y, $TMPH
-MVHL AZ, ND               # 108->TMPH
-$LOOP0
-LD HL, $0x80              # delay 128
-MVHL A, NA                # A=128
-$DELAY0
-LD HL, $DEC$NULL
-FNH A, HLA                # A=A-1
-LDP PC, $DELAY0           # delay until -1
-LD HL, $DEC$NULL
-LDZ Y, $TMPH
-FNH DZ, HLD               # TMPH-1->TMPH
-LDP PC, $LOOP0            # loop until 0
 LD HL, $DEC$NULL
 LDZ Y, $TEMP
 FNH DZ, HLD               # TEMP-1->TEMP
-LDP PC, $RESET            # reset until no more retries
+LDN PC, $EXIT             # exit if no more retries
+LD HL, $0x36              # loop 54
+LD Y, $TMPH
+MVHL AZ, ND               # 54->TMPH
+$LOOPH
+LD HL, $0x80              # loop 128
+LD Y, $TMPL
+MVHL AZ, ND               # 128->TMPH
+$LOOPL
+LD HL, $0x37              # delay 55
+MVHL A, NA                # A=55
+$DELAY
+LD HL, $DEC$NULL
+FNH A, HLA                # A=A-1
+LDP PC, $DELAY            # delay until -1
+LD HL, $DEC$NULL
+FNH DZ, HLD               # TMPH-1->TMPH
+LDP PC, $LOOPL            # loop until 0
+LD HL, $DEC$NULL
+LDZ Y, $TMPH
+FNH DZ, HLD               # TMPH-1->TMPH
+LDP PC, $LOOPH            # loop until 0
+LD PC, $RESET
 
 $EXIT
 LD PG, $CLR_SCRN
