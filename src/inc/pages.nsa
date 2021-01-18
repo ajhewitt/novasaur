@@ -9,6 +9,7 @@ $TEST_PG       0x7F
 # 0x80-0x8F: system
 $COLD_START    0x80 # reset vector
 $WARM_START    0x81
+$KBD_START     0x82
 
 $ROM_COPY      0x88 # temp dev testing
 $CLR_SCRN      0x89
