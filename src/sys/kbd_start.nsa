@@ -1,4 +1,4 @@
-# Keyboard Start
+# Keyboard Start - send PS/2 reset, retry for 2 secs if no clock
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -70,11 +70,11 @@ MVHL AZ, ND               # 128->TMPH
 $LOOP5
 LD HL, $0x37              # delay 80us
 LD Y, $TMPL
-MVHL AZ, ND               # 37->TMPL
+MVHL AZ, ND               # 55->TMPL
 $DELAY5
 LD HL, $IDEN$NULL
 FNFH E, NA                # A sign=kbd clk
-LDP PC, $CONT6            # continue if clk low
+LDP PC, $EXIT             # exit if clk low
 LDZ HL, $DEC$NULL
 FNH DZ, HLD               # TMPL-1->TMPL
 LDP PC, $DELAY5           # delay until -1
@@ -82,17 +82,11 @@ LD HL, $DEC$NULL
 LDZ Y, $TMPH
 FNH DZ, HLD               # TMPH-1->TMPH
 LDP PC, $LOOP5            # loop until 0
-LD PC, $RETRY             # timed out, retry
 
-# (6)  Release data to transmit 10 high bits - FF, patiry, stop
-$CONT6
+# (6)  Release data, wait 300ms, retry
 LD HL, $0x00
 MVHL A, SA
 MVHL A, SA                # kbdtx high
-LD PC, $EXIT
-
-# (0)  Retry after 300ms delay
-$RETRY
 LD HL, $DEC$NULL
 LDZ Y, $TEMP
 FNH DZ, HLD               # TEMP-1->TEMP
@@ -105,7 +99,7 @@ LD HL, $0x80              # loop 128
 LD Y, $TMPL
 MVHL AZ, ND               # 128->TMPH
 $LOOPL
-LD HL, $0x37              # delay 55
+LD HL, $0x37              # delay 40us
 MVHL A, NA                # A=55
 $DELAY
 LD HL, $DEC$NULL
@@ -120,6 +114,11 @@ FNH DZ, HLD               # TMPH-1->TMPH
 LDP PC, $LOOPH            # loop until 0
 LD PC, $IDLE
 
+# (7)  Release data to transmit 10 high bits - FF, patiry, stop
 $EXIT
-LD PG, $CLR_SCRN
+LD HL, $0x00
+MVHL A, SA
+MVHL A, SA                # kbdtx high
 
+#LD PG, $WARM_START
+LD PG, $CLR_SCRN          # dev testing
