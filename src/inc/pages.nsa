@@ -1,10 +1,11 @@
 # All the pages
-$IDLE_PG       0x00 # 43-pc idle VMC
-$EXT1_PG       0x01
-$EXT2_PG       0x02
-$EXT3_PG       0x03
+$IDLE_PG       0x10 # 43-pc idle VMC
+$EXT1_PG       0x11
+$EXT2_PG       0x12
+$EXT3_PG       0x13
 # 0x04-0x7F: extended CPU instructions
 $CSWE_PG       0x70
+$ROM_COPY_PG   0x71
 $TEST_PG       0x7F
 # 0x80-0x8F: system
 $COLD_START    0x80 # reset vector

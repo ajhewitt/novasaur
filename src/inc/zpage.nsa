@@ -68,7 +68,7 @@ $VMODE         0xDB
 $VLINE         0xDC
 $VSTART        0xDD
 $CSLINE        0xDE
-$MEMSIZE       0xDF
+$HWSTAT        0xDF
 #RTC
 $TIME0         0xE0 # 15tps, max 90 - 6s
 $TIME1         0xE1 # 10tpm, max 120 - 12m
@@ -77,7 +77,7 @@ $TIME3         0xE3 # 1tpd, max 256 - 0.7y
 $ICL           0xE4
 $ICH           0xE5
 $VMS           0xE6
-$EREG          0xE7
+$EO            0xE7
 $CTXIDX        0xE8
 $CSWPC         0xE9
 $CTX0          0xEA

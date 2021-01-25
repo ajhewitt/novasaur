@@ -52,7 +52,7 @@ LD HL, $DEC$NULL
 LDZ Y, $CSLINE
 #71
 FNH DZ, HLD               # vertical counter timeout
-LDN PC, $CTX_SWITCH       # jump if context switch line  neg?
+LDN PC, $CTX_SWITCH       # jump if context switch line neg?
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
@@ -139,7 +139,7 @@ XORHL DZ, NA              # A = CTX1 diff CTX0
 LD HL, $SWAP$NULL
 #111
 FNH A, HL                 # H = AL
-LD Y, $EREG
+LD Y, $EO
 XORH DZ, ED               # update bank using CTX delta
 LD HL, $IDEN$IDEN
 #120

@@ -23,7 +23,7 @@ LDP PC, $DELAY1           # delay until -1
 
 # (2)  Bring clock low for 124us
 LD HL, $0x20
-LD Y, $EREG
+LD Y, $EO
 ORHL DZ, ED               # kbdclk low
 LD HL, $0x80              # delay 128*8
 MVHL A, NA                # A=128
@@ -60,7 +60,7 @@ LDP PC, $DELAY3           # delay until -1
 
 # (4)  Release clock
 LD HL, $0xDF
-LD Y, $EREG
+LD Y, $EO
 ANDHL DZ, ED              # kbdclk high
 
 # (5)  Wait 10ms for auxiliary device to bring clock low
@@ -74,7 +74,7 @@ MVHL AZ, ND               # 55->TMPL
 $DELAY5
 LD HL, $IDEN$NULL
 FNFH E, NA                # A sign=kbd clk
-LDP PC, $EXIT             # exit if clk low
+LDP PC, $PASS             # pass if clk low
 LDZ HL, $DEC$NULL
 FNH DZ, HLD               # TMPL-1->TMPL
 LDP PC, $DELAY5           # delay until -1
@@ -87,10 +87,13 @@ LDP PC, $LOOP5            # loop until 0
 LD HL, $0x00
 MVHL A, SA
 MVHL A, SA                # kbdtx high
+LD HL, $0x20
+LD Y, $HWSTAT
+ORH DZ, ND                # set bit 2 of HW STAT
 LD HL, $DEC$NULL
 LDZ Y, $TEMP
 FNH DZ, HLD               # TEMP-1->TEMP
-LDN PC, $EXIT             # exit if no more retries
+LDN PC, $FAIL             # fail if no more retries
 LD HL, $0x36              # loop 54
 LD Y, $TMPH
 MVHL AZ, ND               # 54->TMPH
@@ -115,10 +118,15 @@ LDP PC, $LOOPH            # loop until 0
 LD PC, $IDLE
 
 # (7)  Release data to transmit 10 high bits - FF, patiry, stop
-$EXIT
+$PASS
 LD HL, $0x00
 MVHL A, SA
 MVHL A, SA                # kbdtx high
+LD HL, $0xD0
+LD Y, $HWSTAT
+ANDH DZ, ND               # clear bit 2 of HW STAT
+
+$FAIL
 
 #LD PG, $WARM_START
 LD PG, $CLR_SCRN          # dev testing

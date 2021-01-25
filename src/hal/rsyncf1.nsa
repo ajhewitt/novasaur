@@ -40,7 +40,7 @@ VMPHL DZ, PGA         # jump to next VMC
 
 ADDR 0x28             #32 - mode 0x60: rx conn open
 LD HL, $0xEF
-LD Y, $EREG
+LD Y, $EO
 ANDHL DZ, ED          # 0 -> RTS (assert)
 #40/46
 LD HL, $0x42
@@ -51,7 +51,7 @@ LD PC, $EXIT50
 
 ADDR 0x38             #32 - mode 0x43: rx conn close
 LD HL, $0x10
-LD Y, $EREG
+LD Y, $EO
 ORHL DZ, ED           # 1 -> RTS (deassert)
 #40/62
 LD HL, $0x40

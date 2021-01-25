@@ -55,7 +55,7 @@ MULH E, NA            # A sign = CTS
 LDN PC, $EXIT45       # jump on not clear to send
 ADDH DZ, ND           # mode+4
 LD HL, $7$NULL
-LD Y, $EREG
+LD Y, $EO
 #51/72
 ANDH DZ, ED           # 0 -> Tx (start bit)
 $EXIT54
@@ -113,14 +113,14 @@ LDN PC, $TX_HIGH      # jump to set Tx
 FNH D, HLD            # Tx byte >> 1
 LD HL, $7$NULL
 #61/144
-LD Y, $EREG
+LD Y, $EO
 ANDH DZ, ED           # Tx reset
 LD PC, $EXIT68
 $TX_HIGH
 FNH D, HLD            # Tx byte >> 1
 #60/151
 LD HL, $8$NULL
-LD Y, $EREG
+LD Y, $EO
 ORH DZ, ED            # Tx set
 NOP
 LD HL, $INC$NULL
@@ -154,7 +154,7 @@ LDN HL, $0xEE         # -0x12
 LD Y, $TMODE
 ADDHL DZ, ND          # 0,2 -> mode
 LD HL, $8$NULL
-LD Y, $EREG
+LD Y, $EO
 #70/207
 ORH DZ, ED            # 1 -> Tx (stop bit)
 NOP
@@ -172,7 +172,7 @@ LD Y, $TMODE
 FNEH DZ, ND           # tx mode -> keyboard mode
 #39/230
 LD HL, $0xDF
-LD Y, $EREG
+LD Y, $EO
 ANDHL DZ, ED          # kbd clock enable
 LD PC, $EXIT49
 #49/238
@@ -183,7 +183,7 @@ LD Y, $TMODE
 ADDHL DZ, ND          # mode-0x18 (0-3)
 #40/246
 LD HL, $0x20
-LD Y, $EREG
+LD Y, $EO
 ORHL DZ, ED           # kbd clock disable
 LD PC, $EXIT50
 #50/254

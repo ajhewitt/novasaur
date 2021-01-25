@@ -1,0 +1,100 @@
+# ROM Copy
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE ROM_COPY_PG
+
+$ROM_COPY_EXT 0
+
+LDZ HL, $INC2$NULL
+FNH DZ, HLD            # VMS+2
+LD HL, $IDEN$2
+LD Y, $TEMP
+FNFH DZ, XA            # TEMP->X,A
+#11
+LDZ Y, $TMPH
+FNH DZ, PC             # jump to read rom, A=index, L=LSL
+$CONT24
+MVHL A, NA             # HL->A return value from ROM
+LD HL, $IDEN$NULL
+#30
+LDZ Y, $DREG
+FNH DZ, Y              # PAGE->Y
+FNFH A, NM             # A->[Y,X]
+LD HL, $INC$NULL
+LDZ Y, $TEMP
+#41
+FNH DZ, HLD            # TEMP+1->TEMP
+LDZ HL, $OVER?$NULL
+FNH A, HLA             # check if X>255
+LDP PC, $EXIT49
+LD HL, $INC$NULL
+#50
+LDZ Y, $DREG
+FNH DZ, HLD            # ram page+1
+LD HL, $0x80
+LD Y, $TMPL
+ADDH DZ, ND            # rom page+8
+#61
+LDP PC, $EXIT63
+XORHL DZ, ND
+LD Y, $TMPH
+ADDH DZ, ND
+#71
+$EXIT71
+LD HL, $DEC$NULL
+LDZ Y, $CREG
+FNH DZ, HLD               # page count-1
+LDP HL, $ROM_COPY_EXT     # continue if more pages
+LDN HL, $FETCH            # fetch if done
+#80
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#86
+
+$EXIT49
+NOP
+#50
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#60
+NOP
+NOP
+NOP
+$EXIT63
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD PC, $EXIT71
+#71
+
+LD HL, $NSR$NULL
+LDZ Y, $BREG
+FNH DZ, HLA
+LD HL, $0x80
+LD Y, $TMPH
+ANDH AZ, ND
+LD Y, $BREG
+MULH DZ, NA
+LD HL, $0x70
+LD Y, $TMPL
+ANDHL AZ, ND
+#26,21
+
+ADDR 0x80
+LDZ Y,  $TMPL
+MULL DZ, HL             # rom page*2->H (can be FNF shift left)
+ROM0H A, HL             # ROMn(A,H)->HL
+LD PC, $CONT24
+

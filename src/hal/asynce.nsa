@@ -39,9 +39,9 @@ VMPHL DZ, PGA         # jump to next VMC
 #43/40
 
 ADDR 0x30             #32 - 1 voice
-LD HL, $IDEN$2
+LD HL, $IDEN$2        # HL=0x02
 LD Y, $AUDIO
-MULH DZ, ND
+MULH DZ, ND           # 0->AUDIO
 LD PC, $EXIT41
 #41/56
 
@@ -130,7 +130,7 @@ NOP
 $EXIT41               #41 + 215-127=129
 LD Y, $VMS
 #129
-ADDHL DZ, ND
+ADDHL DZ, ND          # VMS+2->VMS
 LDZ Y, $NOTE1L
 FNH DZ, HL            # HL = 0xA6
 LD Y, $TONE1L

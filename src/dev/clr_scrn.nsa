@@ -5,38 +5,39 @@ INCLUDE ../inc/pages.nsa
 PAGE CLR_SCRN
 
 LD HL, $0
-LD Y, $CLR_X
-MULH AZ, ND            # X=0
-LD HL, $0xF0
 LD Y, $CLR_Y
-MVHL AZ, ND            # Y=0xF0
+MULH AZ, ND             # Y=0
 
-$START
-LD HL, $IDEN$IDEN
+$NEXTY
+LD HL, $0x0C
 LD Y, $CLR_X
-FNFL DZ, X             # set X
-LDZ Y, $CLR_Y
-FNH DZ, Y              # set Y
-LD HL, $0x20           # *** fill with black bg, green fg, font 0
-MVHL A, ND             # 0x20 ->[X,Y]
-LD HL, $IDEN$INC
+MVHL AZ, ND             # X=12
+$NEXTX
+LD HL, $INC2$IDEN
 LD Y, $CLR_X
-FNFL DZ, X             # set X+1
+FNFH DZ, XD             # set X+2
+LD Y, $CLR_Y
+FNFL DZ, Y              # set Y
+LD HL, $0x28            # *** fill with black bg, green fg, font 1
+MVHL A, ND              # 0x20 ->[X,Y]
+LD HL, $IDEN$DEC
+LD Y, $CLR_X
+FNFL DZ, X              # set X
 LDZ Y, $CLR_Y
-FNH DZ, Y              # set Y
-MULH A, ND             # 0->[X+1,Y]
-LD HL, $INC2$NULL
+FNH DZ, Y               # set Y
+MULH A, ND              # 0->[X-1,Y]
+LD HL, $0x50            # -0xB0=-(16+2*80)
 LDZ Y, $CLR_X
-FNH DZ, HLD             # X=X+2
-LD HL, $ZERO?$NULL
-FNH A, HLA              # X==0?
-LDN PC, $START          # loop if X!=0
-LD HL, $DEC$NULL
+ADDHL DZ, NA            # A=X-0xB0
+LD HL, $OVER?$NULL
+FNH A, HLA              # X==col 80?
+LDN PC, $NEXTX          # loop if X!=0
+LD HL, $INC$NULL
 LDZ Y, $CLR_Y
-FNH DZ, HLD             # Y=Y-1
-LD HL, $UNDER?$NULL
+FNH DZ, HLD             # Y=Y+1
+LD HL, $OVER?$NULL
 FNH A, HLA              # Y==0?
-LDP PC, $START          # loop if Y!=0
+LDN PC, $NEXTY          # loop if Y!=0
 
 # ROM Copy
 LD HL, $0

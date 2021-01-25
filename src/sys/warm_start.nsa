@@ -6,7 +6,7 @@ PAGE WARM_START
 
 # set E-reg
 LD HL, $0xD0
-LD Y, $EREG
+LD Y, $EO
 MVHL AZ, ED         # LED off
 LD HL, $0xA0        # F=XGA48,A=SVGA60
 LD Y, $VMODE
@@ -37,7 +37,7 @@ LD Y, $KCWRIDX
 MULH AZ, ND
 LD Y, $KCRDIDX
 MULH AZ, ND
-LD HL, $0x17
+LD HL, $0x0D
 LD Y, $TERM_COL
 MVHL AZ, ND
 LD HL, $0x4F

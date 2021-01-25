@@ -98,7 +98,7 @@ end
 
 ML2SYNC_PG = [3,8,1,4,7,9,2,4,7,9,2,2,4,7,9,0].freeze
 ML2LEN = [5,5,5,4,4,4,4,4,4,4,4,3,3,3,3,3].freeze
-IDLE_PG = 0x00
+IDLE_PG = 0x10
 INST = [
   0x90,1, 0x97,1, 0xA1,1, 0xB3,1, 0xAF,2, 0xB1,2, 0x95,1, 0xC3,1, #0x00X
   0xE3,2, 0xB5,2, 0xA0,1, 0xB4,1, 0xAF,2, 0xB1,2, 0x95,1, 0xC4,1, 
@@ -131,7 +131,8 @@ INST = [
   0xD0,2, 0xD5,2, 0xCB,1, 0xDA,2, 0xCD,2, 0xD7,2, 0xB9,2, 0xD2,1, #0x0EX
   0xD1,2, 0xD4,1, 0xCB,1, 0xA2,2, 0xCE,2, 0x02,2, 0xBF,2, 0xD2,1, 
   0xD0,2, 0xD6,2, 0xCB,1, 0xE0,1, 0xCD,2, 0xD8,2, 0xBC,2, 0xD2,1, #0x0FX
-  0xD1,2, 0xDB,1, 0xCB,1, 0xDF,1, 0xCE,2, 0x03,3, 0xC2,2, 0xD2,1, 
+  0xD1,2, 0xDB,1, 0xCB,1, 0xDF,1, 0xCE,2, 0x03,1, 0xC2,2, 0xD2,1, 
+  0x70,2, 0x70,2,
 ].freeze # 8080 inst page decoding, cycle count
 # ALU function: VMP (Virtual Machine Page)
 # Instruction - HHHHLLLL, virtual machine state (VMS) - MMMMECCC
@@ -231,10 +232,11 @@ def print_vid(offset)
             v[2][j].each do |r|
               s = (t>=u[1] && t<u[2]) ? 0 : 0x20 # vsync active low
               if t<u[0]
+                s |= 0x40 # venable
                 s |= pat[t%pat.size] # set glyph line
                 s |= 0x80 if (t%d)==0 # inc V at start of glyph
               else
-                s |= 0x49 # hblank active high
+                s |= 9 # blank line
               end
               rom[r][w] = s if rom[r][w] == 0xFF
               exit if rom[r][w] != s # conflict!
@@ -496,7 +498,7 @@ def ctrl_alt_page
   128.times.map do |code|
     case code
     when 0x71
-      0x83
+      0x82
     else
       0
     end

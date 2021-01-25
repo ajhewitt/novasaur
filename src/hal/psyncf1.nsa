@@ -131,7 +131,7 @@ XORHL DZ, NA              # A = CTX1 diff CTX0
 LD HL, $SWAP$NULL
 #111
 FNH A, HL                 # H = AL
-LD Y, $EREG
+LD Y, $EO
 XORH DZ, ED               # update bank using CTX delta
 LD HL, $IDEN$IDEN
 #120
