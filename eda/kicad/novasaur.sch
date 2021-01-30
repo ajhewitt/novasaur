@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2021-01-01"
+Date "2021-01-30"
 Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"
@@ -118,8 +118,8 @@ Text GLabel 1350 1300 0    50   Output ~ 0
 PA16
 Text GLabel 1350 1900 0    50   Output ~ 0
 pcent
-Text Label 2500 1700 0    50   ~ 0
-C12
+Text Label 2550 1700 0    50   ~ 0
+C4
 Entry Wire Line
 	2650 1700 2750 1800
 Wire Wire Line
@@ -177,13 +177,13 @@ F 3 "" H 1850 4200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text Label 2550 3200 0    50   ~ 0
-C8
-Text Label 2550 3300 0    50   ~ 0
-C9
-Text Label 2550 3400 0    50   ~ 0
 C0
-Text Label 2500 1900 0    50   ~ 0
-C14
+Text Label 2550 3300 0    50   ~ 0
+C1
+Text Label 2550 3400 0    50   ~ 0
+C8
+Text Label 2550 1900 0    50   ~ 0
+C6
 Text GLabel 2750 6000 3    50   Output ~ 0
 C[0..15]
 Entry Wire Line
@@ -243,21 +243,21 @@ Entry Wire Line
 Entry Wire Line
 	4450 5800 4350 5700
 Text Label 2550 5000 0    50   ~ 0
-C8
+C0
 Text Label 2550 5100 0    50   ~ 0
-C9
-Text Label 2500 5200 0    50   ~ 0
-C10
-Text Label 2500 5300 0    50   ~ 0
-C11
-Text Label 2500 5400 0    50   ~ 0
-C12
-Text Label 2500 5500 0    50   ~ 0
-C13
-Text Label 2500 5600 0    50   ~ 0
-C14
-Text Label 2500 5700 0    50   ~ 0
-C15
+C1
+Text Label 2550 5200 0    50   ~ 0
+C2
+Text Label 2550 5300 0    50   ~ 0
+C3
+Text Label 2550 5400 0    50   ~ 0
+C4
+Text Label 2550 5500 0    50   ~ 0
+C5
+Text Label 2550 5600 0    50   ~ 0
+C6
+Text Label 2550 5700 0    50   ~ 0
+C7
 Text Label 4200 5000 0    50   ~ 0
 PD0
 Text Label 4200 5100 0    50   ~ 0
@@ -304,8 +304,8 @@ Entry Wire Line
 	2650 2000 2750 2100
 Entry Wire Line
 	2650 1900 2750 2000
-Text Label 2500 1800 0    50   ~ 0
-C13
+Text Label 2550 1800 0    50   ~ 0
+C5
 Entry Wire Line
 	2650 1800 2750 1900
 Text GLabel 1350 1500 0    50   Output ~ 0
@@ -371,21 +371,21 @@ PD1
 Text Label 1150 5000 0    50   ~ 0
 PD0
 Text Label 2850 5700 0    50   ~ 0
-C7
+C15
 Text Label 2850 5600 0    50   ~ 0
-C6
+C14
 Text Label 2850 5500 0    50   ~ 0
-C5
+C13
 Text Label 2850 5400 0    50   ~ 0
-C4
+C12
 Text Label 2850 5300 0    50   ~ 0
-C3
+C11
 Text Label 2850 5200 0    50   ~ 0
-C2
+C10
 Text Label 2850 5100 0    50   ~ 0
-C1
+C9
 Text Label 2850 5000 0    50   ~ 0
-C0
+C8
 Entry Wire Line
 	2750 5800 2650 5700
 Entry Wire Line
@@ -411,7 +411,7 @@ Entry Wire Line
 Entry Wire Line
 	1150 5000 1050 4900
 Text Label 2550 3700 0    50   ~ 0
-C1
+C9
 Text GLabel 1350 3900 0    50   Output ~ 0
 pgcp
 Text GLabel 1350 3400 0    50   Output ~ 0
@@ -456,8 +456,8 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS138" H 1850 3500 50  0001 C CNN
 	1    1850 3500
 	-1   0    0    -1  
 $EndComp
-Text Label 2500 2000 0    50   ~ 0
-C15
+Text Label 2550 2000 0    50   ~ 0
+C7
 Entry Wire Line
 	2750 4650 2850 4550
 Entry Wire Line
@@ -495,21 +495,21 @@ Wire Wire Line
 Wire Wire Line
 	2850 4650 3050 4650
 Text Label 2850 4650 0    50   ~ 0
-C0
+C8
 Text Label 2850 4550 0    50   ~ 0
-C1
+C9
 Text Label 2850 4450 0    50   ~ 0
-C2
+C10
 Text Label 2850 4350 0    50   ~ 0
-C3
+C11
 Text Label 2850 4250 0    50   ~ 0
-C4
+C12
 Text Label 2850 4150 0    50   ~ 0
-C5
+C13
 Text Label 2850 4050 0    50   ~ 0
-C6
+C14
 Text Label 2850 3950 0    50   ~ 0
-C7
+C15
 $Comp
 L power:VCC #PWR?
 U 1 1 5DA1E7F9
@@ -741,7 +741,7 @@ Wire Wire Line
 Wire Wire Line
 	2850 3200 3150 3200
 Text Label 2850 3100 0    50   ~ 0
-C3
+C11
 Text GLabel 3150 3400 0    50   Input ~ 0
 ~read
 Text GLabel 4150 3200 2    50   Output ~ 0
@@ -769,9 +769,9 @@ Text GLabel 4150 3100 2    50   Output ~ 0
 Entry Wire Line
 	2850 2200 2750 2300
 Text Label 2850 2200 0    50   ~ 0
-C13
+C5
 Text Label 2850 3200 0    50   ~ 0
-C12
+C4
 Entry Wire Line
 	2850 3100 2750 3200
 Entry Wire Line
@@ -795,7 +795,7 @@ F0 "sheet5DA1E721" 50
 F1 "novasaur-gpu.sch" 50
 $EndSheet
 Text Label 2850 3700 0    50   ~ 0
-C2
+C10
 Entry Wire Line
 	2850 3700 2750 3800
 $Comp
@@ -887,13 +887,13 @@ $EndComp
 Entry Wire Line
 	2850 2600 2750 2700
 Text Label 2850 2600 0    50   ~ 0
-C10
+C2
 Wire Wire Line
 	2850 2600 4450 2600
 Entry Wire Line
 	2850 1900 2750 2000
 Text Label 2850 1900 0    50   ~ 0
-C11
+C3
 Wire Wire Line
 	2850 2200 4450 2200
 $Comp

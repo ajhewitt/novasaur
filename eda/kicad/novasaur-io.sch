@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 4 4
 Title "Input/Output"
-Date "2021-01-01"
+Date "2021-01-30"
 Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"
@@ -162,11 +162,11 @@ DD6
 Text Label 1350 2400 0    50   ~ 0
 DD7
 Text Label 3000 2700 2    50   ~ 0
-C0
-Text Label 3000 2600 2    50   ~ 0
-C9
-Text Label 3000 2500 2    50   ~ 0
 C8
+Text Label 3000 2600 2    50   ~ 0
+C1
+Text Label 3000 2500 2    50   ~ 0
+C0
 Text GLabel 2550 1400 2    50   Input ~ 0
 qclk1
 $Comp
@@ -719,9 +719,9 @@ Wire Wire Line
 	9150 6100 9150 6200
 Connection ~ 9150 6200
 Text Label 1400 1600 0    50   ~ 0
-C3
+C11
 Text Label 1550 2700 0    50   ~ 0
-C1
+C9
 Text GLabel 1450 2900 3    50   Input ~ 0
 C[0..15]
 Entry Wire Line

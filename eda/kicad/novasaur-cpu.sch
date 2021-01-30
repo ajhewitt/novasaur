@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2021-01-01"
+Date "2021-01-30"
 Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"
@@ -211,14 +211,14 @@ Entry Wire Line
 	2550 6750 2650 6650
 Entry Wire Line
 	2550 6850 2650 6750
-Text Label 3850 6650 0    50   ~ 0
-C6
-Text Label 3850 6550 0    50   ~ 0
-C5
-Text Label 3850 6450 0    50   ~ 0
-C4
-Text Label 3850 6750 0    50   ~ 0
-C7
+Text Label 3800 6650 0    50   ~ 0
+C14
+Text Label 3800 6550 0    50   ~ 0
+C13
+Text Label 3800 6450 0    50   ~ 0
+C12
+Text Label 3800 6750 0    50   ~ 0
+C15
 Wire Wire Line
 	7450 2900 7700 2900
 Text GLabel 7700 3000 0    50   Input ~ 0
