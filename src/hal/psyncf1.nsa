@@ -122,7 +122,7 @@ FNH DZ, HLD               # context switch index+1
 LD HL, $IDEN$NULL
 FNH A, Y                  # Y = context switch index
 FNFH D, NA                # A = next CTX col
-LD PC, $EXIT100          # exit if positive
+LD PC, $EXIT100          # DEBUG ***exit if positive
 LD Y, $CTX1
 #101
 FNH AZ, HLD               # A -> next CTX col
@@ -136,17 +136,17 @@ XORH DZ, ED               # update bank using CTX delta
 LD HL, $IDEN$IDEN
 #120
 LD Y, $CTX0
-FNFL DZ, X                # X = running CTX col
+FNFL DZ, X                # X = CTX0 col
 LD HL, $FETCH
 LD Y, $INST
 #129
-MVHL A, ND                # fetch -> running CTX col
+MVHL A, ND                # fetch -> inst in CTX0 col
 LDZ Y, $VMS
 FNH DZ, HLA               # A = VMS
 LD HL, $SWAP$NULL
 LD Y, $EXT
 #141
-FNH A, HLD                # ext sign -> running CTX col
+FNH A, HLD                # ext bit -> ext sign in CTX0 col
 LD HL, $0xD8
 LD Y, $CSWPC
 MVHL AZ, ND               # -40 -> CSW PC (jump page PC+56=0x10)

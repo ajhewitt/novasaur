@@ -51,7 +51,8 @@ $SWCARRY    8 # swap carry with borrow flags
 $DACARRY    9 # set carry if nibbles > 9
 $CON2MUL   10 # condition code to flag multiplier
 $RSTVEC    11 # map inst+1 to PCL vector
-
+$EXTPG     12 # extended dispatch page
+$EXTPC     13 # extended dispatch PC
 
 
 

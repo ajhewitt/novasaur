@@ -8,16 +8,16 @@ $SUSTAIN0      0xA3
 $RELEASE0      0xA4
 $DELTA0        0xA5
 # sound voice 1
-$WAVE1         0xA6
-$NOTE1L        0xA7
-$NOTE1H        0xA8
-$ATTACK1       0xA9
-$DECAY1        0xAA
-$SUSTAIN1      0xAB
-$RELEASE1      0xAC
-$DELTA1        0xAD
-$TONE1L        0xAE
-$TONE1H        0xAF
+$WAVE1         0xA6 # wave table entry (SQRWAV/SAWWAV)
+$NOTE1L        0xA7 # note interval low (FREQL)
+$NOTE1H        0xA8 # note interval high (FREQH)
+$ATTACK1       0xA9 # ADSR attack
+$DECAY1        0xAA # ADSR decay
+$SUSTAIN1      0xAB # ADSR sustain
+$RELEASE1      0xAC # ADSR release
+$DELTA1        0xAD # ADSR state as Y indirect (internal)
+$TONE1L        0xAE # wave table index low (internal)
+$TONE1H        0xAF # wave table index high (internal)
 # sound voice 2
 $WAVE2         0xB0
 $NOTE2L        0xB1
@@ -41,47 +41,47 @@ $DELTA3        0xC1
 $TONE3L        0xC2
 $TONE3H        0xC3
 #HAL
-$KTO           0xC4
-$KIDLE         0xC5
-$KSL           0xC6
-$KSH           0xC7
-$KSCAN         0xC8
-$KMODE         0xC9
-$KSRDIDX       0xCA
-$KSWRIDX       0xCB
-$KCRDIDX       0xCC
-$KCWRIDX       0xCD
-$RMULT         0xCE
-$RMODE         0xCF
-$RXRDIDX       0xD0
-$RXWRIDX       0xD1
-$TMODE         0xD2
-$TXRDIDX       0xD3
-$TXWRIDX       0xD4
-$AMODE         0xD5
-$PMODE         0xD6
-$PLINE         0xD7
-$FRAME         0xD8
-$COMLS         0xD9
-$COMPS         0xDA
-$VMODE         0xDB
-$VLINE         0xDC
-$VSTART        0xDD
-$CSLINE        0xDE
-$HWSTAT        0xDF
+$AMODE         0xD4 # audio mode - 0x00-0x3F,n%4:#voices,0:off
+$KTO           0xC5 # max kbd idle count
+$KIDLE         0xC6 # kbd idle cycle count (internal)
+$KSL           0xC7 # kbd sample low (internal)
+$KSH           0xC8 # kbd sample high (internal)
+$KSCAN         0xC9 # kbd scan decode state (internal)
+$KMODE         0xCA # keyboard mode (internal)
+$KSRDIDX       0xCB
+$KSWRIDX       0xCC
+$KCRDIDX       0xCD
+$KCWRIDX       0xCE
+$RMULT         0xCF # rx multiplier (internal)
+$RMODE         0xD0 # Rx mode - 0x40-0x7F
+$RXRDIDX       0xD1
+$RXWRIDX       0xD2
+$TMODE         0xD3 # Tx mode - 0x80-0xBF
+$TXRDIDX       0xD4
+$TXWRIDX       0xD5
+$PMODE         0xD6 # VID col used for process cycle
+$PLINE         0xD7 # process line
+$FRAME         0xD8 # frame count (-5,-4 to 0)
+$COMLS         0xD9 # comms line state
+$COMPS         0xDA # comms process state
+$VMODE         0xDB # video mode - combined with mode line
+$VLINE         0xDC # video memory line
+$VSTART        0xDD # top of video display
+$CSLINE        0xDE # context switch line
+$HWSTAT        0xDF # hardware status
 #RTC
 $TIME0         0xE0 # 15tps, max 90 - 6s
 $TIME1         0xE1 # 10tpm, max 120 - 12m
 $TIME2         0xE2 # 5tph, max 120 - 1d
 $TIME3         0xE3 # 1tpd, max 256 - 0.7y
-$ICL           0xE4
-$ICH           0xE5
-$VMS           0xE6
-$EO            0xE7
-$CTXIDX        0xE8
-$CSWPC         0xE9
-$CTX0          0xEA
-$CTX1          0xEB
+$ICL           0xE4 # idle cycle count low byte
+$ICH           0xE5 # idle cycle count high byte
+$VMS           0xE6 # virtual machine state
+$EO            0xE7 # Eo register value
+$CTXIDX        0xE8 # context index
+$CSWPC         0xE9 # context switch process count
+$CTX0          0xEA # current context
+$CTX1          0xEB # next context
 #8080CPU
 $INST          0xEC # instruction cache
 $EXT           0xED # extended mode cache

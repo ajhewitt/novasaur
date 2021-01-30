@@ -4,7 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE TSYNCF1_PG
 
-# PMODE: column in AV used during process cycle
+# PMODE: column in VID used during process cycle
 # VLINE: line(page) in video ram
 # VMS: [mode_line][e][cycle count]
 #           0,1,2  0  0,1,2,3,4,5
