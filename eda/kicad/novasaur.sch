@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2021-01-30"
+Date "2021-01-31"
 Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"

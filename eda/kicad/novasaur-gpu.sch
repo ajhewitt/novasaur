@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2021-01-30"
+Date "2021-01-31"
 Rev "1.8"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"
@@ -1644,6 +1644,8 @@ Wire Wire Line
 	5000 3400 5000 3350
 Wire Wire Line
 	5000 3400 5100 3400
+Text Label 4100 3650 0    50   ~ 0
+tclk
 Wire Bus Line
 	3200 2150 3200 2450
 Wire Bus Line
