@@ -11,7 +11,7 @@ LD Y, $CTX0
 FNFL DZ, X                # X = running CTX col
 #10/8
 LD HL, $0x38              # 56 bytes per cycle
-LD Y, $CSWBLK
+LD Y, $HTEMP              # jump page PC
 ADDHL DZ, PCD             # PC + 56
 #18/14
 

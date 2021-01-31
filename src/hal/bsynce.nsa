@@ -39,17 +39,17 @@ LD Y, $IMODE
 MVHL AZ, ND               # HL -> IMODE
 LD HL, $INC$NULL
 #51
-LDZ Y, $BLINE
-FNH DZ, HLD               # A,bline = bline+1
+LDZ Y, $BLOCK
+FNH DZ, HLD               # A,block = block+1
 LD HL, $IDEN$NULL
 LDZ Y, $VMODE
 FNH DZ, HL                # H = vmode
 #61
 LD Y, $BMODE
-VIDH AZ, ND               # VID(vmode,bline) -> block mode
+VIDH AZ, ND               # VID(vmode,block) -> block mode
 LDP PC, $NEXT_FIELD       # jump if block mode zero?
 LD HL, $DEC$NULL
-LDZ Y, $CSLINE
+LDZ Y, $CBLOCK
 #71
 FNH DZ, HLD               # vertical counter timeout
 LDN PC, $CTX_SWITCH       # jump if context switch line neg?
@@ -63,13 +63,13 @@ VMPHL DZ, PGA             # jump to next VMC
 
 $NEXT_FIELD               #68 - next field, cycle=1
 LD HL, $IDEN$NULL
-LD Y, $BLINE
-MULH DZ, ND               # 0 -> A,bline
+LD Y, $BLOCK
+MULH DZ, ND               # 0 -> A,block
 LDZ Y, $VMODE
 FNH DZ, HL                # H = vmode
 LD Y, $BMODE
 #81
-VIDH AZ, ND               # VID(vmode,bline) -> block mode
+VIDH AZ, ND               # VID(vmode,block) -> block mode
 LD HL, $IDEN$NULL
 LD Y, $VSTART
 FNFH DZ, NA               # A = vertical start
@@ -117,9 +117,9 @@ NOP
 LD PG, $RTCE_PG
 #120
 
-$CTX_SWITCH               #75 Y=$CSLINE
+$CTX_SWITCH               #75 Y=$CBLOCK
 LDZ HL, $75
-FNH DZ, HLD               # 75 -> CSLINE
+FNH DZ, HLD               # 75 -> CBLOCK
 LD HL, $CTX_SEQ
 #81
 MVHL A, XA                # X = CTX sequence col
@@ -156,8 +156,8 @@ LD Y, $EXT
 FNH A, HLD                # ext bit -> ext sign in CTX0 col
 #141
 LD HL, $0xD8
-LD Y, $CSWBLK
-MVHL AZ, ND               # -40 -> CSW block count (jump page PC+56=0x10)
+LD Y, $HTEMP
+MVHL AZ, ND               # -40 -> CSW jump page PC (-40+56=0x10)
 NOP
 #150
 NOP

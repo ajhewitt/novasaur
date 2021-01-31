@@ -1,10 +1,9 @@
 # All the pages
 $IDLE_PG       0x00 # 43-pc idle VMC
-$EXT1_PG       0x01 # extended instruction fetch
-$EXT2_PG       0x02 # extended dispatch 2-cycle
-$EXT3_PG       0x03 # extended dispatch 3-cycle
+$FETCHX_PG     0x01 # extended instruction fetch
+$DISPATCH_PG   0x02 # extended dispatch
 
-# 0x04-0x7F: extended CPU instructions
+# 0x03-0x7F: extended CPU instructions
 $CSWE_PG       0x70
 $ROM_COPY_PG   0x71
 $TEST_PG       0x7F

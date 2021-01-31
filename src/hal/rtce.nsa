@@ -1,4 +1,4 @@
-# H-sync on block cycle continuation to real-time clock on execute
+# H-sync on block continuation to real-time clock on execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

@@ -2,7 +2,6 @@
 INCLUDE ../inc/pages.nsa
 PAGE DASYNCE_PG
 
-NOP
-NOP
+LD Y, $VMS
 LD PG, $ASYNCE_PG
 #4

@@ -1,0 +1,42 @@
+# Extended dispatch - fetch pre-inc and execute or dispatch
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE DISPATCH_PG
+
+# assume: Y = $VMS
+LD HL, $10$FORK1       # assume 2 cycle
+ADDH DZ, ND            # inc state, set ext flag
+LD Y, $PCL
+FNFH DZ, XD            # X,PCL = PCL+1
+FNDL A, PC             # fork on PCL
+#13
+
+ADDR 0x80              # PCL = 0
+LDZ Y, $PCH
+FNH DZ, HLD            # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$NULL
+#19
+FNH DZ, Y              # Y = PCH
+FNFH M, NA             # A = [PC]
+LD Y, $INST
+FNH AZ, HLD            # A -> inst cache
+LD HL, $EXTPC$EXTPG
+#30
+FNDL A, PG             # fork to jump page, follow with FNDH A, PCA
+#32
+
+ADDR 0xC0              # else
+NOP
+NOP
+LD HL, $IDEN$NULL
+LDZ Y, $PCH
+#19
+FNH DZ, Y              # Y = PCH
+FNFH M, NA             # A = [PC]
+LD Y, $INST
+FNH AZ, HLD            # A -> inst cache
+LD HL, $EXTPC$EXTPG
+#30
+FNDL A, PG             # fork to jump page, follow with FNDH A, PCA
+#32

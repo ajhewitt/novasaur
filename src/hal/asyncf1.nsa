@@ -159,7 +159,7 @@ LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $WAVE0
 FNH DZ, HL            # HL = amp/noise odd or even
-LD Y, $BLINE
+LD Y, $BLOCK
 #189
 WAVHL DZ, NA          # A = noise value
 LD HL, $IDEN$NULL

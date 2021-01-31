@@ -2,7 +2,6 @@
 INCLUDE ../inc/pages.nsa
 PAGE DTSYNCF1_PG
 
-NOP
-NOP
+LD Y, $VMS
 LD PG, $TSYNCF1_PG
 #4

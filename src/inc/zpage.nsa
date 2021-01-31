@@ -41,7 +41,7 @@ $DELTA3        0xC1
 $TONE3L        0xC2
 $TONE3H        0xC3
 #HAL
-$AMODE         0xD4 # audio mode - 0x00-0x3F,n%4:#voices,0:off
+$AMODE         0xC4 # audio mode - 0x00-0x3F,n%4:#voices,0:off
 $KTO           0xC5 # max kbd idle count
 $KIDLE         0xC6 # kbd idle cycle count (internal)
 $KSL           0xC7 # kbd sample low (internal)
@@ -60,14 +60,14 @@ $TMODE         0xD3 # Tx mode - 0x80-0xBF
 $TXRDIDX       0xD4
 $TXWRIDX       0xD5
 $BMODE         0xD6 # VID col used for block
-$BLINE         0xD7 # block line
+$BLOCK         0xD7 # block count (0 to 175/160/128)
 $FRAME         0xD8 # frame count (-5,-4 to 0)
 $COMLS         0xD9 # comms line state
 $COMBS         0xDA # comms block state
 $VMODE         0xDB # video mode - combined with mode line
 $VLINE         0xDC # video memory line
 $VSTART        0xDD # top of video display
-$CSLINE        0xDE # context switch line
+$CBLOCK        0xDE # context switch block
 $HWSTAT        0xDF # hardware status
 #RTC
 $TIME0         0xE0 # 15tps, max 90 - 6s
@@ -79,9 +79,9 @@ $ICH           0xE5 # idle cycle count high byte
 $VMS           0xE6 # virtual machine state
 $EO            0xE7 # Eo register value
 $CTXIDX        0xE8 # context index
-$CSWBLK        0xE9 # context switch block count
-$CTX0          0xEA # current context
-$CTX1          0xEB # next context
+$CTX0          0xE9 # current context
+$CTX1          0xEA # next context
+$HTEMP         0xEB # HAL temp
 #8080CPU
 $INST          0xEC # instruction cache
 $EXT           0xED # extended mode cache

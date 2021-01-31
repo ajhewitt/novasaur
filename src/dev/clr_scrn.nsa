@@ -18,7 +18,7 @@ LD Y, $CLR_X
 FNFH DZ, XD             # set X+2
 LD Y, $CLR_Y
 FNFL DZ, Y              # set Y
-LD HL, $0x28            # *** fill with black bg, green fg, font 1
+LD HL, $0xA0            # *** fill with black bg, green fg, font 2
 MVHL A, ND              # 0x20 ->[X,Y]
 LD HL, $IDEN$DEC
 LD Y, $CLR_X
