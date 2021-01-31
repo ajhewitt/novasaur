@@ -1,10 +1,10 @@
-# H-sync at end of process cycle on fetch1
+# H-sync at end of block on execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE PSYNCF1_PG
+PAGE BSYNCE_PG
 
-# PMODE: column in VID used during process cycle
+# BMODE: column in VID used during block
 # VLINE: line(page) in video ram
 # VMS: [mode_line][e][cycle count]
 #           0,1,2  0  0,1,2,3,4,5
@@ -12,10 +12,10 @@ PAGE PSYNCF1_PG
 #        7,8,9,10     0,1,2,3,4
 #  11,12,13,14,15     0,1,2,3
 # assumes Y=$VMS
-LDZ HL, $INCPROC$NULL
+LDZ HL, $INCBLK$NULL
 FNH DZ, HLD               # H=mode_line start, L=E001
-LD Y, $PMODE
-VIDH DZ, SA               # mode_line, pmode —> S
+LD Y, $BMODE
+VIDH DZ, SA               # mode_line, block mode —> S
 #9
 LDP HL, $IDEN$IDEN        # sign bit low, don’t inc vline
 LDN HL, $INC$IDEN         # sign bit high, inc vline
@@ -26,9 +26,9 @@ FNFL E, HL                # H = serial inputs
 LD Y, $COMLS
 COMH DZ, NA               # A = update comms line state
 LD HL, $IDEN$NULL
-LDZ Y, $COMPS
+LDZ Y, $COMBS
 #29
-FNH AZ, HLD               # comms line state -> comms process state
+FNH AZ, HLD               # comms line state -> comms block state
 LD HL, $1$MASK2MODE
 LD Y, $COMLS
 ANDH AZ, ND               # reset ps2 state/data
@@ -39,25 +39,23 @@ LD Y, $IMODE
 MVHL AZ, ND               # HL -> IMODE
 LD HL, $INC$NULL
 #51
-LDZ Y, $PLINE
-FNH DZ, HLD               # A,pline = pline+1
+LDZ Y, $BLINE
+FNH DZ, HLD               # A,bline = bline+1
 LD HL, $IDEN$NULL
 LDZ Y, $VMODE
 FNH DZ, HL                # H = vmode
 #61
-LD Y, $PMODE
-VIDH AZ, ND               # VID(vmode,pline) -> pmode
-LDP PC, $NEXT_FIELD       # jump if pmode zero?
+LD Y, $BMODE
+VIDH AZ, ND               # VID(vmode,bline) -> block mode
+LDP PC, $NEXT_FIELD       # jump if block mode zero?
 LD HL, $DEC$NULL
 LDZ Y, $CSLINE
 #71
 FNH DZ, HLD               # vertical counter timeout
 LDN PC, $CTX_SWITCH       # jump if context switch line neg?
-NOP
-NOP
-NOP
-NOP
-LD HL, $FETCH
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL                # inst cache -> HL
 #80
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
@@ -65,13 +63,13 @@ VMPHL DZ, PGA             # jump to next VMC
 
 $NEXT_FIELD               #68 - next field, cycle=1
 LD HL, $IDEN$NULL
-LD Y, $PLINE
-MULH DZ, ND               # 0 -> A,pline
+LD Y, $BLINE
+MULH DZ, ND               # 0 -> A,bline
 LDZ Y, $VMODE
 FNH DZ, HL                # H = vmode
-LD Y, $PMODE
+LD Y, $BMODE
 #81
-VIDH AZ, ND               # VID(vmode,pline) -> pmode
+VIDH AZ, ND               # VID(vmode,bline) -> block mode
 LD HL, $IDEN$NULL
 LD Y, $VSTART
 FNFH DZ, NA               # A = vertical start
@@ -89,9 +87,14 @@ FNH DZ, HLA               # negative if AMODE = 0
 LDN PC, $EXIT110          # exit if audio off, cycle=1
 NOP
 #110
-LD HL, $FETCH
-LD Y, $INST
-MVHL AZ, ND               # fetch -> inst cache
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
 LD HL, $IDEN$ADSRPG
 #120
 LD Y, $FRAME
@@ -103,9 +106,14 @@ LD HL, $0x10
 LD Y, $TMODE
 ORH DZ, ND                # set LSB -> TMODE to stop Tx
 #110
-LD HL, $FETCH
-LD Y, $INST
-MVHL AZ, ND               # fetch -> inst cache
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
 LD PG, $RTCE_PG
 #120
 
@@ -137,20 +145,22 @@ LD HL, $IDEN$IDEN
 #120
 LD Y, $CTX0
 FNFL DZ, X                # X = CTX0 col
-LD HL, $FETCH
-LD Y, $INST
-#129
-MVHL A, ND                # fetch -> inst in CTX0 col
+LDZ Y, $INST
+FNH D, HLD                # inst -> inst in CTX0 col
+LD HL, $IDEN$NULL
+#131
 LDZ Y, $VMS
 FNH DZ, HLA               # A = VMS
 LD HL, $SWAP$NULL
 LD Y, $EXT
-#141
 FNH A, HLD                # ext bit -> ext sign in CTX0 col
+#141
 LD HL, $0xD8
-LD Y, $CSWPC
-MVHL AZ, ND               # -40 -> CSW PC (jump page PC+56=0x10)
-#151
+LD Y, $CSWBLK
+MVHL AZ, ND               # -40 -> CSW block count (jump page PC+56=0x10)
+NOP
+#150
+NOP
 LD HL, $0xA0
 LD Y, $VMS
 ORH DZ, ND                # VMS+ext+2 (cycle=3)
@@ -176,15 +186,13 @@ NOP
 #110
 $EXIT110
 NOP
-NOP
-NOP
-NOP
-NOP
 LD HL, $INC$NULL
 LDZ Y, $VMS
-#119
 FNH DZ, HLD               # VMS+1 (cycle=2)
-LD HL, $FETCH
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+#121
+FNH DZ, HL                # inst cache -> HL
 LD Y, $VMS                # set Y = $VMS on exit
 VMPHL DZ, PGA             # jump to next VMC
 #129

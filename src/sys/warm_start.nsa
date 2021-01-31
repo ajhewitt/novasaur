@@ -68,4 +68,4 @@ LD Y, $INST
 MVHL AZ, ND
 
 LD Y, $VMS
-LD PG, $PSYNCE_PG       # start video loop
+LD PG, $BSYNCE_PG       # start video loop

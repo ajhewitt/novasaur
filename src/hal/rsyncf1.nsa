@@ -4,7 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE RSYNCF1_PG
 
-# PMODE: column in VID used during process cycle
+# BMODE: column in VID used during block
 # VLINE: line(page) in video ram
 # VMS: [mode_line][e][cycle count]
 #           0,1,2  0  0,1,2,3,4,5
@@ -14,8 +14,8 @@ PAGE RSYNCF1_PG
 # assume Y = $VMS
 LDZ HL, $INCLINE$NULL
 FNH DZ, HLD           # H=mode_line+1, L=E000
-LD Y, $PMODE
-VIDH DZ, SA           # mode_line, pmode —> S
+LD Y, $BMODE
+VIDH DZ, SA           # mode_line, block mode —> S
 #9/7
 LDP HL, $IDEN$IDEN    # sign bit low, don’t inc vline
 LDN HL, $INC$IDEN     # sign bit high, inc vline
@@ -61,8 +61,8 @@ LD PC, $EXIT50
 #50/70
 
 ADDR 0x48             #32 - mode 0x42: rx idle/start bit, adjust timing
-LDZ Y, $COMPS
-FNH DZ, HL            # H = serial process state (n-1)
+LDZ Y, $COMBS
+FNH DZ, HL            # H = serial block state (n-1)
 LD Y, $COMLS          # Y = point to serial line state (n)
 MVH DZ, NA            # A = [n, n-1]
 #41/79

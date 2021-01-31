@@ -10,7 +10,7 @@ FNEL DZ, PC               # keyboard fork
 #39/4
 
 ADDR 0x08                 #39 - mode 0x02: keyboard idle
-LD Y, $COMPS
+LD Y, $COMBS
 FNEH DZ, NA
 LDN PC, $CLKSTART46       # KS=2|3, clock started last cycle
 LD Y, $COMLS
@@ -79,7 +79,7 @@ LD PC, $EXIT68
 
 ADDR 0x60                 #39,82 - mode 0x04-0x0C: keyboard scan L
 $SCAN_LOW82
-LD Y, $COMPS
+LD Y, $COMBS
 FNEH DZ, NA               # A = test number of bits
 LDP HL, $4$KDATA          # 2 bits received
 LDN HL, $2$KDATA          # 1 bits received
@@ -88,7 +88,7 @@ LD Y, $TMODE
 ADDH DZ, ND               # comms mode +2 or 4
 LD Y, $KSL
 MULH DZ, NA               # A = scan L << 1 or 2
-LD Y, $COMPS
+LD Y, $COMBS
 #59,102/113
 FNEL DZ, HL               # H = kbd data
 LD Y, $KSL
@@ -108,7 +108,7 @@ VMPHL DZ, PGA             # jump to next VMC
 #86,129/134
 
 ADDR 0x88                 #39 - mode 0x0E-0x18: keyboard scan H
-LD Y, $COMPS
+LD Y, $COMBS
 FNEH DZ, NA               # A = test number of bits
 LDP HL, $4$KDATA          # 2 bits received
 LDN HL, $2$KDATA          # 1 bits received
@@ -117,7 +117,7 @@ LD Y, $TMODE
 ADDH DZ, ND               # comms mode +2 or 4
 LD Y, $KSH
 MULH DZ, NA               # A = scan L << 1 or 2
-LD Y, $COMPS
+LD Y, $COMBS
 #59/152
 FNEL DZ, HL               # H = kbd data
 LD Y, $KSH

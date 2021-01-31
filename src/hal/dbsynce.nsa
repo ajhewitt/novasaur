@@ -1,0 +1,8 @@
+# Delay at end of block cycle on execute
+INCLUDE ../inc/pages.nsa
+PAGE DBSYNCE_PG
+
+NOP
+NOP
+LD PG, $BSYNCE_PG
+#4

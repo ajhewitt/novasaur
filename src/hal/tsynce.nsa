@@ -4,7 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE TSYNCE_PG
 
-# PMODE: column in VID used during process cycle
+# BMODE: column in VID used during block
 # VLINE: line(page) in video ram
 # VMS: [mode_line][e][cycle count]
 #           0,1,2  0  0,1,2,3,4,5
@@ -14,8 +14,8 @@ PAGE TSYNCE_PG
 # assume Y = $VMS
 LDZ HL, $INCLINE$NULL
 FNH DZ, HLD           # H=mode_line+1, L=E000
-LD Y, $PMODE
-VIDH DZ, SA           # mode_line, pmode —> S
+LD Y, $BMODE
+VIDH DZ, SA           # mode_line, block mode —> S
 #9/7
 LDP HL, $IDEN$IDEN    # sign bit low, don’t inc vline
 LDN HL, $INC$IDEN     # sign bit high, inc vline

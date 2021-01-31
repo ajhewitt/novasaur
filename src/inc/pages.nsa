@@ -112,8 +112,8 @@ $TSYNCE_PG     0xEA # transmit
 $KSCANE_PG     0xEB # keyboard
 $KDCODE_PG     0xEC
 $RSYNCE_PG     0xED # receive
-$DPSYNCE_PG    0xEE # delayed process
-$PSYNCE_PG     0xEF # process
+$DBSYNCE_PG    0xEE # delayed block
+$BSYNCE_PG     0xEF # block
 $NSYNCF1_PG    0xF0 # sync on fetch1
 $DASYNCF1_PG   0xF1
 $ASYNCF1_PG    0xF2
@@ -122,8 +122,8 @@ $TSYNCF1_PG    0xF4
 $KSCANF1_PG    0xF5
 $KDCODF1_PG    0xF6
 $RSYNCF1_PG    0xF7
-$DPSYNCF1_PG   0xF8
-$PSYNCF1_PG    0xF9
+$DBSYNCF1_PG   0xF8
+$BSYNCF1_PG    0xF9
 $ADSRE0_PG     0xFA # ADSR voice 0
 $ADSRE1_PG     0xFB # ADSR voice 1
 $ADSRE2_PG     0xFC # ADSR voice 2

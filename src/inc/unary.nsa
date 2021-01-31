@@ -14,7 +14,7 @@ $ZERO?      8 # alias for over?
 $OVER?      8 # 0 if 0, else -1
 $UNDER?     9 # -1 if -1, else 0
 $INCLINE   10 # ML +1, cyc=0
-$INCPROC   11 # ML reset, cyc=1
+$INCBLK    11 # ML reset, cyc=1
 $NSR       12 # >>1&0x80
 $SWAP      13 # AB -> BA
 $REVERSE   14 # reverse bits

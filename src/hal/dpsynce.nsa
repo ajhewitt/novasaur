@@ -1,8 +1,0 @@
-# Delay at end of process cycle on execute
-INCLUDE ../inc/pages.nsa
-PAGE DPSYNCE_PG
-
-NOP
-NOP
-LD PG, $PSYNCE_PG
-#4

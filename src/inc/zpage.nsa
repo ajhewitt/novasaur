@@ -59,11 +59,11 @@ $RXWRIDX       0xD2
 $TMODE         0xD3 # Tx mode - 0x80-0xBF
 $TXRDIDX       0xD4
 $TXWRIDX       0xD5
-$PMODE         0xD6 # VID col used for process cycle
-$PLINE         0xD7 # process line
+$BMODE         0xD6 # VID col used for block
+$BLINE         0xD7 # block line
 $FRAME         0xD8 # frame count (-5,-4 to 0)
 $COMLS         0xD9 # comms line state
-$COMPS         0xDA # comms process state
+$COMBS         0xDA # comms block state
 $VMODE         0xDB # video mode - combined with mode line
 $VLINE         0xDC # video memory line
 $VSTART        0xDD # top of video display
@@ -79,7 +79,7 @@ $ICH           0xE5 # idle cycle count high byte
 $VMS           0xE6 # virtual machine state
 $EO            0xE7 # Eo register value
 $CTXIDX        0xE8 # context index
-$CSWPC         0xE9 # context switch process count
+$CSWBLK        0xE9 # context switch block count
 $CTX0          0xEA # current context
 $CTX1          0xEB # next context
 #8080CPU

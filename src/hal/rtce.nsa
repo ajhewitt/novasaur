@@ -1,4 +1,4 @@
-# H-sync on process cycle continuation to real-time clock on execute
+# H-sync on block cycle continuation to real-time clock on execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -84,8 +84,8 @@ NOP
 LD Y, $VMS
 LDZ HL, $INCLINE$NULL
 FNH DZ, HLD               # H=mode_line+1, L=E000
-LD Y, $PMODE
-VIDH DZ, SA               # mode_line, pmode —> S
+LD Y, $BMODE
+VIDH DZ, SA               # mode_line, block mode —> S
 #181
 LDP HL, $IDEN$IDEN        # sign bit low, don’t inc vline
 LDN HL, $INC$IDEN         # sign bit high, inc vline

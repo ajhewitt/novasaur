@@ -99,8 +99,8 @@ FNEH DZ, NA
 LDN PC, $CONT173
 LDZ HL, $INCLINE$NULL
 FNH DZ, HLD               # H=mode_line+1, L=E000
-LD Y, $PMODE
-VIDH DZ, SA               # mode_line, pmode —> S
+LD Y, $BMODE
+VIDH DZ, SA               # mode_line, block mode —> S
 #181
 LDP HL, $IDEN$IDEN        # sign bit low, don’t inc vline
 LDN HL, $INC$IDEN         # sign bit high, inc vline
@@ -144,8 +144,8 @@ FNEH DZ, NA
 LDN PC, $EXIT173
 LDZ HL, $INCLINE$NULL
 FNH DZ, HLD               # H=mode_line+1, L=E000
-LD Y, $PMODE
-VIDH DZ, SA               # mode_line, pmode —> S
+LD Y, $BMODE
+VIDH DZ, SA               # mode_line, block mode —> S
 #181
 LDP HL, $IDEN$IDEN        # sign bit low, don’t inc vline
 LDN HL, $INC$IDEN         # sign bit high, inc vline

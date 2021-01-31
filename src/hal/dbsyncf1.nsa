@@ -1,0 +1,8 @@
+# Delay at end of block cycle on fetch1
+INCLUDE ../inc/pages.nsa
+PAGE DBSYNCF1_PG
+
+NOP
+NOP
+LD PG, $BSYNCF1_PG
+#4
