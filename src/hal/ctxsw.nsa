@@ -2,7 +2,7 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE CSWE_PG
+PAGE CTXSW_PG
 
 # assume Y = $VMS
 LDZ HL, $INC2$IDEN
@@ -52,7 +52,7 @@ FNH D, HLD
 LD HL, $IDEN$NULL
 LDZ Y, $0xF7
 FNH D, HLD
-LD HL, $CSW_INST
+LD HL, $CTXSW_INST
 #80/52
 LD Y, $VMS
 VMPHL DZ, PCA
@@ -95,7 +95,7 @@ FNH DZ, HLD               # A -> running CTX col
 NOP
 NOP
 MVHL A, NA                # NOP
-LD HL, $CSW_INST
+LD HL, $CTXSW_INST
 #80/51
 LD Y, $VMS
 VMPHL DZ, PCA
@@ -138,7 +138,7 @@ FNH DZ, HLD
 LD HL, $IDEN$NULL
 LD Y, $0xF5
 FNH DZ, HLD
-LD HL, $CSW_INST
+LD HL, $CTXSW_INST
 #80/52
 LD Y, $VMS
 VMPHL DZ, PCA

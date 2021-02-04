@@ -1,0 +1,165 @@
+# Copy ROM to memory - one byte per cycle, fetch when done
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE COPYROM_PG
+
+#TEMP: X (index)
+#DREG: Y (page)
+#CREG: count (number of pages to copy)
+#TMLH: ROM number (jump PC=0x80+ROMn*8)
+#TMPL: ROM page (H of ROMH)
+#assume Y=$VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD            # VMS+2
+LD HL, $IDEN$LSL
+LD Y, $TEMP
+FNFH DZ, XA            # index->X,A
+#11
+LDZ Y, $TMPH
+FNH DZ, PC             # jump to read rom, A=index, L=LSL
+$CONT24
+MVHL A, NA             # HL->A return value from ROM
+LD HL, $IDEN$NULL
+#30
+LDZ Y, $DREG
+FNH DZ, Y              # page->Y
+FNFH A, NM             # A->[Y,X]
+LD HL, $INC$NULL
+LDZ Y, $TEMP
+#41
+FNH DZ, HLD            # index+1->index
+LDZ HL, $OVER?$NULL
+FNH A, HLA             # check if X>255
+LDP PC, $EXIT49
+LD HL, $INC$NULL
+#50
+LDZ Y, $DREG
+FNH DZ, HLD            # ram page+1
+LD HL, $0x80
+LD Y, $TMPL
+ADDH DZ, ND            # rom page+8
+#61
+LDP PC, $EXIT63
+XORHL DZ, ND
+LD Y, $TMPH
+ADDH DZ, ND
+#71
+$EXIT71
+LD HL, $DEC$NULL
+LDZ Y, $CREG
+FNH DZ, HLD               # page count-1
+LDP HL, $COPYROM_INST     # continue if more pages
+LDN HL, $FETCH            # fetch if done
+#80
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#86
+
+$EXIT49
+NOP
+#50
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#60
+NOP
+NOP
+NOP
+$EXIT63
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD PC, $EXIT71
+#71
+
+ADDR 0x80
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM0H A, HL             # ROM0(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM1H A, HL             # ROM1(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM2H A, HL             # ROM2(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM3H A, HL             # ROM3(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM4H A, HL             # ROM4(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM5H A, HL             # ROM5(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM6H A, HL             # ROM6(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM7H A, HL             # ROM7(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM8H A, HL             # ROM8(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROM9H A, HL             # ROM9(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROMAH A, HL             # ROMA(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROMBH A, HL             # ROMB(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROMCH A, HL             # ROMC(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROMDH A, HL             # ROMD(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROMEH A, HL             # ROME(A,H)->HL
+LD PC, $CONT24
+
+LD Y,  $TMPL
+FNFL DZ, HL             # rom page<<1->H
+ROMFH A, HL             # ROMF(A,H)->HL
+LD PC, $CONT24

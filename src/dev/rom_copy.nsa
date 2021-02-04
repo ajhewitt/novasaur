@@ -28,7 +28,7 @@ MVHL A, NA              # HL->A return value from ROM
 LD HL, $IDEN$NULL
 LDZ Y, $ROM_Y
 FNH DZ, Y               # [53]->Y
-FNH A, HLD              # A->[X, Y] ** this would normally be NB
+FNFH A, NM              # A->[X,Y]
 LD HL, $INC$NULL
 LDZ Y, $ROM_X
 FNH DZ, HLD             # X++

@@ -157,14 +157,14 @@ FNH A, HLD                # ext bit -> ext sign in CTX0 col
 #141
 LD HL, $0xD8
 LD Y, $HTEMP
-MVHL AZ, ND               # -40 -> CSW jump page PC (-40+56=0x10)
+MVHL AZ, ND               # -40 -> CTX SW jump page PC (-40+56=0x10)
 NOP
 #150
 NOP
 LD HL, $0xA0
 LD Y, $VMS
 ORH DZ, ND                # VMS+ext+2 (cycle=3)
-LD HL, $CSW_INST
+LD HL, $CTXSW_INST
 #160
 LDZ Y, $INST
 MVHL AZ, ND               # HL -> inst cache

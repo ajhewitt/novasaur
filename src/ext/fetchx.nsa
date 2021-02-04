@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE FETCHX_PG
 
 # assume: Y = $VMS
-LD HL, $9$FORK1
+LD HL, $0x90
 ADDH DZ, ND            # inc state, set ext flag
 NOP
 NOP
@@ -15,8 +15,7 @@ NOP
 #10
 NOP
 NOP
-NOP
-NOP
+LD HL, $INC$FORK1
 LD Y, $PCL
 FNFH DZ, XD            # X,PCL = PCL+1
 FNDL A, PC             # fork on PCL
@@ -25,7 +24,7 @@ FNDL A, PC             # fork on PCL
 ADDR 0x80              # PCL = 0
 LDZ Y, $PCH
 FNH DZ, HLD            # PCH = PCH+1      *** inc PCH ***
-LD HL, $IDEN$NULL
+LDZ HL, $IDEN$NULL
 FNH DZ, Y              # Y = PCH
 #30
 FNFH M, NA             # A = [PC]
@@ -44,7 +43,7 @@ FNH DZ, Y              # Y = PCH
 #30
 FNFH M, NA             # A = [PC]
 LD Y, $INST
-FNH AZ, HLD            # HL -> inst cache
+FNH AZ, HLD            # A -> inst cache,HL
 LD Y, $VMS             # set Y = $VMS on exit
 VMPHL DZ, PGA          # jump to next VMC
 #43

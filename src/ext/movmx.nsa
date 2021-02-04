@@ -1,0 +1,52 @@
+# Move register source to display destination
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE MOVMX_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LD Y, $LREG
+FNFH DZ, XA           # A,X = L
+#11
+LDP HL, $0x80         # negate of positive
+LDN HL, $0x10         # positive if >0xF0
+ADDHL A, NA
+LDP PC, $EXIT20       # exit if positive
+LD HL, $IDEN$REGMAPL
+#21
+LD Y, $INST
+FNDL DZ, Y            # Y = zpage addr of source reg
+FNFH DZ, NA           # source reg -> A
+LDZ Y, $HREG
+#31
+FNH DZ, Y             # Y = H
+FNH A, HLD            # A -> [HL]
+LD HL, $FETCH
+LDZ Y, $VMS           # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43
+
+$EXIT20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LDZ Y, $VMS           # set Y = $VMS on exit
+VMPHL DZ, PGA         # jump to next VMC
+#43

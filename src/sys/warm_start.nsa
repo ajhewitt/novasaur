@@ -5,9 +5,9 @@ INCLUDE ../inc/pages.nsa
 PAGE WARM_START
 
 # set E-reg
-LD HL, $0xD0
+LD HL, $0xD1
 LD Y, $EO
-MVHL AZ, ED         # LED off
+MVHL AZ, ED         # bank1,LED off
 LD HL, $0xA0        # F=XGA48,A=SVGA60
 LD Y, $VMODE
 MVHL AZ, ND         # 3 -> video mode
@@ -22,7 +22,7 @@ MVHL AZ, ND         # 0 -> vstart
 LD HL, $0x00 # number of voices
 LD Y, $AMODE
 MVHL AZ, ND
-LD HL, $0x00
+LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND
 

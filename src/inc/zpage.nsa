@@ -126,11 +126,11 @@ $INTR2_INST    0x38
 $SKIP_INST     0xCB
 $PUSHPC_INST   0xD9
 $JMP_INST      0xC3
-$CSW_INST      0x01
+$CTXSW_INST    0x01
+$COPYROM_INST  0x00
 
 $KSBUFF        0xF8
 $KCBUFF        0xF9
 $RXBUFF        0xFA
 $TXBUFF        0xFB
-
 $CTX_SEQ       0xFE

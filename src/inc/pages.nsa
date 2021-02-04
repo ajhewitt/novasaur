@@ -2,10 +2,11 @@
 $IDLE_PG       0x00 # 43-pc idle VMC
 $FETCHX_PG     0x01 # extended instruction fetch
 $DISPATCH_PG   0x02 # extended dispatch
+$COPYROM_PG    0x03
+$CTXSW_PG      0x04
 
-# 0x03-0x7F: extended CPU instructions
-$CSWE_PG       0x70
-$ROM_COPY_PG   0x71
+$MOVMX_PG      0x20
+
 $TEST_PG       0x7F
 
 # 0x80-0x8F: system

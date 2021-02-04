@@ -153,8 +153,8 @@ LD HL, $0
 LD Y, $HWSTAT
 ANDH AZ, ND               # mem size->HW STAT H
 
-LD HL, $0x10
+LD HL, $0x11
 LD Y, $EO
-MVHL AZ, ED               # bank0,LED off->E
+MVHL AZ, ED               # bank1,LED off->E
 
 LD PG, $KBD_START
