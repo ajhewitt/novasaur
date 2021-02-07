@@ -53,7 +53,7 @@ LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute->audio
 
-#CPU
+#Boot kernel CPU
 LD HL, $0
 LD Y, $IMASK
 MULH AZ, ND               # 0->IMASK = 0 (disable)

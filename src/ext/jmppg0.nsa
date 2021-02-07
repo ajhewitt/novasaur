@@ -6,25 +6,34 @@ PAGE JMPPG0_PG
 
 #assume A=inst, HL=$EXTPC$EXTPG
 FNDH A, PCA           # fork to jump page
-#34
+#34/2
+
+#NOP
+LD HL, $DEC$NULL
+LDZ Y, $VMS
+FNH DZ, HLD
+#40
+NOP
+LD PC, $FETCH1_PG
+#43/8
 
 #COPYROM - init
 #TEMP: X (RAM index) init to zero
-#BREG: ROM page (H=ROM number,L=ROM page lsn)
-ADDR 0x04
+#EREG: ROM page (H=ROM number,L=ROM page lsn)
+ADDR 0x0C
 LD HL, $0
 LD Y, $TEMP
 MULH AZ, ND            # 0->temp
 #41
 LD HL, $NSR$NULL
-LDZ Y, $BREG
+LDZ Y, $EREG
 FNH DZ, HLA            # A=ROM jump PC=0x80+H*8
 LD HL, $0x80
 LD Y, $TMPH
 #51
 ANDH AZ, ND            # A&000b->tempH
 LD HL, $0x0F
-LD Y, $BREG
+LD Y, $EREG
 ANDHL DZ, NA           # A=ROM page lsn
 #62
 LD HL, $0x80
@@ -40,7 +49,7 @@ MVHL AZ, ND            # HL -> inst cache
 #80
 LD Y, $VMS             # set Y = $VMS on exit
 VMPHL DZ, PGA          # jump to next VMC
-#86
+#86/42
 
-ADDR 0x30
+ADDR 0x38
 #next instruction
