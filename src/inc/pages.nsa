@@ -5,6 +5,8 @@ $DISPATCH_PG   0x02 # extended dispatch
 $COPYROM_PG    0x03
 $CTXSW_PG      0x04
 
+$JMPPG0_PG     0x10
+
 $MOVMX_PG      0x20
 
 $TEST_PG       0x7F

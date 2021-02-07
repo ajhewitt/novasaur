@@ -49,4 +49,5 @@ LD HL, $1
 LD Y, $ROM_N
 MVHL AZ, ND             # 1 -> ROM N: copy 1 roms
 
-LD PG, $ROM_COPY        # copy code rom
+#LD PG, $ROM_COPY        # copy code rom
+LD PG, $WARM_START

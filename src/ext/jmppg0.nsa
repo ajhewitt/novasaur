@@ -1,0 +1,46 @@
+# Jump page 0 for extended dispatch
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE JMPPG0_PG
+
+#assume A=inst, HL=$EXTPC$EXTPG
+FNDH A, PCA           # fork to jump page
+#34
+
+#COPYROM - init
+#TEMP: X (RAM index) init to zero
+#BREG: ROM page (H=ROM number,L=ROM page lsn)
+ADDR 0x04
+LD HL, $0
+LD Y, $TEMP
+MULH AZ, ND            # 0->temp
+#41
+LD HL, $NSR$NULL
+LDZ Y, $BREG
+FNH DZ, HLA            # A=ROM jump PC=0x80+H*8
+LD HL, $0x80
+LD Y, $TMPH
+#51
+ANDH AZ, ND            # A&000b->tempH
+LD HL, $0x0F
+LD Y, $BREG
+ANDHL DZ, NA           # A=ROM page lsn
+#62
+LD HL, $0x80
+LD Y, $TMPL
+MULH AZ, ND            # A*8->tempL
+NOP
+#70
+NOP
+NOP
+LD HL, $COPYROM_INST
+LD Y, $INST
+MVHL AZ, ND            # HL -> inst cache
+#80
+LD Y, $VMS             # set Y = $VMS on exit
+VMPHL DZ, PGA          # jump to next VMC
+#86
+
+ADDR 0x30
+#next instruction

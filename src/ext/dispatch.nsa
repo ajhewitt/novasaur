@@ -1,4 +1,4 @@
-# Extended dispatch - fetch pre-inc and dispatch
+# Extended dispatch - fetch pre-inc and dispatch to jump page
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

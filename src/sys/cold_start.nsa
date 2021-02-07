@@ -135,9 +135,9 @@ FNH DZ, HLD               # Y+1->zpageY
 LDN PC, $ROW4             # loop if Y>80
 
 LD HL, $0x11              # LED OFF to set mem size
-LD Y, $0xFF               # Y=FF
 MVHL A, EA                # bank1,LED off->E
 LD HL, $0xAA
+LD Y, $0xFF               # Y=FF
 MVHL AZ, NM               # AA->[1FFFF]
 LD HL, $0x13
 MVHL A, EA                # bank3->E
@@ -152,9 +152,5 @@ FNH A, HLA                # A=0 if 512k, else -1 if 128k
 LD HL, $0
 LD Y, $HWSTAT
 ANDH AZ, ND               # mem size->HW STAT H
-
-LD HL, $0x11
-LD Y, $EO
-MVHL AZ, ED               # bank1,LED off->E
 
 LD PG, $KBD_START
