@@ -8,10 +8,10 @@ PAGE WARM_START
 LD HL, $0xD1
 LD Y, $EO
 MVHL AZ, ED               # bank1,LED off
-LD HL, $0xA0              # F=XGA48,A=SVGA60
+LD HL, $0xF0              # F=XGA48,A=SVGA60
 LD Y, $VMODE
 MVHL AZ, ND               # 3 -> video mode
-LD HL, $0x98              # E=XGA48,9=SVGA60
+LD HL, $0xE8              # E=XGA48,9=SVGA60
 LD Y, $VMS
 MVHL AZ, ND               # mode+ext -> mode line
 LD HL, $0x1F
@@ -29,7 +29,7 @@ LD Y, $KCWRIDX
 MULH AZ, ND
 LD Y, $KCRDIDX
 MULH AZ, ND
-LD HL, $0x0D
+LD HL, $0x15
 LD Y, $TERM_COL
 MVHL AZ, ND
 LD HL, $0x4F
@@ -58,30 +58,23 @@ LD HL, $0
 LD Y, $IMASK
 MULH AZ, ND               # 0->IMASK = 0 (disable)
 LD Y, $CREG
-#9
 MULH AZ, ND               # 0->C
 LD Y, $DREG
 MULH AZ, ND               # 0->D
 LD Y, $TEMP
-#19
 MULH AZ, ND               # 0->temp
 LD Y, $TMPL
 MULH AZ, ND               # 0->tmpL
 LD HL, $0x80
-#29
 LD Y, $TMPH
 MVHL AZ, ND               # 0x80->tmpH
 LD HL, $0xFF
-LD Y, $PCL
-#39
-MVHL AZ, ND
 LD Y, $PCH
+MVHL AZ, ND
+LD Y, $PCL
 MVHL AZ, ND               # 0xFFFF->PC
-#49
 LD HL, $COPYROM_INST
 LD Y, $INST
 MVHL AZ, ND
 LD Y, $VMS
-#59
 LD PG, $BSYNCE_PG         # start video loop
-#61

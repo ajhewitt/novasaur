@@ -163,7 +163,7 @@ FNFH DZ, ND           # vstart+1
 LDZ Y, $TERM_ROW
 FNH DZ, HLD           # row+1
 #111
-LD HL, $0x0D          # Scaler=15(0x0D), LCD=23(0x17)
+LD HL, $0x17          # SVGA=0x0D,XGA=0x17
 LD Y, $TERM_COL
 MVHL AZ, ND           # start -> term column
 LD PC, $CONT121

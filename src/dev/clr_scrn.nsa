@@ -26,7 +26,7 @@ FNFL DZ, X              # set X
 LDZ Y, $CLR_Y
 FNH DZ, Y               # set Y
 MULH A, ND              # 0->[X-1,Y]
-LD HL, $0x50            # -0xB0=-(16+2*80)
+LD HL, $0x68            # -0xB0=-(16+2*80):SVGA=0x50,XGA=-0x68
 LDZ Y, $CLR_X
 ADDHL DZ, NA            # A=X-0xB0
 LD HL, $OVER?$NULL

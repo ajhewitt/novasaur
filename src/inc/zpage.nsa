@@ -130,8 +130,8 @@ $JMP_INST      0xC3
 $COPYROM_INST  0x01
 $CTXSW_INST    0x02
 
-$KSBUFF        0xF8
-$KCBUFF        0xF9
+$KSBUFF        0x37
+$KCBUFF        0x39
 $RXBUFF        0xFA
 $TXBUFF        0xFB
 $CTX_SEQ       0xFE

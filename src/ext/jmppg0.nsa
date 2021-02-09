@@ -51,5 +51,65 @@ LD Y, $VMS             # set Y = $VMS on exit
 VMPHL DZ, PGA          # jump to next VMC
 #86/42
 
+#BOOTSTRAP - init copy ROM0/page0
+#BREG: CPU number
 ADDR 0x38
-#next instruction
+LD HL, $0xF0
+LD Y, $BREG
+ORHL DZ, NA               # A=n|0xF0
+#42
+LD HL, $KERN?$7
+ANDL A, X                 # X=0xFn&0x07
+LD Y, $EO
+FNCH DZ, NA               # A=0 if root
+#52
+LD HL, $0
+LD Y, $IMASK
+LDN PC, $EXIT58           # exit if not kern
+MULH A, ND                # 0->IMASK = 0 (disable)
+#60
+LD Y, $CREG
+MULH A, ND                # 0->C
+LD Y, $DREG
+MULH A, ND                # 0->D
+#70
+LD Y, $TEMP
+MULH A, ND                # 0->temp
+LD Y, $TMPL
+MULH A, ND                # 0->tmpL
+#80
+LD HL, $0x80
+LD Y, $TMPH
+MVHL A, ND                # 0x80->tmpH
+LD HL, $0xFF
+#90
+LD Y, $PCH
+MVHL A, ND
+LD Y, $PCL
+MVHL A, ND                # 0xFFFF->PC
+#102
+LD Y, $EXT
+MVHL A, ND                # -1->ext mode
+LD HL, $COPYROM_INST
+#110
+LD Y, $INST
+MVHL A, ND                # CopyROM->inst cache
+NOP
+LD PC, $EXIT119
+
+$EXIT58
+LD HL, $DEC$NULL
+#60
+LDZ Y, $VMS
+FNH DZ, HLD               # adjust VMS for 2 cycles
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+$EXIT119
+NOP
+#77/120
+NOP
+LD HL, $FETCH
+LD Y, $VMS                # set Y = $VMS on exit
+VMPHL DZ, PGA             # jump to next VMC
+#86/129
