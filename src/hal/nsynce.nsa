@@ -24,7 +24,7 @@ FNFH DZ, VD           # increment? vline —> V
 FNFL E, HL            # serial inputs -> H
 #20/17
 LD Y, $COMLS
-COMH DZ, NA           # update comms line state
+COMH DZ, ND           # update comms line state
 NOP
 NOP
 NOP

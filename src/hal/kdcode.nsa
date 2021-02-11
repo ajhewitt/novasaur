@@ -138,7 +138,7 @@ NOP
 $CONT71
 NOP
 $CONT72
-LDZ Y, $KCWRIDX
+LD Y, $KCWRIDX
 FNFL DZ, Y            # Y=keyboard code write index
 FNCH A, ND            # ascii -> kbd code buffer
 #80/183
