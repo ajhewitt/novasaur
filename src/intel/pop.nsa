@@ -61,7 +61,7 @@ FNH AZ, HLD           # A -> low reg
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0x80             # SPL = 0, inc SPH, iden SPH
@@ -82,7 +82,7 @@ FNH AZ, HLD           # A -> low reg
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0xC0             # else, iden SPH, iden SPH, iden SPH
@@ -104,5 +104,5 @@ FNH AZ, HLD           # A -> low reg
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86

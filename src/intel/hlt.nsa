@@ -31,5 +31,5 @@ LD HL, $INTR2_INST        # HL = interupt2
 LD Y, $INST
 MVHL AZ, ND               # HL -> inst cache
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #43

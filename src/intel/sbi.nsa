@@ -49,7 +49,7 @@ FNDH AZ, ND           # A -> flags (borrow to carry)
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0xC0
@@ -74,5 +74,5 @@ FNDH AZ, ND           # A -> flags (borrow to carry)
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86

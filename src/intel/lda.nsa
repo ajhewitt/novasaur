@@ -52,7 +52,7 @@ FNH AZ, HLD           # A -> inst cache,HL
 NOP
 #80/51
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/55
 
 ADDR 0x58             # PCL = 255, iden PCH, inc PCH, iden PCH
@@ -94,7 +94,7 @@ FNH AZ, HLD           # A -> inst cache,HL
 NOP
 #80/51
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/55
 
 ADDR 0x90             # PCL = 0, inc PCH, iden PCH, iden PCH
@@ -136,7 +136,7 @@ FNH AZ, HLD           # A -> inst cache,HL
 NOP
 #80/51
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/55
 
 ADDR 0xC8             # else, iden PCH, iden PCH, iden PCH
@@ -179,5 +179,5 @@ NOP
 NOP
 #80/52
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/56

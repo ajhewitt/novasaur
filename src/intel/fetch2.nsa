@@ -30,7 +30,7 @@ FNFH M, NA             # A = [PC]
 LD Y, $INST
 FNH AZ, HLD            # HL -> inst cache
 LD Y, $VMS             # set Y = $VMS on exit
-VMPHL DZ, PGA          # jump to next VMC
+DISHL DZ, PGA          # jump to next VMC
 #43
 
 # assume: Y = $IMODE
@@ -45,5 +45,5 @@ LD HL, $INTR1_INST     # HL = check interupts
 LD Y, $INST
 MVHL AZ, ND            # HL -> inst cache
 LD Y, $VMS             # set Y = $VMS on exit
-VMPHL DZ, PGA          # jump to next VMC
+DISHL DZ, PGA          # jump to next VMC
 #43

@@ -35,7 +35,7 @@ NOP
 FNH A, HL             # NOP
 LD HL, $FETCH         # HL = fetch
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43/40
 
 ADDR 0x30             #32 - 1 voice
@@ -171,5 +171,5 @@ MVHL A, NA            # NOP
 LD HL, $FETCH         # HL = fetch
 #209
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #215

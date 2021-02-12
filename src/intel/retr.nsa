@@ -50,7 +50,7 @@ NOP
 NOP
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43/59
 
 ADDR 0x40             # SPL = 255, iden SPH, inc SPH
@@ -74,7 +74,7 @@ LDZ Y, $INST
 FNH AZ, HLD           # A -> inst cache,HL
 #80/27
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/31
 
 ADDR 0x80             # SPL = 0, inc SPH, iden SPH
@@ -98,7 +98,7 @@ LDZ Y, $INST
 FNH AZ, HLD           # A -> inst cache,HL
 #80/27
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/31
 
 ADDR 0xC0             # else, iden SPH, iden SPH, iden SPH
@@ -123,5 +123,5 @@ LDZ Y, $INST
 FNH AZ, HLD           # A -> inst cache,HL
 #80/27
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/31

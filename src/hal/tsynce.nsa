@@ -35,7 +35,7 @@ NOP
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43/39
 
 ADDR 0x28             #32 - mode 0xC2-0xDB: keyboard scan page
@@ -78,7 +78,7 @@ LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 #80/96
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/100
 
 $EXIT45
@@ -132,7 +132,7 @@ LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 #80/168
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/172
 
 ADDR 0xB0             #32 - mode 0x94,0x95: transmit stop bit
@@ -163,7 +163,7 @@ LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 #80/215
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/219
 
 ADDR 0xE0             #32 - mode 0x81,0x83: keyboard start

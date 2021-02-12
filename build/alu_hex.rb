@@ -660,7 +660,7 @@ print_unary(0xC0, (SCAN_LO+SCAN_UP).map {|c| c ? c.ord : 0})
 print_unary(0xC1, SCAN_EX.map {|c| c ? c.ord : 0}+Array.new(0x80, 0))
 # $SCAN2: alt/ext-ctrl-alt
 print_unary(0xC2, Array.new(0x80, 0)+ctrl_alt_page)
-# $SC2MASK: scan code->keyboard mode bit mask
+# $KS2MODE: kbd scan code->keyboard mode bit mask
 print_unary(0xC3, kmode_mask)
 # $KERN?: A&7==1 ? 0:-1
 print_unary(0xC4, 256.times.map{|i| i&7==1 ? 0:0xFF})

@@ -61,7 +61,7 @@ FNFH A, NM            # A -> [SP]
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0x80             # SPL = 0, iden SPH, dec SPH
@@ -91,7 +91,7 @@ FNFH A, NM            # A -> [SP]
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0xC0             # else, iden SPH, iden SPH
@@ -123,5 +123,5 @@ FNFH A, NM            # A -> [SP]
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86

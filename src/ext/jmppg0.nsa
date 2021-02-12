@@ -48,7 +48,7 @@ LD Y, $INST
 MVHL AZ, ND            # HL -> inst cache
 #80
 LD Y, $VMS             # set Y = $VMS on exit
-VMPHL DZ, PGA          # jump to next VMC
+DISHL DZ, PGA          # jump to next VMC
 #86/42
 
 #BOOTSTRAP - init copy ROM0/page0
@@ -111,5 +111,5 @@ NOP
 NOP
 LD HL, $FETCH
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #86/129

@@ -105,7 +105,7 @@ ADDHL DZ, ND          # VMC+3
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #172
 
 $RX39
@@ -191,5 +191,5 @@ LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86

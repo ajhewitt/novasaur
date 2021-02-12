@@ -35,7 +35,7 @@ NOP
 FNH A, HL             # NOP
 LD HL, $FETCH         # HL = fetch
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43/39
 
 ADDR 0x28             #32 - mode 0xC2-0xDB: keyboard scan page
@@ -77,7 +77,7 @@ MVHL A, NA            # NOP
 LD HL, $FETCH         # HL = fetch
 #80/96
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/100
 
 $EXIT45
@@ -130,7 +130,7 @@ MVHL A, NA            # NOP
 LD HL, $FETCH         # HL = fetch
 #80/168
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/172
 
 ADDR 0xB0             #32 - mode 0x94,0x95: transmit stop bit
@@ -160,7 +160,7 @@ MVHL A, NA            # NOP
 LD HL, $FETCH         # HL = fetch
 #80/215
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/219
 
 ADDR 0xE0             #32 - mode 0x81,0x83: keyboard start

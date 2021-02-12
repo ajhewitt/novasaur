@@ -26,7 +26,7 @@ FNH DZ, Y             # Y = H
 FNH A, HLD            # A -> [HL]
 LD HL, $FETCH
 LDZ Y, $VMS           # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43
 
 $EXIT20
@@ -48,5 +48,5 @@ NOP
 NOP
 LD HL, $FETCH
 LDZ Y, $VMS           # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43

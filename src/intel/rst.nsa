@@ -26,7 +26,7 @@ LD HL, $RST2_INST
 LD Y, $INST
 MVHL AZ, ND           # restart -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43
 
 ADDR 0xC0             # else
@@ -46,5 +46,5 @@ LD HL, $RST2_INST
 LD Y, $INST
 MVHL AZ, ND           # restart -> inst cache
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43

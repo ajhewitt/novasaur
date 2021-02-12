@@ -21,7 +21,7 @@ LD HL, $INTR1_INST     # HL = check interupts
 LD Y, $INST
 MVHL AZ, ND            # HL -> inst cache
 LD Y, $VMS             # set Y = $VMS on exit
-VMPHL DZ, PGA          # jump to next VMC
+DISHL DZ, PGA          # jump to next VMC
 #43
 
 ADDR 0x80              # PCL = 0
@@ -40,7 +40,7 @@ FNFH M, NA             # A = [PC]
 LD Y, $INST
 FNH AZ, HLD            # A -> inst cache,HL
 LD Y, $VMS             # set Y = $VMS on exit
-VMPHL DZ, PGA          # jump to next VMC
+DISHL DZ, PGA          # jump to next VMC
 #43
 
 ADDR 0xC0             # else
@@ -61,5 +61,5 @@ FNFH M, NA             # A = [PC]
 LD Y, $INST
 FNH AZ, HLD            # HL -> inst cache
 LD Y, $VMS             # set Y = $VMS on exit
-VMPHL DZ, PGA          # jump to next VMC
+DISHL DZ, PGA          # jump to next VMC
 #43

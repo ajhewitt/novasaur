@@ -29,7 +29,7 @@ FNFH M, NA                # A = [PC]
 LD Y, $INST
 FNH AZ, HLD               # HL -> inst cache
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #43/19
 
 ADDR 0x40                 # non-vectored interupt
@@ -44,7 +44,7 @@ NOP
 LD HL, $RST2_INST         # HL = check interupts
 MVHL AZ, ND               # HL -> inst cache
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #43/19
 
 ADDR 0x60                 # vectored interupt 5.5
@@ -58,7 +58,7 @@ MVHL AZ, ND               # 5.5 -> temp
 LD HL, $RST2_INST         # HL = check interupts
 MVHL AZ, ND               # HL -> inst cache
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #43/18
 
 ADDR 0x80                 # vectored interupt 6.5
@@ -72,7 +72,7 @@ MVHL AZ, ND               # 6.5 -> temp
 LD HL, $RST2_INST         # HL = check interupts
 MVHL AZ, ND               # HL -> inst cache
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #43
 
 ADDR 0xA0                 # vectored interupt 7.5
@@ -86,5 +86,5 @@ MVHL AZ, ND               # 7.5 -> temp
 LD HL, $RST2_INST         # HL = check interupts
 MVHL AZ, ND               # HL -> inst cache
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #43

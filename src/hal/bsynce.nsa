@@ -51,14 +51,14 @@ LDP PC, $NEXT_FIELD       # jump if block mode zero?
 LD HL, $DEC$NULL
 LDZ Y, $CBLOCK
 #71
-FNH DZ, HLD               # vertical counter timeout
-LDN PC, $CTX_SWITCH       # jump if context switch line neg?
+FNH DZ, HLD               # context switch block-1
+LDN PC, $CTX_SWITCH       # jump if context switch?
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
 #80
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #86
 
 $NEXT_FIELD               #68 - next field, cycle=1
@@ -118,63 +118,60 @@ LD PG, $RTCE_PG
 #120
 
 $CTX_SWITCH               #75 Y=$CBLOCK
-LDZ HL, $75
-FNH DZ, HLD               # 75 -> CBLOCK
-LD HL, $CTX_SEQ
+LD HL, $74
+MVHL AZ, ND               # 74 -> CBLOCK
 #81
+LD HL, $CTX_SEQ
 MVHL A, XA                # X = CTX sequence col
 LD HL, $INC$NULL
 LDZ Y, $CTXIDX
-FNH DZ, HLD               # context switch index+1
 #91
+FNH DZ, HLD               # context switch index+1
 LD HL, $IDEN$NULL
 FNH A, Y                  # Y = context switch index
 FNFH D, NA                # A = next CTX col
-LD PC, $EXIT100          # DEBUG ***exit if positive
-LD Y, $CTX1
+LD PC, $EXIT102          # DEBUG ***exit if positive
 #101
+LD Y, $CTX1
 FNH AZ, HLD               # A -> next CTX col
 LD Y, $CTX0
 XORHL DZ, NA              # A = CTX1 diff CTX0
-LD HL, $SWAP$NULL
 #111
+LD HL, $SWAP$IDEN
+FNFL DZ, X                # X = CTX0 col
 FNH A, HL                 # H = AL
 LD Y, $EO
-XORH DZ, ED               # update bank using CTX delta
-LD HL, $IDEN$IDEN
 #120
-LD Y, $CTX0
-FNFL DZ, X                # X = CTX0 col
+XORH DZ, ED               # update bank using CTX delta
+LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH D, HLD                # inst -> inst in CTX0 col
+NOP
+#130
+NOP
 LD HL, $IDEN$NULL
-#131
 LDZ Y, $VMS
 FNH DZ, HLA               # A = VMS
 LD HL, $SWAP$NULL
 LD Y, $EXT
-FNH A, HLD                # ext bit -> ext sign in CTX0 col
 #141
+FNH A, HLD                # ext bit -> ext sign in CTX0 col
 LD HL, $0xD8
 LD Y, $HTEMP
 MVHL AZ, ND               # -40 -> CTX SW jump page PC (-40+56=0x10)
-NOP
-#150
-NOP
+#151
 LD HL, $0xA0
 LD Y, $VMS
 ORH DZ, ND                # VMS+ext+2 (cycle=3)
 LD HL, $CTXSW_INST
 #160
-LDZ Y, $INST
+LD Y, $INST
 MVHL AZ, ND               # HL -> inst cache
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #172
 
-$EXIT100
-NOP
-NOP
+$EXIT102
 NOP
 NOP
 NOP
@@ -194,5 +191,5 @@ LDZ Y, $INST
 #121
 FNH DZ, HL                # inst cache -> HL
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #129

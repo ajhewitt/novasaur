@@ -1,11 +1,11 @@
-# Extended execute - fetch pre-inc and dispatch to jump page for 2-cycle execute
+# Extended pre-inc fetch and dispatch to jump page for 3-cycle execute
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE EXECX1_PG
+PAGE DISPX2_PG
 
 # assume: Y = $VMS
-LD HL, $0xA0           # assume 2 cycle
+LD HL, $0xB0           # assume 3 cycle
 ADDH DZ, ND            # inc state, set ext flag
 LD HL, $INC$FORK1
 LD Y, $PCL
@@ -20,7 +20,7 @@ LDZ HL, $IDEN$NULL
 #21
 FNH DZ, Y              # Y = PCH
 FNFH M, NA             # A = [PC]
-LD HL, $EXTPC1$EXTPG1
+LD HL, $EXTPC2$EXTPG2
 FNDL A, PG             # fork to jump page
 #31
 
@@ -32,7 +32,7 @@ LDZ Y, $PCH
 #21
 FNH DZ, Y              # Y = PCH
 FNFH M, NA             # A = [PC]
-LD HL, $EXTPC1$EXTPG1
+LD HL, $EXTPC2$EXTPG2
 FNDL A, PG             # fork to jump page
 #31
 
@@ -41,7 +41,7 @@ FNDL A, PG             # fork to jump page
 #34
 
 #jump page w/inst cache
-#LD HL, $IDEN$EXTPC1
+#LD HL, $IDEN$EXTPC2
 #LD Y, $INST
 #FNFH AZ, ND
 #FNDL A, PC

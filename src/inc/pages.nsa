@@ -1,8 +1,8 @@
 # All the pages
 $IDLE_PG       0x00 # 43-pc idle VMC
 $FETCHX_PG     0x01 # extended fetch
-$EXECX1_PG     0x02 # extended execute 2-cycle
-$EXECX2_PG     0x03 # extended execute 3-cycle
+$DISPX1_PG     0x02 # fetch/disptch/exec 2-cycle
+$DISPX2_PG     0x03 # fetch/disptch/exec 3-cycle
 $COPYROM_PG    0x04
 $CTXSW_PG      0x05
 

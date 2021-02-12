@@ -50,7 +50,7 @@ LD HL, $FETCH
 NOP
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0xC0
@@ -71,5 +71,5 @@ LD HL, $FETCH
 NOP
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86

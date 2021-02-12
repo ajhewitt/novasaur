@@ -30,7 +30,7 @@ FNDL DZ, Y            # Y = zpage addr of dest reg
 FNH AZ, HLD           # A -> dest reg
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43
 
 ADDR 0xC0
@@ -47,5 +47,5 @@ FNDL DZ, Y            # Y = zpage addr of dest reg
 FNH AZ, HLD           # A -> dest reg
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43

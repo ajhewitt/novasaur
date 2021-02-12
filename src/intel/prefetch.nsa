@@ -22,7 +22,7 @@ LD Y, $INST
 FNH AZ, HLD        # A -> inst cache,HL
 #80
 LD Y, $VMS         # set Y = $VMS on exit
-VMPHL DZ, PGA      # jump to next VMC
+DISHL DZ, PGA      # jump to next VMC
 #86
 
 ADDR 0xC0         # else
@@ -37,5 +37,5 @@ LD Y, $INST
 FNH AZ, HLD        # HL -> inst cache
 #80
 LD Y, $VMS         # set Y = $VMS on exit
-VMPHL DZ, PGA      # jump to next VMC
+DISHL DZ, PGA      # jump to next VMC
 #86

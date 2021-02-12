@@ -71,7 +71,7 @@ LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #172
 
 $ATTACK                   #142 start attack
@@ -167,7 +167,7 @@ LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
 #209
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #215
 
 $EXIT173
@@ -209,5 +209,5 @@ LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
 #209,252
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #215,258

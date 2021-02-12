@@ -6,7 +6,7 @@ PAGE KDCODF1_PG
 
 #KMODE: 000EBCAS
 #assume H=$IDEN
-LDZ Y, $KSCAN         #34
+LDZ Y, $KS0           #34
 FNH DZ, HLA           # A=kbd scan code
 LDP PC, $SCAN40       # scan code
 LD HL, $LSL$NULL
@@ -26,7 +26,7 @@ LD PC, $EXIT62
 #62/26
 
 $SCAN40
-LD HL, $SC2MASK$NULL
+LD HL, $KS2MODE$NULL
 FNCH A, NA            # A=mask update (update on MSB low)
 LDP PC, $MASK47       # update mask
 LD HL, $KCBUFF
@@ -56,7 +56,7 @@ LD HL, $KCBUFF
 MVHL A, XA            # X=kbd code buffer
 #59/64
 LD HL, $0x7F          # -0x81
-LD Y, $KSCAN
+LD Y, $KS0
 ADDHL DZ, NA          # A=kbd scan code - 0x81
 #67/70
 LD HL, $SCAN0$IDEN
@@ -68,12 +68,12 @@ LD Y, $KMODE
 LDZ HL, $SWAP$NULL
 #51/78
 FNH DZ, HLA           # A=swapped kbd mode (make on MSB low)
-LD HL, $SC2MASK$1COM
-LD Y, $KSCAN
+LD HL, $KS2MODE$1COM
+LD Y, $KS0
 LDP PC, $MAKE59       # jump on make
 FNCH DZ, NA           # A=mask bit
 #61/87
-FNFL A, HL            # A=inverse mask
+FNFL A, HL            # HL=inverse mask
 LD Y, $KMODE
 ANDHL DZ, ND          # reset mask bit
 #70/93
@@ -209,5 +209,5 @@ MVHL A, NA            # NOP
 #121,78
 LD HL, $FETCH         # HL = fetch
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #129,86

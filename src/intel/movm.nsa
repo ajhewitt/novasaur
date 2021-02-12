@@ -30,5 +30,5 @@ NOP
 NOP
 LD HL, $FETCH
 LDZ Y, $VMS           # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43

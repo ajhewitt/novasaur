@@ -23,8 +23,8 @@ FNH DZ, HLD               # keyboard idle+1
 LDP PC, $TIMEOUT59        # timeout when idle>0
 LD HL, $0xC0
 #60/29
-LD Y, $KSH
-MVH AZ, ND                # XXXX1100 -> scan H
+LD Y, $KS1
+MVH AZ, ND                # XXXX1100 -> scan 1
 LD PC, $EXIT67
 #67/35
 
@@ -34,28 +34,27 @@ LDZ Y, $TMODE
 #50/39
 FNH DZ, HLD               # 4 -> keyboard mode
 LD HL, $0xC0
-LD Y, $KSL
-MVH AZ, ND                # XXXX1100 -> scan L
+LD Y, $KS0
+MVH AZ, ND                # XXXX1100 -> scan 0
+NOP
+#60/47
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#70/57
+NOP
+NOP
 LD HL, $INC$NULL
-#61/48
 LDZ Y, $VMS
 FNH DZ, HLD               # VMS+1
 LD HL, $KS01?$NULL
-NOP
-NOP
-NOP
-#70/56
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#80/66
 LD PC, $SCAN_LOW82        # process first sample
 #82/68
 
@@ -65,8 +64,8 @@ LDZ Y, $TMODE
 FNH DZ, HLD               # 4 -> keyboard mode
 LD HL, $0xC0
 #60/75
-LD Y, $KSL
-MVH AZ, ND                # XXXX1100 -> scan L
+LD Y, $KS0
+MVH AZ, ND                # XXXX1100 -> scan 0
 LD PC, $EXIT67
 #67/81
 
@@ -77,7 +76,7 @@ FNEH DZ, ND               # kb mode -> tx mode
 LD PC, $EXIT68
 #68/89
 
-ADDR 0x60                 #39,82 - mode 0x04-0x0C: keyboard scan L
+ADDR 0x60                 #39,82 - mode 0x04-0x0C: keyboard scan 0
 $SCAN_LOW82
 LD Y, $COMBS
 FNEH DZ, NA               # A = test number of bits
@@ -86,12 +85,12 @@ LDN HL, $2$KDATA          # 1 bits received
 LD Y, $TMODE
 #49,92/105
 ADDH DZ, ND               # comms mode +2 or 4
-LD Y, $KSL
-MULH DZ, NA               # A = scan L << 1 or 2
+LD Y, $KS0
+MULH DZ, NA               # A = scan 0 << 1 or 2
 LD Y, $COMBS
 #59,102/113
 FNEL DZ, HL               # H = kbd data
-LD Y, $KSL
+LD Y, $KS0
 ORH AZ, ND                # add kbd data to scan
 $EXIT67
 NOP
@@ -104,10 +103,10 @@ MVHL A, NA                # NOP
 LD HL, $FETCH             # HL = fetch
 #80,123/130
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #86,129/134
 
-ADDR 0x88                 #39 - mode 0x0E-0x18: keyboard scan H
+ADDR 0x88                 #39 - mode 0x0E-0x18: keyboard scan 1
 LD Y, $COMBS
 FNEH DZ, NA               # A = test number of bits
 LDP HL, $4$KDATA          # 2 bits received
@@ -115,13 +114,13 @@ LDN HL, $2$KDATA          # 1 bits received
 LD Y, $TMODE
 #49/146
 ADDH DZ, ND               # comms mode +2 or 4
-LD Y, $KSH
-MULH DZ, NA               # A = scan L << 1 or 2
+LD Y, $KS1
+MULH DZ, NA               # A = scan 1 << 1 or 2
 LD Y, $COMBS
 #59/152
 FNEL DZ, HL               # H = kbd data
-LD Y, $KSH
-ORH AZ, ND                # add kbd data to scan
+LD Y, $KS1
+ORH AZ, ND                # add kbd data to scan 1
 NOP
 LD HL, $INC$NULL
 #70/160
@@ -131,40 +130,43 @@ MVHL A, NA                # NOP
 LD HL, $FETCH             # HL = fetch
 #80/168
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #86/172
 
 ADDR 0xB0                 #39 - mode 0x1A: store sampled byte
 LD HL, $KSBUFF
 MVHL A, XA                # X = Kbd scan buffer
 LD HL, $IDEN$NULL
-LDZ Y, $KSL
-FNH DZ, HLA               # A = scan low
+LDZ Y, $KS0
+FNH DZ, HLA               # A = scan 0
 #51
-LDP HL, $0x40             # scan low contains 6 bits
-LDN HL, $0x80             # scan low contains 5 bits
+LDP HL, $0x40             # scan 0 contains 6 bits
+LDN HL, $0x80             # scan 0 contains 5 bits
 MULH A, NA                # A sign = 1st bit of sample
 LDN PC, $TIMEOUT59        # exit if start bit high
 LD HL, $0x24
 #60
-MULH AZ, ND               # upper 4 or 5 bits -> scan low
-LD Y, $KSH
+MULH AZ, ND               # upper 4 or 5 bits -> scan 0
+LD Y, $KS1
 MULL DZ, HL               # H = lower 4 or 3 bits
-LD Y, $KSL
+LD Y, $KS0
 #70
 ORH DZ, NA                # rest of bits -> A
-LD HL, $REVERSE$IDEN
-LD Y, $KSWRIDX
-FNFL DZ, Y                # Y = Kbd scan write index
-#80
-FNFH A, ND                # A -> keyboard buffer
-LD HL, $IDEN$NULL
-LD Y, $KSCAN
+LD HL, $REVERSE$NULL
 FNH AZ, HLD               # A -> scan cache
-#89
+LD HL, $IDEN$NULL
+#79
+LDZ Y, $KSWRIDX
+FNH DZ, Y                 # Y = Kbd scan write index
+FNH A, HLD                # A -> keyboard buffer
 LD HL, $INC$NULL
 LDZ Y, $KSWRIDX
+#89
 FNH DZ, HLD               # Kbd scan write index+1
+NOP
+NOP
+NOP
+NOP
 LD HL, $IDEN$NULL
 LDZ Y, $KTO
 #99
@@ -181,5 +183,5 @@ MVHL A, NA                # NOP
 #121
 LD HL, $FETCH             # HL = fetch
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #129

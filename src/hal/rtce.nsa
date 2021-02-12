@@ -57,7 +57,7 @@ LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
 #209
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #215
 
 $T0_ADJ174                #174 - 10 ticks per min, cycle=3
@@ -182,5 +182,5 @@ LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL
 #209,166,123
 LD Y, $VMS                # set Y = $VMS on exit
-VMPHL DZ, PGA             # jump to next VMC
+DISHL DZ, PGA             # jump to next VMC
 #258,215,172,129

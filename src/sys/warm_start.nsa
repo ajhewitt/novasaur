@@ -76,5 +76,6 @@ MVHL AZ, ND               # 0xFFFF->PC
 LD HL, $COPYROM_INST
 LD Y, $INST
 MVHL AZ, ND
+
 LD Y, $VMS
 LD PG, $BSYNCE_PG         # start video loop

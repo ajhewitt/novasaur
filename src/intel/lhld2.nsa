@@ -48,7 +48,7 @@ NOP
 NOP
 NOP
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #129
 
 #60
@@ -95,5 +95,5 @@ NOP
 NOP
 NOP
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #129

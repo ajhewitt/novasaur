@@ -35,7 +35,7 @@ NOP
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43/39
 
 ADDR 0x28             #32 - mode 0x60: rx conn open
@@ -191,5 +191,5 @@ LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 #80/230
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86/234

@@ -44,31 +44,31 @@ $TONE3H        0xC3
 $AMODE         0xC4 # audio mode - 0x00-0x3F,n%4:#voices,0:off
 $KTO           0xC5 # max kbd idle count
 $KIDLE         0xC6 # kbd idle cycle count (internal)
-$KSL           0xC7 # kbd sample low (internal)
-$KSH           0xC8 # kbd sample high (internal)
-$KSCAN         0xC9 # kbd scan decode state (internal)
-$KMODE         0xCA # keyboard mode (internal)
-$KSRDIDX       0xCB
-$KSWRIDX       0xCC
-$KCRDIDX       0xCD
-$KCWRIDX       0xCE
-$RMULT         0xCF # rx multiplier (internal)
-$RMODE         0xD0 # Rx mode - 0x40-0x7F
-$RXRDIDX       0xD1
-$RXWRIDX       0xD2
-$TMODE         0xD3 # Tx mode - 0x80-0xBF
-$TXRDIDX       0xD4
-$TXWRIDX       0xD5
-$BMODE         0xD6 # VID col used for block
-$BLOCK         0xD7 # block count (0 to 175/160/128)
-$FRAME         0xD8 # frame count (-5,-4 to 0)
-$COMLS         0xD9 # comms line state
-$COMBS         0xDA # comms block state
-$VMODE         0xDB # video mode - combined with mode line
-$VLINE         0xDC # video memory line
-$VSTART        0xDD # top of video display
-$CBLOCK        0xDE # context switch block
-$HWSTAT        0xDF # hardware status
+$KS0           0xC7 # kbd sample 0 (internal)
+$KS1           0xC8 # kbd sample 1 (internal)
+$KMODE         0xC9 # kbd decode state (internal)
+$KSRDIDX       0xCA
+$KSWRIDX       0xCB
+$KCRDIDX       0xCC
+$KCWRIDX       0xCD
+$RMULT         0xCE # rx multiplier (internal)
+$RMODE         0xCF # Rx mode - 0x40-0x7F
+$RXRDIDX       0xD0
+$RXWRIDX       0xD1
+$TMODE         0xD2 # Tx mode - 0x80-0xBF
+$TXRDIDX       0xD3
+$TXWRIDX       0xD4
+$BMODE         0xD5 # VID col used for block
+$BLOCK         0xD6 # block count (0 to 175/160/128)
+$FRAME         0xD7 # frame count (-5,-4 to 0)
+$COMLS         0xD8 # comms line state
+$COMBS         0xD9 # comms block state
+$VMODE         0xDA # video mode - combined with mode line
+$VLINE         0xDB # video memory line
+$VSTART        0xDC # top of video display
+$CBLOCK        0xDD # context switch block
+$HWSTAT        0xDE # hardware status
+
 #RTC
 $TIME0         0xE0 # 15tps, max 90 - 6s
 $TIME1         0xE1 # 10tpm, max 120 - 12m

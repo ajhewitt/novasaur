@@ -35,7 +35,7 @@ NOP
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #43/40
 
 ADDR 0x30             #32 - 1 voice
@@ -172,5 +172,5 @@ LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 #209
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #215

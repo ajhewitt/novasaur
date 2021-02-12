@@ -57,7 +57,7 @@ LD Y, $INST
 FNH AZ, HLD           # A -> isnt cache,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0x80             # PCL = 0, inc PCH, iden PCH
@@ -93,7 +93,7 @@ LD Y, $INST
 FNH AZ, HLD           # A -> isnt cache,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86
 
 ADDR 0xC0             # else, iden PCH, iden PCH
@@ -130,5 +130,5 @@ LD Y, $INST
 FNH AZ, HLD           # A -> isnt cache,HL
 #80
 LD Y, $VMS            # set Y = $VMS on exit
-VMPHL DZ, PGA         # jump to next VMC
+DISHL DZ, PGA         # jump to next VMC
 #86
