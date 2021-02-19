@@ -6,7 +6,8 @@ PAGE KBD_START
 
 LD HL, $0x07              # retry 7 times
 LD Y, $TEMP
-MVHL AZ, ND               # 7->TEMP
+MVHL AZ, SD               # 7->TEMP
+MULH A, SA                # reset scan/kbdtx high
 
 # (1)  Auxiliary device idle when clock high for 186us
 $IDLE
@@ -84,10 +85,9 @@ FNH DZ, HLD               # TMPH-1->TMPH
 LDP PC, $LOOP5            # loop until 0
 
 # (6)  Release data, wait 300ms, retry
-LD HL, $0x00
-MVHL A, SA
-MVHL A, SA                # kbdtx high
 LD HL, $0x20
+MULL A, S
+MULL A, S                 # kbdtx high
 LD Y, $HWSTAT
 ORH DZ, ND                # set bit 2 of HW STAT
 LD HL, $DEC$NULL
@@ -119,10 +119,9 @@ LD PC, $IDLE
 
 # (7)  Release data to transmit 10 high bits - FF, patiry, stop
 $PASS
-LD HL, $0x00
-MVHL A, SA
-MVHL A, SA                # kbdtx high
 LD HL, $0xD0
+MULL A, S
+MULL A, S                 # kbdtx high
 LD Y, $HWSTAT
 ANDH DZ, ND               # clear bit 2 of HW STAT
 

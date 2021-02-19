@@ -1,0 +1,60 @@
+# Send message - one byte per cycle, fetch when done
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SEND_PG
+
+#HREG: RAM page
+#LREG: RAM X index, init 0x7F/0xFF
+#TEMP: buffer index, init 0xFF
+# assume: Y = $VMS
+LD HL, $INC$NULL
+FNFH DZ, ND            # inc VMS
+LD Y, $LREG
+FNFH DZ, XD            # X = L+1
+#10
+LDZ Y, $TEMP
+FNH DZ, HLD            # row = row+1
+LDN PC, $EXIT16        # exit at end of buffer
+LD HL, $IDEN$IDEN
+LDZ Y, $HREG
+FNH DZ, Y              # Y = H
+#21
+FNFH M, NA             # A = [Y,X]
+LD Y, $CTX0
+FNFL DZ, X             # X = context col
+LDZ Y, $TEMP
+#31
+FNH DZ, Y              # Y = row
+FNH A, HLD             # A->[Y,X]
+LD HL, $SEND_INST
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#43
+
+$EXIT16                # TODO: update Semaphore to mark this CTX ready
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#43

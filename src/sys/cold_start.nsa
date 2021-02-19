@@ -144,7 +144,8 @@ MVHL A, EA                # bank3->E
 LD HL, $0x55
 MVHL AZ, NM               # 55->[7FFFF]
 LD HL, $0x11
-MVHL A, EA                # bank1->E
+LD Y, $EO
+MVHL AZ, ED               # bank1,LED off->E *** init EO
 LD HL, $0xAA
 XORHL MZ, NA              # A=AA$[1FFFF]
 LD HL, $ZERO?$NULL

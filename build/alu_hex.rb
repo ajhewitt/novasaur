@@ -32,6 +32,7 @@ def print_unary(offset, r)
   end
 end
 
+PARITY=[1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1].freeze
 # ALU function: AF (arithmetic flags)
 # ADD: XXXXYYYY = BBBBAAAA + HHHHLLLL
 # AF: A = XXXXYYYY, HL = HHHHLLLL (BBBBAAAA = XXXXYYYY - HHHHLLLL)
@@ -46,14 +47,14 @@ def print_af(offset, opts = {})
           r |= 0x80 if (b-(c>>3)) < a                 # C - Carry (from bit 7)
           r |= b >> 3                                 # S - Sign of result
           r |= 0x20 if c&4 != 0 && b == 0             # Z - Zero (high if result is 0)
-          r |= ((sprintf('%b', b).split('').map(&:to_i).reduce(&:+) + ((c&2)>>1))%2) << 4
+          r |= (PARITY[b] ^ ((c>>1)%2) ^ 1) << 4      # P - Parity (high if result even)
           r |= 4 if ((b&7) < (a&7)) ^ (b < a)         # V - Overflow (carry from bit 6 xor carry)
           r |= 2 unless b < a || (c&4 != 0 && a == 0) # B - Borrow (from bit 7 if subtraction)
         else # a=LLLL, b=XXXX, c=YYYY
           r = b << 4                                  # preserve high nibble
           r |= 8 if c < a # YYYY < LLLL               # H - Half carry (carry from bit 3)
-          r |= 4 if c == 0                            # (half zero)
-          r |= (sprintf('%b', c).split('').map(&:to_i).reduce(&:+)%2) << 1
+          r |= 4 if c == 0                            # (half zero - high if zero)
+          r |= PARITY[c] << 1                         # (half parity - high if even)
           r |= 1 unless c < a || a == 0               # L - Low borrow (from bit 3 if subtraction)
         end
         r
@@ -133,8 +134,8 @@ I8080 = [
   0xD0,2, 0xD6,2, 0xCB,1, 0xE0,1, 0xCD,2, 0xD8,2, 0xBC,2, 0xD2,1, #0xFX
   0xD1,2, 0xDB,1, 0xCB,1, 0xDF,1, 0xCE,2, 0x03,3, 0xC2,2, 0xD2,1,
 ].freeze # Intel 8080 inst page decoding, cycle count
-EXT = [
-  0x90,1, 0x04,2, 0x05,2, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, #0x0X
+EXT = [ # *** organize so dispatched instructions can't be fetched
+  0x90,1, 0x04,2, 0x05,2, 0x06,1, 0x07,1, 0x08,1, 0x90,1, 0x90,1, #0x0X
   0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1,
   0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, #0x1X
   0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1, 0x90,1,
@@ -673,8 +674,8 @@ print_unary(0xD0, fork_intr)
 print_unary(0xD1, [0x80] + Array.new(0xFF, 0xC0))
 # $FORK2: 0xFF->0x40,0->0x80,else->0xC0
 print_unary(0xD2, [0x80] + Array.new(0xFE, 0xC0) + [0x40])
-# $FORK3: 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
-print_unary(0xD3, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x38])
+# $FORK3: 0xFE->0x20,0xFF->0x58,0->0x90,else->0xC8
+print_unary(0xD3, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x58])
 # $MAPREGH: map instruction to zpage addr of destination register, or high source register pair
 REG8=[0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF1, 0xF0].freeze
 REG16H=[0xF2, 0xF4, 0xF6, 0xF8].freeze

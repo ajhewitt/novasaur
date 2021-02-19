@@ -1,0 +1,61 @@
+# Transfer message from CTX A->B - one byte per cycle, fetch when done
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE XFER_PG
+
+#HREG: RAM page
+#LREG: RAM X index, init 0x7F/0xFF
+#TEMP: buffer index, init 0xFF
+# assume: Y = $VMS
+LD HL, $INC$IDEN
+FNFH DZ, ND            # inc VMS
+LD Y, $TMPH
+FNFL DZ, X             # X = tmp H
+#10
+LDZ Y, $TEMP
+FNH DZ, HLD            # row = row+1
+LDN PC, $EXIT16        # exit at end of buffer
+LD HL, $IDEN$NULL
+FNH A, Y               # Y = row
+FNH D, HLA             # A = [Y,X]
+#21
+LD HL, $IDEN$IDEN
+LDZ Y, $TMPL
+FNFL DZ, X             # X = tmp L
+LDZ Y, $TEMP
+#30
+FNH DZ, Y              # Y = row
+FNH A, HLD             # A->[Y,X]
+NOP
+LD HL, $XFER_INST
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#43
+
+$EXIT16                # TODO: update Semaphore to mark CTX A dirty, B ready
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#43

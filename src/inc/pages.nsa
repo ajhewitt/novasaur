@@ -5,6 +5,9 @@ $DISPX1_PG     0x02 # fetch/disptch/exec 2-cycle
 $DISPX2_PG     0x03 # fetch/disptch/exec 3-cycle
 $COPYROM_PG    0x04
 $CTXSW_PG      0x05
+$SEND_PG       0x06
+$XFER_PG       0x07
+$RECV_PG       0x08
 
 $JMPPG0_PG     0x10
 
@@ -17,8 +20,7 @@ $COLD_START    0x80 # reset vector
 $WARM_START    0x81
 $KBD_START     0x82
 
-$ROM_COPY      0x88 # temp dev testing
-$CLR_SCRN      0x89
+$CLR_SCRN      0x88 # temp dev testing
 
 $FETCH1_PG     0x90 # 0x90-0xE5: 8080 instruction set
 $FETCH2_PG     0x91

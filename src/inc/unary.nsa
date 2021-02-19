@@ -42,7 +42,7 @@ $FREQH     15 # MIDI->TONE delta H
 $FORKI      0 # interupt vector fork
 $FORK1      1 # 0->0x80,else->0xC0
 $FORK2      2 # 0xFF->0x40,0->0x80,else->0xC0
-$FORK3      3 # 0xFE->0x20,0xFF->0x38,0->0x90,else->0xC8
+$FORK3      3 # 0xFE->0x20,0xFF->0x58,0->0x90,else->0xC8
 $REGMAPH    4 # map dest/hi register to zpage addr
 $REGMAPL    5 # map source/low register to zpage addr
 $F2PSW      6 # flags->PSW
