@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2021-01-31"
-Rev "1.8"
+Date "2021-03-19"
+Rev "1.9"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"
 Comment2 ""
@@ -2200,69 +2200,12 @@ Text GLabel 2050 6250 2    50   Output ~ 0
 DB2
 Text GLabel 2050 6750 2    50   Output ~ 0
 text
-Wire Wire Line
-	2300 5300 2300 5250
 $Comp
-L power:VCC #PWR?
-U 1 1 5FE7CD0F
-P 2300 5250
-AR Path="/5F6C0B36/5FE7CD0F" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA19D5/5FE7CD0F" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA5CD8/5D99DA9F/5FE7CD0F" Ref="#PWR?"  Part="1" 
-AR Path="/5DA1E9BA/5FE7CD0F" Ref="#PWR0175"  Part="1" 
-F 0 "#PWR0175" H 2300 5100 50  0001 C CNN
-F 1 "VCC" H 2317 5423 50  0000 C CNN
-F 2 "" H 2300 5250 50  0001 C CNN
-F 3 "" H 2300 5250 50  0001 C CNN
-	1    2300 5250
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:LED_ALT D?
-U 1 1 5EE6CB39
-P 2300 5800
-AR Path="/5DAA19D5/5EE6CB39" Ref="D?"  Part="1" 
-AR Path="/5DAA5CD8/5D99DA9F/5EE6CB39" Ref="D?"  Part="1" 
-AR Path="/5DA1E9BA/5EE6CB39" Ref="D1"  Part="1" 
-AR Path="/5EE6CB39" Ref="D?"  Part="1" 
-F 0 "D1" V 2300 6000 50  0000 R CNN
-F 1 "LTL-10223W" V 2248 5683 50  0001 R CNN
-F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm" H 2300 5800 50  0001 C CNN
-F 3 "~" H 2300 5800 50  0001 C CNN
-	1    2300 5800
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:R_US R?
-U 1 1 5EE6CB33
-P 2300 5450
-AR Path="/62D13D9D/5EE6CB33" Ref="R?"  Part="1" 
-AR Path="/5DAA19D5/5EE6CB33" Ref="R?"  Part="1" 
-AR Path="/5DAA5CD8/5D99DA9F/5EE6CB33" Ref="R?"  Part="1" 
-AR Path="/5DA1E9BA/5EE6CB33" Ref="R1"  Part="1" 
-AR Path="/5EE6CB33" Ref="R?"  Part="1" 
-F 0 "R1" H 2100 5500 50  0000 L CNN
-F 1 "330" H 2100 5400 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2340 5440 50  0001 C CNN
-F 3 "~" H 2300 5450 50  0001 C CNN
-	1    2300 5450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2050 6450 2300 6450
-Wire Wire Line
-	2300 5950 2300 6450
-Connection ~ 2300 6450
-Wire Wire Line
-	2300 6450 2350 6450
-Wire Wire Line
-	2300 5650 2300 5600
-$Comp
-L power:+BATT #PWR0142
+L power:VMEM #PWR0142
 U 1 1 5EC0EA23
 P 3150 1100
 F 0 "#PWR0142" H 3150 950 50  0001 C CNN
-F 1 "+BATT" H 3165 1273 50  0000 C CNN
+F 1 "VMEM" H 3165 1273 50  0000 C CNN
 F 2 "" H 3150 1100 50  0001 C CNN
 F 3 "" H 3150 1100 50  0001 C CNN
 	1    3150 1100
@@ -2439,6 +2382,59 @@ Wire Wire Line
 	9350 4500 9500 4500
 Wire Wire Line
 	9500 4550 9500 4500
+Wire Wire Line
+	2300 6450 2350 6450
+Wire Wire Line
+	2050 6450 2300 6450
+Connection ~ 2300 6450
+Wire Wire Line
+	2300 5950 2300 6450
+$Comp
+L power:VCC #PWR?
+U 1 1 5FE7CD0F
+P 2300 5350
+AR Path="/5F6C0B36/5FE7CD0F" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA19D5/5FE7CD0F" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/5D99DA9F/5FE7CD0F" Ref="#PWR?"  Part="1" 
+AR Path="/5DA1E9BA/5FE7CD0F" Ref="#PWR0175"  Part="1" 
+F 0 "#PWR0175" H 2300 5200 50  0001 C CNN
+F 1 "VCC" H 2317 5523 50  0000 C CNN
+F 2 "" H 2300 5350 50  0001 C CNN
+F 3 "" H 2300 5350 50  0001 C CNN
+	1    2300 5350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED_ALT D?
+U 1 1 5EE6CB39
+P 2300 5500
+AR Path="/5DAA19D5/5EE6CB39" Ref="D?"  Part="1" 
+AR Path="/5DAA5CD8/5D99DA9F/5EE6CB39" Ref="D?"  Part="1" 
+AR Path="/5DA1E9BA/5EE6CB39" Ref="D1"  Part="1" 
+AR Path="/5EE6CB39" Ref="D?"  Part="1" 
+F 0 "D1" V 2300 5700 50  0000 R CNN
+F 1 "LTL-10223W" V 2248 5383 50  0001 R CNN
+F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm_Clear" H 2300 5500 50  0001 C CNN
+F 3 "~" H 2300 5500 50  0001 C CNN
+	1    2300 5500
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R?
+U 1 1 5EE6CB33
+P 2300 5800
+AR Path="/62D13D9D/5EE6CB33" Ref="R?"  Part="1" 
+AR Path="/5DAA19D5/5EE6CB33" Ref="R?"  Part="1" 
+AR Path="/5DAA5CD8/5D99DA9F/5EE6CB33" Ref="R?"  Part="1" 
+AR Path="/5DA1E9BA/5EE6CB33" Ref="R1"  Part="1" 
+AR Path="/5EE6CB33" Ref="R?"  Part="1" 
+F 0 "R1" H 2100 5850 50  0000 L CNN
+F 1 "330" H 2100 5750 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2340 5790 50  0001 C CNN
+F 3 "~" H 2300 5800 50  0001 C CNN
+	1    2300 5800
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	850  800  10150 800 
 Wire Bus Line

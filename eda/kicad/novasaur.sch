@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2021-01-31"
-Rev "1.8"
+Date "2021-03-19"
+Rev "1.9"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"
 Comment2 ""
@@ -595,7 +595,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 7200 2400 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 Text GLabel 8300 1700 0    50   Input ~ 0
-s1
+tld
 Text GLabel 9300 1800 2    50   Output ~ 0
 ~exec
 Text GLabel 9300 1700 2    50   Output ~ 0

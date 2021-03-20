@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2021-01-31"
-Rev "1.8"
+Date "2021-03-19"
+Rev "1.9"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"
 Comment2 ""
@@ -1223,7 +1223,7 @@ G[0..7]
 Text GLabel 6700 5550 0    50   Input ~ 0
 pclk2
 Text GLabel 9400 3600 2    50   Output ~ 0
-s1
+tld
 Text GLabel 5900 5650 2    50   Input ~ 0
 ~voe
 Wire Wire Line
@@ -1379,7 +1379,7 @@ P 1200 2450
 AR Path="/5E144DCF" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BA/5E144DCF" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5E144DCF" Ref="TP22"  Part="1" 
-F 0 "TP22" H 950 2600 50  0000 L CNN
+F 0 "TP22" H 1100 2650 50  0000 L CNN
 F 1 "SCP" H 950 2600 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1400 2450 50  0001 C CNN
 F 3 "~" H 1400 2450 50  0001 C CNN
@@ -1500,12 +1500,12 @@ AR Path="/5FE5FA60" Ref="TP?"  Part="1"
 AR Path="/5DA1E9BA/5FE5FA60" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5FE5FA60" Ref="TP23"  Part="1" 
 AR Path="/5DA1E9C0/5FE5FA60" Ref="TP?"  Part="1" 
-F 0 "TP23" V 3050 3550 50  0000 L CNN
+F 0 "TP23" H 2950 3550 50  0000 L CNN
 F 1 "VENABLE" H 2800 3500 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3250 3350 50  0001 C CNN
 F 3 "~" H 3250 3350 50  0001 C CNN
 	1    3050 3350
-	0    -1   -1   0   
+	-1   0    0    1   
 $EndComp
 Text Label 5000 2250 0    50   ~ 0
 PA15
@@ -1644,8 +1644,38 @@ Wire Wire Line
 	5000 3400 5000 3350
 Wire Wire Line
 	5000 3400 5100 3400
-Text Label 4100 3650 0    50   ~ 0
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 604E54C4
+P 6500 3600
+AR Path="/604E54C4" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/604E54C4" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/604E54C4" Ref="TP39"  Part="1" 
+F 0 "TP39" H 6400 3800 50  0000 L CNN
+F 1 "TLD" H 6250 3750 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6700 3600 50  0001 C CNN
+F 3 "~" H 6700 3600 50  0001 C CNN
+	1    6500 3600
+	1    0    0    -1  
+$EndComp
+Text Label 4150 3650 0    50   ~ 0
 tclk
+$Comp
+L Connector:TestPoint_Alt TP?
+U 1 1 604A4AE1
+P 4100 3650
+AR Path="/604A4AE1" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BA/604A4AE1" Ref="TP?"  Part="1" 
+AR Path="/5DA1E9BD/604A4AE1" Ref="TP38"  Part="1" 
+F 0 "TP38" H 4000 3850 50  0000 L CNN
+F 1 "TCLK" H 3850 3800 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4300 3650 50  0001 C CNN
+F 3 "~" H 4300 3650 50  0001 C CNN
+	1    4100 3650
+	1    0    0    -1  
+$EndComp
+Connection ~ 4100 3650
+Connection ~ 6500 3600
 Wire Bus Line
 	3200 2150 3200 2450
 Wire Bus Line
@@ -1659,13 +1689,13 @@ Wire Bus Line
 Wire Bus Line
 	6400 4750 6400 5650
 Wire Bus Line
+	5300 1350 5300 2150
+Wire Bus Line
 	7900 4750 7900 5550
 Wire Bus Line
 	7900 1350 7900 2150
 Wire Bus Line
 	6400 1350 6400 2150
-Wire Bus Line
-	5300 1350 5300 2150
 Wire Bus Line
 	4600 4450 4600 7100
 $EndSCHEMATC
