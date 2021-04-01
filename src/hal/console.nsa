@@ -1,0 +1,66 @@
+# Console jump page
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE CON_PG
+$CONL 0
+$CONR 0
+$CONX 0
+$CONY 0
+
+# assume L = $FORKC
+LD Y, $AREG
+FNCL DZ, PC               # fork on character
+#38/4
+
+ADDR 0x04                 # Backspace
+LD HL, $DEC$2COM
+#40/2
+LD Y, $CONX
+FNFH DZ, ND               # X-1
+LD Y, $CONL
+FNFL DZ, HL               # HL=-conL
+#50/10
+ADDHL DZ, NA              # A=X-conL
+LDN PC, $BSEX56           # Exit if less than console left
+LD HL, $LSL$INC
+LD Y, $CONX
+#59/18
+FNFH DZ, NA               # A=conX*2
+FNFL A, X                 # X=A+1
+LD HL, $IDEN$NULL
+LD Y, $CONY
+#69/26
+FNH DZ, Y                 # Y=colY
+MULH A, ND                # 0->[Y,X]
+LD HL, $INC2$NULL
+LD Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+2
+#80/34
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#86/38
+
+$BSEX56
+LD HL, $INC$2COM
+LDZ Y, $CONX
+#60/42
+FNH DZ, HLD               # X-1
+LD PC, $EXIT64
+#64/45
+
+ADDR 0x34
+
+$EXIT64
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+#72
+NOP
+NOP
+LD HL, $INC2$NULL
+LD Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+2
+#80
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#86

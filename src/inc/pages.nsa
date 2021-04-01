@@ -10,6 +10,7 @@ $XFER_PG       0x07
 $RECV_PG       0x08
 
 $JMPPG0_PG     0x10
+$JMPPG1_PG     0x11
 
 $MOVMX_PG      0x20
 
@@ -100,7 +101,7 @@ $XTHL_PG       0xDA
 $SPHL_PG       0xDB
 $IN_PG         0xDC
 $OUT_PG        0xDD
-$INOUT_PG      0xDE
+$CON_PG        0xDE
 $EI_PG         0xDF
 $DI_PG         0xE0
 $RIM_PG        0xE1

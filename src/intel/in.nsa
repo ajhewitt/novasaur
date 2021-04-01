@@ -1,113 +1,226 @@
-# Input from port (with fetch)
+# Input from port
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE IN_PG
-$JUMP_ADD      74
-$JUMP_MUL      0x90
+$FORKP 0
 
 # assume: Y = $VMS
-LDZ HL, $INC2$NULL
-FNH DZ, HLD           # inc state
-NOP
-NOP
-LD HL, $INC$FORK2
+LD HL, $KERN?$NULL
+LD Y, $EO
+FNCH DZ, NA               # A=0 if kern
+LD HL, $INC$FORK1
 LD Y, $PCL
-#10
-FNFH DZ, XD           # X,PCL = PCL+1
+#11/10
+LDNZ PC, $EXIT13          # exit if not kern
+FNFH DZ, XD               # X,PCL = PCL+1
 FNDL A, PC
-#16
+#18/16
 
-ADDR 0x40             # PCL = 255, iden PCH, inc PCH
-LD HL, $IDEN$NULL
-LDZ Y, $PCH
-#20
-FNH DZ, Y             # Y = PCH
-FNFH M, NA            # A = [PC]
-LD HL, $JUMP_MUL
-LD Y, $TEMP
-#29
-MULH AZ, ND           # A*9 -> temp
-LD HL, $INC$NULL
-LD Y, $PCL
-FNFH DZ, XD           # X,PCL = PCL+1
-LDZ Y, $PCH
-#41
-FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-LD HL, $IDEN$NULL
-FNH A, Y              # Y = PCH
-FNFH M, NA            # A = [PC]
-#50
-LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
-LD HL, $JUMP_ADD
-LD Y, $TEMP
-#60
-ADDHL DZ, NA          # A = temp+74
+ADDR 0x10                 # PORT0
 LD Y, $AREG
-LD HL, $IDEN$IDEN
-LD PG, $INOUT_PG
-#70
+FNFH IZ, ND               # I0->acc
+NOP
+$EXIT35
+LD HL, $INC$NULL
+LDZ Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD
+LD PC, $FETCH1_PG         # cycle available, goto fetch
+#43/12
 
-ADDR 0x80             # PCL = 0, inc PCH, iden PCH
-LDZ Y, $PCH
-FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-#20
-LD HL, $IDEN$NULL
-FNH A, Y              # Y = PCH
-FNFH M, NA            # A = [PC]
-LD HL, $JUMP_MUL
-LD Y, $TEMP
+ADDR 0x1C                 # PORT1
+LD Y, $AREG
+FNFH IZ, O1D              # I1->acc
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD
+LD PC, $FETCH1_PG         # cycle available, goto fetch
+#43/12
+
+ADDR 0x28                 # PORT2
+LD Y, $AREG
+FNFH IZ, O2D              # I2->acc
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD
+LD PC, $FETCH1_PG         # cycle available, goto fetch
+#43/12
+
+ADDR 0x34                 # PORT3
+LD Y, $AREG
+FNFH IZ, O3D              # I3->acc
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD
+LD PC, $FETCH1_PG         # cycle available, goto fetch
+#43/12
+
+ADDR 0x40                 # PORT4
+LD Y, $AREG
+FNFH IZ, O4D              # I4->acc
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD
+LD PC, $FETCH1_PG         # cycle available, goto fetch
+#43/12
+
+ADDR 0x4C                 # PORT5
+LD Y, $AREG
+FNFH IZ, O5D              # I5->acc
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD
+LD PC, $FETCH1_PG         # cycle available, goto fetch
+#43/12
+
+ADDR 0x58                 # PORT6
+LD Y, $AREG
+FNFH IZ, O6D              # I6->acc
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD
+LD PC, $FETCH1_PG         # cycle available, goto fetch
+#43/12
+
+ADDR 0x64                 # PORT7
+LD Y, $AREG
+FNFH IZ, O7D              # I7->acc
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS                # set Y = $VMS on exit
+FNH DZ, HLD
+LD PC, $FETCH1_PG         # cycle available, goto fetch
+#43/12
+
+ADDR 0x70
+LD PC, $KC31
 #31
-MULH AZ, ND           # A*9 -> temp
-LD HL, $INC$NULL
-LD Y, $PCL
-FNFH DZ, XD           # X,PCL = PCL+1
-#41
-LD HL, $IDEN$NULL
-LDZ Y, $PCH
-FNH DZ, Y             # Y = PCH
-FNFH M, NA            # A = [PC]
-#50
-LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
-LD HL, $JUMP_ADD
-LD Y, $TEMP
-#60
-ADDHL DZ, NA          # A = temp+74
-LD Y, $AREG
-LD HL, $IDEN$IDEN
-LD PG, $INOUT_PG
-#70
 
-ADDR 0xC0             # else, iden PCH, iden PCH
+ADDR 0x74
+MVHL A, NA                # NOP
+LD PC, $EXIT35
+#35
+
+ADDR 0x78
+LD PC, $KS31
+#31
+
+$EXIT45
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+LD PC, $EXIT55
+#55
+
+ADDR 0x80                 # PCL = 255, inc PCH
+LDZ Y, $PCH
+#20/2
+FNH DZ, HLD               # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$FORKP
+FNH A, Y                  # Y = PCH
+FNCL M, PC                # fork on port [PC]
+#29/8
+
+ADDR 0x88
 NOP
 NOP
-LD HL, $IDEN$IDEN
-#20
+$RX31
+LD HL, $2COM$NULL
+LDZ Y, $RXWRIDX
+FNH DZ, HL                # HL=-rx write index
+LD Y, $RXRDIDX
+#39
+ADDHL DZ, NA              # A=rx read-rx write index
+LDP PC, $RXEX45           # exit if rx read >= rx write
+LD HL, $RXBUFF
+LD PC, $CONT48
+#48
+
+$RXEX45                   # buffer empty, turn on thread to refill
+LD HL, $0x20
+LD Y, $RMODE
+ORHL DZ, ND               # Enable Rx thread
+LD PC, $EXIT55
+#55
+
+$KC31                     # Keyboard Code
+LD HL, $2COM$NULL
+LDZ Y, $KCWRIDX
+FNH DZ, HL                # HL=-kc write index
+LD Y, $KCRDIDX
+#39
+ADDHL DZ, NA              # A=kc read-kc write index
+LDP PC, $EXIT45           # exit if kc read >= kc write
+LD HL, $KCBUFF
+LD PC, $CONT48
+#48
+
+$KS31
+LD HL, $2COM$NULL
+LDZ Y, $KSWRIDX
+FNH DZ, HL                # HL=-ks write index
+LD Y, $KSRDIDX
+#39
+ADDHL DZ, NA              # A=ks read-ks write index
+LDP PC, $EXIT45           # exit if ks read >= ks write
+LD HL, $KSBUFF
+LD PC, $CONT48
+#48
+
+ADDR 0xC0                 # else, iden PCH, iden PCH
+FNH A, HLA                # NOP
+LD HL, $IDEN$FORKP
 LDZ Y, $PCH
-FNH DZ, Y             # Y = PCH
-FNFH M, NA            # A = [PC]
-LD HL, $JUMP_MUL
-LD Y, $TEMP
-#31
-MULH AZ, ND           # A*9 -> temp
-LD HL, $INC$NULL
-LD Y, $PCL
-FNFH DZ, XD           # X,PCL = PCL+1
-#41
-LD HL, $IDEN$NULL
-LDZ Y, $PCH
-FNH DZ, Y             # Y = PCH
-FNFH M, NA            # A = [PC]
-#50
-LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
-LD HL, $JUMP_ADD
-LD Y, $TEMP
-#60
-ADDHL DZ, NA          # A = temp+74
+FNH DZ, Y                 # Y = PCH
+FNCL M, PC                # fork on port [PC]
+#29/8
+
+$CONT48
+MVHL A, XA                # X=buff addr
+LDZ HL, $INC$NULL
+FNH DZ, HLD               # read index+1
+LD HL, $IDEN$DEC
+FNFL A, Y                 # Y=read index-1
+#61
+FNFH D, NA                # A=char
 LD Y, $AREG
-LD HL, $IDEN$IDEN
-LD PG, $INOUT_PG
+FNH AZ, HLD               # char->Acc
+LD PC, $EXIT70
 #70
+
+$EXIT55
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+LD HL, $0
+LD Y, $AREG
+MULH AZ, ND               # 0->Acc
+$EXIT70
+MVHL A, NA                # NOP
+LD HL, $INC2$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+2
+#80|37
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#86|43
+
+$EXIT13
+FNH DZ, HLD               # PCL = PCL+1
+LD HL, $OVER?$NULL
+FNH A, HLA
+#19
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $PCH
+FNH DZ, HLD
+LD HL, $0
+LD Y, $AREG
+#30
+MULH AZ, ND               # 0->Acc
+LD PC, $EXIT35
+#35

@@ -68,7 +68,7 @@ $VLINE         0xDB # video memory line
 $VSTART        0xDC # top of video display
 $CBLOCK        0xDD # context switch block
 $HWSTAT        0xDE # hardware status
-
+$HTEMP         0xDF # HAL temp
 #RTC
 $TIME0         0xE0 # 15tps, max 90 - 6s
 $TIME1         0xE1 # 10tpm, max 120 - 12m
@@ -78,10 +78,10 @@ $ICL           0xE4 # idle cycle count low byte
 $ICH           0xE5 # idle cycle count high byte
 $VMS           0xE6 # virtual machine state
 $EO            0xE7 # Eo register value
-$CTXIDX        0xE8 # context index
-$CTX0          0xE9 # current context
-$CTX1          0xEA # next context
-$HTEMP         0xEB # HAL temp
+#RESERVED      0xE8
+$CTXIDX        0xE9 # context index
+$CTX0          0xEA # current context
+$CTX1          0xEB # next context
 #8080CPU
 $INST          0xEC # instruction cache
 $EXT           0xED # extended mode cache
