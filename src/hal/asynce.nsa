@@ -48,7 +48,7 @@ LD PC, $EXIT41
 ADDR 0x40             #32 - 2 voices
 LDZ Y, $NOTE2L
 FNH DZ, HL            # HL = 0xA6
-LD Y, $TONE2L
+LD Y, $WAVIDX2L
 ADDHL DZ, ND          # tone L + 0xA6 -> tone L
 #42/71
 AFHL A, NA
@@ -57,7 +57,7 @@ LDN HL, $INC$NULL
 LDZ Y, $NOTE2H
 #51/79
 FNH DZ, HL            # HL = 0x0B or 0x0C
-LD Y, $TONE2H
+LD Y, $WAVIDX2H
 ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
 LD HL, $IDEN$NULL
 #61/86
@@ -77,7 +77,7 @@ LD PC, $EXIT79
 ADDR 0x70             #32 - 3 voices
 LDZ Y, $NOTE3L
 FNH DZ, HL            # HL = 0xA6
-LD Y, $TONE3L
+LD Y, $WAVIDX3L
 ADDHL DZ, ND          # tone L + 0xA6 -> tone L
 #42
 AFHL A, NA
@@ -86,7 +86,7 @@ LDN HL, $INC$NULL
 LDZ Y, $NOTE3H
 #51
 FNH DZ, HL            # HL = 0x0B or 0x0C
-LD Y, $TONE3H
+LD Y, $WAVIDX3H
 ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
 LD HL, $IDEN$NULL
 #61
@@ -98,7 +98,7 @@ WAVHL AZ, ND          # synth value -> audio
 LD HL, $IDEN$NULL
 LDZ Y, $NOTE2L
 FNH DZ, HL            # HL = 0xA6
-LD Y, $TONE2L
+LD Y, $WAVIDX2L
 #79
 ADDHL DZ, ND          # tone L + 0xA6 -> tone L
 AFHL A, NA
@@ -107,7 +107,7 @@ LDN HL, $INC$NULL
 #90
 LDZ Y, $NOTE2H
 FNH DZ, HL            # HL = 0x0B or 0x0C
-LD Y, $TONE2H
+LD Y, $WAVIDX2H
 ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
 #100
 LD HL, $IDEN$NULL
@@ -133,7 +133,7 @@ LD Y, $VMS
 ADDHL DZ, ND          # VMS+2->VMS
 LDZ Y, $NOTE1L
 FNH DZ, HL            # HL = 0xA6
-LD Y, $TONE1L
+LD Y, $WAVIDX1L
 #139
 ADDHL DZ, ND          # tone L + 0xA6 -> tone L
 AFHL A, NA
@@ -142,7 +142,7 @@ LDN HL, $INC$NULL
 #150
 LDZ Y, $NOTE1H
 FNH DZ, HL            # HL = 0x0B or 0x0C
-LD Y, $TONE1H
+LD Y, $WAVIDX1H
 ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
 #160
 LD HL, $IDEN$NULL

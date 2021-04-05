@@ -5,16 +5,16 @@ INCLUDE ../inc/pages.nsa
 PAGE JMPPG0_PG
 
 #assume A=inst, HL=$EXTPC$EXTPG
-FNDH A, PCA           # fork to jump page
+FNDH A, PCA               # fork to jump page
 #34/2
 
 #NOP
 LD HL, $DEC$NULL
-LDZ Y, $VMS
-FNH DZ, HLD
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS-1
 #40
 NOP
-LD PC, $FETCH1_PG
+LD PG, $FETCH1_PG         # cycle available, goto fetch
 #43/8
 
 #COPYROM - init
@@ -23,32 +23,32 @@ LD PC, $FETCH1_PG
 ADDR 0x0C
 LD HL, $0
 LD Y, $TEMP
-MULH AZ, ND            # 0->temp
+MULH AZ, ND               # 0->temp
 #41
 LD HL, $NSR$NULL
 LDZ Y, $EREG
-FNH DZ, HLA            # A=ROM jump PC=0x80+H*8
+FNH DZ, HLA               # A=ROM jump PC=0x80+H*8
 LD HL, $0x80
 LD Y, $TMPH
 #51
-ANDH AZ, ND            # A&000b->tempH
+ANDH AZ, ND               # A&000b->tempH
 LD HL, $0x0F
 LD Y, $EREG
-ANDHL DZ, NA           # A=ROM page lsn
+ANDHL DZ, NA              # A=ROM page lsn
 #62
 LD HL, $0x80
 LD Y, $TMPL
-MULH AZ, ND            # A*8->tempL
+MULH AZ, ND               # A*8->tempL
 NOP
 #70
 NOP
 NOP
 LD HL, $COPYROM_INST
 LD Y, $INST
-MVHL AZ, ND            # HL -> inst cache
+MVHL AZ, ND               # HL -> inst cache
 #80
-LD Y, $VMS             # set Y = $VMS on exit
-DISHL DZ, PGA          # jump to next VMC
+LD Y, $VMS                # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
 #86/42
 
 #BOOTSTRAP - init copy ROM0/page0
@@ -60,56 +60,56 @@ ORHL DZ, NA               # A=n|0xF0
 #42
 LD HL, $KERN?$7
 ANDL A, X                 # X=0xFn&0x07
-LD Y, $EO
-FNCH DZ, NA               # A=0 if root
-#52
+LDZ Y, $EO
+FNH DZ, HLA               # A=0 if root
+#51
 LD HL, $0
+LDN PC, $EXIT55           # exit if not kern
 LD Y, $IMASK
-LDN PC, $EXIT58           # exit if not kern
 MULH A, ND                # 0->IMASK = 0 (disable)
-#60
 LD Y, $CREG
+#61
 MULH A, ND                # 0->C
 LD Y, $DREG
 MULH A, ND                # 0->D
-#70
 LD Y, $TEMP
+#71
 MULH A, ND                # 0->temp
 LD Y, $TMPL
 MULH A, ND                # 0->tmpL
-#80
 LD HL, $0x80
+#81
 LD Y, $TMPH
 MVHL A, ND                # 0x80->tmpH
 LD HL, $0xFF
-#90
 LD Y, $PCH
+#91
 MVHL A, ND
 LD Y, $PCL
 MVHL A, ND                # 0xFFFF->PC
-#102
+#101
 LD Y, $EXT
 MVHL A, ND                # -1->ext mode
 LD HL, $COPYROM_INST
-#110
 LD Y, $INST
+#111
 MVHL A, ND                # CopyROM->inst cache
-NOP
-LD PC, $EXIT119
+LD PC, $EXIT117
 
-$EXIT58
+$EXIT55
+NOP
 LD HL, $DEC$NULL
-#60
 LDZ Y, $VMS
+#60
 FNH DZ, HLD               # adjust VMS for 2 cycles
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
+#70
 MVHL A, NA                # NOP
-$EXIT119
-NOP
-#77/120
-NOP
+$EXIT117
+MVHL A, NA                # NOP
 LD HL, $FETCH
+#80
 LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
-#86/129
+#86|129

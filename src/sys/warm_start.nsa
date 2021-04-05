@@ -8,10 +8,10 @@ PAGE WARM_START
 LD HL, $0xD1
 LD Y, $EO
 MVHL AZ, ED               # bank1,LED off
-LD HL, $0xF0              # F=XGA48,A=SVGA60
+LD HL, $0xF0              # F=XGA48,A=SVGA60,3=VGA60
 LD Y, $VMODE
 MVHL AZ, ND               # 3 -> video mode
-LD HL, $0xE8              # E=XGA48,9=SVGA60
+LD HL, $0xE8              # E=XGA48,9=SVGA60,1=VGA60
 LD Y, $VMS
 MVHL AZ, ND               # mode+ext -> mode line
 LD HL, $0x1F

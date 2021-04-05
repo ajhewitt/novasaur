@@ -10,9 +10,8 @@ $1COM       4 # A = ~A
 $2COM       5 # A = -A
 $LSR        6 # A>>1
 $LSL        7 # A<<1
-$ZERO?      8 # alias for over?
-$OVER?      8 # 0 if 0, else -1
-$UNDER?     9 # -1 if -1, else 0
+$ZERO?      8 # A==0 ? 0:-1
+$KERN?      9 # A&7==1 ? 0:-1
 $INCLINE   10 # ML +1, cyc=0
 $INCBLK    11 # ML reset, cyc=1
 $NSR       12 # >>1&0x80
@@ -33,10 +32,10 @@ $KS01?      8 # A&3==0||1 ? 0:-1
 $KDATA      9 # A&C<<2
 $ADSRPG    10 # FRAME->ADSR Page
 $SUS2LEV   11 # sustain to level
-$SQRWAV    12 # MIDI->bandlimited Square WAV
-$SAWWAV    13 # MIDI->bandlimited Sawtooth WAV
-$FREQL     14 # MIDI->TONE delta L
-$FREQH     15 # MIDI->TONE delta H
+$SQRWAV    12 # MIDI->bandlimited square WAV
+$SAWWAV    13 # MIDI->bandlimited sawtooth WAV
+$FREQL     14 # MIDI->wave index delta L
+$FREQH     15 # MIDI->wave index delta H
 
 #FND - CPU
 $FORKI      0 # interupt vector fork
@@ -49,16 +48,15 @@ $F2PSW      6 # flags->PSW
 $PSW2F      7 # PSW->flags
 $SWCARRY    8 # swap carry with borrow flags
 $DACARRY    9 # set carry if nibbles > 9
-$CON2MUL   10 # condition code to flag multiplier
-$RSTVEC    11 # map inst+1 to PCL vector
+$FORKP     10 # IN/OUT page fork
+$FORKC     11 # Console page fork
 $EXTPG1    12 # extended execute 2-cycle page
 $EXTPC1    13 # extended execute 2-cycle PC
 $EXTPG2    14 # extended execute 3-cycle page
 $EXTPC2    15 # extended execute 3-cycle PC
 
 #FNC - Extended
-$SCAN0      0 #lower/upper scan code->ascii
-$SCAN1      1 #extended/control scan code->ascii
-$SCAN2      2 #alt/ext-ctrl-alt scan code->ascii
-$KS2MODE    3 #kbd scan code->kmode mask bit
-$KERN?      4 #A&7==1 ? 0:-1
+$SCAN0      0 # lower/upper scan code->ascii
+$SCAN1      1 # extended/control scan code->ascii
+$SCAN2      2 # alt/ext-ctrl-alt scan code->ascii
+$KS2MODE    3 # kbd scan code->kmode mask bit

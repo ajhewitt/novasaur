@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE JMPC_PG
 
 # assume: Y = $VMS
-LD HL, $INC$CON2MUL
+LD HL, $INC$REGMAPL
 FNFH DZ, ND           # inc state
 LD Y, $INST
 FNDL DZ, HL           # H = multiplier to move flag to MSB

@@ -39,7 +39,7 @@ $FILL1
 LD HL, $INC$NULL
 FNFH DZ, XD               # X+1->zpageX
 FNH A, HLD                # A->[YYXX]
-LD HL, $OVER?$NULL
+LD HL, $ZERO?$NULL
 FNH A, HLA                # X==0?
 LDN PC, $FILL1            # loop if X<=255
 LD HL, $INC$NULL
@@ -69,9 +69,10 @@ FNH D, HLA                # [YYXX]==0?
 LDN PC, $0                # retest if !0
 LD HL, $INC$NULL
 FNFH DZ, XD               # X+1->zpageX
-LD HL, $UNDER?$NULL
+FNH A, HLA                # A=0 if X==FF
+LD HL, $ZERO?$NULL
 FNH A, HLA                # X==FF?
-LDP PC, $CHECK2           # loop if X>0
+LDN PC, $CHECK2           # loop if X>0
 LD HL, $0
 MULH A, ND                # 0->[YYFF]
 LD HL, $INC$NULL
@@ -97,7 +98,7 @@ $FILL3
 LD HL, $INC$NULL
 FNFH DZ, XD               # X+1->zpageX
 FNH A, HLD                # A->[YYXX]
-LD HL, $OVER?$NULL
+LD HL, $ZERO?$NULL
 FNH A, HLA                # X==0?
 LDN PC, $FILL3            # loop if X<=255
 LD HL, $INC$NULL
@@ -124,9 +125,10 @@ FNH D, HLA                # [YYXX]==0?
 LDN PC, $0                # retest if !0
 LD HL, $INC$NULL
 FNFH DZ, XD               # X+1->zpageX
-LD HL, $UNDER?$NULL
+FNH A, HLA                # A=0 if X==FF
+LD HL, $ZERO?$NULL
 FNH A, HLA                # X==FF?
-LDP PC, $CHECK4           # loop if X>0
+LDN PC, $CHECK4           # loop if X>0
 LD HL, $0
 MULH A, ND                # 0->[YYFF]
 LD HL, $INC$NULL

@@ -3,215 +3,221 @@ INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE OUT_PG
-$FORKP 0
-$FORKC 0
 
 # assume: Y = $VMS
 LD HL, $KERN?$NULL
-LD Y, $EO
-FNCH DZ, NA               # A=0 if kern
+LDZ Y, $EO
+FNH DZ, HLA               # A=0 if kern
 LD HL, $INC$FORK1
 LD Y, $PCL
-#11/10
-LDNZ PC, $EXIT13          # exit if not kern
+#10/9
+LDN PC, $EXIT12           # exit if not kern
 FNFH DZ, XD               # X,PCL = PCL+1
 FNDL A, PC
-#18/16
+#17/15
 
 ADDR 0x10                 # PORT0
 LD Y, $AREG
 FNFH DZ, NA               # acc->N
+LD PC, $EXIT35
+#35
+
+ADDR 0x16                 # PORT1
+LD Y, $AREG
+FNFH DZ, O1A              # acc->O1
+LD PC, $EXIT35
+#35
+
+ADDR 0x1C                 # PORT2
+LD Y, $AREG
+FNFH DZ, O2A              # acc->O2
+LD PC, $EXIT35
+#35
+
+ADDR 0x22                 # PORT3
+LD Y, $AREG
+FNFH DZ, O3A              # acc->O3
+LD PC, $EXIT35
+#35
+
+ADDR 0x28                 # PORT4
+LD Y, $AREG
+FNFH DZ, O4A              # acc->O4
+LD PC, $EXIT35
+#35
+
+ADDR 0x2E                 # PORT5
+LD Y, $AREG
+FNFH DZ, O5A              # acc->O5
+LD PC, $EXIT35
+#35
+
+ADDR 0x34                 # PORT6
+LD Y, $AREG
+FNFH DZ, O6A              # acc->O6
+LD PC, $EXIT35
+#35
+
+ADDR 0x3A                 # PORT7
+LD Y, $AREG
+FNFH DZ, O7A              # acc->O7
+LD PC, $EXIT35
+#35
+
+$ADDR 0x40
+LD HL, $INC$NULL
+#30/2
+LDZ Y, $TXWRIDX
+FNH DZ, HLD               # tx write index+1
+LD HL, $2COM$NULL
+FNH A, HL                 # HL=-tx write index
+LD Y, $TXRDIDX
+#40/10
+ADDHL DZ, NA              # A=tx read-tx write index
+LDP PC, $EXIT46           # exit if tx read >= tx write
+LD HL, $TXBUFF
+MVHL A, XA
+#51/18
+LD HL, $IDEN$DEC
+LD Y, $AREG
+FNFH DZ, NA               # A = Acc
+LDZ Y, $TXWRIDX
+#60/26
+FNFL DZ, Y                # Y = wr index-1
+FNH A, HLD                # A -> tx wr buff
+LD HL, $0x20
+LD Y, $TMODE
+#69/33
+ORHL DZ, ND               # enable -> tx mode
 NOP
+LD HL, $INC2$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+2
+#80/41
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#86/45
+
+ADDR 0x70                 # Jump to console page
+LD HL, $FORKC
+LD PG, $CON_PG
+#32
+
+ADDR 0x74                 # Set Audio Mode
+LD HL, $3
+LD PC, $AUDIO32
+#32
+
+$EXIT46
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+LD PC, $EXIT56
+#56
+
+ADDR 0x80                 # PCL = 255, inc PCH
+LDZ Y, $PCH
+FNH DZ, HLD               # PCH = PCH+1      *** inc PCH ***
+#21/3
+LD HL, $IDEN$FORKP
+FNH A, Y                  # Y = PCH
+FNDL M, PC                # fork on port [PC]
+#28/8
+
+ADDR 0x88                 # Rx disable
+LD HL, $0x10
+LD Y, $RMODE
+ORH DZ, ND                # Set Rx Mode LSB
 $EXIT35
 LD HL, $INC$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD
 LD PC, $FETCH1_PG         # cycle available, goto fetch
-#43/12
+#43/21
 
-ADDR 0x1C                 # PORT1
-LD Y, $AREG
-FNFH DZ, O1A              # acc->O1
-NOP
-LD HL, $INC$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD
-LD PC, $FETCH1_PG         # cycle available, goto fetch
-#43/12
-
-ADDR 0x28                 # PORT2
-LD Y, $AREG
-FNFH DZ, O2A              # acc->O2
-NOP
-LD HL, $INC$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD
-LD PC, $FETCH1_PG         # cycle available, goto fetch
-#43/12
-
-ADDR 0x34                 # PORT3
-LD Y, $AREG
-FNFH DZ, O3A              # acc->O3
-NOP
-LD HL, $INC$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD
-LD PC, $FETCH1_PG         # cycle available, goto fetch
-#43/12
-
-ADDR 0x40                 # PORT4
-LD Y, $AREG
-FNFH DZ, O4A              # acc->O4
-NOP
-LD HL, $INC$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD
-LD PC, $FETCH1_PG         # cycle available, goto fetch
-#43/12
-
-ADDR 0x4C                 # PORT5
-LD Y, $AREG
-FNFH DZ, O5A              # acc->O5
-NOP
-LD HL, $INC$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD
-LD PC, $FETCH1_PG         # cycle available, goto fetch
-#43/12
-
-ADDR 0x58                 # PORT6
-LD Y, $AREG
-FNFH DZ, O6A              # acc->O6
-NOP
-LD HL, $INC$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD
-LD PC, $FETCH1_PG         # cycle available, goto fetch
-#43/12
-
-ADDR 0x64                 # PORT7
-LD Y, $AREG
-FNFH DZ, O7A              # acc->O7
-NOP
-LD HL, $INC$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD
-LD PC, $FETCH1_PG         # cycle available, goto fetch
-#43/12
-
-ADDR 0x70
-LD HL, $FORKC
-LD PG, $CON_PG
-#33
-
-ADDR 0x74
-LD HL, $0x30
-LD PC, $AUDIO33
-#33
-
-ADDR 0x78
-LD HL, $1
-LD Y, $RMODE
-ORHL DZ, ND
-LD PC, $EXIT41
-#41
-
-ADDR 0x80                 # PCL = 255, inc PCH
+$EXIT12
+FNH DZ, HLD               # PCL = PCL+1
+LD HL, $ZERO?$NULL
+FNH A, HLA
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+#21/29
 LDZ Y, $PCH
-#20/2
-FNH DZ, HLD               # PCH = PCH+1      *** inc PCH ***
-LD HL, $IDEN$FORKP
-FNH A, Y                  # Y = PCH
-FNCL M, PC                # fork on port [PC]
-#29/8
-
-$ADDR 0x88
-LD HL, $INC$NULL
-LDZ Y, $TXWRIDX
 FNH DZ, HLD
-LD HL, $2COM$NULL
-FNH A, HL                 # HL=-tx write index
-#39/16
-LD Y, $TXRDIDX
-ADDHL DZ, NA              # A=tx read-tx write index
-LDP PC, $EXIT45           # exit if tx read >= tx write
-LD HL, $TXBUFF
-MVHL A, XA
-#52/26
-LD HL, $IDEN$DEC
+LD HL, $0
 LD Y, $AREG
-FNFH DZ, NA               # A = Acc
-LDZ Y, $TXWRIDX
-#61/34
-FNFL DZ, Y                # Y = wr index-1
-FNH A, HLD                # A -> tx wr buff
-LD HL, $0x20
-LD Y, $TMODE
-#70/41
-ORHL DZ, ND               # enable -> tx mode
+#29/36
+MVHL AZ, ND               # 0->Acc
+LD PC, $EXIT35
+#35/40
+
+$EXIT56
+NOP
+$EXIT57
+MVHL A, NA                # NOP
+$EXIT61
+MVHL A, NA                # NOP
+NOP
+LD HL, $0
+LD Y, $AREG
+#70/50
+MULH AZ, ND               # 0->Acc
+$EXIT73
+NOP
 LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
-#80/48
+#80/58
 LD HL, $FETCH
 DISHL DZ, PGA             # jump to next VMC
-#86/52
-
-$AUDIO33
-LD Y, $AREG
-ANDH DZ, NA               # A = Acc&3
-LD HL,$IDEN$NULL
-#40/58
-LD Y, $AMODE
-FNH AZ, HLD               # A -> audio mode
-LD PC, $EXIT46
-#46/63
+#86/62
 
 ADDR 0xC0                 # else, iden PCH, iden PCH
-NOP
-NOP
+FNH A, HL                 # NOP
 LD HL, $IDEN$FORKP
 LDZ Y, $PCH
 FNH DZ, Y                 # Y = PCH
-FNCL M, PC                # fork on port [PC]
-#29/9
+FNDL M, PC                # fork on port [PC]
+#28/8
 
-$EXIT41
-MVHL A, NA                # NOP
-$EXIT45
-NOP
-$EXIT46
-MVHL A, NA                # NOP
-#50
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-LD HL, $0
+ADDR 0xC8                 # Write to zpage
+LD HL, $0x3F
+#30/10
+ANDHL M, NA               # A = [PC]&0x3F
+LD HL, $0x80
+LD Y, $TEMP
+ORHL AZ, ND               # A|0x80 -> temp
+#42/18
+LD HL, $IDEN$NULL
 LD Y, $AREG
-#70
-MULH AZ, ND               # 0->Acc
-NOP
-LD HL, $INC2$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD               # VMS+2
-#80
-LD HL, $FETCH
-DISHL DZ, PGA             # jump to next VMC
-#86
+FNFH DZ, NA               # A = Acc
+LDZ Y, $TEMP
+#51/26
+FNH DZ, Y                 # Y = temp
+FNH AZ, HLD               # A -> Z[Y]
+LD PC, $EXIT57
+#57/30
 
-$EXIT13
-FNH DZ, HLD               # PCL = PCL+1
-LD HL, $OVER?$NULL
-FNH A, HLA
-#19
-LDP HL, $INC$NULL
-LDN HL, $IDEN$NULL
-LDZ Y, $PCH
-FNH DZ, HLD
-LD HL, $0
-LD Y, $AREG
-#30
-MULH AZ, ND               # 0->Acc
-LD PC, $EXIT35
-#35
+$AUDIO32
+LDZ Y, $AREG
+ANDHL DZ, ND               # A =
+LD HL, $XGA?$NULL
+#40/36
+LD Y, $VMS
+FNEH DZ, NA               # 0 if 3 cycles
+LDP HL, $0xFE             # -2
+LDN HL, $0xFD             # -3
+LDZ Y, $AREG
+#50/46
+ADDHL DZ, NA
+LDN PC, $EXIT56
+LDZ HL, $IDEN$NULL
+FNH DZ, HLA
+LD Y, $AMODE
+#61/55
+FNH AZ, HLD               #
+LD HL, $0x80
+LD Y, $AUDIO
+MVHL AZ, ND               #
+#71/62
+LD PC, $EXIT73
+#73/64

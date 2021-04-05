@@ -1,87 +1,89 @@
 # zero page assignments
 
-# sound voice 0
-$WAVE0         0xA0
-$ATTACK0       0xA1
-$DECAY0        0xA2
-$SUSTAIN0      0xA3
-$RELEASE0      0xA4
-$DELTA0        0xA5
-# sound voice 1
-$WAVE1         0xA6 # wave table entry (SQRWAV/SAWWAV)
-$NOTE1L        0xA7 # note interval low (FREQL)
-$NOTE1H        0xA8 # note interval high (FREQH)
-$ATTACK1       0xA9 # ADSR attack
-$DECAY1        0xAA # ADSR decay
-$SUSTAIN1      0xAB # ADSR sustain
-$RELEASE1      0xAC # ADSR release
-$DELTA1        0xAD # ADSR state as Y indirect (internal)
-$TONE1L        0xAE # wave table index low (internal)
-$TONE1H        0xAF # wave table index high (internal)
-# sound voice 2
-$WAVE2         0xB0
-$NOTE2L        0xB1
-$NOTE2H        0xB2
-$ATTACK2       0xB3
-$DECAY2        0xB4
-$SUSTAIN2      0xB5
-$RELEASE2      0xB6
-$DELTA2        0xB7
-$TONE2L        0xB8
-$TONE2H        0xB9
-# sound voice 3
-$WAVE3         0xBA
-$NOTE3L        0xBB
-$NOTE3H        0xBC
-$ATTACK3       0xBD
-$DECAY3        0xBE
-$SUSTAIN3      0xBF
-$RELEASE3      0xC0
-$DELTA3        0xC1
-$TONE3L        0xC2
-$TONE3H        0xC3
-#HAL
-$AMODE         0xC4 # audio mode - 0x00-0x3F,n%4:#voices,0:off
-$KTO           0xC5 # max kbd idle count
-$KIDLE         0xC6 # kbd idle cycle count (internal)
-$KS0           0xC7 # kbd sample 0 (internal)
-$KS1           0xC8 # kbd sample 1 (internal)
-$KMODE         0xC9 # kbd decode state (internal)
-$KSRDIDX       0xCA
-$KSWRIDX       0xCB
-$KCRDIDX       0xCC
-$KCWRIDX       0xCD
-$RMULT         0xCE # rx multiplier (internal)
-$RMODE         0xCF # Rx mode - 0x40-0x7F
-$RXRDIDX       0xD0
-$RXWRIDX       0xD1
+#RESERVED      0x80-0x8A (10)
+$AMODE         0x8B # audio mode - 0x00-0x3F (protected)
+$WAVE0         0x8E
+$ATTACK0       0x8F
+$DECAY0        0x90
+$SUSTAIN0      0x91
+$RELEASE0      0x92
+$NOTE1L        0x93 # note interval low (FREQL)
+$NOTE1H        0x94 # note interval high (FREQH)
+$WAVE1         0x95 # wave table entry (SQRWAV/SAWWAV)
+$ATTACK1       0x96 # ADSR attack
+$DECAY1        0x97 # ADSR decay
+$SUSTAIN1      0x98 # ADSR sustain
+$RELEASE1      0x99 # ADSR release
+$NOTE2L        0x9A
+$NOTE2H        0x9B
+$WAVE2         0x9C
+$ATTACK2       0x9D
+$DECAY2        0x9E
+$SUSTAIN2      0x9F
+$RELEASE2      0xA0
+$NOTE3L        0xA1
+$NOTE3H        0xA2
+$WAVE3         0xA3
+$ATTACK3       0xA4
+$DECAY3        0xA5
+$SUSTAIN3      0xA6
+$RELEASE3      0xA7
+$CONL          0xA8
+$CONR          0xA9
+$CONX          0xAA
+$CONY          0xAB
+$KSRDIDX       0xAC
+$KSWRIDX       0xAD
+$KCRDIDX       0xAE
+$KCWRIDX       0xAF
+$KTO           0xB0 # max kbd idle count
+$BLOCK         0xB1 # block count (0 to 175/160/128)
+$FRAME         0xB2 # frame count (-5,-4 to 0)
+$VSTART        0xB3 # top of video display
+$TIME0         0xB4 # 15tps, max 90 - 6s
+$TIME1         0xB5 # 10tpm, max 120 - 12m
+$TIME2         0xB6 # 5tph, max 120 - 1d
+$TIME3         0xB7 # 1tpd, max 256 - 0.7y
+$ICL           0xB8 # idle cycle count low byte
+$ICH           0xB9 # idle cycle count high byte
+#SPARE         0xBA-0xBF (6)
+$DELTA0        0xC0
+$DELTA1        0xC1 # ADSR state as Y indirect
+$DELTA2        0xC2
+$DELTA3        0xC3
+$WAVIDX1L      0xC4 # wave table index low
+$WAVIDX1H      0xC5 # wave table index high
+$WAVIDX2L      0xC6
+$WAVIDX2H      0xC7
+$WAVIDX3L      0xC8
+$WAVIDX3H      0xC9
+$KMODE         0xCA # kbd decode state
+$KIDLE         0xCB # kbd idle cycle count
+$KS0           0xCC # kbd sample 0
+$KS1           0xCD # kbd sample 1
+$RMODE         0xCE # Rx mode - 0x40-0x7F
+$RXRDIDX       0xCF
+$RXWRIDX       0xD0
+$RMULT         0xD1 # rx multiplier
 $TMODE         0xD2 # Tx mode - 0x80-0xBF
 $TXRDIDX       0xD3
 $TXWRIDX       0xD4
-$BMODE         0xD5 # VID col used for block
-$BLOCK         0xD6 # block count (0 to 175/160/128)
-$FRAME         0xD7 # frame count (-5,-4 to 0)
-$COMLS         0xD8 # comms line state
-$COMBS         0xD9 # comms block state
-$VMODE         0xDA # video mode - combined with mode line
-$VLINE         0xDB # video memory line
-$VSTART        0xDC # top of video display
-$CBLOCK        0xDD # context switch block
-$HWSTAT        0xDE # hardware status
-$HTEMP         0xDF # HAL temp
-#RTC
-$TIME0         0xE0 # 15tps, max 90 - 6s
-$TIME1         0xE1 # 10tpm, max 120 - 12m
-$TIME2         0xE2 # 5tph, max 120 - 1d
-$TIME3         0xE3 # 1tpd, max 256 - 0.7y
-$ICL           0xE4 # idle cycle count low byte
-$ICH           0xE5 # idle cycle count high byte
-$VMS           0xE6 # virtual machine state
-$EO            0xE7 # Eo register value
-#RESERVED      0xE8
-$CTXIDX        0xE9 # context index
-$CTX0          0xEA # current context
-$CTX1          0xEB # next context
+#SPARE         0xD5
+$VMS           0xD6 # virtual machine state
+$VMODE         0xD7 # video mode  (combined with mode line)
+$BMODE         0xD8 # VID col used for block
+$VLINE         0xD9 # video memory line
+$COMLS         0xDA # comms line state
+$COMBS         0xDB # comms block state
+$CBLOCK        0xDC # context switch block
+$CTXIDX        0xDD # context index
+$CTX0          0xDE # current context
+$CTX1          0xDF # next context
+$EO            0xE0 # Eo register value
+$HWSTAT        0xE1 # hardware status
+$HTEMP         0xE2 # HAL temp
+#SPARE         0xE3-0xE7 (5)
+#RESERVED      0xE8-0xEB (4)
 #8080CPU
 $INST          0xEC # instruction cache
 $EXT           0xED # extended mode cache
@@ -104,18 +106,12 @@ $TMPL          0xFD # 16-bit temp LSB
 $TEMP          0xFE # 8-bit temp
 $AUDIO         0xFF
 
-#ROM copy
-$CLR_X         0xF8        # clr_scrn X
-$CLR_Y         0xF9        # clr_scrn Y
-$ROM_ID        0xFA        # source rom 0-15 - init to PC jump point
-$ROM_PG        0xFB        # source page 0-15 - init to 0
-$ROM_X         0xFC        # x index - ref both src and dest - init to 0
-$ROM_Y         0xFD        # y index - dest D0 page
-$ROM_N         0xFE        # ROM count
 #Terminal test
 $TERM_TEMP     0x80
 $TERM_COL      0x81
 $TERM_ROW      0x82
+$CLR_X         0xF8        # clr_scrn X
+$CLR_Y         0xF9        # clr_scrn Y
 
 #Constants
 $FETCH         0x00

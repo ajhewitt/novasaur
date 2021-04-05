@@ -12,7 +12,7 @@ LD Y, $INST
 FNDL DZ, Y            # Y = zpage addr of lower register
 #11
 FNH DZ, HLD           # lower register++
-LDZ HL, $OVER?$NULL
+LDZ HL, $ZERO?$NULL
 FNH A, HLA
 LDP HL, $INC$REGMAPH
 LDN HL, $IDEN$REGMAPH

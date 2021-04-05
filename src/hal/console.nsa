@@ -3,14 +3,10 @@ INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE CON_PG
-$CONL 0
-$CONR 0
-$CONX 0
-$CONY 0
 
 # assume L = $FORKC
 LD Y, $AREG
-FNCL DZ, PC               # fork on character
+FNDL DZ, PC               # fork on character
 #38/4
 
 ADDR 0x04                 # Backspace

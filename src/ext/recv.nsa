@@ -167,12 +167,17 @@ MVHL A, NA
 MVHL A, NA
 MVHL A, NA
 #60
-MVHL A, NA
-MVHL A, NA
-MVHL A, NA
-MVHL A, NA
 NOP
-NOP
+LD HL, $INC$NULL       # count this as an idle cycle
+LDZ Y, $ICL
+FNH DZ, HLD            # ICL+1
+LD HL, $ZERO?$NULL
+FNH A, HLA             # ICL overflow?
+#71
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $ICH
+FNH DZ, HLD            # ICH+1 if ICL overflowed
 LD HL, $FETCH
 #80
 LD Y, $VMS             # set Y = $VMS on exit

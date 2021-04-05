@@ -9,7 +9,7 @@ LD HL, $INC$NULL
 FNFH DZ, ND               # inc state
 LD Y, $PCL
 FNH DZ, HLD               # PCL = PCL+1
-LDZ HL, $OVER?$NULL
+LDZ HL, $ZERO?$NULL
 #11
 FNH A, HLA                # PCL > 255?
 LDP HL, $INC$NULL

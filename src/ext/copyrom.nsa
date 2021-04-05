@@ -29,7 +29,7 @@ LD HL, $INC$NULL
 #40
 LDZ Y, $TEMP
 FNH DZ, HLD               # index+1->index
-LD HL, $OVER?$NULL
+LD HL, $ZERO?$NULL
 FNH A, HLA                # check if X>255
 LDN PC, $EXIT50
 #49

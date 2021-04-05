@@ -12,19 +12,17 @@ LD Y, $INST
 FNDL DZ, Y            # Y = zpage addr of lower register
 #11
 FNH DZ, HLD           # lower register--
-LDZ HL, $UNDER?$NULL
-FNH A, HLA
-LDP HL, $IDEN$REGMAPH
-LDN HL, $DEC$REGMAPH
-#20
+LD HL, $INC$IDEN
+FNH A, HLA            # underflow to 0xFF, inc to zero
+LD HL, $ZERO?$NULL
+#19
+FNH A, HLA            # underflow if zero, dec H reg
+LDP HL, $DEC$REGMAPH
+LDN HL, $IDEN$REGMAPH
 LD Y, $INST
 FNDL DZ, Y            # Y = zpage addr of upper register
+#29
 FNH DZ, HLD           # upper register-- if lower underflows
-NOP
-NOP
-NOP
-#30
-NOP
 NOP
 NOP
 NOP

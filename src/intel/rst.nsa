@@ -18,7 +18,7 @@ FNFH DZ, ND           # PCH = PCH+1      *** inc PCH ***
 LDZ Y, $INST
 #20
 FNH DZ, HLA           # A = inst + 1
-LD HL, $RSTVEC$NULL
+LD HL, $REGMAPL$NULL
 LD Y, $TEMP
 FNDH AZ, ND           # rst vector -> temp
 #29
@@ -38,7 +38,7 @@ NOP
 LDZ Y, $INST
 #20
 FNH DZ, HLA           # A = inst + 1
-LD HL, $RSTVEC$NULL
+LD HL, $REGMAPL$NULL
 LD Y, $TEMP
 FNDH AZ, ND           # rst vector -> temp
 #29
