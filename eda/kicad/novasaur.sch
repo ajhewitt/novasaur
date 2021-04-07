@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2021-03-19"
+Date "2021-03-28"
 Rev "1.9"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"
@@ -1324,9 +1324,7 @@ Connection ~ 7900 4850
 Wire Wire Line
 	4400 3750 4400 3400
 Wire Wire Line
-	2850 3700 4200 3700
-Wire Wire Line
-	4200 3700 4200 4000
+	2850 3700 4150 3700
 $Comp
 L Connector:TestPoint_Alt TP29
 U 1 1 5E51CAB2
@@ -1441,8 +1439,6 @@ F 3 "74xx/74ls86.pdf" H 7200 1600 50  0001 C CNN
 	2    7200 1600
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4200 4000 5600 4000
 $Comp
 L 74xx:74LS11 U?
 U 2 1 5FA4FFFA
@@ -1475,6 +1471,10 @@ F 3 "74xx/74ls86.pdf" H 7600 3950 50  0001 C CNN
 	4    7600 3950
 	0    -1   1    0   
 $EndComp
+Wire Wire Line
+	4150 4000 4150 3700
+Wire Wire Line
+	4150 4000 5600 4000
 Wire Bus Line
 	4450 5100 4450 6750
 Wire Bus Line
