@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
 
-# Convert JPG image (less than 256x256) to 256-color 3:3:2 image rom
-# jpegtopnm images/parrot.jpg | pnmnoraw > build/output/parrot.ppm
+# Convert JPG image (less than 240x256) to 256-color 3:3:2 image rom
+# pngtopnm parrot.png | pnmnoraw > build/output/parrot.ppm
+# or
+# jpegtopnm parrot.jpg | pnmnoraw > build/output/parrot.ppm
+# then
 # build/ppmtorom.rb build/output/parrot.ppm > build/output/cold.hex
 
 def print_ext_addr(addr)

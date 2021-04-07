@@ -127,5 +127,5 @@ ANDH DZ, ND               # clear bit 2 of HW STAT
 
 $FAIL
 
-#LD PG, $WARM_START
+LD PG, $WARM_START
 LD PG, $CLR_SCRN          # dev testing
