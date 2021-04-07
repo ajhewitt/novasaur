@@ -7,16 +7,44 @@ PAGE RIM_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA           # A=0 if kern
+#10
+LDN PC, $EXIT12       # exit if not kern
 LD HL, $SWAP$SWAP
 FNFH E, NA            # A = E << 4
 LD Y, $IMASK
-#11
 FNFL DZ, HL           # H = Mask
+#21
 MVH A, NA             # A = E, Mask
 LD HL, $7             # invert mask bits
 LD Y, $AREG
-#21
 XORHL AZ, ND          # A $ 111 -> Acc
+#32
+NOP
+NOP
+NOP
+LD HL, $FETCH         # HL = Fetch
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43
+
+$EXIT12
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
 NOP
 NOP
 NOP

@@ -7,13 +7,41 @@ PAGE SIM_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA           # A=0 if kern
+#10
+LDN PC, $EXIT12       # exit if not kern
 LD HL, $IDEN$NULL
 LDZ Y, $AREG
 FNH DZ, HLA           # A = Acc
-#10
 LD HL, $7             # invert mask bits
 LD Y, $IMASK
+#21
 XORHL AZ, ND          # A $ 111 -> Mask
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH         # HL = Fetch
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43
+
+$EXIT12
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
 NOP
 NOP
 #20

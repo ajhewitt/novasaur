@@ -199,25 +199,25 @@ LD PC, $EXIT57
 
 $AUDIO32
 LDZ Y, $AREG
-ANDHL DZ, ND               # A =
+ANDHL DZ, ND              # Acc = Acc&3
 LD HL, $XGA?$NULL
 #40/36
 LD Y, $VMS
-FNEH DZ, NA               # 0 if 3 cycles
+FNEH DZ, NA               # 0 if 3 cycles per line
 LDP HL, $0xFE             # -2
 LDN HL, $0xFD             # -3
 LDZ Y, $AREG
 #50/46
-ADDHL DZ, NA
-LDN PC, $EXIT56
+ADDHL DZ, NA              # A = Acc-2|3
+LDN PC, $EXIT56           # exit is not enough cycles
 LDZ HL, $IDEN$NULL
-FNH DZ, HLA
+FNH DZ, HLA               # A = Acc
 LD Y, $AMODE
 #61/55
-FNH AZ, HLD               #
+FNH AZ, HLD               # A -> Audio mode
 LD HL, $0x80
 LD Y, $AUDIO
-MVHL AZ, ND               #
+MVHL AZ, ND               # mute audio
 #71/62
 LD PC, $EXIT73
 #73/64
