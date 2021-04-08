@@ -46,12 +46,47 @@ MVHL AZ, ND
 LD HL, $0xFF
 LD Y, $TXRDIDX
 MVHL AZ, ND               # -1->Tx Rd index
-LD HL, $0x00
+LD HL, $0x03
 LD Y, $AMODE
 MVHL AZ, ND               # 0->number of voices
 LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute->audio
+
+#ADSR Voice 1
+LD HL, $ATTACK1
+LD Y, $DELTA1
+MVHL AZ, ND
+LD HL, $0x20 # +2
+LD Y, $ATTACK1
+MVHL AZ, ND
+LD HL, $0xE0 # -2
+LD Y, $DECAY1
+MVHL AZ, ND
+LD HL, $0xFF # -11
+LD Y, $SUSTAIN1
+MVHL AZ, ND
+LD HL, $0xF0 # -1
+LD Y, $RELEASE1
+MVHL AZ, ND
+
+#ADSR Voice 2
+LD HL, $ATTACK2
+LD Y, $DELTA2
+MVHL AZ, ND
+LD HL, $0x70 # +2
+LD Y, $ATTACK2
+MVHL AZ, ND
+LD HL, $0xC0 # -2
+LD Y, $DECAY2
+MVHL AZ, ND
+LD HL, $0xF0 # -11
+LD Y, $SUSTAIN2
+MVHL AZ, ND
+LD HL, $0xF0 # -1
+LD Y, $RELEASE2
+MVHL AZ, ND
+
 
 #Boot kernel CPU
 LD HL, $0

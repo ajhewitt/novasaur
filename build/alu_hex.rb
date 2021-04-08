@@ -255,7 +255,8 @@ def print_vmp(offset, opts = {})
             i = (a<<4) | c
             pg = i<<1
             cc = pg+1
-            b&3<inst[cc] ? IDLE_PG : inst[pg]
+            #b&3<inst[cc] ? IDLE_PG : inst[pg]
+            IDLE_PG
           end
         end
       else # a=LLLL, b=MMMM
@@ -738,7 +739,7 @@ print_unary(0xE8, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C<<2
 print_unary(0xE9, 256.times.map{|i| (i&0xC) << 2})
 # $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
-print_unary(0xEA, [0xED,0xEC,0xEB,0xEA]*64)
+print_unary(0xEA, [0xFD,0xFC,0xFB,0xFA]*64)
 # $SUS2LEV: sustain to level
 print_unary(0xEB, 256.times.map{|i| ((-1*i)&0xF)<<4})
 # SQRWAV: square wave number bandlimit
