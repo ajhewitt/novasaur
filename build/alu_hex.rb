@@ -448,11 +448,24 @@ FORK_KBD = [
    0x88, 0x88, 0xB0, 0xB0, 0x08, 0x08, 0x08, 0x08] * 4  # tx:scan
 ].flatten.freeze
 
+FORK_PORT = (
+  [0x10, 0x16, 0x1C, 0x22, 0x28, 0x2E, 0x34, 0x3A,
+   0x40, 0x70, 0x74, 0x88, 0xC8, 0xC8, 0xC8, 0xC8,
+   0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8,
+   0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8,
+   0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8,
+   0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8,
+   0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8,
+   0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8, 0xC8] * 4
+).freeze
+
 SCAN_LO = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '`', nil, nil, nil, nil, nil, nil, 'q', '1', nil, nil, nil, 'z', 's', 'a', 'w', '2', nil, nil, 'c', 'x', 'd', 'e', '4', '3', nil, nil, ' ', 'v', 'f', 't', 'r', '5', nil, nil, 'n', 'b', 'h', 'g', 'y', '6', nil, nil, nil, 'm', 'j', 'u', '7', '8', nil, nil, ',', 'k', 'i', 'o', '0', '9', nil, nil, '.', '/', 'l', ';', 'p', '-', nil, nil, nil, '\'', nil, '[', '=', nil, nil, nil, nil, "\n", ']', nil, '\\', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, '1', nil, '4', '7', nil, nil, nil, '0', '.', '2', '5', '6', '8', "\e", nil, nil, '+', '3', '-', '*', '9', nil, nil].freeze
 
 SCAN_UP = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '~', nil, nil, nil, nil, nil, nil, 'Q', '!', nil, nil, nil, 'Z', 'S', 'A', 'W', '@', nil, nil, 'C', 'X', 'D', 'E', '$', '#', nil, nil, ' ', 'V', 'F', 'T', 'R', '%', nil, nil, 'N', 'B', 'H', 'G', 'Y', '^', nil, nil, nil, 'M', 'J', 'U', '&', '*', nil, nil, '<', 'K', 'I', 'O', ')', '(', nil, nil, '>', '?', 'L', ':', 'P', '_', nil, nil, nil, '"', nil, '{', '+', nil, nil, nil, nil, "\n", '}', nil, '|', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\e", nil, nil, nil, nil, nil, nil, nil, nil, nil].freeze
 
 SCAN_EX = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '`', nil, nil, nil, nil, nil, nil, 'q', '1', nil, nil, nil, 'z', 's', 'a', 'w', '2', nil, nil, 'c', 'x', 'd', 'e', '4', '3', nil, nil, ' ', 'v', 'f', 't', 'r', '5', nil, nil, 'n', 'b', 'h', 'g', 'y', '6', nil, nil, nil, 'm', 'j', 'u', '7', '8', nil, nil, ',', 'k', 'i', 'o', '0', '9', nil, nil, '.', '/', 'l', ';', 'p', '-', nil, nil, nil, '\'', nil, '[', '=', nil, nil, nil, nil, "\n", ']', nil, '\\', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, '1', nil, '4', '7', nil, nil, nil, '0', '.', '2', '5', '6', '8', "\e", nil, nil, '+', '3', '-', '*', '9', nil, nil].freeze
+
+FORK_CON = Array.new(256, 0)
 
 # fork on masked interupt
 def fork_intr
@@ -704,9 +717,9 @@ print_unary(0xD8, swap_carry)
 # $DACARRY: set carry if nibbles > 9
 print_unary(0xD9, da_carry)
 # FORKP: Fork Port in IN and OUT instruction page
-
+print_unary(0xDA, FORK_PORT)
 # FORKC: Fork Console in CON page
-
+print_unary(0xDB, FORK_CON)
 # $EXTPG1: extended 2-cycle execute page
 print_unary(0xDC, EXTPG.each_slice(2).map {|i,j| j<=2 ? i : EXTPG[0]})
 # $EXTPC1: extended 2-cycle execute PC
@@ -738,7 +751,7 @@ print_unary(0xE8, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C<<2
 print_unary(0xE9, 256.times.map{|i| (i&0xC) << 2})
 # $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
-print_unary(0xEA, [0xED,0xEC,0xEB,0xEA]*64)
+print_unary(0xEA, [0xFD,0xFC,0xFB,0xFA]*64)
 # $SUS2LEV: sustain to level
 print_unary(0xEB, 256.times.map{|i| ((-1*i)&0xF)<<4})
 # SQRWAV: square wave number bandlimit

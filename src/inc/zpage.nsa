@@ -1,7 +1,8 @@
 # zero page assignments
 
-#RESERVED      0x80-0x8A (10)
+#RESERVED      0x80-0x8A (11)
 $AMODE         0x8B # audio mode - 0x00-0x3F (protected)
+#SPARE         0x8C-0x8D (2)
 $WAVE0         0x8E
 $ATTACK0       0x8F
 $DECAY0        0x90

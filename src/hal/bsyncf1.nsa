@@ -87,13 +87,12 @@ LD HL, $DEC$NULL
 LDZ Y, $AMODE
 FNH DZ, HLA               # negative if AMODE = 0
 LDN PC, $EXIT110          # exit if audio off, cycle=1
-NOP
-#110
+#109
 LD HL, $FETCH
 LD Y, $INST
 MVHL AZ, ND               # fetch -> inst cache
 LD HL, $IDEN$ADSRPG
-#120
+#119
 LD Y, $FRAME
 FNEL DZ, PG               # jump to envelope channel, cycle=1
 #124

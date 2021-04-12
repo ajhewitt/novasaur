@@ -20,7 +20,7 @@ $REVERSE   14 # reverse bits
 #AUDIO     15 # reverse bits, flip sign
 
 #FNE - HAL
-$XGA?       0 # mode-line>11?: 0-10->-1,else->0
+$XGA?       0 # mode-line>=11?: 0-10->-1,else->0
 $INCCYC     1 # cyc+1, ext=0
 $FORKJ      2 # feature fork (audio, rx, tx/kb)
 $FORKK      3 # keyboard fork
