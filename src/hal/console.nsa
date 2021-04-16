@@ -3,60 +3,185 @@ INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE CON_PG
+$CLR_LINE 0
 
-# assume L = $FORKC
-LD Y, $AREG
+# assume H = $INC, L = $FORKC
+LD Y, $AREG               #32
 FNDL DZ, PC               # fork on character
-#38/4
+#37/4
 
-ADDR 0x04                 # Backspace
+ADDR 0x04                 # NOP
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+1
+LD PC, $FETCH1_PG         # cycle available, goto fetch
+#43/5
+
+ADDR 0x0A                 # Backspace
 LD HL, $DEC$2COM
-#40/2
+#39/2
 LD Y, $CONX
-FNFH DZ, ND               # X-1
+FNFH DZ, ND               # column-1
 LD Y, $CONL
-FNFL DZ, HL               # HL=-conL
-#50/10
-ADDHL DZ, NA              # A=X-conL
-LDN PC, $BSEX56           # Exit if less than console left
+FNFL DZ, HL               # HL = -console left
+#49/10
+ADDHL A, NA               # A = column-console left
 LD HL, $LSL$INC
 LD Y, $CONX
-#59/18
-FNFH DZ, NA               # A=conX*2
-FNFL A, X                 # X=A+1
+LDN PC, $BOL59            # Exit if less than console left
+FNFH DZ, NA               # A = column*2
+#61/20
+FNFL A, X                 # X = A+1
 LD HL, $IDEN$NULL
-LD Y, $CONY
-#69/26
-FNH DZ, Y                 # Y=colY
+LDZ Y, $CONY
+FNH DZ, Y                 # Y = row
+#70/27
 MULH A, ND                # 0->[Y,X]
+NOP
 LD HL, $INC2$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+2
+#80/35
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#86/39
+
+$BOL59                    # move forward one column
+LD HL, $INC$NULL
+FNH DZ, HLD               # column+1
+LD PC, $EXIT65
+#65/45
+
+ADDR 0x38                 # Horizontal Tab (+8 mod 8)
+LD HL, $2COM$8
+#39/2
+LDZ Y, $CONR
+FNFH DZ, NA               # A = -console right
+ADDL A, HL                # HL = 8-console right
+LD Y, $CONX
+#49/10
+ADDHL DZ, NA              # A = X+last tab
+LD HL, $8$IDEN
+LDP PC, $EXIT57           # End of line not negative
+ANDH A, NA                # A&8
+#59/18
+LD Y, $CONR
+FNFL DZ, HL               # HL = console right
+LD Y, $CONX
+ADDHL AZ, ND              # A+console right -> console col
+#70/26
+LD PC, $EXIT72
+#72/28
+
+ADDR 0x54                 # Line Feed
+MVHL A, NA                # NOP
+#41/2
+$CONT41
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+#49/6
+MVHL A, NA                # NOP
+NOP
+LD HL, $INC$NULL
+LD Y, $VSTART
+FNFH DZ, ND               # vstart+1
+#61/15
+LDZ Y, $CONY
+FNH DZ, HLD               # row+1
+LD HL, $CLR_LINE
+LD Y, $INST
+#69/22
+MVHL AZ, ND               # clear line -> inst cache
+LD HL, $0xA0
 LD Y, $VMS                # set Y = $VMS on exit
+ADDH DZ, ND               # VMS+EXT+2
+#80/30
+LD HL, $CLR_LINE
+DISHL DZ, PGA             # jump to next VMC
+#86/34
+
+ADDR 0x76                 # Carriage Return
+LD HL, $IDEN$NULL
+#30/2
+LD Y, $CONL
+FNFH DZ, NA               # A = console left
+LDZ Y, $CONX
+FNH AZ, HLD               # A -> column
+#39/11
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+#59/21
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+LD PC, $EXIT73
+#73/29
+
+ADDR 0x94                 # Carriage Return + Line Feed
+LD HL, $IDEN$NULL
+#30/2
+LD Y, $CONL
+FNFH DZ, NA               # A = console left
+LDZ Y, $CONX
+FNH AZ, HLD               # A -> column
+LD PC, $CONT41
+#41/11
+
+ADDR 0xA0                 # Standard Character
+LDZ Y, $CONX
+#39/2
+FNH DZ, HLD               # column+1
+LD HL, $2COM$NULL
+LDZ Y, $CONR
+FNH DZ, HL                # HL = -console right
+ADDHL A, NA               # A = column-console right
+#51/10
+LD Y, $CONX
+LDP PC, $EOL55            # Exit if more than console right
+LDZ HL, $LSL$NULL
+FNH DZ, HLA               # A = column*2
+LD HL, $IDEN$DEC
+#60/19
+FNFL A, X                 # X = A-1
+LD Y, $AREG
+FNFH DZ, NA               # A = char
+LDZ Y, $CONY
+#70/27
+FNH DZ, Y                 # Y = row
+FNH A, HLD                # char -> [Y,X]
+LD HL, $INC2$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
 #80/34
 LD HL, $FETCH
 DISHL DZ, PGA             # jump to next VMC
 #86/38
 
-$BSEX56
-LD HL, $INC$2COM
-LDZ Y, $CONX
-#60/42
-FNH DZ, HLD               # X-1
-LD PC, $EXIT64
-#64/45
+$EOL55                    # back off one column
+LDZ HL, $DEC$NULL
+FNH DZ, HLD               # column-1
+LD PC, $EXIT61
+#61/43
 
-ADDR 0x34
-
-$EXIT64
+$EXIT57
 MVHL A, NA                # NOP
+$EXIT61
 MVHL A, NA                # NOP
-#72
+$EXIT65                   # exit with null in Acc
+LD HL, $0
+LD Y, $AREG
+#69/51
+MULH AZ, ND               # 0 -> Acc
+$EXIT72
 NOP
+$EXIT73
 NOP
 LD HL, $INC2$NULL
-LD Y, $VMS                # set Y = $VMS on exit
+LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
-#80
+#80/60
 LD HL, $FETCH
 DISHL DZ, PGA             # jump to next VMC
-#86
+#86/64

@@ -99,7 +99,7 @@ DISHL DZ, PGA             # jump to next VMC
 #86/45
 
 ADDR 0x70                 # Jump to console page
-LD HL, $FORKC
+LD HL, $INC$FORKC
 LD PG, $CON_PG
 #32
 
