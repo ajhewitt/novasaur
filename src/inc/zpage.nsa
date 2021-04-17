@@ -126,9 +126,11 @@ $JMP_INST      0xC3
 
 $COPYROM_INST  0x01
 $CTXSW_INST    0x02
-$SEND_INST     0x03
-$XFER_INST     0x04
-$RECV_INST     0x05
+$CLRLN_INST    0x03
+#TBD           0x04
+$SEND_INST     0x05
+$XFER_INST     0x06
+$RECV_INST     0x07
 
 $KSBUFF        0xF8
 $KCBUFF        0xF9

@@ -5,9 +5,10 @@ $DISPX1_PG     0x02 # fetch/disptch/exec 2-cycle
 $DISPX2_PG     0x03 # fetch/disptch/exec 3-cycle
 $COPYROM_PG    0x04
 $CTXSW_PG      0x05
-$SEND_PG       0x06
-$XFER_PG       0x07
-$RECV_PG       0x08
+$CLRLN_PG      0x06
+$SEND_PG       0x08
+$XFER_PG       0x09
+$RECV_PG       0x0A
 
 $JMPPG0_PG     0x10
 $JMPPG1_PG     0x11
