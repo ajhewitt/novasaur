@@ -131,7 +131,7 @@ $EXIT35
 LD HL, $INC$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD
-LD PC, $FETCH1_PG         # cycle available, goto fetch
+LD PG, $FETCH1_PG         # cycle available, goto fetch
 #43/21
 
 $EXIT12
@@ -204,12 +204,12 @@ LD HL, $XGA?$NULL
 #40/36
 LD Y, $VMS
 FNEH DZ, NA               # 0 if 3 cycles per line
-LDP HL, $0xFE             # -2
-LDN HL, $0xFD             # -3
+LDP HL, $0xFD             # -3
+LDN HL, $0xFC             # -4
 LDZ Y, $AREG
 #50/46
 ADDHL DZ, NA              # A = Acc-2|3
-LDN PC, $EXIT56           # exit is not enough cycles
+LDP PC, $EXIT56           # exit is not enough cycles
 LDZ HL, $IDEN$NULL
 FNH DZ, HLA               # A = Acc
 LD Y, $AMODE
