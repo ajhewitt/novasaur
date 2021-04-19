@@ -159,32 +159,33 @@ LD PC, $EXIT61
 #61/43
 
 ADDR 0xC2                 # Flash Cursor (toggle null to char @1.2Hz)
-LD HL, $LSL$INC
+LD HL, $LSL$NULL
 #39/2
-LD Y, $CONX
-FNFH DZ, NA               # A = column*2
+LDZ Y, $CONX
+FNH DZ, HLA               # A = column*2
+LD HL, $5$INC             # F=30BPM,9=50BPM,5=90BPM,3=150BPM
 FNFL A, X                 # X = A+1
-LD HL, $0x91              # F=30BPM,9=50BPM,5=90BPM,3=150BPM
-#49/10
 LD Y, $TIME0
-DIVH DZ, NA               # A = time0/9
-ANDL A, HL                # L = 0|1
+#50/11
+DIVH DZ, NA               # A = time0/5
+ANDL A, HL                # L = A&1
 LD Y, $AREG
-#59/18
-MULL DZ, HL               # HL = null or char in acc
-MVHL A, NA                # A = cursor char
+MULL DZ, HL               # HL = 0|1 * 0|0x10
+#61/19
+LD Y, $CONC
+MULH DZ, NA               # A = cursor char
 LD HL, $IDEN$NULL
 LDZ Y, $CONY
-#70/26
+#70/27
 FNH DZ, Y                 # Y = column
 FNH A, HLD                # A -> [Y,X]
 LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
-#80/33
+#80/34
 LD HL, $FETCH
 DISHL DZ, PGA             # jump to next VMC
-#86/37
+#86/38
 
 $EXIT57
 MVHL A, NA                # NOP
@@ -193,7 +194,7 @@ MVHL A, NA                # NOP
 $EXIT65                   # exit with null in Acc
 LD HL, $0
 LD Y, $AREG
-#69/45
+#69/46
 MULH AZ, ND               # 0 -> Acc
 $EXIT72
 NOP
@@ -202,7 +203,7 @@ NOP
 LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
-#80/54
+#80/55
 LD HL, $FETCH
 DISHL DZ, PGA             # jump to next VMC
-#86/58
+#86/59

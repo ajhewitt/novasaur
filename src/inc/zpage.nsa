@@ -29,25 +29,27 @@ $ATTACK3       0xA4
 $DECAY3        0xA5
 $SUSTAIN3      0xA6
 $RELEASE3      0xA7
-$CONL          0xA8
-$CONR          0xA9
-$CONX          0xAA
-$CONY          0xAB
-$KSRDIDX       0xAC
-$KSWRIDX       0xAD
-$KCRDIDX       0xAE
-$KCWRIDX       0xAF
-$KTO           0xB0 # max kbd idle count
-$BLOCK         0xB1 # block count (0 to 175/160/128)
-$FRAME         0xB2 # frame count (-5,-4 to 0)
-$VSTART        0xB3 # top of video display
-$TIME0         0xB4 # 15tps, max 90 - 6s
-$TIME1         0xB5 # 10tpm, max 120 - 12m
-$TIME2         0xB6 # 5tph, max 120 - 1d
-$TIME3         0xB7 # 1tpd, max 256 - 0.7y
-$ICL           0xB8 # idle cycle count low byte
-$ICH           0xB9 # idle cycle count high byte
-#SPARE         0xBA-0xBF (6)
+$KSRDIDX       0xA8
+$KSWRIDX       0xA9
+$KCRDIDX       0xAA
+$KCWRIDX       0xAB
+$CONL          0xAC
+$CONR          0xAD
+$CONX          0xAE
+$CONY          0xAF
+$CONC          0xB0
+#RESERVED
+$KTO           0xB2 # max kbd idle count
+$BLOCK         0xB3 # block count (0 to 175/160/128)
+$FRAME         0xB4 # frame count (-5,-4 to 0)
+$VSTART        0xB5 # top of video display
+$ICL           0xB6 # idle cycle count low byte
+$ICH           0xB7 # idle cycle count high byte
+$TIME0         0xB8 # 15tps, max 90 - 6s
+$TIME1         0xB9 # 10tpm, max 120 - 12m
+$TIME2         0xBA # 5tph, max 120 - 1d
+$TIME3         0xBB # 1tpd, max 256 - 0.7y
+#SPARE         0xBC-0xBF (4)
 $DELTA0        0xC0
 $DELTA1        0xC1 # ADSR state as Y indirect
 $DELTA2        0xC2

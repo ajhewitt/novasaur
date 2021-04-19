@@ -40,6 +40,9 @@ MVHL AZ, ND
 LD HL, $0x3B
 LD Y, $CONY
 MVHL AZ, ND
+LD HL, $0x5F
+LD Y, $CONC
+MVHL AZ, ND
 
 #turn off features
 LD HL, $0x40              # 0x60=on,0x40=off
