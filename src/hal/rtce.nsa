@@ -20,7 +20,7 @@ MVHL AZ, ND               # vmode==01xx?-5:-4 -> Frame count
 LD HL, $INC$NULL
 LDZ Y, $TIME0
 FNH DZ, HLD               # TIME0+1
-LDN PC, $EXIT148          # return if TIME0<90
+LDN PC, $EXIT148          # return if TIME0<0
 LD HL, $0xA6
 #149
 MVHL AZ, ND               # TIME0 = -90
@@ -35,14 +35,14 @@ LD HL, $INC$ML2ADJ
 LDZ Y, $TIME1
 #169
 FNFH DZ, ND               # TIME1+1
-LDN PC, $T0_ADJ174        # return if TIME1<120
+LDN PC, $T0_ADJ174        # return if TIME1<0
 LD HL, $0x88
 MVHL AZ, ND               # TIME1 = -120
 LD HL, $INC$NULL
 #181
 LDZ Y, $TIME2
 FNH DZ, HLD               # TIME2+1
-LDN PC, $EXIT187          # return if TIME2<120
+LDN PC, $EXIT187          # return if TIME2<0
 LD HL, $0x88
 MVHL AZ, ND               # TIME2 = -120
 #192
@@ -99,14 +99,14 @@ LD HL, $INC$ML2ADJ
 LDZ Y, $TIME1
 #201
 FNFH DZ, ND               # TIME1+1
-LDN PC, $T0_ADJ206        # return if TIME1<120
+LDN PC, $T0_ADJ206        # return if TIME1<0
 LD HL, $0x88
 MVHL AZ, ND               # TIME1 = -120
 #211
 LD HL, $INC$NULL
 LDZ Y, $TIME2
 FNH DZ, HLD               # TIME2+1
-LDN PC, $EXIT219          # return if TIME2<120
+LDN PC, $EXIT219          # return if TIME2<0
 LD HL, $0x88
 #220
 MVHL AZ, ND               # TIME2 = -120

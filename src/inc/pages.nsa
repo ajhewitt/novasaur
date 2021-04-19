@@ -15,6 +15,7 @@ $JMPPG1_PG     0x11
 
 $MOVMX_PG      0x20
 
+$TERM_PG       0x7E
 $TEST_PG       0x7F
 
 # 0x80-0x8F: system
@@ -112,8 +113,7 @@ $INTR1_PG      0xE4
 $INTR2_PG      0xE5
 $NSYNCE_PG     0xE6 # null sync on execute
 $DASYNCE_PG    0xE7 # delayed audio
-$ASYNCE_PG     0x7F # audio *** test 
-$TERM_PG       0xE8 #*** test - overide audio thread
+$ASYNCE_PG     0xE8 # audio
 $DTSYNCE_PG    0xE9 # delayed transmit
 $TSYNCE_PG     0xEA # transmit
 $KSCANE_PG     0xEB # keyboard

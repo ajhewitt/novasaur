@@ -16,14 +16,14 @@ LD PC, $FETCH1_PG         # cycle available, goto fetch
 #43/5
 
 ADDR 0x0A                 # Backspace
-LD HL, $DEC$2COM
+LD HL, $DEC$1COM
 #39/2
 LD Y, $CONX
 FNFH DZ, ND               # column-1
 LD Y, $CONL
-FNFL DZ, HL               # HL = -console left
+FNFL DZ, HL               # HL = -console left-1
 #49/10
-ADDHL A, NA               # A = column-console left
+ADDHL A, NA               # A = column-console left-1
 LD HL, $LSL$INC
 LD Y, $CONX
 LDN PC, $BOL59            # Exit if less than console left
@@ -109,16 +109,16 @@ FNFH DZ, NA               # A = column*2
 FNFL A, X                 # X = A+1
 LD HL, $IDEN$NULL
 #49/10
-LD Y, $CONY
+LDZ Y, $CONY
 FNH DZ, Y                 # Y = row
 MULH A, ND                # null -> [Y,X]
-LD Y, $CONL
-FNFH DZ, NA               # A = console left
-#61/19
+LDZ Y, $CONL
+FNH DZ, HLA               # A = console left
+#60/18
+LD HL, $INC$NULL
 LDZ Y, $CONX
 FNH AZ, HLD               # A -> column
 MVHL A, NA                # NOP
-NOP
 LD PC, $EXIT72
 #72/27
 
@@ -126,10 +126,10 @@ ADDR 0x96                 # Standard Character (column+1, print char in acc)
 LDZ Y, $CONX
 #39/2
 FNH DZ, HLD               # column+1
-LD HL, $2COM$NULL
+LD HL, $1COM$NULL
 LDZ Y, $CONR
-FNH DZ, HL                # HL = -console right
-ADDHL A, NA               # A = column-console right
+FNH DZ, HL                # HL = -console right-1
+ADDHL A, NA               # A = column-console right-1
 #51/10
 LD Y, $CONX
 LDP PC, $EOL55            # Exit if more than console right
@@ -158,23 +158,23 @@ FNH DZ, HLD               # column-1
 LD PC, $EXIT61
 #61/43
 
-ADDR 0xC2                 # Flash Cursor (toggle cursor from null to char in acc @1Hz)
+ADDR 0xC2                 # Flash Cursor (toggle null to char @1.2Hz)
 LD HL, $LSL$INC
 #39/2
 LD Y, $CONX
 FNFH DZ, NA               # A = column*2
 FNFL A, X                 # X = A+1
-LD HL, $0xF1
+LD HL, $0x91              # F=30BPM,9=50BPM,5=90BPM,3=150BPM
 #49/10
 LD Y, $TIME0
-DIVH DZ, NA               # A = time0/15
-ANDL A, HL                # L = 0 or 1
+DIVH DZ, NA               # A = time0/9
+ANDL A, HL                # L = 0|1
 LD Y, $AREG
 #59/18
 MULL DZ, HL               # HL = null or char in acc
 MVHL A, NA                # A = cursor char
 LD HL, $IDEN$NULL
-LD Y, $CONY
+LDZ Y, $CONY
 #70/26
 FNH DZ, Y                 # Y = column
 FNH A, HLD                # A -> [Y,X]

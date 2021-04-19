@@ -29,15 +29,20 @@ LD Y, $KCWRIDX
 MULH AZ, ND
 LD Y, $KCRDIDX
 MULH AZ, ND
-LD HL, $0x0B
-LD Y, $TERM_COL
+LD HL, $0x06
+LD Y, $CONL
+MVHL AZ, ND
+LD Y, $CONX
+MVHL AZ, ND
+LD HL, $0x57
+LD Y, $CONR
 MVHL AZ, ND
 LD HL, $0x3B
-LD Y, $TERM_ROW
+LD Y, $CONY
 MVHL AZ, ND
 
 #turn off features
-LD HL, $0x60              # 0x60=on,0x40=off
+LD HL, $0x40              # 0x60=on,0x40=off
 LD Y, $RMODE
 MVHL AZ, ND
 LD HL, $0x80              # 0xA0=on,0x80=off
