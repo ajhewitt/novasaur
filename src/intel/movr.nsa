@@ -5,30 +5,27 @@ INCLUDE ../inc/pages.nsa
 PAGE MOVR_PG
 
 # assume: Y = $VMS
-LD HL, $INC$REGMAPL
-FNFH DZ, HLD          # inc state
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $REGMAPL$NULL
 LD Y, $INST
-FNDL DZ, Y            # Y = zpage addr of source reg
-#10
+FNDH DZ, YA           # Y = zpage addr of source reg
+#11
 LD HL, $IDEN$REGMAPH
-LDN PC, $REG_SRC     # zpage > 0x80 for reg source
-#14
-
-#MEM_SRC
-LD Y, $LREG
+LDN PC, $REG_SRC      # zpage > 0x80 for reg source
+LD Y, $LREG           # MEM_SRC
 FNFH DZ, XA           # X = L
 LDZ Y, $HREG
-#20
+#21
 FNH DZ, Y             # Y = H
 FNFH M, NA            # A = [HL]
 $REG_DEST
-NOP
-NOP
-NOP
 LD Y, $INST
-#30
 FNDL DZ, Y            # Y = zpage addr of dest reg
+#31
 FNH AZ, HLD           # A -> dest reg
+NOP
+NOP
 LD HL, $FETCH
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
@@ -38,8 +35,8 @@ $REG_SRC
 FNFH DZ, NA           # source reg -> A
 NOP
 NOP
-NOP
 #20
+NOP
 NOP
 NOP
 NOP
