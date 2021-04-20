@@ -17,6 +17,8 @@ MVHL AZ, ND               # mode+ext -> mode line
 LD HL, $0
 LD Y, $VSTART
 MULH AZ, ND               # 0 -> vstart
+LD Y, $CONY
+MULH AZ, ND               # 0 -> console row
 
 #keyboard (terminal test)
 LD HL, $0xD8              # -40
@@ -31,18 +33,21 @@ LD Y, $KCRDIDX
 MULH AZ, ND
 LD HL, $0x06
 LD Y, $CONL
-MVHL AZ, ND
+MVHL AZ, ND               # 6 -> console left
 LD Y, $CONX
-MVHL AZ, ND
+MVHL AZ, ND               # 6 -> console column
+LD HL, $0
+LD Y, $CONB
+ADDH AZ, ND               # left border+0 -> backspace stop
 LD HL, $0x57
 LD Y, $CONR
-MVHL AZ, ND
-LD HL, $0x3B
-LD Y, $CONY
-MVHL AZ, ND
+MVHL AZ, ND               # 87 -> console right
+LD HL, $0xC4
+LD Y, $CONH
+MVHL AZ, ND               # -60 -> console height
 LD HL, $0x5F
 LD Y, $CONC
-MVHL AZ, ND
+MVHL AZ, ND               # '_' -> console cursor
 
 #turn off features
 LD HL, $0x40              # 0x60=on,0x40=off

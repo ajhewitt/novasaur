@@ -15,15 +15,15 @@ FNH DZ, HLD               # VMS+1
 LD PC, $FETCH1_PG         # cycle available, goto fetch
 #43/5
 
-ADDR 0x0A                 # Backspace
+ADDR 0x09                 # Backspace
 LD HL, $DEC$1COM
 #39/2
 LD Y, $CONX
 FNFH DZ, ND               # column-1
-LD Y, $CONL
-FNFL DZ, HL               # HL = -console left-1
+LD Y, $CONB
+FNFL DZ, HL               # HL = -console left stop-1
 #49/10
-ADDHL A, NA               # A = column-console left-1
+ADDHL A, NA               # A = column-console left stop-1
 LD HL, $LSL$INC
 LD Y, $CONX
 LDN PC, $BOL59            # Exit if less than console left
@@ -50,7 +50,7 @@ FNH DZ, HLD               # column+1
 LD PC, $EXIT65
 #65/45
 
-ADDR 0x38                 # Horizontal Tab (cursor+8 mod 8)
+ADDR 0x36                 # Horizontal Tab (cursor+8 mod 8)
 LD HL, $2COM$8
 #39/2
 LDZ Y, $CONR
@@ -71,35 +71,35 @@ ADDHL AZ, ND              # A+console right -> column
 LD PC, $EXIT72
 #72/28
 
-ADDR 0x54                 # Line Feed (row+1, dispatch clear line)
-LD Y, $VSTART
+ADDR 0x52                 # Line Feed (row+1, dispatch clear line)
+LDZ Y, $CONH
 #39/2
-FNFH DZ, ND               # vstart+1
+FNH DZ, HLA               # console heigth+1
+LDP Y, $VSTART            # use vstart at max height
+LDNZ Y, $CONH             # else use console height
+LDZ HL, $INC$NULL
+FNFH DZ, ND               #
+#49/11
 LDZ Y, $CONY
 FNH DZ, HLD               # row+1
 LD HL, $LSL$NULL
 LDZ Y, $CONL
-#50/11
 FNH DZ, HLA               # A = console left*2
+#59/19
 LD HL, $DEC$NULL
 LD Y, $TEMP
 FNH AZ, HLD               # A-1 -> temp
 LD HL, $CLRLN_INST
-#60/19
 LD Y, $INST
+#69/28
 MVHL AZ, ND               # clear line -> inst cache
-MVHL A, NA                # NOP
-#70/25
-NOP
-NOP
-NOP
 LD HL, $0xA0
 LD Y, $VMS                # set Y = $VMS on exit
 ADDH DZ, ND               # VMS+EXT+2
-#80/34
+#80/36
 LD HL, $CLRLN_INST
 DISHL DZ, PGA             # jump to next VMC
-#86/38
+#86/40
 
 ADDR 0x7A                 # Carriage Return (blank cursor, column to console left)
 LD HL, $LSL$INC

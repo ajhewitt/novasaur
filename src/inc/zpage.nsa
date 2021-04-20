@@ -2,7 +2,8 @@
 
 #RESERVED      0x80-0x8A (11)
 $AMODE         0x8B # audio mode - 0x00-0x3F (protected)
-#SPARE         0x8C-0x8D (2)
+$ICL           0x8C # idle cycle count low byte
+$ICH           0x8D # idle cycle count high byte
 $WAVE0         0x8E
 $ATTACK0       0x8F
 $DECAY0        0x90
@@ -33,18 +34,18 @@ $KSRDIDX       0xA8
 $KSWRIDX       0xA9
 $KCRDIDX       0xAA
 $KCWRIDX       0xAB
-$CONL          0xAC
-$CONR          0xAD
-$CONX          0xAE
-$CONY          0xAF
-$CONC          0xB0
-#RESERVED
-$KTO           0xB2 # max kbd idle count
-$BLOCK         0xB3 # block count (0 to 175/160/128)
-$FRAME         0xB4 # frame count (-5,-4 to 0)
-$VSTART        0xB5 # top of video display
-$ICL           0xB6 # idle cycle count low byte
-$ICH           0xB7 # idle cycle count high byte
+$KTO           0xAC # max kbd idle count
+$BLOCK         0xAD # block count (0 to 175/160/128)
+$FRAME         0xAE # frame count (-5,-4 to 0)
+$VSTART        0xAF # top of video display
+$CONL          0xB0 # console left border
+$CONR          0xB1 # console right border
+$CONX          0xB2 # console column
+$CONY          0xB3 # console row
+$CONH          0xB4 # console height from bottom
+$CONB          0xB5 # console backspace stop
+$CONC          0xB6 # console cursor char
+$COND          0xB7 # console spare
 $TIME0         0xB8 # 15tps, max 90 - 6s
 $TIME1         0xB9 # 10tpm, max 120 - 12m
 $TIME2         0xBA # 5tph, max 120 - 1d
