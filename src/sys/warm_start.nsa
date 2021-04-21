@@ -70,8 +70,10 @@ MVHL AZ, ND               # mute->audio
 LD HL, $0
 LD Y, $IMASK
 MULH AZ, ND               # 0->IMASK = 0 (disable)
+LD HL, $8
 LD Y, $CREG
-MULH AZ, ND               # 0->C
+MVHL AZ, ND               # 8->C
+LD HL, $0
 LD Y, $DREG
 MULH AZ, ND               # 0->D
 LD Y, $TEMP

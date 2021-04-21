@@ -12,7 +12,7 @@ FNDL DZ, PC               # fork on character
 ADDR 0x04                 # NOP
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+1
-LD PC, $FETCH1_PG         # cycle available, goto fetch
+LD PG, $FETCH1_PG         # cycle available, goto fetch
 #43/5
 
 ADDR 0x09                 # Backspace
@@ -74,11 +74,11 @@ LD PC, $EXIT72
 ADDR 0x52                 # Line Feed (row+1, dispatch clear line)
 LDZ Y, $CONH
 #39/2
-FNH DZ, HLA               # console heigth+1
+FNH DZ, HLA               # A = console heigth+1
 LDP Y, $VSTART            # use vstart at max height
 LDNZ Y, $CONH             # else use console height
 LDZ HL, $INC$NULL
-FNFH DZ, ND               #
+FNFH DZ, ND               # (console height or vstart)+1
 #49/11
 LDZ Y, $CONY
 FNH DZ, HLD               # row+1

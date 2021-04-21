@@ -474,6 +474,8 @@ SCAN_UP = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t"
 
 SCAN_EX = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '`', nil, nil, nil, nil, nil, nil, 'q', '1', nil, nil, nil, 'z', 's', 'a', 'w', '2', nil, nil, 'c', 'x', 'd', 'e', '4', '3', nil, nil, ' ', 'v', 'f', 't', 'r', '5', nil, nil, 'n', 'b', 'h', 'g', 'y', '6', nil, nil, nil, 'm', 'j', 'u', '7', '8', nil, nil, ',', 'k', 'i', 'o', '0', '9', nil, nil, '.', '/', 'l', ';', 'p', '-', nil, nil, nil, '\'', nil, '[', '=', nil, nil, nil, nil, "\n", ']', nil, '\\', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, '1', nil, '4', '7', nil, nil, nil, '0', '.', '2', '5', '6', '8', "\e", nil, nil, '+', '3', '-', '*', '9', nil, nil].freeze
 
+SCAN_CTRL = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 26, 19, 1, 23, 0, 0, 0, 3, 24, 4, 5, 0, 0, 0, 0, 0, 22, 6, 20, 18, 0, 0, 0, 14, 2, 8, 7, 25, 30, 0, 0, 0, 13, 10, 21, 0, 0, 0, 0, 0, 11, 9, 15, 0, 0, 0, 0, 0, 0, 12, 0, 16, 31, 0, 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 29, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].freeze
+
 # fork on masked interupt
 def fork_intr
   256.times.map do |i|
@@ -676,11 +678,11 @@ print_vid 0xB0
 
 # 0x0003C000-0x0003CFFF: FNC low nibble only
 # $SCAN0: default/shift
-print_unary(0xC0, (SCAN_LO+SCAN_UP).map {|c| c ? c.ord : 0})
+print_unary(0xC0, (SCAN_LO + SCAN_UP).map {|c| c ? c.ord : 0})
 # $SCAN1: extended/control
-print_unary(0xC1, SCAN_EX.map {|c| c ? c.ord : 0}+Array.new(0x80, 0))
+print_unary(0xC1, SCAN_EX.map {|c| c ? c.ord : 0} + SCAN_CTRL)
 # $SCAN2: alt/ext-ctrl-alt
-print_unary(0xC2, Array.new(0x80, 0)+ctrl_alt_page)
+print_unary(0xC2, Array.new(0x80, 0) + ctrl_alt_page)
 # $KS2MODE: kbd scan code->keyboard mode bit mask
 print_unary(0xC3, kmode_mask)
 
