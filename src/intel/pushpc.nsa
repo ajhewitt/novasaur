@@ -42,7 +42,7 @@ LD Y, $PCL
 FNFH AZ, XD           # A -> PCL,X
 LD Y, $TMPH
 FNFH DZ, NA           # A = upper temp
-LD Y, $PCL
+LD Y, $PCH
 #70
 FNH AZ, HLD           # A -> PCH
 LD HL, $FETCH2
@@ -82,7 +82,7 @@ LD Y, $PCL
 FNFH AZ, XD           # A -> PCL,X
 LD Y, $TMPH
 FNFH DZ, NA           # A = upper temp
-LD Y, $PCL
+LD Y, $PCH
 #70
 FNH AZ, HLD           # A -> PCH
 LD HL, $FETCH2
@@ -120,7 +120,7 @@ FNFH AZ, XD           # X,A -> PCL
 #59
 LD Y, $TMPH
 FNFH DZ, NA           # A = upper temp
-LD Y, $PCL
+LD Y, $PCH
 FNFH AZ, ND           # A -> PCH
 NOP
 #70

@@ -12,7 +12,7 @@ FNDL DZ, HL           # HL = multiplier to move flag to MSB
 #10/8
 LD Y, $FREG
 MULH DZ, NA           # A MSB = flag to test
-LDN PC, $SKIP_RET     # skip return if flag set
+LDP PC, $SKIP_RET     # skip return if flag not set
 LD HL, $IDEN$NULL
 LD Y, $SPL
 #20/18

@@ -14,7 +14,7 @@ LD Y, $FREG
 MULH DZ, NA           # A MSB = flag to test
 LD HL, $INC$FORK3
 LD Y, $PCL
-LDN PC, $SKIP_CALL    # skip call if flag set
+LDP PC, $SKIP_CALL    # skip call if flag not set
 #20/18
 FNFH DZ, XD           # X,PCL = PCL+1
 FNDL A, PC
@@ -107,7 +107,7 @@ FNFH DZ, ND           # PCH = PCH+1      *** inc PCH ***
 #31/4
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-FNH A, Y              # Y = PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 #40/11
 LD Y, $TMPL
@@ -154,7 +154,7 @@ FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$NULL
 #50/20
 LDZ Y, $PCH
-FNH A, Y              # Y = PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $TMPH
 FNH AZ, HLD           # A -> temp2
