@@ -58,7 +58,7 @@ LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
 #86
 
-ADDR 0x58             # PCL = 254, iden PCH, inc PCH, iden PCH
+ADDR 0x58             # PCL = 255, iden PCH, inc PCH, iden PCH
 LD HL, $IDEN$REGMAPL
 #21
 LDZ Y, $PCH

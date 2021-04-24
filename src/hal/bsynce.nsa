@@ -52,7 +52,7 @@ LD HL, $DEC$NULL
 LDZ Y, $CBLOCK
 #71
 FNH DZ, HLD               # context switch block-1
-LDN PC, $CTX_SWITCH       # jump if context switch?
+NOP #LDN PC, $CTX_SWITCH       # jump if context switch?
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # inst cache -> HL

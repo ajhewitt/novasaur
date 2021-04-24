@@ -55,7 +55,7 @@ FNH D, HLD
 LD HL, $CTXSW_INST
 #80/52
 LD Y, $VMS
-DISHL DZ, PCA
+DISHL DZ, PGA
 #86/56
 
 ADDR 0x48
@@ -98,7 +98,7 @@ MVHL A, NA                # NOP
 LD HL, $CTXSW_INST
 #80/51
 LD Y, $VMS
-DISHL DZ, PCA
+DISHL DZ, PGA
 #86/55
 
 ADDR 0x80
@@ -141,7 +141,7 @@ FNH DZ, HLD
 LD HL, $CTXSW_INST
 #80/52
 LD Y, $VMS
-DISHL DZ, PCA
+DISHL DZ, PGA
 #86/56
 
 ADDR 0xB8
@@ -184,7 +184,7 @@ LD Y, $INST
 FNH DZ, HLD               # restore instruction
 #80/53
 LD Y, $VMS
-DISHL DZ, PCA
+DISHL DZ, PGA
 #86/57
 
 $EXIT68
@@ -197,5 +197,5 @@ LD Y, $INST
 FNH DZ, HLD               # restore instruction
 #80/9
 LD Y, $VMS
-DISHL DZ, PCA
+DISHL DZ, PGA
 #86/13
