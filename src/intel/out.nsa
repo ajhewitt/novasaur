@@ -135,20 +135,20 @@ LD PG, $FETCH1_PG         # cycle available, goto fetch
 #43/21
 
 $EXIT12
-FNH DZ, HLD               # PCL = PCL+1
+FNFH DZ, ND               # PCL = PCL+1
 LD HL, $ZERO?$NULL
-FNH A, HLA
+FNH A, HLA                # PCL overflow?
+#19/26
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
-#21/29
 LDZ Y, $PCH
-FNH DZ, HLD
+FNH DZ, HLD               # PCH+1 if overflow
 LD HL, $0
 LD Y, $AREG
-#29/36
-MVHL AZ, ND               # 0->Acc
+#30/37
+MULH AZ, ND               # 0->Acc
 LD PC, $EXIT35
-#35/40
+#35/41
 
 $EXIT56
 NOP
@@ -159,17 +159,17 @@ MVHL A, NA                # NOP
 NOP
 LD HL, $0
 LD Y, $AREG
-#70/50
+#70/51
 MULH AZ, ND               # 0->Acc
 $EXIT73
 NOP
 LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
-#80/58
+#80/59
 LD HL, $FETCH
 DISHL DZ, PGA             # jump to next VMC
-#86/62
+#86/63
 
 ADDR 0xC0                 # else, iden PCH, iden PCH
 FNH A, HL                 # NOP

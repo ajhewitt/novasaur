@@ -81,7 +81,7 @@ LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
 #71
-FNH DZ, Y             # Y = PCH
+FNH A, Y              # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 FNH AZ, HLD           # A -> inst cache,HL

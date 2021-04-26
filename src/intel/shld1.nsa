@@ -18,7 +18,7 @@ FNFH DZ, XD           # X = low addr+1
 LDP HL, $INC$NULL     # X was negative, now positive
 LDN HL, $IDEN$NULL
 #81
-LD Y, $TMPH
+LDZ Y, $TMPH
 FNH DZ, HLD          # update temp hi
 LD HL, $IDEN$NULL
 LD Y, $LREG

@@ -157,12 +157,19 @@ srcs.each do |src|
 
   page = Integer(vars[page]) rescue abort("NO_PAGE? #{page}")
 
+  #z = true
   o = Array.new 256, 128
   src.each_with_index do |l, j|
     a = l.partition(/\$|#/)
     b = a.first.strip
     next unless c = is[b]
-
+    #if b.start_with?("FNH DZ")
+    #  unless z
+    #    puts "WARNING: #{page}"
+    #    exit
+    #  end
+    #end
+    #z = 0!=c.first.to_i&8
     i = addrs[j]
     c.each do |k|
       o[i] = k

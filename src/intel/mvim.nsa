@@ -48,7 +48,7 @@ FNFH M, NA            # A = [PC]
 LD Y, $LREG
 FNFL DZ, X            # X = L
 #51
-LD Y, $HREG
+LDZ Y, $HREG
 FNH DZ, Y             # Y = H
 FNFH A, NM            # A -> [HL]
 LD HL, $INC$NULL
@@ -78,7 +78,7 @@ FNFH M, NA            # A = [PC]
 LD Y, $LREG
 #50
 FNFL DZ, X            # X = L
-LD Y, $HREG
+LDZ Y, $HREG
 FNH DZ, Y             # Y = H
 FNFH A, NM            # A -> [HL]
 #60
@@ -108,7 +108,7 @@ FNFH M, NA            # A = [PC]
 LD Y, $LREG
 #50
 FNFL DZ, X            # X = L
-LD Y, $HREG
+LDZ Y, $HREG
 FNH DZ, Y             # Y = H
 FNFH A, NM            # A -> [HL]
 #60

@@ -108,7 +108,7 @@ $DELAY
 LD HL, $DEC$NULL
 FNH A, HLA                # A=A-1
 LDP PC, $DELAY            # delay until -1
-LD HL, $DEC$NULL
+LDZ HL, $DEC$NULL
 FNH DZ, HLD               # TMPH-1->TMPH
 LDP PC, $LOOPL            # loop until 0
 LD HL, $DEC$NULL

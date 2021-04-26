@@ -18,7 +18,7 @@ FNFH DZ, XD           # X = low addr+1
 LDP HL, $INC$NULL     # X was negative, now positive
 LDN HL, $IDEN$NULL
 #80
-LD Y, $TMPH
+LDZ Y, $TMPH
 FNH DZ, Y             # Y = updated hi addr
 LD HL, $IDEN$NULL
 FNFH M, NA            # A = [XY]
@@ -64,7 +64,7 @@ LD Y, $TMPL
 FNFH DZ, XD           # X = low addr+1
 LD HL, $IDEN$NULL
 #80
-LD Y, $TMPH
+LDZ Y, $TMPH
 FNH DZ, Y             # Y = updated hi addr
 FNFH M, NA            # A = [XY]
 LD Y, $LREG
@@ -76,7 +76,7 @@ FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$NULL
 #100
 LDZ Y, $PCH
-FNH A, Y              # Y = PCH
+FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
 FNH AZ, HLD           # A -> inst cache,HL

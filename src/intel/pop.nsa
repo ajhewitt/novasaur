@@ -5,19 +5,19 @@ INCLUDE ../inc/pages.nsa
 PAGE POP_PG
 
 # assume: Y = $VMS
-LD HL, $INC2$NULL
+LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
-LD HL, $IDEN$REGMAPH
+LD HL, $IDEN$REGMAPL
 LD Y, $SPL
 FNFH DZ, XA           # X = SPL
 #11
-LD Y, $SPH
+LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
 LD Y, $INST
 #20
-FNDL DZ, Y            # Y = zero page addr of high reg
-FNH AZ, HLD           # A -> high reg
+FNDL DZ, Y            # Y = zero page addr of low reg
+FNH AZ, HLD           # A -> low reg
 NOP
 NOP
 NOP
@@ -53,11 +53,11 @@ FNH DZ, HLD           # SPH = SPH+1      *** pre inc SPH ***
 LD HL, $IDEN$DEC
 FNFL A, Y             # Y = SPH-1
 FNFH M, NA            # A = [SP]
-LD HL, $IDEN$REGMAPL
+LD HL, $IDEN$REGMAPH
 #71
 LD Y, $INST
-FNDL DZ, Y            # Y = zero page addr of low reg
-FNH AZ, HLD           # A -> low reg
+FNDL DZ, Y            # Y = zero page addr of high reg
+FNH AZ, HLD           # A -> high reg
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
@@ -72,13 +72,13 @@ FNFH DZ, ND           # SPL = SPL+1 again
 #60
 LDZ Y, $SPH
 FNH DZ, HLD           # SPH = SPH+1      *** inc SPH ***
-LDZ HL, $IDEN$REGMAPL
+LDZ HL, $IDEN$REGMAPH
 FNH A, Y              # Y = SPH
 FNFH M, NA            # A = [SP]
 #71
 LD Y, $INST
-FNDL DZ, Y            # Y = zero page addr of low reg
-FNH AZ, HLD           # A -> low reg
+FNDL DZ, Y            # Y = zero page addr of low high
+FNH AZ, HLD           # A -> high reg
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
@@ -93,14 +93,14 @@ NOP
 NOP
 #59
 FNFH DZ, ND           # SPL = SPL+1 again
-LD HL, $IDEN$REGMAPL
+LD HL, $IDEN$REGMAPH
 LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
 #71
 LD Y, $INST
-FNDL DZ, Y            # Y = zero page addr of low reg
-FNH AZ, HLD           # A -> low reg
+FNDL DZ, Y            # Y = zero page addr of high reg
+FNH AZ, HLD           # A -> high reg
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit

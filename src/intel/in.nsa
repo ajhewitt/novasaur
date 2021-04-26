@@ -185,7 +185,7 @@ ANDHL M, NA               # A = [PC]&0x3F
 LD HL, $0x80
 ORHL A, YA                # Y = A|0x80
 #40/16
-LD HL, $IDEN$NULL
+LDZ HL, $IDEN$NULL
 FNH DZ, HLA               # A = Z[Y]
 LD HL, $IDEN$NULL
 LD Y, $AREG
@@ -197,20 +197,20 @@ LD PC, $EXIT54
 #54/28
 
 $EXIT12
-FNH DZ, HLD               # PCL = PCL+1
+FNFH DZ, ND               # PCL = PCL+1
 LD HL, $ZERO?$NULL
-FNH A, HLA
+FNH A, HLA                # PCL overflow?
+#19/33
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
-#21/36
 LDZ Y, $PCH
-FNH DZ, HLD
+FNH DZ, HLD               # PCH+1 if overflow
 LD HL, $0
 LD Y, $AREG
-#29/43
-MVHL AZ, ND               # 0->Acc
+#30/44
+MULH AZ, ND               # 0->Acc
 LD PC, $EXIT35
-#35/47
+#35/48
 
 $CONT47
 MVHL A, XA                # X=buff addr
@@ -218,9 +218,9 @@ LDZ HL, $INC$NULL
 FNH DZ, HLD               # read index+1
 LD HL, $IDEN$DEC
 FNFL A, Y                 # Y=read index-1
-#60/56
+#60/57
 FNFH D, NA                # A=char
 LD Y, $AREG
 FNH AZ, HLD               # char->Acc
 LD PC, $EXIT69
-#69/63
+#69/64

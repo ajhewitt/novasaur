@@ -5,13 +5,13 @@ INCLUDE ../inc/pages.nsa
 PAGE POPA_PG
 
 # assume: Y = $VMS
-LD HL, $INC2$NULL
+LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
 LD HL, $IDEN$NULL
 LD Y, $SPL
 FNFH DZ, XA           # X = SPL
 #11
-LD Y, $SPH
+LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
 LD HL, $PSW2F$NULL
@@ -62,7 +62,7 @@ LDZ Y, $SPH
 #41
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
-LD Y, $AREG
+LDZ Y, $AREG
 FNH DZ, HLD           # A -> acc
 #50
 NOP

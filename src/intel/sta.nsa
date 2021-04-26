@@ -38,7 +38,7 @@ LD HL, $INC$NULL
 #40
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-LD Y, $PCH
+LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$IDEN
 #51
