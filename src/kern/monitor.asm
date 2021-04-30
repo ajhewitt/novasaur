@@ -26,34 +26,35 @@ INC     EQU     0DBH    ;IN OP CODE
 OUTC    EQU     0D3H    ;OUT OP CODE
 RETC    EQU     0C9H    ;RET OP CODE
 ;
+; SEND ASCII MESSAGE UNTIL BINARY ZERO
+; IS FOUND. POINTER IS D,E
+;
+COLD:   LXI     D,SIGNON ;MESSAGE
+SENDM:  LDAX    D       ;GET BYTE
+        ORA     A       ;ZERO?
+        JZ      START   ;YES, START
+        OUT     CDATA   ;SEND IT
+        INX     D       ;POINTER
+        JMP     SENDM   ;NEXT
+;
 ; CONTINUATION OF COLD START
 ;
-COLD:   LXI     SP,STACK
-        LXI     D,SIGNON ;MESSAGE
-        CALL    SENDM   ;SEND IT
+START:  LXI     SP,STACK
 ;
 ; WARM-START ENTRY
 ;
 WARM:   LXI     H,WARM  ;RETURN HERE
         PUSH    H
-;
-; TEST
-;
-TEST:   CALL    INPUTT
-;        CALL    OUTT
-;        JMP     TEST
+        CALL    INPLN   ;CONSOLE LINE
+        CALL    GETCH   ;FIRST CHAR
 ;
 ; MAIN COMMAND PROCESSOR
 ;
         SUI     'A'     ;CONVERT OFFSET
         JC      ERROR   ; < A
         CPI     'Z'-'A'+1
-        JC      UPPER   ; <= Z
-        SUI     'a'-'A'
-        JC      ERROR   ; < a
-        CPI     'z'-'a'+1
-        JNC     ERROR   ; > z
-UPPER:  ADD     A       ;DOUBLE
+        JNC     ERROR   ; > Z
+        ADD     A       ;DOUBLE
         LXI     H,TABLE ;START
         MVI     D,0
         MOV     E,A     ;OFFSET
@@ -64,47 +65,65 @@ UPPER:  ADD     A       ;DOUBLE
         XCHG            ;INTO H,L
         PCHL            ;GO THERE
 ;
-; PRINT ? ON IMPROPER INPUT
-;
-ERROR:  MVI     A,'?'
-        OUT     CDATA
-        RET             ;TRY AGAIN
-;
 ; COMMAND TABLE
 ;
-TABLE:  DW      ASCII   ;A
-        DW      STUFF   ;B
-        DW      STUFF   ;C
-        DW      DUMP    ;D
-        DW      STUFF   ;E
-        DW      STUFF   ;F
-        DW      STUFF   ;G
-        DW      STUFF   ;H
-        DW      STUFF   ;I
-        DW      STUFF   ;J
-        DW      STUFF   ;K
-        DW      STUFF   ;L
-        DW      STUFF   ;M
-        DW      STUFF   ;N
-        DW      STUFF   ;O
-        DW      STUFF   ;P
-        DW      STUFF   ;Q
-        DW      STUFF   ;R
-        DW      STUFF   ;S
-        DW      STUFF   ;T
-        DW      STUFF   ;U
-        DW      STUFF   ;V
-        DW      STUFF   ;W
-        DW      STUFF   ;X
-        DW      STUFF   ;Y
-        DW      STUFF   ;Z
+TABLE:  DW      ASCII   ;A, ASCII
+        DW      ERROR   ;B
+        DW      CALLS   ;C, CALL SUBR
+        DW      DUMP    ;D, DUMP
+        DW      ERROR   ;E
+        DW      FILL    ;F, FILL
+        DW      GO      ;G, GO
+        DW      HMATH   ;H, HEX MATH
+        DW      IPORT   ;I, PORT INPUT
+        DW      JUST    ;J, MEMORY TEST
+        DW      ERROR   ;K
+        DW      LOAD    ;L, LOAD
+        DW      MOVE    ;M, MOVE
+        DW      ERROR   ;N
+        DW      OPORT   ;O, PORT OUTPUT
+        DW      ERROR   ;P
+        DW      ERROR   ;Q
+        DW      REPL    ;R, REPLACE
+        DW      SEARCH  ;S, SEARCH
+        DW      ERROR   ;T
+        DW      ERROR   ;U
+        DW      VERM    ;V, VERIFY MEM
+        DW      ERROR   ;W
+        DW      REGS    ;X, STACK POINTER
+        DW      ERROR   ;Y
+        DW      ZERO    ;Z, ZERO
 ;
-; TEST
+; CONSOLE INPUT ROUTINE
 ;
-STUFF:  RAR
-        ADI     41H
-        OUT     CDATA
-        JMP     TEST
+INPUTT: MVI     A,10H
+        OUT     CDATA   ;FLAST CURSOR
+        IN      CDATA   ;GET BYTE
+        CPI     0
+        JZ      INPUTT  ;BLOCK ON IO
+;        CPI     CTRX    ;ABORT?
+;        JZ      HOME    ;YES
+        RET
+;
+; CONSOLE OUTPUT ROUTINE
+;
+OUTT:   MOV     B,A     ;SAVE BYTE
+        MVI     A,00H
+        OUT     CDATA   ;BLANK CURSOR
+        MOV     A,B     ;RESTORE BYTE
+        OUT     CDATA   ;WRITE BYTE
+        RET
+;
+; SIGNON MESSAGE
+;
+SIGNON: DB      CR,LF
+        DB      TAB,"     _",CR,LF
+        DB      TAB,"    /",0A7H,")",CR,LF
+        DB      "   .^/\/\^.//",CR,LF
+        DB      " _/NOVASAUR/",TAB
+        DB      "8080 SYSMON v0.1",CR,LF
+        DB      "<__^|_|-|_|",CR,LF
+        DB      LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
 ; INTO THE BUFFER. CARRIAGE RETURN ENDS
@@ -112,10 +131,8 @@ STUFF:  RAR
 ; ENTRY. CONTROL-X RESTARTS LINE.
 ; OTHER CONTROL CHARACTERS ARE IGNORED.
 ;
-INPLN:  MVI     A,'-'   ;PROMPT
-        OUT     CDATA
-        MVI     A,'>'   ;PROMPT
-        OUT     CDATA
+INPLN:  MVI     A,'>'   ;PROMPT
+        CALL    OUTT
 INPL2:  LXI     H,IBUFF ;BUFFER ADDR
         SHLD    IBUFP   ;SAVE POINTER
         MVI     C,0     ;COUNT
@@ -152,10 +169,9 @@ INPLC:  CPI     CTRH    ;^H?
 ; CARRIAGE-RETURN, LINE-FEED ROUTINE
 ;
 CRLF:   MVI     A,CR
-        OUT     CDATA   ;SEND CR
+        CALL    OUTT    ;SEND CR
         MVI     A,LF
-        OUT     CDATA   ;SEND LF
-        RET
+        JMP     OUTT    ;SEND LF
 ;
 ; DELETE PRIOR CHARACTER IF ANY
 ;
@@ -181,16 +197,6 @@ GETCH:  PUSH    H       ;SAVE REGS
         SHLD    IBUFP   ;AND SAVE
 GETC4:  POP     H       ;RESTORE REGS
         RET
-;
-; SEND ASCII MESSAGE UNTIL BINARY ZERO
-; IS FOUND. POINTER IS D,E
-;
-SENDM:  LDAX    D       ;GET BYTE
-        ORA     A       ;ZERO?
-        RZ              ;YES, DONE
-        OUT     CDATA   ;SEND IT
-        INX     D       ;POINTER
-        JMP     SENDM   ;NEXT
 ;
 ; DUMP MEMORY IN HEXADECIMAL AND ASCII
 ;
@@ -289,6 +295,12 @@ NIB:    SUI     '0'     ;ASCII BIAS
         SUI     'A'-'9'-1
         CPI     10      ;SKIP : TO
         RET             ;LETTER A-F
+;
+; PRINT ? ON IMPROPER INPUT
+;
+ERROR:  MVI     A,'?'
+        CALL    OUTT
+        JMP     START   ;TRY AGAIN
 ;
 ; START NEW LINE, GIVE ADDRESS
 ;
@@ -628,8 +640,7 @@ JUST3:  MOV     A,L     ;PASS
 ; AFTER EACH PASS,
 ; SEE IF ABORT WANTED
 ;
-        ;CALL    INSTAT  ;INPUT?
-        ;CNZ     INPUTT  ;YES, GET IT
+;        IN      CDATA   ;LOOK FOR ABORT
         POP     H       ;SAVE START ADDR
         PUSH    H       ;SAVE AGAIN
         JMP     JUST2   ;NEXT PASS
@@ -693,31 +704,4 @@ VERM3:  CALL    TSTOP   ;DONE?
         INX     B       ;2ND POINTER
         JMP     VERM2
 ;
-; CONSOLE INPUT ROUTINE
-;
-INPUTT: MVI     A,10H
-        OUT     CDATA   ;FLAST CURSOR
-        IN      CDATA   ;GET BYTE
-        CPI     00H
-        JZ      INPUTT  ;BLOCK ON IO
-        RET
-;
-; CONSOLE OUTPUT ROUTINE
-;
-OUTT:   MOV     B,A     ;SAVE BYTE
-        MVI     A,00H
-        OUT     CDATA   ;BLANK CURSOR
-        MOV     A,B     ;RESTORE BYTE
-        OUT     CDATA   ;WRITE BYTE
-        RET
-;
-; SIGNON MESSAGE
-;
-SIGNON: DB      CR,LF
-        DB      TAB,"     _",CR,LF
-        DB      TAB,"    /",0A7H,")",CR,LF
-        DB      "   .^/\/\^.//",CR,LF
-        DB      " _/NOVASAUR/",TAB
-        DB      "8080 SYSMON v0.1",CR,LF
-        DB      "<__^|_|-|_|",CR,LF
-        DB      LF,0
+        END

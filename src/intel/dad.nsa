@@ -16,45 +16,77 @@ LD Y, $LREG
 ADDHL DZ, ND          # L = L + lower register
 #19
 AFHL A, NA            # A = carry
-LDP HL, $0
-LDN HL, $1
-LD Y, $HREG
-ADDHL DZ, NA          # A = H+1 if carry
-#32
-LD Y, $TEMP
-AFHL AZ, ND           # temp = carry from H
 LD HL, $IDEN$REGMAPH
-#40
 LD Y, $INST
 FNDL DZ, Y            # Y = zpage addr of upper register
+#30
 FNH DZ, HL            # HL = upper register
 LD Y, $HREG
-#49
+NOP
+NOP
+NOP
+NOP
+NOP
+LDP PC, $NO_CARRY
+#40
 ADDHL DZ, ND          # H = H + upper register
-AFHL A, NA            # A = carry
-LD HL, $IDEN$NULL
-FNH A, HL             # HL = carry
-#61
-NOP
 LD Y, $TEMP
-ORHL DZ, NA           # include previous carry
-LD Y, $FREG
-#70
-LDP PC, $RESET_CARRY  # branch on carry bit
-
-#SET_CARRY
+AFHL AZ, ND           # temp = carry
+#50
+LD HL, $INC$NULL
+LDZ Y, $HREG
+FNH DZ, HLD           # H = H + carry
+LD HL, $ZERO?$NULL
+FNH A, HLA
+#60
+LDP HL, $0x80
+LDN HL, $0
+LD Y, $TEMP
+ORH DZ, NA
+LDN PC, $SET_CARRY70
 NOP
-LD HL, $0x80
-ORHL DZ, ND
+#70
+$RESET_CARRY70
+LD Y, $FREG
+LD HL, $0x7F
+ANDHL DZ, ND
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
 #86
 
-$RESET_CARRY
-LD HL, $0x7F
-ANDHL DZ, ND
+$NO_CARRY             #41
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#50
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#60
+ADDHL DZ, ND          # H = H + upper register
+AFHL A, NA            # A = carry
+LDP PC, $RESET_CARRY70
+NOP
+#70
+$SET_CARRY70
+LD Y, $FREG
+LD HL, $0x80
+ORHL DZ, ND
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit

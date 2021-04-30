@@ -152,8 +152,8 @@ LD Y, $PCL
 #31/14
 FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$IDEN
-LD Y, $PCH
-FNH A, Y              # Y = PCH
+LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
 #40/21
 FNFH M, NA            # A = [PC]
 LD Y, $TEMP

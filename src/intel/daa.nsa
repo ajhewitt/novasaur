@@ -1,70 +1,50 @@
-# Decimal adjust accumulator (with fetch)
+# Decimal adjust accumulator
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE DAA_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC2$DACARRY
-FNH DZ, HLD           # inc state
-LDZ Y, $AREG
-FNDL DZ, HL           # determine carry flags if nibbles > 9
+LD HL, $INC2$DACARRY
+FNFH DZ, ND           # inc state
+LD Y, $AREG
+FNDL DZ, HL           # HL = carry flags if nibbles > 9
+#10
 LD Y, $FREG
-#11
-ORHL DZ, ND           # overlay carry flags
-LDP HL, $0
-LDN HL, $0x60
-LD Y, $TEMP
-#20
-MVHL AZ, ND           # move 0x60 to temp if carry
+ORHL DZ, NA           # overlay carry flags
 LD HL, $SWAP$NULL
-LDZ Y, $FREG
-FNH DZ, HLA           # swap aux-carry to test
-#30
+FNH A, HLA            # swap to check half carry
+#20
 LDP HL, $0
 LDN HL, $6
-LD Y, $TEMP
-ADDL DZ, HL           # add 6 to temp if aux-carry
 LD Y, $AREG
-#40
-ADDHL DZ, ND          # add decimal adjust to Acc
-AFHL A, NA            # determine flags
-LD HL, $IDEN$NULL
+ADDHL DZ, ND          # add 6 if half carry
+#29
+AFHL A, NA            # set flags after adjust
+LD HL, $NULL$DACARRY
+FNDL DZ, HL           # HL = carry flags if nibbles > 9
+ORHL A, NA            # overlay carry flags
+#42
+LD HL, $0x88
+LD Y, $TEMP
+ANDHL AZ, ND          # temp = carry flags
 #50
-LD Y, $FREG
-FNH AZ, HLD           # update flags
-NOP
-LDZ HL, $INC$FORK1
-LD Y, $PCL
+LDP HL, $0
+LDN HL, $0x60
+LD Y, $AREG
+ADDHL DZ, ND          # add 0x60 if carry
 #59
-FNFH DZ, XD           # X,PCL = PCL+1
-FNDL A, PC
-#65
-
-ADDR 0x80
-LDZ Y, $PCH
-FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+AFHL A, NA            # update flags
 LD HL, $IDEN$NULL
-#71
-FNH A, Y              # Y = PCH
-FNFH M, NA            # A = [PC]
-LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
-#80
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
-#86
-
-ADDR 0xC0
+LDZ Y, $TEMP
+FNH DZ, HL
+#69
+LD Y, $FREG
+ORHL AZ, ND           # combine flags
 NOP
 NOP
-LD HL, $IDEN$NULL
-LDZ Y, $PCH
-#71
-FNH DZ, Y             # Y = PCH
-FNFH M, NA            # A = [PC]
-LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
+NOP
+LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
