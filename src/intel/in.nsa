@@ -64,7 +64,7 @@ FNFH IZ, O7D              # I7->acc
 LD PC, $EXIT35
 #35
 
-ADDR 0x40
+ADDR 0x40                 # Serial Rx
 NOP
 NOP
 $RX30
@@ -73,8 +73,8 @@ LDZ Y, $RXWRIDX
 FNH DZ, HL                # HL=-rx write index
 LD Y, $RXRDIDX
 ADDHL DZ, NA              # A=rx read-rx write index
-LDP PC, $RXEX44           # exit if rx read >= rx write
 LD HL, $RXBUFF
+LDP PC, $EXIT46           # exit if rx read >= rx write
 LD PC, $CONT47
 #47/17
 
@@ -108,13 +108,6 @@ ADDR 0x74                 # Kbd scan
 LD PC, $KS30
 #30
 
-$RXEX44                   # buffer empty, turn on thread to refill
-LD HL, $0x20
-LD Y, $RMODE
-ORHL DZ, ND               # Enable Rx thread
-LD PC, $EXIT54
-#54/14
-
 ADDR 0x80                 # PCL = 255, inc PCH
 LDZ Y, $PCH
 FNH DZ, HLD               # PCH = PCH+1      *** inc PCH ***
@@ -138,37 +131,37 @@ FNFH D, NA                # A = [Y,X]
 LD Y, $AREG
 FNH AZ, HLD               # A -> Acc
 #51/26
-NOP
-LD PC, $EXIT54
-#54/29
+LD PC, $EXIT53
+#53/28
 
 $EXIT35
 LD HL, $INC$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD
 LD PG, $FETCH1_PG         # cycle available, goto fetch
-#43/36
+#43/35
 
 $EXIT46
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-$EXIT54
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
 LD HL, $0
 LD Y, $AREG
+#50/39
 MULH AZ, ND               # 0->Acc
-$EXIT69
-NOP
-#70/51
+$EXIT53
 MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+$EXIT69
+#69/49
+MVHL A, NA                # NOP
+NOP
 LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
-#80/58
+#80/57
 LD HL, $FETCH
 DISHL DZ, PGA             # jump to next VMC
-#86/62
+#86/61
 
 ADDR 0xC0                 # else, iden PCH, iden PCH
 FNH A, HLA                # NOP
@@ -192,25 +185,24 @@ LD Y, $AREG
 FNH AZ, HLD               # A -> Acc
 #50/24
 NOP
-NOP
-LD PC, $EXIT54
-#54/28
+LD PC, $EXIT53
+#54/27
 
 $EXIT12
 FNFH DZ, ND               # PCL = PCL+1
 LD HL, $ZERO?$NULL
 FNH A, HLA                # PCL overflow?
-#19/33
+#19/32
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, HLD               # PCH+1 if overflow
 LD HL, $0
 LD Y, $AREG
-#30/44
+#30/43
 MULH AZ, ND               # 0->Acc
 LD PC, $EXIT35
-#35/48
+#35/47
 
 $CONT47
 MVHL A, XA                # X=buff addr
@@ -218,9 +210,9 @@ LDZ HL, $INC$NULL
 FNH DZ, HLD               # read index+1
 LD HL, $IDEN$DEC
 FNFL A, Y                 # Y=read index-1
-#60/57
+#60/56
 FNFH D, NA                # A=char
 LD Y, $AREG
 FNH AZ, HLD               # char->Acc
 LD PC, $EXIT69
-#69/64
+#69/63

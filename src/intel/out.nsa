@@ -89,6 +89,7 @@ LD HL, $0x20
 LD Y, $TMODE
 #69/33
 ORHL DZ, ND               # enable -> tx mode
+$EXIT73
 NOP
 LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
@@ -108,11 +109,12 @@ LD HL, $3
 LD PC, $AUDIO32
 #32
 
-$EXIT46
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-LD PC, $EXIT56
-#56
+$EXIT35
+LD HL, $INC$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD
+LD PG, $FETCH1_PG         # cycle available, goto fetch
+#43
 
 ADDR 0x80                 # PCL = 255, inc PCH
 LDZ Y, $PCH
@@ -123,53 +125,53 @@ FNH A, Y                  # Y = PCH
 FNDL M, PC                # fork on port [PC]
 #28/8
 
-ADDR 0x88                 # Rx disable
-LD HL, $0x10
+ADDR 0x88                 # Rx enable/disable
+LD HL, $REVERSE$NULL
+#30/10
+LDZ Y, $AREG
+FNH DZ, HLA               # test LSB of Acc
+LDP HL, $0x01             # disable if low
+LDN HL, $0x20             # enable if high
 LD Y, $RMODE
-ORH DZ, ND                # Set Rx Mode LSB
-$EXIT35
-LD HL, $INC$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD
-LD PG, $FETCH1_PG         # cycle available, goto fetch
-#43/21
+#39/19
+ORHL DZ, ND               # set enable/disable bit
+NOP
+LD PC, $EXIT46
+#46/24
 
 $EXIT12
 FNFH DZ, ND               # PCL = PCL+1
 LD HL, $ZERO?$NULL
 FNH A, HLA                # PCL overflow?
-#19/26
+#19/29
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, HLD               # PCH+1 if overflow
 LD HL, $0
 LD Y, $AREG
-#30/37
+#30/40
 MULH AZ, ND               # 0->Acc
 LD PC, $EXIT35
-#35/41
+#35/44
 
-$EXIT56
-NOP
-$EXIT57
-MVHL A, NA                # NOP
-$EXIT61
-MVHL A, NA                # NOP
-NOP
+$EXIT46
 LD HL, $0
 LD Y, $AREG
-#70/51
+#50/48
 MULH AZ, ND               # 0->Acc
-$EXIT73
+MVHL A, NA                # NOP
+$EXIT57
 NOP
-LD HL, $INC2$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD               # VMS+2
-#80/59
-LD HL, $FETCH
-DISHL DZ, PGA             # jump to next VMC
-#86/63
+$EXIT58
+NOP
+#59/54
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+#71/60
+LD PC, $EXIT73
+#73/62
 
 ADDR 0xC0                 # else, iden PCH, iden PCH
 FNH A, HL                 # NOP
@@ -209,8 +211,8 @@ LDN HL, $0xFC             # -4
 LDZ Y, $AREG
 #50/46
 ADDHL DZ, NA              # A = Acc-2|3
-LDP PC, $EXIT56           # exit is not enough cycles
 LDZ HL, $IDEN$NULL
+LDP PC, $EXIT58           # exit if not enough cycles
 FNH DZ, HLA               # A = Acc
 LD Y, $AMODE
 #61/55
