@@ -19,7 +19,7 @@ ADDHL DZ, ND          # Acc = Acc + HL
 AFHL A, NA            # A = flags
 LD HL, $0x88
 LD Y, $FREG
-ANDHL AZ, ND          # save carry flags in temp
+ANDHL AZ, ND          # save carry flags
 #31
 NOP
 NOP
