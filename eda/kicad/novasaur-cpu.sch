@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2021-03-28"
+Date "2021-05-02"
 Rev "1.9"
 Comp ""
 Comment1 "(c) A J Hewitt 2021"
@@ -2429,7 +2429,7 @@ AR Path="/5DAA5CD8/5D99DA9F/5EE6CB33" Ref="R?"  Part="1"
 AR Path="/5DA1E9BA/5EE6CB33" Ref="R1"  Part="1" 
 AR Path="/5EE6CB33" Ref="R?"  Part="1" 
 F 0 "R1" H 2100 5850 50  0000 L CNN
-F 1 "330" H 2100 5750 50  0000 L CNN
+F 1 "300" H 2100 5750 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2340 5790 50  0001 C CNN
 F 3 "~" H 2300 5800 50  0001 C CNN
 	1    2300 5800
