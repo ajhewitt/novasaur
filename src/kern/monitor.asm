@@ -45,6 +45,7 @@ START:  LXI     SP,STACK
 ;
 WARM:   LXI     H,WARM  ;RETURN HERE
         PUSH    H
+        CALL    CRLF
         CALL    INPLN   ;CONSOLE LINE
         CALL    GETCH   ;FIRST CHAR
 ;
@@ -101,8 +102,8 @@ INPUTT: MVI     A,10H
         IN      CDATA   ;GET BYTE
         CPI     0
         JZ      INPUTT  ;BLOCK ON IO
-;        CPI     CTRX    ;ABORT?
-;        JZ      HOME    ;YES
+        CPI     CTRX    ;ABORT?
+        JZ      START   ;YES
         RET
 ;
 ; CONSOLE OUTPUT ROUTINE
@@ -116,14 +117,12 @@ OUTT:   MOV     B,A     ;SAVE BYTE
 ;
 ; SIGNON MESSAGE
 ;
-SIGNON: DB      CR,LF
-        DB      TAB,"     _",CR,LF
+SIGNON: DB      CR,LF,TAB,"     _",CR,LF
         DB      TAB,"    /",0A7H,")",CR,LF
         DB      "   .^/\/\^.//",CR,LF
         DB      " _/NOVASAUR/",TAB
         DB      "8080 SYSMON v0.1",CR,LF
-        DB      "<__^|_|-|_|",CR,LF
-        DB      LF,0
+        DB      "<__^|_|-|_|",LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
 ; INTO THE BUFFER. CARRIAGE RETURN ENDS
@@ -169,9 +168,10 @@ INPLC:  CPI     CTRH    ;^H?
 ; CARRIAGE-RETURN, LINE-FEED ROUTINE
 ;
 CRLF:   MVI     A,CR
-        CALL    OUTT    ;SEND CR
+        OUT     CDATA    ;SEND CR
         MVI     A,LF
-        JMP     OUTT    ;SEND LF
+        OUT     CDATA    ;SEND LF
+        RET
 ;
 ; DELETE PRIOR CHARACTER IF ANY
 ;
@@ -298,8 +298,14 @@ NIB:    SUI     '0'     ;ASCII BIAS
 ;
 ; PRINT ? ON IMPROPER INPUT
 ;
-ERROR:  MVI     A,'?'
-        CALL    OUTT
+ERROR:  MVI     A,'E'
+        OUT     CDATA
+        MVI     A,'R'
+        OUT     CDATA
+        MVI     A,'R'
+        OUT     CDATA
+        MVI     A,'?'
+        OUT     CDATA
         JMP     START   ;TRY AGAIN
 ;
 ; START NEW LINE, GIVE ADDRESS
@@ -579,7 +585,7 @@ BIT2:   MOV     A,L
         MOV     L,A
         MVI     A,'0'/2 ;HALF OF 0
         ADC     A       ;DOUBLE AND CARRY
-        CALL    OUTT    ;PRINT BIT
+        OUT     CDATA   ;PRINT BIT
         DCR     B
         JNZ     BIT2    ;8 TIMES
         RET

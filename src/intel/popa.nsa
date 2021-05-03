@@ -17,55 +17,81 @@ FNFH M, NA            # A = [SP]
 LD HL, $PSW2F$NULL
 #20
 LD Y, $FREG
-FNH AZ, HLD           # A -> flags
+FNDH AZ, ND           # PSW -> flags
 LD HL, $INC$FORK2
 LD Y, $SPL
+#29
 FNFH DZ, XD           # X,SPL = SPL+1
-#31
 FNDL A, PC
-#34
+#35
 
 ADDR 0x40             # SPL = 255, iden SPH, inc SPH
 FNFH DZ, ND           # SPL = SPL+1 again
 LDZ Y, $SPH
+#40
 FNH DZ, HLD           # SPH = SPH+1      *** pre inc SPH ***
-#41
 LD HL, $IDEN$DEC
 FNFL A, Y             # Y = SPH-1
 FNFH M, NA            # A = [SP]
+#50
 LD Y, $AREG
-#51
 FNH AZ, HLD           # A -> acc
 NOP
-LD PG, $PREFETCH_PG
-#55
+NOP
+NOP
+NOP
+NOP
+NOP
+#60
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#70
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#86
 
 ADDR 0x80             # SPL = 0, inc SPH, iden SPH
 FNFH DZ, ND           # SPL = SPL+1 again
 LDZ Y, $SPH
+#40
 FNH DZ, HLD           # SPH = SPH+1      *** inc SPH ***
-#41
 LDZ HL, $IDEN$NULL
 FNH A, Y              # Y = SPH
 FNFH M, NA            # A = [SP]
 LD Y, $AREG
-#50
+#51
 FNH AZ, HLD           # A -> acc
-NOP
 LD PG, $PREFETCH_PG
 #55
 
 ADDR 0xC0             # else, iden SPH, iden SPH, iden SPH
 FNFH DZ, ND           # SPL = SPL+1 again
 LD HL, $IDEN$NULL
+#40
 LDZ Y, $SPH
-#41
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
 LDZ Y, $AREG
 FNH DZ, HLD           # A -> acc
-#50
-NOP
+#51
 NOP
 NOP
 LD PG, $PREFETCH_PG
