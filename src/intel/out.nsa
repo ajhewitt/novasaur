@@ -211,8 +211,8 @@ LDN HL, $0xFC             # -4
 LDZ Y, $AREG
 #50/46
 ADDHL DZ, NA              # A = Acc-2|3
-LDZ HL, $IDEN$NULL
-LDP PC, $EXIT58           # exit if not enough cycles
+LD HL, $IDEN$NULL
+LDPZ PC, $EXIT58          # exit if not enough cycles
 FNH DZ, HLA               # A = Acc
 LD Y, $AMODE
 #61/55

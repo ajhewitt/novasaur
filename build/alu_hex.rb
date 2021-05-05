@@ -43,19 +43,20 @@ def print_af(offset, opts = {})
     16.times.map do |b|
       d = 16.times.map do |c|
         if opts[:high] # a=HHHH, b=XXXX, c=HZPL
+          carry = (b-(c>>3)) < a
           r = c & 9                                   # preserve half carry/borrow
-          r |= 0x80 if (b-(c>>3)) < a                 # C - Carry (from bit 7)
+          r |= 0x80 if carry                          # C - Carry (from bit 7)
           r |= b >> 3                                 # S - Sign of result
           r |= 0x20 if c&4 != 0 && b == 0             # Z - Zero (high if result is 0)
           r |= (PARITY[b] ^ ((c>>1)%2) ^ 1) << 4      # P - Parity (high if result even)
           r |= 4 if ((b&7) < (a&7)) ^ (b < a)         # V - Overflow (carry from bit 6 xor carry)
-          r |= 2 unless (b+(c&1)) < a || a == 0       # B - Borrow (from bit 7 if subtraction)
+          r |= 2 unless carry || ((c&1)==1 && a==0)   # B - Borrow (from bit 7 if subtraction)
         else # a=LLLL, b=XXXX, c=YYYY
           r = b << 4                                  # preserve high nibble
           r |= 8 if c < a # A+L < L?                  # H - Half carry (carry from bit 3)
           r |= 4 if c == 0                            # (half zero - high if zero)
           r |= PARITY[c] << 1                         # (half parity - high if even)
-          r |= 1 unless c < a || a == 0               # L - Low borrow (from bit 3 if subtraction)
+          r |= 1 if a == 0                            # (low zero - high if L zero)
         end
         r
       end
@@ -526,14 +527,12 @@ def rxstate_mulmode
   end
 end
 
-# Swap carry with borrow flags (CSZPHVBL->BSZPLVCH)
+# Swap carry with borrow flags (CSZPHVBL->BSZPHVCL)
 def swap_carry
   256.times.map do |i|
-    r = i & 0x74
-    r |= (i&2)<<6
-    r |= (i&1)<<3
+    r = i & 0x7D
     r |= (i&0x80)>>6
-    r |= (i&8)>>3
+    r |= (i&2)<<6
     r
   end
 end
@@ -721,7 +720,7 @@ print_unary(0xD5, 256.times.map { |i|
 print_unary(0xD6, flags_psw)
 # $PSW2F: PSW->flags
 print_unary(0xD7, psw_flags)
-# $SWCARRY: swap carry with borrow flags (CNZPHOBL->BNZPLOCH)
+# $SWCARRY: swap carry with borrow flag (CNZPHOBL->BNZPHOCL)
 print_unary(0xD8, swap_carry)
 # $DACARRY: set carry if nibbles > 9
 print_unary(0xD9, da_carry)

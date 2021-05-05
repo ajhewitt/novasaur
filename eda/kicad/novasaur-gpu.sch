@@ -1347,46 +1347,25 @@ F 3 "~" H 4850 2250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1350 2250 1700 2250
+	2800 5350 1400 5350
 Wire Wire Line
-	2800 5350 1350 5350
-Wire Wire Line
-	1350 2250 1350 5350
-Wire Wire Line
-	1700 4250 1200 4250
-Wire Wire Line
-	1200 4250 1200 2450
-Wire Wire Line
-	1200 2450 1700 2450
-Wire Wire Line
-	1200 4250 1200 6450
-Wire Wire Line
-	1200 6450 1700 6450
-Connection ~ 1200 4250
-Wire Wire Line
-	1700 6550 1350 6550
-Wire Wire Line
-	1350 6550 1350 5350
-Connection ~ 1350 5350
-Wire Wire Line
-	1100 2450 1200 2450
-Text GLabel 1100 2450 0    50   Input ~ 0
+	1700 6550 1400 6550
+Text GLabel 1700 2450 0    50   Input ~ 0
 scp
 $Comp
 L Connector:TestPoint_Alt TP?
 U 1 1 5E144DCF
-P 1200 2450
+P 1700 2450
 AR Path="/5E144DCF" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BA/5E144DCF" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5E144DCF" Ref="TP22"  Part="1" 
-F 0 "TP22" H 1100 2650 50  0000 L CNN
-F 1 "SCP" H 950 2600 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1400 2450 50  0001 C CNN
-F 3 "~" H 1400 2450 50  0001 C CNN
-	1    1200 2450
+F 0 "TP22" H 1450 2550 50  0000 L CNN
+F 1 "SCP" H 1450 2600 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 1900 2450 50  0001 C CNN
+F 3 "~" H 1900 2450 50  0001 C CNN
+	1    1700 2450
 	1    0    0    -1  
 $EndComp
-Connection ~ 1200 2450
 Text GLabel 1700 4050 0    50   Input ~ 0
 0
 Text GLabel 1700 3950 0    50   Input ~ 0
@@ -1495,17 +1474,17 @@ Wire Wire Line
 $Comp
 L Connector:TestPoint_Alt TP?
 U 1 1 5FE5FA60
-P 3050 3350
+P 5000 3350
 AR Path="/5FE5FA60" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BA/5FE5FA60" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5FE5FA60" Ref="TP23"  Part="1" 
 AR Path="/5DA1E9C0/5FE5FA60" Ref="TP?"  Part="1" 
-F 0 "TP23" H 2950 3550 50  0000 L CNN
-F 1 "VENABLE" H 2800 3500 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3250 3350 50  0001 C CNN
-F 3 "~" H 3250 3350 50  0001 C CNN
-	1    3050 3350
-	-1   0    0    1   
+F 0 "TP23" H 4900 3550 50  0000 L CNN
+F 1 "VENABLE" H 4750 3500 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5200 3350 50  0001 C CNN
+F 3 "~" H 5200 3350 50  0001 C CNN
+	1    5000 3350
+	1    0    0    -1  
 $EndComp
 Text Label 5000 2250 0    50   ~ 0
 PA15
@@ -1631,15 +1610,9 @@ Wire Wire Line
 Wire Wire Line
 	3050 3750 3500 3750
 Wire Wire Line
-	3050 3350 4200 3350
-Wire Wire Line
 	4300 3550 4200 3550
 Wire Wire Line
 	4200 3550 4200 3350
-Connection ~ 4200 3350
-Wire Wire Line
-	4200 3350 5000 3350
-Connection ~ 3050 3350
 Wire Wire Line
 	5000 3400 5000 3350
 Wire Wire Line
@@ -1676,6 +1649,25 @@ F 3 "~" H 4300 3650 50  0001 C CNN
 $EndComp
 Connection ~ 4100 3650
 Connection ~ 6500 3600
+Text Label 4450 3350 0    50   ~ 0
+venable
+Text GLabel 1700 6450 0    50   Input ~ 0
+vcp
+Text GLabel 1700 4250 0    50   Input ~ 0
+vcp
+Wire Wire Line
+	1400 5350 1400 2250
+Connection ~ 1400 5350
+Wire Wire Line
+	1400 2250 1700 2250
+Wire Wire Line
+	1400 6550 1400 5350
+Wire Wire Line
+	3050 3350 4200 3350
+Connection ~ 4200 3350
+Connection ~ 5000 3350
+Wire Wire Line
+	4200 3350 5000 3350
 Wire Bus Line
 	3200 2150 3200 2450
 Wire Bus Line

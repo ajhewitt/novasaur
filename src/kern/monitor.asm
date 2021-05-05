@@ -1,10 +1,11 @@
-; TITLE '8080 system monitor, ver 0.1'
+; TITLE '8080 system monitor, ver 0.2'
 ;
-; April 20, 2021
+; May 4, 2021
 ;
         .project monitor.com
 ;
 STACK   EQU     2000H
+SDATA   EQU     8       ;SERIAL DATA
 CDATA   EQU     9       ;CONSOLE DATA
 PORTN   EQU     STACK   ;3BYTES I/O
 IBUFP   EQU     STACK+3 ;BUFFER POINTER
@@ -33,7 +34,7 @@ COLD:   LXI     D,SIGNON ;MESSAGE
 SENDM:  LDAX    D       ;GET BYTE
         ORA     A       ;ZERO?
         JZ      START   ;YES, START
-        OUT     CDATA   ;SEND IT
+        CALL    OUTT    ;SEND IT
         INX     D       ;POINTER
         JMP     SENDM   ;NEXT
 ;
@@ -77,8 +78,8 @@ TABLE:  DW      ASCII   ;A, ASCII
         DW      GO      ;G, GO
         DW      HMATH   ;H, HEX MATH
         DW      IPORT   ;I, PORT INPUT
-        DW      JUST    ;J, MEMORY TEST
-        DW      ERROR   ;K
+        DW      ERROR   ;J
+        DW      KIPS    ;K, SPEED TEST
         DW      LOAD    ;L, LOAD
         DW      MOVE    ;M, MOVE
         DW      ERROR   ;N
@@ -91,7 +92,7 @@ TABLE:  DW      ASCII   ;A, ASCII
         DW      ERROR   ;U
         DW      VERM    ;V, VERIFY MEM
         DW      ERROR   ;W
-        DW      REGS    ;X, STACK POINTER
+        DW      ERROR   ;X
         DW      ERROR   ;Y
         DW      ZERO    ;Z, ZERO
 ;
@@ -101,18 +102,20 @@ INPUTT: MVI     A,10H
         OUT     CDATA   ;FLAST CURSOR
         IN      CDATA   ;GET BYTE
         CPI     0
+        JNZ     INPUT2  ;PROCESS INPUT
+        IN      SDATA   ;GET BYTE
+        CPI     0
         JZ      INPUTT  ;BLOCK ON IO
-        CPI     CTRX    ;ABORT?
+INPUT2: CPI     CTRX    ;ABORT?
         JZ      START   ;YES
         RET
 ;
 ; CONSOLE OUTPUT ROUTINE
 ;
-OUTT:   MOV     B,A     ;SAVE BYTE
-        MVI     A,00H
-        OUT     CDATA   ;BLANK CURSOR
-        MOV     A,B     ;RESTORE BYTE
-        OUT     CDATA   ;WRITE BYTE
+OUTT:   OUT     CDATA   ;WRITE CONSOLE
+OUT2:   OUT     SDATA   ;WRITE SERIAL
+        ;CPI     0
+        ;JZ      OUT2    ;BLOCK ON IO
         RET
 ;
 ; SIGNON MESSAGE
@@ -168,9 +171,9 @@ INPLC:  CPI     CTRH    ;^H?
 ; CARRIAGE-RETURN, LINE-FEED ROUTINE
 ;
 CRLF:   MVI     A,CR
-        OUT     CDATA    ;SEND CR
+        CALL    OUTT    ;SEND CR
         MVI     A,LF
-        OUT     CDATA    ;SEND LF
+        CALL    OUTT    ;SEND LF
         RET
 ;
 ; DELETE PRIOR CHARACTER IF ANY
@@ -180,6 +183,8 @@ INPLB:  MOV     A,C     ;CHAR COUNT
         JZ      INPLI   ;YES
         DCX     H       ;BACK POINTER
         DCR     C       ;AND COUNT
+        MVI     A,0
+        CALL    OUTT    ;CLEAR CURSOR
         MVI     A,BACKUP ;CHARACTER
         JMP     INPLE   ;SEND
 ;
@@ -298,14 +303,8 @@ NIB:    SUI     '0'     ;ASCII BIAS
 ;
 ; PRINT ? ON IMPROPER INPUT
 ;
-ERROR:  MVI     A,'E'
-        OUT     CDATA
-        MVI     A,'R'
-        OUT     CDATA
-        MVI     A,'R'
-        OUT     CDATA
-        MVI     A,'?'
-        OUT     CDATA
+ERROR:  MVI     A,'?'
+        CALL    OUTT
         JMP     START   ;TRY AGAIN
 ;
 ; START NEW LINE, GIVE ADDRESS
@@ -408,12 +407,6 @@ ERRB:   MVI     A,'B'   ;BAD
 ERR2:   CALL    OUTT
         CALL    OUTSP
         JMP     OUTHL   ;POINTER
-;
-; DISPLAY STACK POINTER
-;
-REGS:   LXI     H,0
-        DAD     SP
-        JMP     OUTHL
 ;
 ; ZERO A PORTION OF MEMORY
 ; THE MONITOR AND STACK ARE
@@ -585,7 +578,7 @@ BIT2:   MOV     A,L
         MOV     L,A
         MVI     A,'0'/2 ;HALF OF 0
         ADC     A       ;DOUBLE AND CARRY
-        OUT     CDATA   ;PRINT BIT
+        CALL    OUTT    ;PRINT BIT
         DCR     B
         JNZ     BIT2    ;8 TIMES
         RET
@@ -622,47 +615,6 @@ HMATH:  CALL    HHLDE   ;TWO NUMBERS
         SBB     D
         MOV     H,A     ;HIGH BYTES
         JMP     OUTHL   ;DIFFERENCE
-;
-; MEMORY TEST
-; THAT DOESN'T ALTER CURRENT BYTE
-; INPUT RANGE OF ADDRESSES, ABORT WITH ^X
-;
-JUST:   CALL    RDHLDE  ;RANGE
-        PUSH    H       ;SAVE START ADDR
-JUST2:  MOV     A,M     ;GET BYTE
-        CMA             ;COMPLEMENT IT
-        MOV     M,A     ;PUT IT BACK
-        CMP     M       ;DID IT GO?
-        JNZ     JERR    ;NO
-        CMA             ;ORIGINAL BYTE
-        MOV     M,A     ;PUT IT BACK
-JUST3:  MOV     A,L     ;PASS
-        SUB     E       ; COMPLETED?
-        MOV     A,H
-        SBB     D
-        INX     H
-        JC      JUST2   ;NO
-;
-; AFTER EACH PASS,
-; SEE IF ABORT WANTED
-;
-;        IN      CDATA   ;LOOK FOR ABORT
-        POP     H       ;SAVE START ADDR
-        PUSH    H       ;SAVE AGAIN
-        JMP     JUST2   ;NEXT PASS
-;
-; FOUND MEMORY ERROR, PRINT POINTER AND
-; BIT MAP: 0=GOOD, 1=BAD BIT
-;
-JERR:   PUSH    PSW     ;SAVE COMPLEMENT
-        CALL    CRHL    ;PRINT POINTER
-        POP     PSW
-        XRA     M       ;SET BAD BITS
-        PUSH    H       ;SAVE POINTER
-        MOV     L,A     ;BIT MAP TO L
-        CALL    BITS    ;PRINT BINARY
-        POP     H
-        JMP     JUST3   ;CONTINUE
 ;
 ; REPLACE HEX BYTE WITH ANOTHER
 ; OVER GIVEN RANGE
@@ -710,4 +662,33 @@ VERM3:  CALL    TSTOP   ;DONE?
         INX     B       ;2ND POINTER
         JMP     VERM2
 ;
+KIPS:   LXI     HL,88H  ;BCD OVERHEAD
+        IN      39H
+        MOV     B,A
+KIPS2:  INR     L
+        MOV     A,L
+        DAA
+        MOV     L,A
+        MOV     A,H
+        ACI     0
+        DAA
+        MOV     H,A
+        MVI     C,8     ;8 CYCLES OF 6
+KIPS3:  MOV     A,M     ;MEMORY EXAMPLE
+        IN      CDATA   ;LOOK FOR ABORT
+        CPI     CTRX    ;ABORT?
+        JZ      START   ;YES
+        DCR     C       ;7/60 INC/DEC 12%
+        JNZ     KIPS3
+        IN      39H
+        SUB     B
+        JZ      KIPS2   ;9/60 JUMPS 15%
+        MOV     C,H
+        CALL    OUTHX
+        MVI     A, '.'
+        CALL    OUTT
+        CALL    OUTLL
+        CALL    CRLF
+        JMP     KIPS    ;11+31
+        
         END
