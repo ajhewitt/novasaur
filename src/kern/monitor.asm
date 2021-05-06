@@ -112,10 +112,16 @@ INPUT2: CPI     CTRX    ;ABORT?
 ;
 ; CONSOLE OUTPUT ROUTINE
 ;
-OUTT:   OUT     CDATA   ;WRITE CONSOLE
-OUT2:   OUT     SDATA   ;WRITE SERIAL
-        ;CPI     0
-        ;JZ      OUT2    ;BLOCK ON IO
+OUTT:   PUSH    B
+        MOV     B,A
+        OUT     CDATA   ;WRITE CONSOLE
+OUT2:   MOV     A,B
+        CPI     0
+        JZ      OUT3
+        OUT     SDATA   ;WRITE SERIAL
+        CPI     0
+        JZ      OUT2    ;BLOCK ON IO
+OUT3:   POP     B
         RET
 ;
 ; SIGNON MESSAGE

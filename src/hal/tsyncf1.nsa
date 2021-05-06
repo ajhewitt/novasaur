@@ -134,53 +134,46 @@ DISHL DZ, PGA         # jump to next VMC
 #86/172
 
 ADDR 0xB0             #32 - mode 0x94,0x95: transmit stop bit
-LD HL, $INC$2COM
-LD Y, $VMS
-FNFH DZ, ND           # VMS+1
-LD Y, $TXRDIDX
-#41/184
-FNFH DZ, ND           # A,TxRdIndex+1
-LD Y, $TXWRIDX
-FNFL DZ, HL           # HL = -TxWrIndex
-#49/190
-ADDHL A, NA           # A = TxRdIndex - TxWrIndex
-LDZ HL, $ZERO?$NULL
-FNH A, HLA            # A = 0 if TxRdIndex == TxWrIndex
-LDP HL, $0xEC         # -0x14
-LDN HL, $0xEE         # -0x12
-#60/199
+LD HL, $INC$NULL
+LDZ Y, $TXRDIDX
+FNH DZ, HLD           # TxRdIndex+1
+LD HL, $2COM$NULL
+#40/179
+LDZ Y, $TXWRIDX
+FNH DZ, HL            # HL = -TxWrIndex
+ADDHL A, NA           # A = TxRdIndex-TxWrIndex
+LDP HL, $0xEC         # -0x14 stop thread
+LDN HL, $0xEE         # -0x12 idle
+#51/188
 LD Y, $TMODE
 ADDHL DZ, ND          # 0,2 -> mode
 LD HL, $8$NULL
 LD Y, $EO
-#70/207
+#61/196
 ORH DZ, ED            # 1 -> Tx (stop bit)
 NOP
-MVHL A, NA            # NOP
-LD HL, $FETCH         # HL = fetch
-#80/215
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
-#86/219
+NOP
+LD PC, $EXIT68
+#68/202
 
 ADDR 0xE0             #32 - mode 0x81,0x83: keyboard start
 LD HL, $TKTOG$NULL
 LD Y, $TMODE
 FNEH DZ, ND           # tx mode -> keyboard mode
-#39/230
+#39/208
 LD HL, $0xDF
 LD Y, $EO
 ANDHL DZ, ED          # kbd clock enable
 LD PC, $EXIT49
-#49/238
+#49/216
 
 ADDR 0xF0             #32 - mode 0x98-0x9B: keyboard stop
 LD HL, $0xE8
 LD Y, $TMODE
 ADDHL DZ, ND          # mode-0x18 (0-3)
-#40/246
+#40/222
 LD HL, $0x20
 LD Y, $EO
 ORHL DZ, ED           # kbd clock disable
 LD PC, $EXIT50
-#50/254
+#50/230

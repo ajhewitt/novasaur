@@ -65,32 +65,32 @@ LD PC, $EXIT35
 #35
 
 $ADDR 0x40
-LD HL, $INC$NULL
+LD HL, $0x20
 #30/2
+LD Y, $TMODE
+ORHL DZ, ND               # enable -> tx mode
+LD HL, $1COM$NULL
 LDZ Y, $TXWRIDX
-FNH DZ, HLD               # tx write index+1
-LD HL, $2COM$NULL
-FNH A, HL                 # HL=-tx write index
-LD Y, $TXRDIDX
 #40/10
+FNH DZ, HL                # HL=-tx write index
+LD Y, $TXRDIDX
 ADDHL DZ, NA              # A=tx read-tx write index
-LDP PC, $EXIT46           # exit if tx read >= tx write
+LDP PC, $EXIT50           # exit if tx read >= tx write
+#49/17
 LD HL, $TXBUFF
 MVHL A, XA
-#51/18
-LD HL, $IDEN$DEC
+LD HL, $IDEN$NULL
 LD Y, $AREG
+#59/25
 FNFH DZ, NA               # A = Acc
 LDZ Y, $TXWRIDX
-#60/26
-FNFL DZ, Y                # Y = wr index-1
+FNH DZ, Y                 # Y = wr index
 FNH A, HLD                # A -> tx wr buff
-LD HL, $0x20
-LD Y, $TMODE
-#69/33
-ORHL DZ, ND               # enable -> tx mode
-$EXIT73
-NOP
+LD HL, $INC$NULL
+#70/33
+LDZ Y, $TXWRIDX
+FNH DZ, HLD
+$EXIT74
 LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
@@ -106,8 +106,9 @@ LD PG, $CON_PG
 
 ADDR 0x74                 # Set Audio Mode
 LD HL, $3
-LD PC, $AUDIO32
-#32
+NOP
+LD PC, $AUDIO33
+#33
 
 $EXIT35
 LD HL, $INC$NULL
@@ -135,43 +136,48 @@ LDN HL, $0x20             # enable if high
 LD Y, $RMODE
 #39/19
 ORHL DZ, ND               # set enable/disable bit
-NOP
-LD PC, $EXIT46
-#46/24
+LD PC, $EXIT45
+#45/23
 
 $EXIT12
 FNFH DZ, ND               # PCL = PCL+1
 LD HL, $ZERO?$NULL
 FNH A, HLA                # PCL overflow?
-#19/29
+#19/28
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, HLD               # PCH+1 if overflow
 LD HL, $0
 LD Y, $AREG
-#30/40
+#30/39
 MULH AZ, ND               # 0->Acc
 LD PC, $EXIT35
-#35/44
+#35/43
 
+$EXIT44
+NOP
+$EXIT45
+NOP
 $EXIT46
+MVHL A, NA                # NOP
+#50/47
+$EXIT50
 LD HL, $0
 LD Y, $AREG
-#50/48
 MULH AZ, ND               # 0->Acc
-MVHL A, NA                # NOP
 $EXIT57
 NOP
 $EXIT58
 NOP
-#59/54
+#59/55
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
-#71/60
-LD PC, $EXIT73
-#73/62
+#71/61
+NOP
+LD PC, $EXIT74
+#74/64
 
 ADDR 0xC0                 # else, iden PCH, iden PCH
 FNH A, HL                 # NOP
@@ -199,27 +205,26 @@ FNH AZ, HLD               # A -> Z[Y]
 LD PC, $EXIT57
 #57/30
 
-$AUDIO32
-LDZ Y, $AREG
+$AUDIO33
+LD Y, $AREG
 ANDHL DZ, ND              # Acc = Acc&3
 LD HL, $XGA?$NULL
-#40/36
+#41/36
 LD Y, $VMS
 FNEH DZ, NA               # 0 if 3 cycles per line
 LDP HL, $0xFD             # -3
 LDN HL, $0xFC             # -4
 LDZ Y, $AREG
-#50/46
+#51/46
 ADDHL DZ, NA              # A = Acc-2|3
 LD HL, $IDEN$NULL
 LDPZ PC, $EXIT58          # exit if not enough cycles
 FNH DZ, HLA               # A = Acc
+#60/53
 LD Y, $AMODE
-#61/55
 FNH AZ, HLD               # A -> Audio mode
 LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute audio
-#71/62
-LD PC, $EXIT73
-#73/64
+LD PC, $EXIT74
+#74/64
