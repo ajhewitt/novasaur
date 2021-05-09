@@ -548,15 +548,15 @@ def da_carry
 end
 
 # Flags -> PSW (CSZPHVBL->SZKA0PVC)
-def flags_psw
+def flags_psw(i8085 = false)
   256.times.map do |i|
-   r = 0
+   r = i8085 ? 2 : 0
    r |= 0x80 unless i&0x40 == 0
    r |= 0x40 unless i&0x20 == 0
-   r |= 0x20 if (i&0x40 == 0) ^ (i&0x04 == 0) # undocumented 8085
+   r |= 0x20 if i8085 && ((i&0x40 == 0) ^ (i&0x04 == 0)) # undocumented 8085
    r |= 0x10 unless i&8 == 0
    r |= 4 unless i&0x10 == 0
-   r |= 2 unless i&0x04 == 0 # undocumented 8085
+   r |= 2 unless !i8085 || i&0x04 == 0 # undocumented 8085
    r |= 1 unless i&0x80 == 0
    r
   end

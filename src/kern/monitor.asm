@@ -4,11 +4,14 @@
 ;
         .project monitor.com
 ;
-STACK   EQU     2000H
+STACK   EQU     480H
 SDATA   EQU     8       ;SERIAL DATA
 CDATA   EQU     9       ;CONSOLE DATA
-PORTN   EQU     STACK   ;3BYTES I/O
-IBUFP   EQU     STACK+3 ;BUFFER POINTER
+RXEN    EQU     11      ;RX ENABLE
+;
+COMS    EQU     STACK   ;1BYTE COMS STATE
+PORTN   EQU     COMS+1  ;3BYTES I/O
+IBUFP   EQU     PORTN+3 ;BUFFER POINTER
 IBUFC   EQU     IBUFP+2 ;BUFFER COUNT
 IBUFF   EQU     IBUFP+3 ;INPUT BUFFER
 ;
@@ -30,7 +33,9 @@ RETC    EQU     0C9H    ;RET OP CODE
 ; SEND ASCII MESSAGE UNTIL BINARY ZERO
 ; IS FOUND. POINTER IS D,E
 ;
-COLD:   LXI     D,SIGNON ;MESSAGE
+COLD:   MVI     A,1
+        OUT     RXEN    ;TURN ON RX
+        LXI     D,SIGNON ;MESSAGE
 SENDM:  LDAX    D       ;GET BYTE
         ORA     A       ;ZERO?
         JZ      START   ;YES, START
@@ -101,35 +106,42 @@ TABLE:  DW      ASCII   ;A, ASCII
 INPUTT: MVI     A,10H
         OUT     CDATA   ;FLAST CURSOR
         IN      CDATA   ;GET BYTE
-        CPI     0
-        JNZ     INPUT2  ;PROCESS INPUT
-        IN      SDATA   ;GET BYTE
-        CPI     0
+        ORA     A       ;ZERO?
+        JZ      INPUT2  ;PROCESS INPUT
+        MOV     B,A
+        XRA     A       ;CLEAR A
+        JMP     INPUT3
+INPUT2: IN      SDATA   ;GET BYTE
+        ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
-INPUT2: CPI     CTRX    ;ABORT?
+        MOV     B,A
+        MVI     A,1
+INPUT3: STA     COMS    ;SET COMS STATE
+        MOV     A,B
+        CPI     CTRX    ;ABORT?
         JZ      START   ;YES
         RET
 ;
 ; CONSOLE OUTPUT ROUTINE
 ;
-OUTT:   PUSH    B
+OUTT:   OUT     CDATA   ;WRITE CONSOLE
         MOV     B,A
-        OUT     CDATA   ;WRITE CONSOLE
-OUT2:   MOV     A,B
-        CPI     0
-        JZ      OUT3
+OUT2:   ORA     A       ;ZERO?
+        RZ
+        MOV     A,B
         OUT     SDATA   ;WRITE SERIAL
-        CPI     0
-        JZ      OUT2    ;BLOCK ON IO
-OUT3:   POP     B
-        RET
+        ORA     A       ;ZERO?
+        RNZ
+        LDA     COMS
+        JMP     OUT2    ;BLOCK ON IO
 ;
 ; SIGNON MESSAGE
 ;
-SIGNON: DB      CR,LF,TAB,"     _",CR,LF
-        DB      TAB,"    /",0A7H,")",CR,LF
+SIGNON: DB      CR,LF,
+        DB      "             _",CR,LF
+        DB      "            /0)",CR,LF
         DB      "   .^/\/\^.//",CR,LF
-        DB      " _/NOVASAUR/",TAB
+        DB      " _/NOVASAUR/    ",
         DB      "8080 SYSMON v0.1",CR,LF
         DB      "<__^|_|-|_|",LF,0
 ;
@@ -578,14 +590,14 @@ IPORT:  CALL    READHL  ;PORT
 ;
 ; PRINT L REGISTER IN BINARY (8080 VER)
 ;
-BITS:   MVI     B,8     ;8 BITS
+BITS:   MVI     C,8     ;8 BITS
 BIT2:   MOV     A,L
         ADD     A       ;SHIFT LEFT
         MOV     L,A
         MVI     A,'0'/2 ;HALF OF 0
         ADC     A       ;DOUBLE AND CARRY
         CALL    OUTT    ;PRINT BIT
-        DCR     B
+        DCR     C
         JNZ     BIT2    ;8 TIMES
         RET
 ;
@@ -668,10 +680,12 @@ VERM3:  CALL    TSTOP   ;DONE?
         INX     B       ;2ND POINTER
         JMP     VERM2
 ;
-KIPS:   LXI     HL,88H  ;BCD OVERHEAD
+; SPEED TEST
+;
+KIPS:   LXI     HL,76H  ;OVERHEAD (BCD)
         IN      39H
-        MOV     B,A
-KIPS2:  INR     L
+        MOV     B,A     ;SAVE TIME1
+KIPS2:  INR     L       ;INC HL
         MOV     A,L
         DAA
         MOV     L,A
@@ -679,22 +693,24 @@ KIPS2:  INR     L
         ACI     0
         DAA
         MOV     H,A
-        MVI     C,8     ;8 CYCLES OF 6
-KIPS3:  MOV     A,M     ;MEMORY EXAMPLE
+        MVI     C,7     ;LOOP 7*6 MIX
+KIPS3:  MOV     A,M
+        LDA     0
+        XRA     A
+        SBB     A
+        DCR     C       ;LOOP-1
+        JNZ     KIPS3
         IN      CDATA   ;LOOK FOR ABORT
         CPI     CTRX    ;ABORT?
         JZ      START   ;YES
-        DCR     C       ;7/60 INC/DEC 12%
-        JNZ     KIPS3
+        IN      SDATA   ;LOOK FOR ABORT
+        CPI     CTRX    ;ABORT?
+        JZ      START   ;YES
         IN      39H
-        SUB     B
-        JZ      KIPS2   ;9/60 JUMPS 15%
-        MOV     C,H
-        CALL    OUTHX
-        MVI     A, '.'
-        CALL    OUTT
-        CALL    OUTLL
+        CMP     B       ;TIME CHANGED?
+        JZ      KIPS2   ;8/60 JUMPS 13%
+        CALL    OUTHL
         CALL    CRLF
-        JMP     KIPS    ;11+31
+        JMP     KIPS    ;6+6+19+3*8+5+2*8
         
         END

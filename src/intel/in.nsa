@@ -127,7 +127,7 @@ LD HL, $IDEN$NULL
 #40/18
 LDZ Y, $CONY
 FNH DZ, Y                 # Y = row
-FNFH D, NA                # A = [Y,X]
+FNFH D, NA                # A = [XY]
 LD Y, $AREG
 FNH AZ, HLD               # A -> Acc
 #51/26
