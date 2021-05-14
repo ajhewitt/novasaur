@@ -126,20 +126,24 @@ LD PC, $EXIT68
 #68/168
 
 ADDR 0xA8             #32 - mode 0x58: receive stop bit
+LD HL, $0xEA          # HL = -0x16 (idle: 0x58-0x16=0x42)
+LD Y, $RMODE
+ADDHL DZ, ND          # idle -> rx mode
+#40/174
 LD HL, $INC$2COM
 LD Y, $RXWRIDX
 FNFH DZ, ND           # A,RxWrIndex+1
 LD Y, $RXRDIDX
-#41/176
+#49/182
 FNFL DZ, HL           # HL = -RxRdIndex
 ADDHL A, NA           # A = RxWrIndex - RxRdIndex
-LDP HL, $0xEA         # HL = -0x16 (idle: 0x42 -> rx mode)
-LDN HL, $0xEB         # HL = -0x15 (close: 0x43 -> rx mode)
-#51/184
-LD Y, $RMODE
-ADDHL DZ, ND          # idle or close -> rx mode
-LD PC, $EXIT59
+LDN PC, $EXIT58
+LD HL, $0x10          # deassert RTS
 #59/190
+LD Y, $EO
+ORHL DZ, ED           # 1 -> RTS
+LD PC, $EXIT67
+#67/196
 
 $EXIT41
 NOP
@@ -153,7 +157,7 @@ NOP
 $EXIT48
 NOP
 NOP
-#50/199
+#50/205
 $EXIT50
 NOP
 NOP
@@ -163,10 +167,10 @@ NOP
 NOP
 NOP
 NOP
+$EXIT58
 NOP
-$EXIT59
 NOP
-#60/209
+#60/215
 $EXIT60
 NOP
 $EXIT61
@@ -176,16 +180,20 @@ NOP
 NOP
 NOP
 NOP
+$EXIT67
 NOP
 $EXIT68
 LD HL, $INC$NULL
-#70/219
+#70/225
 LDZ Y, $VMS
 FNH DZ, HLD           # VMC+1
 $EXIT74
-MVHL A, NA            # NOP
+NOP
+NOP
+NOP
+NOP
 LD HL, $FETCH         # HL = fetch
-#80/226
+#80/234
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
-#86/230
+#86/238

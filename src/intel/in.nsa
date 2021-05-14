@@ -65,18 +65,19 @@ LD PC, $EXIT35
 #35
 
 ADDR 0x40                 # Serial Rx
-NOP
-NOP
-$RX30
 LD HL, $2COM$NULL
+#30/2
 LDZ Y, $RXWRIDX
 FNH DZ, HL                # HL=-rx write index
 LD Y, $RXRDIDX
 ADDHL DZ, NA              # A=rx read-rx write index
+#40/9
+LD HL, $ZERO?$NULL
+FNH A, HLA
+LDP PC, $ASSERT46         # exit if rx read == rx write
 LD HL, $RXBUFF
-LDP PC, $EXIT46           # exit if rx read >= rx write
-LD PC, $CONT47
-#47/17
+LD PC, $CONT49
+#49/18
 
 $KC30                     # Keyboard Code
 LD HL, $2COM$NULL
@@ -87,7 +88,7 @@ ADDHL DZ, NA              # A=kc read-kc write index
 LD HL, $KCBUFF
 LDP PC, $EXIT46           # exit if kc read >= kc write
 LD PC, $CONT47
-#47/32
+#47/33
 
 $KS30
 LD HL, $2COM$NULL
@@ -98,7 +99,7 @@ ADDHL DZ, NA              # A=ks read-ks write index
 LD HL, $KSBUFF
 LDP PC, $EXIT46           # exit if ks read >= ks write
 LD PC, $CONT47
-#47/47
+#47/48
 
 ADDR 0x70                 # Kbd code
 LD PC, $KC30
@@ -107,6 +108,15 @@ LD PC, $KC30
 ADDR 0x74                 # Kbd scan
 LD PC, $KS30
 #30
+
+$ASSERT46
+LD HL, $0xEF              # assert RTS
+LD Y, $EO
+#50/10
+ANDHL DZ, ED              # 0 -> RTS
+NOP
+LD PC, $EXIT57
+#57/15
 
 ADDR 0x80                 # PCL = 255, inc PCH
 LDZ Y, $PCH
@@ -128,40 +138,45 @@ LD HL, $IDEN$NULL
 LDZ Y, $CONY
 FNH DZ, Y                 # Y = row
 FNFH D, NA                # A = [XY]
-LD Y, $AREG
-FNH AZ, HLD               # A -> Acc
-#51/26
-LD PC, $EXIT53
-#53/28
+NOP
+NOP
+LD PC, $EXIT51
+#51/27
 
 $EXIT35
 LD HL, $INC$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD
 LD PG, $FETCH1_PG         # cycle available, goto fetch
-#43/35
+#43/34
 
 $EXIT46
 LD HL, $0
+MULH A, NA                # A = 0
+#51/38
+$EXIT51
+LD HL, $IDEN$NULL
 LD Y, $AREG
-#50/39
-MULH AZ, ND               # 0->Acc
-$EXIT53
+FNH AZ, HLD               # A -> Acc
+$EXIT57
+MVHL A, NA                # NOP
+#61/45
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-$EXIT69
-#69/49
-MVHL A, NA                # NOP
+NOP
+NOP
+#71/51
+$EXIT71
+NOP
+NOP
 NOP
 LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
-#80/57
+#80/59
 LD HL, $FETCH
 DISHL DZ, PGA             # jump to next VMC
-#86/61
+#86/63
 
 ADDR 0xC0                 # else, iden PCH, iden PCH
 FNH A, HLA                # NOP
@@ -172,47 +187,47 @@ FNDL M, PC                # fork on port [PC]
 #28/8
 
 ADDR 0xC8                 # Read from zpage
+MVHL A, NA                # NOP
 LD HL, $0x3F
-#30/10
 ANDHL M, NA               # A = [PC]&0x3F
 LD HL, $0x80
-ORHL A, YA                # Y = A|0x80
 #40/16
+ORHL A, YA                # Y = A|0x80
 LDZ HL, $IDEN$NULL
 FNH DZ, HLA               # A = Z[Y]
-LD HL, $IDEN$NULL
-LD Y, $AREG
-FNH AZ, HLD               # A -> Acc
-#50/24
 NOP
-LD PC, $EXIT53
-#54/27
+LD PC, $EXIT51
+#51/24
 
 $EXIT12
 FNFH DZ, ND               # PCL = PCL+1
 LD HL, $ZERO?$NULL
 FNH A, HLA                # PCL overflow?
-#19/32
+#19/29
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, HLD               # PCH+1 if overflow
 LD HL, $0
 LD Y, $AREG
-#30/43
+#30/40
 MULH AZ, ND               # 0->Acc
 LD PC, $EXIT35
-#35/47
+#35/44
 
 $CONT47
+NOP
+NOP
+$CONT49
+#49/46
 MVHL A, XA                # X=buff addr
 LDZ HL, $INC$NULL
 FNH DZ, HLD               # read index+1
 LD HL, $IDEN$DEC
+#59/53
 FNFL A, Y                 # Y=read index-1
-#60/56
 FNFH D, NA                # A=char
 LD Y, $AREG
-FNH AZ, HLD               # char->Acc
-LD PC, $EXIT69
-#69/63
+FNH AZ, HLD               # A -> Acc
+LD PC, $EXIT71
+#71/62
