@@ -1,6 +1,6 @@
-; TITLE '8080 system monitor, ver 0.2'
+; TITLE '8080 system monitor, ver 0.3'
 ;
-; May 4, 2021
+; May 14, 2021
 ;
         .project monitor.com
 ;
@@ -34,6 +34,7 @@ RETC    EQU     0C9H    ;RET OP CODE
 ; IS FOUND. POINTER IS D,E
 ;
 COLD:   MVI     A,1
+        STA     COMS
         OUT     RXEN    ;TURN ON RX
         LXI     D,SIGNON ;MESSAGE
 SENDM:  LDAX    D       ;GET BYTE
@@ -93,7 +94,7 @@ TABLE:  DW      ASCII   ;A, ASCII
         DW      ERROR   ;Q
         DW      REPL    ;R, REPLACE
         DW      SEARCH  ;S, SEARCH
-        DW      ERROR   ;T
+        DW      TOGGLE  ;T, TOGGLE SERIAL
         DW      ERROR   ;U
         DW      VERM    ;V, VERIFY MEM
         DW      ERROR   ;W
@@ -107,33 +108,39 @@ INPUTT: MVI     A,10H
         OUT     CDATA   ;FLAST CURSOR
         IN      CDATA   ;GET BYTE
         ORA     A       ;ZERO?
-        JZ      INPUT2  ;PROCESS INPUT
-        MOV     B,A
-        XRA     A       ;CLEAR A
-        JMP     INPUT3
+        JNZ     INPUT3  ;PROCESS INPUT
+        LDA     COMS    ;CHECK SERAIL
+        ORA     A       ;ZERO?
+        JZ      INPUTT  ;BLOCK ON IO
 INPUT2: IN      SDATA   ;GET BYTE
         ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
-        MOV     B,A
-        MVI     A,1
-INPUT3: STA     COMS    ;SET COMS STATE
-        MOV     A,B
-        CPI     CTRX    ;ABORT?
+INPUT3: CPI     CTRX    ;ABORT?
         JZ      START   ;YES
         RET
 ;
 ; CONSOLE OUTPUT ROUTINE
 ;
 OUTT:   OUT     CDATA   ;WRITE CONSOLE
-        MOV     B,A
-OUT2:   ORA     A       ;ZERO?
+        ORA     A       ;ZERO?
         RZ
-        MOV     A,B
+        MOV     B,A
+        LDA     COMS    ;CHECK COMS
+        ORA     A       ;ZERO?
+        RZ
+OUT2:   MOV     A,B
         OUT     SDATA   ;WRITE SERIAL
         ORA     A       ;ZERO?
-        RNZ
-        LDA     COMS
-        JMP     OUT2    ;BLOCK ON IO
+        JZ      OUT2    ;BLOCK ON IO
+        RET
+;
+; TOGGLE SERIAL
+;
+TOGGLE: LDA     COMS
+        XRI     1       ;TOGGLE COMS
+        STA     COMS
+        OUT     RXEN    ;ENABLE/DISBLE RX
+        RET
 ;
 ; SIGNON MESSAGE
 ;
@@ -142,7 +149,7 @@ SIGNON: DB      CR,LF,
         DB      "            /0)",CR,LF
         DB      "   .^/\/\^.//",CR,LF
         DB      " _/NOVASAUR/    ",
-        DB      "8080 SYSMON v0.1",CR,LF
+        DB      "8080 SYSMON v0.3",CR,LF
         DB      "<__^|_|-|_|",LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
