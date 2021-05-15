@@ -34,8 +34,8 @@ RETC    EQU     0C9H    ;RET OP CODE
 ; IS FOUND. POINTER IS D,E
 ;
 COLD:   MVI     A,1
-        STA     COMS
-        OUT     RXEN    ;TURN ON RX
+        STA     COMS    ;TURN COMS ON
+        OUT     RXEN    ;ENABLE RX
         LXI     D,SIGNON ;MESSAGE
 SENDM:  LDAX    D       ;GET BYTE
         ORA     A       ;ZERO?
@@ -108,14 +108,14 @@ INPUTT: MVI     A,10H
         OUT     CDATA   ;FLAST CURSOR
         IN      CDATA   ;GET BYTE
         ORA     A       ;ZERO?
-        JNZ     INPUT3  ;PROCESS INPUT
+        JNZ     INPUT2  ;PROCESS INPUT
         LDA     COMS    ;CHECK SERAIL
         ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
-INPUT2: IN      SDATA   ;GET BYTE
+        IN      SDATA   ;GET BYTE
         ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
-INPUT3: CPI     CTRX    ;ABORT?
+INPUT2: CPI     CTRX    ;ABORT?
         JZ      START   ;YES
         RET
 ;
@@ -136,9 +136,9 @@ OUT2:   MOV     A,B
 ;
 ; TOGGLE SERIAL
 ;
-TOGGLE: LDA     COMS
+TOGGLE: LDA     COMS    ;LOAD COMS
         XRI     1       ;TOGGLE COMS
-        STA     COMS
+        STA     COMS    ;SAVE COMS
         OUT     RXEN    ;ENABLE/DISBLE RX
         RET
 ;
