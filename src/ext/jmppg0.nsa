@@ -51,11 +51,11 @@ LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
 #86/42
 
-#BOOTSTRAP - init copy ROM0/page0
-#BREG: CPU number
+#BOOTCPU - init copy ROM0/page0
+#AREG: CPU number
 ADDR 0x38
 LD HL, $0xF0
-LD Y, $BREG
+LD Y, $AREG
 ORHL DZ, NA               # A=n|0xF0
 #42
 LD HL, $KERN?$7

@@ -9,8 +9,9 @@ SDATA   EQU     8       ;SERIAL DATA
 CDATA   EQU     9       ;CONSOLE DATA
 RXEN    EQU     11      ;RX ENABLE
 ;
-COMS    EQU     STACK   ;1BYTE COMS STATE
-PORTN   EQU     COMS+1  ;3BYTES I/O
+COMS    EQU     STACK   ;1BYTE COM SERIAL
+COMB    EQU     STACK+1 ;1BYTE COM BLOCK
+PORTN   EQU     STACK+2 ;3BYTES I/O
 IBUFP   EQU     PORTN+3 ;BUFFER POINTER
 IBUFC   EQU     IBUFP+2 ;BUFFER COUNT
 IBUFF   EQU     IBUFP+3 ;INPUT BUFFER
@@ -108,14 +109,21 @@ INPUTT: MVI     A,10H
         OUT     CDATA   ;FLAST CURSOR
         IN      CDATA   ;GET BYTE
         ORA     A       ;ZERO?
-        JNZ     INPUT2  ;PROCESS INPUT
-        LDA     COMS    ;CHECK SERAIL
+        JZ      INPUT2  ;CHECK SERIAL
+        MOV     B,A
+        XRA     A       ;CLEAR A
+        JMP     INPUT3  ;PROCESS INPUT
+INPUT2: LDA     COMS    ;CHECK SERAIL
         ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
         IN      SDATA   ;GET BYTE
         ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
-INPUT2: CPI     CTRX    ;ABORT?
+        MOV     B,A
+        MVI     A,1
+INPUT3: STA     COMB    ;SET COMS STATE
+        MOV     A,B
+        CPI     CTRX    ;ABORT?
         JZ      START   ;YES
         RET
 ;
@@ -131,7 +139,10 @@ OUTT:   OUT     CDATA   ;WRITE CONSOLE
 OUT2:   MOV     A,B
         OUT     SDATA   ;WRITE SERIAL
         ORA     A       ;ZERO?
-        JZ      OUT2    ;BLOCK ON IO
+        RNZ
+        LDA     COMB    ;LOAD COM BLOCK
+        ORA     A
+        JNZ     OUT2    ;BLOCK ON IO
         RET
 ;
 ; TOGGLE SERIAL
@@ -146,7 +157,7 @@ TOGGLE: LDA     COMS    ;LOAD COMS
 ;
 SIGNON: DB      CR,LF,
         DB      "             _",CR,LF
-        DB      "            /0)",CR,LF
+        DB      "            /o)",CR,LF
         DB      "   .^/\/\^.//",CR,LF
         DB      " _/NOVASAUR/    ",
         DB      "8080 SYSMON v0.3",CR,LF
