@@ -4,7 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE WARM_START
 
-# set E-reg
+# Set E-reg
 LD HL, $0xD1
 LD Y, $EO
 MVHL AZ, ED               # bank1,LED off
@@ -20,17 +20,42 @@ MULH AZ, ND               # 0 -> vstart
 LD Y, $CONY
 MULH AZ, ND               # 0 -> console row
 
-#keyboard (terminal test)
+# Keyboard
 LD HL, $0xD8              # -40
-LD Y, $KTO
+LD Y, $KTO                # PS/2 idle timeout (blocks)
 MVHL AZ, ND
 LD HL, $0
 LD Y, $KMODE
-MULH AZ, ND
+MULH AZ, ND               # 0 -> Keyboard mode
 LD Y, $KCWRIDX
-MULH AZ, ND
+MULH AZ, ND               # 0 -> Key code Wr index
+LD Y, $KSWRIDX
+MULH AZ, ND               # 0 -> Key scan Wr index
+LD HL, $0xFF
 LD Y, $KCRDIDX
-MULH AZ, ND
+MVHL AZ, ND               # -1 -> Key code Rd index
+LD Y, $KSRDIDX
+MVHL AZ, ND               # -1 -> Key scan Rd index
+
+# Serial
+LD HL, $0x40              # 0x60=on,0x40=off
+LD Y, $RMODE
+MVHL AZ, ND
+LD HL, $0x80              # 0xA0=on,0x80=off
+LD Y, $TMODE
+MVHL AZ, ND
+LD HL, $0xFF
+LD Y, $RXRDIDX
+MVHL AZ, ND               # -1 -> Rx Rd index
+LD Y, $TXRDIDX
+MVHL AZ, ND               # -1 -> Tx Rd index
+LD HL, $0
+LD Y, $RXWRIDX
+MULH AZ, ND               # 0 -> Rx Wr index
+LD Y, $TXWRIDX
+MULH AZ, ND               # 0 -> Tx Wr index
+
+# Console
 LD HL, $0x06
 LD Y, $CONL
 MVHL AZ, ND               # 6 -> console left
@@ -49,16 +74,7 @@ LD HL, $0x5F
 LD Y, $CONC
 MVHL AZ, ND               # '_' -> console cursor
 
-#turn off features
-LD HL, $0x40              # 0x60=on,0x40=off
-LD Y, $RMODE
-MVHL AZ, ND
-LD HL, $0x80              # 0xA0=on,0x80=off
-LD Y, $TMODE
-MVHL AZ, ND
-LD HL, $0xFF
-LD Y, $TXRDIDX
-MVHL AZ, ND               # -1->Tx Rd index
+# Audio
 LD HL, $0x00
 LD Y, $AMODE
 MVHL AZ, ND               # 0->number of voices
@@ -66,7 +82,14 @@ LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute->audio
 
-#Boot kernel CPU
+# Boot Kernel CPU
+LD HL, $IDEN$NULL
+LDZ Y, $HWSTAT
+FNH DZ, HLA               # A = HW status
+LDP HL, $0
+LDN HL, $1
+LD Y, $AREG
+MVHL AZ, ND               # memory size -> Acc
 LD HL, $0
 LD Y, $IMASK
 MULH AZ, ND               # 0->IMASK = 0 (disable)
@@ -90,7 +113,7 @@ LD Y, $PCL
 MVHL AZ, ND               # 0xFFFF->PC
 LD HL, $COPYROM_INST
 LD Y, $INST
-MVHL AZ, ND
+MVHL AZ, ND               # Bootstrap Kernal
 
 LD Y, $VMS
 LD PG, $BSYNCE_PG         # start video loop

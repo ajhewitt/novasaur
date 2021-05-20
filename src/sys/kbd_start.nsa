@@ -4,11 +4,14 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE KBD_START
 
-LD HL, $0x07              # retry 7 times
+LD HL, $7                 # retry 7 times
 LD Y, $TEMP
 MVHL AZ, ND               # 7->TEMP
-MULH A, VA                # preset H reg
-MULH A, SA                # reset scan/kbdtx high
+LD HL, $0x20
+LD Y, $HWSTAT
+MVH DZ, ND                # set HW status LSN 0010
+MULL A, V                 # preset H reg
+MULL A, S                 # reset scan/kbdtx high
 
 # (1)  Auxiliary device idle when clock high for 186us
 $IDLE
@@ -89,8 +92,6 @@ LDP PC, $LOOP5            # loop until 0
 LD HL, $0x20
 MULL A, V                 # preset H reg
 MULL A, S                 # kbdtx high
-LD Y, $HWSTAT
-ORH DZ, ND                # set bit 2 of HW STAT
 LD HL, $DEC$NULL
 LDZ Y, $TEMP
 FNH DZ, HLD               # TEMP-1->TEMP
@@ -120,11 +121,11 @@ LD PC, $IDLE
 
 # (7)  Release data to transmit 10 high bits - FF, patiry, stop
 $PASS
-LD HL, $0xD0
+LD HL, $0x10
+LD Y, $HWSTAT
+ORH DZ, ND                # set bit 0 of HW STAT
 MULL A, V                 # preset H reg
 MULL A, S                 # kbdtx high
-LD Y, $HWSTAT
-ANDH DZ, ND               # clear bit 2 of HW STAT
 
 $FAIL
 
