@@ -8,19 +8,27 @@ PAGE JMPPG0_PG
 FNDH A, PCA               # fork to jump page
 #34/2
 
-#NOP
+$EXIT53
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+#69/10
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+ADDR 0x0D
+NOP
 LD HL, $DEC$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
+#39|82
 FNH DZ, HLD               # VMS-1
-#40
-NOP
 LD PG, $FETCH1_PG         # cycle available, goto fetch
-#43/8
+#43/22
 
 #COPYROM - init
-#TEMP: X (RAM index) init to zero
-#EREG: ROM page (H=ROM number,L=ROM page lsn)
-ADDR 0x0C
+#0 -> TEMP (X RAM index)
+#EREG (ROM page) -> TMPH=ROM number, TMPL=ROM page lsn
+ADDR 0x16
 LD HL, $0
 LD Y, $TEMP
 MULH AZ, ND               # 0->temp
@@ -53,7 +61,7 @@ DISHL DZ, PGA             # jump to next VMC
 
 #BOOTCPU - init copy ROM0/page0
 #AREG: CPU number
-ADDR 0x38
+ADDR 0x40
 LD HL, $0xF0
 LD Y, $AREG
 ORHL DZ, NA               # A=n|0xF0
@@ -63,53 +71,44 @@ ANDL A, X                 # X=0xFn&0x07
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
 #51
+LDN PC, $EXIT53           # exit if not kern
+LD HL, $IDEN$NULL
+LDZ Y, $AREG
+FNH D, HLD                # CPU Acc = CPU number
 LD HL, $0
-LDN PC, $EXIT55           # exit if not kern
+#60
 LD Y, $IMASK
-MULH A, ND                # 0->IMASK = 0 (disable)
+MULH A, ND                # 0->IMASK (disable)
 LD Y, $CREG
-#61
 MULH A, ND                # 0->C
+#70
 LD Y, $DREG
 MULH A, ND                # 0->D
 LD Y, $TEMP
-#71
 MULH A, ND                # 0->temp
+#80
 LD Y, $TMPL
 MULH A, ND                # 0->tmpL
 LD HL, $0x80
-#81
 LD Y, $TMPH
+#89
 MVHL A, ND                # 0x80->tmpH
 LD HL, $0xFF
 LD Y, $PCH
-#91
 MVHL A, ND
+#101
 LD Y, $PCL
 MVHL A, ND                # 0xFFFF->PC
-#101
 LD Y, $EXT
+#109
 MVHL A, ND                # -1->ext mode
 LD HL, $COPYROM_INST
 LD Y, $INST
-#111
 MVHL A, ND                # CopyROM->inst cache
-LD PC, $EXIT117
-
-$EXIT55
-NOP
-LD HL, $DEC$NULL
-LDZ Y, $VMS
-#60
-FNH DZ, HLD               # adjust VMS for 2 cycles
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-#70
-MVHL A, NA                # NOP
-$EXIT117
-MVHL A, NA                # NOP
+#121
 LD HL, $FETCH
-#80
 LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
-#86|129
+#129/74
+
+#ADDR 0x8A
