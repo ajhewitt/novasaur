@@ -700,35 +700,26 @@ VERM3:  CALL    TSTOP   ;DONE?
 ;
 ; SPEED TEST
 ;
-KIPS:   LXI     HL,76H  ;OVERHEAD (BCD)
-        IN      39H
-        MOV     B,A     ;SAVE TIME1
-KIPS2:  INR     L       ;INC HL
-        MOV     A,L
-        DAA
-        MOV     L,A
-        MOV     A,H
-        ACI     0
-        DAA
-        MOV     H,A
-        MVI     C,7     ;LOOP 7*6 MIX
-KIPS3:  MOV     A,M
-        LDA     0
-        XRA     A
-        SBB     A
-        DCR     C       ;LOOP-1
-        JNZ     KIPS3
-        IN      CDATA   ;LOOK FOR ABORT
-        CPI     CTRX    ;ABORT?
-        JZ      START   ;YES
-        IN      SDATA   ;LOOK FOR ABORT
-        CPI     CTRX    ;ABORT?
-        JZ      START   ;YES
-        IN      39H
+KIPS:   IN      38H
+        MOV     B,A     ;SAVE TIME
+KIPS1:  IN      38H
+        CMP     B
+        JZ      KIPS1   ;WAIT FOR TICK
+        MOV     B,A     ;SAVE TIME
+        MVI     C,99H   ;A=-1
+KIPS2:  MOV     A,C
+        INR     A       ;INC A
+        DAA             ;BCD
+        MVI     D,12    ;LOOP 12*5 @ 2.3 CPI
+KIPS3:  MOV     E,M     ;1+1 (2)
+        INR     E       ;1+2-1 (2.3)
+        MOV     C,A     ;1+1 (2) SAVE A IN C
+        DCR     D       ;1+2-1 (2.3)
+        JNZ     KIPS3   ;1+2 (3.3)
+        IN      38H
         CMP     B       ;TIME CHANGED?
-        JZ      KIPS2   ;8/60 JUMPS 13%
-        CALL    OUTHL
-        CALL    CRLF
-        JMP     KIPS    ;6+6+19+3*8+5+2*8
-        
+        JZ      KIPS2
+        CALL    OUTHX
+        RET
+
         END
