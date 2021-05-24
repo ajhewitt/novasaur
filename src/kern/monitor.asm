@@ -703,22 +703,22 @@ VERM3:  CALL    TSTOP   ;DONE?
 KIPS:   IN      38H
         MOV     B,A     ;SAVE TIME
 KIPS1:  IN      38H
-        CMP     B
+        CMP     B       ;TIME CHANGED?
         JZ      KIPS1   ;WAIT FOR TICK
         MOV     B,A     ;SAVE TIME
-        MVI     C,99H   ;A=-1
+        MVI     C,99H   ;C=-1 BCD
 KIPS2:  MOV     A,C
-        INR     A       ;INC A
-        DAA             ;BCD
+        INR     A
+        DAA             ;BCD INC
         MVI     D,12    ;LOOP 12*5 @ 2.3 CPI
-KIPS3:  MOV     E,M     ;1+1 (2)
-        INR     E       ;1+2-1 (2.3)
+KIPS3:  MOV     E,M     ;1+1 (2) PACK
+        INR     E       ;1+2-1 (2.3) PACK
         MOV     C,A     ;1+1 (2) SAVE A IN C
-        DCR     D       ;1+2-1 (2.3)
+        DCR     D       ;1+2-1 (2.3) COUNT-1
         JNZ     KIPS3   ;1+2 (3.3)
         IN      38H
         CMP     B       ;TIME CHANGED?
-        JZ      KIPS2
+        JZ      KIPS2   ;WAIT FOR TICK
         CALL    OUTHX
         RET
 
