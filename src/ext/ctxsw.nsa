@@ -1,4 +1,4 @@
-# context switch on execute
+# context switch CTX0 to CTX1
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -89,9 +89,9 @@ LD HL, $IDEN$NULL
 LDZ Y, $CTX1
 FNH DZ, HLA               # A = next CTX col
 LD HL, $IDEN$NULL
-LDZ Y, $CTX0
+LD Y, $CTX0
 #70/44
-FNH DZ, HLD               # A -> running CTX col
+FNH AZ, HLD               # A -> running CTX col
 NOP
 NOP
 MVHL A, NA                # NOP
@@ -173,8 +173,8 @@ FNH DZ, HLD
 #60/35
 LD HL, $IDEN$NULL
 LD Y, $EXT
-FNH DZ, HLA               # A sign = extended cache
-LDN HL, $EXIT68           # leave in extended mode
+FNH D, HLA                # A sign = extended cache
+LDN PC, $EXIT68           # leave in extended mode
 LD HL, $0x70
 LD Y, $VMS
 #71/46
@@ -190,12 +190,12 @@ DISHL DZ, PGA
 $EXIT68
 NOP
 NOP
-#70/2
+#70/243
 MVHL A, NA                # NOP
 LD HL, $IDEN$NULL
 LD Y, $INST
 FNH DZ, HLD               # restore instruction
-#80/9
+#80/250
 LD Y, $VMS
 DISHL DZ, PGA
-#86/13
+#86/254

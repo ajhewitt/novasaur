@@ -110,12 +110,9 @@ $TMPL          0xFD # 16-bit temp LSB
 $TEMP          0xFE # 8-bit temp
 $AUDIO         0xFF
 
-#Terminal test
-$TERM_TEMP     0x80
-$TERM_COL      0x81
-$TERM_ROW      0x82
-$CLR_X         0xF8        # clr_scrn X
-$CLR_Y         0xF9        # clr_scrn Y
+#Test
+$CLR_X         0xB2        # clr_scrn X
+$CLR_Y         0xB3        # clr_scrn Y
 
 #Constants
 $FETCH         0x00
@@ -129,8 +126,8 @@ $JMP_INST      0xC3
 
 $COPYROM_INST  0x01
 $CTXSW_INST    0x02
-$CLRLN_INST    0x03
-#TBD           0x04
+#TBD           0x03
+$CLRLN_INST    0x04
 $SEND_INST     0x05
 $XFER_INST     0x06
 $RECV_INST     0x07

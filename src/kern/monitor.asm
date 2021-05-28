@@ -710,7 +710,7 @@ KIPS1:  IN      38H
 KIPS2:  MOV     A,C
         INR     A
         DAA             ;BCD INC
-        MVI     D,12    ;LOOP 12*5 @ 2.3 CPI
+        MVI     D,12    ;LOOP 12*5 @ 2.4 CPI
 KIPS3:  MOV     E,M     ;1+1 (2) PACK
         INR     E       ;1+2-1 (2.3) PACK
         MOV     C,A     ;1+1 (2) SAVE A IN C

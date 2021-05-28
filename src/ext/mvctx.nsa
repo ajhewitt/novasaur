@@ -1,0 +1,55 @@
+# Move accumulator to context table w/index given by H register, reset index to zero
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE MVCTX_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $CTX_SEQ
+MVHL A, XA            # X = CTX sequence col
+#10
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA           # A=0 if kern
+LDN PC, $EXIT18       # exit if not kern
+LD HL, $IDEN$NULL
+LD Y, $CTXIDX
+#21
+MULH AZ, ND           # reset context index
+LD Y, $AREG
+FNFH DZ, NA           # A = Acc
+LDZ Y, $HREG
+#31
+FNH DZ, Y             # Y = H
+FNH A, HLD            # Acc -> [X,Y]
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43
+
+$EXIT18
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LDZ Y, $VMS           # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43

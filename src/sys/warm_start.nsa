@@ -90,7 +90,12 @@ LDP HL, $0
 LDN HL, $1
 LD Y, $AREG
 MVHL AZ, ND               # memory size -> Acc
+LD HL, $0xF1
+LD Y, $CTX0
+MVHL AZ, ND               # 1->Context 0
 LD HL, $0
+LD Y, $CTXIDX
+MULH AZ, ND               # reset context index
 LD Y, $IMASK
 MULH AZ, ND               # 0->IMASK = 0 (disable)
 LD HL, $8

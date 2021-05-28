@@ -52,7 +52,7 @@ LD HL, $DEC$NULL
 LDZ Y, $CBLOCK
 #71
 FNH DZ, HLD               # context switch block-1
-NOP  #LDN PC, $CTX_SWITCH       # jump if context switch?
+LDN PC, $CTX_SWITCH       # jump if context switch?
 NOP
 NOP
 NOP
@@ -121,7 +121,7 @@ FNH DZ, HLD               # context switch index+1
 LD HL, $IDEN$NULL
 FNH A, Y                  # Y = context switch index
 FNFH D, NA                # A = next CTX col
-LD PC, $EXIT102          # DEBUG ***exit if positive
+LDP PC, $EXIT102          # exit if positive
 #101
 LD Y, $CTX1
 FNH AZ, HLD               # A -> next CTX col

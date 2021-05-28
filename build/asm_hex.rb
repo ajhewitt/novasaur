@@ -163,12 +163,7 @@ srcs.each do |src|
     a = l.partition(/\$|#/)
     b = a.first.strip
     next unless c = is[b]
-    #if b.start_with?("FNH DZ")
-    #  unless z
-    #    puts "WARNING: #{page}"
-    #    exit
-    #  end
-    #end
+    #abort "WARNING: #{page}" if b.start_with?("FNH DZ") && !z
     #z = 0!=c.first.to_i&8
     i = addrs[j]
     c.each do |k|

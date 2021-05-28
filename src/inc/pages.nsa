@@ -5,7 +5,8 @@ $DISPX1_PG     0x02 # fetch/disptch/exec 2-cycle
 $DISPX2_PG     0x03 # fetch/disptch/exec 3-cycle
 $COPYROM_PG    0x04
 $CTXSW_PG      0x05
-$CLRLN_PG      0x06
+$MVCTX_PG      0x06
+$CLRLN_PG      0x07
 $SEND_PG       0x08
 $XFER_PG       0x09
 $RECV_PG       0x0A
@@ -15,7 +16,6 @@ $JMPPG1_PG     0x11
 
 $MOVMX_PG      0x20
 
-$TERM_PG       0x7E
 $TEST_PG       0x7F
 
 # 0x80-0x8F: system
