@@ -1,10 +1,11 @@
-; TITLE '8080 system monitor, ver 0.3'
+; TITLE '8080 system monitor, ver 0.4'
 ;
-; May 14, 2021
+; May 29, 2021
 ;
-        .project monitor.com
+        .PROJECT monitor.com
+        .ORG    0FA00H
 ;
-STACK   EQU     480H
+STACK   EQU     0F9C0H
 SDATA   EQU     8       ;SERIAL DATA
 CDATA   EQU     9       ;CONSOLE DATA
 RXEN    EQU     11      ;RX ENABLE

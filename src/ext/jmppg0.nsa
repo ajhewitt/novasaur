@@ -77,13 +77,13 @@ LDZ Y, $AREG
 FNH D, HLD                # CPU Acc = CPU number
 LD HL, $0
 #60
-LD Y, $IMASK
-MULH A, ND                # 0->IMASK (disable)
 LD Y, $CREG
 MULH A, ND                # 0->C
-#70
 LD Y, $DREG
 MULH A, ND                # 0->D
+#70
+LD Y, $EREG
+MULH AZ, ND               # 0->E
 LD Y, $TEMP
 MULH A, ND                # 0->temp
 #80

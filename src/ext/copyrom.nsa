@@ -71,7 +71,6 @@ NOP
 NOP
 NOP
 NOP
-$EXIT64
 NOP
 NOP
 NOP
@@ -88,6 +87,25 @@ NOP
 NOP
 NOP
 LD HL, $COPYROM_INST      # continue if more pages
+#80
+LD Y, $VMS                # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
+#86
+
+$EXIT64
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#70
+NOP
+LD HL, $DEC$NULL
+LDZ Y, $CREG
+FNH DZ, HLD               # page count-1
+LDP HL, $COPYROM_INST     # continue if more pages
+LDN HL, $FETCH            # fetch if done
 #80
 LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
