@@ -7,6 +7,7 @@ ORIGIN  EQU     0
 CPROM   EQU     01EDH
 BOOTCPU EQU     02FDH
 MOVXB   EQU     70DDH
+YIELD   EQU     08DDH
 
         .ORG    ORIGIN
         ANI     7
@@ -37,6 +38,7 @@ CPM5:   INR     A
 COL1:   DW      MOVXB
         INR     H
         JNZ     COL1
+        DW      YIELD
         INR     B
         JMP     COL1
 
@@ -52,8 +54,8 @@ TABLE:  DB      KERNEL  -ORIGIN
 ;
 ; TEST - QUAD CORE CONTEXT MAP
 ;
-        .ORG    080H
-MVCTX   EQU     003DDH
+        .ORG    80H
+MVCTX   EQU     04DDH
 
         MVI     H,0
 CTX1:   MOV     A,H

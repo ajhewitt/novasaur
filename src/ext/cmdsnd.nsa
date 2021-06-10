@@ -1,0 +1,30 @@
+# Send command as slave
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE CMDSND_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD               # inc state
+LD HL, $IDEN$IDEN
+LD Y, $CTX0
+FNFL DZ, X                # X = Context Col
+#11
+LDZ Y, $CREG
+FNH DZ, YA                # A = C
+LD Y, $CMDL
+FNH A, HLD                # A -> command L
+LD HL, $0xFF
+#21
+LD Y, $0xFF
+MVHL A, ND                # set wait
+NOP
+NOP
+LD Y, $INST
+#31
+LD HL, $YIELD_INST
+MVHL AZ, ND               # yeild
+LD Y, $VMS                # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
+#43

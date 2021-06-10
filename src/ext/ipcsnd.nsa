@@ -1,0 +1,80 @@
+# Send command as master (kernel)
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE IPCSND_PG
+
+# assume: Y = $VMS
+LD HL, $0xF0
+LD Y, $AREG
+ORHL DZ, NA               # A=n|0xF0
+LD HL, $KERN?$7
+#10
+ANDL A, X                 # X=0xFn&0x07
+LDZ Y, $EO
+FNH DZ, HLA               # bank = kernel?
+LDN PC, $EXIT19           # exit if not kernel
+LD HL, $IDEN$NULL
+#20
+LD Y, $0xFF
+FNH D, HLA                # read semaphore
+LDP PC, $EXIT26           # exit if not waiting
+LD HL, $0
+LD Y, $AREG
+#29
+MULH A, ND                # 0 -> Acc
+LD Y, $0xFF
+MULH A, ND                # signal -> semaphore
+LD HL, $IDEN$NULL
+#39
+LDZ Y, $BREG
+FNH D, HLD                # B -> context B (seq)
+LD HL, $IDEN$NULL
+LDZ Y, $CREG
+FNH D, HLD                # C -> context C (cmd)
+#49
+LD HL, $IDEN$NULL
+LDZ Y, $DREG
+FNH D, HLD                # D -> context D (param 1)
+LD HL, $IDEN$NULL
+LDZ Y, $EREG
+#59
+FNH D, HLD                # E -> context E (param 2)
+LD HL, $IDEN$NULL
+LDZ Y, $HREG
+FNH D, HLD                # H -> context H (param 3)
+LD HL, $IDEN$NULL
+#69
+LDZ Y, $LREG
+FNH D, HLD                # L -> context L (param 4)
+NOP
+LD HL, $INC2$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+2
+#80
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#86
+
+$EXIT19
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+$EXIT26
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+1
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#43

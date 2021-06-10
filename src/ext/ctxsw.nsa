@@ -1,4 +1,4 @@
-# context switch CTX0 to CTX1
+# Context switch CTX0 to CTX1
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

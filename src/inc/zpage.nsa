@@ -87,7 +87,10 @@ $EO            0xE0 # Eo register value
 $HWSTAT        0xE1 # hardware status
 $HTEMP         0xE2 # HAL temp
 #SPARE         0xE3-0xE7 (5)
-#RESERVED      0xE8-0xEB (4)
+$CMDL          0xE8 # kernel IPC - command low
+$CMDH          0xE9 # kernel IPC - command high
+$MSEQ          0xEA # kernel IPC - message sequence
+$MLEN          0xEB # kernel IPC - message length
 #8080CPU
 $INST          0xEC # instruction cache
 $EXT           0xED # extended mode cache
@@ -125,12 +128,12 @@ $PUSHPC_INST   0xD9
 $JMP_INST      0xC3
 
 $COPYROM_INST  0x01
-$CTXSW_INST    0x02
-#TBD           0x03
-$CLRLN_INST    0x04
-$SEND_INST     0x05
-$XFER_INST     0x06
-$RECV_INST     0x07
+$CLRLN_INST    0x02
+$CTXSW_INST    0x03
+$YIELD_INST    0x08
+$SEND_INST     0x09
+$XFER_INST     0x0A
+$RECV_INST     0x0B
 
 $KSBUFF        0xF8
 $KCBUFF        0xF9
