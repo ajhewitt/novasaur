@@ -4,21 +4,21 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE RECSEND_PG
 
-#HREG: RAM page
-#LREG: RAM X index, init 0x7F/0xFF
+#DREG: RAM page
+#EREG: RAM X index, init 0x7F/0xFF
 #TEMP: buffer index, init 0xFF
 # assume: Y = $VMS
 LD HL, $INC$NULL
 FNFH DZ, ND            # inc VMS
-LD Y, $LREG
-FNFH DZ, XD            # X = L+1
+LD Y, $EREG
+FNFH DZ, XD            # X = E+1
 #10
 LDZ Y, $TEMP
 FNH DZ, HLD            # row = row+1
 LDN PC, $EXIT16        # exit at end of buffer
 LD HL, $IDEN$IDEN
-LDZ Y, $HREG
-FNH DZ, Y              # Y = H
+LDZ Y, $DREG
+FNH DZ, Y              # Y = D
 #21
 FNFH M, NA             # A = [Y,X]
 LD Y, $CTX0

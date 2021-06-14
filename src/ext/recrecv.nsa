@@ -4,14 +4,14 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE RECRECV_PG
 
-#HREG: RAM page
-#LREG: RAM X index, init 0x7F/0xFF
+#DREG: RAM page
+#EREG: RAM X index
 #TEMP: buffer index, init 0xFF
 # assume: Y = $VMS
 LD HL, $INC2$FORK3
 FNFH DZ, ND            # VMS+2
-LD Y, $TMPL
-FNFL DZ, PC            # Fork on L
+LD Y, $EREG
+FNFL DZ, PC            # Fork on E
 #10/8
 
 $EXIT27
@@ -35,10 +35,10 @@ LD Y, $VMS             # set Y = $VMS on exit
 DISHL DZ, PGA          # jump to next VMC
 #86/27
 
-ADDR 0x20              # L = 254, iden H, inc H
+ADDR 0x20              # E = 254, iden D, inc D
 NOP
 NOP
-FNH DZ, HLD            # L+2
+FNH DZ, HLD            # E+2
 LD HL, $INC2$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
@@ -50,14 +50,14 @@ LD HL, $IDEN$DEC
 FNFL A, Y              # Y = row-1
 #31/18
 FNFH D, NA             # A = [Y,X]
-LD Y, $TMPL
-FNFL DZ, X             # X = L-1
-LDZ Y, $HREG
+LD Y, $EREG
+FNFL DZ, X             # X = E-1
+LDZ Y, $DREG
 #41/26
-FNH DZ, Y              # Y = H
+FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
 LD HL, $INC$IDEN
-FNH DZ, HLD            # H = H+1         *** inc H ***
+FNH DZ, HLD            # D = D+1         *** inc D ***
 #50/32
 LD HL, $IDEN$IDEN
 LD Y, $CTX0
@@ -66,20 +66,20 @@ LDZ Y, $TEMP
 FNH DZ, Y              # Y = row
 #61/41
 FNFH D, NA             # A = [Y,X]
-LD Y, $TMPL
-FNFL DZ, X             # X = L
-LDZ Y, $HREG
+LD Y, $EREG
+FNFL DZ, X             # X = E
+LDZ Y, $DREG
 #71/49
-FNH DZ, Y              # Y = H
+FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
 LD PC, $EXIT78
 #78/54
 
-ADDR 0x58              # L = 255, inc H, iden H
-FNH DZ, HLD            # L+2
+ADDR 0x58              # E = 255, inc D, iden D
+FNH DZ, HLD            # E+2
 LD HL, $INC$IDEN
-LDZ Y, $HREG
-FNH DZ, HLD            # H = H+1         *** inc H ***
+LDZ Y, $DREG
+FNH DZ, HLD            # D = D+1         *** inc D ***
 LD HL, $INC2$IDEN
 #20/8
 LD Y, $CTX0
@@ -91,11 +91,11 @@ LDN PC, $EXIT31        # exit at end of buffer
 LD HL, $IDEN$DEC
 FNFL A, Y              # Y = row-1
 FNFH D, NA             # A = [Y,X]
-LD Y, $TMPL
+LD Y, $EREG
 #40/25
-FNFL DZ, X             # X = L-1
-LDZ Y, $HREG
-FNH DZ, Y              # Y = H
+FNFL DZ, X             # X = E-1
+LDZ Y, $DREG
+FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
 #50/32
 LD HL, $IDEN$IDEN
@@ -105,20 +105,20 @@ LDZ Y, $TEMP
 FNH DZ, Y              # Y = row
 #61/41
 FNFH D, NA             # A = [Y,X]
-LD Y, $TMPL
-FNFL DZ, X             # X = L
-LDZ Y, $HREG
+LD Y, $EREG
+FNFL DZ, X             # X = E
+LDZ Y, $DREG
 #71/49
-FNH DZ, Y              # Y = H
+FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
 LD PC, $EXIT78
 #78/54
 
-ADDR 0x90              # L = 0, iden H, iden H
+ADDR 0x90              # E = 0, iden D, iden D
 NOP
 NOP
 $CONT12
-FNH DZ, HLD            # L+2
+FNH DZ, HLD            # E+2
 LD HL, $INC2$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
@@ -130,11 +130,11 @@ LD HL, $IDEN$DEC
 FNFL A, Y              # Y = row-1
 #31/18
 FNFH D, NA             # A = [Y,X]
-LD Y, $TMPL
-FNFL DZ, X             # X = L-1
-LDZ Y, $HREG
+LD Y, $EREG
+FNFL DZ, X             # X = E-1
+LDZ Y, $DREG
 #41/26
-FNH DZ, Y              # Y = H
+FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
 LD HL, $IDEN$IDEN
 LD Y, $CTX0
@@ -144,10 +144,10 @@ LDZ Y, $TEMP
 FNH DZ, Y              # Y = row
 FNFH D, NA             # A = [Y,X]
 #60/40
-LD Y, $TMPL
-FNFL DZ, X             # X = L
-LDZ Y, $HREG
-FNH DZ, Y              # Y = H
+LD Y, $EREG
+FNFL DZ, X             # X = E
+LDZ Y, $DREG
+FNH DZ, Y              # Y = D
 #69/47
 FNFH A, NM             # A->[Y,X]
 NOP
@@ -157,5 +157,5 @@ NOP
 LD PC, $EXIT78
 #78/55
 
-ADDR 0xC8              # else, iden H, iden H
+ADDR 0xC8              # else, iden D, iden D
 LD PC, $CONT12

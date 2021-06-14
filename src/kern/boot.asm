@@ -18,7 +18,7 @@ YIELD   EQU     08DDH
         MOV     L,M     ;HL = VECTOR
         PCHL            ;JUMP VECTOR
 
-KERNEL: LXI     DE,0FA01H ;DEST/ROM PAGE
+KERNEL: LXI     DE,0FA08H ;DEST/ROM PAGE
         MVI     C,5     ;6 PAGES
         DW      CPROM   ;COPY ROM
         MVI     A,2

@@ -4,14 +4,14 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE RECXFER_PG
 
-#HREG: RAM page
-#LREG: RAM X index, init 0x7F/0xFF
+#DREG: SRC CTX
+#EREG: DST CTX
 #TEMP: buffer index, init 0xFF
 # assume: Y = $VMS
-LD HL, $INC$IDEN
+LD HL, $INC$7
 FNFH DZ, ND            # inc VMS
-LD Y, $TMPH
-FNFL DZ, X             # X = tmp H
+LD Y, $DREG
+ANDL DZ, X             # X = D
 #10
 LDZ Y, $TEMP
 FNH DZ, HLD            # row = row+1
@@ -20,9 +20,9 @@ LD HL, $IDEN$NULL
 FNH A, Y               # Y = row
 FNH D, HLA             # A = [Y,X]
 #21
-LD HL, $IDEN$IDEN
-LDZ Y, $TMPL
-FNFL DZ, X             # X = tmp L
+LD HL, $IDEN$7
+LDZ Y, $EREG
+ANDL DZ, X             # X = E
 LDZ Y, $TEMP
 #30
 FNH DZ, Y              # Y = row

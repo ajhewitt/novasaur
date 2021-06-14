@@ -1,32 +1,26 @@
-# Yield to wait for command on signal
+# Yield - wait for context switch in kernal, else wait for command on signal
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE YIELD_PG
 
 # assume: Y = $VMS
-LD HL, $INC$IDEN
-FNFH DZ, ND               # inc state
-LD Y, $CTX0
-FNFL DZ, X                # X = Context Col
+LDZ HL, $INC$IDEN
+FNH DZ, HLD                # inc state
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA                # check if kernel
 #10
-LD Y, $0xFF
-FNH D, HLA                # read semaphore
-LDP PC, $EXIT16           # received signal
-NOP
-NOP
-NOP
-NOP
-NOP
-#20
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+LDN PC, $CONT12            # jump if not kernel
+LD HL, $2COM$NULL
+LDZ Y, $TEMP
+FNH DZ, HL                 # HL = -context index (set initially)
+LD Y, $CTXIDX
+#19
+ADDHL DZ, NA               # A = current context index - initial index
+LD HL, $ZERO?$NULL
+FNH A, HLA                 # context index unchanged?
+LDN PC, $EXIT29            # exit to fetch if changed
 LD HL, $0
 #30
 LD Y, $CBLOCK
@@ -36,21 +30,28 @@ LD Y, $VMS                 # set Y = $VMS on exit
 DISHL DZ, PGA              # jump to next VMC
 #43
 
-$EXIT16
+$CONT12
 NOP
 NOP
 NOP
 NOP
+LD HL, $IDEN$IDEN
+LD Y, $CTX0
 #20
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+FNFL DZ, X                 # X = Context Col
+LD Y, $0xFF
+FNH D, HLA                 # read semaphore
+LDP PC, $EXIT29            # received signal
+LD HL, $0
+#30
+LD Y, $CBLOCK
+MULH AZ, ND                # reset context block
+LD HL, $YIELD_INST
+LD Y, $VMS                 # set Y = $VMS on exit
+DISHL DZ, PGA              # jump to next VMC
+#43
+
+$EXIT29
 NOP
 #30
 NOP
