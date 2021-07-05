@@ -31,23 +31,21 @@ LD HL, $IDEN$NULL
 LD Y, $CREG
 FNH DZ, HLD               # context C -> C (cmd)
 LD HL, $IDEN$NULL
+MULH A, ND                # clear context C
 LD Y, $DREG
+#51
 FNH DZ, HLD               # context D -> D (param 1)
-#50
 LD HL, $IDEN$NULL
 LD Y, $EREG
 FNH DZ, HLD               # context E -> E (param 2)
 LD HL, $IDEN$NULL
+#61
 LD Y, $HREG
-#60
-FNH DZ, HLD               # context H -> E (param 3)
+FNH DZ, HLD               # context H -> H (param 3)
 LD HL, $IDEN$NULL
 LD Y, $LREG
 FNH DZ, HLD               # context L -> L (param 4)
-NOP
-NOP
-#70
-NOP
+#71
 NOP
 NOP
 NOP
