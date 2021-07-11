@@ -3,17 +3,18 @@ $IDLE_PG       0x00 # 43-pc idle VMC
 $FETCHX_PG     0x01 # extended fetch
 $DISPX1_PG     0x02 # fetch/disptch/exec 2-cycle
 $DISPX2_PG     0x03 # fetch/disptch/exec 3-cycle
-$COPYROM_PG    0x04 # DD01
-$CLRLN_PG      0x05 # DD02
-$CTXSW_PG      0x06 # DD03 - dispatched from BSYNC
-$MVCTX_PG      0x07 # DD04
-$IPCSND_PG     0x08 # DD05
-$IPCREC_PG     0x09 # DD06
-$CMDSND_PG     0x0A # DD07
-$YIELD_PG      0x0B # DD08
-$RECSEND_PG    0x0C # DD09
-$RECXFER_PG    0x0D # DD0A
-$RECRECV_PG    0x0E # DD0B
+$COPYROM_PG    0x04 # ED01
+$CLRLN_PG      0x05 # dispatched from CONSOLE
+$CTXSW_PG      0x06 # dispatched from BSYNC
+$MVCTX_PG      0x07 # DD04 (dev temp?)
+$CMDSND_PG     0x08 # DD05
+$YIELD_PG      0x09 # ED06 kernel, DD06 slave
+$SIGNAL_PG     0x0A # DD07
+$IPCSND_PG     0x0B # DD08
+$IPCREC_PG     0x0C # DD09
+$RECSEND_PG    0x0D # ED0A
+$RECXFER_PG    0x0E # ED0B
+$RECRECV_PG    0x0F # ED0C
 
 $JMPPG0_PG     0x10
 $JMPPG1_PG     0x11

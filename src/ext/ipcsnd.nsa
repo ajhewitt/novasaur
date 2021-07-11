@@ -18,12 +18,27 @@ LD HL, $IDEN$NULL
 #20
 LD Y, $0xFF
 FNH D, HLA                # read semaphore
-LDP PC, $EXIT26           # exit if not waiting
-LD HL, $0
+LDN PC, $CONT26           # send msg if waiting
 LD Y, $AREG
-#29
-MULH A, ND                # 0 -> Acc
-LD Y, $0xFF
+MULH AZ, ND               # 0 -> Acc
+#30
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+1
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#43
+
+$CONT26
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+LD HL, $0
 MULH A, ND                # signal -> semaphore
 LD HL, $IDEN$NULL
 #39
@@ -65,7 +80,6 @@ NOP
 NOP
 NOP
 NOP
-$EXIT26
 NOP
 NOP
 NOP
