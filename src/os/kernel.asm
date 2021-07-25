@@ -8,16 +8,21 @@ STACK   EQU     0FD00H
 SRCCPU  EQU     STACK+1
 HANDPG  EQU     0FAH    ;HANDLER TABLE
 
-CMDSND	EQU	05DDH
-YIELD	EQU	06EDH
-SIGNAL  EQU     07DDH
-IPCSND	EQU	08DDH
-IPCRCV	EQU	09DDH
-RECRECV	EQU	0AEDH
-RECXFER	EQU	0BEDH
-RECSEND	EQU	0CEDH
+CMDSND	EQU	05DDH   ;SLAVE: SET CMD;YIELD
+YIELD	EQU	06EDH   ;SLAVE: YIELD UNTIL SIGNAL
+                        ;MASTER: YIELD UNTIL CTX SW
+SIGNAL  EQU     07DDH   ;MASTER: SIGNAL SLAVE
+IPCSND	EQU	08DDH   ;MASTER: SET SLAVE REGS
+IPCRCV	EQU	09DDH   ;MASTER: GET SLAVE REGS
+RECRECV	EQU	0AEDH   ;SLAVE: GET RECORD
+RECXFER	EQU	0BEDH   ;MASTER: MOVE RECORD
+RECSEND	EQU	0CEDH   ;SLAVE: SET RECORD
 
         .ORG    ORIGIN
+;
+; MAIN EVENT LOOP
+; SCAN MSG BOXES - EXIT IF MSG RECEIVED
+;
 START:  LXI     SP,STACK
         DW	YIELD   ;WAIT UNTIL CTX SW
         XRA     A       ;A=0
@@ -28,7 +33,9 @@ RXMSG:  INR     A       ;A+1
         DW      IPCRCV  ;RX MSG
         ORA     A       ;A==0?
         JNZ     RXMSG   ;NEXT CPU
-        
+;
+; MSG HANDLER
+;
         PUSH    D       ;SAVE DE
 	PUSH	H       ;SAVE HL
 	LXI	H,TABLE
@@ -46,7 +53,7 @@ RXMSG:  INR     A       ;A+1
 	POP     D
 	PCHL		;GO THERE
 ;
-;
+; CLIENT RETURNS
 ;
 RETURN: LDA     SRCCPU
         ADI     HANDPG
@@ -57,8 +64,8 @@ RETURN: LDA     SRCCPU
         MOV     L,A     ;PAGE INDEX=SEQ<<2
         MOV     A,M     ;A=CMD
         ORA     A       ;NULL?
-        JZ      START
-        ;jump to only option "xfer" below
+        JZ      START   ;NO ACTION RETURN
+        ;"jump" to only option "xfer" below
         INX     H
         MOV     E,M     ;E=DEST
         LDA     SRCCPU
