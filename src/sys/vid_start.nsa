@@ -1,0 +1,70 @@
+# Video Start
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE VID_START
+
+$COL 0
+$ROW 0
+
+LD HL, $0xF0              # clear display
+LD Y, $COL
+MVHL AZ, ND               # F0 -> col
+#8
+$LOOP2
+LD HL, $DEC$NULL
+FNFH DZ, XD               # X = col-1
+LD HL, $0
+LDZ Y, $ROW
+MULH AZ, ND               # 0 -> row
+#12
+$LOOP1
+LD HL, $IDEN$NULL
+FNH D, Y                  # Y = row
+MULH A, ND                # 0 -> [X,Y]
+LD HL, $INC$NULL
+LDZ Y, $ROW
+FNH DZ, HLD               # row = row+1
+LD HL, $ZERO?$NULL
+FNFH A, NA                # row == 0?
+LDN PC, $LOOP1            # next row until 0
+#20,5120
+LDZ Y, $COL
+FNH DZ, HLA               # col == 0?
+LDN PC, $LOOP2            # next col until 0
+#6,1232887/35
+
+LD HL, $IDEN$NULL         # fill color/font
+LD Y, $TXTWID
+FNFH DZ, NA               # A = width
+LD Y, $COL
+FNH AZ, HLD               # A -> col
+#11
+$LOOP4
+LD HL, $DEC$LSL
+FNFH DZ, ND               # col = col-1
+LDN PC, $CONT             # continue if col > width
+FNFL A, HL                # HL = col*2
+LD Y, $TXTOFF
+ADDHL DZ, XA              # X = col*2 + offset
+LD HL, $0
+LD Y, $ROW
+MULH AZ, ND               # 0 -> row
+#22
+$LOOP3
+LD HL, $IDEN$NULL
+LD Y, $TXTCOL
+FNFH DZ, NA               # A = color/font
+LDZ Y, $ROW
+FNH D, Y                  # Y = row
+FNH A, HLD                # A -> [X,Y]
+LD HL, $INC$NULL
+LDZ Y, $ROW
+FNH DZ, HLD               # row = row+1
+LD HL, $ZERO?$NULL
+FNFH A, NA                # row == 0?
+LDN PC, $LOOP3            # next row until 0
+#26,6655
+LDP PC, $LOOP4            # else next col
+#2,6679*TXTWID+10
+$CONT

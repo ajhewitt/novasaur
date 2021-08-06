@@ -124,7 +124,7 @@ LD HL, $IDEN$NULL
 LD Y, $TEMP
 #50
 FNH AZ, HLD               # A -> temp
-LD PC, $CONT54
+LD PC, $EXIT54
 #54/17
 
 #RECORD SEND - init E to boundry, temp = -1
@@ -143,7 +143,7 @@ LD HL, $0xFF              # init temp to -1
 LD Y, $TEMP
 MVHL AZ, ND               # -1 -> temp
 #60
-LD PC, $CONT62
+LD PC, $EXIT62
 #62/22
 
 #RECORD XFER - init E to context, temp = -1
@@ -165,7 +165,7 @@ LD Y, $TEMP
 #59
 MVHL AZ, ND               # FF -> temp
 NOP
-LD PC, $CONT66
+LD PC, $EXIT66
 #66/27
 
 #RECORD RECV - init temp = -1
@@ -178,6 +178,7 @@ LD Y, $EREG
 LDZ HL, $DEC$NULL
 FNH DZ, HLD
 LD HL, $0xFF              # init temp to -1
+$EXIT48
 LD Y, $TEMP
 #50
 MVHL AZ, ND               # -1 -> temp

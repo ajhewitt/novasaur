@@ -8,10 +8,10 @@ PAGE WARM_START
 LD HL, $0xD1
 LD Y, $EO
 MVHL AZ, ED               # bank1,LED off
-LD HL, $0xA0              # F=XGA48,A=SVGA60,3=VGA60
+LD HL, $0xF0              # F=XGA48,A=SVGA60,3=VGA60
 LD Y, $VMODE
 MVHL AZ, ND               # 3 -> video mode
-LD HL, $0x98              # E=XGA48,9=SVGA60,1=VGA60
+LD HL, $0xE8              # E=XGA48,9=SVGA60,1=VGA60
 LD Y, $VMS
 MVHL AZ, ND               # mode+ext -> mode line
 LD HL, $0
@@ -56,7 +56,7 @@ LD Y, $TXWRIDX
 MULH AZ, ND               # 0 -> Tx Wr index
 
 # Console
-LD HL, $0x06
+LD HL, $0x0B              # SVGA:0x06,XGA:0x0B
 LD Y, $CONL
 MVHL AZ, ND               # 6 -> console left
 LD Y, $CONX
@@ -64,10 +64,10 @@ MVHL AZ, ND               # 6 -> console column
 LD HL, $0
 LD Y, $CONB
 ADDH AZ, ND               # left border+0 -> backspace stop
-LD HL, $0x57
+LD HL, $0x4C              # SVGA:0x57,XGA:0x4C
 LD Y, $CONR
 MVHL AZ, ND               # 87 -> console right
-LD HL, $0xC4
+LD HL, $0xCF              # SVGA:0xC4,XGA:0xCF
 LD Y, $CONH
 MVHL AZ, ND               # -60 -> console height
 LD HL, $0x5F

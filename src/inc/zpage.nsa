@@ -46,11 +46,15 @@ $CONH          0xB4 # console height from bottom
 $CONB          0xB5 # console backspace stop
 $CONC          0xB6 # console cursor char
 $COND          0xB7 # console spare
-$TIME0         0xB8 # 15tps, max 90 - 6s
-$TIME1         0xB9 # 10tpm, max 120 - 12m
-$TIME2         0xBA # 5tph, max 120 - 1d
-$TIME3         0xBB # 1tpd, max 256 - 0.7y
-#SPARE         0xBC-0xBF (4)
+$TXTADJ        0xB8 # text adjust offset
+$TXTOFF        0xB8 # text offset
+$TXTWID        0xBA # text width (104,80,64)
+$TXTCOL        0xBB # text color/font
+$TIME0         0xBC # 15tps, max 90 - 6s
+$TIME1         0xBD # 10tpm, max 120 - 12m
+$TIME2         0xBE # 5tph, max 120 - 1d
+$TIME3         0xBF # 1tpd, max 256 - 0.7y
+
 $DELTA0        0xC0
 $DELTA1        0xC1 # ADSR state as Y indirect
 $DELTA2        0xC2

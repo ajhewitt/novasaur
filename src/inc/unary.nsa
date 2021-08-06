@@ -6,7 +6,7 @@ $IDEN       0 # A = A
 $INC        1 # A = A+1
 $DEC        2 # A = A-1
 $INC2       3 # A = A+2
-$1COM       4 # A = ~A
+$1COM       4 # A = !A
 $2COM       5 # A = -A
 $LSR        6 # A>>1
 $LSL        7 # A<<1

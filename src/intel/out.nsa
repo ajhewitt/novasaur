@@ -168,8 +168,8 @@ LD Y, $AREG
 MULH AZ, ND               # 0->Acc
 $EXIT57
 NOP
-$EXIT58
 NOP
+$EXIT59
 #59/55
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
@@ -218,7 +218,7 @@ LDZ Y, $AREG
 #51/46
 ADDHL DZ, NA              # A = Acc-2|3
 LD HL, $IDEN$NULL
-LDPZ PC, $EXIT58          # exit if not enough cycles
+LDPZ PC, $EXIT59          # exit if not enough cycles
 FNH DZ, HLA               # A = Acc
 #60/53
 LD Y, $AMODE
