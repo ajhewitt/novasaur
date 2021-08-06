@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2021-07-10"
+Date "2021-08-01"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"
@@ -1668,6 +1668,18 @@ Connection ~ 4200 3350
 Connection ~ 5000 3350
 Wire Wire Line
 	4200 3350 5000 3350
+Text Notes 3750 4950 0    100  ~ 20
+H
+Text Notes 5350 5050 0    100  ~ 20
+V
+Text Notes 7150 1950 0    100  ~ 20
+F
+Text Notes 7150 5050 0    100  ~ 20
+G
+Text Notes 2150 1950 0    100  ~ 20
+S
+Text Notes 8550 4700 0    100  ~ 20
+T
 Wire Bus Line
 	3200 2150 3200 2450
 Wire Bus Line

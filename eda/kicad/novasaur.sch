@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2021-07-10"
+Date "2021-08-01"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"
@@ -1348,8 +1348,6 @@ Connection ~ 1350 5900
 Wire Wire Line
 	5600 5900 4150 5900
 Connection ~ 4150 5900
-Text GLabel 2350 1500 2    50   Input ~ 0
-~reset
 $Comp
 L Connector:TestPoint_Alt TP28
 U 1 1 5E514E07
@@ -1420,11 +1418,9 @@ $EndComp
 Connection ~ 9500 4650
 Wire Wire Line
 	9500 4650 9650 4650
-Wire Wire Line
-	2350 1600 3050 1600
-Text Label 2850 1600 0    50   ~ 0
+Text Label 2550 1600 0    50   ~ 0
 DD7
-Text GLabel 3050 1600 2    50   Input ~ 0
+Text GLabel 2750 1600 2    50   Input ~ 0
 DD[0..7]
 $Comp
 L 74xx:74LS86 U?
@@ -1475,6 +1471,81 @@ Wire Wire Line
 	4150 4000 4150 3700
 Wire Wire Line
 	4150 4000 5600 4000
+Text Notes 1750 5450 0    100  ~ 20
+CL
+Text Notes 3550 5450 0    100  ~ 20
+CH
+$Comp
+L Device:R_US R?
+U 1 1 6116EADB
+P 2750 1250
+AR Path="/62D13D9D/6116EADB" Ref="R?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/6116EADB" Ref="R?"  Part="1" 
+AR Path="/5DA1E9C0/6116EADB" Ref="R?"  Part="1" 
+AR Path="/6116EADB" Ref="R18"  Part="1" 
+F 0 "R18" H 2550 1200 50  0000 L CNN
+F 1 "10k" H 2550 1300 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2790 1240 50  0001 C CNN
+F 3 "~" H 2750 1250 50  0001 C CNN
+	1    2750 1250
+	-1   0    0    1   
+$EndComp
+$Comp
+L Switch:SW_Push SW?
+U 1 1 6116EAE1
+P 3150 1500
+AR Path="/5DA1E9C0/6116EAE1" Ref="SW?"  Part="1" 
+AR Path="/6116EAE1" Ref="SW2"  Part="1" 
+F 0 "SW2" H 3100 1800 50  0000 L CNN
+F 1 "RESET" H 3050 1700 50  0000 L CNN
+F 2 "Button_Switch_THT:SW_Tactile_SPST_Angled_PTS645Vx31-2LFS" H 3150 1700 50  0001 C CNN
+F 3 "~" H 3150 1700 50  0001 C CNN
+	1    3150 1500
+	-1   0    0    -1  
+$EndComp
+$Comp
+L power:VCC #PWR?
+U 1 1 611A0A05
+P 2750 1000
+AR Path="/5CDEEC9F/611A0A05" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/611A0A05" Ref="#PWR?"  Part="1" 
+AR Path="/611A0A05" Ref="#PWR0197"  Part="1" 
+F 0 "#PWR0197" H 2750 850 50  0001 C CNN
+F 1 "VCC" H 2750 1150 50  0000 C CNN
+F 2 "" H 2750 1000 50  0001 C CNN
+F 3 "" H 2750 1000 50  0001 C CNN
+	1    2750 1000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 1100 2750 1000
+Wire Wire Line
+	2350 1500 2750 1500
+Wire Wire Line
+	2750 1500 2750 1400
+Connection ~ 2750 1500
+Wire Wire Line
+	2750 1500 2950 1500
+Wire Wire Line
+	3350 1500 3450 1500
+Wire Wire Line
+	3450 1500 3450 1600
+$Comp
+L power:GNDD #PWR?
+U 1 1 611D649A
+P 3450 1600
+AR Path="/5CDEEC9F/611D649A" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/611D649A" Ref="#PWR?"  Part="1" 
+AR Path="/611D649A" Ref="#PWR0199"  Part="1" 
+F 0 "#PWR0199" H 3450 1350 50  0001 C CNN
+F 1 "GNDD" H 3450 1450 50  0000 C CNN
+F 2 "" H 3450 1600 50  0001 C CNN
+F 3 "" H 3450 1600 50  0001 C CNN
+	1    3450 1600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 1600 2350 1600
 Wire Bus Line
 	4450 5100 4450 6750
 Wire Bus Line

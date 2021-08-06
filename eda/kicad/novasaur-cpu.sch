@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2021-07-10"
+Date "2021-08-01"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"
@@ -2435,6 +2435,28 @@ F 3 "~" H 2300 5800 50  0001 C CNN
 	1    2300 5800
 	1    0    0    -1  
 $EndComp
+Text Notes 9400 5250 0    100  ~ 20
+HL
+Text Notes 3250 4400 0    100  ~ 20
+A
+Text Notes 1500 1850 0    100  ~ 20
+X
+Text Notes 1500 4150 0    100  ~ 20
+Y
+Text Notes 1450 6450 0    100  ~ 20
+Eo
+Text Notes 3200 6300 0    100  ~ 20
+Ei
+Text Notes 6500 4750 0    100  ~ 20
+PC
+Text Notes 6400 1800 0    100  ~ 20
+Pg
+Text Notes 4700 1800 0    100  ~ 20
+B
+Text Notes 8000 2450 0    100  ~ 20
+ROM
+Text Notes 3000 2100 0    100  ~ 20
+RAM
 Wire Bus Line
 	850  800  10150 800 
 Wire Bus Line
