@@ -4,21 +4,19 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE WARM_START
 
-# Set E-reg
-LD HL, $0xD1
+# set E-reg
+LD HL, $0x11              # D1=text,11=graph
 LD Y, $EO
 MVHL AZ, ED               # bank1,LED off
-LD HL, $0xF0              # F=XGA48,A=SVGA60,3=VGA60
+LD HL, $0x00              # F=XGA48,A=SVGA60,3=VGA60
 LD Y, $VMODE
 MVHL AZ, ND               # 3 -> video mode
-LD HL, $0xE8              # E=XGA48,9=SVGA60,1=VGA60
+LD HL, $0x18              # E=XGA48,9=SVGA60,1=VGA60
 LD Y, $VMS
 MVHL AZ, ND               # mode+ext -> mode line
 LD HL, $0
 LD Y, $VSTART
-MULH AZ, ND               # 0 -> vstart
-LD Y, $CONY
-MULH AZ, ND               # 0 -> console row
+MVHL AZ, ND               # 0 -> vstart
 
 # Keyboard
 LD HL, $0xD8              # -40

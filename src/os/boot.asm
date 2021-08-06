@@ -25,7 +25,7 @@ BOOT1:  DW      BOOTCPU
         INR     A
         CPI     8
         JNZ     BOOT1
-        JMP     0FA00H  ;BOOT MONITOR
+        JMP     00050H  ;BOOT MUSIC
         
 CTX2:   INR     A
 CTX3:   INR     A

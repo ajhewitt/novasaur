@@ -21,6 +21,7 @@ $JMPPG1_PG     0x11
 
 $MOVMX_PG      0x20
 
+$TEST_IMG_PG   0x7E
 $TEST_PG       0x7F
 
 # 0x80-0x8F: system

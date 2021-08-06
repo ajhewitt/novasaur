@@ -157,4 +157,5 @@ LD HL, $DEC$NULL
 LDZ Y, $TIME3
 FNH DZ, HLD               # set days to -1 (will overflow to 0)
 
+LD PG, $TEST_IMG_PG
 LD PG, $KBD_START
