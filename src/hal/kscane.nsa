@@ -17,10 +17,10 @@ LD Y, $COMLS
 FNEH DZ, NA
 #50/18
 LDN PC, $CLKSTART52       # KS=2|3, clock started this cycle
-LD HL, $INC$NULL
+LD HL, $DEC$NULL
 LDZ Y, $KIDLE
-FNH DZ, HLD               # keyboard idle+1
-LDP PC, $TIMEOUT59        # timeout when idle>0
+FNH DZ, HLD               # keyboard idle-1
+LDN PC, $TIMEOUT59        # timeout when idle<0
 LD HL, $0xC0
 #60/29
 LD Y, $KS1

@@ -1,6 +1,6 @@
 # zero page assignments
 
-#RESERVED      0x80-0x8A (11)
+#RESERVED      0x80-0x8A (11) scratch pad (protected)
 $AMODE         0x8B # audio mode - 0x00-0x3F (protected)
 $ICL           0x8C # idle cycle count low byte
 $ICH           0x8D # idle cycle count high byte
@@ -30,31 +30,31 @@ $ATTACK3       0xA4
 $DECAY3        0xA5
 $SUSTAIN3      0xA6
 $RELEASE3      0xA7
-$KSRDIDX       0xA8
-$KSWRIDX       0xA9
-$KCRDIDX       0xAA
-$KCWRIDX       0xAB
-$KTO           0xAC # max kbd idle count
-$BLOCK         0xAD # block count (0 to 175/160/128)
-$FRAME         0xAE # frame count (-5,-4 to 0)
-$VSTART        0xAF # top of video display
-$CONL          0xB0 # console left border
-$CONR          0xB1 # console right border
-$CONX          0xB2 # console column
-$CONY          0xB3 # console row
-$CONH          0xB4 # console height from bottom
-$CONB          0xB5 # console backspace stop
-$CONC          0xB6 # console cursor char
-$COND          0xB7 # console spare
-$TXTADJ        0xB8 # text adjust offset
-$TXTOFF        0xB8 # text offset
-$TXTWID        0xBA # text width (104,80,64)
-$TXTCOL        0xBB # text color/font
-$TIME0         0xBC # 15tps, max 90 - 6s
-$TIME1         0xBD # 10tpm, max 120 - 12m
-$TIME2         0xBE # 5tph, max 120 - 1d
-$TIME3         0xBF # 1tpd, max 256 - 0.7y
-
+$CONL          0xA8 # console left border
+$CONR          0xA9 # console right border
+$CONX          0xAA # console column
+$CONY          0xAB # console row
+$CONH          0xAC # console height from bottom
+$CONB          0xAD # console backspace stop
+$CONC          0xAE # console cursor char
+$COND          0xAF # console spare
+$TXTADJ        0xB0 # text adjust offset
+$TXTOFF        0xB1 # text offset
+$TXTWID        0xB2 # text width (104,80,64)
+$TXTCOL        0xB3 # text color/font
+$KSRDIDX       0xB4
+$KSWRIDX       0xB5
+$KCRDIDX       0xB6
+$KCWRIDX       0xB7
+$KTO           0xB8 # max kbd idle count
+$VSTART        0xB9 # start of video display
+$BLOCK         0xBA # block count, 0 to 175/160/128 (read-only)
+$FRAME         0xBB # frame count, -5,-4 to 0 (read-only)
+$TIME0         0xBC # 15tps, max 90 - 6s (read-only)
+$TIME1         0xBD # 10tpm, max 120 - 12m (read-only)
+$TIME2         0xBE # 5tph, max 120 - 1d (read-only)
+$TIME3         0xBF # 1tpd, max 256 - 0.7y (read-only)
+#INTERNAL STATE
 $DELTA0        0xC0
 $DELTA1        0xC1 # ADSR state as Y indirect
 $DELTA2        0xC2

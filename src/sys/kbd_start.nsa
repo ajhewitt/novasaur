@@ -10,7 +10,7 @@ MVHL AZ, ND               # 7->TEMP
 LD HL, $0x20
 LD Y, $HWSTAT
 MVH DZ, ND                # set HW status LSN 0010
-MULL A, V                 # preset H reg
+MULL A, V                 # reset V, preset H reg
 MULL A, S                 # reset scan/kbdtx high
 
 # (1)  Auxiliary device idle when clock high for 186us
@@ -41,7 +41,7 @@ LDP PC, $DELAY2           # delay until -1
 
 # (3)  Bring data low for 93us
 LD HL, $0
-MULL A, V                 # preset H reg
+MULL A, V                 # reset V, preset H reg
 NOP
 NOP
 NOP
@@ -90,7 +90,7 @@ LDP PC, $LOOP5            # loop until 0
 
 # (6)  Release data, wait 300ms, retry
 LD HL, $0x20
-MULL A, V                 # preset H reg
+MULL A, V                 # reset V, preset H reg
 MULL A, S                 # kbdtx high
 LD HL, $DEC$NULL
 LDZ Y, $TEMP
@@ -124,7 +124,7 @@ $PASS
 LD HL, $0x10
 LD Y, $HWSTAT
 ORH DZ, ND                # set bit 0 of HW STAT
-MULL A, V                 # preset H reg
+MULL A, V                 # reset V, preset H reg
 MULL A, S                 # kbdtx high
 
 $FAIL

@@ -21,7 +21,7 @@ LD Y, $CONY
 MULH AZ, ND               # 0 -> console row
 
 # Keyboard
-LD HL, $0xD8              # -40
+LD HL, $40                # 40
 LD Y, $KTO                # PS/2 idle timeout (blocks)
 MVHL AZ, ND
 LD HL, $0

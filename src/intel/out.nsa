@@ -105,10 +105,9 @@ LD PG, $CON_PG
 #32
 
 ADDR 0x74                 # Set Audio Mode
-LD HL, $3
-NOP
-LD PC, $AUDIO33
-#33
+LD HL, $XGA?$NULL
+LD PC, $AUDIO32
+#32
 
 $EXIT35
 LD HL, $INC$NULL
@@ -166,16 +165,15 @@ $EXIT50
 LD HL, $0
 LD Y, $AREG
 MULH AZ, ND               # 0->Acc
-$EXIT57
 NOP
 NOP
-$EXIT59
 #59/55
 MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-#71/61
+$EXIT63
 NOP
+$EXIT64
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
 LD PC, $EXIT74
 #74/64
 
@@ -195,36 +193,35 @@ LD HL, $0x80
 LD Y, $TEMP
 ORHL AZ, ND               # A|0x80 -> temp
 #42/18
+LD HL, $0x46              # check last 6 zpage entries
+ADDHL A, NA
+LDP PC, $EXIT50           # exit if read-ony
 LD HL, $IDEN$NULL
+#51/26
 LD Y, $AREG
 FNFH DZ, NA               # A = Acc
 LDZ Y, $TEMP
-#51/26
 FNH DZ, Y                 # Y = temp
+#60/33
 FNH AZ, HLD               # A -> Z[Y]
-LD PC, $EXIT57
-#57/30
+LD PC, $EXIT64
+#64/36
 
-$AUDIO33
-LD Y, $AREG
-ANDHL DZ, ND              # Acc = Acc&3
-LD HL, $XGA?$NULL
-#41/36
+$AUDIO32
 LD Y, $VMS
 FNEH DZ, NA               # 0 if 3 cycles per line
-LDP HL, $0xFD             # -3
-LDN HL, $0xFC             # -4
-LDZ Y, $AREG
-#51/46
-ADDHL DZ, NA              # A = Acc-2|3
-LD HL, $IDEN$NULL
-LDPZ PC, $EXIT59          # exit if not enough cycles
-FNH DZ, HLA               # A = Acc
-#60/53
+LDP HL, $0x40
+LDN HL, $0
+#40/44
+LD Y, $AREG
+ORH DZ, NA                # A = Acc|0b100 if XGA
+LD HL, $7
 LD Y, $AMODE
-FNH AZ, HLD               # A -> Audio mode
+#49/52
+ANDHL AZ, ND              # A&7 -> Audio mode
 LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute audio
-LD PC, $EXIT74
-#74/64
+#61/60
+LD PC, $EXIT63
+#57/62
