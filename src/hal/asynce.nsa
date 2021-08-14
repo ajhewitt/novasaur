@@ -38,43 +38,40 @@ LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
 #43/40
 
-ADDR 0x30             #32 - 1 voice
+ADDR 0x28             #32 - 1 voice
 LD HL, $IDEN$2        # HL=0x02
 LD Y, $AUDIO
 MULH DZ, ND           # 0->AUDIO
 LD PC, $EXIT41
-#41/56
+#41/48
 
-ADDR 0x40             #32 - 2 voices
+ADDR 0x30             #32 - 2 voices
 LDZ Y, $NOTE2L
 FNH DZ, HL            # HL = 0xA6
 LD Y, $WAVIDX2L
 ADDHL DZ, ND          # tone L + 0xA6 -> tone L
-#42/71
+#42/55
 AFHL A, NA
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL
 LDZ Y, $NOTE2H
-#51/79
+#51/63
 FNH DZ, HL            # HL = 0x0B or 0x0C
 LD Y, $WAVIDX2H
 ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
 LD HL, $IDEN$NULL
-#61/86
+#61/70
 LDZ Y, $WAVE2
 FNH DZ, HL            # HL = amp/wave
 LD Y, $AUDIO
 WAVHL AZ, ND          # synth value -> audio
-#71/93
-NOP
-NOP
-NOP
-NOP
+#71/77
+MVHL A, NA            # NOP
 LD HL, $IDEN$3
 LD PC, $EXIT79
-#79/101
+#79/83
 
-ADDR 0x70             #32 - 3 voices
+ADDR 0x58             #32 - 3 voices
 LDZ Y, $NOTE3L
 FNH DZ, HL            # HL = 0xA6
 LD Y, $WAVIDX3L
@@ -122,10 +119,7 @@ ADDHL DZ, ND          # audio + HL -> audio
 #120
 LD HL, $IDEN$4
 $EXIT79               #79 + 215-122=172
-NOP
-NOP
-NOP
-NOP
+MVHL A, NA            # NOP
 NOP
 $EXIT41               #41 + 215-127=129
 LD Y, $VMS

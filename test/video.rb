@@ -20,13 +20,12 @@ def load_rom
 end
 
 def print_line(i, j, l, n, s)
-  puts "#{(i * n) + l}: [#{j}, #{s & 0xF}] #{
-          (s & 0x10) >> 4} #{
-          (s & 0x20) == 0 ? '#' : '.'} #{
-          (s & 0x40) == 0 ? 'A' : 'B'}"
+  puts "#{(i * n)+l}\t#{j}\t#{(s&0x10)>>4}:#{s&0xF}\t#{
+          (s & 0x20) == 0 ? 'x' : '.'}\t#{
+          (s & 0x40) == 0 ? 'x' : '.'}"
 end
 
-# Output video timing for one of 32 modes
+# Output video timing for one of 24 modes
 mode = ARGV.first.to_i
 n = [3,3,3,3, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 5,5,5,5][mode]
 m = [0,0,0,0, 3,3,3,3,7,7,7,7, 3,3,3,3,7,7,7,7, 11,11,11,11][mode]
@@ -36,7 +35,7 @@ alu = load_rom[3]
 i = 0
 j = 0
 s = 0
-puts "LINE#: [V, PA] BANK SYNC ACTIVE/BLANK"
+puts "LINE#\tV\tS:L\tVSYNC\tVENABLE"
 while true
   n.times.each do |l|
     lmod = alu[offset + i]
