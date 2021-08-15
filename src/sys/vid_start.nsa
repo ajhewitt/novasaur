@@ -7,19 +7,6 @@ PAGE VID_START_PG
 $COL 0x80
 $ROW 0x81
 
-LD HL, $0x40
-LD Y, $TXTWID
-MVHL AZ, ND
-
-LD HL, $0x0C
-LD Y, $TXTOFF
-MVHL AZ, ND
-
-LD HL, $0xA0
-LD Y, $TXTCOL
-MVHL AZ, ND
-
-
 LD HL, $0xF0              # clear display
 LD Y, $COL
 MVHL AZ, ND               # F0 -> col
@@ -28,7 +15,7 @@ $LOOP2
 LD HL, $DEC$NULL
 FNFH DZ, XD               # X = col-1
 LD HL, $0
-LDZ Y, $ROW
+LD Y, $ROW
 MULH AZ, ND               # 0 -> row
 #12
 $LOOP1
@@ -45,7 +32,7 @@ LDN PC, $LOOP1            # next row until 0
 LDZ Y, $COL
 FNH DZ, HLA               # col == 0?
 LDN PC, $LOOP2            # next col until 0
-#6,1232887/35
+#6,1232887/37
 
 LD HL, $IDEN$NULL         # fill color/font
 LD Y, $TXTWID
@@ -61,7 +48,7 @@ ADDHL DZ, XA              # X = col*2 + offset
 LD HL, $0
 LD Y, $ROW
 MULH AZ, ND               # 0 -> row
-#22
+#17
 $LOOP3
 LD HL, $IDEN$NULL
 LD Y, $TXTCOL
@@ -75,12 +62,12 @@ FNH DZ, HLD               # row = row+1
 LD HL, $ZERO?$NULL
 FNH A, HLA                # row == 0?
 LDN PC, $LOOP3            # next row until 0
-#26,6655
+#25,6399
 LD HL, $DEC$NULL
 LDZ Y, $COL
 FNH DZ, HLD               # col = col-1
 LDP PC, $LOOP4            # next col until neg
-#2,6679*TXTWID+10
+#8,6424*TXTWID+10
 
 LD Y, $VMS
 LD PG, $BSYNCE_PG         # start video loop
