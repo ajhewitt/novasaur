@@ -1,5 +1,4 @@
 # zero page assignments
-
 #RESERVED      0x80-0x8A (11) scratch pad (protected)
 $AMODE         0x8B # audio mode - 0x00-0x3F (protected)
 $ICL           0x8C # idle cycle count low byte
@@ -116,10 +115,6 @@ $TMPH          0xFC # 16-bit temp MSB
 $TMPL          0xFD # 16-bit temp LSB
 $TEMP          0xFE # 8-bit temp
 $AUDIO         0xFF
-
-#Test
-$CLR_X         0xB2        # clr_scrn X
-$CLR_Y         0xB3        # clr_scrn Y
 
 #Constants
 $FETCH         0x00
