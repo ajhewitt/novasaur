@@ -21,15 +21,11 @@ $JMPPG1_PG     0x11
 
 $MOVMX_PG      0x20
 
-$TEST_PG       0x7F
-
 # 0x80-0x8F: system
-$COLD_START    0x80 # reset vector
-$WARM_START    0x81
-$KBD_START     0x82
-$VID_START     0x83
-
-$CLR_SCRN      0x88 # temp dev testing
+$COLD_START_PG 0x80 # reset vector
+$WARM_START_PG 0x81
+$KBD_START_PG  0x82
+$VID_START_PG  0x83
 
 $FETCH1_PG     0x90 # 0x90-0xE5: 8080 instruction set
 $FETCH2_PG     0x91

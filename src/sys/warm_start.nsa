@@ -2,23 +2,12 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE WARM_START
+PAGE WARM_START_PG
 
 # Set E-reg
 LD HL, $0xD1
 LD Y, $EO
 MVHL AZ, ED               # bank1,LED off
-LD HL, $0xF0              # F=XGA48,A=SVGA60,3=VGA60
-LD Y, $VMODE
-MVHL AZ, ND               # 3 -> video mode
-LD HL, $0xE8              # E=XGA48,9=SVGA60,1=VGA60
-LD Y, $VMS
-MVHL AZ, ND               # mode+ext -> mode line
-LD HL, $0
-LD Y, $VSTART
-MULH AZ, ND               # 0 -> vstart
-LD Y, $CONY
-MULH AZ, ND               # 0 -> console row
 
 # Keyboard
 LD HL, $40                # 40
@@ -54,6 +43,28 @@ LD Y, $RXWRIDX
 MULH AZ, ND               # 0 -> Rx Wr index
 LD Y, $TXWRIDX
 MULH AZ, ND               # 0 -> Tx Wr index
+
+# Video
+LD HL, $0xF0              # F=XGA48,A=SVGA60,3=VGA60
+LD Y, $VMODE
+MVHL AZ, ND               # 3 -> video mode
+LD HL, $0xE8              # E=XGA48,9=SVGA60,1=VGA60
+LD Y, $VMS
+MVHL AZ, ND               # mode+ext -> mode line
+LD HL, $0
+LD Y, $VSTART
+MULH AZ, ND               # 0 -> vstart
+LD Y, $CONY
+MULH AZ, ND               # 0 -> console row
+LD HL, $0x40              # text width 64 cols
+LD Y, $TXTWID
+MVHL AZ, ND
+LD HL, $0x0C              # text offset 12 chars
+LD Y, $TXTOFF
+MVHL AZ, ND
+LD HL, $0xA0              # text colors - green on black, font 2
+LD Y, $TXTCOL
+MVHL AZ, ND
 
 # Console
 LD HL, $0x0B              # SVGA:0x06,XGA:0x0B
@@ -120,5 +131,4 @@ LD HL, $COPYROM_INST
 LD Y, $INST
 MVHL AZ, ND               # Bootstrap Kernal
 
-LD Y, $VMS
-LD PG, $BSYNCE_PG         # start video loop
+LD PG, $VID_START_PG      # start video

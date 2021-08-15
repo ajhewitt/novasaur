@@ -2,7 +2,7 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE KBD_START
+PAGE KBD_START_PG
 
 LD HL, $7                 # retry 7 times
 LD Y, $TEMP
@@ -128,6 +128,4 @@ MULL A, V                 # reset V, preset H reg
 MULL A, S                 # kbdtx high
 
 $FAIL
-
-#LD PG, $WARM_START
-LD PG, $CLR_SCRN          # dev testing
+LD PG, $WARM_START_PG

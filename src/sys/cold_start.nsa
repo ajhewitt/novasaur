@@ -2,7 +2,7 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE COLD_START
+PAGE COLD_START_PG
 
 LD HL, $0x01              # LED ON for preflight
 MVHL A, EA                # bank1,LED on->E
@@ -157,4 +157,4 @@ LD HL, $DEC$NULL
 LDZ Y, $TIME3
 FNH DZ, HLD               # set days to -1 (will overflow to 0)
 
-LD PG, $KBD_START
+LD PG, $KBD_START_PG
