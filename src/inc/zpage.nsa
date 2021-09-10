@@ -77,7 +77,7 @@ $TXRDIDX       0xD3
 $TXWRIDX       0xD4
 #SPARE         0xD5
 $VMS           0xD6 # virtual machine state
-$VMODE         0xD7 # video mode  (combined with mode line)
+$VMODE         0xD7 # video mode  (used with mode line in VMS)
 $BMODE         0xD8 # VID col used for block
 $VLINE         0xD9 # video memory line
 $COMLS         0xDA # comms line state

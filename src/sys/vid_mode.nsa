@@ -1,0 +1,83 @@
+# Video Mode
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE VID_START_PG
+
+$MODE 0x80
+$VATTR 0
+
+LD HL, $0x40
+LD Y, $MODE
+MULH DZ, NA               # A = MODE<<2
+LD HL, $IDEN$NULL
+LD Y, $TEMP
+FNH AZ, HLD               # mode index->temp
+
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = MODES
+LD HL, $SWAP$NULL
+LDZ Y, $VMODE
+FNH AZ, HLD               # set video mode
+
+LD HL, $0x0F
+LDZ Y, $VMS
+ANDHL DZ, ND              # clear mode line
+LD HL, $IDEN$NULL
+LDZ Y, $TEMP
+FNH DZ, HLA
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = MODES
+LD HL, $0
+ANDH A, NA
+LD Y, $VMS
+ORHL AZ, ND               # set mode line
+
+LD HL, $INC$NULL
+LDZ Y, $TEMP
+FNH DZ, HLD               # mode index+1->temp
+
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = ELEFT
+LD HL, $0x3F
+ANDHL A, NA               # A = LEFT BORDER
+LD HL, $IDEN$NULL
+LD Y, $CONL
+FNFH AZ, ND               # left border -> console left
+LD Y, $CONX
+FNH AZ, HLD               # left border -> console X
+
+LD HL, $0x3F
+LD Y, $EO
+ANDHL DZ, ND              # Eo&3F -> Eo
+LD HL, $VATTR$NULL
+LD Y, $TEMP
+FNCH DZ, NA               # A = ELEFT
+LD HL, $0xC0
+ANDHL A, NA
+LD HL, $IDEN$NULL
+LDZ Y, $EO
+FNH DZ, HL                # HL = Eo
+ORHL AZ, ED               # set text/VDAC
+
+LD HL, $INC$NULL
+LDZ Y, $TEMP
+FNH DZ, HLD               # mode index+1->temp
+
+LD HL, $VATTR$IDEN
+FNCH A, NA                # A = WIDTH
+LD Y, $CONL
+FNFL DZ, HL               # HL = CON left
+LD Y, $CONR
+ADDHL AZ, ND              # CON left + WIDTH -> Con right
+
+LD HL, $INC$NULL
+LDZ Y, $TEMP
+FNH DZ, HLD               # mode index+1->temp
+
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = HEIGHT
+LD HL, $1COM$NULL
+LD Y, $CONH
+FNH AZ, HLD               # -height-1 -> CON height
+

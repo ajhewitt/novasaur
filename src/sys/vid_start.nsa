@@ -41,14 +41,13 @@ LD Y, $COL
 FNH AZ, HLD               # A -> col
 #11
 $LOOP4
-LD HL, $LSL$NULL
-FNH A, HL                 # HL = col*2
-LD Y, $TXTOFF
-ADDHL DZ, XA              # X = col*2 + offset
-LD HL, $0
+LD Y, $CONL
+ADDHL DZ, NA              # A = left-border + col
+LD HL, $0$LSL
+FNFL A, X                 # X = A*2
 LD Y, $ROW
 MULH AZ, ND               # 0 -> row
-#17
+#16
 $LOOP3
 LD HL, $IDEN$NULL
 LD Y, $TXTCOL

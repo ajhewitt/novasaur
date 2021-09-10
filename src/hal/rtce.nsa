@@ -23,7 +23,7 @@ FNH DZ, HLD               # TIME0+1
 LDN PC, $EXIT148          # return if TIME0<0
 LD HL, $0xA6
 #149
-MVHL AZ, ND               # TIME0 = -90
+ADDHL AZ, ND              # TIME0 += -90
 LD HL, $INC2$NULL
 LDZ Y, $VMS
 FNH DZ, HLD               # VMS+2 (cycle=3)
