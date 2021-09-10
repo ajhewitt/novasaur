@@ -6,7 +6,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2021-08-01"
+Date "2021-09-02"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"
@@ -1471,9 +1471,9 @@ Wire Wire Line
 	4150 4000 4150 3700
 Wire Wire Line
 	4150 4000 5600 4000
-Text Notes 1750 5450 0    100  ~ 20
+Text Notes 1750 5450 0    100  ~ 0
 CL
-Text Notes 3550 5450 0    100  ~ 20
+Text Notes 3550 5450 0    100  ~ 0
 CH
 $Comp
 L Device:R_US R?
