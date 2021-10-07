@@ -7,9 +7,9 @@ PAGE KBD_START_PG
 LD HL, $7                 # retry 7 times
 LD Y, $TEMP
 MVHL AZ, ND               # 7->TEMP
-LD HL, $0x20
-LD Y, $HWSTAT
-MVH DZ, ND                # set HW status LSN 0010
+LD HL, $0x40
+LD Y, $KBSTAT
+MVHL DZ, ND               # set kbd status to 0b01000000
 MULL A, V                 # reset V, preset H reg
 MULL A, S                 # reset scan/kbdtx high
 
@@ -121,9 +121,9 @@ LD PC, $IDLE
 
 # (7)  Release data to transmit 10 high bits - FF, patiry, stop
 $PASS
-LD HL, $0x10
-LD Y, $HWSTAT
-ORH DZ, ND                # set bit 0 of HW STAT
+LD HL, $0x80
+LD Y, $KBSTAT
+ORHL DZ, ND               # set MSB of kbd status
 MULL A, V                 # reset V, preset H reg
 MULL A, S                 # kbdtx high
 

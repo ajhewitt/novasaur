@@ -11,7 +11,7 @@ LD HL, $IDEN$NULL
 LD Y, $LREG
 FNFH DZ, XA           # A,X = L
 #11
-LDP HL, $0x80         # negate of positive
+LDP HL, $0x80         # negate if positive
 LDN HL, $0x10         # positive if >0xF0
 ADDHL A, NA
 LDP PC, $EXIT20       # exit if positive

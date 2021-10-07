@@ -2,39 +2,36 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE VID_START_PG
+PAGE VID_MODE_PG
 
-$MODE 0x80
-$VATTR 0
+$INDEX 0x80
+
+LD HL, $SWAP$NULL
+LDZ Y, $VMS
+FNH DZ, HLD               # swap VMS
 
 LD HL, $0x40
 LD Y, $MODE
 MULH DZ, NA               # A = MODE<<2
 LD HL, $IDEN$NULL
-LD Y, $TEMP
+LD Y, $INDEX
 FNH AZ, HLD               # mode index->temp
 
 LD HL, $VATTR$NULL
 FNCH A, NA                # A = MODES
-LD HL, $SWAP$NULL
+LD HL, $IDEN$NULL
 LDZ Y, $VMODE
 FNH AZ, HLD               # set video mode
 
-LD HL, $0x0F
-LDZ Y, $VMS
-ANDHL DZ, ND              # clear mode line
-LD HL, $IDEN$NULL
-LDZ Y, $TEMP
-FNH DZ, HLA
-LD HL, $VATTR$NULL
-FNCH A, NA                # A = MODES
-LD HL, $0
-ANDH A, NA
+LD HL, $SWAP$NULL
+FNH A, HLA                # H = MODEL
 LD Y, $VMS
-ORHL AZ, ND               # set mode line
+MVH DZ, NA                # H -> VMSL
+LD HL, $SWAP$NULL
+FNH AZ, HLD               # swap VMS
 
 LD HL, $INC$NULL
-LDZ Y, $TEMP
+LDZ Y, $INDEX
 FNH DZ, HLD               # mode index+1->temp
 
 LD HL, $VATTR$NULL
@@ -45,13 +42,15 @@ LD HL, $IDEN$NULL
 LD Y, $CONL
 FNFH AZ, ND               # left border -> console left
 LD Y, $CONX
-FNH AZ, HLD               # left border -> console X
+FNFH AZ, ND               # left border -> console X
+LD Y, $CONB
+FNH AZ, HLD               # left border -> console backstop
 
 LD HL, $0x3F
 LD Y, $EO
 ANDHL DZ, ND              # Eo&3F -> Eo
 LD HL, $VATTR$NULL
-LD Y, $TEMP
+LD Y, $INDEX
 FNCH DZ, NA               # A = ELEFT
 LD HL, $0xC0
 ANDHL A, NA
@@ -61,7 +60,7 @@ FNH DZ, HL                # HL = Eo
 ORHL AZ, ED               # set text/VDAC
 
 LD HL, $INC$NULL
-LDZ Y, $TEMP
+LDZ Y, $INDEX
 FNH DZ, HLD               # mode index+1->temp
 
 LD HL, $VATTR$IDEN
@@ -72,7 +71,7 @@ LD Y, $CONR
 ADDHL AZ, ND              # CON left + WIDTH -> Con right
 
 LD HL, $INC$NULL
-LDZ Y, $TEMP
+LDZ Y, $INDEX
 FNH DZ, HLD               # mode index+1->temp
 
 LD HL, $VATTR$NULL
@@ -81,3 +80,4 @@ LD HL, $1COM$NULL
 LD Y, $CONH
 FNH AZ, HLD               # -height-1 -> CON height
 
+LD PG, $VID_START_PG      # start video

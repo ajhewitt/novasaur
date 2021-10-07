@@ -36,17 +36,18 @@ $CONY          0xAB # console row
 $CONH          0xAC # console height from bottom
 $CONB          0xAD # console backspace stop
 $CONC          0xAE # console cursor char
-$COND          0xAF # console spare
-$TXTADJ        0xB0 # text adjust offset
-$TXTOFF        0xB1 # text offset
-$TXTWID        0xB2 # text width (104,80,64)
-$TXTCOL        0xB3 # text color/font
+$CONF          0xAF # console font
+$VSTART        0xB0 # start of video display
+$MODE          0xB1 # video mode to set
+#SPARE
+$KTO           0xB3 # max kbd idle count
 $KSRDIDX       0xB4
 $KSWRIDX       0xB5
 $KCRDIDX       0xB6
 $KCWRIDX       0xB7
-$KTO           0xB8 # max kbd idle count
-$VSTART        0xB9 # start of video display
+#PROTECTED STATE
+$KBSTAT        0xB8 # kbd status
+#SPARE
 $BLOCK         0xBA # block count, 0 to 175/160/128 (read-only)
 $FRAME         0xBB # frame count, -5,-4 to 0 (read-only)
 $TIME0         0xBC # 15tps, max 90 - 6s (read-only)
@@ -87,7 +88,7 @@ $CTXIDX        0xDD # context index
 $CTX0          0xDE # current context
 $CTX1          0xDF # next context
 $EO            0xE0 # Eo register value
-$HWSTAT        0xE1 # hardware status
+$RCODE         0xE1 # restart scan code
 $HTEMP         0xE2 # HAL temp
 #SPARE         0xE3-0xE7 (5)
 $CMDL          0xE8 # kernel IPC - command low

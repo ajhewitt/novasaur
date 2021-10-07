@@ -116,41 +116,45 @@ LD HL, $SCAN2$IDEN
 LD PC, $CONT66
 #66
 
-#ADDR 0x90
-
-ADDR 0x98
+ADDR 0x90
 LD HL, $0x80          # EXTCTRLALT62
-ORHL A, NA
+LD Y, $RCODE
+ORHL AZ, ND           # scan code+128 -> restart code
+#70/150
 LD HL, $SCAN2$IDEN
-#70/166
-FNCH A, NA            # A=ascii
-LDP PC, $EXIT75       # exit if positive
-FNFL A, PG            # load page register
-#77/172
+FNCH A, NA            # A = escape page
+NOP
+NOP
+NOP
+NOP
+#79/158
+LDP PC, $EXIT81       # exit if positive
+FNFL A, PG            # A -> page register
+#86/162
 
 $CONT66
 NOP
 NOP
 NOP
 NOP
-#70/176
+#70/166
 NOP
 $CONT71
 NOP
 $CONT72
 LD Y, $KCWRIDX
-FNFL DZ, Y            # Y=kbd code write index
+FNFL DZ, Y            # Y=keyboard code write index
 FNCH A, ND            # ascii -> kbd code buffer
-#80/183
+#80/174
 LD HL, $ZERO?$NULL
 FNH A, HLA            # ascii null?
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL
 LDZ Y, $KCWRIDX
 FNH DZ, HLD           # inc kbd wr index if not null
-#91/193
+#91/184
 LD PC, $EXIT93
-#93/195
+#93/186
 
 ADDR 0xC0             # BREAK62
 NOP
@@ -169,7 +173,6 @@ $EXIT72
 NOP
 NOP
 NOP
-$EXIT75
 NOP
 NOP
 NOP
@@ -177,6 +180,7 @@ NOP
 NOP
 #80
 NOP
+$EXIT81
 NOP
 NOP
 NOP

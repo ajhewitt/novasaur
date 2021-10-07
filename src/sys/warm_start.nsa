@@ -44,47 +44,6 @@ MULH AZ, ND               # 0 -> Rx Wr index
 LD Y, $TXWRIDX
 MULH AZ, ND               # 0 -> Tx Wr index
 
-# Video
-LD HL, $0xF0              # F=XGA48,A=SVGA60,3=VGA60
-LD Y, $VMODE
-MVHL AZ, ND               # 3 -> video mode
-LD HL, $0xE8              # E=XGA48,9=SVGA60,1=VGA60
-LD Y, $VMS
-MVHL AZ, ND               # mode+ext -> mode line
-LD HL, $0
-LD Y, $VSTART
-MULH AZ, ND               # 0 -> vstart
-LD Y, $CONY
-MULH AZ, ND               # 0 -> console row
-LD HL, $0x40              # text width 64 cols
-LD Y, $TXTWID
-MVHL AZ, ND
-LD HL, $0x0C              # text offset 12 chars
-LD Y, $TXTOFF
-MVHL AZ, ND
-LD HL, $0xA0              # text colors - green on black, font 2
-LD Y, $TXTCOL
-MVHL AZ, ND
-
-# Console
-LD HL, $0x0B              # SVGA:0x06,XGA:0x0B
-LD Y, $CONL
-MVHL AZ, ND               # 6 -> console left
-LD Y, $CONX
-MVHL AZ, ND               # 6 -> console column
-LD HL, $0
-LD Y, $CONB
-ADDH AZ, ND               # left border+0 -> backspace stop
-LD HL, $0x4C              # SVGA:0x57,XGA:0x4C
-LD Y, $CONR
-MVHL AZ, ND               # 87 -> console right
-LD HL, $0xCF              # SVGA:0xC4,XGA:0xCF
-LD Y, $CONH
-MVHL AZ, ND               # -60 -> console height
-LD HL, $0x5F
-LD Y, $CONC
-MVHL AZ, ND               # '_' -> console cursor
-
 # Audio
 LD HL, $0x00
 LD Y, $AMODE
@@ -94,11 +53,11 @@ LD Y, $AUDIO
 MVHL AZ, ND               # mute->audio
 
 # Boot Kernel CPU
-LD HL, $IDEN$NULL
-LDZ Y, $HWSTAT
-FNH DZ, HLA               # A = HW status
-LDP HL, $0
-LDN HL, $1
+#LD HL, $IDEN$NULL
+#LDZ Y, $HWSTAT
+#FNH DZ, HLA               # A = HW status
+#LDP HL, $0
+LD HL, $1
 LD Y, $AREG
 MVHL AZ, ND               # memory size -> Acc
 LD HL, $0xF1
@@ -131,4 +90,4 @@ LD HL, $COPYROM_INST
 LD Y, $INST
 MVHL AZ, ND               # Bootstrap Kernal
 
-LD PG, $VID_START_PG      # start video
+LD PG, $VID_MODE_PG       # set video mode

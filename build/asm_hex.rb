@@ -61,7 +61,7 @@ is = {"NOP" => [0x80], "NOPZ" => [0x88]}
   i = 16.times.each_with_object([]) {|b, a| a[b] = n >> b & 1}
   next unless i[7] == 0
 
-  is["#{inst(i)}"] = [n&0xff, n>>8]
+  is["#{inst(i)}"] = [n&0xff, n>>8] unless is["#{inst(i)}"]
 end
 
 (2**7).times do |n|

@@ -441,7 +441,7 @@ FORK_KBD = [
 # |-> none  <-|->  alt  <-|-> ctrl  <-|->ctrl-alt<-|    000EBCAS
   [0x68, 0x70, 0x88, 0x88, 0x80, 0x80, 0x80, 0x80,      # make
    0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0,      # break
-   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x98, 0x98,      # ext-make
+   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x90, 0x90,      # ext-make
    0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0] * 4, # ext-break
   [0x08, 0x08, 0x08, 0x08, 0x60, 0x60, 0x60, 0x60,
    0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x88, 0x88,
@@ -620,13 +620,28 @@ end
 def ctrl_alt_page
   128.times.map do |code|
     case code
-    when 0x71
+    when 0x71 # del -> warm start
       0x82
+    when 0x7D # pgup -> vid mode up
+      0x89
+    when 0x7A # pgdn -> vid mode down
+      0x89
     else
       0
     end
   end
 end
+
+VATTR = [
+  49, 200, 104, 60,
+  117, 207, 80, 60,
+  105, 207, 80, 48,
+  121, 207, 80, 30,
+  181, 201, 80, 75,
+  169, 201, 80, 60,
+  185, 201, 80, 36,
+  254, 198, 64, 48
+] * 8
 
 # start of ALU high
 print_ext_addr 0x0002
@@ -684,7 +699,8 @@ print_unary(0xC1, SCAN_EX.map {|c| c ? c.ord : 0} + SCAN_CTRL)
 print_unary(0xC2, Array.new(0x80, 0) + ctrl_alt_page)
 # $KS2MODE: kbd scan code->keyboard mode bit mask
 print_unary(0xC3, kmode_mask)
-
+# $VATTR: video attributes
+print_unary(0xC4, VATTR)
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
 # FORKI: fork on interrupt

@@ -60,3 +60,4 @@ $SCAN0      0 # lower/upper scan code->ascii
 $SCAN1      1 # extended/control scan code->ascii
 $SCAN2      2 # alt/ext-ctrl-alt scan code->ascii
 $KS2MODE    3 # kbd scan code->kmode mask bit
+$VATTR      4 # video mode attributes (64 modes, 4 attrs/mode)

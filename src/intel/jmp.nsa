@@ -16,45 +16,44 @@ NOP
 #10
 NOP
 NOP
-NOP
 LD HL, $INC$FORK2
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
-#20
+#19
 FNDL A, PC
-#23
+#22
 
 ADDR 0x40             # PCL = 255, iden PCH, inc PCH
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
-#29
 FNFH M, NA            # A = [PC]
+#31
 LD Y, $TEMP
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
 LD Y, $PCL
-#40
+#39
 FNFH DZ, XD           # X,PCL = PCL+1
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
 FNH A, Y              # Y = PCH
-#51
+#50
 FNFH M, NA            # A = [PC]
 LD Y, $PCH
 FNFH AZ, ND           # A -> PCH
 LDZ Y, $TEMP
-#61
+#60
 FNFH DZ, XA           # X,A = temp
 LDZ Y, $PCL
 FNFH AZ, ND           # A -> PCL
 LDZ Y, $PCH
-#71
+#70
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # A -> isnt cache,HL
+FNFH AZ, HLD          # A -> isnt cache,HL (clear bank)
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
@@ -65,32 +64,32 @@ LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
 LD HL, $IDEN$NULL
 FNH A, Y              # Y = PCH
-#31
+#30
 FNFH M, NA            # A = [PC]
 LD Y, $TEMP
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
-#40
+#39
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$IDEN
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
-#51
+#50
 FNFH M, NA            # A = [PC]
 LD Y, $PCH
 FNFH AZ, ND           # A -> PCH
 LDZ Y, $TEMP
-#61
+#60
 FNFH DZ, XA           # X,A = temp
 LDZ Y, $PCL
 FNFH AZ, ND           # A -> PCL
 LDZ Y, $PCH
-#71
+#70
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # A -> isnt cache,HL
+FNFH AZ, HLD          # A -> isnt cache,HL (clear bank)
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
@@ -101,33 +100,33 @@ NOP
 NOP
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
-#29
 FNH DZ, Y             # Y = PCH
+#30
 FNFH M, NA            # A = [PC]
 LD Y, $TEMP
 FNH AZ, HLD           # A -> temp
 LD HL, $INC$NULL
-#40
+#39
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
 LD HL, $IDEN$IDEN
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
-#51
+#50
 FNFH M, NA            # A = [PC]
 LD Y, $PCH
 FNFH AZ, ND           # A -> PCH
 LDZ Y, $TEMP
-#61
+#60
 FNFH DZ, XA           # X,A = temp
 LDZ Y, $PCL
 FNFH AZ, ND           # A -> PCL
 LDZ Y, $PCH
-#71
+#70
 FNH DZ, Y             # Y = PCH
 FNFH M, NA            # A = [PC]
 LD Y, $INST
-FNH AZ, HLD           # A -> isnt cache,HL
+FNFH AZ, HLD          # A -> isnt cache,HL (clear bank)
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
