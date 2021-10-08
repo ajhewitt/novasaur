@@ -128,4 +128,4 @@ MULL A, V                 # reset V, preset H reg
 MULL A, S                 # kbdtx high
 
 $FAIL
-LD PG, $WARM_START_PG
+LD PG, $VID_MODE_PG

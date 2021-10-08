@@ -53,10 +53,6 @@ LD Y, $AUDIO
 MVHL AZ, ND               # mute->audio
 
 # Boot Kernel CPU
-#LD HL, $IDEN$NULL
-#LDZ Y, $HWSTAT
-#FNH DZ, HLA               # A = HW status
-#LDP HL, $0
 LD HL, $1
 LD Y, $AREG
 MVHL AZ, ND               # memory size -> Acc
@@ -90,4 +86,4 @@ LD HL, $COPYROM_INST
 LD Y, $INST
 MVHL AZ, ND               # Bootstrap Kernal
 
-LD PG, $VID_MODE_PG       # set video mode
+LD PG, $VID_START_PG      # start video

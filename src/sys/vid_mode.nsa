@@ -6,6 +6,30 @@ PAGE VID_MODE_PG
 
 $INDEX 0x80
 
+LD HL, $3                 # -0x7D
+LD Y, $RCODE
+ADDHL DZ, NA
+LD HL, $ZERO?$NULL
+FNH A, HLA                # page up?
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $MODE
+FNH DZ, HLD               # MODE+1
+
+LD HL, $6                 # -0x7A
+LD Y, $RCODE
+ADDHL DZ, NA
+LD HL, $ZERO?$NULL
+FNH A, HLA                # page down?
+LDP HL, $DEC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $MODE
+FNH DZ, HLD               # MODE-1
+
+LD HL, $0
+LD Y, $RCODE
+MULH AZ, ND               # clear restart code
+
 LD HL, $SWAP$NULL
 LDZ Y, $VMS
 FNH DZ, HLD               # swap VMS
@@ -80,4 +104,4 @@ LD HL, $1COM$NULL
 LD Y, $CONH
 FNH AZ, HLD               # -height-1 -> CON height
 
-LD PG, $VID_START_PG      # start video
+LD PG, $WARM_START_PG     # warm start
