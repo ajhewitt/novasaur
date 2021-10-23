@@ -5,7 +5,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2021-06-24"
+Date "2021-10-20"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"
@@ -677,8 +677,6 @@ F 3 "" H 1850 1000 50  0001 C CNN
 	1    1850 1000
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	9600 1100 8000 1100
 $Comp
 L Connector:TestPoint_Alt TP3
 U 1 1 5E52109D
@@ -1162,14 +1160,10 @@ $EndComp
 Wire Wire Line
 	7600 4650 7500 4650
 Connection ~ 7600 4650
-Text GLabel 7000 3300 2    50   Output ~ 0
+Text GLabel 6600 3100 2    50   Output ~ 0
 DA17
 Wire Wire Line
 	9600 2300 9300 2300
-Wire Wire Line
-	9600 1100 9600 2300
-Wire Wire Line
-	8000 1100 8000 1900
 Wire Wire Line
 	4400 3000 4400 2900
 Wire Wire Line
@@ -1347,8 +1341,6 @@ Connection ~ 1350 5900
 Wire Wire Line
 	5600 5900 4150 5900
 Connection ~ 4150 5900
-Text GLabel 2350 1500 2    50   Input ~ 0
-~reset
 $Comp
 L Connector:TestPoint_Alt TP28
 U 1 1 5E514E07
@@ -1362,41 +1354,6 @@ F 1 "CLCP" H 3900 6050 50  0001 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4350 5900 50  0001 C CNN
 F 3 "~" H 4350 5900 50  0001 C CNN
 	1    4150 5900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6600 3100 6700 3100
-$Comp
-L Jumper:SolderJumper_3_Bridged12 JP1
-U 1 1 5EB86903
-P 6900 3100
-F 0 "JP1" H 6900 3305 50  0000 C CNN
-F 1 "RAM" H 6900 3214 50  0000 C CNN
-F 2 "Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm" H 6900 3100 50  0001 C CNN
-F 3 "~" H 6900 3100 50  0001 C CNN
-	1    6900 3100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7000 3300 6900 3300
-Wire Wire Line
-	6900 3300 6900 3250
-Wire Wire Line
-	7100 3100 7200 3100
-Wire Wire Line
-	7200 3100 7200 3000
-$Comp
-L power:VCC #PWR?
-U 1 1 5EAF98E7
-P 7200 3000
-AR Path="/5CDEEC9F/5EAF98E7" Ref="#PWR?"  Part="1" 
-AR Path="/5DAA5CD8/5EAF98E7" Ref="#PWR?"  Part="1" 
-AR Path="/5EAF98E7" Ref="#PWR0198"  Part="1" 
-F 0 "#PWR0198" H 7200 2850 50  0001 C CNN
-F 1 "VCC" H 7217 3173 50  0000 C CNN
-F 2 "" H 7200 3000 50  0001 C CNN
-F 3 "" H 7200 3000 50  0001 C CNN
-	1    7200 3000
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -1419,11 +1376,9 @@ $EndComp
 Connection ~ 9500 4650
 Wire Wire Line
 	9500 4650 9650 4650
-Wire Wire Line
-	2350 1600 3050 1600
-Text Label 2850 1600 0    50   ~ 0
+Text Label 2550 1600 0    50   ~ 0
 DD7
-Text GLabel 3050 1600 2    50   Input ~ 0
+Text GLabel 2750 1600 2    50   Input ~ 0
 DD[0..7]
 $Comp
 L 74xx:74LS86 U?
@@ -1474,6 +1429,81 @@ Wire Wire Line
 	4150 4000 4150 3700
 Wire Wire Line
 	4150 4000 5600 4000
+$Comp
+L Device:R_US R?
+U 1 1 61FD430E
+P 2750 1250
+AR Path="/62D13D9D/61FD430E" Ref="R?"  Part="1" 
+AR Path="/5DAA5CD8/5D9AFF37/61FD430E" Ref="R?"  Part="1" 
+AR Path="/5DA1E9C0/61FD430E" Ref="R?"  Part="1" 
+AR Path="/61FD430E" Ref="R6"  Part="1" 
+F 0 "R6" H 2550 1200 50  0000 L CNN
+F 1 "10k" H 2550 1300 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2790 1240 50  0001 C CNN
+F 3 "~" H 2750 1250 50  0001 C CNN
+	1    2750 1250
+	-1   0    0    1   
+$EndComp
+$Comp
+L Switch:SW_Push SW?
+U 1 1 61FD4314
+P 3150 1500
+AR Path="/5DA1E9C0/61FD4314" Ref="SW?"  Part="1" 
+AR Path="/61FD4314" Ref="SW2"  Part="1" 
+F 0 "SW2" H 3100 1800 50  0000 L CNN
+F 1 "RESET" H 3050 1700 50  0000 L CNN
+F 2 "Button_Switch_THT:SW_DIP_SPSTx01_Slide_6.7x4.1mm_W7.62mm_P2.54mm_LowProfile" H 3150 1700 50  0001 C CNN
+F 3 "~" H 3150 1700 50  0001 C CNN
+	1    3150 1500
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 1500 2750 1400
+Wire Wire Line
+	2350 1500 2750 1500
+$Comp
+L power:GNDD #PWR?
+U 1 1 62E1CD75
+P 3400 1550
+AR Path="/5CDEEC9F/62E1CD75" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/62E1CD75" Ref="#PWR?"  Part="1" 
+AR Path="/62E1CD75" Ref="#PWR0188"  Part="1" 
+F 0 "#PWR0188" H 3400 1300 50  0001 C CNN
+F 1 "GNDD" H 3400 1400 50  0000 C CNN
+F 2 "" H 3400 1550 50  0001 C CNN
+F 3 "" H 3400 1550 50  0001 C CNN
+	1    3400 1550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3350 1500 3400 1500
+Wire Wire Line
+	3400 1500 3400 1550
+Connection ~ 2750 1500
+Wire Wire Line
+	2750 1500 2950 1500
+Wire Wire Line
+	8000 1150 9600 1150
+Wire Wire Line
+	8000 1150 8000 1900
+Wire Wire Line
+	9600 1150 9600 2300
+$Comp
+L power:VCC #PWR?
+U 1 1 61743D1E
+P 2750 1100
+AR Path="/5CDEEC9F/61743D1E" Ref="#PWR?"  Part="1" 
+AR Path="/5DAA5CD8/61743D1E" Ref="#PWR?"  Part="1" 
+AR Path="/61743D1E" Ref="#PWR0111"  Part="1" 
+F 0 "#PWR0111" H 2750 950 50  0001 C CNN
+F 1 "VCC" H 2750 1250 50  0000 C CNN
+F 2 "" H 2750 1100 50  0001 C CNN
+F 3 "" H 2750 1100 50  0001 C CNN
+	1    2750 1100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 1600 2350 1600
 Wire Bus Line
 	4450 5100 4450 6750
 Wire Bus Line

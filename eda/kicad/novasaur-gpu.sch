@@ -5,7 +5,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 3 4
 Title "Graphics Processing Unit"
-Date "2021-06-24"
+Date "2021-10-20"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"
@@ -1335,10 +1335,10 @@ Wire Wire Line
 Text GLabel 2700 2250 2    50   Output ~ 0
 ~kbdtx
 $Comp
-L Jumper:SolderJumper_2_Open JP2
+L Jumper:SolderJumper_2_Open JP1
 U 1 1 5EC0E5B4
 P 4850 2250
-F 0 "JP2" H 4850 2150 50  0000 C CNN
+F 0 "JP1" H 4850 2150 50  0000 C CNN
 F 1 "FONT" H 4850 2050 50  0000 C CNN
 F 2 "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm" H 4850 2250 50  0001 C CNN
 F 3 "~" H 4850 2250 50  0001 C CNN
