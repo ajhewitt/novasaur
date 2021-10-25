@@ -19,7 +19,10 @@ build/asm_hex.rb boot >> build/output/rom.hex
 echo "Copy Cold Storage"
 echo ":020000040001F9" >> build/output/rom.hex
 build/cold_hex.rb lib/boot.hex 0 >> build/output/rom.hex
-build/cold_hex.rb lib/monitor.hex 8 >> build/output/rom.hex
+build/cold_hex.rb lib/disk.hex 1 >> build/output/rom.hex
+build/cold_hex.rb lib/kernel.hex 2 >> build/output/rom.hex
+build/cold_hex.rb lib/monitor.hex 10 >> build/output/rom.hex
+#build/cold_hex.rb lib/cpm22.hex 18 >> build/output/rom.hex
 
 echo "Building ALU"
 build/alu_hex.rb >> build/output/rom.hex

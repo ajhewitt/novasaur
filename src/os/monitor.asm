@@ -1,11 +1,11 @@
-; TITLE '8080 system monitor, ver 0.4'
+; TITLE '8080 SYSTEM MONITOR, VER 0.5'
 ;
-; May 29, 2021
+; OCT 22, 2021
 ;
         .PROJECT monitor.com
-        .ORG    0FA00H
+        .ORG    0F800H
 ;
-STACK   EQU     0F9C0H
+STACK   EQU     0FF80H
 SDATA   EQU     8       ;SERIAL DATA
 CDATA   EQU     9       ;CONSOLE DATA
 RXEN    EQU     11      ;RX ENABLE
@@ -161,7 +161,7 @@ SIGNON: DB      CR,LF,
         DB      "            /o)",CR,LF
         DB      "   .^/\/\^.//",CR,LF
         DB      " _/NOVASAUR/    ",
-        DB      "8080 SYSMON v0.3",CR,LF
+        DB      "8080 SYSMON v0.5",CR,LF
         DB      "<__^|_|-|_|",LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
@@ -701,9 +701,9 @@ VERM3:  CALL    TSTOP   ;DONE?
 ;
 ; SPEED TEST
 ;
-KIPS:   IN      38H
+KIPS:   IN      3CH
         MOV     B,A     ;SAVE TIME
-KIPS1:  IN      38H
+KIPS1:  IN      3CH
         CMP     B       ;TIME CHANGED?
         JZ      KIPS1   ;WAIT FOR TICK
         MOV     B,A     ;SAVE TIME
@@ -717,7 +717,7 @@ KIPS3:  MOV     E,M     ;1+1 (2) PACK
         MOV     C,A     ;1+1 (2) SAVE A IN C
         DCR     D       ;1+2-1 (2.3) COUNT-1
         JNZ     KIPS3   ;1+2 (3.3)
-        IN      38H
+        IN      3CH
         CMP     B       ;TIME CHANGED?
         JZ      KIPS2   ;WAIT FOR TICK
         CALL    OUTHX

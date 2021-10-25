@@ -1,173 +1,127 @@
+; TITLE: 'BOOT LOADER'
 ;
-; May 29, 2021
+; OCT 22, 2021
 ;
         .PROJECT        boot.com
-ORIGIN  EQU     0
-CPROM   EQU     01EDH
-BOOTCPU EQU     02FDH
-MOVXB   EQU     70DDH
-YIELD   EQU     08DDH
 
-        .ORG    ORIGIN
-        ANI     7
-        ADI     TABLE   -ORIGIN
-        MOV     L,A
-        MVI     A,41H
-        MVI     H,ORIGIN>>8
-        MOV     L,M     ;HL = VECTOR
-        PCHL            ;JUMP VECTOR
+STACK   EQU     0FFFFH
+CPROM   EQU     001EDH
+BOOTCPU EQU     002FDH
+MVCTX   EQU     004DDH
+MOVXB   EQU     070DDH
 
-KERNEL: LXI     DE,0FA08H ;DEST/ROM PAGE
-        MVI     C,5     ;6 PAGES
+        .ORG    0
+        ANI     7       ;LIMIT TO 8 CPUS
+        JNZ     START   ;BOOT CPU1-7
+HALT:   HLT             ;HALT CPU0
+        NOP
+        NOP
+RST1:   NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+RST2:   NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+RST3:   NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+RST4:   NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+RST5:   NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+RST6:   NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+RST7:   NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+        NOP
+START:  LXI     SP,STACK
+        PUSH    A       ;PUSH CPU#
+        ADI     TABLE
+        MOV     L,A     ;L=TABLE+CPU
+        MVI     H,0
+        MOV     L,M     ;HL=BOOT VECTOR
+        PCHL            ;JUMP TO VECTOR
+
+KERNEL: MVI     A,0     ;CLEAR CTX TABLE
+        MOV     H,A
+CTX1:   DW      MVCTX   ;CTX=0
+        INR     H
+        JNZ     CTX1
+        LXI     DE,0F80AH ;DEST/ROM PAGE
+        MVI     C,5    ;16 PAGES
         DW      CPROM   ;COPY ROM
         MVI     A,2
 BOOT1:  DW      BOOTCPU
         INR     A
         CPI     8
         JNZ     BOOT1
-        JMP     0FA00H  ;BOOT MONITOR
+        JMP     0F800H  ;BOOT MONITOR
         
-CTX2:   INR     A
-CTX3:   INR     A
-CTX4:   INR     A
-CTX5:   INR     A
-CTX6:   INR     A
-CTX7:   INR     A
-        MOV     L,A
-COL1:   DW      MOVXB
-        INR     H
-        JNZ     COL1
-        DW      YIELD
-        INR     B
-        JMP     COL1
+CPM:    LXI     DE,0DC12H;DEST/ROM PAGE
+        MVI     C,29    ;30 PAGES
+        DW      CPROM   ;COPY ROM
+        JMP     0F200H  ;WARM BOOT CPM
 
+DISK:   LXI     DE,0FF01H;DEST/ROM PAGE
+        MVI     C,0     ;1 PAGE
+        DW      CPROM   ;COPY ROM
+        JMP     0FF00H  ;BOOT DISK
 
-TABLE:  DB      KERNEL  -ORIGIN
-        DB      KERNEL  -ORIGIN
-        DB      CTX2    -ORIGIN
-        DB      CTX3    -ORIGIN
-        DB      CTX4    -ORIGIN
-        DB      CTX5    -ORIGIN
-        DB      CTX6    -ORIGIN
-        DB      CTX7    -ORIGIN
+TABLE:  DB      HALT
+        DB      KERNEL
+        DB      CPM
+        DB      CPM
+        DB      DISK
+        DB      DISK
+        DB      DISK
+        DB      DISK
 ;
-; TEST - QUAD CORE CONTEXT MAP of @ 0040
+; TEST - QUAD CORE CONTEXT MAP
 ;
-MVCTX   EQU     04DDH
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
         MVI     H,0
-CTX1:   MOV     A,H
+CTX2:   MOV     A,H
         ANI     6
         ORI     0F1H
         DW      MVCTX
         INR     H
-        JNZ     CTX1
+        JNZ     CTX2
         RET
-;
-; TEST - KEYPAD/MUSIC DEMO @ 0050
-;
-GATE    EQU     0100H
-VOICE   EQU     GATE+1
-        NOP
-        NOP
-        MVI     A,2
-        STA     VOICE   ;CLEAR VOICE
-        OUT     00AH    ;AUDIO MODE 2
-        MVI     A,00AH
-        OUT     015H    ;WAVE 1
-        OUT     01CH    ;WAVE 2
-        MVI     A,070H
-        OUT     016H    ;ATTACK 1
-        OUT     01DH    ;ATTACH 2
-        MVI     A,0F0H
-        OUT     017H    ;DECAY 1
-        OUT     01EH    ;DECAY 2
-        MVI     A,0F8H
-        OUT     019H    ;RELEASE 1
-        OUT     020H    ;RELEASE 2
-RELS:   MVI     A,0
-        OUT     018H    ;GATE OFF 1
-        OUT     01FH    ;GATE OFF 2
-        XRA     A
-        STA     GATE
-SCAN:   MVI     B,0F7H
-        MVI     C,0FFH
-SCAN1:  INR     C       ;COUNT COL
-        MOV     A,B
-        RAL
-        CPI     0E0H
-        JZ      RELS    ;NO KEY PRESS
-        OUT     7       ;SCAN COL
-        MOV     B,A     ;SAVE
-        IN      7       ;SCAN ROW
-        ANI     0F0H
-        CPI     0F0H
-        JZ      SCAN1   ;NEXT COL
-SCAN2:  MOV     B,A
-        ANI     080H
-        JZ      PLAY
-        MOV     A,C
-        ADI     4
-        MOV     C,A
-        MOV     A,B
-        RAL
-        JMP     SCAN2
 
-PLAY:   LDA     GATE
-        ORA     A
-        JNZ     TONE
-        MVI     A,1
-        STA     GATE
-        LDA     VOICE
-        XRI     2
-        STA     VOICE
-        
-TONE:   MVI     D,0
-        MOV     A,C
-        RAL
-        MOV     E,A     ;DE=OFFSET
-        LXI     H,NOTES ;TABLE START
-        DAD     D       ;ADD OFFSET TO TABLE
-        MOV     D,M     ;LOW BYTE
-        INX     H
-        MOV     E,M     ;HIGH BYTE
-        LDA     VOICE
-        ORA     A
-        MOV     A,D
-        JZ      TONE2
-        
-TONE1:  OUT     013H    ;SET TONE 1
-        MOV     A,E
-        OUT     014H    ;SET TONE 1
-        MVI     A,0F6H
-        OUT     018H    ;SET SUSTAIN 1
-        JMP     SCAN
-        
-TONE2:  OUT     01AH    ;SET TONE 1
-        MOV     A,E
-        OUT     01BH    ;SET TONE 1
-        MVI     A,0F6H
-        OUT     01FH    ;SET SUSTAIN 2
-        JMP     SCAN
-        
-NOTES:  DW      053BH
-        DW      058BH
-        DW      05DFH
-        DW      0638H
-        DW      0697H
-        DW      06FBH
-        DW      0766H
-        DW      07D6H
-        DW      084EH
-        DW      08CCH
-        DW      0952H
-        DW      09E0H
-        DW      0A76H
-        DW      0B15H
-        DW      0BBEH
-        DW      0C71H

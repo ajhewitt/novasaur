@@ -85,5 +85,8 @@ MVHL AZ, ND               # 0xFFFF->PC
 LD HL, $COPYROM_INST
 LD Y, $INST
 MVHL AZ, ND               # Bootstrap Kernal
+LD HL, $0x80
+LD Y, $VMS
+MVH DZ, ND                # Extended instruction
 
 LD PG, $VID_START_PG      # start video
