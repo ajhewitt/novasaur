@@ -4,31 +4,34 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE JMPPG0_PG
 
-#assume A=inst, HL=$EXTPC$EXTPG
-FNDH A, PCA               # fork to jump page
-#34/2
+#assume A=inst
+LD HL, $IDEN$EXTPC
+FNDL A, PC                # fork within jump page
+#34/4
 
 $EXIT53
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
-#69/10
+#69
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
-ADDR 0x0D
+
+# NOP for 2-cycle extended dispatch
+ADDR 0x10
 NOP
 LD HL, $DEC$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 #39|82
 FNH DZ, HLD               # VMS-1
 LD PG, $FETCH1_PG         # cycle available, goto fetch
-#43/22
+#43/20
 
 #COPYROM - init
 #0 -> TEMP (X RAM index)
 #EREG (ROM page) -> TMPH=ROM number, TMPL=ROM page lsn
-ADDR 0x16
+ADDR 0x18
 LD HL, $0
 LD Y, $TEMP
 MULH AZ, ND               # 0->temp
@@ -61,7 +64,7 @@ DISHL DZ, PGA             # jump to next VMC
 
 #BOOTCPU - init copy ROM0/page0
 #AREG: CPU number
-ADDR 0x40
+ADDR 0x44
 LD HL, $0xF0
 LD Y, $AREG
 ORHL DZ, NA               # A=n|0xF0
@@ -112,86 +115,74 @@ DISHL DZ, PGA             # jump to next VMC
 #129/74
 
 #YIELD - init temp = context index
-ADDR 0x8C
+ADDR 0x90
 LD HL, $IDEN$NULL
 LD Y, $INST
 FNH AZ, HLD               # yield -> inst cache
 #40
 LD HL, $IDEN$NULL
 LDZ Y, $CTXIDX
-FNH DZ, HLA               # A = context index
-LD HL, $IDEN$NULL
-LD Y, $TEMP
+FNH DZ, HL                # HL = context index
+MVHL A, NA                # NOP
 #50
-FNH AZ, HLD               # A -> temp
-LD PC, $EXIT54
-#54/17
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+LD PC, $EXIT68
+#68/22
 
 #RECORD SEND - init E to boundry, temp = -1
-ADDR 0xA0
-LD HL, $IDEN$NULL
+ADDR 0xA8
 LD Y, $INST
 FNH AZ, HLD               # record send -> inst cache
-#40
 LD HL, $0x80
+#40
 LD Y, $EREG
 ANDHL DZ, ND              # E = E&80
-LDZ HL, $DEC$NULL
-#50
-FNH DZ, HLD               # E-1
-LD HL, $0xFF              # init temp to -1
-LD Y, $TEMP
-MVHL AZ, ND               # -1 -> temp
-#60
-LD PC, $EXIT62
-#62/22
+LD PC, $EXIT48
+#48/11
 
-#RECORD XFER - init E to context, temp = -1
+#RECORD XFER - init D/E to context, temp = -1
 ADDR 0xB8
-LD HL, $IDEN$NULL
-LD Y, $INST
-FNH AZ, HLD               # record transfer -> inst cache
-#40
 LD HL, $KERN?$NULL
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
-LDN PC, $EXIT48           # exit if not kern
+#40
+LDP HL, $XFER_INST        # XFER if kern
+LDN HL, $FETCH            # FETCH if not kern
+LD Y, $INST
+MVHL AZ, ND               # inst -> cache
+#49
 LD HL, $0xF0
+LD Y, $DREG
+ORHL DZ, ND               # D|F0 -> D
 LD Y, $EREG
-#51
-ORHL DZ, ND               # E|F0 -> E
-LD HL, $0xFF              # init temp to -1
-LD Y, $TEMP
 #59
-MVHL AZ, ND               # FF -> temp
-NOP
-LD PC, $EXIT66
-#66/27
+ORHL DZ, ND               # E|F0 -> E
+LD PC, $EXIT65
+#65/25
 
 #RECORD RECV - init temp = -1
 ADDR 0xD8
-LD HL, $IDEN$NULL
 LD Y, $INST
 FNH AZ, HLD               # record receive -> inst cache
-#40
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
 LD Y, $EREG
-LDZ HL, $DEC$NULL
-FNH DZ, HLD
-LD HL, $0xFF              # init temp to -1
 $EXIT48
+LDZ HL, $DEC$NULL
+FNH DZ, HLD               # E-1
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+NOP
+$EXIT65
+NOP
+LD HL, $0xFF              # init temp to -1
+$EXIT68
 LD Y, $TEMP
-#50
 MVHL AZ, ND               # -1 -> temp
-$EXIT54
-MVHL A, NA                # NOP
-$EXIT58
-MVHL A, NA                # NOP
-$EXIT62
-MVHL A, NA                # NOP
-$EXIT66
-MVHL A, NA                # NOP
-#70
-MVHL A, NA                # NOP
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # HL = inst cache

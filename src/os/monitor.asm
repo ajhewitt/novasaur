@@ -1,4 +1,4 @@
-; TITLE '8080 SYSTEM MONITOR, VER 0.5'
+i; TITLE '8080 SYSTEM MONITOR, VER 0.5'
 ;
 ; OCT 22, 2021
 ;
@@ -92,7 +92,7 @@ TABLE:  DW      ASCII   ;A, ASCII
         DW      MOVE    ;M, MOVE
         DW      ERROR   ;N
         DW      OPORT   ;O, PORT OUTPUT
-        DW      ERROR   ;P
+        DW      PROC    ;P
         DW      ERROR   ;Q
         DW      REPL    ;R, REPLACE
         DW      SEARCH  ;S, SEARCH
@@ -723,4 +723,28 @@ KIPS3:  MOV     E,M     ;1+1 (2) PACK
         CALL    OUTHX
         RET
 
+CMDSND	EQU	05DDH   ;SLAVE: SET CMD;YIELD
+YIELD	EQU	06EDH   ;SLAVE: YIELD UNTIL SIGNAL
+                        ;MASTER: YIELD UNTIL CTX SW
+SIGNAL  EQU     07DDH   ;MASTER: SIGNAL SLAVE
+IPCSND	EQU	08DDH   ;MASTER: SET SLAVE REGS
+IPCRCV	EQU	09DDH   ;MASTER: GET SLAVE REGS
+RECSEND	EQU	0AEDH   ;SLAVE: SET RECORD
+RECXFER	EQU	0BEDH   ;MASTER: MOVE RECORD
+RECRECV	EQU	0CEDH   ;SLAVE: GET RECORD
+
+PROC:   MVI     A,7
+        LXI     B,4102H
+        LXI     D,0200H ;READ PAGE 2
+        LXI     H,0
+        DW      IPCSND  ;SEND CMD 2
+        ORA     A       ;A==0?
+        JZ      ERROR   ;TODO: HANDLE ERR
+        LXI     D,0701H ;CTX 7->1
+        DW      RECXFER
+        LXI     D,0200H ;REC->PAGE 2
+        DW      RECRECV
+
+        RET
+        
         END

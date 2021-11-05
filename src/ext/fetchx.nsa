@@ -5,16 +5,14 @@ INCLUDE ../inc/pages.nsa
 PAGE FETCHX_PG
 
 # assume: Y = $VMS
-LD HL, $0x90
-ADDH DZ, ND            # inc state, set ext flag
-NOP
-NOP
-NOP
-NOP
-NOP
+LD HL, $0x80
+ORH DZ, NA             # set ext flag
+LD HL, $INC$FORK1
+FNFH AZ, ND            # inc state
 #10
 NOP
-LD HL, $INC$FORK1
+NOP
+NOP
 LD Y, $PCL
 FNFH DZ, XD            # X,PCL = PCL+1
 FNDL A, PC             # fork on PCL

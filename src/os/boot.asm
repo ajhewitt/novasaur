@@ -107,8 +107,8 @@ DISK:   LXI     DE,0FF01H;DEST/ROM PAGE
 
 TABLE:  DB      HALT
         DB      KERNEL
-        DB      CPM
-        DB      CPM
+        DB      HALT
+        DB      HALT
         DB      DISK
         DB      DISK
         DB      DISK
@@ -124,4 +124,3 @@ CTX2:   MOV     A,H
         INR     H
         JNZ     CTX2
         RET
-

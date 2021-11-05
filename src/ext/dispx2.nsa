@@ -16,33 +16,32 @@ FNDL A, PC             # fork on PCL
 ADDR 0x80              # PCL = 0
 LDZ Y, $PCH
 FNH DZ, HLD            # PCH = PCH+1      *** inc PCH ***
-LDZ HL, $IDEN$NULL
+LDZ HL, $IDEN$EXTPG2
 #21
 FNH DZ, Y              # Y = PCH
 FNFH M, NA             # A = [PC]
-LD HL, $EXTPC2$EXTPG2
 FNDL A, PG             # fork to jump page
-#31
+#29
 
 ADDR 0xC0              # else
 NOP
 NOP
-LD HL, $IDEN$NULL
+LD HL, $IDEN$EXTPG2
 LDZ Y, $PCH
 #21
 FNH DZ, Y              # Y = PCH
 FNFH M, NA             # A = [PC]
-LD HL, $EXTPC2$EXTPG2
 FNDL A, PG             # fork to jump page
-#31
+#29
 
 #jump page
-#FNDH A, PCA
+#LD HL, $IDEN$EXTPC
+#FNDL A, PC
 #34
 
 #jump page w/inst cache
-#LD HL, $IDEN$EXTPC2
+#LD HL, $IDEN$EXTPC
 #LD Y, $INST
 #FNFH AZ, ND
 #FNDL A, PC
-#41
+#39

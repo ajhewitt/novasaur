@@ -50,10 +50,10 @@ $SWCARRY    8 # swap carry with borrow flags
 $DACARRY    9 # set carry if nibbles > 9
 $FORKP     10 # IN/OUT page fork
 $FORKC     11 # Console page fork
-$EXTPG1    12 # extended execute 2-cycle page
-$EXTPC1    13 # extended execute 2-cycle PC
-$EXTPG2    14 # extended execute 3-cycle page
-$EXTPC2    15 # extended execute 3-cycle PC
+$EXTPG1    12 # extended execute 2-cycle jump page
+$EXTPG2    13 # extended execute 3-cycle jump page
+$EXTPC     14 # extended execute jump PC
+$EXTFCH    15 # extended fetch ok? 0 : -1
 
 #FNC - Extended
 $SCAN0      0 # lower/upper scan code->ascii

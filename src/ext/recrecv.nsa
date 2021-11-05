@@ -11,7 +11,7 @@ PAGE RECRECV_PG
 LD HL, $INC2$FORK3
 FNFH DZ, ND            # VMS+2
 LD Y, $EREG
-FNFL DZ, PC            # Fork on E
+FNDL DZ, PC            # Fork on E
 #10/8
 
 $EXIT27
@@ -37,7 +37,7 @@ DISHL DZ, PGA          # jump to next VMC
 
 ADDR 0x20              # E = 254, iden D, inc D
 NOP
-NOP
+NOPZ
 FNH DZ, HLD            # E+2
 LD HL, $INC2$IDEN
 LD Y, $CTX0
@@ -56,7 +56,7 @@ LDZ Y, $DREG
 #41/26
 FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
-LD HL, $INC$IDEN
+LDZ HL, $INC$IDEN
 FNH DZ, HLD            # D = D+1         *** inc D ***
 #50/32
 LD HL, $IDEN$IDEN
@@ -116,7 +116,7 @@ LD PC, $EXIT78
 
 ADDR 0x90              # E = 0, iden D, iden D
 NOP
-NOP
+NOPZ
 $CONT12
 FNH DZ, HLD            # E+2
 LD HL, $INC2$IDEN
@@ -158,4 +158,4 @@ LD PC, $EXIT78
 #78/55
 
 ADDR 0xC8              # else, iden D, iden D
-LD PC, $CONT12
+LDZ PC, $CONT12
