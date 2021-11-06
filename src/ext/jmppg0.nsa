@@ -26,7 +26,7 @@ LDZ Y, $VMS               # set Y = $VMS on exit
 #39|82
 FNH DZ, HLD               # VMS-1
 LD PG, $FETCH1_PG         # cycle available, goto fetch
-#43/20
+#43/24
 
 #COPYROM - init
 #0 -> TEMP (X RAM index)
@@ -35,158 +35,168 @@ ADDR 0x18
 LD HL, $0
 LD Y, $TEMP
 MULH AZ, ND               # 0->temp
-#41
+#41/6
 LD HL, $NSR$NULL
 LDZ Y, $EREG
 FNH DZ, HLA               # A=ROM jump PC=0x80+H*8
 LD HL, $0x80
 LD Y, $TMPH
-#51
+#51/15
 ANDH AZ, ND               # A&000b->tempH
 LD HL, $0x0F
 LD Y, $EREG
 ANDHL DZ, NA              # A=ROM page lsn
-#62
+#62/23
 LD HL, $0x80
 LD Y, $TMPL
 MULH AZ, ND               # A*8->tempL
 NOP
-#70
+#70/30
 NOP
 NOP
 LD HL, $COPYROM_INST
 LD Y, $INST
 MVHL AZ, ND               # HL -> inst cache
-#80
+#80/38
 LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
 #86/42
 
 #BOOTCPU - init copy ROM0/page0
 #AREG: CPU number
-ADDR 0x44
+ADDR 0x42
 LD HL, $0xF0
 LD Y, $AREG
 ORHL DZ, NA               # A=n|0xF0
-#42
+#42/6
 LD HL, $KERN?$7
 ANDL A, X                 # X=0xFn&0x07
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
-#51
+#51/13
 LDN PC, $EXIT53           # exit if not kern
 LD HL, $IDEN$NULL
 LDZ Y, $AREG
 FNH D, HLD                # CPU Acc = CPU number
 LD HL, $0
-#60
+#60/22
 LD Y, $CREG
 MULH A, ND                # 0->C
 LD Y, $DREG
 MULH A, ND                # 0->D
-#70
+#70/30
 LD Y, $EREG
 MULH AZ, ND               # 0->E
 LD Y, $TEMP
 MULH A, ND                # 0->temp
-#80
+#80/38
 LD Y, $TMPL
 MULH A, ND                # 0->tmpL
 LD HL, $0x80
 LD Y, $TMPH
-#89
+#89/46
 MVHL A, ND                # 0x80->tmpH
 LD HL, $0xFF
 LD Y, $PCH
 MVHL A, ND
-#101
+#101/54
 LD Y, $PCL
 MVHL A, ND                # 0xFFFF->PC
 LD Y, $EXT
-#109
+#109/60
 MVHL A, ND                # -1->ext mode
 LD HL, $COPYROM_INST
 LD Y, $INST
 MVHL A, ND                # CopyROM->inst cache
-#121
+#121/68
 LD HL, $FETCH
 LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
 #129/74
 
 #YIELD - init temp = context index
-ADDR 0x90
-LD HL, $IDEN$NULL
+ADDR 0x8C
 LD Y, $INST
 FNH AZ, HLD               # yield -> inst cache
-#40
 LD HL, $IDEN$NULL
+#40/5
 LDZ Y, $CTXIDX
 FNH DZ, HL                # HL = context index
 MVHL A, NA                # NOP
-#50
+MVHL A, NA                # NOP
+$EXIT52
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
+$EXIT64
 MVHL A, NA                # NOP
-LD PC, $EXIT68
-#68/22
-
-#RECORD SEND - init E to boundry, temp = -1
-ADDR 0xA8
-LD Y, $INST
-FNH AZ, HLD               # record send -> inst cache
-LD HL, $0x80
-#40
-LD Y, $EREG
-ANDHL DZ, ND              # E = E&80
-LD PC, $EXIT48
-#48/11
-
-#RECORD XFER - init D/E to context, temp = -1
-ADDR 0xB8
-LD HL, $KERN?$NULL
-LDZ Y, $EO
-FNH DZ, HLA               # A=0 if root
-#40
-LDP HL, $XFER_INST        # XFER if kern
-LDN HL, $FETCH            # FETCH if not kern
-LD Y, $INST
-MVHL AZ, ND               # inst -> cache
-#49
-LD HL, $0xF0
-LD Y, $DREG
-ORHL DZ, ND               # D|F0 -> D
-LD Y, $EREG
-#59
-ORHL DZ, ND               # E|F0 -> E
-LD PC, $EXIT65
-#65/25
-
-#RECORD RECV - init temp = -1
-ADDR 0xD8
-LD Y, $INST
-FNH AZ, HLD               # record receive -> inst cache
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-LD Y, $EREG
-$EXIT48
-LDZ HL, $DEC$NULL
-FNH DZ, HLD               # E-1
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-NOP
-$EXIT65
-NOP
-LD HL, $0xFF              # init temp to -1
 $EXIT68
 LD Y, $TEMP
+#70/22
 MVHL AZ, ND               # -1 -> temp
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # HL = inst cache
-#80
+#80/29
 LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
-#86/35
+#86/33
+
+#RECORD SEND - init E to boundry, temp = -1
+ADDR 0xB0
+LD Y, $INST
+FNH AZ, HLD               # record send -> inst cache
+LD HL, $0x80
+#40/5
+LD Y, $EREG
+ANDHL DZ, ND              # E = E&80
+NOP
+NOP
+LD HL, $0xFF
+LD PC, $EXIT52
+#52/15
+
+#RECORD XFER - init D/E to context, temp = -1
+ADDR 0xC0
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA               # A=0 if root
+#40/5
+LDP HL, $XFER_INST        # XFER if kern
+LDN HL, $FETCH            # FETCH if not kern
+LD Y, $INST
+MVHL AZ, ND               # inst -> cache
+#49/13
+LD HL, $0xF0
+LD Y, $DREG
+ORHL DZ, ND               # D|F0 -> D
+LD Y, $EREG
+#59/21
+ORHL DZ, ND               # E|F0 -> E
+NOP
+LD HL, $0xFF
+LD PC, $EXIT68
+#68/28
+
+#RECORD RECV - init temp = -1
+ADDR 0xE0
+LD Y, $INST
+FNH AZ, HLD               # record receive -> inst cache
+LD HL, $ZERO?$NULL
+#40/5
+LDZ Y, $EREG
+FNH DZ, HLA               # E==0?
+LDP HL, $DEC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $DREG
+FNH DZ, HLD               # D-1 if E==0
+#51/15
+LD Y, $EREG
+LDZ HL, $DEC$NULL
+FNH DZ, HLD               # E-1
+NOP
+NOP
+NOP
+LD HL, $0xFF              # init temp to -1
+LD PC, $EXIT64
+#64/27

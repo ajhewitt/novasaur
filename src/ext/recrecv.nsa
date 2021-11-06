@@ -10,152 +10,170 @@ PAGE RECRECV_PG
 # assume: Y = $VMS
 LD HL, $INC2$FORK3
 FNFH DZ, ND            # VMS+2
+LDZ Y, $TEMP
+FNFH DZ, ND            # row = row+2
+#10/8
+LDN PC, $EXIT12        # exit at end of buffer
 LD Y, $EREG
 FNDL DZ, PC            # Fork on E
-#10/8
-
-$EXIT27
-NOP
-NOP
-NOP
-#30/11
-NOP
-$EXIT31
-LD HL, $DEC$NULL
-LDZ Y, $VMS            # set Y = $VMS on exit
-FNH DZ, HLD
-LD HL, $FETCH
-DISHL DZ, PGA          # jump to next VMC
-#43/21
-
-$EXIT78
-LD HL, $RECV_INST
-#80/23
-LD Y, $VMS             # set Y = $VMS on exit
-DISHL DZ, PGA          # jump to next VMC
-#86/27
+#16/14
 
 ADDR 0x20              # E = 254, iden D, inc D
-NOP
-NOPZ
 FNH DZ, HLD            # E+2
-LD HL, $INC2$IDEN
+LD HL, $DEC$IDEN
+#20/3
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-#21/9
 LDZ Y, $TEMP
-FNH DZ, HLD            # row = row+2
-LDN PC, $EXIT27        # exit at end of buffer
+FNH DZ, Y              # Y = row-1
 LD HL, $IDEN$DEC
-FNFL A, Y              # Y = row-1
-#31/18
+#31/12
 FNFH D, NA             # A = [Y,X]
 LD Y, $EREG
 FNFL DZ, X             # X = E-1
 LDZ Y, $DREG
-#41/26
+#41/20
 FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
-LDZ HL, $INC$IDEN
+LD HL, $INC$IDEN
+LDZ Y, $DREG
+#50/27
 FNH DZ, HLD            # D = D+1         *** inc D ***
-#50/32
 LD HL, $IDEN$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
 LDZ Y, $TEMP
+#61/36
 FNH DZ, Y              # Y = row
-#61/41
 FNFH D, NA             # A = [Y,X]
 LD Y, $EREG
 FNFL DZ, X             # X = E
+#71/43
 LDZ Y, $DREG
-#71/49
 FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
-LD PC, $EXIT78
-#78/54
+LD HL, $RECV_INST
+#80/50
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#86/54
 
 ADDR 0x58              # E = 255, inc D, iden D
 FNH DZ, HLD            # E+2
 LD HL, $INC$IDEN
+#20/3
 LDZ Y, $DREG
 FNH DZ, HLD            # D = D+1         *** inc D ***
-LD HL, $INC2$IDEN
-#20/8
+LD HL, $DEC$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
+#31/12
 LDZ Y, $TEMP
-FNH DZ, HLD            # row = row+2
-LDN PC, $EXIT31        # exit at end of buffer
-#30/17
+FNH DZ, Y              # Y = row-1
 LD HL, $IDEN$DEC
-FNFL A, Y              # Y = row-1
 FNFH D, NA             # A = [Y,X]
+#40/19
 LD Y, $EREG
-#40/25
 FNFL DZ, X             # X = E-1
 LDZ Y, $DREG
 FNH DZ, Y              # Y = D
+#49/26
 FNFH A, NM             # A->[Y,X]
-#50/32
 LD HL, $IDEN$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
+#59/34
 LDZ Y, $TEMP
 FNH DZ, Y              # Y = row
-#61/41
 FNFH D, NA             # A = [Y,X]
 LD Y, $EREG
 FNFL DZ, X             # X = E
+#71/43
 LDZ Y, $DREG
-#71/49
 FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
-LD PC, $EXIT78
-#78/54
+LD HL, $RECV_INST
+#80/50
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#86/54
 
 ADDR 0x90              # E = 0, iden D, iden D
 NOP
 NOPZ
-$CONT12
+$CONT18
 FNH DZ, HLD            # E+2
-LD HL, $INC2$IDEN
+#20/3
+LD HL, $DEC$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-#21/9
 LDZ Y, $TEMP
-FNH DZ, HLD            # row = row+2
-LDN PC, $EXIT27        # exit at end of buffer
+FNH DZ, Y              # Y = row-1
+#31/12
 LD HL, $IDEN$DEC
-FNFL A, Y              # Y = row-1
-#31/18
 FNFH D, NA             # A = [Y,X]
 LD Y, $EREG
 FNFL DZ, X             # X = E-1
+#41/20
 LDZ Y, $DREG
-#41/26
 FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
 LD HL, $IDEN$IDEN
+#50/27
 LD Y, $CTX0
-#50/33
 FNFL DZ, X             # X = context col
 LDZ Y, $TEMP
 FNH DZ, Y              # Y = row
+#59/34
 FNFH D, NA             # A = [Y,X]
-#60/40
 LD Y, $EREG
 FNFL DZ, X             # X = E
 LDZ Y, $DREG
+#69/42
 FNH DZ, Y              # Y = D
-#69/47
 FNFH A, NM             # A->[Y,X]
 NOP
 NOP
 NOP
 NOP
-LD PC, $EXIT78
-#78/55
+LD HL, $RECV_INST
+#80/51
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#86/55
 
 ADDR 0xC8              # else, iden D, iden D
-LDZ PC, $CONT12
+LDZ PC, $CONT18
+
+$EXIT12
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $DEC$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+#39
+FNH DZ, HLD               # VMS-1
+LD PG, $FETCH1_PG         # cycle available, goto fetch
+#43
