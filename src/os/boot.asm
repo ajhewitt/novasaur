@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; OCT 22, 2021
+; NOV 7, 2021
 ;
         .PROJECT        boot.com
 
@@ -118,6 +118,7 @@ TABLE:  DB      HALT
 ;
         MVI     H,0
 CTX2:   MOV     A,H
+        RLC
         ANI     6
         ORI     0F1H
         DW      MVCTX

@@ -1,6 +1,6 @@
-i; TITLE '8080 SYSTEM MONITOR, VER 0.5'
+; TITLE '8080 SYSTEM MONITOR, VER 0.5'
 ;
-; OCT 22, 2021
+; NOV 7, 2021
 ;
         .PROJECT monitor.com
         .ORG    0F800H
@@ -93,7 +93,7 @@ TABLE:  DW      ASCII   ;A, ASCII
         DW      ERROR   ;N
         DW      OPORT   ;O, PORT OUTPUT
         DW      PROC    ;P
-        DW      ERROR   ;Q
+        DW      QUOC    ;Q
         DW      REPL    ;R, REPLACE
         DW      SEARCH  ;S, SEARCH
         DW      TOGGLE  ;T, TOGGLE SERIAL
@@ -724,8 +724,7 @@ KIPS3:  MOV     E,M     ;1+1 (2) PACK
         RET
 
 CMDSND	EQU	05DDH   ;SLAVE: SET CMD;YIELD
-YIELD	EQU	06EDH   ;SLAVE: YIELD UNTIL SIGNAL
-                        ;MASTER: YIELD UNTIL CTX SW
+YIELD	EQU	06EDH   ;MASTER: YIELD UNTIL CTX SW
 SIGNAL  EQU     07DDH   ;MASTER: SIGNAL SLAVE
 IPCSND	EQU	08DDH   ;MASTER: SET SLAVE REGS
 IPCRCV	EQU	09DDH   ;MASTER: GET SLAVE REGS
@@ -735,16 +734,30 @@ RECRECV	EQU	0CEDH   ;SLAVE: GET RECORD
 
 PROC:   MVI     A,7
         LXI     B,4102H
-        LXI     D,0200H ;READ PAGE 2
+        LXI     D,0303H ;READ TRK 3, SEC 3
         LXI     H,0
         DW      IPCSND  ;SEND CMD 2
         ORA     A       ;A==0?
         JZ      ERROR   ;TODO: HANDLE ERR
+        DW      YIELD
         LXI     D,0701H ;CTX 7->1
         DW      RECXFER
-        LXI     D,0200H ;REC->PAGE 2
+        LXI     D,0200H ;SHM->PAGE 2
         DW      RECRECV
+        RET
 
+QUOC:   LXI     D,0200H ;PAGE 2->SHM
+        DW      RECSEND
+        LXI     D,0107H ;CTX 1->7
+        DW      RECXFER
+        MVI     A,7
+        LXI     B,4203H
+        LXI     D,0303H ;WRITE TRK 3, SEC 3
+        LXI     H,0
+        DW      IPCSND  ;SEND CMD 3
+        ORA     A       ;A==0?
+        JZ      ERROR   ;TODO: HANDLE ERR
+        DW      YIELD
         RET
         
         END

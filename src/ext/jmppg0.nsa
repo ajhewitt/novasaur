@@ -124,8 +124,8 @@ LDZ Y, $CTXIDX
 FNH DZ, HL                # HL = context index
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
-$EXIT52
 MVHL A, NA                # NOP
+$EXIT56
 MVHL A, NA                # NOP
 MVHL A, NA                # NOP
 $EXIT64
@@ -133,7 +133,7 @@ MVHL A, NA                # NOP
 $EXIT68
 LD Y, $TEMP
 #70/22
-MVHL AZ, ND               # -1 -> temp
+MVHL AZ, ND               # HL -> temp
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # HL = inst cache
@@ -145,19 +145,22 @@ DISHL DZ, PGA             # jump to next VMC
 #RECORD SEND - init E to boundry, temp = -1
 ADDR 0xB0
 LD Y, $INST
-FNH AZ, HLD               # record send -> inst cache
-LD HL, $0x80
-#40/5
-LD Y, $EREG
-ANDHL DZ, ND              # E = E&80
-NOP
-NOP
+FNFH AZ, ND               # record send -> inst cache
+#39/4
+LDZ Y, $EREG
+FNH DZ, HLA               # A = E
+LDP HL, $0xFF             # +ve: -1 -> E
+LDN HL, $0x7F             # -ve: 127 -> E
+MVHL AZ, ND
+#50/13
 LD HL, $0xFF
-LD PC, $EXIT52
-#52/15
+NOP
+NOP
+LD PC, $EXIT56
+#56/19
 
 #RECORD XFER - init D/E to context, temp = -1
-ADDR 0xC0
+ADDR 0xC4
 LD HL, $KERN?$NULL
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
