@@ -12,40 +12,41 @@ LD HL, $KERN?$7
 #10
 ANDL A, X                 # X=0xFn&0x07
 LDZ Y, $EO
-FNH DZ, HLA               # bank = kernel?
+FNH DZ, HLA               # bank == kernel?
 LDN PC, $EXIT19           # exit if not kernel
 LD HL, $ZERO?$NULL
 #20
 LD Y, $CMDL
-FNH D, HLA                # command = zero?
+FNH D, HLA                # command == zero?
 LDP PC, $EXIT26           # exit if command zero
-LD HL, $0
-LD Y, $AREG
-#29
-MULH DZ, ND               # 0 -> Acc (command received)
 LD HL, $IDEN$NULL
+MULH A, ND                # 0 -> command
+#30
+LD Y, $AREG
+MULH AZ, ND               # 0 -> Acc (command received)
 LD Y, $BREG
 FNH DZ, HLD               # context B -> B (seq)
+#39
 LD HL, $IDEN$NULL
-#40
 LD Y, $CREG
 FNH DZ, HLD               # context C -> C (cmd)
 LD HL, $IDEN$NULL
-MULH A, ND                # clear context C
 LD Y, $DREG
-#51
+#49
 FNH DZ, HLD               # context D -> D (param 1)
 LD HL, $IDEN$NULL
 LD Y, $EREG
 FNH DZ, HLD               # context E -> E (param 2)
 LD HL, $IDEN$NULL
-#61
+#59
 LD Y, $HREG
 FNH DZ, HLD               # context H -> H (param 3)
 LD HL, $IDEN$NULL
 LD Y, $LREG
 FNH DZ, HLD               # context L -> L (param 4)
-#71
+NOP
+#70
+NOP
 NOP
 NOP
 NOP

@@ -16,17 +16,17 @@ NOP
 #10
 LD HL, $0xF0
 LD Y, $AREG
-ORHL DZ, NA               # A=n|0xF0
+ORHL DZ, NA                # A=n|0xF0
 LD HL, $KERN?$7
 #20
-ANDL A, X                 # X=0xFn&0x07
+ANDL A, X                  # X=0xFn&0x07
 LDZ Y, $EO
-FNH DZ, HLA               # bank = kernel?
-LDN PC, $EXIT29           # exit if not kernel
+FNH DZ, HLA                # bank = kernel?
+LDN PC, $EXIT29            # exit if not kernel
 LD HL, $0
 #30
 LD Y, $0xFF
-MULH A, ND                # semaphore signal
+MULH A, ND                 # semaphore signal
 LD HL, $FETCH
 LD Y, $VMS                 # set Y = $VMS on exit
 DISHL DZ, PGA              # jump to next VMC

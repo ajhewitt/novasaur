@@ -1,10 +1,12 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; NOV 7, 2021
+; NOV 14, 2021
 ;
         .PROJECT        boot.com
-
-STACK   EQU     0FFFFH
+;
+STACK   EQU     0E880H
+BREAK   EQU     STACK
+;
 CPROM   EQU     001EDH
 BOOTCPU EQU     002FDH
 MVCTX   EQU     004DDH
@@ -72,9 +74,7 @@ RST7:   NOP
         NOP
         NOP
         NOP
-START:  LXI     SP,STACK
-        PUSH    A       ;PUSH CPU#
-        ADI     TABLE
+START:  ADI     TABLE
         MOV     L,A     ;L=TABLE+CPU
         MVI     H,0
         MOV     L,M     ;HL=BOOT VECTOR
@@ -85,8 +85,8 @@ KERNEL: MVI     A,0     ;CLEAR CTX TABLE
 CTX1:   DW      MVCTX   ;CTX=0
         INR     H
         JNZ     CTX1
-        LXI     DE,0F80AH ;DEST/ROM PAGE
-        MVI     C,5    ;16 PAGES
+        LXI     DE,0F002H;DEST/ROM PAGE
+        MVI     C,15    ;16 PAGES
         DW      CPROM   ;COPY ROM
         MVI     A,2
 BOOT1:  DW      BOOTCPU
