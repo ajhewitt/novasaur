@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; NOV 14, 2021
+; NOV 15, 2021
 ;
         .PROJECT        kernel.com
 ;
@@ -55,15 +55,21 @@ K_CMD:  MOV	A,C	;A=CMD
 	POP     D       ;RESTORE DE
 	PCHL		;GO THERE
 ;
-; CLIENT RETURNS
+; RETURN HANDLER POINTER
+; IN HL FROM CPU# IN A
 ;
-RETURN: LDA     SRCCPU  ;GET CURRENT CPU
-        ADI     HANDPG  ;A=HANDPG+CPU
+HANDHL: ADI     HANDPG  ;A=HANDPG+CPU
         MOV     H,A     ;H=CPU PAGE
         MOV     A,B     ;A=SEQ
         ADD	A	;A*=2
         ADD	A	;A*=2
         MOV     L,A     ;L=SEQ*4
+        RET
+;
+; CLIENT RETURNS
+;
+RETURN: LDA     SRCCPU  ;GET CURRENT CPU
+        CALL    HANDHL  ;HL=HANDLER
         MOV     A,M     ;A=CMD
         ORA     A       ;NULL?
         JZ      START   ;NO ACTION RETURN
@@ -77,25 +83,26 @@ RETURN: LDA     SRCCPU  ;GET CURRENT CPU
         DW      SIGNAL  ;WAKE DEST CPU
         JMP     START    
 ;
-; CLIENT GETS RECORD
-; - FORWARD GET TO DISK
-; - SET XFER ON RETURN
+; RETURN CPU# IN A
+; FROM SECTOR IN E
 ;
-GET:    MOV     A,E     ;A=000QQSSS
+SECCPU: MOV     A,E     ;A=000QQSSS
         RRC             ;SHIFT>>3
         RRC
         RRC
         ANI     03H     ;A=000000QQ
         ORI     04H     ;A=000001QQ
+        RET
+;
+; CLIENT GETS RECORD
+; - FORWARD GET TO DISK
+; - SET XFER ON RETURN
+;
+GET:    CALL    SECCPU  ;A=CPU#
         DW	IPCSND	;FORWARD GET
         ORA     A       ;A==0?
         JZ      START   ;TODO: HANDLE ERR
-        ADI     HANDPG  ;A=HANDPG+CPU
-        MOV     H,A     ;H=CPU PAGE
-        MOV     A,B     ;A=SEQ
-        ADD	A	;A*=2
-        ADD	A	;A*=2
-        MOV     L,A     ;L=SEQ*4
+        CALL    HANDHL  ;HL=HANDLER
         MVI     M,3     ;CMD=XFER
         LDA     SRCCPU
         INX     H
@@ -106,16 +113,13 @@ GET:    MOV     A,E     ;A=000QQSSS
 ; - XFER TO CPU
 ; - FORWARD PUT TO DISK
 ;
-PUT:	MOV     A,E     ;A=SECTOR
-        RRC             ;SHIFT>>3
-        RRC
-        RRC
-        ANI     03H     ;A=000000QQ
-        ORI     04H     ;A=000001QQ
-        MOV     E,A     ;DEST CPU
+PUT:    PUSH    D
         LDA     SRCCPU
         MOV     D,A     ;SRC CPU
+        CALL    SECCPU  ;A=CPU#
+        MOV     E,A     ;DEST CPU
         DW      RECXFER ;XFER RECORD
+        POP     D
         DW	IPCSND	;SEND PUT
 	JMP	START
 ;

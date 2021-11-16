@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.5'
 ;
-; NOV 14, 2021
+; NOV 15, 2021
 ;
         .PROJECT monitor.com
         .ORG    0F800H
@@ -748,18 +748,14 @@ PROC:   MVI     A,1
         DW      RECRECV ;SHM->PAGE 2
         RET
 
-QUOC:   LXI     D,0200H ;PAGE 2->SHM
-        DW      RECSEND
-        LXI     D,0107H ;CTX 1->7
-        DW      RECXFER
-        MVI     A,7
-        LXI     B,4203H
-        LXI     D,0303H ;WRITE TRK 3, SEC 3
-        LXI     H,0
-        DW      IPCSND  ;SEND CMD 3
-        ORA     A       ;A==0?
-        JZ      ERROR   ;TODO: HANDLE ERR
-        DW      YIELD
+QUOC:   LXI     D,0200H ;SET PAGE 2
+        DW      RECSEND ;PAGE 2->SHM
+        MVI     A,1
+        STA     BREAK   ;SET BREAK POINT
+        STA     SRCCPU  ;SET CPU AS KERNEL
+        LXI     B,0203H ;SEQ 2, PUT COMMAND
+        LXI     D,031BH ;GET TRK 3, QUAD 3, SEC 3
+        CALL    K_CMD   ;HANDLE COMMAND
         RET
-        
+
         END
