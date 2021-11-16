@@ -75,11 +75,11 @@ RETURN: LDA     SRCCPU  ;GET CURRENT CPU
         JZ      START   ;NO ACTION RETURN
         ;"jump" to only option "xfer" below
         INX     H
-        MOV     E,M     ;E=DEST CPU
+        MOV     L,M     ;L=DEST CPU
         LDA     SRCCPU
-        MOV     D,A     ;D=SRC CPU
-        DW      RECXFER ;XFER
-        MOV     A,E
+        MOV     H,A     ;H=SRC CPU
+        MOV     A,L
+        DW      RECXFER ;XFER RECORD
         DW      SIGNAL  ;WAKE DEST CPU
         JMP     START    
 ;
@@ -113,13 +113,11 @@ GET:    CALL    SECCPU  ;A=CPU#
 ; - XFER TO CPU
 ; - FORWARD PUT TO DISK
 ;
-PUT:    PUSH    D
-        LDA     SRCCPU
-        MOV     D,A     ;SRC CPU
+PUT:    LDA     SRCCPU
+        MOV     H,A     ;SRC CPU
         CALL    SECCPU  ;A=CPU#
-        MOV     E,A     ;DEST CPU
+        MOV     L,A     ;DEST CPU
         DW      RECXFER ;XFER RECORD
-        POP     D
         DW	IPCSND	;SEND PUT
 	JMP	START
 ;
