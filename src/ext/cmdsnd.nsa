@@ -11,15 +11,14 @@ LD HL, $IDEN$IDEN
 LD Y, $CTX0
 FNFL DZ, X                # X = Context Col
 #11
-LDZ Y, $CREG
-FNH DZ, YA                # A = C
+LD Y, $CREG
+FNFH DZ, NA               # A = C
 LD Y, $CMDL
 FNH A, HLD                # A -> command L
+#20
 LD HL, $0xFF
-#21
 LD Y, $0xFF
 MVHL A, ND                # set wait
-NOP
 NOP
 LD Y, $INST
 #31

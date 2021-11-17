@@ -2,7 +2,7 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE IPCREC_PG
+PAGE IPCRCV_PG
 
 # assume: Y = $VMS
 LD HL, $0xF0

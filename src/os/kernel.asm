@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; NOV 15, 2021
+; NOV 16, 2021
 ;
         .PROJECT        kernel.com
 ;
@@ -10,8 +10,6 @@ BREAK   EQU     STACK
 SRCCPU  EQU     STACK+1
 HANDPG  EQU     0E8H    ;HANDLER TABLE E7->EF
 ;
-MOVXB   EQU     070DDH
-
 YIELD	EQU	06EDH   ;MASTER: YIELD UNTIL CTX SW
 SIGNAL  EQU     07DDH   ;MASTER: SIGNAL SLAVE
 IPCSND	EQU	08DDH   ;MASTER: SET SLAVE REGS
@@ -23,30 +21,44 @@ RECXFER	EQU	0BEDH   ;MASTER: MOVE RECORD
 ; MAIN EVENT LOOP
 ; SCAN MSG BOXES - EXIT IF MSG RECEIVED
 ;
-START:  DW	YIELD   ;WAIT UNTIL CTX SW
-        LDA     BREAK
+
+START:  LDA     BREAK
         ORA     A       ;CHECK BREAK (A!=0)
         RNZ             ;RETURN ON BREAK
-K_SCAN: XRA     A       ;A=0
-NXTCPU: INR     A       ;A+1
+WAIT:   DW	YIELD   ;WAIT UNTIL CTX SW
+        XRA     A       ;A=0
+SCAN:   INR     A       ;A+1
         ANI     7       ;A==8?
         JZ      START   ;NO MSGS; LOOP
         STA     SRCCPU  ;SAVE CURRENT CPU
         DW      IPCRCV  ;RX MSG
         ORA     A       ;A==0?
-        JNZ     NXTCPU  ;NEXT CPU
+        JNZ     SCAN    ;NEXT CPU
 ;
 ; MSG HANDLER
 ;
 K_CMD:  MOV	A,C	;A=CMD
-	CPI	04H	;LIMIT CMD<4
-	JNC     START   ;SKIP HIGH CMD
-        PUSH    D       ;SAVE DE
-	;PUSH	H       ;SAVE HL
+        CPI	4       ;LIMIT CMD<4
+        JNC     WAIT    ;SKIP HIGH CMD
+        CPI     1       ;CHECK RETURN
+        JC      WAIT    ;NULL CMD
+        JZ      CMD1    ;HANDLE RET
+        LXI	H,CMDS
+	JP      CMD2
+CMD1:   LXI     H,0041H
+        LDA     SRCCPU  ;GET CURRENT CPU
+        CALL    HANDHL  ;HL=HANDLER
+        MOV     A,M     ;A=CMD
+        ORA     A       ;NULL?
+        JZ      WAIT    ;NO ACTION RETURN
+        MVI     M,0     ;CLEAR COMMAND
+        INX     H
+        PUSH    H
+        LXI	H,RETS
+CMD2:   PUSH    D       ;SAVE DE
 	ADD	A	;A*=2
 	MOV	E,A	;OFFSET
-	MVI	D,0	
-	LXI	H,TABLE
+	MVI	D,0
 	DAD	D	;ADD TO TABLE
 	MOV	E,M	;LOW BYTE
 	INX	H
@@ -66,23 +78,6 @@ HANDHL: ADI     HANDPG  ;A=HANDPG+CPU
         MOV     L,A     ;L=SEQ*4
         RET
 ;
-; CLIENT RETURNS
-;
-RETURN: LDA     SRCCPU  ;GET CURRENT CPU
-        CALL    HANDHL  ;HL=HANDLER
-        MOV     A,M     ;A=CMD
-        ORA     A       ;NULL?
-        JZ      START   ;NO ACTION RETURN
-        ;"jump" to only option "xfer" below
-        INX     H
-        MOV     L,M     ;L=DEST CPU
-        LDA     SRCCPU
-        MOV     H,A     ;H=SRC CPU
-        MOV     A,L
-        DW      RECXFER ;XFER RECORD
-        DW      SIGNAL  ;WAKE DEST CPU
-        JMP     START    
-;
 ; RETURN CPU# IN A
 ; FROM SECTOR IN E
 ;
@@ -101,13 +96,25 @@ SECCPU: MOV     A,E     ;A=000QQSSS
 GET:    CALL    SECCPU  ;A=CPU#
         DW	IPCSND	;FORWARD GET
         ORA     A       ;A==0?
-        JZ      START   ;TODO: HANDLE ERR
+        JZ      WAIT    ;TODO: HANDLE ERR
         CALL    HANDHL  ;HL=HANDLER
-        MVI     M,3     ;CMD=XFER
+        MVI     M,2     ;CMD=XFER
         LDA     SRCCPU
         INX     H
         MOV     M,A     ;DEST=SRC CPU
-	JMP	START
+	JMP	WAIT
+;
+; RETURN FROM GET
+; - XFER FROM CPU
+;
+GETR:   POP     H
+        MOV     L,M     ;L=DEST CPU
+        LDA     SRCCPU
+        MOV     H,A     ;H=SRC CPU
+        MOV     A,L
+        DW      RECXFER ;XFER RECORD
+        DW      SIGNAL  ;WAKE DEST CPU
+        JMP     WAIT
 ;
 ; CLIENT PUTS RECORD
 ; - XFER TO CPU
@@ -119,11 +126,18 @@ PUT:    LDA     SRCCPU
         MOV     L,A     ;DEST CPU
         DW      RECXFER ;XFER RECORD
         DW	IPCSND	;SEND PUT
-	JMP	START
+	JMP	WAIT
 ;
 ; COMMAND JUMP VECTOR TABLE
 ;
-TABLE:  DW      START   ;NULL
-        DW      RETURN  ;RETURN
+CMDS:   DW      WAIT    ;NULL N/A
+        DW      WAIT    ;RETURN N/A
         DW      GET
         DW      PUT
+;
+; RETURN JUMP VECTOR TABLE
+;
+RETS:   DW      WAIT    ;NULL N/A
+        DW      WAIT    ;RETURN N/A
+        DW      GETR
+        DW      WAIT

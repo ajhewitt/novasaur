@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.5'
 ;
-; NOV 15, 2021
+; NOV 16, 2021
 ;
         .PROJECT monitor.com
         .ORG    0F800H
@@ -726,7 +726,7 @@ KIPS3:  MOV     E,M     ;1+1 (2) PACK
         RET
 
 SRCCPU  EQU     STACK+1
-K_SCAN  EQU     0F007H
+K_WAIT  EQU     0F005H
 K_CMD   EQU     0F017H
 
 YIELD	EQU	06EDH   ;MASTER: YIELD UNTIL CTX SW
@@ -743,7 +743,7 @@ PROC:   MVI     A,1
         LXI     B,0102H ;SEQ 1, GET COMMAND
         LXI     D,031BH ;GET TRK 3, QUAD 3, SEC 3
         CALL    K_CMD   ;HANDLE COMMAND
-        CALL    K_SCAN  ;HANDLE RETURN
+        CALL    K_WAIT  ;HANDLE RETURN
         LXI     D,0200H ;SET PAGE 2
         DW      RECRECV ;SHM->PAGE 2
         RET
