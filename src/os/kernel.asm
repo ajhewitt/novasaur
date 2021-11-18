@@ -1,130 +1,143 @@
-; TITLE: 'BOOT LOADER'
+; TITLE: 'KERNEL'
 ;
 ; NOV 16, 2021
 ;
-        .PROJECT        boot.com
+        .PROJECT        kernel.com
 ;
 STACK   EQU     0E880H
 BREAK   EQU     STACK
 ;
-CPROM   EQU     001EDH
-BOOTCPU EQU     002FDH
-MVCTX   EQU     004DDH
-CMDSND	EQU	005DDH
-
-        .ORG    0
-
-RST0:   ANI     7       ;LIMIT TO 8 CPUS
-        JNZ     START   ;BOOT CPU1-7
-HALT:   HLT             ;HALT NON-CPUS
-        NOP
-        NOP
-RST1:   MVI     C,0
-        DW      CMDSND  ;SEND NULL; YIELD
-        JP      RST1    ;WAIT FOREVER
-        NOP
-RST2:   NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-RST3:   NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-RST4:   NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-RST5:   NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-RST6:   NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-RST7:   NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-START:  ADI     TABLE
-        MOV     L,A     ;L=TABLE+CPU
-        MVI     H,0
-        MOV     L,M     ;HL=BOOT VECTOR
-        PCHL            ;JUMP TO VECTOR
+SRCCPU  EQU     STACK+1
+HANDPG  EQU     0E8H    ;HANDLER TABLE E7->EF
 ;
-; KERNEL
-; - SETUP CPU SEQ: 1,2,3,1,4,5,6,7
-; - COPY KERNEL/MONITOR
-; - BOOT OTHER CPUS
+YIELD	EQU	06EDH   ;MASTER: YIELD UNTIL CTX SW
+SIGNAL  EQU     07DDH   ;MASTER: SIGNAL SLAVE
+IPCSND	EQU	08DDH   ;MASTER: SET SLAVE REGS
+IPCRCV	EQU	09DDH   ;MASTER: GET SLAVE REGS
+RECXFER	EQU	0BEDH   ;MASTER: MOVE RECORD
 ;
-KERNEL: MVI     H,0
-CTX1:   MOV     A,H
-        ANI     7
-        CPI     3
-        JC      CTX2    ;CPU<3
-        JNZ     CTX3    ;CPU>3
+        .ORG    0F000H
+;
+; MAIN EVENT LOOP
+; SCAN MSG BOXES - EXIT IF MSG RECEIVED
+;
+
+START:  LDA     BREAK
+        ORA     A       ;CHECK BREAK (A!=0)
+        RNZ             ;RETURN ON BREAK
+WAIT:   DW	YIELD   ;WAIT UNTIL CTX SW
         XRA     A       ;A=0
-CTX2:   INR     A       ;A+=1
-CTX3:   ORI     0F0H
-        DW      MVCTX
-        INR     H
-        JNZ     CTX1
-        LXI     DE,0F002H;DEST/ROM PAGE
-        MVI     C,15    ;16 PAGES
-        DW      CPROM   ;COPY ROM
-        MVI     A,2
-BOOT1:  DW      BOOTCPU
-        INR     A
-        CPI     8
-        JNZ     BOOT1
-        JMP     0F800H  ;BOOT MONITOR
+SCAN:   INR     A       ;A+1
+        ANI     7       ;A==8?
+        JZ      START   ;NO MSGS; LOOP
+        STA     SRCCPU  ;SAVE CURRENT CPU
+        DW      IPCRCV  ;RX MSG
+        ORA     A       ;A==0?
+        JNZ     SCAN    ;NEXT CPU
 ;
-; CP/M 2.2
+; MSG HANDLER
 ;
-CPM:    LXI     DE,0DC12H;DEST/ROM PAGE
-        MVI     C,29    ;30 PAGES
-        DW      CPROM   ;COPY ROM
-        JMP     0F200H  ;WARM BOOT CPM
+K_CMD:  MOV	A,C	;A=CMD
+        CPI	4       ;LIMIT CMD<4
+        JNC     WAIT    ;SKIP HIGH CMD
+        CPI     1       ;CHECK RETURN
+        JC      WAIT    ;NULL CMD
+        JZ      CMD1    ;HANDLE RET
+        LXI	H,CMDS
+	JP      CMD2
+CMD1:   LXI     H,0041H
+        LDA     SRCCPU  ;GET CURRENT CPU
+        CALL    HANDHL  ;HL=HANDLER
+        MOV     A,M     ;A=CMD
+        ORA     A       ;NULL?
+        JZ      WAIT    ;NO ACTION RETURN
+        MVI     M,0     ;CLEAR COMMAND
+        INX     H
+        PUSH    H
+        LXI	H,RETS
+CMD2:   PUSH    D       ;SAVE DE
+	ADD	A	;A*=2
+	MOV	E,A	;OFFSET
+	MVI	D,0
+	DAD	D	;ADD TO TABLE
+	MOV	E,M	;LOW BYTE
+	INX	H
+	MOV	D,M	;HIGH BYTE
+	XCHG		;INTO HL
+	POP     D       ;RESTORE DE
+	PCHL		;GO THERE
 ;
-; DISK QUADRANT
+; RETURN HANDLER POINTER
+; IN HL FROM CPU# IN A
 ;
-DISK:   LXI     DE,0FF01H;DEST/ROM PAGE
-        MVI     C,0     ;1 PAGE
-        DW      CPROM   ;COPY ROM
-        JMP     0FF00H  ;BOOT DISK
+HANDHL: ADI     HANDPG  ;A=HANDPG+CPU
+        MOV     H,A     ;H=CPU PAGE
+        MOV     A,B     ;A=SEQ
+        ADD	A	;A*=2
+        ADD	A	;A*=2
+        MOV     L,A     ;L=SEQ*4
+        RET
 ;
-; JUMP VECTOR TABLE
+; RETURN CPU# IN A
+; FROM SECTOR IN E
 ;
-TABLE:  DB      HALT
-        DB      KERNEL
-        DB      RST1    ;CPM
-        DB      RST1    ;CPM
-        DB      DISK
-        DB      DISK
-        DB      DISK
-        DB      DISK
+SECCPU: MOV     A,E     ;A=000QQSSS
+        RRC             ;SHIFT>>3
+        RRC
+        RRC
+        ANI     03H     ;A=000000QQ
+        ORI     04H     ;A=000001QQ
+        RET
+;
+; CLIENT GETS RECORD
+; - FORWARD GET TO DISK
+; - SET XFER ON RETURN
+;
+GET:    CALL    SECCPU  ;A=CPU#
+        DW	IPCSND	;FORWARD GET
+        ORA     A       ;A==0?
+        JZ      WAIT    ;TODO: HANDLE ERR
+        CALL    HANDHL  ;HL=HANDLER
+        MVI     M,2     ;CMD=XFER
+        LDA     SRCCPU
+        INX     H
+        MOV     M,A     ;DEST=SRC CPU
+	JMP	WAIT
+;
+; RETURN FROM GET
+; - XFER FROM CPU
+;
+GETR:   POP     H
+        MOV     L,M     ;L=DEST CPU
+        LDA     SRCCPU
+        MOV     H,A     ;H=SRC CPU
+        MOV     A,L
+        DW      RECXFER ;XFER RECORD
+        DW      SIGNAL  ;WAKE DEST CPU
+        JMP     WAIT
+;
+; CLIENT PUTS RECORD
+; - XFER TO CPU
+; - FORWARD PUT TO DISK
+;
+PUT:    LDA     SRCCPU
+        MOV     H,A     ;SRC CPU
+        CALL    SECCPU  ;A=CPU#
+        MOV     L,A     ;DEST CPU
+        DW      RECXFER ;XFER RECORD
+        DW	IPCSND	;SEND PUT
+	JMP	WAIT
+;
+; COMMAND JUMP VECTOR TABLE
+;
+CMDS:   DW      WAIT    ;NULL N/A
+        DW      WAIT    ;RETURN N/A
+        DW      GET
+        DW      PUT
+;
+; RETURN JUMP VECTOR TABLE
+;
+RETS:   DW      WAIT    ;NULL N/A
+        DW      WAIT    ;RETURN N/A
+        DW      GETR
+        DW      WAIT
