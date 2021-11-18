@@ -1,30 +1,25 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; NOV 14, 2021
+; NOV 17, 2021
 ;
         .PROJECT        boot.com
-;
-STACK   EQU     0E880H
-BREAK   EQU     STACK
 ;
 CPROM   EQU     001EDH
 BOOTCPU EQU     002FDH
 MVCTX   EQU     004DDH
-MOVXB   EQU     070DDH
+CMDSND	EQU	005DDH
 
         .ORG    0
-        ANI     7       ;LIMIT TO 8 CPUS
-        JNZ     START   ;BOOT CPU1-7
+
+RST0:   ADI     TABLE
+        MOV     L,A     ;L=TABLE+CPU
+        MVI     H,0
+        MOV     L,M     ;HL=BOOT VECTOR
+        PCHL            ;JUMP TO VECTOR
 HALT:   HLT             ;HALT CPU0
-        NOP
-        NOP
-RST1:   NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
+RST1:   MVI     C,0
+        DW      CMDSND  ;SEND NULL; YIELD
+        JP      RST1    ;WAIT FOREVER
         NOP
 RST2:   NOP
         NOP
@@ -74,15 +69,22 @@ RST7:   NOP
         NOP
         NOP
         NOP
-START:  ADI     TABLE
-        MOV     L,A     ;L=TABLE+CPU
-        MVI     H,0
-        MOV     L,M     ;HL=BOOT VECTOR
-        PCHL            ;JUMP TO VECTOR
-
-KERNEL: MVI     A,0     ;CLEAR CTX TABLE
-        MOV     H,A
-CTX1:   DW      MVCTX   ;CTX=0
+;
+; KERNEL
+; - SETUP CPU SEQ: 1,2,3,1,4,5,6,7
+; - COPY KERNEL/MONITOR
+; - BOOT OTHER CPUS
+;
+KERNEL: MVI     H,0
+CTX1:   MOV     A,H
+        ANI     7
+        CPI     3
+        JC      CTX2    ;CPU<3
+        JNZ     CTX3    ;CPU>3
+        XRA     A       ;A=0
+CTX2:   INR     A       ;A+=1
+CTX3:   ORI     0F0H
+        DW      MVCTX
         INR     H
         JNZ     CTX1
         LXI     DE,0F002H;DEST/ROM PAGE
@@ -94,34 +96,28 @@ BOOT1:  DW      BOOTCPU
         CPI     8
         JNZ     BOOT1
         JMP     0F800H  ;BOOT MONITOR
-        
+;
+; CP/M 2.2
+;
 CPM:    LXI     DE,0DC12H;DEST/ROM PAGE
         MVI     C,29    ;30 PAGES
         DW      CPROM   ;COPY ROM
         JMP     0F200H  ;WARM BOOT CPM
-
+;
+; DISK QUADRANT
+;
 DISK:   LXI     DE,0FF01H;DEST/ROM PAGE
         MVI     C,0     ;1 PAGE
         DW      CPROM   ;COPY ROM
         JMP     0FF00H  ;BOOT DISK
-
+;
+; JUMP VECTOR TABLE
+;
 TABLE:  DB      HALT
         DB      KERNEL
-        DB      HALT
-        DB      HALT
+        DB      RST1    ;CPM
+        DB      RST1    ;CPM
         DB      DISK
         DB      DISK
         DB      DISK
         DB      DISK
-;
-; TEST - QUAD CORE CONTEXT MAP
-;
-        MVI     H,0
-CTX2:   MOV     A,H
-        RLC
-        ANI     6
-        ORI     0F1H
-        DW      MVCTX
-        INR     H
-        JNZ     CTX2
-        RET

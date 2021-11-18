@@ -49,7 +49,7 @@ MVHL AZ, ND           # 0x42 -> rx mode (idle)
 LD PC, $EXIT50
 #50/54
 
-ADDR 0x38             #32 - mode 0x43: rx conn close
+ADDR 0x38             #32 - mode 0x62-0x7F: rx conn close
 LD HL, $0x10
 LD Y, $EO
 ORHL DZ, ED           # 1 -> RTS (deassert)

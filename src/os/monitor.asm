@@ -1,9 +1,8 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.5'
 ;
-; NOV 16, 2021
+; NOV 17, 2021
 ;
         .PROJECT monitor.com
-        .ORG    0F800H
 ;
 STACK   EQU     0E880H
 BREAK   EQU     STACK
@@ -12,9 +11,9 @@ SDATA   EQU     8       ;SERIAL DATA
 CDATA   EQU     9       ;CONSOLE DATA
 RXEN    EQU     11      ;RX ENABLE
 ;
-COMS    EQU     STACK+1 ;1BYTE COM SERIAL
-COMB    EQU     STACK+2 ;1BYTE COM BLOCK
-PORTN   EQU     STACK+3 ;3BYTES I/O
+COMS    EQU     STACK+2 ;1BYTE COM SERIAL
+COMB    EQU     STACK+3 ;1BYTE COM BLOCK
+PORTN   EQU     STACK+4 ;3BYTES I/O
 IBUFP   EQU     PORTN+3 ;BUFFER POINTER
 IBUFC   EQU     IBUFP+2 ;BUFFER COUNT
 IBUFF   EQU     IBUFP+3 ;INPUT BUFFER
@@ -33,6 +32,9 @@ LF      EQU     10      ;LINE FEED
 INC     EQU     0DBH    ;IN OP CODE
 OUTC    EQU     0D3H    ;OUT OP CODE
 RETC    EQU     0C9H    ;RET OP CODE
+
+        .ORG    0F800H
+
 ;
 ; SEND ASCII MESSAGE UNTIL BINARY ZERO
 ; IS FOUND. POINTER IS D,E
@@ -89,13 +91,13 @@ TABLE:  DW      ASCII   ;A, ASCII
         DW      HMATH   ;H, HEX MATH
         DW      IPORT   ;I, PORT INPUT
         DW      ERROR   ;J
-        DW      KIPS    ;K, SPEED TEST
+        DW      KERN    ;K, KERNEL
         DW      LOAD    ;L, LOAD
         DW      MOVE    ;M, MOVE
         DW      ERROR   ;N
         DW      OPORT   ;O, PORT OUTPUT
-        DW      PROC    ;P
-        DW      QUOC    ;Q
+        DW      PROC    ;P, PROC SPEED TEST
+        DW      ERROR    ;Q
         DW      REPL    ;R, REPLACE
         DW      SEARCH  ;S, SEARCH
         DW      TOGGLE  ;T, TOGGLE SERIAL
@@ -278,7 +280,7 @@ PASCI:  MOV     A,M     ;GET BYTE
 PASC2:  MVI     A,'.'   ;CHANGE TO DOT
 PASC3:  JMP     OUTT    ;SEND
 ;
-; GET H,L ADN D,E FROM CONSOLE
+; GET H,L AND D,E FROM CONSOLE
 ; CHECK THAT D,E IS LARGER
 ;
 RDHLDE: CALL    HHLDE
@@ -703,32 +705,36 @@ VERM3:  CALL    TSTOP   ;DONE?
 ;
 ; SPEED TEST
 ;
-KIPS:   IN      3CH
+PROC:   IN      3CH
         MOV     B,A     ;SAVE TIME
-KIPS1:  IN      3CH
+PROC1:  IN      3CH
         CMP     B       ;TIME CHANGED?
-        JZ      KIPS1   ;WAIT FOR TICK
+        JZ      PROC1   ;WAIT FOR TICK
         MOV     B,A     ;SAVE TIME
         MVI     C,99H   ;C=-1 BCD
-KIPS2:  MOV     A,C
+PROC2:  MOV     A,C
         INR     A
         DAA             ;BCD INC
         MVI     D,12    ;LOOP 12*5 @ 2.4 CPI
-KIPS3:  MOV     E,M     ;1+1 (2) PACK
+PROC3:  MOV     E,M     ;1+1 (2) PACK
         INR     E       ;1+2-1 (2.3) PACK
         MOV     C,A     ;1+1 (2) SAVE A IN C
         DCR     D       ;1+2-1 (2.3) COUNT-1
-        JNZ     KIPS3   ;1+2 (3.3)
+        JNZ     PROC3   ;1+2 (3.3)
         IN      3CH
         CMP     B       ;TIME CHANGED?
-        JZ      KIPS2   ;WAIT FOR TICK
+        JZ      PROC2   ;WAIT FOR TICK
         CALL    OUTHX
         RET
-
+;
+; THESE MUST MATCH KERNEL!
+;
 SRCCPU  EQU     STACK+1
 K_WAIT  EQU     0F005H
 K_CMD   EQU     0F017H
-
+;
+; EXTENDED INSTRUCTIONS
+;
 YIELD	EQU	06EDH   ;MASTER: YIELD UNTIL CTX SW
 SIGNAL  EQU     07DDH   ;MASTER: SIGNAL SLAVE
 IPCSND	EQU	08DDH   ;MASTER: SET SLAVE REGS
@@ -736,25 +742,41 @@ IPCRCV	EQU	09DDH   ;MASTER: GET SLAVE REGS
 RECSEND	EQU	0AEDH   ;SLAVE: SET RECORD
 RECXFER	EQU	0BEDH   ;MASTER: MOVE RECORD
 RECRECV	EQU	0CEDH   ;SLAVE: GET RECORD
-
-PROC:   MVI     A,1
+;
+; KERNEL SUB-COMMAND PROCESSOR
+;
+KERN:   MVI     A,1
         STA     BREAK   ;SET BREAK POINT
-        STA     SRCCPU  ;SET CPU AS KERNEL
+        STA     SRCCPU  ;SET SOURCE AS KERNEL
+        CALL    GETCH   ;NEXT CHAR
+        CPI     'G'     ;READ DISK
+        JZ      KGET
+        CPI     'P'     ;WRITE DISK
+        JZ      KPUT
+        ;MOAR COMMANDS
+        JP      ERROR
+;
+; GET DISK RECORD
+; COPY TRACK/SEC TO MEM ADDR
+;
+KGET:   CALL    HHLDE   ;GET HL, COPY TO DE
+        PUSH    D       ;SAVE MEM ADDR
+        XCHG            ;DE=TRACK/SEC
         LXI     B,0102H ;SEQ 1, GET COMMAND
-        LXI     D,031BH ;GET TRK 3, QUAD 3, SEC 3
         CALL    K_CMD   ;HANDLE COMMAND
         CALL    K_WAIT  ;HANDLE RETURN
-        LXI     D,0200H ;SET PAGE 2
-        DW      RECRECV ;SHM->PAGE 2
+        POP     D       ;RECOVER MEM ADDR
+        DW      RECRECV ;SHM->DE
         RET
-
-QUOC:   LXI     D,0200H ;SET PAGE 2
-        DW      RECSEND ;PAGE 2->SHM
-        MVI     A,1
-        STA     BREAK   ;SET BREAK POINT
-        STA     SRCCPU  ;SET CPU AS KERNEL
+;
+; PUT DISK RECORD
+; COPY MEM ADDR TO TRACK/SEC
+;
+KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
+        PUSH    H       ;SAVE TRACK/SEC
+        DW      RECSEND ;DE->SHM
         LXI     B,0203H ;SEQ 2, PUT COMMAND
-        LXI     D,031BH ;GET TRK 3, QUAD 3, SEC 3
+        POP     D       ;RECOVER TRACK/SEC
         CALL    K_CMD   ;HANDLE COMMAND
         RET
 
