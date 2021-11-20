@@ -13,14 +13,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Wire Wire Line
-	4650 6000 4650 6700
-Wire Wire Line
-	4250 6000 4250 6550
 Text GLabel 1350 1800 0    50   Output ~ 0
 alu
-Wire Bus Line
-	1150 6850 4350 6850
 Wire Wire Line
 	2450 5700 2650 5700
 Connection ~ 2450 5700
@@ -75,10 +69,6 @@ Wire Wire Line
 Wire Wire Line
 	2350 1700 2650 1700
 NoConn ~ 1350 1400
-Entry Bus Bus
-	4350 6850 4450 6750
-Entry Bus Bus
-	1050 6750 1150 6850
 Text GLabel 2350 3900 2    50   Input ~ 0
 qclk1
 Text GLabel 2350 3800 2    50   Input ~ 0
@@ -121,8 +111,6 @@ Text Label 2550 1700 0    50   ~ 0
 C4
 Entry Wire Line
 	2650 1700 2750 1800
-Wire Wire Line
-	4250 6000 4150 6000
 $Comp
 L power:GNDD #PWR?
 U 1 1 5DA1E817
@@ -234,13 +222,13 @@ F 3 "" H 3650 6300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Entry Wire Line
-	4450 5100 4350 5000
+	4450 4900 4350 5000
 Entry Wire Line
-	4450 5200 4350 5100
+	4450 5000 4350 5100
 Entry Wire Line
-	4450 5300 4350 5200
+	4450 5100 4350 5200
 Entry Wire Line
-	4450 5800 4350 5700
+	4450 5600 4350 5700
 Text Label 2550 5000 0    50   ~ 0
 C0
 Text Label 2550 5100 0    50   ~ 0
@@ -276,13 +264,13 @@ PD7
 Text GLabel 1050 4700 1    50   Input ~ 0
 PD[0..7]
 Entry Wire Line
-	4450 5700 4350 5600
+	4450 5500 4350 5600
 Entry Wire Line
-	4450 5600 4350 5500
+	4450 5400 4350 5500
 Entry Wire Line
-	4450 5500 4350 5400
+	4450 5300 4350 5400
 Entry Wire Line
-	4450 5400 4350 5300
+	4450 5200 4350 5300
 Wire Wire Line
 	4150 5000 4350 5000
 Wire Wire Line
@@ -473,10 +461,6 @@ Entry Wire Line
 	2750 4050 2850 3950
 Entry Wire Line
 	2750 4750 2850 4650
-Wire Wire Line
-	1150 6700 4650 6700
-Wire Wire Line
-	2450 6550 4250 6550
 Wire Wire Line
 	2850 4250 3050 4250
 Wire Wire Line
@@ -773,24 +757,6 @@ Entry Wire Line
 	2850 3100 2750 3200
 Entry Wire Line
 	2850 3200 2750 3300
-Text Notes 3750 7550 0    150  ~ 0
-I/O
-Text Notes 2500 7550 0    150  ~ 0
-GPU
-Text Notes 1300 7550 0    150  ~ 0
-CPU
-$Sheet
-S 1250 7150 600  600 
-U 5DA1E9BA
-F0 "sheet5DA1E720" 50
-F1 "novasaur-cpu.sch" 50
-$EndSheet
-$Sheet
-S 2450 7150 600  600 
-U 5DA1E9BD
-F0 "sheet5DA1E721" 50
-F1 "novasaur-gpu.sch" 50
-$EndSheet
 Text Label 2850 3700 0    50   ~ 0
 C10
 Entry Wire Line
@@ -808,12 +774,6 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 7200 2000 50  0001 C CNN
 	2    7200 2000
 	1    0    0    -1  
 $EndComp
-$Sheet
-S 3650 7150 600  600 
-U 5DA1E9C0
-F0 "sheet5DA1E722" 50
-F1 "novasaur-io.sch" 50
-$EndSheet
 $Comp
 L power:VCC #PWR?
 U 1 1 5E57D7F8
@@ -930,36 +890,36 @@ $EndComp
 $Comp
 L Connector:TestPoint_Alt TP36
 U 1 1 5E2B88BD
-P 8000 5500
+P 8050 5500
 AR Path="/5E2B88BD" Ref="TP36"  Part="1" 
 AR Path="/5DA1E9BA/5E2B88BD" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9BD/5E2B88BD" Ref="TP?"  Part="1" 
 AR Path="/5DA1E9C0/5E2B88BD" Ref="TP?"  Part="1" 
-F 0 "TP36" H 8050 5650 50  0000 L CNN
-F 1 "DCLK" H 7750 5650 50  0001 L CNN
-F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 8200 5500 50  0001 C CNN
-F 3 "~" H 8200 5500 50  0001 C CNN
-	1    8000 5500
+F 0 "TP36" H 8100 5650 50  0000 L CNN
+F 1 "DCLK" H 7800 5650 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 8250 5500 50  0001 C CNN
+F 3 "~" H 8250 5500 50  0001 C CNN
+	1    8050 5500
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7150 5500 7200 5500
+	7200 5500 7250 5500
 Wire Wire Line
-	7150 5150 7500 5150
+	7200 5150 7550 5150
 Wire Wire Line
 	9500 3300 9500 4550
 Wire Wire Line
 	9350 3450 9350 4250
 Wire Wire Line
 	8300 4050 8250 4050
-Text GLabel 7500 4650 0    50   Output ~ 0
+Text GLabel 7600 4650 0    50   Output ~ 0
 nclk
 NoConn ~ 9300 4750
 Wire Wire Line
-	7500 5150 7500 5100
-Connection ~ 7500 5150
+	7550 5150 7550 5100
+Connection ~ 7550 5150
 Wire Wire Line
-	7500 5200 7500 5150
+	7550 5200 7550 5150
 Wire Wire Line
 	9350 4250 9650 4250
 Connection ~ 9350 4250
@@ -973,42 +933,42 @@ Wire Wire Line
 $Comp
 L Oscillator:CXO_DIP8 X1
 U 1 1 5D9CA9D5
-P 7500 5500
-F 0 "X1" H 7650 5900 50  0000 L CNN
-F 1 "33M" H 7600 5800 50  0000 L CNN
-F 2 "Oscillator:Oscillator_DIP-8" H 7950 5150 50  0001 C CNN
-F 3 "http://cdn-reichelt.de/documents/datenblatt/B400/OSZI.pdf" H 7400 5500 50  0001 C CNN
-	1    7500 5500
+P 7550 5500
+F 0 "X1" H 7700 5900 50  0000 L CNN
+F 1 "33M" H 7650 5800 50  0000 L CNN
+F 2 "Oscillator:Oscillator_DIP-8" H 8000 5150 50  0001 C CNN
+F 3 "http://cdn-reichelt.de/documents/datenblatt/B400/OSZI.pdf" H 7450 5500 50  0001 C CNN
+	1    7550 5500
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GNDD #PWR?
 U 1 1 5D9CBE89
-P 7500 5800
+P 7550 5800
 AR Path="/5CDEEC9F/5D9CBE89" Ref="#PWR?"  Part="1" 
 AR Path="/5DAA5CD8/5D9CBE89" Ref="#PWR?"  Part="1" 
 AR Path="/5D9CBE89" Ref="#PWR0112"  Part="1" 
-F 0 "#PWR0112" H 7500 5550 50  0001 C CNN
-F 1 "GNDD" H 7504 5645 50  0000 C CNN
-F 2 "" H 7500 5800 50  0001 C CNN
-F 3 "" H 7500 5800 50  0001 C CNN
-	1    7500 5800
+F 0 "#PWR0112" H 7550 5550 50  0001 C CNN
+F 1 "GNDD" H 7554 5645 50  0000 C CNN
+F 2 "" H 7550 5800 50  0001 C CNN
+F 3 "" H 7550 5800 50  0001 C CNN
+	1    7550 5800
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:VCC #PWR0191
 U 1 1 5D9DED2A
-P 7500 5100
+P 7550 5100
 AR Path="/5D9DED2A" Ref="#PWR0191"  Part="1" 
 AR Path="/5DAA5CD8/5D9DED2A" Ref="#PWR?"  Part="1" 
-F 0 "#PWR0191" H 7500 4950 50  0001 C CNN
-F 1 "VCC" H 7517 5273 50  0000 C CNN
-F 2 "" H 7500 5100 50  0001 C CNN
-F 3 "" H 7500 5100 50  0001 C CNN
-	1    7500 5100
+F 0 "#PWR0191" H 7550 4950 50  0001 C CNN
+F 1 "VCC" H 7567 5273 50  0000 C CNN
+F 2 "" H 7550 5100 50  0001 C CNN
+F 3 "" H 7550 5100 50  0001 C CNN
+	1    7550 5100
 	1    0    0    -1  
 $EndComp
-Text GLabel 8000 5500 2    50   Output ~ 0
+Text GLabel 8050 5500 2    50   Output ~ 0
 dclk
 $Comp
 L power:GNDD #PWR?
@@ -1142,7 +1102,7 @@ DB1
 Text GLabel 5600 3400 0    50   Input ~ 0
 DB2
 Wire Wire Line
-	7600 4650 7600 4250
+	7700 4650 7700 4250
 $Comp
 L Connector:TestPoint_Alt TP10
 U 1 1 60ED566B
@@ -1158,8 +1118,8 @@ F 3 "~" H 6800 5100 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	7600 4650 7500 4650
-Connection ~ 7600 4650
+	7700 4650 7600 4650
+Connection ~ 7700 4650
 Text GLabel 6600 3100 2    50   Output ~ 0
 DA17
 Wire Wire Line
@@ -1262,38 +1222,23 @@ Connection ~ 8250 4050
 Wire Wire Line
 	8250 4050 8250 3300
 Wire Wire Line
-	8250 3300 9500 3300
-Wire Wire Line
 	8100 4450 8100 3450
 Connection ~ 8100 3450
 Wire Wire Line
 	8100 4450 8300 4450
-Wire Wire Line
-	8100 3450 9350 3450
 Connection ~ 8250 3300
 Wire Wire Line
-	7900 4850 8300 4850
+	7600 3650 7600 3300
 Wire Wire Line
-	7500 3650 7500 3300
+	7600 3300 8250 3300
 Wire Wire Line
-	7500 3300 8250 3300
+	7800 3650 7800 3450
 Wire Wire Line
-	7700 3650 7700 3450
-Wire Wire Line
-	7700 3450 8100 3450
-Wire Wire Line
-	7900 2600 8300 2600
+	7800 3450 8100 3450
 Wire Wire Line
 	4400 3750 5550 3750
 Wire Wire Line
 	2850 1900 6900 1900
-Wire Wire Line
-	4650 6000 5600 6000
-Wire Wire Line
-	7800 5500 7900 5500
-Connection ~ 7900 5500
-Wire Wire Line
-	7900 5500 8000 5500
 Wire Wire Line
 	4450 3200 4400 3200
 Wire Wire Line
@@ -1306,14 +1251,9 @@ Connection ~ 4400 2900
 Wire Wire Line
 	4400 2900 4400 2800
 Wire Wire Line
-	7150 5150 7150 5500
+	7200 5150 7200 5500
 Wire Wire Line
-	7900 4850 7900 5500
-Wire Wire Line
-	7600 4650 8300 4650
-Wire Wire Line
-	7900 4850 7900 2600
-Connection ~ 7900 4850
+	7700 4650 8300 4650
 Wire Wire Line
 	4400 3750 4400 3400
 Wire Wire Line
@@ -1333,10 +1273,6 @@ F 3 "~" H 1550 5900 50  0001 C CNN
 	1    1350 5900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	1150 6700 1150 5900
-Wire Wire Line
-	1150 5900 1350 5900
 Connection ~ 1350 5900
 Wire Wire Line
 	5600 5900 4150 5900
@@ -1414,15 +1350,15 @@ Connection ~ 4400 3200
 $Comp
 L 74xx:74LS86 U1
 U 4 1 5F86670E
-P 7600 3950
+P 7700 3950
 AR Path="/5F86670E" Ref="U1"  Part="4" 
 AR Path="/5DA1E9BD/5F86670E" Ref="U?"  Part="4" 
 AR Path="/5DA1E9BA/5F86670E" Ref="U?"  Part="4" 
-F 0 "U1" H 7600 3950 50  0000 C CNN
-F 1 "74F86" H 7600 4184 50  0001 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7600 3950 50  0001 C CNN
-F 3 "74xx/74ls86.pdf" H 7600 3950 50  0001 C CNN
-	4    7600 3950
+F 0 "U1" H 7700 3950 50  0000 C CNN
+F 1 "74F86" H 7700 4184 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 7700 3950 50  0001 C CNN
+F 3 "74xx/74ls86.pdf" H 7700 3950 50  0001 C CNN
+	4    7700 3950
 	0    -1   1    0   
 $EndComp
 Wire Wire Line
@@ -1504,10 +1440,70 @@ F 3 "" H 2750 1100 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	2750 1600 2350 1600
+Wire Wire Line
+	1200 5900 1200 6700
+Wire Wire Line
+	1200 5900 1350 5900
+Wire Wire Line
+	1200 6700 4600 6700
+Wire Wire Line
+	4600 6700 4600 6000
+Wire Wire Line
+	4600 6000 5600 6000
+Wire Wire Line
+	4300 6550 4300 6000
+Wire Wire Line
+	4150 6000 4300 6000
+Wire Wire Line
+	2450 6550 4300 6550
+Wire Wire Line
+	8100 3450 9350 3450
+Wire Wire Line
+	8250 3300 9500 3300
+Wire Wire Line
+	7950 5500 7950 4850
+Wire Wire Line
+	7950 2600 8300 2600
+Wire Wire Line
+	7950 4850 8300 4850
+Connection ~ 7950 4850
+Wire Wire Line
+	7950 4850 7950 2600
+Wire Wire Line
+	7850 5500 7950 5500
+Wire Wire Line
+	7950 5500 8050 5500
+Connection ~ 7950 5500
+Text GLabel 4450 4700 1    50   Input ~ 0
+PD[0..7]
+Text Notes 3750 7500 0    150  ~ 0
+I/O
+Text Notes 2500 7500 0    150  ~ 0
+GPU
+Text Notes 1300 7500 0    150  ~ 0
+CPU
+$Sheet
+S 1250 7100 600  600 
+U 5DA1E9BA
+F0 "sheet5DA1E720" 50
+F1 "novasaur-cpu.sch" 50
+$EndSheet
+$Sheet
+S 2450 7100 600  600 
+U 5DA1E9BD
+F0 "sheet5DA1E721" 50
+F1 "novasaur-gpu.sch" 50
+$EndSheet
+$Sheet
+S 3650 7100 600  600 
+U 5DA1E9C0
+F0 "sheet5DA1E722" 50
+F1 "novasaur-io.sch" 50
+$EndSheet
 Wire Bus Line
-	4450 5100 4450 6750
+	4450 4700 4450 5600
 Wire Bus Line
-	1050 4700 1050 6750
+	1050 4700 1050 5600
 Wire Bus Line
 	2750 1800 2750 6000
 $EndSCHEMATC
