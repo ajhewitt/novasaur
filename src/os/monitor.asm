@@ -121,7 +121,6 @@ INPUTT: MVI     A,10H
 INPUT2: LDA     COMS    ;CHECK STATE
         ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
-        XRA     A       ;CLEAR A
         IN      SDATA   ;GET BYTE
         ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
