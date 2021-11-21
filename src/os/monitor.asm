@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.5'
 ;
-; NOV 17, 2021
+; NOV 20, 2021
 ;
         .PROJECT monitor.com
 ;
@@ -111,16 +111,17 @@ TABLE:  DW      ASCII   ;A, ASCII
 ; CONSOLE INPUT ROUTINE
 ;
 INPUTT: MVI     A,10H
-        OUT     CDATA   ;FLAST CURSOR
+        OUT     CDATA   ;FLASH CURSOR
         IN      CDATA   ;GET BYTE
         ORA     A       ;ZERO?
-        JZ      INPUT2  ;CHECK SERIAL
+        JZ      INPUT2  ;GET SERIAL
         MOV     B,A
         XRA     A       ;CLEAR A
         JMP     INPUT3  ;PROCESS INPUT
-INPUT2: LDA     COMS    ;CHECK SERAIL
+INPUT2: LDA     COMS    ;CHECK STATE
         ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
+        XRA     A       ;CLEAR A
         IN      SDATA   ;GET BYTE
         ORA     A       ;ZERO?
         JZ      INPUTT  ;BLOCK ON IO
@@ -133,21 +134,22 @@ INPUT3: STA     COMB    ;SET COMS STATE
         RET
 ;
 ; CONSOLE OUTPUT ROUTINE
+; SAVE A IN B
 ;
-OUTT:   OUT     CDATA   ;WRITE CONSOLE
+OUTT:   MOV     B,A     ;SAVE A
+        OUT     CDATA   ;WRITE CONSOLE
         ORA     A       ;ZERO?
-        RZ
-        MOV     B,A
+        RZ              ;RETURN IF NULL
         LDA     COMS    ;CHECK COMS
-        ORA     A       ;ZERO?
-        RZ
-OUT2:   MOV     A,B
+        ORA     A       ;SERIAL ON?
+        RZ              ;RETURN IF OFF
+OUT2:   MOV     A,B     ;RESTORE A
         OUT     SDATA   ;WRITE SERIAL
-        ORA     A       ;ZERO?
-        RNZ
+        ORA     A       ;BUFFER FULL?
+        RNZ             ;NO, RETURN
         LDA     COMB    ;LOAD COM BLOCK
-        ORA     A
-        JNZ     OUT2    ;BLOCK ON IO
+        ORA     A       ;BLOCK ON IO?
+        JNZ     OUT2    ;BLOCK
         RET
 ;
 ; TOGGLE SERIAL
@@ -560,11 +562,10 @@ ASCII:  CALL    GETCH   ;NEXT CHAR
         CALL    OUTHL   ;PRINT IT
 ALOD2:  CALL    INPUTT  ;NEXT CHAR
         CALL    OUTT    ;PRINT IT
-        MOV     B,A     ;SAVE
         CALL    CHEKM   ;INTO MEMORY
         INX     H       ;POINTER
         MOV     A,L
-        ANI     7FH     ;LINE END?
+        ANI     3FH     ;LINE END?
         JNZ     ALOD2   ;NO
         CALL    CRHL    ;NEW LINE
         JMP     ALOD2
