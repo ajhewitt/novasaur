@@ -5,7 +5,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 4 4
 Title "Input/Output"
-Date "2021-10-20"
+Date "2021-11-20"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"

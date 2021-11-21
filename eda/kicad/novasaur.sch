@@ -5,7 +5,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2021-10-20"
+Date "2021-11-20"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"
@@ -1500,6 +1500,10 @@ U 5DA1E9C0
 F0 "sheet5DA1E722" 50
 F1 "novasaur-io.sch" 50
 $EndSheet
+Text Notes 1700 5450 0    150  ~ 0
+Cl
+Text Notes 3500 5400 0    150  ~ 0
+Ch
 Wire Bus Line
 	4450 4700 4450 5600
 Wire Bus Line

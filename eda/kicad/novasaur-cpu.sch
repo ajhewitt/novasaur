@@ -5,7 +5,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2021-10-20"
+Date "2021-11-20"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"
@@ -2406,34 +2406,56 @@ $EndComp
 $Comp
 L Device:LED_ALT D?
 U 1 1 5EE6CB39
-P 2300 5500
+P 2300 5800
 AR Path="/5DAA19D5/5EE6CB39" Ref="D?"  Part="1" 
 AR Path="/5DAA5CD8/5D99DA9F/5EE6CB39" Ref="D?"  Part="1" 
 AR Path="/5DA1E9BA/5EE6CB39" Ref="D1"  Part="1" 
 AR Path="/5EE6CB39" Ref="D?"  Part="1" 
-F 0 "D1" V 2300 5700 50  0000 R CNN
-F 1 "LTL-10223W" V 2248 5383 50  0001 R CNN
-F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm_Clear" H 2300 5500 50  0001 C CNN
-F 3 "~" H 2300 5500 50  0001 C CNN
-	1    2300 5500
+F 0 "D1" V 2300 6000 50  0000 R CNN
+F 1 "LTL-10223W" V 2248 5683 50  0001 R CNN
+F 2 "LED_THT:LED_D5.0mm_Horizontal_O1.27mm_Z3.0mm_Clear" H 2300 5800 50  0001 C CNN
+F 3 "~" H 2300 5800 50  0001 C CNN
+	1    2300 5800
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Device:R_US R?
 U 1 1 5EE6CB33
-P 2300 5800
+P 2300 5500
 AR Path="/62D13D9D/5EE6CB33" Ref="R?"  Part="1" 
 AR Path="/5DAA19D5/5EE6CB33" Ref="R?"  Part="1" 
 AR Path="/5DAA5CD8/5D99DA9F/5EE6CB33" Ref="R?"  Part="1" 
 AR Path="/5DA1E9BA/5EE6CB33" Ref="R1"  Part="1" 
 AR Path="/5EE6CB33" Ref="R?"  Part="1" 
-F 0 "R1" H 2100 5850 50  0000 L CNN
-F 1 "300" H 2100 5750 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2340 5790 50  0001 C CNN
-F 3 "~" H 2300 5800 50  0001 C CNN
-	1    2300 5800
+F 0 "R1" H 2100 5550 50  0000 L CNN
+F 1 "300" H 2100 5450 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2340 5490 50  0001 C CNN
+F 3 "~" H 2300 5500 50  0001 C CNN
+	1    2300 5500
 	1    0    0    -1  
 $EndComp
+Text Notes 1500 4150 0    150  ~ 0
+Y
+Text Notes 1400 6500 0    150  ~ 0
+Eo
+Text Notes 3200 6450 0    150  ~ 0
+Ei
+Text Notes 3250 4400 0    150  ~ 0
+A
+Text Notes 1500 1850 0    150  ~ 0
+X
+Text Notes 3250 2000 1    150  ~ 0
+RAM
+Text Notes 4700 1850 0    150  ~ 0
+B
+Text Notes 6350 1850 0    150  ~ 0
+Pg
+Text Notes 6450 4750 0    150  ~ 0
+PC
+Text Notes 8200 2000 1    150  ~ 0
+ROM
+Text Notes 9350 5300 0    150  ~ 0
+HL
 Wire Bus Line
 	850  800  10150 800 
 Wire Bus Line
