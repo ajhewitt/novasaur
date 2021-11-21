@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; NOV 17, 2021
+; NOV 21, 2021
 ;
         .PROJECT        boot.com
 ;
@@ -99,10 +99,11 @@ BOOT1:  DW      BOOTCPU
 ;
 ; CP/M 2.2
 ;
-CPM:    LXI     DE,0DC12H;DEST/ROM PAGE
-        MVI     C,29    ;30 PAGES
+CPM:    LXI     DE,0E412H;DEST/ROM PAGE
+        MVI     C,27    ;28 PAGES
         DW      CPROM   ;COPY ROM
-        JMP     0F200H  ;WARM BOOT CPM
+        RST     1       ;DEBUG - WAIT FOREVER
+        JMP     0FA00H  ;BOOT CPM
 ;
 ; DISK QUADRANT
 ;
@@ -115,8 +116,8 @@ DISK:   LXI     DE,0FF01H;DEST/ROM PAGE
 ;
 TABLE:  DB      HALT
         DB      KERNEL
-        DB      RST1    ;CPM
-        DB      RST1    ;CPM
+        DB      CPM
+        DB      CPM
         DB      DISK
         DB      DISK
         DB      DISK
