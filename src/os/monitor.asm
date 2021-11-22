@@ -574,20 +574,27 @@ ALOD2:  CALL    INPUTT  ;NEXT CHAR
 ; TAB TO SPACE, REMOVE OTHER CONTROL CHAR.
 ;
 ADUMP:  CALL    RDHLDE  ;RANGE
+        MVI     C,-1    ;INIT COUNT
 ADMP2:  MOV     A,M     ;GET BYTE
-        CPI     DEL     ;HIGH BIT ON?
-        JNC     ADMP4   ;YES
         CPI     ' '     ;CONTROL?
-        JNC     ADMP3   ;NO
+        JNC     ADMP4   ;NO
         CPI     CR      ;CARR RET?
-        JZ      ADMP3   ;YES, OK
-        CPI     LF      ;LINE FEED?
-        JZ      ADMP3   ;YES, OK
-        CPI     TAB
-        JNZ     ADMP4   ;SKIP OTHER
-        MVI     A,' '   ;SPACE FOR TAB
-ADMP3:  CALL    OUTT    ;SEND
-ADMP4:  CALL    TSTOP   ;DONE?
+        JNZ     ADMP3   ;NO
+        MVI     C,0     ;CLEAR COUNT
+        JP      ADMP5   ;DON'T COUNT
+ADMP3:  CPI     LF      ;LINE FEED?
+        JZ      ADMP5   ;DON'T COUNT
+        CPI     TAB     ;TAB
+        JNZ     ADMP6   ;SKIP OTHER
+        MVI     A,' '   ;TAB->SPACE
+ADMP4:  INR     C       ;INC COUNT
+ADMP5:  CALL    OUTT    ;SEND
+        MOV     A,C
+        CPI     64      ;EOL?
+        JC      ADMP6   ;NO, CONTINUE
+        MVI     C,0     ;CLEAR COUNT
+        CALL    CRLF    ;NEW LINE
+ADMP6:  CALL    TSTOP   ;DONE?
         JMP     ADMP2   ;END
 ;
 ; SEARCH FOR 1 OR 2 ASCII CHARACTERS
