@@ -5,17 +5,16 @@ Retrocomputer built from late-70's TTL logic chips
           |--------------->S->|------->F=}->video   ^
           |  H->|  +-+        |  +-+     ^         GPU
           |->V->|->|R|        |  |R|  |->G->audio   v
-          |        |A|<>|->b->|->|O|->|            ...
-          |->X->|->|M|  |     |  |M|  |->C->[ECU]   ^
-          |->Y->|  +-+  | fn->|  +-+  |             :
-          |             |     |{=HL<--|             :
-          |          I->|     |<-PC<--|->O         CPU
-          |             |     |<-Pg<--|             :
-          |     Rx->Ei->|<----A<------|->Eo->Tx     :
-          |<--------------------------|             v
-                                                   ...
+          |        |A|<>|->B->|->|O|->|            ...
+          |->X->|->|M|  |     |  |M|  |             ^
+          |->Y->|  +-+  | fn->|  +-+  |->C->[ECU]   :
+          |--------->A->|     |{=HL<--|            CPU
+          |     Rx->Ei->|     |<-PC<--|->Eo->Tx     :
+          |          I->|     |<-Pg<--|->O          v
+          |___________________________|            ...
 ```
-Can you browse the Web using pre-1980 TTL logic and memory speeds? The goal of this project is to demonstrate how. Internet connectivity is via an era-appropriate RS232 interface. The machine is upward compatible by a decade to support currently available keyboard and video interfaces (PS/2 and VGA). The video includes a native text mode capable of displaying 104-columns and bitmapped color graphics for retro gaming.
+
+The Novasaur is a full-featured personal computer built from less than three dozen Advanced Schottky TTL chips (circa 1979). It supports an 80-column SVGA text display, PS/2 keyboard, programmable sound generator, RS232 serial, and an Intel 8080 byte-code interpreter. The machine is capable of running early 80's computer games and CP/M using a built-in 250k RAM disk.
 
 ---
 
