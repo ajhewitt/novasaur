@@ -90,6 +90,11 @@ CTX3:   ORI     0F0H
         LXI     DE,0F002H;DEST/ROM PAGE
         MVI     C,15    ;16 PAGES
         DW      CPROM   ;COPY ROM
+        ;DEBUG - ADD CP/M TO KERNEL SPACE
+        LXI     DE,0CC12H;DEST/ROM PAGE
+        MVI     C,24    ;25 PAGES
+        DW      CPROM   ;COPY ROM
+        ;DEBUG END
         MVI     A,2
 BOOT1:  DW      BOOTCPU
         INR     A
@@ -102,7 +107,7 @@ BOOT1:  DW      BOOTCPU
 CPM:    LXI     DE,0E412H;DEST/ROM PAGE
         MVI     C,27    ;28 PAGES
         DW      CPROM   ;COPY ROM
-        RST     1       ;DEBUG - WAIT FOREVER
+        JMP     RST1    ;DEBUG - WAIT FOREVER
         JMP     0FA00H  ;BOOT CPM
 ;
 ; DISK QUADRANT
