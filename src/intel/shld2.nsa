@@ -6,11 +6,11 @@ PAGE SHLD2_PG
 
 # assume: A = X, H = $IDEN
 LDP PC, $BRANCH
-LD Y, $HREG
-FNFH DZ, NA           # A = H
+LD Y, $LREG
+FNFH DZ, NA           # A = L
 LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
-FNFH A, NM            # H -> [XY]
+FNFH A, NM            # L -> [XY]
 #71
 LD HL, $INC$NULL
 LD Y, $TMPL
@@ -21,12 +21,12 @@ LDN HL, $IDEN$NULL
 LDZ Y, $TMPH
 FNH DZ, HLD          # update temp hi
 LD HL, $IDEN$NULL
-LD Y, $LREG
-FNFH DZ, NA           # A = L
+LD Y, $HREG
+FNFH DZ, NA           # A = H
 #92
 LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
-FNFH A, NM            # L -> [XY]
+FNFH A, NM            # H -> [XY]
 LD HL, $INC$NULL
 #101
 LD Y, $PCL
@@ -49,23 +49,23 @@ DISHL DZ, PGA         # jump to next VMC
 
 #60
 $BRANCH
-LD Y, $HREG
-FNFH DZ, NA           # A = H
+LD Y, $LREG
+FNFH DZ, NA           # A = L
 LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 #69
-FNFH A, NM            # H -> [XY]
+FNFH A, NM            # L -> [XY]
 LD HL, $INC$NULL
 LD Y, $TMPL
 FNFH DZ, XD           # X = low addr+1
 #79
 LD HL, $IDEN$NULL
-LD Y, $LREG
-FNFH DZ, NA           # A = L
+LD Y, $HREG
+FNFH DZ, NA           # A = H
 LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 #90
-FNFH A, NM            # L -> [XY]
+FNFH A, NM            # H -> [XY]
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1

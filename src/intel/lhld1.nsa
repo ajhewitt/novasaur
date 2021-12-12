@@ -9,8 +9,8 @@ LDP PC, $BRANCH
 LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 FNFH M, NA            # A = [XY]
-LD Y, $HREG
-FNH AZ, HLD           # A -> H
+LD Y, $LREG
+FNH AZ, HLD           # A -> L
 #70
 LD HL, $INC$NULL
 LD Y, $TMPL
@@ -22,9 +22,9 @@ LDZ Y, $TMPH
 FNH DZ, Y             # Y = updated hi addr
 LD HL, $IDEN$NULL
 FNFH M, NA            # A = [XY]
-LD Y, $LREG
+LD Y, $HREG
 #91
-FNH AZ, HLD           # A -> L
+FNH AZ, HLD           # A -> H
 LD HL, $INC$NULL
 LD Y, $PCL
 FNFH DZ, XD           # X,PCL = PCL+1
@@ -55,8 +55,8 @@ $BRANCH
 LDZ Y, $TMPH
 FNH DZ, Y             # Y = hi addr
 FNFH M, NA            # A = [XY]
-LD Y, $HREG
-FNH AZ, HLD           # A -> H
+LD Y, $LREG
+FNH AZ, HLD           # A -> L
 #71
 LD HL, $INC$NULL
 LD Y, $TMPL
@@ -66,8 +66,8 @@ LD HL, $IDEN$NULL
 LDZ Y, $TMPH
 FNH DZ, Y             # Y = updated hi addr
 FNFH M, NA            # A = [XY]
-LD Y, $LREG
-FNH AZ, HLD           # A -> L
+LD Y, $HREG
+FNH AZ, HLD           # A -> H
 #91
 LD HL, $INC$NULL
 LD Y, $PCL
