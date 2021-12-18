@@ -1,4 +1,4 @@
-# Pop A, PSW (with prefetch)
+# Pop PSW, A (prefetch unless SPH overflow)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -90,7 +90,7 @@ LDZ Y, $SPH
 FNH DZ, Y             # Y = SPH
 FNFH M, NA            # A = [SP]
 LDZ Y, $AREG
-FNH DZ, HLD           # A -> acc
+FNH AZ, HLD           # A -> acc
 #51
 NOP
 NOP
