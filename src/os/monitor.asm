@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.5'
 ;
-; NOV 20, 2021
+; DEC 18, 2021
 ;
         .PROJECT monitor.com
 ;
@@ -385,15 +385,16 @@ HEX1:   ANI     0FH     ;TAKE 4 BITS
         DAA
         JMP     OUTT
 ;
-; CHECK FOR END, H,L MINUS D,E
+; CHECK FOR END, H,L EQUALS D,E
 ; INCREMENT H,L
 ;
-TSTOP:  INX     H
-        MOV     A,E
-        SUB     L       ; E - L
+TSTOP:  MOV     A,E
+        CMP     L       ; E==L?
+        JNZ     TSTOP2
         MOV     A,D
-        SBB     H       ; D - H
-        RNC             ;NOT DONE
+        CMP     H       ; D==H?
+TSTOP2: INX     H
+        RNZ             ;NOT DONE
         POP     H       ;RAISE STACK
         RET
 ;
