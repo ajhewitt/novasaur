@@ -59,11 +59,11 @@ DISHL DZ, PGA         # jump to next VMC
 ADDR 0xC0
 NOP
 NOP
-LD HL, $IDEN$NULL
+LD HL, $IDEN$IDEN
 #51
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
-FNFH M, HLA           # HL = [PC]
+FNFL M, HL            # HL = [PC]
 LD Y, $AREG
 #60
 ADDHL DZ, ND          # Acc = Acc + HL

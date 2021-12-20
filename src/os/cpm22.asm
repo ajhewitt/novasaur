@@ -13,8 +13,7 @@
 ;   Set memory limit here. This is the amount of contigeous
 ; ram starting from 0000. CP/M will reside at the end of this space.
 ;
-MEM	EQU	58	;for a 64k system
-STACK   EQU     0E880H  ;debug - use to override CCPSTACK
+MEM	EQU	58	;for a 62k system (TS802 TEST - WORKS OK).
 ;
 IOBYTE	EQU	3	;i/o definition byte.
 TDRIVE	EQU	4	;current drive name and user number.
@@ -44,7 +43,7 @@ DEL	EQU	7FH	;rubout
 ;
 	ORG	(MEM-7)*1024
 ;
-CBASE	JMP	COMMAND         ;execute command processor (ccp).
+CBASE	JMP	COMMAND	;execute command processor (ccp).
 	JMP	CLEARBUF	;entry to empty input buffer before starting ccp.
 
 ;
@@ -53,12 +52,12 @@ CBASE	JMP	COMMAND         ;execute command processor (ccp).
 ;
 INBUFF	DB	127	;length of input buffer.
 	DB	0	;current length of contents.
-SIGNON:	DB      '64k CP/M version 2.2',CR,LF
-        DB	'Copyright'
-	DB	' 1979 (c) by Digital Research',CR,LF
-	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+SIGNON:	DB	'Copyright'
+	DB	' 1979 (c) by Digital Research      '
+	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 INPOINT	DW	INBUFF+2;input line pointer
 NAMEPNT	DW	0	;input line pointer used for error message. Points to
 ;			;start of name in error.
@@ -1209,8 +1208,7 @@ GETBACK1:CALL	CONVFST	;convert first name in (FCB).
 ;   ccp stack area.
 ;
 	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-;CCPSTACK:EQU	$	;end of ccp stack area.
-CCPSTACK:EQU    STACK
+CCPSTACK:EQU	$	;end of ccp stack area.
 ;
 ;   Batch (or SUBMIT) processing information storage.
 ;
@@ -1887,7 +1885,7 @@ TRKSEC4	POP	H	;get track number (HL).
 	MOV	B,A
 	LHLD	XLATE	;translate this sector according to this table.
 	XCHG
-	CALL	SECTRAN	;let the bios translate it.
+	CALL	SECTRN	;let the bios translate it.
 	MOV	C,L
 	MOV	B,H
 	JMP	SETSEC	;and select it.
@@ -3730,8 +3728,8 @@ RXEN    EQU     11              ;RX ENABLE
 ;
 ; THESE MUST MATCH KERNEL!
 ;
-BREAK   EQU     STACK
-SRCCPU  EQU     STACK+1
+BREAK   EQU     0E880H
+SRCCPU  EQU     BREAK+1
 K_WAIT  EQU     0F005H
 K_CMD   EQU     0F017H
 ;
@@ -3766,7 +3764,7 @@ WBOOTE:	JMP	WBOOT	;WARM START
 	JMP	READ	;READ DISK
 	JMP	WRITE	;WRITE DISK
 	JMP	LISTST	;RETURN LIST STATUS
-	JMP	SECTRAN	;SECTOR TRANSLATE
+	JMP	SECTRN	;SECTOR TRANSLATE
 ;
 ;	FIXED DATA TABLES FOR FOUR-DRIVE STANDARD
 ;	IBM-COMPATIBLE 8" DISKS
@@ -3927,7 +3925,7 @@ SETSEC:	;SET SECTOR GIVEN BY REGISTER C
 	RET
 ;
 ;
-SECTRAN:
+SECTRN:
 	;TRANSLATE THE SECTOR GIVEN BY BC USING THE
 	;TRANSLATE TABLE GIVEN BY DE
 	MOV	L, C		;LOW ORDER ADDRESS

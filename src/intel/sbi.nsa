@@ -59,7 +59,7 @@ LD HL, $IDEN$2COM
 LDZ Y, $PCH
 FNH DZ, Y             # Y = PCH
 #50
-FNFH M, HLA           # HL = -[PC]
+FNFL M, HL            # HL = -[PC]
 LD Y, $AREG
 ADDHL DZ, ND          # Acc = Acc + HL
 #59

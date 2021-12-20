@@ -12,7 +12,7 @@ LD Y, $INST
 FNDL DZ, Y            # Y = zpage addr of lower register
 #11
 FNH DZ, HLD           # lower register--
-LD HL, $INC$IDEN
+LD HL, $INC$NULL
 FNH A, HLA            # underflow to 0xFF, inc to zero
 LD HL, $ZERO?$NULL
 #19
