@@ -1,4 +1,4 @@
-# Move immediate to memory
+# Move immediate to memory (with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

@@ -4,72 +4,83 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE XTHL_PG
 
-# assume: Y = $VMS, ref: https://en.wikipedia.org/wiki/XOR_swap_algorithm
-LDZ HL, $INC2$NULL
-FNH DZ, HLD           # inc state
-# [SP] <-> L
+# assume: Y = $VMS
+LD HL, $0x30
+ADDH DZ, ND               # inc state
 LD HL, $IDEN$IDEN
 LD Y, $SPL
-FNFL DZ, X            # X = SPL
-#11
+#9
+FNFL DZ, X                # X = PCL
 LDZ Y, $SPH
-FNH DZ, Y             # Y = SPH
-FNFL M, HL            # HL = [SP]
+FNH DZ, Y                 # Y = PCH
+FNFH M, NA                # A = [SP]
+LD Y, $TEMP
+#21
+FNFH AZ, ND               # A -> temp
 LD Y, $LREG
-#20
-XORHL DZ, NA          # A = [SP]$L
+FNFH DZ, NA               # A = L
 LDZ Y, $SPH
-FNH DZ, Y             # Y = SPH
-XORHL A, NM           # [SP]$A -> [SP]
-#32
+#31
+FNH DZ, Y
+FNFH A, NM                # A -> [SP]
+LD Y, $TEMP
+FNFH DZ, NA               # A = temp
+#41
 LD Y, $LREG
-MVHL AZ, ND           # [SP] -> L
-# [SP+1] <-> H
+FNH AZ, HLD               # A -> L
 LD HL, $INC$FORK1
-#40
 LD Y, $SPL
-FNFH DZ, XA           # X = SPL+1
+#49
+FNFH DZ, XA               # X = SPL+1
 FNDL A, PC
-#48
+#55
 
-ADDR 0x80             # inc SPH
+ADDR 0x80                 # inc SPH
+FNFH DZ, XA               # X = PCL+1
 LD HL, $IDEN$INC
-#50
-FNFL DZ, Y            # Y = SPH+1
-FNFH M, HLA           # HL = [SP+1]
-LD Y, $HREG
-XORHL DZ, NA          # A = [SP+1]$H
-#62
+#60
 LDZ Y, $SPH
-FNFL DZ, Y            # Y = SPH+1
-XORHL A, NM           # [SP+1]$A -> [SP+1]
-#71
+FNFL DZ, Y                # Y = PCH+1
+FNFH M, NA                # A = [SP]
+LD Y, $TEMP
+#70
+FNFH AZ, ND               # A -> temp
 LD Y, $HREG
-MVHL AZ, ND           # [SP+1] -> H
-LD HL, $FETCH
-NOP
+FNFH DZ, NA               # A = H
+LDZ Y, $SPH
 #80
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
-#86
+FNFL DZ, Y                # Y = PCH+1
+FNFH A, NM                # A -> [SP]
+LD Y, $TEMP
+FNFH DZ, NA               # A = temp
+#91
+LD Y, $HREG
+FNH AZ, HLD               # A -> H
+NOP
+LD PG, $PREFETCH_PG
+#98
 
 ADDR 0xC0
+FNFH DZ, XA               # X = PCL+1
 LD HL, $IDEN$IDEN
-#50
-FNFL DZ, Y            # Y = SPH
-FNFH M, HLA           # HL = [SP+1]
-LD Y, $HREG
-XORHL DZ, NA          # A = [SP+1]$H
-#62
+#60
 LDZ Y, $SPH
-FNFL DZ, Y            # Y = SPH+1?
-XORHL A, NM           # [SP+1]$A -> [SP+1]
-#71
+FNFL DZ, Y                # Y = PCH
+FNFH M, NA                # A = [SP]
+LD Y, $TEMP
+#70
+FNFH AZ, ND               # A -> temp
 LD Y, $HREG
-MVHL AZ, ND           # [SP+1] -> H
-LD HL, $FETCH
-NOP
+FNFH DZ, NA               # A = H
+LDZ Y, $SPH
 #80
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
-#86
+FNFL DZ, Y                # Y = PCH
+FNFH A, NM                # A -> [SP]
+LD Y, $TEMP
+FNFH DZ, NA               # A = temp
+#91
+LD Y, $HREG
+FNH AZ, HLD               # A -> H
+NOP
+LD PG, $PREFETCH_PG
+#98

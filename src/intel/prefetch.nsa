@@ -4,7 +4,7 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE PREFETCH_PG
 
-LD HL, $INC$FORK1  #55
+LD HL, $INC$FORK1  #55,#98
 LD Y, $PCL
 #59
 FNFH DZ, XD        # X,PCL = PCL+1
