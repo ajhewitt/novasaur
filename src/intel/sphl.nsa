@@ -12,12 +12,13 @@ LD Y, $LREG
 FNFH DZ, NA           # A = L
 #11
 LD Y, $SPL
-FNFH AZ, XD           # A -> SPL
+FNFH AZ, ND           # A -> SPL
 LD Y, $HREG
 FNFH DZ, NA           # A = H
 #21
 LD Y, $SPH
-FNFH AZ, ND           # A -> SPH
+FNH AZ, HLD           # A -> SPH
+NOP
 NOP
 NOP
 NOP

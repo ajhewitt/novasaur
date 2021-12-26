@@ -101,7 +101,7 @@ LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
 #86/31
 
-ADDR 0xC0             # else, iden SPH, iden SPH, iden SPH
+ADDR 0xC0             # else, iden SPH, iden SPH
 NOP
 NOP
 FNFH DZ, ND           # SPL = SPL+1 again

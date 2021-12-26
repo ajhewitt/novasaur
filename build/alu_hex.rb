@@ -685,19 +685,19 @@ print_unary(0xD3, [0x90] + Array.new(0xFD, 0xC8) + [0x20, 0x58])
 REG8=[0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0x00, 0xF0].freeze
 REG16H=[0xF2, 0xF4, 0xF6, 0xF8].freeze
 print_unary(0xD4, 256.times.map { |i|
-  (i&0xC4).zero? || (i>0xC0) ? REG16H[(i&0x30)>>4] : REG8[(i&0x38)>>3]
+  if ((i-1)&7)==7 && ((i-1)&0xFF)>0xC0 # RSTVEC: map inst+1 to RST vector
+    (((i-1)>>3)&7)*8
+  else
+    (i&0xC4).zero? || (i>0xC0) ? REG16H[(i&0x30)>>4] : REG8[(i&0x38)>>3]
+  end
 })
 # $REGMAPL: map instruction to zpage addr of source register, or low source register pair
 REG16L=[0xF3, 0xF5, 0xF7, 0xF9].freeze
 CON=[0x40, 0x10, 0x80, 0x20].freeze
 UNC=[0xC3, 0xC9, 0xCD].freeze # unconditional instructions
 print_unary(0xD5, 256.times.map { |i|
-  if i>=0xC0 && (i&0xB)!=1
-    if (i&7)==7 # RSTVEC: map inst+1 to RST vector
-      ((i-1)%8)*8
-    else # CON2MUL: condition code to flag multiplier (ZCPS->CNZPHOBL)
-      UNC.include?(i) ? 0 : CON[(i&0x30)>>4]
-    end
+  if i>=0xC0 && (i&0xB)!=1 # CON2MUL: condition code to flag multiplier (ZCPS->CNZPHOBL)
+    UNC.include?(i) ? 0 : CON[(i&0x30)>>4]
   else
     i>=0xC0 || (i&0xC4).zero? ? REG16L[(i&0x30)>>4] : REG8[i&7]
   end

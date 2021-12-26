@@ -8,7 +8,7 @@ PAGE RST_PG
 LD HL, $INC$FORK1
 FNFH DZ, ND           # inc state
 LD Y, $PCL
-FNFH DZ, ND           # X,PCL = PCL+1
+FNFH DZ, ND           # PCL = PCL+1
 FNDL A, PC            # fork on PCL
 #13
 
@@ -18,7 +18,7 @@ FNFH DZ, ND           # PCH = PCH+1      *** inc PCH ***
 LDZ Y, $INST
 #20
 FNH DZ, HLA           # A = inst + 1
-LD HL, $REGMAPL$NULL
+LD HL, $REGMAPH$NULL
 LD Y, $TEMP
 FNDH AZ, ND           # rst vector -> temp
 #29
@@ -38,7 +38,7 @@ NOP
 LDZ Y, $INST
 #20
 FNH DZ, HLA           # A = inst + 1
-LD HL, $REGMAPL$NULL
+LD HL, $REGMAPH$NULL
 LD Y, $TEMP
 FNDH AZ, ND           # rst vector -> temp
 #29
