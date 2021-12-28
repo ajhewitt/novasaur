@@ -5,7 +5,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "Central Processing Unit"
-Date "2021-11-20"
+Date "2021-12-27"
 Rev "1.10"
 Comp ""
 Comment1 "(c) Solid State Machines 2021"
@@ -2428,7 +2428,7 @@ AR Path="/5DAA5CD8/5D99DA9F/5EE6CB33" Ref="R?"  Part="1"
 AR Path="/5DA1E9BA/5EE6CB33" Ref="R1"  Part="1" 
 AR Path="/5EE6CB33" Ref="R?"  Part="1" 
 F 0 "R1" H 2100 5550 50  0000 L CNN
-F 1 "300" H 2100 5450 50  0000 L CNN
+F 1 "220" H 2100 5450 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 2340 5490 50  0001 C CNN
 F 3 "~" H 2300 5500 50  0001 C CNN
 	1    2300 5500
