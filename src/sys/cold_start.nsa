@@ -150,7 +150,7 @@ LD HL, $0x5F
 LD Y, $CONC
 MVHL AZ, ND               # '_' -> console cursor
 LD Y, $MODE
-LD HL, $6
-MVHL AZ, ND               # SVGA - 80x36 text
+LD HL, $3
+MVHL AZ, ND               # VGA75 - 80x30 text
 
 LD PG, $KBD_START_PG
