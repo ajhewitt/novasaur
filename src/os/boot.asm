@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; NOV 21, 2021
+; JAN 2, 2022
 ;
         .PROJECT        boot.com
 ;
@@ -88,11 +88,11 @@ CTX3:   ORI     0F0H
         INR     H
         JNZ     CTX1
         LXI     DE,0F002H;DEST/ROM PAGE
-        MVI     C,15    ;16 PAGES
+        MVI     C,13    ;14 PAGES
         DW      CPROM   ;COPY ROM
         ;DEBUG - ADD CP/M TO KERNEL SPACE
-        LXI     DE,0CC12H;DEST/ROM PAGE
-        MVI     C,24    ;25 PAGES
+        LXI     DE,0CC34H;DEST/ROM PAGE
+        MVI     C,23    ;24 PAGES
         DW      CPROM   ;COPY ROM
         ;DEBUG END
         MVI     A,2
@@ -104,8 +104,8 @@ BOOT1:  DW      BOOTCPU
 ;
 ; CP/M 2.2
 ;
-CPM:    LXI     DE,0E412H;DEST/ROM PAGE
-        MVI     C,27    ;28 PAGES
+CPM:    LXI     DE,0E434H;DEST/ROM PAGE
+        MVI     C,23    ;24 PAGES
         DW      CPROM   ;COPY ROM
         JMP     RST1    ;DEBUG - WAIT FOREVER
         JMP     0FA00H  ;BOOT CPM
