@@ -5,10 +5,10 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 4
 Title "Novasaur Retrocomputer"
-Date "2021-12-27"
+Date "2022-01-02"
 Rev "1.10"
 Comp ""
-Comment1 "(c) Solid State Machines 2021"
+Comment1 "(c) Solid State Machines 2022"
 Comment2 ""
 Comment3 ""
 Comment4 ""
