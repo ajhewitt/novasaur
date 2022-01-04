@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; JAN 2, 2022
+; JAN 3, 2022
 ;
         .PROJECT        boot.com
 ;
@@ -91,7 +91,7 @@ CTX3:   ORI     0F0H
         MVI     C,13    ;14 PAGES
         DW      CPROM   ;COPY ROM
         ;DEBUG - ADD CP/M TO KERNEL SPACE
-        LXI     DE,0CC34H;DEST/ROM PAGE
+        LXI     DE,0C434H;DEST/ROM PAGE
         MVI     C,23    ;24 PAGES
         DW      CPROM   ;COPY ROM
         ;DEBUG END

@@ -13,7 +13,7 @@
 ;   Set memory limit here. This is the amount of contigeous
 ; ram starting from 0000. CP/M will reside at the end of this space.
 ;
-MEM	EQU	58	;for a 62k system (TS802 TEST - WORKS OK).
+MEM	EQU	56	;for a 62k system (TS802 TEST - WORKS OK).
 ;
 IOBYTE	EQU	3	;i/o definition byte.
 TDRIVE	EQU	4	;current drive name and user number.
@@ -3744,6 +3744,7 @@ IPCRCV	EQU	09DDH   ;MASTER: GET SLAVE REGS
 RECSEND	EQU	0AEDH   ;SLAVE: SET RECORD
 RECXFER	EQU	0BEDH   ;MASTER: MOVE RECORD
 RECRECV	EQU	0CEDH   ;SLAVE: GET RECORD
+DMA     EQU     0DDDH   ;DMA
 ;
 	ORG	BIOS		;ORIGIN OF THIS PROGRAM
 NSECTS	EQU	($-CCP)/128	;WARM START SECTOR COUNT
@@ -3805,16 +3806,16 @@ DPBLA:	;DISK PARAMETER BLOCK, COMMON TO ALL DISKS
 	DW	0		;TRACK OFFSET
 ;
 DPBLB:	;DISK PARAMETER BLOCK, COMMON TO ALL DISKS
-	DW	8       	;SECTORS PER TRACK
+	DW	4       	;SECTORS PER TRACK
 	DB	3		;BLOCK SHIFT FACTOR
 	DB	7		;BLOCK MASK
 	DB	0		;NULL MASK
-	DW	59              ;DISK SIZE-1
-	DW	31              ;DIRECTORY MAX
+	DW	59		;DISK SIZE-1
+	DW	15              ;DIRECTORY MAX
 	DB	128             ;ALLOC 0
 	DB	0		;ALLOC 1
 	DW	0               ;CHECK SIZE
-	DW	0		;TRACK OFFSET
+	DW	8		;TRACK OFFSET
 ;
 ;	END OF FIXED TABLES
 ;
@@ -3942,61 +3943,61 @@ SETDMA:	;SET	DMA ADDRESS GIVEN BY REGISTERS B AND C
 ;
 READ:	;PERFORM READ OPERATION
         LDA	DISKNO
-        CPI     1       ;B: DRIVE?
+        CPI     1               ;B: DRIVE?
         JNZ     ADRIVE
-        LDA     TRACK   ;A=00TTTTTT
-        CPI     60H
-        RNC             ;TRACK OUT OF RANGE
-        RLC             ;A=0TTTTTT0
-        RLC             ;A=TTTTTT00
-        MOV     E,A
         LDA     SECTOR
-        CPI     8
-        RNC             ;SECTOR OUT OF RANGE
-        RRC             ;A=000000SS
-        JNC     RDROM
-        XRA     A
-        RET             ;ASSUME PAGE READ SET UPPER RECORD
-
-RDROM   ANA     E       ;A=TTTTTTSS C=0
-        ADI     10H     ;FIRST PAGE OF B: DRIVE
-        MOV     E, A    ;ROM PAGE
-        LDA     DMAAD+1 ;DMA PAGE
-        MOV     D, A    ;DEST PAGE
-        MVI     C, 0    ;1 PAGE
-        DW      CPROM   ;COPY ROM
+        ORA     A               ;SECTOR ZERO?
+        JNZ     CPBBF
+        LDA     TRACK
+        ADD     A               ;A=TTTTTTT0
+        MVI     D, BBUFF>>8     ;SET BBUFF PAGE
+        MOV     E, A            ;ROM PAGE
+        MVI     C, 1            ;2 PAGES
+        DW      CPROM           ;COPY ROM
+        LDA     SECTOR          ;A=000000SS
+CPBBF   RAR                     ;A=0000000S C=S
+        RAR                     ;A=S0000000 C=S
+        MOV     E, A
+        MVI     A, 0
+        ACI     BBUFF>>8        ;SET BBUFF PAGE+C
+        MOV     D, A
+        DCX     D
+        LHLD    DMAAD           ;SET DEST
+        DCX     H
+        MVI     C, 128          ;128 BYTES
+        DW      DMA             ;COPY RECORD
         XRA     A
         RET
 
 ADRIVE	MVI     A, 1
-        STA     BREAK   ;SET BREAK POINT
-        STA     SRCCPU  ;SET SOURCE AS KERNEL
+        STA     BREAK           ;SET BREAK POINT
+        STA     SRCCPU          ;SET SOURCE AS KERNEL
         LDA     TRACK
         MOV     D, A
         LDA     SECTOR
         MOV     E, A
-        LXI     B, 0102H;SEQ 1, GET COMMAND
-        CALL    K_CMD   ;HANDLE COMMAND
-        CALL    K_WAIT  ;HANDLE RETURN
+        LXI     B, 0102H        ;SEQ 1, GET COMMAND
+        CALL    K_CMD           ;HANDLE COMMAND
+        CALL    K_WAIT          ;HANDLE RETURN
         LHLD    DMAAD
         XCHG
-        DW      RECRECV ;SHM->DE
+        DW      RECRECV         ;SHM->DE
         XRA     A
 	RET
 ;
 WRITE:	;PERFORM A WRITE OPERATION
 	MVI     A, 1
-        STA     BREAK   ;SET BREAK POINT
-        STA     SRCCPU  ;SET SOURCE AS KERNEL
+        STA     BREAK           ;SET BREAK POINT
+        STA     SRCCPU          ;SET SOURCE AS KERNEL
         LHLD    DMAAD
         XCHG
-        DW      RECSEND ;DE->SHM
+        DW      RECSEND         ;DE->SHM
         LDA     TRACK
         MOV     D, A
         LDA     SECTOR
         MOV     E, A
-        LXI     B, 0203H;SEQ 2, PUT COMMAND
-        CALL    K_CMD   ;HANDLE COMMAND
+        LXI     B, 0203H        ;SEQ 2, PUT COMMAND
+        CALL    K_CMD           ;HANDLE COMMAND
         XRA     A
         RET
 ;
@@ -4012,8 +4013,9 @@ DISKNO:	DS	1		;DISK NUMBER 0-15
 CSTAT:  DS      1               ;CONSOLE STATE
 ;
 ;	SCRATCH RAM AREA FOR BDOS USE
-ORG     0E400H                  ;ROUND UP TO RECORD BOUNDRY
+ORG     0E000H                  ;ROUND UP TO RECORD BOUNDRY
 BEGDAT	EQU	$	 	;BEGINNING OF DATA AREA
+BBUFF:  DS      512             ;B: DRIVE BUFFER
 DIRBF:	DS	128	 	;SCRATCH DIRECTORY AREA
 ALL00:	DS	31	 	;ALLOCATION VECTOR 0
 ALL01:	DS	31	 	;ALLOCATION VECTOR 1
