@@ -20,6 +20,7 @@ $JMPPG0_PG     0x10
 $JMPPG1_PG     0x11
 
 $MOVMX_PG      0x20
+$DMA_PG        0x21
 
 # 0x80-0x8F: system
 $COLD_START_PG 0x80 # reset vector

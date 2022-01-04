@@ -1,0 +1,61 @@
+# DMA - xfer C bytes DE->HL, one byte per 2-cycle, fetch when done
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE DMA_PG
+
+#CREG: Number of bytes to xfer (0=256)
+#DREG/EREG: Source address - 1
+#HREG/LREG: Dest address - 1
+# assume: Y = $VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD            # VMS+2
+LD HL, $INC$NULL
+LD Y, $EREG
+FNFH DZ, XD            # X,E=E+1
+#11
+LD HL, $ZERO?$NULL
+FNH A, HLA             # E overflow?
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $DREG
+#20
+FNH DZ, HLD            # D=D+1?
+LD HL, $IDEN$NULL
+FNH A, Y
+FNFH M, NA             # A=[DE]
+LD Y, $TEMP
+#31
+FNH AZ, HLD            # A->temp
+LD HL, $INC$NULL
+LD Y, $LREG
+FNFH DZ, XD            # X,L=L+1
+#40
+LD HL, $ZERO?$NULL
+FNH A, HLA             # L overflow?
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $HREG
+FNH DZ, HLD            # H=H+1?
+#51
+LD HL, $IDEN$NULL
+LD Y, $TEMP
+FNFH DZ, NA            # A=temp
+LDZ Y, $HREG
+#60
+FNH DZ, Y              # Y=H
+FNFH A, NM             # A->[HL]
+NOP
+NOP
+LD HL, $DEC$NULL
+LDZ Y, $CREG
+#71
+FNH DZ, HLD            # C=C-1
+LD HL, $ZERO?$NULL
+FNH A, HLA             # C==0?
+LDP HL, $FETCH         # Xfer done - fetch
+LDN HL, $DMA_INST      # More data - DMA
+#80
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#86

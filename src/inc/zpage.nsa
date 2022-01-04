@@ -134,6 +134,7 @@ $YIELD_INST    0x06
 $SEND_INST     0x0A
 $XFER_INST     0x0B
 $RECV_INST     0x0C
+$DMA_INST      0x0D
 
 $KSBUFF        0xF8
 $KCBUFF        0xF9
