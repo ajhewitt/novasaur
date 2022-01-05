@@ -3948,9 +3948,9 @@ READ:	;PERFORM READ OPERATION
         LDA     SECTOR
         ORA     A               ;SECTOR ZERO?
         JNZ     CPBBF
+        MVI     D, BBUFF>>8     ;SET BBUFF PAGE
         LDA     TRACK
         ADD     A               ;A=TTTTTTT0
-        MVI     D, BBUFF>>8     ;SET BBUFF PAGE
         MOV     E, A            ;ROM PAGE
         MVI     C, 1            ;2 PAGES
         DW      CPROM           ;COPY ROM

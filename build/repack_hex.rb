@@ -11,14 +11,16 @@ def load_rom(filename)
   min = 0x10000
   max = 0
   file.each do |l|
-    case l[7, 2].to_i(16)
-    when 0
-      size = l[1, 2].to_i(16)
-      addr = l[3, 4].to_i(16)
-      min = addr if addr < min
-      top = addr + size - 1
-      max = top if top > max
-      size.times {|i| rom[addr + i] = l[(i * 2) + 9, 2].to_i(16)}
+    if l.start_with? ':'
+      case l[7, 2].to_i(16)
+      when 0
+        size = l[1, 2].to_i(16)
+        addr = l[3, 4].to_i(16)
+        min = addr if addr < min
+        top = addr + size - 1
+        max = top if top > max
+        size.times {|i| rom[addr + i] = l[(i * 2) + 9, 2].to_i(16)}
+      end
     end
   end
   size = max - min
