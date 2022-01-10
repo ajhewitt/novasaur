@@ -142,25 +142,8 @@ LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
 #86/33
 
-#RECORD SEND - init E to boundry, temp = -1
-ADDR 0xB0
-LD Y, $INST
-FNFH AZ, ND               # record send -> inst cache
-#39/4
-LDZ Y, $EREG
-FNH DZ, HLA               # A = E
-LDP HL, $0xFF             # +ve: -1 -> E
-LDN HL, $0x7F             # -ve: 127 -> E
-MVHL AZ, ND
-#50/13
-LD HL, $0xFF
-NOP
-NOP
-LD PC, $EXIT56
-#56/19
-
 #RECORD XFER - init HL to contexts, temp = -1
-ADDR 0xC4
+ADDR 0xAE
 LD HL, $KERN?$NULL
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
@@ -181,10 +164,10 @@ LD HL, $0xFF
 LD PC, $EXIT68
 #68/28
 
-#RECORD RECV - init temp = -1
-ADDR 0xE0
+#RECORD SEND/RECV - init temp = -1
+ADDR 0xCA
 LD Y, $INST
-FNH AZ, HLD               # record receive -> inst cache
+FNH AZ, HLD               # record send/recv -> inst cache
 LD HL, $ZERO?$NULL
 #40/5
 LDZ Y, $EREG
@@ -203,3 +186,5 @@ NOP
 LD HL, $0xFF              # init temp to -1
 LD PC, $EXIT64
 #64/27
+
+#ADDR 0xE6
