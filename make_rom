@@ -24,16 +24,16 @@ build/repack_hex.rb lib/kernel.hex 2 >> build/output/rom.hex
 build/repack_hex.rb lib/monitor.hex 10 >> build/output/rom.hex
 build/pack_hex.rb lib/bdir.hex 16 >> build/output/rom.hex
 build/bin2hex.rb lib/asm.com 20 >> build/output/rom.hex
-#build/repack_hex.rb lib/basic.hex 52 >> build/output/rom.hex
-build/repack_hex.rb lib/cpm22.hex 84 >> build/output/rom.hex
-build/bin2hex.rb lib/ddt.com 108 >> build/output/rom.hex
-build/bin2hex.rb lib/dump.com 128 >> build/output/rom.hex
-build/bin2hex.rb lib/ed.com 132 >> build/output/rom.hex
-build/bin2hex.rb lib/load.com 160 >> build/output/rom.hex
-build/bin2hex.rb lib/pip.com 168 >> build/output/rom.hex
-build/bin2hex.rb lib/stat.com 200 >> build/output/rom.hex
-build/bin2hex.rb lib/submit.com 224 >> build/output/rom.hex
-#build/bin2hex.rb lib/xmodem.com 232 >> build/output/rom.hex
+build/repack_hex.rb lib/basic.hex 52 >> build/output/rom.hex
+build/repack_hex.rb lib/cpm22.hex 88 >> build/output/rom.hex
+build/bin2hex.rb lib/ddt.com 112 >> build/output/rom.hex
+build/bin2hex.rb lib/dump.com 132 >> build/output/rom.hex
+build/bin2hex.rb lib/ed.com 136 >> build/output/rom.hex
+build/bin2hex.rb lib/load.com 164 >> build/output/rom.hex
+build/bin2hex.rb lib/pip.com 172 >> build/output/rom.hex
+build/bin2hex.rb lib/stat.com 204 >> build/output/rom.hex
+build/bin2hex.rb lib/submit.com 228 >> build/output/rom.hex
+#build/bin2hex.rb lib/xmodem.com 236 >> build/output/rom.hex
 build/bin2hex.rb lib/xsub.com 252 >> build/output/rom.hex
 
 echo "Building ALU"
