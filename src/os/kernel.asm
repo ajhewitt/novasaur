@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; NOV 16, 2021
+; JAN 11, 2022
 ;
         .PROJECT        kernel.com
 ;
@@ -44,7 +44,7 @@ K_CMD:  MOV	A,C	;A=CMD
         JC      WAIT    ;NULL CMD
         JZ      CMD1    ;HANDLE RET
         LXI	H,CMDS
-	JP      CMD2
+	JMP     CMD2
 CMD1:   LXI     H,0041H
         LDA     SRCCPU  ;GET CURRENT CPU
         CALL    HANDHL  ;HL=HANDLER

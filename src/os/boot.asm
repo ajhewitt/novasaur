@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; JAN 3, 2022
+; JAN 10, 2022
 ;
         .PROJECT        boot.com
 ;
@@ -19,7 +19,7 @@ RST0:   ADI     TABLE
 HALT:   HLT             ;HALT CPU0
 RST1:   MVI     C,0
         DW      CMDSND  ;SEND NULL; YIELD
-        JP      RST1    ;WAIT FOREVER
+        JMP     RST1    ;WAIT FOREVER
         NOP
 RST2:   NOP
         NOP
@@ -91,7 +91,7 @@ CTX3:   ORI     0F0H
         MVI     C,13    ;14 PAGES
         DW      CPROM   ;COPY ROM
         ;DEBUG - ADD CP/M TO KERNEL SPACE
-        LXI     DE,0C434H;DEST/ROM PAGE
+        LXI     DE,0C458H;DEST/ROM PAGE
         MVI     C,23    ;24 PAGES
         DW      CPROM   ;COPY ROM
         ;DEBUG END
@@ -101,10 +101,11 @@ BOOT1:  DW      BOOTCPU
         CPI     8
         JNZ     BOOT1
         JMP     0F800H  ;BOOT MONITOR
+        ;JMP     0DA00H
 ;
 ; CP/M 2.2
 ;
-CPM:    LXI     DE,0E434H;DEST/ROM PAGE
+CPM:    LXI     DE,0E458H;DEST/ROM PAGE
         MVI     C,23    ;24 PAGES
         DW      CPROM   ;COPY ROM
         JMP     RST1    ;DEBUG - WAIT FOREVER

@@ -46,7 +46,7 @@ def print_af(offset, opts = {})
           carry = (b-(c>>3)) < a
           r = c & 9                                   # preserve half carry/borrow
           r |= 0x80 if carry                          # C - Carry (from bit 7)
-          r |= b >> 3                                 # S - Sign of result
+          r |= 0x40 & (b<<3)                          # S - Sign of result
           r |= 0x20 if c&4 != 0 && b == 0             # Z - Zero (high if result is 0)
           r |= (PARITY[b] ^ ((c>>1)%2) ^ 1) << 4      # P - Parity (high if result even)
           r |= 4 if ((b&7) < (a&7)) ^ (b < a)         # V - Overflow (carry from bit 6 xor carry)

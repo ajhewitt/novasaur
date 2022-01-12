@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.5'
 ;
-; DEC 18, 2021
+; JAN 11, 2022
 ;
         .PROJECT monitor.com
 ;
@@ -582,7 +582,7 @@ ADMP2:  MOV     A,M     ;GET BYTE
         CPI     CR      ;CARR RET?
         JNZ     ADMP3   ;NO
         MVI     C,0     ;CLEAR COUNT
-        JP      ADMP5   ;DON'T COUNT
+        JMP     ADMP5   ;DON'T COUNT
 ADMP3:  CPI     LF      ;LINE FEED?
         JZ      ADMP5   ;DON'T COUNT
         CPI     TAB     ;TAB
@@ -762,7 +762,7 @@ KERN:   MVI     A,1
         CPI     'P'     ;WRITE DISK
         JZ      KPUT
         ;MOAR COMMANDS
-        JP      ERROR
+        JMP     ERROR
 ;
 ; GET DISK RECORD
 ; COPY TRACK/SEC TO MEM ADDR
