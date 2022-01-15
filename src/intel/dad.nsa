@@ -6,43 +6,42 @@ PAGE DAD_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC2$NULL
-FNH DZ, HLD           # inc state
+FNH DZ, HLD               # inc state
 LD HL, $IDEN$REGMAPL
 LD Y, $INST
-FNDL DZ, Y            # Y = zpage addr of lower register
+FNDL DZ, Y                # Y = zpage addr of lower register
 #11
-FNH DZ, HL            # HL = lower register
+FNH DZ, HL                # HL = lower register
 LD Y, $LREG
-ADDHL DZ, ND          # L = L + lower register
+ADDHL DZ, ND              # L = L + lower register
 #19
-AFHL A, NA            # A = carry
+AFHL A, NA                # A MSB = L carry
+NOP
+NOP
+NOP
+NOP
 LD HL, $IDEN$REGMAPH
+#29
 LD Y, $INST
-FNDL DZ, Y            # Y = zpage addr of upper register
-#30
-FNH DZ, HL            # HL = upper register
+FNDL DZ, Y                # Y = zpage addr of upper register
+FNH DZ, HL                # HL = upper register
 LD Y, $HREG
-NOP
-NOP
-NOP
-NOP
-NOP
-LDP PC, $NO_CARRY
-#40
-ADDHL DZ, ND          # H = H + upper register
+LDP PC, $NO_CARRY40       # No carry from L
+#39
+ADDHL DZ, ND              # H = H + upper register
 LD Y, $TEMP
-AFHL AZ, ND           # temp = carry
-#50
+AFHL AZ, ND               # temp MSB = H carry
+#49
 LD HL, $INC$NULL
 LDZ Y, $HREG
-FNH DZ, HLD           # H = H + carry
+FNH DZ, HLD               # H = H + carry
 LD HL, $ZERO?$NULL
-FNH A, HLA
-#60
-LDP HL, $0x80
+FNH A, HLA                # H overflowed?
+#59
+LDP HL, $0x80             # yes, set carry
 LDN HL, $0
 LD Y, $TEMP
-ORH DZ, NA
+ORHL DZ, NA               # carry set?
 LDN PC, $SET_CARRY70
 NOP
 #70
@@ -52,11 +51,12 @@ LD HL, $0x7F
 ANDHL DZ, ND
 LD HL, $FETCH
 #80
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
+LD Y, $VMS                # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
 #86
 
-$NO_CARRY             #41
+$NO_CARRY40               #40
+NOP
 NOP
 NOP
 NOP
@@ -78,8 +78,8 @@ NOP
 NOP
 NOP
 #60
-ADDHL DZ, ND          # H = H + upper register
-AFHL A, NA            # A = carry
+ADDHL DZ, ND              # H = H + upper register
+AFHL A, NA                # A MSB = carry
 LDP PC, $RESET_CARRY70
 NOP
 #70
@@ -89,6 +89,6 @@ LD HL, $0x80
 ORHL DZ, ND
 LD HL, $FETCH
 #80
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
+LD Y, $VMS                # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
 #86

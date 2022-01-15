@@ -1,4 +1,4 @@
-# Exchange stack top with HL
+# Exchange stack top with HL (with prefetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -10,9 +10,9 @@ ADDH DZ, ND               # inc state
 LD HL, $IDEN$IDEN
 LD Y, $SPL
 #9
-FNFL DZ, X                # X = PCL
+FNFL DZ, X                # X = SPL
 LDZ Y, $SPH
-FNH DZ, Y                 # Y = PCH
+FNH DZ, Y                 # Y = SPH
 FNFH M, NA                # A = [SP]
 LD Y, $TEMP
 #21
@@ -28,59 +28,33 @@ FNFH DZ, NA               # A = temp
 #41
 LD Y, $LREG
 FNH AZ, HLD               # A -> L
-LD HL, $INC$FORK1
+LD HL, $INC$NULL
 LD Y, $SPL
 #49
 FNFH DZ, XA               # X = SPL+1
-FNDL A, PC
-#55
-
-ADDR 0x80                 # inc SPH
-FNFH DZ, XA               # X = PCL+1
-LD HL, $IDEN$INC
-#60
-LDZ Y, $SPH
-FNFL DZ, Y                # Y = PCH+1
+LD HL, $ZERO?$NULL
+FNH A, HLA                # X overflow?
+LDP HL, $IDEN$INC
+LDN HL, $IDEN$IDEN
+#59
+LD Y, $SPH
+FNFL DZ, Y                # Y = SPH+1?
 FNFH M, NA                # A = [SP]
 LD Y, $TEMP
-#70
+#69
 FNFH AZ, ND               # A -> temp
 LD Y, $HREG
 FNFH DZ, NA               # A = H
-LDZ Y, $SPH
-#80
-FNFL DZ, Y                # Y = PCH+1
+LD Y, $SPH
+#79
+FNFL DZ, Y                # Y = SPH+1?
 FNFH A, NM                # A -> [SP]
 LD Y, $TEMP
 FNFH DZ, NA               # A = temp
-#91
+#90
 LD Y, $HREG
 FNH AZ, HLD               # A -> H
 NOP
-LD PG, $PREFETCH_PG
-#98
-
-ADDR 0xC0
-FNFH DZ, XA               # X = PCL+1
-LD HL, $IDEN$IDEN
-#60
-LDZ Y, $SPH
-FNFL DZ, Y                # Y = PCH
-FNFH M, NA                # A = [SP]
-LD Y, $TEMP
-#70
-FNFH AZ, ND               # A -> temp
-LD Y, $HREG
-FNFH DZ, NA               # A = H
-LDZ Y, $SPH
-#80
-FNFL DZ, Y                # Y = PCH
-FNFH A, NM                # A -> [SP]
-LD Y, $TEMP
-FNFH DZ, NA               # A = temp
-#91
-LD Y, $HREG
-FNH AZ, HLD               # A -> H
 NOP
 LD PG, $PREFETCH_PG
 #98

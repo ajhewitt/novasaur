@@ -72,7 +72,7 @@ LD HL, $IDEN$NULL
 #70
 FNH AZ, HL            # HL = new flags
 LD Y, $FREG
-ORHL DZ, NA           # A = flags | initial carry flags
+ORHL DZ, ND           # A = flags | initial carry flags
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
