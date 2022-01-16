@@ -46,7 +46,7 @@ AFHL A, NA            # A = flags after adjust
 #70
 LD HL, $8
 LD Y, $FREG
-ORHL AZ, ND           # set half carry
+ORHL AZ, ND           # flags = A + set half carry
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
@@ -68,7 +68,7 @@ AFHL A, NA            # A = flags after adjust
 #70
 LD HL, $0xF7
 LD Y, $FREG
-ANDHL AZ, ND          # clear half carry
+ANDHL AZ, ND          # flags = A - clear half carry
 LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
