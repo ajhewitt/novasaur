@@ -5,7 +5,7 @@ INCLUDE ../inc/pages.nsa
 PAGE ANAR_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC$NULL
+LDZ HL, $INC2$NULL
 FNH DZ, HLD           # inc state
 LD HL, $IDEN$REGMAPL
 LD Y, $INST
@@ -13,21 +13,50 @@ FNDL DZ, Y            # Y = zpage addr of source reg
 #11
 FNH DZ, HL            # source reg -> HL
 LD Y, $AREG
-ANDHL DZ, ND          # Acc = Acc & HL
-LD HL, $0
+ORHL DZ, NA           # A = Acc | HL
+LD HL, $8
 #21
 LD Y, $FREG
-AFHL AZ, ND
+ANDHL AZ, ND          # flags = aux carry
+LD HL, $IDEN$REGMAPL
+LD Y, $INST
+#31
+FNDL DZ, Y            # Y = zpage addr of source reg
+FNH DZ, HL            # source reg -> HL
+LD Y, $AREG
+ANDHL DZ, ND          # Acc = Acc & temp
+#42
+LD HL, $0
+AFHL A, NA            # A = flags
+LD HL, $IDEN$NULL
+#50
+LDZ Y, $FREG
+FNH DZ, HL            # HL = aux carry
+ORHL AZ, ND           # flags = flags | aux carry
+NOP
+NOP
+#60
 NOP
 NOP
 NOP
-#30
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#70
+NOP
+NOP
+NOP
 NOP
 NOP
 NOP
 NOP
 NOP
 LD HL, $FETCH
+#80
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
-#43
+#86

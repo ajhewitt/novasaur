@@ -16,110 +16,77 @@ NOP
 #10
 NOP
 NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#20
-NOP
-NOP
-NOP
-NOP
-NOP
-LD HL, $INC$FORK2
+LD HL, $INC$FORK1
 LD Y, $PCL
-#29
 FNFH DZ, XD           # X,PCL = PCL+1
+#19
 FNDL A, PC
-#35
+#22
 
-ADDR 0x40             # PCL = 255, iden PCH, inc PCH
-LD HL, $IDEN$IDEN
-LDZ Y, $PCH
-FNH DZ, Y             # Y = PCH
-#41
-FNFL M, HL            # HL = [PC]
-LD Y, $AREG
-ANDHL DZ, ND          # Acc = Acc & immediate
-#50
-LD HL, $0
-LD Y, $FREG
-AFHL AZ, ND           # set flags
-LD HL, $INC$NULL
-#60
-LD Y, $PCL
-FNFH DZ, XD           # X,PCL = PCL+1
+ADDR 0x80             # PCL = 0, inc PCH
 LDZ Y, $PCH
 FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
+LD HL, $IDEN$IDEN
+FNH DZ, Y             # Y = PCH
+#30
+FNFL M, HL            # HL = [PC]
+LD Y, $AREG
+ORHL DZ, NA           # A = Acc | HL
+LD HL, $8
+#41
+LD Y, $FREG
+ANDHL AZ, ND          # flags = aux carry
+LD HL, $IDEN$IDEN
+LDZ Y, $PCH
+#51
+FNH DZ, Y             # Y = PCH
+FNFL M, HL            # HL = [PC]
+LD Y, $AREG
+ANDHL DZ, ND          # Acc = Acc & temp
+#62
+LD HL, $0
+AFHL A, NA            # A = flags
 LD HL, $IDEN$NULL
-#71
-FNH A, Y              # Y = PCH
-FNFH M, NA            # A = [PC]
-LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
+#70
+LDZ Y, $FREG
+FNH DZ, HL            # HL = aux carry
+ORHL AZ, ND           # flags = flags | aux carry
+LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
 #86
 
-ADDR 0x80             # PCL = 0, inc PCH, iden PCH
-LDZ Y, $PCH
-FNH DZ, HLD           # PCH = PCH+1      *** inc PCH ***
-LD HL, $IDEN$IDEN
-#41
-FNH A, Y              # Y = PCH
-FNFL M, HL            # HL = [PC]
-LD Y, $AREG
-ANDHL DZ, ND          # Acc = Acc + immediate
-#52
-LD HL, $0
-LD Y, $FREG
-AFHL AZ, ND           # set flags
-#60
-LD HL, $INC$NULL
-LD Y, $PCL
-FNFH DZ, XD           # X,PCL = PCL+1
-LD HL, $IDEN$NULL
-LDZ Y, $PCH
-#71
-FNH DZ, Y             # Y = PCH
-FNFH M, NA            # A = [PC]
-LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
-#80
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
-#86
-
-ADDR 0xC0             # else, iden PCH, iden PCH
+ADDR 0xC0             # else, iden PCH
 NOP
 NOP
 LD HL, $IDEN$IDEN
 LDZ Y, $PCH
+FNH DZ, Y             # Y = PCH
+#30
+FNFL M, HL            # HL = [PC]
+LD Y, $AREG
+ORHL DZ, NA           # A = Acc | HL
+LD HL, $8
 #41
+LD Y, $FREG
+ANDHL AZ, ND          # flags = aux carry
+LD HL, $IDEN$IDEN
+LDZ Y, $PCH
+#51
 FNH DZ, Y             # Y = PCH
 FNFL M, HL            # HL = [PC]
 LD Y, $AREG
-ANDHL DZ, ND          # Acc = Acc + immediate
-#52
+ANDHL DZ, ND          # Acc = Acc & temp
+#62
 LD HL, $0
-LD Y, $FREG
-AFHL AZ, ND           # set flags
-#60
-LD HL, $INC$NULL
-LD Y, $PCL
-FNFH DZ, XD           # X,PCL = PCL+1
+AFHL A, NA            # A = flags
 LD HL, $IDEN$NULL
-LDZ Y, $PCH
-#71
-FNH DZ, Y             # Y = PCH
-FNFH M, NA            # A = [PC]
-LD Y, $INST
-FNH AZ, HLD           # A -> inst cache,HL
+#70
+LDZ Y, $FREG
+FNH DZ, HL            # HL = aux carry
+ORHL AZ, ND           # flags = flags | aux carry
+LD HL, $FETCH
 #80
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
