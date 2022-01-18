@@ -80,13 +80,13 @@ LDZ Y, $AREG
 FNH D, HLD                # CPU Acc = CPU number
 LD HL, $0
 #60/22
+LD Y, $IMASK
+MULH A, ND                # 0->IMASK
 LD Y, $CREG
 MULH A, ND                # 0->C
-LD Y, $DREG
-MULH A, ND                # 0->D
 #70/30
-LD Y, $EREG
-MULH AZ, ND               # 0->E
+LD Y, $DREG
+MULH AZ, ND               # 0->D
 LD Y, $TEMP
 MULH A, ND                # 0->temp
 #80/38
