@@ -4,10 +4,12 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE COLD_START_PG
 
-LD HL, $0x01              # LED ON for preflight
-MVHL A, EA                # bank1,LED on->E
-MULH A, VA                # V=0
-MULH A, XA                # X=0
+LD HL, $0x11              # LED OFF for preflight
+MVHL A, EA                # bank1,LED off->E
+LD HL, $0
+MULL A, V                 # V=0
+MULL A, S                 # S=0
+MULL A, X                 # X=0
 LD Y, $0                  # Y=0
 $PREFLIGHT
 LD HL, $0xAA
@@ -25,9 +27,8 @@ LD HL, $ZERO?$NULL
 FNH A, HLA                # A==0?
 LDN PC, $PREFLIGHT        # try again?
 
-LD HL, $0x10              # LED OFF for fill
-MVHL A, EA                # bank0,LED off->E
-LD HL, $0
+LD HL, $0                 # LED ON for fill
+MULL A, E                 # bank0,LED on->E
 LD Y, $0x80
 MULH AZ, ND               # 0->zpageY
 $ROW1
@@ -47,13 +48,10 @@ LDZ Y, $0x80
 FNH DZ, HLD               # Y+1->zpageY
 LDP PC, $ROW1             # loop if Y<80
 
-LD HL, $0x40
-MVHL A, SA
-MVHL A, SA                # kbdtx high,venable on
-
-LD HL, $0x00              # LED ON for check
-MVHL A, EA                # bank0,LED on->E
+LD HL, $0x10              # LED OFF for check
+MVHL A, EA                # bank0,LED off->E
 LD Y, $0x80
+LD HL, $0
 MULH AZ, ND               # 0->zpageY
 $ROW2
 LDZ HL, $IDEN$NULL
@@ -80,12 +78,8 @@ LDZ Y, $0x80
 FNH DZ, HLD               # Y+1->zpageY
 LDP PC, $ROW2             # loop if Y<80
 
-LD HL, $0x00
-MVHL A, SA
-MVHL A, SA                # kbdtx high,venable off
-
-LD HL, $0x10              # LED OFF for fill
-MVHL A, EA                # bank0,LED off->E
+LD HL, $0                 # LED ON for fill
+MULL A, E                 # bank0,LED on->E
 LD HL, $0x80
 LD Y, $0x7F
 MVHL AZ, ND               # 80->zpageY
@@ -106,8 +100,8 @@ LDZ Y, $0x7F
 FNH DZ, HLD               # Y+1->zpageY
 LDN PC, $ROW3             # loop if Y>80
 
-LD HL, $0x00              # LED OFF for check
-MVHL A, EA                # bank0,LED on->E
+LD HL, $0x10              # LED OFF for check
+MVHL A, EA                # bank0,LED off->E
 LD HL, $0x80
 LD Y, $0x7F
 MVHL AZ, ND               # 0x80->zpageY
@@ -136,21 +130,21 @@ LDZ Y, $0x7F
 FNH DZ, HLD               # Y+1->zpageY
 LDN PC, $ROW4             # loop if Y>80
 
-LD HL, $0x11
+LD HL, $0x01
 LD Y, $EO
-MVHL AZ, ED               # bank1,LED off->E *** init EO
+MVHL AZ, ED               # bank1,LED on->E *** init EO
 
 LD HL, $DEC$NULL
 LDZ Y, $TIME3
-FNH DZ, HLD               # set days to -1 (will overflow to 0)
-LD HL, $0xA0              # text colors - green on black, font 2
+FNH DZ, HLD               # set days to -1 (will overflow to 0 on start)
+LD HL, $0xA0              # green on black, font 2
 LD Y, $CONF
-MVHL AZ, ND
-LD HL, $0x5F
+MVHL AZ, ND               # set default text colors
+LD HL, $0x5F              # '_'
 LD Y, $CONC
-MVHL AZ, ND               # '_' -> console cursor
-LD Y, $MODE
+MVHL AZ, ND               # set default console cursor
+LD Y, $MODE               # VGA75 - 80x30 text
 LD HL, $3
-MVHL AZ, ND               # VGA75 - 80x30 text
+MVHL AZ, ND               # set default video mode
 
 LD PG, $KBD_START_PG

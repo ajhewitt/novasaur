@@ -15,6 +15,9 @@ MULL A, S                 # reset scan/kbdtx high
 
 # (1)  Auxiliary device idle when clock high for 186us
 $IDLE
+LD HL, $0x10
+LD Y, $EO
+XORHL DZ, ED              # toggle LED
 LD HL, $0x80              # delay 128
 LD Y, $TMPL
 MVHL AZ, ND               # 128->TMPL
@@ -117,7 +120,7 @@ LD HL, $DEC$NULL
 LDZ Y, $TMPH
 FNH DZ, HLD               # TMPH-1->TMPH
 LDP PC, $LOOPH            # loop until 0
-LD PC, $IDLE
+LD PC, $IDLE              # retry
 
 # (7)  Release data to transmit 10 high bits - FF, patiry, stop
 $PASS

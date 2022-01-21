@@ -5,9 +5,11 @@ INCLUDE ../inc/pages.nsa
 PAGE WARM_START_PG
 
 # Set E-reg
-LD HL, $0xD1
+LD HL, $0x80
 LD Y, $EO
-MVHL AZ, ED               # bank1,LED off
+ANDH DZ, NA               # clear bank
+LD HL, $0x10              # bank 1
+ORH AZ, ED                # set bank
 
 # Keyboard
 LD HL, $40                # 40
