@@ -86,7 +86,7 @@ LD Y, $CREG
 MULH A, ND                # 0->C
 #70/30
 LD Y, $DREG
-MULH AZ, ND               # 0->D
+MULH A, ND                # 0->D
 LD Y, $TEMP
 MULH A, ND                # 0->temp
 #80/38
