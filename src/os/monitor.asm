@@ -761,6 +761,8 @@ KERN:   MVI     A,1
         JZ      KGET
         CPI     'P'     ;WRITE DISK
         JZ      KPUT
+        CPI     'F'     ;FORMAT DISK
+        JZ      KFMT
         ;MOAR COMMANDS
         JMP     ERROR
 ;
@@ -787,5 +789,33 @@ KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
         POP     D       ;RECOVER TRACK/SEC
         CALL    K_CMD   ;HANDLE COMMAND
         RET
-
+;
+; FORMAT A: DRIVE
+;
+KFMT:   LXI     H,0180H ;CREATE RECORD
+KFMT1:  DCR     L       ;HL--
+        MOV     A,L
+        ANI     01FH    ;FIND RECORD START
+        JZ      KFMT2
+        MVI     M,0     ;CLEAR  BYTE
+        JMP     KFMT1   ;LOOP
+KFMT2:  MVI     M,0E5H  ;SET ERA EVERY RECORD
+        ORA     L       ;L=0?
+        JNZ     KFMT1   ;LOOP IF NO
+        XCHG            ;DE=0100
+        DW      RECSEND ;COPY RECORD (0100->SHM)
+        MVI     B,0     ;SEQ=0
+KFMT3:  MVI     A,1
+        STA     SRCCPU  ;SET SOURCE AS KERNEL
+        MVI     C,3     ;PUT COMMAND
+        MVI     D,0     ;TRACK 0
+        MOV     E,B     ;SECTOR SEQ
+        CALL    K_CMD   ;HANDLE COMMAND
+        CALL    K_WAIT  ;HANDLE RETURN
+        INR     B
+        MOV     A,B
+        CPI     10H
+        JNZ     KFMT3
+        RET
+        
         END
