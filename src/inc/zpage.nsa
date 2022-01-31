@@ -1,6 +1,5 @@
 # zero page assignments
-#RESERVED      0x80-0x8A (11) scratch pad (protected)
-$AMODE         0x8B # audio mode - 0x00-0x3F (protected)
+#RESERVED      0x80-0x8B (12) scratch pad (protected)
 $ICL           0x8C # idle cycle count low byte
 $ICH           0x8D # idle cycle count high byte
 $WAVE0         0x8E
@@ -10,11 +9,11 @@ $SUSTAIN0      0x91
 $RELEASE0      0x92
 $NOTE1L        0x93 # note interval low (FREQL)
 $NOTE1H        0x94 # note interval high (FREQH)
-$WAVE1         0x95 # wave table entry (SQRWAV/SAWWAV)
-$ATTACK1       0x96 # ADSR attack
-$DECAY1        0x97 # ADSR decay
-$SUSTAIN1      0x98 # ADSR sustain
-$RELEASE1      0x99 # ADSR release
+$WAVE1         0x95 # wave table entry (SQRWAV/SAWWAV: 0000WWWW)
+$ATTACK1       0x96 # ADSR attack (positive 4-bit packed to 8-bits *8: 0AAAA000)
+$DECAY1        0x97 # ADSR decay (negative 4-bit packed to 8-bits *8: 1DDDD000)
+$SUSTAIN1      0x98 # ADSR sustain (negative 4-bit packed to 8-bits: 1111SSSS)
+$RELEASE1      0x99 # ADSR release (negative 4-bit packed to 8-bits *8: 1RRRR000)
 $NOTE2L        0x9A
 $NOTE2H        0x9B
 $WAVE2         0x9C
@@ -39,7 +38,7 @@ $CONC          0xAE # console cursor char
 $CONF          0xAF # console font
 $VSTART        0xB0 # start of video display
 $MODE          0xB1 # video mode to set
-#SPARE
+#SPARE         0xB2 (1)
 $KTO           0xB3 # max kbd idle count
 $KSRDIDX       0xB4
 $KSWRIDX       0xB5
@@ -47,7 +46,7 @@ $KCRDIDX       0xB6
 $KCWRIDX       0xB7
 #PROTECTED STATE
 $KBSTAT        0xB8 # kbd status
-#SPARE
+#SPARE         0xB9 (1)
 $BLOCK         0xBA # block count, 0 to 175/160/128 (read-only)
 $FRAME         0xBB # frame count, -5,-4 to 0 (read-only)
 $TIME0         0xBC # 15tps, max 90 - 6s (read-only)
@@ -59,28 +58,28 @@ $DELTA0        0xC0
 $DELTA1        0xC1 # ADSR state as Y indirect
 $DELTA2        0xC2
 $DELTA3        0xC3
-$WAVIDX1L      0xC4 # wave table index low
-$WAVIDX1H      0xC5 # wave table index high
-$WAVIDX2L      0xC6
-$WAVIDX2H      0xC7
-$WAVIDX3L      0xC8
-$WAVIDX3H      0xC9
-$KMODE         0xCA # kbd decode state
-$KIDLE         0xCB # kbd idle cycle count
-$KS0           0xCC # kbd sample 0
-$KS1           0xCD # kbd sample 1
-$RMODE         0xCE # Rx mode - 0x40-0x7F
-$RXRDIDX       0xCF
-$RXWRIDX       0xD0
-$RMULT         0xD1 # rx multiplier
-$TMODE         0xD2 # Tx mode - 0x80-0xBF
-$TXRDIDX       0xD3
-$TXWRIDX       0xD4
-#SPARE         0xD5
-$VMS           0xD6 # virtual machine state
-$VMODE         0xD7 # video mode  (used with mode line in VMS)
-$BMODE         0xD8 # VID col used for block
-$VLINE         0xD9 # video memory line
+$GATE0         0xC4
+$GATE1         0xC5 # ADSR sustain to set on gate on
+$GATE2         0xC6
+$GATE3         0xC7
+$WAVIDX1L      0xC8 # wave table index low
+$WAVIDX1H      0xC9 # wave table index high
+$WAVIDX2L      0xCA
+$WAVIDX2H      0xCB
+$WAVIDX3L      0xCC
+$WAVIDX3H      0xCD
+$AMODE         0xCE # audio mode - 0x00-0x3F (protected)
+$KMODE         0xCF # kbd decode state
+$KIDLE         0xD0 # kbd idle cycle count
+$KS0           0xD1 # kbd sample 0
+$KS1           0xD2 # kbd sample 1
+$RMODE         0xD3 # Rx mode - 0x40-0x7F
+$RXRDIDX       0xD4
+$RXWRIDX       0xD5
+$RMULT         0xD6 # rx multiplier
+$TMODE         0xD7 # Tx mode - 0x80-0xBF
+$TXRDIDX       0xD8
+$TXWRIDX       0xD9
 $COMLS         0xDA # comms line state
 $COMBS         0xDB # comms block state
 $CBLOCK        0xDC # context switch block
@@ -88,9 +87,13 @@ $CTXIDX        0xDD # context index
 $CTX0          0xDE # current context
 $CTX1          0xDF # next context
 $EO            0xE0 # Eo register value
-$RCODE         0xE1 # restart scan code
-$HTEMP         0xE2 # HAL temp
-#SPARE         0xE3-0xE7 (5)
+$VMS           0xE1 # virtual machine state
+$VMODE         0xE2 # video mode (used with mode line in VMS)
+$BMODE         0xE3 # VID col used for block
+$VLINE         0xE4 # video memory line
+$RCODE         0xE5 # restart scan code
+$HTEMP         0xE6 # HAL temp
+#SPARE         0xE7 (1)
 $CMDL          0xE8 # kernel IPC - command low
 $CMDH          0xE9 # kernel IPC - command high
 $MSEQ          0xEA # kernel IPC - message sequence

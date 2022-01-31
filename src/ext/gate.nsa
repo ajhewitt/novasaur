@@ -1,0 +1,52 @@
+# Gate voice on/off
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE GATE_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD               # inc state
+LD HL, $SWAP$NULL
+LDZ Y, $INST
+FNH DZ, HLA               # check bit3
+#10
+LDP PC, $GATE_ON          # gate on if bit3 low
+#GATE_OFF
+LD HL, $EXTMAPL$NULL
+FNCH DZ, NA               # A=index of sustain
+LD HL, $INC$EXTMAPH
+FNCL DZ, Y                # Y=index of delta
+#21
+FNH AZ, HLD               # index of release->delta
+LD HL, $0$EXTMAPL
+LD Y, $INST
+FNCL A, Y                 # Y=index of sustain
+#30
+MULH AZ, HLD              # 0->sustain
+NOP
+NOP
+LD HL, $FETCH
+LDZ Y, $VMS               # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
+#43
+
+$GATE_ON
+LD HL, $IDEN$EXTMAPH
+LD Y, $INST
+FNCL A, Y                 # Y=index of gate
+#19
+FNFH DZ, NA               # A=gate
+LD HL, $IDEN$EXTMAPL
+LD Y, $INST
+FNCL DZ, Y                # Y=index of sustain
+#29
+FNH AZ, HLD               # gate->sustain
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LDZ Y, $VMS               # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
+#43

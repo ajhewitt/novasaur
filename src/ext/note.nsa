@@ -1,0 +1,77 @@
+# Set note: Acc=Midi note, set NOTEL/H and WAVE
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE NOTE_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD               # inc state
+LD HL, $EXTMAPL$NULL
+LD Y, $INST
+FNCH DZ, NA               # A=voice index
+#11
+LD HL, $IDEN$NULL
+LD Y, $TEMP
+FNFH AZ, ND               # voice index->temp
+LD Y, $AREG
+#20
+FNFH DZ, NA               # A=MIDI note
+LD HL, $FREQL$IDEN
+LD Y, $TEMP
+FNFL DZ, Y                # Y=index of NOTEL
+#30
+FNEH AZ, ND               # A->FREQL
+LD HL, $IDEN$NULL
+LD Y, $AREG
+FNFH DZ, NA               # A=MIDI note
+#40
+LD HL, $FREQH$INC
+LD Y, $TEMP
+FNFL DZ, Y                # Y=index of NOTEH
+FNEH AZ, ND               # A->FREQH
+#50
+LD HL, $EXTMAPH$INC2
+LD Y, $TEMP
+FNFL DZ, Y                # Y=index of WAVE
+FNCH DZ, HLA              # HL=FNCWAV
+#60
+LDP PC, $EXIT62
+LD Y, $AREG
+FNEH DZ, NA               # A=WAVE
+LD HL, $IDEN$INC2
+LD Y, $TEMP
+#70
+FNFL DZ, Y                # Y=index of WAVE
+FNFH DZ, ND               # update WAVE
+NOP
+NOP
+LD HL, $FETCH
+#80
+LDZ Y, $VMS               # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
+#86
+
+$EXIT62
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#70
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+#80
+LDZ Y, $VMS               # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
+#86
