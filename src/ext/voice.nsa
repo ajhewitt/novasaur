@@ -5,70 +5,70 @@ INCLUDE ../inc/pages.nsa
 PAGE VOICE_PG
 
 # assume: Y = $VMS
-LD HL, $3$NULL
-ANDH DZ, ND               # inc state
-LD HL, $EXTMAPL$NULL
+LD HL, $3$EXTMAPH
+ADDH DZ, ND               # inc state
 LD Y, $INST
-#9
-FNCH DZ, NA               # A=WAVE index
-LD HL, $IDEN$NULL
+FNCL DZ, HL               # HL=WAVE index
+#10
 LD Y, $TEMP
-FNH AZ, HLD               # WAVE index->temp
+MVHL AZ, ND               # WAVE index->temp
 LD HL, $0x0F
-#20
 LD Y, $AREG
+#20
 ANDHL DZ, NA              # A=wave
 LD HL, $IDEN$NULL
-LD Y, $TEMP
-#30
+LDZ Y, $TEMP
 FNH DZ, Y                 # Y=WAVE index
-FNH DZ, HLD               # wave->WAVE
+#30
+FNH AZ, HLD               # wave->WAVE
 LD HL, $0x0F
 LD Y, $BREG
 ANDHL DZ, NA              # A=attack&f
-#42
+#40
 LD HL, $8$INC
 LD Y, $TEMP
 FNFL DZ, Y                # Y=ATTACK index
-#49
 MULH AZ, HLD              # attack*8->ATTACK
+#50
 LD HL, $0x8F
 LD Y, $CREG
 ANDHL DZ, NA              # A=decay&f
-#60
 MULH A, NA                # A=decay*8
+#61
 LD HL, $2COM$INC2
 LD Y, $TEMP
 FNFL DZ, Y                # Y=DECAY index
-#70
 FNH AZ, HLD               # -decay->DECAY
+#70
 LD HL, $0$3
 LD Y, $TEMP
 ADDL DZ, Y                # Y=SUSTAIN index
-#79
 MULH AZ, HLD              # 0->SUSTAIN
+#80
 LD HL, $0x8F
 LD Y, $EREG
 ANDHL DZ, NA              # A=release&f
-#90
 MULH A, NA                # A=release*8
+#91
 LD HL, $2COM$4
 LD Y, $TEMP
 ADDL DZ, Y                # Y=RELEASE index
-#100
 FNH AZ, HLD               # -release->RELEASE
+#100
 LD HL, $0x0F
 LD Y, $DREG
 ANDHL DZ, NA              # A=sustain&f
+LD HL, $2COM$EXTMAPL
 #110
-LD HL, $2COM$EXTMAPH
 LD Y, $INST
 FNCL DZ, Y                # A=GATE index
 FNH AZ, HLD               # -sustain->GATE
 NOP
+NOP
+NOP
 #120
 NOP
 LD HL, $FETCH
-LDZ Y, $VMS               # set Y = $VMS on exit
+LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
 #129

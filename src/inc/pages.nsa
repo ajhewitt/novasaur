@@ -20,10 +20,10 @@ $JMPPG0_PG     0x10
 $JMPPG1_PG     0x11
 
 $MOVMX_PG      0x20
-$DMA_PG        0x21
-$NOTE_PG       0x22
-$VOICE_PG      0x23
-$GATE_PG       0x24
+$DMA_PG        0x21 #
+$VOICE_PG      0x22 # DD10-DD13
+$NOTE_PG       0x23 # DD18-DD1B
+$GATE_PG       0x24 # DD14-DD17,DD1C-DD1F
 
 # 0x80-0x8F: system
 $COLD_START_PG 0x80 # reset vector

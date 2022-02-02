@@ -5,54 +5,74 @@ INCLUDE ../inc/pages.nsa
 PAGE NOTE_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC2$NULL
-FNH DZ, HLD               # inc state
-LD HL, $EXTMAPL$NULL
+LD HL, $EXTMAPH$NULL
 LD Y, $INST
-FNCH DZ, NA               # A=voice index
-#11
+FNCH DZ, NA               # A=note index
+LDP PC, $ESC9             # escape if +ve index
 LD HL, $IDEN$NULL
+#10
 LD Y, $TEMP
-FNFH AZ, ND               # voice index->temp
+FNFH AZ, ND               # note index->temp
 LD Y, $AREG
-#20
 FNFH DZ, NA               # A=MIDI note
+#20
 LD HL, $FREQL$IDEN
 LD Y, $TEMP
 FNFL DZ, Y                # Y=index of NOTEL
-#30
 FNEH AZ, ND               # A->FREQL
+#30
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, NA               # A=MIDI note
-#40
 LD HL, $FREQH$INC
 LD Y, $TEMP
+#41
 FNFL DZ, Y                # Y=index of NOTEH
 FNEH AZ, ND               # A->FREQH
-#50
-LD HL, $EXTMAPH$INC2
+LD HL, $WAV2FNC$INC2
 LD Y, $TEMP
+#51
 FNFL DZ, Y                # Y=index of WAVE
 FNCH DZ, HLA              # HL=FNCWAV
-#60
-LDP PC, $EXIT62
+LDP PC, $EXIT59
 LD Y, $AREG
+#60
 FNEH DZ, NA               # A=WAVE
 LD HL, $IDEN$INC2
 LD Y, $TEMP
-#70
 FNFL DZ, Y                # Y=index of WAVE
-FNFH DZ, ND               # update WAVE
-NOP
-NOP
-LD HL, $FETCH
-#80
-LDZ Y, $VMS               # set Y = $VMS on exit
-DISHL DZ, PGA             # jump to next VMC
-#86
+#70
+FNH DZ, HLD               # update WAVE
+LD PC, $EXIT74
+#74
 
-$EXIT62
+$ESC9                     # overload NOTE0 to set WAVE3 level when no ADSR
+LD HL, $SWAP$NULL
+LD Y, $AREG
+FNFH DZ, NA               # A=wave,old level
+LDZ Y, $WAVE3
+FNH DZ, HL                # H=new level
+#20
+MVH A, NA                 # A=wave,new level
+LD HL, $SWAP$NULL
+FNH AZ, HLD               # new level,wave->WAVE3
+NOP
+NOP
+NOP
+#30
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # inc VMS
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#43
+
+$EXIT59
+NOP
+#60
+NOP
+NOP
 NOP
 NOP
 NOP
@@ -66,12 +86,11 @@ NOP
 NOP
 NOP
 NOP
-NOP
-NOP
-NOP
-NOP
-LD HL, $FETCH
-#80
+$EXIT74
+LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # inc VMS
+#80
+LD HL, $FETCH
 DISHL DZ, PGA             # jump to next VMC
 #86

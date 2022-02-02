@@ -61,5 +61,6 @@ $SCAN1      1 # extended/control scan code->ascii
 $SCAN2      2 # alt/ext-ctrl-alt scan code->ascii
 $KS2MODE    3 # kbd scan code->kmode mask bit
 $VATTR      4 # video mode attributes (64 modes, 4 attrs/mode)
-$EXTMAPH    5 # extended inst mapping util (high)
-$EXTMAPL    6 # extended inst mapping util (low)
+$WAV2FNC    5 # WAVE in L to SQRWAV/SAWWAV/0 in H
+$EXTMAPH    6 # extended inst mapping util (high)
+$EXTMAPL    7 # extended inst mapping util (low)
