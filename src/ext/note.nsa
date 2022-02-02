@@ -19,30 +19,30 @@ FNFH DZ, NA               # A=MIDI note
 LD HL, $FREQL$IDEN
 LD Y, $TEMP
 FNFL DZ, Y                # Y=index of NOTEL
-FNEH AZ, ND               # A->FREQL
+FNEH AZ, ND               # FREQL->NOTEL
 #30
 LD HL, $IDEN$NULL
 LD Y, $AREG
 FNFH DZ, NA               # A=MIDI note
 LD HL, $FREQH$INC
+#39
 LD Y, $TEMP
-#41
 FNFL DZ, Y                # Y=index of NOTEH
-FNEH AZ, ND               # A->FREQH
+FNEH AZ, ND               # FREQH->NOTEH
 LD HL, $WAV2FNC$INC2
-LD Y, $TEMP
-#51
+#49
+LDZ Y, $TEMP
 FNFL DZ, Y                # Y=index of WAVE
 FNCH DZ, HLA              # HL=FNCWAV
 LDP PC, $EXIT59
 LD Y, $AREG
 #60
-FNEH DZ, NA               # A=WAVE
+FNEH DZ, NA               # A=wave
 LD HL, $IDEN$INC2
 LD Y, $TEMP
 FNFL DZ, Y                # Y=index of WAVE
 #70
-FNH DZ, HLD               # update WAVE
+FNH AZ, HLD               # wave->WAVE
 LD PC, $EXIT74
 #74
 
