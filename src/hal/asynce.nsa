@@ -30,48 +30,48 @@ LD Y, $AMODE
 FNEL DZ, PC           # audio mode fork
 #32/27
 
-ADDR 0x20             #32 - 0 voices
+ADDR 0x1C             #32 - 0 voices
 NOP
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
-#43/40
+#43/36
 
-ADDR 0x28             #32 - 1 voice
+ADDR 0x24             #32 - 1 voice
 LD HL, $IDEN$2        # HL=0x02
 LD Y, $AUDIO
 MULH DZ, ND           # 0->AUDIO
 LD PC, $EXIT41
-#41/48
+#41/44
 
-ADDR 0x30             #32 - 2 voices
+ADDR 0x2C             #32 - 2 voices
 LDZ Y, $NOTE2L
 FNH DZ, HL            # HL = 0xA6
 LD Y, $WAVIDX2L
 ADDHL DZ, ND          # tone L + 0xA6 -> tone L
-#42/55
+#42/51
 AFHL A, NA
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL
 LDZ Y, $NOTE2H
-#51/63
+#51/59
 FNH DZ, HL            # HL = 0x0B or 0x0C
 LD Y, $WAVIDX2H
 ADDHL DZ, ND          # tone H + 0x0B + 1? -> toneH,A = sample index
 LD HL, $IDEN$NULL
-#61/70
+#61/66
 LDZ Y, $WAVE2
 FNH DZ, HL            # HL = amp/wave
 LD Y, $AUDIO
 WAVHL AZ, ND          # synth value -> audio
-#71/77
+#71/73
 MVHL A, NA            # NOP
 LD HL, $IDEN$3
 LD PC, $EXIT79
-#79/83
+#79/79
 
-ADDR 0x58             #32 - 3 voices
+ADDR 0x50             #32 - 3 voices
 LDZ Y, $NOTE3L
 FNH DZ, HL            # HL = 0xA6
 LD Y, $WAVIDX3L
@@ -161,6 +161,7 @@ FNH A, HL
 LD Y, $AUDIO
 #199
 ADDHL DZ, ND          # audio + HL -> audio
+$EXIT74
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL            # inst cache -> HL
@@ -168,3 +169,33 @@ FNH DZ, HL            # inst cache -> HL
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
 #215
+
+ADDR 0xD8             #32 - PCM
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#40/8
+LD HL, $2COM$NULL
+LDZ Y, $PCMPGL
+FNH DZ, HL            # HL=-PCM_PG_low
+LD Y, $PCMPGH
+ADDHL DZ, NA          # A=PCM_PG_high - PCM_PG_low
+#52/17
+LDP PG, $PCM_PG       # output PCM if more pages
+LD HL, $0x0F
+LD Y, $AMODE
+ANDHL DZ, ND          # clear AMODE counts
+#61/25
+LD Y, $HALTMPA
+MULH AZ, ND           # 0->byte index
+LD HL, $INC$NULL
+LDZ Y, $VMS
+#70/33
+FNH DZ, HLD           # VMS+1
+LD PC, $EXIT74        # Exit
+#74/36

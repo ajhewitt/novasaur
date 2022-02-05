@@ -146,7 +146,7 @@ LD HL, $SWAP$NULL
 LD Y, $EXT
 FNH A, HLD                # ext bit -> ext sign in CTX0 col
 LD HL, $0xD8
-LD Y, $HTEMP
+LD Y, $HALTMPB
 MVHL AZ, ND               # -40 -> CTX SW jump page PC (-40+56=0x10)
 #151
 LD HL, $0xA0

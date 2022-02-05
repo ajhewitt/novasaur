@@ -210,15 +210,15 @@ LD PC, $EXIT64
 $AUDIO32
 LD Y, $VMS
 FNEH DZ, NA               # 0 if 3 cycles per line
-LDP HL, $0x40
+LDP HL, $0x80
 LDN HL, $0
 #40/44
 LD Y, $AREG
-ORH DZ, NA                # A = Acc|0b100 if XGA
-LD HL, $7
+ORH DZ, NA                # A = Acc|0b1000 if XGA
+LD HL, $0x0F
 LD Y, $AMODE
 #49/52
-ANDHL AZ, ND              # A&7 -> Audio mode
+ANDHL AZ, ND              # A&f -> Audio mode
 LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute audio

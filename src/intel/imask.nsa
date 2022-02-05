@@ -1,52 +1,53 @@
-# Set interupt mask - IMASK = Acc
+# Set/Read interupt mask - IMASK = Acc
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE SIM_PG
+PAGE IMASK_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD           # inc state
-LD HL, $KERN?$NULL
-LDZ Y, $EO
-FNH DZ, HLA           # A=0 if kern
-#10
-LDN PC, $EXIT12       # exit if not kern
-LD HL, $IDEN$NULL
-LDZ Y, $AREG
-FNH DZ, HLA           # A = Acc
-LD HL, $7             # invert mask bits
+NOP
+LD HL, $0x80
+LD Y, $INST
+#9
+MULH DZ, NA           # test bit 4 of INST
+LDN PC, $SIM14        # SIM: INST=0x30
+NOP                   # RIM: INST=0x20
+LD HL, $SWAP$SWAP
+FNFH E, NA            # A = E << 4
+#19
 LD Y, $IMASK
-#21
-XORHL AZ, ND          # A $ 111 -> Mask
-NOP
-NOP
-NOP
-NOP
-NOP
-#30
-NOP
-NOP
-NOP
-NOP
-NOP
+FNFL DZ, HL           # H = Mask
+MVH A, NA             # A = E, Mask
+LD HL, $7             # invert mask bits
+#29
+LD Y, $AREG
+XORHL AZ, ND          # A $ 111 -> Acc
 LD HL, $FETCH         # HL = Fetch
 LD Y, $VMS            # set Y = $VMS on exit
 DISHL DZ, PGA         # jump to next VMC
 #43
 
-$EXIT12
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+$SIM14
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA           # A=0 if kern
 #20
-NOP
-NOP
+LDN PC, $EXIT22       # exit if not kern
+LD HL, $IDEN$NULL
+LDZ Y, $AREG
+FNH DZ, HLA           # A = Acc
+LD HL, $7             # invert mask bits
+#29
+LD Y, $IMASK
+XORHL AZ, ND          # A $ 111 -> Mask
+LD HL, $FETCH         # HL = Fetch
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43
+
+$EXIT22
 NOP
 NOP
 NOP

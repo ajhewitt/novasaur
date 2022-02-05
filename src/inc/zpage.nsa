@@ -1,7 +1,12 @@
 # zero page assignments
 #RESERVED      0x80-0x8B (12) scratch pad (protected)
-$ICL           0x8C # idle cycle count low byte
-$ICH           0x8D # idle cycle count high byte
+$HALTMPA       0x88 # HAL temp Async
+$HALTMPT       0x89 # HAL temp Tsync
+$HALTMPR       0x8A # HAL temp Rsync
+$HALTMPB       0x8B # HAL temp Bsync
+#SOUND (read/write)
+$PCMPGH        0x8C # PCM page high water - stop page
+$PCMPGL        0x8D # PCM page low water - current page
 $WAVE0         0x8E
 $ATTACK0       0x8F
 $DECAY0        0x90
@@ -28,6 +33,7 @@ $ATTACK3       0xA4
 $DECAY3        0xA5
 $SUSTAIN3      0xA6
 $RELEASE3      0xA7
+#CONSOLE (read/write)
 $CONL          0xA8 # console left border
 $CONR          0xA9 # console right border
 $CONX          0xAA # console column
@@ -44,16 +50,16 @@ $KSRDIDX       0xB4
 $KSWRIDX       0xB5
 $KCRDIDX       0xB6
 $KCWRIDX       0xB7
-#PROTECTED STATE
+#PROTECTED STATE (read-only)
 $KBSTAT        0xB8 # kbd status
 #SPARE         0xB9 (1)
-$BLOCK         0xBA # block count, 0 to 175/160/128 (read-only)
-$FRAME         0xBB # frame count, -5,-4 to 0 (read-only)
-$TIME0         0xBC # 15tps, max 90 - 6s (read-only)
-$TIME1         0xBD # 10tpm, max 120 - 12m (read-only)
-$TIME2         0xBE # 5tph, max 120 - 1d (read-only)
-$TIME3         0xBF # 1tpd, max 256 - 0.7y (read-only)
-#INTERNAL STATE
+$BLOCK         0xBA # block count, 0 to 175/160/128
+$FRAME         0xBB # frame count, -5,-4 to 0
+$TIME0         0xBC # 15tps, max 90 - 6s
+$TIME1         0xBD # 10tpm, max 120 - 12m
+$TIME2         0xBE # 5tph, max 120 - 1d
+$TIME3         0xBF # 1tpd, max 256 - 0.7y
+#INTERNAL STATE (hidden)
 $DELTA0        0xC0
 $DELTA1        0xC1 # ADSR state as Y indirect
 $DELTA2        0xC2
@@ -68,7 +74,7 @@ $WAVIDX2L      0xCA
 $WAVIDX2H      0xCB
 $WAVIDX3L      0xCC
 $WAVIDX3H      0xCD
-$AMODE         0xCE # audio mode - 0x00-0x3F (protected)
+$AMODE         0xCE # audio mode - 0x00-0x3F
 $KMODE         0xCF # kbd decode state
 $KIDLE         0xD0 # kbd idle cycle count
 $KS0           0xD1 # kbd sample 0
@@ -92,8 +98,8 @@ $VMODE         0xE2 # video mode (used with mode line in VMS)
 $BMODE         0xE3 # VID col used for block
 $VLINE         0xE4 # video memory line
 $RCODE         0xE5 # restart scan code
-$HTEMP         0xE6 # HAL temp
-#SPARE         0xE7 (1)
+$ICL           0xE6 # idle cycle count low byte
+$ICH           0xE7 # idle cycle count high byte
 $CMDL          0xE8 # kernel IPC - command low
 $CMDH          0xE9 # kernel IPC - command high
 $MSEQ          0xEA # kernel IPC - message sequence
@@ -118,6 +124,7 @@ $PCL           0xFB # PC LSB
 $TMPH          0xFC # 16-bit temp MSB
 $TMPL          0xFD # 16-bit temp LSB
 $TEMP          0xFE # 8-bit temp
+#HARDWARE
 $AUDIO         0xFF
 
 #Constants

@@ -114,11 +114,11 @@ $OUT_PG        0xDD
 $CON_PG        0xDE
 $EI_PG         0xDF
 $DI_PG         0xE0
-$RIM_PG        0xE1
-$SIM_PG        0xE2
-$DSUB_PG       0xE3
-$INTR1_PG      0xE4
-$INTR2_PG      0xE5
+$IMASK_PG      0xE1
+$INTR1_PG      0xE2
+$INTR2_PG      0xE3
+$DSUB_PG       0xE4
+$RTCE_PG       0xE5
 $NSYNCE_PG     0xE6 # null sync on execute
 $DASYNCE_PG    0xE7 # delayed audio
 $ASYNCE_PG     0xE8 # audio
@@ -143,5 +143,5 @@ $ADSRE0_PG     0xFA # ADSR voice 0
 $ADSRE1_PG     0xFB # ADSR voice 1
 $ADSRE2_PG     0xFC # ADSR voice 2
 $ADSRE3_PG     0xFD # ADSR voice 3
-$RTCE_PG       0xFE
+$PCM_PG        0xFE
 $BOOT          0xFF # hardware reset
