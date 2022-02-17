@@ -143,5 +143,5 @@ $ADSRE0_PG     0xFA # ADSR voice 0
 $ADSRE1_PG     0xFB # ADSR voice 1
 $ADSRE2_PG     0xFC # ADSR voice 2
 $ADSRE3_PG     0xFD # ADSR voice 3
-$PCM_PG        0xFE
+$PCME_PG       0xFE
 $BOOT          0xFF # hardware reset

@@ -603,7 +603,7 @@ def ctrl_alt_page
   end
 end
 
-VATTR = [
+VATTR = ([
   49, 198, 109, 60,
   117, 194, 83, 60,
   105, 194, 83, 48,
@@ -612,7 +612,39 @@ VATTR = [
   169, 198, 85, 60,
   185, 198, 85, 37,
   254, 196, 68, 48
-] * 8
+]*8).freeze
+
+EXPAND = [
+  0x00, 0x01, 0x03, 0x07,
+  0x0F, 0x1F, 0x3F, 0x7F,
+  0x80, 0xC0, 0xE0, 0xF0,
+  0xF8, 0xFC, 0xFE, 0xFF
+].freeze
+FORKPCM = [
+  0x20, 0x20, 0x20, 0x20, # 8-bits/block@9.6kBps
+  0x70, 0x48, 0x70, 0x48, # 4-bits/block@4.8kBps
+  0x20, 0x10, 0x20, 0x10, # 8-bits/2 blocks@4.8kBps
+  0x70, 0x10, 0x48, 0x10  # 4-bits/2 blocks@2.4kBps
+].freeze
+# 00AB00CD(X0XXX0XX)->Expand audio (4 bit log->8 bit linear)
+# 00SSX1MM(X0XXX1XX)->SS+1%4 (update mode state)
+# X1MM00SS(X1XXX0XX)->fork PCM (mode->PC in this page)
+#         (X1XXX1XX)->Not used
+def mod_pcm
+  256.times.map do |i|
+    j = (i>>2)&0xC | i&3
+    case i&0x44
+    when 0x00
+      EXPAND[j]
+    when 0x04
+      (i+0x10)&0x3F
+    when 0x40
+     FORKPCM[j]
+    else
+      0
+    end
+  end
+end
 
 #Extended Instruction Mapper High
 #Voice: INST->WAVEn(8E+7n)
@@ -707,12 +739,15 @@ print_unary(0xC2, Array.new(0x80, 0) + ctrl_alt_page)
 print_unary(0xC3, kmode_mask)
 # $VATTR: video attributes
 print_unary(0xC4, VATTR)
+
 # $WAV2FNC: WAVE->FNCWAV(1-13?[even?C0:D0]:0)
-print_unary(0xC5, 16.times.map{|i| i>0 && i<14 ? i&1 == 0 ? 0xC0 : 0xD0 : 0}*16)
+print_unary(0xC6, 16.times.map{|i| i>0 && i<14 ? i&1 == 0 ? 0xC0 : 0xD0 : 0}*16)
+# $MODPCM: PCM INC/MOD, Fork, expand
+print_unary(0xC7, mod_pcm)
 #Extended Instruction Mapper High
-print_unary(0xC6, ext_map_high)
+print_unary(0xC8, ext_map_high)
 #Extended Instruction Mapper Low
-print_unary(0xC7, ext_map_low)
+print_unary(0xC9, ext_map_low)
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
 # FORKI: fork on interrupt

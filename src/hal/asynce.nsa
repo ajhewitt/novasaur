@@ -186,7 +186,7 @@ FNH DZ, HL            # HL=-PCM_PG_low
 LD Y, $PCMPGH
 ADDHL DZ, NA          # A=PCM_PG_high - PCM_PG_low
 #52/17
-LDP PG, $PCM_PG       # output PCM if more pages
+LDP PG, $PCME_PG      # output PCM if more pages
 LD HL, $0x0F
 LD Y, $AMODE
 ANDHL DZ, ND          # clear AMODE counts

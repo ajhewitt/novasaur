@@ -1,0 +1,172 @@
+# PCM player - Linear 8bit: Full@9.6kBps, Half@4.8kBps, Log 4bit: Full@4.8kBps, Half@2.4kBps
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE PCME_PG
+
+#  +-+-+-+-+
+#  |4|5|6|7|<-AMODE 1MM: 00XXX1MM
+#+v+=+=+=+=+<-AMODE SS: 00SSXXXX
+#|0|F|H|F|H| N=NOP - 0x10
+#|1|F|G|N|N| F=Full Rate (inc index) - 0x20
+#|2|F|H|F|G| H=Half Rate (inc index) - 0x48
+#|3|F|G|N|N| G=Half Rate (iden index) - 0x70
+#+-+-+-+-+-+
+#MODPCM:
+# 00AB00CD(X0XXX0XX)->Expand audio (4 bit log->8 bit linear)
+# 00SSX1MM(X0XXX1XX)->SS+1%4 (update mode state)
+# X1MM00SS(X1XXX0XX)->fork PCM (mode->PC in this page)
+#         (X1XXX1XX)->Not used
+LD HL, $SWAP$NULL      # 54
+LDZ Y, $AMODE
+FNH DZ, HLA            # Swap mode to use fork
+#60/5
+LD HL, $MODPCM$NULL
+FNCH A, PCA            # Fork to mode handler
+#65/9
+
+ADDR 0x10              # NOP
+FNCH DZ, ND            # AMODE upper nibble+1 mod 4
+LD HL, $INC$NULL
+#70/4
+LDZ Y, $VMS
+FNH DZ, HLD            # VMS+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL             # inst cache -> HL
+#80/12
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#86/16
+
+ADDR 0x20              # FULL RATE
+FNCH DZ, ND            # AMODE upper nibble+1 mod 4
+LD HL, $INC$NULL
+#70/4
+LD Y, $HALTMPA
+FNFH DZ, XD            # X=PCM index+1
+LD HL, $ZERO?$NULL
+FNH A, HLA             # X overflow?
+#79/11
+LDP HL, $INC$NULL      # yes: +1
+LDN HL, $IDEN$NULL     # no: +0
+LDZ Y, $PCMPGL
+FNH DZ, HLD            # PCM page+1?
+LD HL, $IDEN$NULL
+FNH A, Y               # Y=PCM page
+#90/22
+FNH D, YA              # A=[Y,X]
+LD Y, $0xFF
+FNH AZ, HLD            # A->audio out
+NOP
+NOP
+NOP
+NOP
+#100/30
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD PC, $EXIT110
+#110/40
+
+ADDR 0x48              # HALF-IDEN
+FNCH DZ, ND            # AMODE upper nibble+1 mod 4
+LD HL, $IDEN$IDEN
+#70/4
+LD Y, $HALTMPA
+FNFL DZ, X             # X=PCM index
+LDZ Y, $PCMPGL
+FNH DZ, Y              # Y=PCM Page
+LD HL, $SWAP$NULL
+#81/13
+FNH D, HLA             # A=XXXXABCD
+LD HL, $0x44
+MULH A, NA             # A=XXABCD00
+MULL A, HL             # HL=ABCD0000
+#91/20
+MVH A, NA              # A=XXABABCD
+LD HL, $0x33
+ANDHL A, NA            # 00AB00CD
+#100/26
+LD HL, $MODPCM$NULL
+LD Y, $0xFF
+FNCH AZ, ND            # expand(A)->audio out
+NOP
+LD PC, $EXIT110
+#110/35
+
+ADDR 0x70              # HALF-INC
+FNCH DZ, ND            # AMODE upper nibble+1 mod 4
+LD HL, $INC$FORK1
+#70/4
+LD Y, $HALTMPA
+FNFH DZ, XD            # X=PCM index+1
+FNDL A, PC             # fork on PCM index
+#78/10
+
+ADDR 0x80              # PCM index = 0
+LDZ Y, $PCMPGL
+#80/2
+FNH DZ, HLD            # PCM page+1      *** inc PCM Page ***
+LD HL, $IDEN$NULL
+FNH A, Y               # Y=PCM page
+LD HL, $0x44
+MULH D, NA             # A=XXABCD00
+#91/10
+MULL A, HL             # HL=ABCD0000
+MVH A, NA              # A=XXABABCD
+LD HL, $0x33
+#99/16
+ANDHL A, NA            # 00AB00CD
+LD HL, $MODPCM$NULL
+LD Y, $0xFF
+FNCH AZ, ND            # expand(A)->audio out
+#110/24
+NOP
+LD HL, $INC2$NULL
+LDZ Y, $VMS
+FNH DZ, HLD            # VMS+2
+LD HL, $IDEN$NULL
+#119/32
+LDZ Y, $INST
+FNH DZ, HL             # inst cache -> HL
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#129/39
+
+ADDR 0xC0              # else
+NOP
+NOP
+#80/2
+LD HL, $IDEN$NULL
+LDZ Y, $PCMPGL
+FNH DZ, Y              # Y=PCM page
+LD HL, $0x44
+MULH D, NA             # A=XXABCD00
+#91/11
+MULL A, HL             # HL=ABCD0000
+MVH A, NA              # A=XXABABCD
+LD HL, $0x33
+#99/17
+ANDHL A, NA            # 00AB00CD
+LD HL, $MODPCM$NULL
+LD Y, $0xFF
+FNCH AZ, ND            # expand(A)->audio out
+#110/25
+$EXIT110
+NOP
+LD HL, $INC2$NULL
+LDZ Y, $VMS
+FNH DZ, HLD            # VMS+2
+LD HL, $IDEN$NULL
+#119/33
+LDZ Y, $INST
+FNH DZ, HL             # inst cache -> HL
+LD Y, $VMS             # set Y = $VMS on exit
+DISHL DZ, PGA          # jump to next VMC
+#129/40
