@@ -1,0 +1,53 @@
+# Enable (if kernel)/Disable Interupts
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE ICTRL_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#10
+NOP
+NOP
+NOP
+NOP
+LD HL, $SWAP$NULL
+LDZ Y, $INST
+FNH DZ, HLA           # test bit 3 of INST
+#20
+LDP PC, $DI22         # DI: INST=0xF3
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA           # A=0 if root
+LDP HL, $0x80         # kernel - set IMASK
+LDN HL, $0            # not kernel - NOP
+#30
+LD Y, $IMASK
+ORH DZ, ND            # set bit3 if kernel
+LD HL, $FETCH
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43
+
+$DI22
+NOP                   # DI: INST=0xF3
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $0x70
+#30
+LD Y, $IMASK
+ANDH DZ, ND           # clear bit3 of $IMASK
+LD HL, $FETCH         # HL = Fetch
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43

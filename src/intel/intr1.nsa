@@ -7,7 +7,7 @@ PAGE INTR1_PG
 # assume: Y = $VMS
 LDZ HL, $INC$NULL
 FNH DZ, HLD               # inc state
-LD HL, $IDEN$NULL
+LD HL, $SWAP$NULL
 LDZ Y, $IMASK
 FNH DZ, HL                # HL = interupt mask
 #10/8
