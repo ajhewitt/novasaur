@@ -1,6 +1,6 @@
-; TITLE '8080 SYSTEM MONITOR, VER 0.5'
+; TITLE '8080 SYSTEM MONITOR, VER 0.6'
 ;
-; JAN 11, 2022
+; JAN 25, 2022
 ;
         .PROJECT monitor.com
 ;
@@ -42,17 +42,13 @@ RETC    EQU     0C9H    ;RET OP CODE
 COLD:   MVI     A,1
         STA     COMS    ;TURN COMS ON
         OUT     RXEN    ;ENABLE RX
-        LXI     D,SIGNON ;MESSAGE
-SENDM:  LDAX    D       ;GET BYTE
-        ORA     A       ;ZERO?
-        JZ      START   ;YES, START
-        CALL    OUTT    ;SEND IT
-        INX     D       ;POINTER
-        JMP     SENDM   ;NEXT
+        LXI     SP,STACK
+        LXI     D,SIGNON
+        CALL    PRNTM   ;PRINT SIGNON
 ;
 ; CONTINUATION OF COLD START
 ;
-START:  LXI     SP,STACK
+START:  LXI     SP,STACK;RESET STACK
 ;
 ; WARM-START ENTRY
 ;
@@ -151,6 +147,15 @@ OUT2:   MOV     A,B     ;RESTORE A
         JNZ     OUT2    ;BLOCK
         RET
 ;
+; PRINT MESSAGE
+;
+PRNTM:  LDAX    D       ;GET BYTE
+        ORA     A       ;ZERO?
+        RZ              ;YES, RETURN
+        CALL    OUTT    ;SEND IT
+        INX     D       ;POINTER
+        JMP     PRNTM   ;NEXT
+;
 ; TOGGLE SERIAL
 ;
 TOGGLE: LDA     COMS    ;LOAD COMS
@@ -166,7 +171,7 @@ SIGNON: DB      CR,LF,
         DB      "            /o)",CR,LF
         DB      "   .^/\/\^.//",CR,LF
         DB      " _/NOVASAUR/    ",
-        DB      "8080 SYSMON v0.5",CR,LF
+        DB      "8080 SYSMON v0.6",CR,LF
         DB      "<__^|_|-|_|",LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
@@ -792,30 +797,45 @@ KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
 ;
 ; FORMAT A: DRIVE
 ;
-KFMT:   LXI     H,0180H ;CREATE RECORD
-KFMT1:  DCR     L       ;HL--
+KFCONF: DB      "FORMAT? (Y)",CR,LF,0
+KFDONE: DB      "YES",0
+KFSKIP: DB      "..SKIP",0
+
+KFMT:   LXI     D,KFCONF
+        CALL    PRNTM
+KFMT0:  CALL    INPUTT  ;READ INPUT
+        CPI     'A'
+        JC      KFMT0   ;IGNORE CR
+        CPI     'Y'
+        JZ      KFMT1   ;CONFIRMED
+        CALL    OUTT    ;IGNORE
+        LXI     D,KFSKIP
+        JMP     PRNTM
+KFMT1:  LXI     H,0180H ;CREATE RECORD
+KFMT2:  DCR     L       ;HL--
         MOV     A,L
         ANI     01FH    ;FIND RECORD START
-        JZ      KFMT2
+        JZ      KFMT3
         MVI     M,0     ;CLEAR  BYTE
-        JMP     KFMT1   ;LOOP
-KFMT2:  MVI     M,0E5H  ;SET ERA EVERY RECORD
+        JMP     KFMT2   ;LOOP
+KFMT3:  MVI     M,0E5H  ;SET ERA EVERY RECORD
         ORA     L       ;L=0?
-        JNZ     KFMT1   ;LOOP IF NO
+        JNZ     KFMT2   ;LOOP IF NO
         XCHG            ;DE=0100
         DW      RECSEND ;COPY RECORD (0100->SHM)
         MVI     B,0     ;SEQ=0
-KFMT3:  MVI     A,1
+KFMT4:  MVI     A,1
         STA     SRCCPU  ;SET SOURCE AS KERNEL
         MVI     C,3     ;PUT COMMAND
         MVI     D,0     ;TRACK 0
         MOV     E,B     ;SECTOR SEQ
         CALL    K_CMD   ;HANDLE COMMAND
         CALL    K_WAIT  ;HANDLE RETURN
-        INR     B
+        INR     B       ;SEQ++
         MOV     A,B
-        CPI     10H
-        JNZ     KFMT3
-        RET
+        CPI     10H     ;16 RECORDS?
+        JNZ     KFMT4
+        LXI     D,KFDONE
+        JMP     PRNTM
         
         END
