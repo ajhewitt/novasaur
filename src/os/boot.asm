@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; JAN 10, 2022
+; MAR 19, 2022
 ;
         .PROJECT        boot.com
 ;
@@ -71,11 +71,17 @@ RST7:   NOP
         NOP
 ;
 ; KERNEL
+; - BOOT OTHER CPUS
 ; - SETUP CPU SEQ: 1,2,3,1,4,5,6,7
 ; - COPY KERNEL/MONITOR
-; - BOOT OTHER CPUS
 ;
-KERNEL: MVI     H,0
+KERNEL: MVI     A,2
+BOOT1:  DW      BOOTCPU
+        INR     A
+        CPI     8
+        JNZ     BOOT1
+
+        MVI     H,0
 CTX1:   MOV     A,H
         ANI     7
         CPI     3
@@ -87,6 +93,7 @@ CTX3:   ORI     0F0H
         DW      MVCTX
         INR     H
         JNZ     CTX1
+
         LXI     DE,0F002H;DEST/ROM PAGE
         MVI     C,13    ;14 PAGES
         DW      CPROM   ;COPY ROM
@@ -95,13 +102,9 @@ CTX3:   ORI     0F0H
         MVI     C,23    ;24 PAGES
         DW      CPROM   ;COPY ROM
         ;DEBUG END
-        MVI     A,2
-BOOT1:  DW      BOOTCPU
-        INR     A
-        CPI     8
-        JNZ     BOOT1
         JMP     0F800H  ;BOOT MONITOR
-        ;JMP     0DA00H
+        ;JMP     0DA00H  ;BOOT CPM
+        ;JMP     0FCB5H  ;FORMAT A:
 ;
 ; CP/M 2.2
 ;
@@ -122,8 +125,8 @@ DISK:   LXI     DE,0FF01H;DEST/ROM PAGE
 ;
 TABLE:  DB      HALT
         DB      KERNEL
-        DB      CPM
-        DB      CPM
+        DB      RST1
+        DB      RST1
         DB      DISK
         DB      DISK
         DB      DISK
