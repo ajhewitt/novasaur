@@ -9,29 +9,20 @@ LD HL, $IDEN$EXTPC
 FNDL A, PC                # fork within jump page
 #34/4
 
-$EXIT53
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-#69
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-
 # NOP for 2-cycle extended dispatch
-ADDR 0x10
+ADDR 0x04
 NOP
 LD HL, $DEC$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 #39|82
 FNH DZ, HLD               # VMS-1
 LD PG, $FETCH1_PG         # cycle available, goto fetch
-#43/24
+#43/12
 
 #COPYROM - init
 #0 -> TEMP (X RAM index)
 #EREG (ROM page) -> TMPH=ROM number, TMPL=ROM page lsn
-ADDR 0x18
+ADDR 0x0C
 LD HL, $0
 LD Y, $TEMP
 MULH AZ, ND               # 0->temp
@@ -63,59 +54,58 @@ DISHL DZ, PGA             # jump to next VMC
 #86/42
 
 #BOOTCPU - init copy ROM0/page0
-#AREG: CPU number
-ADDR 0x42
-LD HL, $0xF0
-LD Y, $AREG
-ORHL DZ, NA               # A=n|0xF0
-#42/6
-LD HL, $KERN?$7
-ANDL A, X                 # X=0xFn&0x07
+#AREG: CPU number if kernel
+ADDR 0x36
+LD HL, $KERN?$NULL
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
-#51/13
-LDN PC, $EXIT53           # exit if not kern
-LD HL, $IDEN$NULL
-LDZ Y, $AREG
-FNH D, HLD                # CPU Acc = CPU number
-LD HL, $0
-#60/22
+#40/5
+LDP Y, $AREG              # kernel: use Acc to set CPU
+LDN Y, $CTX0              # user: keep current context
+LD HL, $0xF0
+ORHL DZ, NA               # A=0xFn
+LD HL, $7
+#51/15
+ANDL A, X                 # X=0xFn&7
+LD Y, $AREG
+ANDHL A, ND               # CPU Acc = n&0x07
+#60/21
 LD Y, $IMASK
 MULH A, ND                # 0->IMASK
 LD Y, $CREG
 MULH A, ND                # 0->C
-#70/30
+#70/29
 LD Y, $DREG
 MULH A, ND                # 0->D
 LD Y, $TEMP
 MULH A, ND                # 0->temp
-#80/38
+#80/37
 LD Y, $TMPL
 MULH A, ND                # 0->tmpL
 LD HL, $0x80
 LD Y, $TMPH
-#89/46
+#89/45
 MVHL A, ND                # 0x80->tmpH
 LD HL, $0xFF
 LD Y, $PCH
 MVHL A, ND
-#101/54
+#101/53
 LD Y, $PCL
 MVHL A, ND                # 0xFFFF->PC
 LD Y, $EXT
-#109/60
+#109/59
 MVHL A, ND                # -1->ext mode
 LD HL, $COPYROM_INST
 LD Y, $INST
 MVHL A, ND                # CopyROM->inst cache
-#121/68
+#121/67
 LD HL, $FETCH
 LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
-#129/74
+#129/73
 
 #YIELD - init temp = context index
-ADDR 0x8C
+ADDR 0x80
 LD Y, $INST
 FNH AZ, HLD               # yield -> inst cache
 LD HL, $IDEN$NULL
@@ -143,7 +133,7 @@ DISHL DZ, PGA             # jump to next VMC
 #86/33
 
 #RECORD XFER - init HL to contexts, temp = -1
-ADDR 0xAE
+ADDR 0xA2
 LD HL, $KERN?$NULL
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
@@ -165,7 +155,7 @@ LD PC, $EXIT68
 #68/28
 
 #RECORD SEND/RECV - init temp = -1
-ADDR 0xCA
+ADDR 0xC0
 LD Y, $INST
 FNH AZ, HLD               # record send/recv -> inst cache
 LD HL, $ZERO?$NULL
@@ -187,4 +177,4 @@ LD HL, $0xFF              # init temp to -1
 LD PC, $EXIT64
 #64/27
 
-#ADDR 0xE6
+#ADDR 0xDC
