@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'distribution'
+#require 'distribution'
 
 def print_ext_addr(addr)
   print_data [2, 0, 0, 4, (addr >> 8) & 0xff, addr & 0xff]
@@ -71,7 +71,7 @@ MAX_VOICE = 13
 # L) A = signed 7-bit sample of bandlimited (L even) square (L odd) or sawtooth
 # H) A = attenuate from -12db in -1.5dB steps to mute
 def print_wav(offset, opts = {})
-  normal = Distribution::Normal.rng                     # RNG with mean 0, sigma 1
+  #normal = Distribution::Normal.rng                     # RNG with mean 0, sigma 1
   h = 16.times.map do |n|                               # fundamental (f), harmonics (2f-16f)
     f = 128.0/(n.to_f+1.0)
     256.times.map {|i| Math.sin(i.to_f * Math::PI/f)}
@@ -82,9 +82,11 @@ def print_wav(offset, opts = {})
       [*0..255].pack('C*').unpack('c*').map {|i| (i.to_f*m).round&0xFF}
     else
       if a > MAX_VOICE                                  # noise in position 14 and 15
-        300.times.map { (normal.call*48).round }.       # normal dist scaled by 48
-          select {|i| i.between? -128, 127}.            # select within dynamic range
-            first(256).map {|i| i&0xFF}                 # sample 256 and convert to byte
+        256.times.map { rand(256) }                     # simple random noise
+#       300.times.map { (normal.call*48).round }.       # normal dist scaled by 48
+#         select {|i| i.between? -128, 127}.            # select within dynamic range
+#           first(256).map {|i| i&0xFF}                 # sample 256 and convert to byte
+        256.times.map { rand(256) }                     
       else
         w = 256.times.map do |i|
           l = h.first(a+1).each_with_index.map do |j,k| # limit band to a+1
