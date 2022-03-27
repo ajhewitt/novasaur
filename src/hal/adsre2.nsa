@@ -32,6 +32,11 @@ MVHL AZ, ND               # decay register -> delta pointer
 LD PC, $EXIT164
 #164
 
+$EXIT151
+NOP
+LD PC, $EXIT154
+#154
+
 $DECAYING                 #140
 ADDHL DZ, ND              # LLLLWWWW + DDDDVVV0 -> WAVE
 AFHL A, NA                # check carry
@@ -57,11 +62,12 @@ ADDH DZ, NA               # A = 1111LLLL + LLLL
 LDN PC, $ATTACK           # level < sustain?
 LD HL, $ZERO?$NULL
 FNH A, HLA                # level == sustain?
-LD HL, $RELEASE2
+LDP HL, $0                # sustain unchanged: sustain
+LDN HL, $RELEASE2         # sustain changed: release
+$EXIT148
 LD Y, $DELTA2
-LDP PC, $EXIT151          # sustain unchanged, exit sustaining, else exit releasing
 #150
-MVHL AZ, ND               # release register -> delta pointer
+MVHL AZ, ND               # attack or release register -> delta pointer
 $EXIT154
 LD HL, $INC2$NULL
 LDZ Y, $VMS
@@ -75,14 +81,11 @@ DISHL DZ, PGA             # jump to next VMC
 #172
 
 $ATTACK                   #142 start attack
+NOP
+NOP
 LD HL, $ATTACK2
-LD Y, $DELTA2
-MVHL AZ, ND               # attack register -> delta pointer
-#150
-NOP
-$EXIT151
-NOP
-LD PC, $EXIT154
+LD PC, $EXIT148
+#148
 
 $CONT159
 NOP
