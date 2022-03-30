@@ -1,0 +1,74 @@
+# Sexagesimal adjust accumulator
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SAA_PG
+
+# assume: Y = $VMS
+LD HL, $INC2$DACARRY
+FNFH DZ, ND           # inc state
+LD Y, $AREG
+FNDL DZ, HL           # HL = carry flags if nibbles > 9
+#10
+LD Y, $FREG
+ORHL DZ, NA           # overlay carry flags
+LD HL, $SWAP$NULL
+FNH A, HLA            # swap to check half carry
+#20
+LDP HL, $0
+LDN HL, $6
+LD Y, $AREG
+ADDHL DZ, ND          # add 6 if half carry
+#29
+AFHL A, NA            # A = flags after adjust
+LD HL, $SWAP$NULL
+FNFH A, NA            # swap to check half carry
+LDP PC, $CLEAR_HC40   # clear half carry
+NOP                   # set half carry
+#40
+LD HL, $0x20
+LD Y, $AREG
+ADDHL DZ, NA          # A+0x20 (A>0x50 sets MSB high)
+FNFL A, HL            # HL = carry flag if upper nibble > 5
+#51
+LD Y, $FREG
+ORHL DZ, NA           # overlay carry flags
+LDP HL, $0
+LDN HL, $0xA0
+#60
+LD Y, $AREG
+ADDHL DZ, ND          # add 0xA0 if full carry
+AFHL A, NA            # A = flags after adjust
+#70
+LD HL, $8
+LD Y, $FREG
+ORHL AZ, ND           # flags = A + set half carry
+LD HL, $FETCH
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#86
+
+$CLEAR_HC40           #40
+LD HL, $0x20
+LD Y, $AREG
+ADDHL DZ, NA          # A+0x20 (A>0x50 sets MSB high)
+FNFL A, HL            # HL = carry flag if upper nibble > 5
+#51
+LD Y, $FREG
+ORHL DZ, NA           # overlay carry flags
+LDP HL, $0
+LDN HL, $0xA0
+#60
+LD Y, $AREG
+ADDHL DZ, ND          # add 0xA0 if full carry
+AFHL A, NA            # A = flags after adjust
+#70
+LD HL, $0xF7
+LD Y, $FREG
+ANDHL AZ, ND          # flags = A - clear half carry
+LD HL, $FETCH
+#80
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#86

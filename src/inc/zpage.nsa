@@ -55,10 +55,10 @@ $KBSTAT        0xB8 # kbd status
 #SPARE         0xB9 (1)
 $BLOCK         0xBA # block count, 0 to 175/160/128
 $FRAME         0xBB # frame count, -5,-4 to 0
-$TIME0         0xBC # 15tps, max 90 - 6s
-$TIME1         0xBD # 10tpm, max 120 - 12m
-$TIME2         0xBE # 5tph, max 120 - 1d
-$TIME3         0xBF # 1tpd, max 256 - 0.7y
+$TIME0         0xBC # 15tps, -90 to 0 in 6s
+$TIME1         0xBD # 10tpm, -120 to 0 in 12m
+$TIME2         0xBE # 5tph, -120 to 0 in 1d
+$TIME3         0xBF # 1tpd, overflow at 256 in 0.7y
 #INTERNAL STATE (hidden)
 $DELTA0        0xC0
 $DELTA1        0xC1 # ADSR state as Y indirect

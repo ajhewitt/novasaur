@@ -1,6 +1,6 @@
-; TITLE '8080 SYSTEM MONITOR, VER 0.6'
+; TITLE '8080 SYSTEM MONITOR, VER 0.7'
 ;
-; JAN 25, 2022
+; JAN 29, 2022
 ;
         .PROJECT monitor.com
 ;
@@ -93,11 +93,11 @@ TABLE:  DW      ASCII   ;A, ASCII
         DW      ERROR   ;N
         DW      OPORT   ;O, PORT OUTPUT
         DW      PROC    ;P, PROC SPEED TEST
-        DW      ERROR    ;Q
+        DW      QUIT    ;Q, QUIT TO KERNEL
         DW      REPL    ;R, REPLACE
         DW      SEARCH  ;S, SEARCH
         DW      TOGGLE  ;T, TOGGLE SERIAL
-        DW      ERROR   ;U
+        DW      UPTIME  ;U, UPTIME
         DW      VERM    ;V, VERIFY MEM
         DW      ERROR   ;W
         DW      ERROR   ;X
@@ -171,7 +171,7 @@ SIGNON: DB      CR,LF,
         DB      "            /o)",CR,LF
         DB      "   .^/\/\^.//",CR,LF
         DB      " _/NOVASAUR/    ",
-        DB      "8080 SYSMON v0.6",CR,LF
+        DB      "8080 SYSMON v0.7",CR,LF
         DB      "<__^|_|-|_|",LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
@@ -740,11 +740,44 @@ PROC3:  MOV     E,M     ;1+1 (2) PACK
         CALL    OUTHX
         RET
 ;
+; UPTIME DDD HH:MM:SS
+;
+UPTIME: DW      013EDH  ;B=DAYS,C=HOURS
+        PUSH    B
+        MOV     A,B     ;A=DAYS
+        DW      010EDH  ;BC=BCD A
+        PUSH    B
+        MOV     A,B     ;A=DAYS 100's
+        ADI     30H     ;COVERT TO ASCII
+        CALL    OUTT
+        POP     B
+        CALL    OUTHX   ;OUT DAYS 10s,1s
+        MVI     A,' '
+        CALL    OUTT
+        POP     B       ;C=HOURS
+        CALL    OUTHX
+        MVI     A,':'
+        CALL    OUTT
+        DW      012EDH  ;C=MINUTES
+        CALL    OUTHX
+        MVI     A,':'
+        CALL    OUTT
+        DW      011EDH  ;C=SECONDS
+        CALL    OUTHX
+        RET
+;
+; QUIT - RUN KERNEL
+;
+QUIT:   XRA     A
+        STA     BREAK   ;RESET BREAK POINT
+        JMP     KERNEL
+;
 ; THESE MUST MATCH KERNEL!
 ;
 SRCCPU  EQU     STACK+1
-K_WAIT  EQU     0F005H
-K_CMD   EQU     0F017H
+KERNEL  EQU     0F000H
+K_WAIT  EQU     KERNEL+5
+K_CMD   EQU     KERNEL+17H
 ;
 ; EXTENDED INSTRUCTIONS
 ;
