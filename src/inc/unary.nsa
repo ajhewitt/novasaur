@@ -60,7 +60,7 @@ $SCAN0      0 # lower/upper scan code->ascii
 $SCAN1      1 # extended/control scan code->ascii
 $SCAN2      2 # alt/ext-ctrl-alt scan code->ascii
 $KS2MODE    3 # kbd scan code->kmode mask bit
-$MOD60      4 # mod60 binary-coded sexagesimal
+$MOD60      4 # binary-coded sexagesimal
 $VATTR      5 # video mode attributes (64 modes, 4 attrs/mode)
 $WAV2FNC    6 # WAVE in L to SQRWAV/SAWWAV/0 in H
 $MODPCM     7 # PCM INC/MOD, Fork, expand

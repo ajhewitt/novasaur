@@ -9,6 +9,7 @@ LD HL, $IDEN$EXTPC
 FNDL A, PC                # fork within jump page
 #34/4
 
+# BC=BCD(A)
 LD Y, $AREG               # BC=BCD of Acc
 DIVH DZ, NA               # A=Acc%10
 #39/8
@@ -33,11 +34,10 @@ DIVH DZ, ND               # Acc=Acc/10
 LD PC, $EXIT78
 #78/39
 
-ADDR 0x28                 # C=BCS Seconds SH,SL
-# S = (T1%10)*6 + (90+T0)/15
-#   = 13 + (|T1|%10)*6 + |T0-1|/15
-# SL=S%10
-# SH=(S%60)/10
+ADDR 0x28
+# SECS = (T1%10)*6 + T0/15
+#      = 13 + (|T1|%10)*6 + |T0-1|/15
+# C=BCD(SECS)
 LD HL, $DEC$NULL
 LDZ Y, $TIME0
 FNH DZ, HLA               # A=T0-1
@@ -63,11 +63,10 @@ NOP
 LD PC, $EXIT78
 #76/35
 
-ADDR 0x4C                 # C=BCS Minutes SH,SL
-# M = (T2%10)*12 + (120+T1)/10
-#   = 35 + (|T2|%10)*12 + |T1-6|/10
-# ML=M%10
-# MH=(M%60)/10
+ADDR 0x4C
+# MINS = (T2%10)*12 + T1/10
+#      = 35 + (|T2|%10)*12 + |T1-6|/10
+# C=BCD(MINS)
 LD HL, $0xFA
 LD Y, $TIME1
 ADDHL DZ, NA              # A=T1-6
@@ -91,10 +90,9 @@ FNCH AZ, ND               # Creg=A%60
 LD PC, $EXIT78
 #78/34
 
-ADDR 0x6E                 # C=BCD Hours SH,SL, B=Days
-# H = (120+T2)/5
-# HL=H%10
-# HH=H/10
+ADDR 0x6E
+# HRS = (T2+120)/5
+# B=DAYS C=BCD(HRS)
 LD HL, $120
 LD Y, $TIME2
 ADDHL DZ, NA              # A=T2+120

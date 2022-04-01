@@ -25,9 +25,9 @@ $SAA_PG        0x23 # DD10
 
 $MOVMX_PG      0x28
 
-$VOICE_PG      0x30 # DD10-DD13
-$NOTE_PG       0x31 # DD18-DD1B
-$GATE_PG       0x32 # DD14-DD17,DD1C-DD1F
+$VOICE_PG      0x30 # DD20-DD23
+$NOTE_PG       0x31 # DD28-DD2B
+$GATE_PG       0x32 # DD24-DD27,DD2C-DD2F
 
 # 0x80-0x8F: system
 $COLD_START_PG 0x80 # reset vector
