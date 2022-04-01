@@ -11,22 +11,21 @@ LD HL, $INC$FORK1
 FNFH AZ, ND            # inc state
 #10
 NOP
-NOP
-NOP
 LD Y, $PCL
 FNFH DZ, XD            # X,PCL = PCL+1
 FNDL A, PC             # fork on PCL
-#21
+#19
 
 ADDR 0x80              # PCL = 0
 LDZ Y, $PCH
 FNH DZ, HLD            # PCH = PCH+1      *** inc PCH ***
 LDZ HL, $IDEN$NULL
 FNH DZ, Y              # Y = PCH
-#29
 FNFH M, NA             # A = [PC]
+#30
+LD HL, $EXTFCH$NULL
 LD Y, $INST
-FNFH AZ, HLD           # A -> inst cache,HL (clear bank)
+FNDH AZ, HLD           # A|NOP -> inst cache,HL (clear bank)
 LD Y, $VMS             # set Y = $VMS on exit
 DISHL DZ, PGA          # jump to next VMC
 #43
@@ -37,10 +36,11 @@ NOP
 LD HL, $IDEN$NULL
 LDZ Y, $PCH
 FNH DZ, Y              # Y = PCH
-#29
 FNFH M, NA             # A = [PC]
+#30
+LD HL, $EXTFCH$NULL
 LD Y, $INST
-FNFH AZ, HLD           # A -> inst cache,HL (clear bank)
+FNDH AZ, HLD           # A|NOP -> inst cache,HL (clear bank)
 LD Y, $VMS             # set Y = $VMS on exit
 DISHL DZ, PGA          # jump to next VMC
 #43

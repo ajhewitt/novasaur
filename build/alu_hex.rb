@@ -803,8 +803,8 @@ print_unary(0xDC, EXTDISP.each_slice(2).map {|i,j| j==2 ? i>>8 : EXTNOP1_PG})
 print_unary(0xDD, EXTDISP.each_slice(2).map {|i,j| j==3 ? i>>8 : EXTNOP2_PG})
 # $EXTPC: extended dispatch PC
 print_unary(0xDE, EXTDISP.each_slice(2).map {|i,j| i>0 ? i&0xFF : EXTNOP_PC})
-# $EXTFCH: extended fetch ok? 0 : -1
-print_unary(0xDF, Array.new(0x100, 0))
+# $EXTFCH: extended fetch ok? INST : NOP (DEBUG as IDEN)
+print_unary(0xDF, [*0..0xFF])
 
 # 0x0003E000-0x0003EFFF: FNE low nibble only - HAL related
 # $XGA?: mode-line: 0-10->-1,else->0
