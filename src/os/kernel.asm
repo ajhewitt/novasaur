@@ -11,8 +11,9 @@ SRCCPU  EQU     BREAK+1
 CSTAT   EQU     SRCCPU+1
 LASTT0  EQU     CSTAT+1
 TTOP    EQU     LASTT0+1
+BELC    EQU     TTOP+2
 HANDPG  EQU     0E8H    ;HANDLER TABLE E9->EF
-TIMER   EQU     0E900H
+TBASE   EQU     0E900H
 ;
 BEL     EQU     7
 SERIAL  EQU     8
@@ -33,8 +34,10 @@ DMA     EQU     0DDDH   ;DMA
 ; SCAN MSG BOXES - EXIT IF MSG RECEIVED
 ;
 
-        LXI     H,TIMER
-        SHLD    TTOP
+        LXI     H,TBASE
+        SHLD    TTOP    ;TIMER TOP=TIMER START
+        XRA     A
+        STA     BELC    ;BEL COUNT=0
 START:  LDA     BREAK
         ORA     A       ;CHECK BREAK (A!=0)
         RNZ             ;RETURN ON BREAK
@@ -171,7 +174,7 @@ TTYI:   LDA     CSTAT   ;LOAD LAST STATUS
         JNZ     IRDY    ;INPUT READY
         IN      CONSOLE ;CHAR IN
 IRDY:   CPI     BEL     ;BELL CHAR?
-        CZ      DING
+        CZ      BELON   ;BELL ON
         MOV     E,A     ;E=CHAR
         XRA     A       ;A=0
         STA     CSTAT   ;CLEAR STATUS
@@ -194,7 +197,7 @@ TTYO:   MOV     A,E
 ; TIMED OUT AT COUNT ZERO
 ;
 TICK:   STA     LASTT0  ;SAVE T0
-        LXI     H,TIMER
+        LXI     H,TBASE
         PUSH    H
 TICKR:  POP     H
 TICK1:  XCHG            ;SAVE HL, DE=CURT
@@ -245,29 +248,42 @@ TADD:   LHLD    TTOP
         SHLD    TTOP
         RET
 ;
-DING:   MVI     A, 1
+VOICE1	EQU	21DDH
+GOFF1	EQU	25DDH
+NOTE1	EQU	29DDH
+GON1	EQU	2DDDH
+;
+; BELL ON - AUDIO ON, NOTE G ON
+; ADD TIMERS TO GATE OFF, AUDIO OFF
+;
+BELON:  LXI     H, BELC
+        INR     M       ;BELL COUNT +1
+        MVI     A, 1
         OUT     AMODE
-        MVI     A, 2    ; wave:0=sine,1=saw,2=sqr,15=noise
-        LXI     B, 00C02H; attack,decay
-        LXI     D, 00C02H; sustain, release
-        DW      021DDH  ; config voice 1
-        MVI     A, 48H  ; MIDI note number
-        DW      029DDH  ; set note 1
-        DW      02DDDH  ; gate note on
-        MVI     C, 2
-        LXI     D, DONG
+        MVI     A, 2    ;SQR WAVE
+        LXI     B, 00C02H;ATTACK/DECAY
+        LXI     D, 00C02H;SUSTAIN/RELEASE
+        DW      VOICE1
+        MVI     A, 43H  ;MIDI NOTE G
+        DW      NOTE1
+        DW      GON1
+        MVI     C, 2    ;GATE ON FOR 2 TICKS
+        LXI     D, BELOFF
         CALL    TADD
-        MVI     C, 8
+        MVI     C, 8    ;AUDIO ON FOR 8 TICKS
         LXI     D, AUDOFF
         CALL    TADD
-        MVI     A,BEL
+        MVI     A, BEL  ;RETURN BEL
         RET
 ; GATE OFF
-DONG:   DW      025DDH  ; gate note off
+BELOFF: DW      GOFF1
         RET
 ; AUDIO OFF
-AUDOFF: XRA     A
-        OUT     AMODE
+AUDOFF: LXI     H, BELC
+        DCR     M       ;BELL COUNT -1
+        RNZ             ;MORE AUDIO COMING
+        XRA     A
+        OUT     AMODE   ;AUDIO OFF
         RET
 ;
 ; COMMAND JUMP VECTOR TABLE
