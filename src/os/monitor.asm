@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.7'
 ;
-; JAN 29, 2022
+; APR 3, 2022
 ;
         .PROJECT monitor.com
 ;
@@ -32,6 +32,7 @@ LF      EQU     10      ;LINE FEED
 INC     EQU     0DBH    ;IN OP CODE
 OUTC    EQU     0D3H    ;OUT OP CODE
 RETC    EQU     0C9H    ;RET OP CODE
+MVCTX   EQU     04DDH
 
         .ORG    0F800H
 
@@ -47,8 +48,20 @@ COLD:   MVI     A,1
         CALL    PRNTM   ;PRINT SIGNON
 ;
 ; CONTINUATION OF COLD START
+; SET CTX: 1,4,1,5,1,6,1,7
 ;
 START:  LXI     SP,STACK;RESET STACK
+        MVI     H,0
+CTX1:   MOV     A,H
+        RRC
+        JNC     CTX2
+        ANI     3
+        ORI     0F4H
+        JMP     CTX3
+CTX2:   MVI     A,0F1H
+CTX3:   DW      MVCTX
+        INR     H
+        JNZ     CTX1
 ;
 ; WARM-START ENTRY
 ;
@@ -770,14 +783,16 @@ UPTIME: DW      013EDH  ;B=DAYS,C=HOURS
 ;
 QUIT:   XRA     A
         STA     BREAK   ;RESET BREAK POINT
+        STA     COMS    ;TURN COMS OFF
+        OUT     RXEN    ;DISABLE RX
         JMP     KERNEL
 ;
 ; THESE MUST MATCH KERNEL!
 ;
 SRCCPU  EQU     STACK+1
 KERNEL  EQU     0F000H
-K_WAIT  EQU     KERNEL+5
-K_CMD   EQU     KERNEL+17H
+K_WAIT  EQU     KERNEL+33H
+K_CMD   EQU     KERNEL+47H
 ;
 ; EXTENDED INSTRUCTIONS
 ;

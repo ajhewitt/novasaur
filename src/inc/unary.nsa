@@ -53,7 +53,7 @@ $FORKC     11 # Console page fork
 $EXTPG1    12 # extended execute 2-cycle jump page
 $EXTPG2    13 # extended execute 3-cycle jump page
 $EXTPC     14 # extended execute jump PC
-$EXTFCH    15 # extended fetch ok? 0 : -1
+$EXTFCH    15 # extended fetch ok? INST : NOP
 
 #FNC - Extended
 $SCAN0      0 # lower/upper scan code->ascii

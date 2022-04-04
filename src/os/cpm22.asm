@@ -13,7 +13,7 @@
 ;   Set memory limit here. This is the amount of contigeous
 ; ram starting from 0000. CP/M will reside at the end of this space.
 ;
-MEM	EQU	56	;for a 62k system (TS802 TEST - WORKS OK).
+MEM	EQU	64	;for a 62k system (TS802 TEST - WORKS OK).
 ;
 IOBYTE	EQU	3	;i/o definition byte.
 TDRIVE	EQU	4	;current drive name and user number.
@@ -3722,21 +3722,12 @@ BIOS	EQU	CCP+1600H	;BASE OF BIOS
 CDISK	EQU	0004H		;CURRENT DISK NUMBER 0=A,... L5=P
 IOBYTE	EQU	0003H		;INTEL I/O BYTE
 ;
-SDATA   EQU     8               ;SERIAL DATA
-CDATA   EQU     9               ;CONSOLE DATA
-RXEN    EQU     11              ;RX ENABLE
-;
-; THESE MUST MATCH KERNEL!
-;
-STACK	EQU	0E880H
-BREAK	EQU	STACK
-SRCCPU	EQU	STACK+1
-K_WAIT	EQU	0F005H
-K_CMD	EQU	0F017H
+STACK	EQU	0E400H
 ;
 ; EXTENDED INSTRUCTIONS
 ;
 CPROM   EQU     01EDH   ;COPY ROM
+CMDSND  EQU     05DDH   ;SLAVE: SEND COMMAND
 YIELD	EQU	06EDH   ;MASTER: YIELD UNTIL CTX SW
 SIGNAL	EQU	07DDH   ;MASTER: SIGNAL SLAVE
 IPCSND	EQU	08DDH   ;MASTER: SET SLAVE REGS
@@ -3867,24 +3858,25 @@ WBOOT:
 ;	TO INSERT YOUR OWN CODE
 ;
 CONST:	;CONSOLE STATUS, RETURN 0FFH IF CHARACTER READY, 00H IF NOT
-	IN	CDATA
-	STA     CSTAT
-	ORA     A               ;ZERO?
-	RZ                      ;NOT READY
-	MVI     A,0FFH
+        LXI     B, 0104H        ;SEQ 1, TTYS COMMAND
+        DW      CMDSND          ;CALL KERNEL
+        MOV     A, E            ;A=0 IF READY
+        DCR     A               ;A=-1 IF READY
 	RET
 ;
 CONIN:	;CONSOLE CHARACTER INTO REGISTER A
-	LDA     CSTAT
-CONIN1: ANI     7FH             ;CLEAR PARITY
+        LXI     B, 0105H        ;SEQ 1, TTYI COMMAND
+        DW      CMDSND          ;CALL KERNEL
+        MOV     A, E            ;A=CHAR IF READY
+        ANI     7FH             ;CLEAR PARITY
 	RNZ                     ;RETURN IF NOT ZERO
-	IN      CDATA           ;READ CONSOLE
-	JMP     CONIN1          ;BLOCK ON INPUT
+	JMP     CONIN           ;BLOCK ON INPUT
 ;
 CONOUT:	;CONSOLE CHARACTER OUTPUT FROM REGISTER C
-	MOV	A, C		;GET TO ACCUMULATOR
-	OUT	CDATA
-	RET
+	MOV	E, C		;E=C
+        LXI     B, 0106H        ;SEQ 1, TTYO COMMAND
+        DW      CMDSND          ;CALL KERNEL
+        RET
 ;
 LIST:	;LIST CHARACTER FROM REGISTER C
 	MOV	A, C	  	;CHARACTER TO REGISTER A
@@ -3959,7 +3951,7 @@ SETDMA:	;SET	DMA ADDRESS GIVEN BY REGISTERS B AND C
 READ:	;PERFORM READ OPERATION
         LDA	DISKNO
         CPI     1               ;B: DRIVE?
-        JNZ     ADRIVE
+        JNZ     READA
         LDA     SECTOR
         ORA     A               ;SECTOR ZERO?
         JNZ     CPBBF
@@ -3984,16 +3976,12 @@ CPBBF   RAR                     ;A=0000000S C=S
         XRA     A
         RET
 
-ADRIVE	MVI     A, 1
-        STA     BREAK           ;SET BREAK POINT
-        STA     SRCCPU          ;SET SOURCE AS KERNEL
-        LDA     TRACK
+READA:	LDA     TRACK
         MOV     D, A
         LDA     SECTOR
         MOV     E, A
         LXI     B, 0102H        ;SEQ 1, GET COMMAND
-        CALL    K_CMD           ;HANDLE COMMAND
-        CALL    K_WAIT          ;HANDLE RETURN
+        DW      CMDSND          ;CALL KERNEL
         LHLD    DMAAD
         XCHG
         DW      RECRECV         ;SHM->DE
@@ -4001,9 +3989,6 @@ ADRIVE	MVI     A, 1
 	RET
 ;
 WRITE:	;PERFORM A WRITE OPERATION
-	MVI     A, 1
-        STA     BREAK           ;SET BREAK POINT
-        STA     SRCCPU          ;SET SOURCE AS KERNEL
         LHLD    DMAAD
         XCHG
         DW      RECSEND         ;DE->SHM
@@ -4012,7 +3997,7 @@ WRITE:	;PERFORM A WRITE OPERATION
         LDA     SECTOR
         MOV     E, A
         LXI     B, 0203H        ;SEQ 2, PUT COMMAND
-        CALL    K_CMD           ;HANDLE COMMAND
+        DW      CMDSND          ;CALL KERNEL
         XRA     A
         RET
 ;
@@ -4025,7 +4010,6 @@ TRACK:	DS	2		;TWO BYTES FOR EXPANSION
 SECTOR:	DS	2		;TWO BYTES FOR EXPANSION
 DMAAD:	DS	2		;DIRECT MEMORY ADDRESS
 DISKNO:	DS	1		;DISK NUMBER 0-15
-CSTAT:  DS      1               ;CONSOLE STATE
 ;
 ;	SCRATCH RAM AREA FOR BDOS USE
 BEGDAT	EQU	$	 	;BEGINNING OF DATA AREA
@@ -4040,8 +4024,5 @@ CHK03	EQU	CHK02+16	;CHECK VECTOR 3
 ;
 DIRBF	EQU	CHK03+16 	;SCRATCH DIRECTORY AREA
 BBUFF   EQU     DIRBF+200h&0ff00h   ;B: DRIVE BUFFER
-
-ENDDAT	EQU	BBUFF+400h      ;END OF DATA AREA
-DATSIZ	EQU	ENDDAT-BEGDAT   ;SIZE OF DATA AREA
 
 	END

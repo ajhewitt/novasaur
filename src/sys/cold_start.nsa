@@ -143,8 +143,8 @@ MVHL AZ, ND               # set default text colors
 LD HL, $0x5F              # '_'
 LD Y, $CONC
 MVHL AZ, ND               # set default console cursor
-LD Y, $MODE               # VGA75 - 80x30 text
-LD HL, $3
+LD Y, $MODE               # SVGA60 80x37 text
+LD HL, $6
 MVHL AZ, ND               # set default video mode
 
 LD PG, $KBD_START_PG

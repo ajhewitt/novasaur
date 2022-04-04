@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; APR 2, 2022
+; APR 3, 2022
 ;
         .PROJECT        kernel.com
 ;
@@ -21,6 +21,7 @@ CONSOLE EQU     9
 AMODE   EQU     0AH
 TIME0   EQU     3CH
 ;
+MVCTX   EQU     04DDH
 YIELD	EQU	06EDH   ;MASTER: YIELD UNTIL CTX SW
 SIGNAL  EQU     07DDH   ;MASTER: SIGNAL SLAVE
 IPCSND	EQU	08DDH   ;MASTER: SET SLAVE REGS
@@ -38,21 +39,40 @@ DMA     EQU     0DDDH   ;DMA
         SHLD    TTOP    ;TIMER TOP=TIMER START
         XRA     A
         STA     BELC    ;BEL COUNT=0
+        LDA     SRCCPU
+;
+; SET CTX: 1,2,3,4,1,2,3,5,1,2,3,6,1,2,3,7
+;
+        MVI     H, 0
+CTX1:   MOV     A, H
+        INR     A
+        ANI     3
+        JNZ     CTX2    ;A=1,2,3
+        MOV     A, H
+        RRC
+        RRC
+        ANI     3       ;A=0,1,2,3
+        ORI     4       ;A=4,5,6,7
+CTX2:   ORI     0F0H
+        DW      MVCTX
+        INR     H
+        JNZ     CTX1
+;
 START:  LDA     BREAK
         ORA     A       ;CHECK BREAK (A!=0)
         RNZ             ;RETURN ON BREAK
-
+;
         LXI     H,LASTT0;GET LAST T0
         IN      TIME0   ;A=T0
         CMP     M       ;T0==LAST T0?
         CNZ     TICK    ;T0 CHANGED
-
+;
 WAIT:   DW	YIELD   ;WAIT UNTIL CTX SW
-        XRA     A       ;A=0
+        LDA     SRCCPU
 SCAN:   INR     A       ;A+1
         ANI     7       ;A==8?
-        JZ      START   ;NO MSGS; LOOP
         STA     SRCCPU  ;SAVE CURRENT CPU
+        JZ      START   ;NO MSGS; LOOP
         DW      IPCRCV  ;RX MSG
         ORA     A       ;A==0?
         JNZ     SCAN    ;NEXT CPU
@@ -100,6 +120,14 @@ HANDHL: ADI     HANDPG  ;A=HANDPG+CPU
         MOV     L,A     ;L=SEQ*4
         RET
 ;
+; SET HANDLER COMMAND
+;
+HANDSET:MOV     M,C     ;CMD=C
+        LDA     SRCCPU
+        INX     H
+        MOV     M,A     ;DEST=SRC CPU
+        JMP     WAIT
+;
 ; RETURN CPU# IN A
 ; FROM SECTOR IN E
 ;
@@ -111,6 +139,13 @@ SECCPU: MOV     A,E     ;A=000QQSSS
         ORI     04H     ;A=000001QQ
         RET
 ;
+; GENERIC RETURN
+;
+GENR:   POP     H
+        MOV     A,M     ;A=DEST CPU
+        DW      SIGNAL  ;WAKE DEST CPU
+        JMP     WAIT
+;
 ; CLIENT GETS RECORD
 ; - FORWARD GET TO DISK
 ; - SET XFER ON RETURN
@@ -120,11 +155,7 @@ GET:    CALL    SECCPU  ;A=CPU#
         ORA     A       ;A==0?
         JZ      WAIT    ;TODO: HANDLE ERR
         CALL    HANDHL  ;HL=HANDLER
-        MVI     M,2     ;CMD=XFER
-        LDA     SRCCPU
-        INX     H
-        MOV     M,A     ;DEST=SRC CPU
-	JMP	WAIT
+        JMP     HANDSET ;SET HANDLER CMD
 ;
 ; RETURN FROM GET
 ; - XFER FROM CPU
@@ -148,7 +179,10 @@ PUT:    LDA     SRCCPU
         MOV     L,A     ;DEST CPU
         DW      RECXFER ;XFER RECORD
         DW	IPCSND	;SEND PUT
-	JMP	WAIT
+        ORA     A       ;A==0?
+        JZ      WAIT    ;TODO: HANDLE ERR
+        CALL    HANDHL  ;HL=HANDLER
+        JMP     HANDSET ;SET HANDLER CMD
 ;
 ; TTY STATUS
 ; E=0 IF READY, ELSE 1
@@ -233,7 +267,7 @@ TFIRE:  PUSH    H       ;SAVE CURT
         XCHG
         MVI     C, 3
         DW      DMA     ;COPY TOP TIMER TO CUR
-        RET
+        RET             ;CALL ADDR
 ;
 ; TIMER ADD
 ; C=COUNT, DE=CALL ADDR
@@ -301,7 +335,7 @@ CMDS:   DW      WAIT    ;NULL N/A
 RETS:   DW      WAIT    ;NULL N/A
         DW      WAIT    ;RETURN N/A
         DW      GETR
-        DW      WAIT
+        DW      GENR
         DW      WAIT
         DW      WAIT
         DW      WAIT

@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; MAR 19, 2022
+; APR 3, 2022
 ;
         .PROJECT        boot.com
 ;
@@ -12,12 +12,12 @@ CMDSND	EQU	005DDH
         .ORG    0
 
 RST0:   ADI     TABLE
-        MOV     L,A     ;L=TABLE+CPU
-        MVI     H,0
-        MOV     L,M     ;HL=BOOT VECTOR
+        MOV     L, A    ;L=TABLE+CPU
+        MVI     H, 0
+        MOV     L, M    ;HL=BOOT VECTOR
         PCHL            ;JUMP TO VECTOR
 HALT:   HLT             ;HALT CPU0
-RST1:   MVI     C,0
+RST1:   MVI     C, 0
         DW      CMDSND  ;SEND NULL; YIELD
         JMP     RST1    ;WAIT FOREVER
         NOP
@@ -75,49 +75,32 @@ RST7:   NOP
 ; - SETUP CPU SEQ: 1,2,3,1,4,5,6,7
 ; - COPY KERNEL/MONITOR
 ;
-KERNEL: MVI     A,2
+KERNEL: MVI     A, 2
 BOOT1:  DW      BOOTCPU
         INR     A
         CPI     8
         JNZ     BOOT1
-
-        MVI     H,0
-CTX1:   MOV     A,H
-        ANI     7
-        CPI     3
-        JC      CTX2    ;CPU<3
-        JNZ     CTX3    ;CPU>3
-        XRA     A       ;A=0
-CTX2:   INR     A       ;A+=1
-CTX3:   ORI     0F0H
-        DW      MVCTX
+        XRA     A
+        MOV     H, A
+CTX1:   DW      MVCTX
         INR     H
         JNZ     CTX1
-
-        LXI     DE,0F002H;DEST/ROM PAGE
-        MVI     C,13    ;14 PAGES
+        LXI     D, 0F002H;DEST/ROM PAGE
+        MVI     C, 13   ;14 PAGES
         DW      CPROM   ;COPY ROM
-        ;DEBUG - ADD CP/M TO KERNEL SPACE
-        LXI     DE,0C458H;DEST/ROM PAGE
-        MVI     C,23    ;24 PAGES
-        DW      CPROM   ;COPY ROM
-        ;DEBUG END
         JMP     0F800H  ;BOOT MONITOR
-        ;JMP     0DA00H  ;BOOT CPM
-        ;JMP     0FCB5H  ;FORMAT A:
 ;
 ; CP/M 2.2
 ;
-CPM:    LXI     DE,0E458H;DEST/ROM PAGE
-        MVI     C,23    ;24 PAGES
+CPM:    LXI     DE, 0E458H;DEST/ROM PAGE
+        MVI     C, 23   ;24 PAGES
         DW      CPROM   ;COPY ROM
-        JMP     RST1    ;DEBUG - WAIT FOREVER
         JMP     0FA00H  ;BOOT CPM
 ;
 ; DISK QUADRANT
 ;
-DISK:   LXI     DE,0FF01H;DEST/ROM PAGE
-        MVI     C,0     ;1 PAGE
+DISK:   LXI     DE, 0FF01H;DEST/ROM PAGE
+        MVI     C, 0    ;1 PAGE
         DW      CPROM   ;COPY ROM
         JMP     0FF00H  ;BOOT DISK
 ;
@@ -125,7 +108,7 @@ DISK:   LXI     DE,0FF01H;DEST/ROM PAGE
 ;
 TABLE:  DB      HALT
         DB      KERNEL
-        DB      RST1
+        DB      CPM
         DB      RST1
         DB      DISK
         DB      DISK
