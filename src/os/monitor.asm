@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.7'
 ;
-; APR 3, 2022
+; APR 4, 2022
 ;
         .PROJECT monitor.com
 ;
@@ -841,6 +841,7 @@ KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
         LXI     B,0203H ;SEQ 2, PUT COMMAND
         POP     D       ;RECOVER TRACK/SEC
         CALL    K_CMD   ;HANDLE COMMAND
+        CALL    K_WAIT  ;HANDLE RETURN
         RET
 ;
 ; FORMAT A: DRIVE

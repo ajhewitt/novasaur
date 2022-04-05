@@ -3857,24 +3857,33 @@ WBOOT:
 ;	IN EACH CASE, THE ENTRY POINT IS PROVIDED, WITH SPACE RESERVED
 ;	TO INSERT YOUR OWN CODE
 ;
+CSTAT   DB      0
 CONST:	;CONSOLE STATUS, RETURN 0FFH IF CHARACTER READY, 00H IF NOT
-        LXI     B, 0104H        ;SEQ 1, TTYS COMMAND
-        DW      CMDSND          ;CALL KERNEL
-        MOV     A, E            ;A=0 IF READY
-        DCR     A               ;A=-1 IF READY
-	RET
-;
-CONIN:	;CONSOLE CHARACTER INTO REGISTER A
-        LXI     B, 0105H        ;SEQ 1, TTYI COMMAND
+        LXI     B, 0304H        ;SEQ 1, TTYI COMMAND
         DW      CMDSND          ;CALL KERNEL
         MOV     A, E            ;A=CHAR IF READY
         ANI     7FH             ;CLEAR PARITY
+        RZ
+        STA     CSTAT           ;SAVE CHAR
+        MVI     A, 0FFH
+	RET
+;
+CONIN:	;CONSOLE CHARACTER INTO REGISTER A
+        LXI     H, CSTAT
+        MOV     A, M            ;A=CSTAT
+        MVI     M, 0            ;CLEAR CSTAT
+        ORA     A
+        RNZ                     ;RETURN CHAR
+        LXI     B, 0304H        ;SEQ 1, TTYI COMMAND
+GETIN:  DW      CMDSND          ;CALL KERNEL
+        MOV     A, E            ;A=CHAR IF READY
+        ANI     7FH             ;CLEAR PARITY
 	RNZ                     ;RETURN IF NOT ZERO
-	JMP     CONIN           ;BLOCK ON INPUT
+	JMP     GETIN           ;BLOCK ON INPUT
 ;
 CONOUT:	;CONSOLE CHARACTER OUTPUT FROM REGISTER C
 	MOV	E, C		;E=C
-        LXI     B, 0106H        ;SEQ 1, TTYO COMMAND
+        LXI     B, 0405H        ;SEQ 1, TTYO COMMAND
         DW      CMDSND          ;CALL KERNEL
         RET
 ;

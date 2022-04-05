@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; APR 3, 2022
+; APR 4, 2022
 ;
         .PROJECT        kernel.com
 ;
@@ -80,7 +80,7 @@ SCAN:   INR     A       ;A+1
 ; MSG HANDLER
 ;
 K_CMD:  MOV	A,C	;A=CMD
-        CPI	7       ;LIMIT CMD<7
+        CPI	6       ;LIMIT CMD<6
         JNC     WAIT    ;SKIP HIGH CMD
         CPI     1       ;CHECK RETURN
         JC      WAIT    ;NULL CMD
@@ -110,7 +110,7 @@ CMD2:   PUSH    D       ;SAVE DE
 	PCHL		;GO THERE
 ;
 ; RETURN HANDLER POINTER
-; IN HL FROM CPU# IN A
+; IN HL FROM SEQ B & CPU# IN A
 ;
 HANDHL: ADI     HANDPG  ;A=HANDPG+CPU
         MOV     H,A     ;H=CPU PAGE
@@ -120,9 +120,14 @@ HANDHL: ADI     HANDPG  ;A=HANDPG+CPU
         MOV     L,A     ;L=SEQ*4
         RET
 ;
-; SET HANDLER COMMAND
+; SEND RETURNABLE COMMAND
+; SET RETURN HANDLER
 ;
-HANDSET:MOV     M,C     ;CMD=C
+SNDRET: DW	IPCSND	;SEND MSG, EXPECT RETURN
+        ORA     A       ;A==0?
+        JZ      WAIT    ;TODO: HANDLE ERR
+        CALL    HANDHL  ;HL=HANDLER
+        MOV     M,C     ;CMD=C
         LDA     SRCCPU
         INX     H
         MOV     M,A     ;DEST=SRC CPU
@@ -151,11 +156,7 @@ GENR:   POP     H
 ; - SET XFER ON RETURN
 ;
 GET:    CALL    SECCPU  ;A=CPU#
-        DW	IPCSND	;FORWARD GET
-        ORA     A       ;A==0?
-        JZ      WAIT    ;TODO: HANDLE ERR
-        CALL    HANDHL  ;HL=HANDLER
-        JMP     HANDSET ;SET HANDLER CMD
+        JMP     SNDRET  ;SET HANDLER CMD
 ;
 ; RETURN FROM GET
 ; - XFER FROM CPU
@@ -178,40 +179,15 @@ PUT:    LDA     SRCCPU
         CALL    SECCPU  ;A=CPU#
         MOV     L,A     ;DEST CPU
         DW      RECXFER ;XFER RECORD
-        DW	IPCSND	;SEND PUT
-        ORA     A       ;A==0?
-        JZ      WAIT    ;TODO: HANDLE ERR
-        CALL    HANDHL  ;HL=HANDLER
-        JMP     HANDSET ;SET HANDLER CMD
-;
-; TTY STATUS
-; E=0 IF READY, ELSE 1
-;
-TTYS:   MVI     E,0     ;ASSUME READY
-        LDA     CSTAT   ;LOAD LAST STATUS
-        ORA     A
-        JNZ     SRDY    ;STATUS READY
-        IN      CONSOLE ;READ CHAR
-        STA     CSTAT   ;STORE CHAR
-        ORA     A
-        JNZ     SRDY    ;STATUS READY
-        INR     E       ;NOT READY A=1
-SRDY:   LDA     SRCCPU
-        DW	IPCSND	;SEND TTY STATUS
-        JMP     WAIT
+        JMP     SNDRET  ;SET HANDLER CMD
 ;
 ; TTY INPUT
 ; console -> E
 ;
-TTYI:   LDA     CSTAT   ;LOAD LAST STATUS
-        ORA     A
-        JNZ     IRDY    ;INPUT READY
-        IN      CONSOLE ;CHAR IN
-IRDY:   CPI     BEL     ;BELL CHAR?
+TTYI:   IN      CONSOLE ;CHAR IN
+        CPI     BEL     ;BELL CHAR?
         CZ      BELON   ;BELL ON
         MOV     E,A     ;E=CHAR
-        XRA     A       ;A=0
-        STA     CSTAT   ;CLEAR STATUS
         LDA     SRCCPU
         DW      IPCSND
         JMP     WAIT
@@ -326,7 +302,6 @@ CMDS:   DW      WAIT    ;NULL N/A
         DW      WAIT    ;RETURN N/A
         DW      GET     ;GET RECORD
         DW      PUT     ;PUT RECORD
-        DW      TTYS
         DW      TTYI
         DW      TTYO
 ;
@@ -336,6 +311,5 @@ RETS:   DW      WAIT    ;NULL N/A
         DW      WAIT    ;RETURN N/A
         DW      GETR
         DW      GENR
-        DW      WAIT
         DW      WAIT
         DW      WAIT
