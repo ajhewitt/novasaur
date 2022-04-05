@@ -4230,9 +4230,13 @@ TSTCC   EQU     $
 ; CANCEL IF CONTROL-C
 ; TOGGLE OUTPUT SUPPRESS SW IF CONTROL-O
 ;
-        ;NOTE: FOLLOWING CLOBBERS REGISTERS,
-        ; PUSH AND POP IF FOUND TO CREATE BUGS.
+        PUSH    B
+        PUSH    D
+        PUSH    H
         CALL    BTSTAT  ;CALL BIOS
+        POP     H
+        POP     D
+        POP     B
         RZ              ;RETURN ON NO CHAR
 GETCH:  PUSH    B       ;SAVE REGS - CPM CAN CLOBBER
         PUSH    D
@@ -4242,7 +4246,7 @@ GETCH:  PUSH    B       ;SAVE REGS - CPM CAN CLOBBER
         POP     D
         POP     B
         CPI     3       ;TEST IF CONTROL C
-        JNZ     TSTC1   ;BRIF NOT
+        JNZ     UCASE   ;BRIF NOT
         CALL    PRCNT   ;GO PRINT ^C
         LDA     EDSW    ;GET MODE SW
         ORA     A       ;TEST IT
@@ -4251,6 +4255,9 @@ GETCH:  PUSH    B       ;SAVE REGS - CPM CAN CLOBBER
         CALL    TERMM   ;GO PRINT IT
         CALL    PRLIN   ;GO PRINT LINE
         JMP     RDY     ;GOTO READY
+UCASE:  CPI     'Z'+1   ;UPPER CHAR?
+        JC      TSTC1   ;YES
+        ANI     5FH     ;MAKE UPPER
 TSTC1:  CPI     0FH     ;TEST IF CONTROL O
         RNZ             ;RETURN IF NOT
         CALL    PRCNT   ;GO PRINT ^O
