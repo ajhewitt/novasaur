@@ -19,8 +19,9 @@ $RECRECV_PG    0x0F # ED0C
 $JMPPG0_PG     0x10
 $JMPPG1_PG     0x11
 
-$DMA_PG        0x20 # DD0D
-
+$BUFFRD_PG     0x20 # DD0D
+$BUFFWR_PG     0x21 # DD0E
+$DMA_PG        0x22 # DD0F
 $SAA_PG        0x23 # DD10
 
 $MOVMX_PG      0x28

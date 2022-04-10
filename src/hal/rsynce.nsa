@@ -39,129 +39,161 @@ DISHL DZ, PGA         # jump to next VMC
 #43/39
 
 ADDR 0x28             #32 - mode 0x60: rx conn open
-LD HL, $0xEF
-LD Y, $EO
-ANDHL DZ, ED          # 0 -> RTS (assert)
-#40/46
-LD HL, $0x42
+LD HL, $0x62
 LD Y, $RMODE
-MVHL AZ, ND           # 0x42 -> rx mode (idle)
-LD PC, $EXIT50
-#50/54
+MVHL AZ, ND           # 0x62 -> rx mode (on)
+LD PC, $EXIT42
+#50/48
 
-ADDR 0x38             #32 - mode 0x62-0x7F: rx conn close
+ADDR 0x30             #32 - mode 0x43-0x7F: rx conn close
 LD HL, $0x10
 LD Y, $EO
 ORHL DZ, ED           # 1 -> RTS (deassert)
-#40/62
+#40/54
 LD HL, $0x40
 LD Y, $RMODE
 MVHL AZ, ND           # 0x40 -> rx mode (off)
 LD PC, $EXIT50
-#50/70
+#50/62
 
-ADDR 0x48             #32 - mode 0x42: rx idle/start bit, adjust timing
+ADDR 0x40             #32 - mode 0x42: rx idle/start bit, adjust timing
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+LD PC, $IDLE40
+#40/72
+
+ADDR 0x48             #32 - mode 0x62: RTS assert, rx idle/start bit, adjust timing
+LD HL, $0xEF
+LD Y, $EO
+ANDHL DZ, ED          # 0 -> RTS (assert)
+#40/78
+$IDLE40
+LD HL, $IDEN$NULL
 LDZ Y, $COMBS
 FNH DZ, HL            # H = serial block state (n-1)
 LD Y, $COMLS          # Y = point to serial line state (n)
 MVH DZ, NA            # A = [n, n-1]
-#41/79
-LDN PC, $EXIT43       # exit on stop bit
+#51/87
+LDN PC, $EXIT53       # exit on stop bit
 LD HL, $RXS2M$NULL
 LD Y, $RMULT
 FNEH AZ, ND           # serial state -> [mult,mode] -> serial multiplier
 LD HL, $SWAP$NULL
-#51/89
+#61/97
 FNH A, HL             # H = mode
 LD Y, $RMODE
 ADDH DZ, ND           # rx mode + H -> rx mode (skip, double, bit 0)
-LD PC, $EXIT60
-#60/96
+$EXIT68
+LD HL, $INC$NULL
+#70/104
+LDZ Y, $VMS
+FNH DZ, HLD           # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/113
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#86/117
 
-ADDR 0x60             #32 - mode 0x44: skip data bit
+ADDR 0x78             #32 - mode 0x44: skip data bit
 LD HL, $4$NULL
 LD Y, $RMODE
 ADDH DZ, ND           # rx mode + 4 -> rx mode (bit 0)
 LD PC, $EXIT41
-#41/104
+#41/128
 
-ADDR 0x68             #32 - mode 0x46: receive double bits
+ADDR 0x80             #32 - mode 0x46: receive double bits
 LD HL, $RXBUFF
 MVHL A, XA            # X = Rx buffer
 LD HL, $LSL$NULL
-#40/110
+#40/134
 LDZ Y, $COMLS         # line state = SCABXXXX
 FNH DZ, HLA           # A = CABXXXX0
 LD HL, $IDEN$NULL
 LDZ Y, $RXWRIDX
 FNH D, Y              # Y = Rx write index
-#50/119
+#50/142
 FNH A, HLD            # CABXXXX0 -> Rx data
 LD HL, $6$NULL
 LDZ Y, $RMODE
 ADDH DZ, ND           # rx mode + 6 -> rx mode (bit 2)
 LD PC, $EXIT61
-#61/128
+#61/151
 
-ADDR 0x80             #32 - mode 0x48-0x57: receive data bit
+ADDR 0x98             #32 - mode 0x48-0x57: receive data bit
 LD HL, $RXBUFF
 MVHL A, XA            # X = Rx buffer
 LD HL, $IDEN$NULL
-#40/134
+#40/158
 LDZ Y, $RMULT
 FNH DZ, HL            # H = serial multiplier
 LD Y, $COMLS
 MULH DZ, NA           # A sign = Rx data bit
-#49/141
+#49/165
 LDP HL, $LSR$IDEN     # shift right, reset MSB
 LDN HL, $NSR$IDEN     # shift right, set MSB
 LD Y, $RXWRIDX
 FNFL DZ, Y            # Y = Rx write index
 FNFH D, ND            # Rx data shift right, set/reset MSB
-#60/151
+#60/175
 LD HL, $INC2$NULL
 LDZ Y, $RMODE
 FNH DZ, HLD           # rx mode + 2 -> rx mode (bit n+1)
 LD PC, $EXIT68
-#68/168
+#68/182
 
-ADDR 0xA8             #32 - mode 0x58: receive stop bit
-LD HL, $0xEA          # HL = -0x16 (idle: 0x58-0x16=0x42)
+ADDR 0xB8             #32 - mode 0x58: receive stop bit
+LD HL, $0x41          # HL = 01000001b
 LD Y, $RMODE
-ADDHL DZ, ND          # idle -> rx mode
-#40/174
+ANDHL DZ, NA          # A=0x58 & 0x41=0x40
+#40/190
+LD HL, $0x20
+ORH AZ, ND            # idle -> rx mode
 LD HL, $INC$2COM
 LD Y, $RXWRIDX
+#49/198
 FNFH DZ, ND           # A,RxWrIndex+1
 LD Y, $RXRDIDX
-#49/182
 FNFL DZ, HL           # HL = -RxRdIndex
 ADDHL A, NA           # A = RxWrIndex - RxRdIndex
-LDN PC, $EXIT58
-LD HL, $0x10          # deassert RTS
-#59/190
+#61/206
+LDN PC, $EXIT63
+LD HL, $0x10          # deassert RTS now
 LD Y, $EO
 ORHL DZ, ED           # 1 -> RTS
-LD PC, $EXIT67
-#67/196
+#70/214
+LDZ Y, $VMS
+FNH DZ, HLD           # VMC+1
+LD HL, $IDEN$NULL
+LDZ Y, $INST
+FNH DZ, HL            # inst cache -> HL
+#80/222
+LD Y, $VMS            # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#86/226
 
 $EXIT41
 NOP
-NOP
-$EXIT43
-NOP
+$EXIT42
 NOP
 NOP
 NOP
 NOP
-$EXIT48
 NOP
 NOP
-#50/205
+NOP
+NOP
+#50/235
 $EXIT50
 NOP
 NOP
 NOP
+$EXIT53
 NOP
 NOP
 NOP
@@ -170,28 +202,14 @@ NOP
 $EXIT58
 NOP
 NOP
-#60/215
-$EXIT60
+#60/245
 NOP
 $EXIT61
 NOP
 NOP
+$EXIT63
 NOP
 NOP
 NOP
-NOP
-$EXIT67
-NOP
-$EXIT68
-LD HL, $INC$NULL
-#70/225
-LDZ Y, $VMS
-FNH DZ, HLD           # VMC+1
-$EXIT74
-LD HL, $IDEN$NULL
-LDZ Y, $INST
-FNH DZ, HL            # inst cache -> HL
-#80/233
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
-#86/237
+LD PC, $EXIT68
+#68/253

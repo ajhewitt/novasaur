@@ -1,0 +1,30 @@
+# Buffer Write - A=CTX, D=index, E=byte
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE BUFFWR_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$IDEN
+FNH DZ, HLD                # inc state
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA                # A=0 if root
+#10
+LDP Y, $AREG               # kernel: use Acc to set CPU
+LDN Y, $CTX0               # user: keep current context
+LD HL, $0xF0
+ORHL DZ, NA                # A=0xFn
+LD HL, $IDEN$7
+#21
+ANDL A, X                  # X=0xFn&7
+LD Y, $EREG
+FNFH DZ, NA                # A=Ereg
+LDZ Y, $DREG
+#31
+FNH DZ, Y                  # Y=index
+FNH A, HLD                 # A->[CTX,index]
+LD HL, $FETCH
+LD Y, $VMS                 # set Y = $VMS on exit
+DISHL DZ, PGA              # jump to next VMC
+#43

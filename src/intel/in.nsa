@@ -110,13 +110,13 @@ LD PC, $KS30
 #30
 
 $ASSERT46
-LD HL, $0xEF              # assert RTS
-LD Y, $EO
-#50/6
-ANDHL DZ, ED              # 0 -> RTS
+LD HL, $0x20              # enable rx/reassert RTS
+LD Y, $RMODE
+#50/4
+ORHL DZ, ND               # set enable bit
 LD HL, $0
 LD PC, $EXIT58
-#58/12
+#58/10
 
 ADDR 0x80                 # PCL = 255, inc PCH
 LDZ Y, $PCH

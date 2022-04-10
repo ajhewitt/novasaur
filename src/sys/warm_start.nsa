@@ -8,8 +8,8 @@ PAGE WARM_START_PG
 LD HL, $0x80
 LD Y, $EO
 ANDH DZ, NA               # clear bank
-LD HL, $0x10              # bank 1
-ORH AZ, ED                # set bank
+LD HL, $0x11              # deassert, bank 1
+ORHL AZ, ED               # set RTS, bank
 
 # Keyboard
 LD HL, $40                # 40
