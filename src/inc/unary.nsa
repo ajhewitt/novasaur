@@ -66,3 +66,4 @@ $WAV2FNC    6 # WAVE in L to SQRWAV/SAWWAV/0 in H
 $MODPCM     7 # PCM INC/MOD, Fork, expand
 $EXTMAPH    8 # extended inst mapping util (high)
 $EXTMAPL    9 # extended inst mapping util (low)
+$CTXCOL    10 # Context Column n->0xFn 0<n<8

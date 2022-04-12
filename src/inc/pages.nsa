@@ -19,10 +19,12 @@ $RECRECV_PG    0x0F # ED0C
 $JMPPG0_PG     0x10
 $JMPPG1_PG     0x11
 
-$BUFFRD_PG     0x20 # DD0D
-$BUFFWR_PG     0x21 # DD0E
-$DMA_PG        0x22 # DD0F
-$SAA_PG        0x23 # DD10
+$BUFFRD_PG     0x18 # DD0D
+$BUFFWR_PG     0x19 # DD0E
+$SERBUFF_PG    0x1A # DD0F
+$DMA_PG        0x1B # DD10
+
+$SAA_PG        0x20 # DD18
 
 $MOVMX_PG      0x28
 

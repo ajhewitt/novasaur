@@ -1,0 +1,100 @@
+# Serial to Buffer - A=CTX, D=index, E=last byte
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SERBUFF_PG
+
+# assume: Y = $VMS
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA               # A=0 if root
+LDN PC, $EXIT8
+LD HL, $2COM$NULL
+#9
+LDZ Y, $RXWRIDX
+FNH DZ, HL                # HL=-rx write index
+LD Y, $RXRDIDX
+ADDHL DZ, NA              # A=rx read-rx write index
+#19
+LD HL, $ZERO?$NULL
+FNH A, HLA
+LDP PC, $RESTART25        # exit if rx read == rx write
+LD HL, $RXBUFF
+MVHL A, XA                # X=buff addr
+#30
+LDZ HL, $INC$NULL
+FNH DZ, HLD               # read index+1
+LD HL, $IDEN$DEC
+FNFL A, Y                 # Y=read index-1
+#39
+FNFH D, NA                # A=char
+LD Y, $EREG
+FNH AZ, HLD               # A -> Ereg
+LD HL, $IDEN$CTXCOL
+LD Y, $AREG
+#50
+FNCL DZ, X                # X=CTX col
+LD Y, $EREG
+FNFH DZ, NA               # A=Ereg
+LDZ Y, $DREG
+#60
+FNH DZ, Y                 # Y=index
+FNH A, HLD                # A->[CTX,index]
+LD HL, $INC2$NULL
+LDZ Y, $VMS
+FNH DZ, HLD               # VMS+2
+#70
+NOP
+LD HL, $INC$NULL
+LDZ Y, $DREG
+FNH DZ, HLD               # index+1
+LDP HL, $SERBUFF_INST
+LDN HL, $FETCH
+#80
+LDZ Y, $VMS
+DISHL DZ, PGA             # jump to next VMC
+#86
+
+$EXIT8
+NOP
+NOP
+#10
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+LD PC, $EXIT33
+#33
+
+$RESTART25
+LD HL, $0x20              # enable rx/reassert RTS
+LD Y, $RMODE
+#29
+ORHL DZ, ND               # set enable bit
+$EXIT33
+NOP
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+1
+LD PG, $FETCH1_PG         # Done in 1 cycle, fetch
+#43

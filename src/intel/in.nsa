@@ -74,7 +74,7 @@ ADDHL DZ, NA              # A=rx read-rx write index
 #40/9
 LD HL, $ZERO?$NULL
 FNH A, HLA
-LDP PC, $ASSERT46         # exit if rx read == rx write
+LDP PC, $RESTART46        # exit if rx read == rx write
 LD HL, $RXBUFF
 LD PC, $CONT49
 #49/18
@@ -109,7 +109,7 @@ ADDR 0x74                 # Kbd scan
 LD PC, $KS30
 #30
 
-$ASSERT46
+$RESTART46
 LD HL, $0x20              # enable rx/reassert RTS
 LD Y, $RMODE
 #50/4
