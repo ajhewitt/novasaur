@@ -138,7 +138,7 @@ LD HL, $KERN?$NULL
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
 #40/5
-LDP HL, $XFER_INST        # XFER if kern
+LDP HL, $RECXFER_INST     # XFER if kern
 LDN HL, $FETCH            # FETCH if not kern
 LD Y, $INST
 MVHL AZ, ND               # inst -> cache

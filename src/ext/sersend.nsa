@@ -1,0 +1,138 @@
+# Buffer to Serial - A=CTX, D=index, E=last byte
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE SERSEND_PG
+
+# D = number of bytes in buffer
+# bytes read from [D-1] down to [0]
+# D=-1 on exit, else TX buffer full, D+1 bytes left
+# retry with D+1. If D==D on exit, not kernel
+# assume: Y = $VMS
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA               # A=0 if root
+LDN PC, $EXIT8
+LD HL, $DEC$CTXCOL
+LD Y, $AREG
+#11
+FNCL DZ, X                # X=CTX col
+LDZ Y, $DREG
+FNH DZ, HLD               # Dreg-1
+LDN PC, $EXIT20           # Exit if <0
+LD HL, $1COM$INC
+#21
+FNFL A, Y                 # Y=Dreg+1
+FNFH D, NA                # A=~[CTX,index]
+LD Y, $EREG
+FNFH AZ, ND               #~A->Ereg
+#32
+LDZ Y, $TXWRIDX
+FNH DZ, HL                # HL=-tx write index
+LD Y, $TXRDIDX
+ADDHL DZ, NA              # A=tx read-tx write index
+#42
+LDP PC, $EXIT44           # exit if tx read >= tx write
+LD HL, $TXBUFF
+MVHL A, XA
+LD HL, $IDEN$NULL
+#51
+LD Y, $EREG
+FNFH DZ, NA               # A=Ereg
+LDZ Y, $TXWRIDX
+FNH DZ, Y                 # Y=wr index
+#60
+FNH A, HLD                # A->tx wr buff
+LD HL, $INC$NULL
+LDZ Y, $TXWRIDX
+FNH DZ, HLD               # wr index+1
+LD HL, $0x20              # 0x20 or $IDEN2$NULL
+#70
+LD Y, $TMODE
+ORHL DZ, ND               # enable -> tx mode
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+2
+#80
+LD HL, $SERSEND_INST
+DISHL DZ, PGA             # jump to next VMC
+#86
+
+$EXIT8
+NOP
+NOP
+#10
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#20
+$EXIT20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $INC$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+1
+LD PG, $FETCH1_PG         # Done in 1 cycle, fetch
+#43
+
+$EXIT44
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#50
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#60
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#70
+NOP
+NOP
+NOP
+NOP
+LD HL, $INC2$NULL
+LDZ Y, $VMS               # set Y = $VMS on exit
+FNH DZ, HLD               # VMS+2
+#80
+LD HL, $FETCH
+DISHL DZ, PGA             # jump to next VMC
+#86

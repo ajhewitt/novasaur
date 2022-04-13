@@ -2,8 +2,12 @@
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE SERBUFF_PG
+PAGE SERRECV_PG
 
+# start with D=0
+# bytes written from [0] up to [D-1]
+# D = number of bytes in buffer, 128 max
+# If D==D on exit, buffer empty or not kernel
 # assume: Y = $VMS
 LD HL, $KERN?$NULL
 LDZ Y, $EO
@@ -48,7 +52,7 @@ NOP
 LD HL, $INC$NULL
 LDZ Y, $DREG
 FNH DZ, HLD               # index+1
-LDP HL, $SERBUFF_INST
+LDP HL, $SERRECV_INST
 LDN HL, $FETCH
 #80
 LDZ Y, $VMS

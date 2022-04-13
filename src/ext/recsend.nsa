@@ -55,7 +55,7 @@ NOP
 NOP
 NOP
 NOP
-LD HL, $SEND_INST
+LD HL, $RECSEND_INST
 #80/50
 LD Y, $VMS             # set Y = $VMS on exit
 DISHL DZ, PGA          # jump to next VMC
@@ -97,7 +97,7 @@ FNH DZ, Y              # Y = row
 FNH A, HLD             # A->[Y,X]
 NOP
 NOP
-LD HL, $SEND_INST
+LD HL, $RECSEND_INST
 #80/50
 LD Y, $VMS             # set Y = $VMS on exit
 DISHL DZ, PGA          # jump to next VMC
@@ -142,7 +142,7 @@ NOP
 NOP
 NOP
 NOP
-LD HL, $SEND_INST
+LD HL, $RECSEND_INST
 #80/51
 LD Y, $VMS             # set Y = $VMS on exit
 DISHL DZ, PGA          # jump to next VMC

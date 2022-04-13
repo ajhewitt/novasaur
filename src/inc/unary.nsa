@@ -2,10 +2,10 @@
 $NULL       0
 
 #FNF, FNH - default
-$IDEN       0 # A = A
-$INC        1 # A = A+1
-$DEC        2 # A = A-1
-$INC2       3 # A = A+2
+$IDEN       0 # A = A   *** DO NOT MOVE
+$INC        1 # A = A+1 *** DO NOT MOVE
+$INC2       2 # A = A+2 *** DO NOT MOVE
+$DEC        3 # A = A-1
 $1COM       4 # A = !A
 $2COM       5 # A = -A
 $LSR        6 # A>>1
@@ -21,7 +21,7 @@ $REVERSE   14 # reverse bits
 
 #FNE - HAL
 $XGA?       0 # mode-line>=11?: 0-10->-1,else->0
-$INCCYC     1 # cyc+1, ext=0
+$INCCYC     1 # cyc+1, ext=0 *** DO NOT MOVE
 $FORKJ      2 # feature fork (audio, rx, tx/kb)
 $FORKK      3 # keyboard fork
 $ML2ADJ     4 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
