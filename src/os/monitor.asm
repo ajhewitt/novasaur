@@ -48,18 +48,20 @@ COLD:   MVI     A,1
         CALL    PRNTM   ;PRINT SIGNON
 ;
 ; CONTINUATION OF COLD START
-; SET CTX: 1,4,1,5,1,6,1,7
+; SET CTX: 1,0,0,0,4,5,6,7
 ;
 START:  LXI     SP,STACK;RESET STACK
-        MVI     H,0
-CTX1:   MOV     A,H
-        RRC
-        JNC     CTX2
-        ANI     3
-        ORI     0F4H
-        JMP     CTX3
-CTX2:   MVI     A,0F1H
-CTX3:   DW      MVCTX
+        MVI     H, 0
+CTX1:   MOV     A, H
+        ANI     7
+        JZ      CTX2
+        CPI     4
+        JNC     CTX3
+        XRA     A
+        JMP     CTX4
+CTX2:   INR     A
+CTX3:   ORI     0F0H
+CTX4:   DW      MVCTX
         INR     H
         JNZ     CTX1
 ;
@@ -819,6 +821,14 @@ KERN:   MVI     A,1
         ;MOAR COMMANDS
         JMP     ERROR
 ;
+; WAIT FOR FULL CTX CYCLE
+;
+CTXSW:  MVI     C,8     ;WAIT 8 CYCLES
+WAIT8:  CALL    K_WAIT  ;HANDLE RETURN
+        DCR     C
+        JNZ     WAIT8
+        RET
+;
 ; GET DISK RECORD
 ; COPY TRACK/SEC TO MEM ADDR
 ;
@@ -827,7 +837,7 @@ KGET:   CALL    HHLDE   ;GET HL, COPY TO DE
         XCHG            ;DE=TRACK/SEC
         LXI     B,0102H ;SEQ 1, GET COMMAND
         CALL    K_CMD   ;HANDLE COMMAND
-        CALL    K_WAIT  ;HANDLE RETURN
+        CALL    CTXSW
         POP     D       ;RECOVER MEM ADDR
         DW      RECRECV ;SHM->DE
         RET
@@ -841,7 +851,7 @@ KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
         LXI     B,0203H ;SEQ 2, PUT COMMAND
         POP     D       ;RECOVER TRACK/SEC
         CALL    K_CMD   ;HANDLE COMMAND
-        CALL    K_WAIT  ;HANDLE RETURN
+        CALL    CTXSW
         RET
 ;
 ; FORMAT A: DRIVE
@@ -879,7 +889,7 @@ KFMT4:  MVI     A,1
         MVI     D,0     ;TRACK 0
         MOV     E,B     ;SECTOR SEQ
         CALL    K_CMD   ;HANDLE COMMAND
-        CALL    K_WAIT  ;HANDLE RETURN
+        CALL    CTXSW
         INR     B       ;SEQ++
         MOV     A,B
         CPI     10H     ;16 RECORDS?
