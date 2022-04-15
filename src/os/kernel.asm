@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; APR 12, 2022
+; APR 14, 2022
 ;
         .PROJECT        kernel.com
 ;
@@ -170,8 +170,9 @@ GETR:   POP     H
         MOV     L,M     ;L=DEST CPU
         LDA     SRCCPU
         MOV     H,A     ;H=SRC CPU
-        MOV     A,L
+        XRA     A       ;START SHM@0
         DW      RECXFER ;XFER RECORD
+        MOV     A,L     ;A=DEST CPU
         DW      SIGNAL  ;WAKE DEST CPU
         JMP     WAIT
 ;
@@ -183,7 +184,9 @@ PUT:    LDA     SRCCPU
         MOV     H,A     ;SRC CPU
         CALL    SECCPU  ;A=CPU#
         MOV     L,A     ;DEST CPU
+        XRA     A       ;START SHM@0
         DW      RECXFER ;XFER RECORD
+        MOV     A,L     ;A=DEST CPU
         JMP     SNDRET  ;SEND/SET HANDLER CMD
 ;
 ; TTY INPUT

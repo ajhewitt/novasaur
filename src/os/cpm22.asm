@@ -3892,11 +3892,19 @@ LISTST:	;RETURN LIST STATUS (0 IF NOT READY, 1 IF READY)
 	RET
 ;
 PUNCH:	;PUNCH	CHARACTER FROM	REGISTER C
+;start buffer at 80 or 96 etc. Start filling until full
+;or EOF is recieved. If EOF, reorder to partial fill
+;after send check index, if not all sent then reorder
+;and continue filling. Block if buffer full after send?
+;could return a status: 0=sent, 1=blocked
 	MOV	A, C		;CHARACTER TO REGISTER A
 	RET			;NULL SUBROUTINE
 ;
 ;
 READER:	;READER CHARACTER INTO REGISTER A FROM READER DEVICE
+;get buffer, copy to local area, scan local area until empty
+;request buffer. Block if buffer empty are receive?
+;could return EOF if blocked
 	MVI    A, 1AH		;ENTER END OF FILE FOR NOW (REPLACE LATER)
 	ANI    7FH		;REMEMBER TO STRIP PARITY BIT
 	RET
@@ -3989,6 +3997,7 @@ READA:	LDA     TRACK
         DW      CMDSND          ;CALL KERNEL
         LHLD    DMAAD
         XCHG
+        XRA     A               ;START SHM@0
         DW      RECRECV         ;SHM->DE
         XRA     A
 	RET
@@ -3996,6 +4005,7 @@ READA:	LDA     TRACK
 WRITE:	;PERFORM A WRITE OPERATION
         LHLD    DMAAD
         XCHG
+        XRA     A               ;START SHM@0
         DW      RECSEND         ;DE->SHM
         LDA     TRACK
         MOV     D, A

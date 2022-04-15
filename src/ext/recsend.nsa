@@ -6,11 +6,11 @@ PAGE RECSEND_PG
 
 #DREG: RAM page
 #EREG: RAM X index
-#TEMP: buffer index, init 0xFF
+#AREG: buffer index, init 0xFF
 # assume: Y = $VMS
 LD HL, $INC2$FORK3
 FNFH DZ, ND            # VMS+2
-LD Y, $TEMP
+LD Y, $AREG
 FNFH DZ, ND            # row = row+2
 #10/8
 LDN PC, $EXIT12        # exit at end of buffer
@@ -30,7 +30,7 @@ FNFH M, NA             # A = [Y,X]
 LD HL, $DEC$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-LDZ Y, $TEMP
+LDZ Y, $AREG
 #39/18
 FNH DZ, Y              # Y = row-1
 LD HL, $IDEN$NULL
@@ -47,7 +47,7 @@ FNH A, Y               # Y = D
 FNFH M, NA             # A = [Y,X]
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-LDZ Y, $TEMP
+LDZ Y, $AREG
 $70/42
 FNH DZ, Y              # Y = row
 FNH A, HLD             # A->[Y,X]
@@ -76,7 +76,7 @@ LD HL, $DEC$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
 #41/19
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNH DZ, Y              # Y = row-1
 LD HL, $IDEN$NULL
 FNH A, HLD             # A->[Y,X]
@@ -92,7 +92,7 @@ FNFH M, NA             # A = [Y,X]
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
 #70/42
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNH DZ, Y              # Y = row
 FNH A, HLD             # A->[Y,X]
 NOP
@@ -119,7 +119,7 @@ LD HL, $DEC$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
 #39/18
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNH DZ, Y              # Y = row-1
 LD HL, $IDEN$NULL
 FNH A, HLD             # A->[Y,X]
@@ -134,7 +134,7 @@ FNH DZ, Y              # Y = D
 FNFH M, NA             # A = [Y,X]
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-LDZ Y, $TEMP
+LDZ Y, $AREG
 $70/43
 FNH DZ, Y              # Y = row
 FNH A, HLD             # A->[Y,X]

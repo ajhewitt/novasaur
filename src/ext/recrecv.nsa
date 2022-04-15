@@ -6,11 +6,11 @@ PAGE RECRECV_PG
 
 #DREG: RAM page
 #EREG: RAM X index
-#TEMP: buffer index, init 0xFF
+#AREG: buffer index, init 0xFF
 # assume: Y = $VMS
 LD HL, $INC2$FORK3
 FNFH DZ, ND            # VMS+2
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNFH DZ, ND            # row = row+2
 #10/8
 LDN PC, $EXIT12        # exit at end of buffer
@@ -24,7 +24,7 @@ LD HL, $DEC$IDEN
 #20/3
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNH DZ, Y              # Y = row-1
 LD HL, $IDEN$DEC
 #31/12
@@ -42,7 +42,7 @@ FNH DZ, HLD            # D = D+1         *** inc D ***
 LD HL, $IDEN$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-LDZ Y, $TEMP
+LDZ Y, $AREG
 #61/36
 FNH DZ, Y              # Y = row
 FNFH D, NA             # A = [Y,X]
@@ -68,7 +68,7 @@ LD HL, $DEC$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
 #31/12
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNH DZ, Y              # Y = row-1
 LD HL, $IDEN$DEC
 FNFH D, NA             # A = [Y,X]
@@ -83,7 +83,7 @@ LD HL, $IDEN$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
 #59/34
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNH DZ, Y              # Y = row
 FNFH D, NA             # A = [Y,X]
 LD Y, $EREG
@@ -107,7 +107,7 @@ FNH DZ, HLD            # E+2
 LD HL, $DEC$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNH DZ, Y              # Y = row-1
 #31/12
 LD HL, $IDEN$DEC
@@ -122,7 +122,7 @@ LD HL, $IDEN$IDEN
 #50/27
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNH DZ, Y              # Y = row
 #59/34
 FNFH D, NA             # A = [Y,X]

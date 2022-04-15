@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.7'
 ;
-; APR 12, 2022
+; APR 14, 2022
 ;
         .PROJECT monitor.com
 ;
@@ -839,6 +839,7 @@ KGET:   CALL    HHLDE   ;GET HL, COPY TO DE
         CALL    K_CMD   ;HANDLE COMMAND
         CALL    CTXSW
         POP     D       ;RECOVER MEM ADDR
+        XRA     A       ;START SHM@0
         DW      RECRECV ;SHM->DE
         RET
 ;
@@ -847,6 +848,7 @@ KGET:   CALL    HHLDE   ;GET HL, COPY TO DE
 ;
 KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
         PUSH    H       ;SAVE TRACK/SEC
+        XRA     A       ;START SHM@0
         DW      RECSEND ;DE->SHM
         LXI     B,0203H ;SEQ 2, PUT COMMAND
         POP     D       ;RECOVER TRACK/SEC
@@ -881,6 +883,7 @@ KFMT3:  MVI     M,0E5H  ;SET ERA EVERY RECORD
         ORA     L       ;L=0?
         JNZ     KFMT2   ;LOOP IF NO
         XCHG            ;DE=0100
+        XRA     A       ;START SHM@0
         DW      RECSEND ;COPY RECORD (0100->SHM)
         MVI     B,0     ;SEQ=0
 KFMT4:  MVI     A,1

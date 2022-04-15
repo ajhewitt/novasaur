@@ -6,24 +6,24 @@ PAGE RECXFER_PG
 
 #HREG: SRC CTX
 #LREG: DST CTX
-#TEMP: buffer index, init 0xFF
+#AREG: buffer index, init 0xFF
 # assume: Y = $VMS
-LD HL, $INC$7
+LD HL, $INC$CTXCOL
 FNFH DZ, ND            # inc VMS
 LD Y, $HREG
-ANDL DZ, X             # X = H
+FNCL DZ, X             # X = H
 #10
-LDZ Y, $TEMP
+LDZ Y, $AREG
 FNH DZ, HLD            # row = row+1
 LDN PC, $EXIT16        # exit at end of buffer
 LD HL, $IDEN$NULL
 FNH A, Y               # Y = row
 FNH D, HLA             # A = [Y,X]
 #21
-LD HL, $IDEN$7
+LD HL, $IDEN$CTXCOL
 LDZ Y, $LREG
-ANDL DZ, X             # X = L
-LDZ Y, $TEMP
+FNCL DZ, X             # X = L
+LDZ Y, $AREG
 #30
 FNH DZ, Y              # Y = row
 FNH A, HLD             # A->[Y,X]

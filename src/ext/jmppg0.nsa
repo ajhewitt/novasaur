@@ -111,29 +111,29 @@ FNH AZ, HLD               # yield -> inst cache
 LD HL, $IDEN$NULL
 #40/5
 LDZ Y, $CTXIDX
-FNH DZ, HL                # HL = context index
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-$EXIT56
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-$EXIT64
-MVHL A, NA                # NOP
-$EXIT68
+FNFH DZ, NA               # A=context index
 LD Y, $TEMP
-#70/22
-MVHL AZ, ND               # HL -> temp
+FNH AZ, HLD               # A->temp
+#49/13
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+$EXIT57
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
+$EXIT65
+NOP
+MVHL A, NA                # NOP
+MVHL A, NA                # NOP
 LD HL, $IDEN$NULL
 LDZ Y, $INST
 FNH DZ, HL                # HL = inst cache
-#80/29
+#80/31
 LD Y, $VMS                # set Y = $VMS on exit
 DISHL DZ, PGA             # jump to next VMC
-#86/33
+#86/35
 
 #RECORD XFER - init HL to contexts, temp = -1
-ADDR 0xA2
+ADDR 0xA4
 LD HL, $KERN?$NULL
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
@@ -142,20 +142,15 @@ LDP HL, $RECXFER_INST     # XFER if kern
 LDN HL, $FETCH            # FETCH if not kern
 LD Y, $INST
 MVHL AZ, ND               # inst -> cache
-#49/13
-LD HL, $0xF0
-LD Y, $HREG
-ORHL DZ, ND               # H|F0 -> H
-LD Y, $LREG
-#59/21
-ORHL DZ, ND               # L|F0 -> L
-NOP
-LD HL, $0xFF
-LD PC, $EXIT68
-#68/28
+LDZ HL, $DEC$NULL
+#51/15
+LDZ Y, $AREG
+FNH DZ, HLD               # Acc-1
+LD PC, $EXIT57
+#57/20
 
 #RECORD SEND/RECV - init temp = -1
-ADDR 0xC0
+ADDR 0xB8
 LD Y, $INST
 FNH AZ, HLD               # record send/recv -> inst cache
 LD HL, $ZERO?$NULL
@@ -167,14 +162,14 @@ LDN HL, $IDEN$NULL
 LDZ Y, $DREG
 FNH DZ, HLD               # D-1 if E==0
 #51/15
+LD HL, $DEC$NULL
 LD Y, $EREG
-LDZ HL, $DEC$NULL
-FNH DZ, HLD               # E-1
+FNFH DZ, ND               # E-1
+LDZ Y, $AREG
+#60/23
+FNH DZ, HLD               # Acc-1
 NOP
-NOP
-NOP
-LD HL, $0xFF              # init temp to -1
-LD PC, $EXIT64
-#64/27
+LD PC, $EXIT65
+#65/27
 
-#ADDR 0xDC
+#ADDR 0xD4
