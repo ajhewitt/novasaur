@@ -3965,30 +3965,36 @@ READ:	;PERFORM READ OPERATION
         LDA	DISKNO
         CPI     1               ;B: DRIVE?
         JNZ     READA
-        LDA     SECTOR
-        ORA     A               ;SECTOR ZERO?
-        JNZ     CPBBF
-        MVI     D, BUFF>>8     ;SET BBUFF PAGE
         LDA     TRACK
-        ADD     A               ;A=TTTTTTT0
+        CPI     9
+        JZ      PADB            ;TRACK 1
+        JNC     READB           ;TRACK>1
+        INR     A               ;TRACK 0
+READB:  ADD     A               ;A=TTTTTTT0
         MOV     E, A            ;ROM PAGE
-        MVI     C, 1            ;2 PAGES
-        DW      CPROM           ;COPY ROM
         LDA     SECTOR          ;A=000000SS
-CPBBF   RAR                     ;A=0000000S C=S
+        ORA     A               ;SECTOR ZERO?
+        JNZ     BSEC            ;NO, BUFF READY
+        MVI     C, 1            ;2 PAGES
+        MVI     D, BUFF>>8      ;SET BUFF PAGE
+        DW      CPROM           ;COPY ROM
+BSEC:   RAR                     ;A=0000000S C=S
         RAR                     ;A=S0000000 C=S
         MOV     E, A
-        MVI     A, 0
-        ACI     BUFF>>8        ;SET BBUFF PAGE+C
+        MVI     A, 0            ;CLEAR A, PRESERVE C
+        ACI     BUFF>>8         ;SET BUFF PAGE+C
         MOV     D, A
         DCX     D
-        LHLD    DMAAD           ;SET DEST
+CPSEC:  LHLD    DMAAD           ;SET DEST
         DCX     H
         MVI     C, 128          ;128 BYTES
         DW      DMA             ;COPY RECORD
         XRA     A
         RET
-
+; TRACK 1 IS LAST EMPTY DIR RECORD OF TRACK 0
+PADB:   LXI     D, BUFF+17FH    ;SECTOR 3 -1
+        JMP     CPSEC
+; READ A: DRIVE
 READA:	LDA     TRACK
         MOV     D, A
         LDA     SECTOR

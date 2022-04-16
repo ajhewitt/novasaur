@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; APR 3, 2022
+; APR 16, 2022
 ;
         .PROJECT        boot.com
 ;
@@ -92,8 +92,8 @@ CTX1:   DW      MVCTX
 ;
 ; CP/M 2.2
 ;
-CPM:    LXI     DE, 0E458H;DEST/ROM PAGE
-        MVI     C, 23   ;24 PAGES
+CPM:    LXI     DE, 0E45CH;DEST/ROM PAGE
+        MVI     C, 27   ;28 PAGES
         DW      CPROM   ;COPY ROM
         JMP     0FA00H  ;BOOT CPM
 ;
