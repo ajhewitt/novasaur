@@ -67,19 +67,12 @@
 ;  Retries on disk errors
 ;  command line option to turn pacifiers off
 ;======================================================
-FALSE   equ     0
-TRUE    equ     -1
+
+        .PROJECT        xmodem.com
 
 ;*************************
 ; Program Option Switches
 ;*************************
-CSTRDR  equ     TRUE    ;FALSE: unmodified BIOS RDR
-                        ;driver. XMODEM will hang with-
-                        ;out timeout if no input from
-                        ;RDR. TRUE:modified RDR driver.
-                        ;XMODEM will timeout neatly if
-                        ;no input from RDR.
-
 ERRLIM  equ     10      ;Max # of error-retries 10
                         ;is standard.
 
@@ -98,14 +91,12 @@ SBUFSZ  equ     48      ;blocks per disk read/write
 BLKSIZ  equ     128     ;bytes per XMODEM block
         ;DO NOT CHANGE. BLKSIZ should be 128!
 
-PACIFY  equ     TRUE    ;true to print pacifiers
-
 ;Progress pacifiers printed on the console
 
 PACACK  equ     '+'     ;Received an ACK
 PACNAK  equ     '-'     ;Received a NAK
-PACBLK  equ     '+'     ;Received a good block
-PACRSD  equ     '-'     ;Requested a resend
+PACBLK  equ     'o'     ;Received a good block
+PACRSD  equ     'x'     ;Requested a resend
 
 ;**************
 ; CP/M Equates
@@ -298,10 +289,8 @@ TXBDON: mov     a,c             ;a=cksum or CRC 2nd byte
 ;---------------------------------------------------
 ;Ack received. Print pacifier, and go for next block
 ;---------------------------------------------------
-      IF PACIFY
         mvi     c,PACACK        ;pacifier on console
         call    TYPEC
-      ENDIF
         jmp     TXLOOP
 
 ;---------------------------------------------------
@@ -357,10 +346,8 @@ RXLOOP: call    GETBLK  ;Receive an XMODEM block
 ;Good block received. Print pacifier on console,
 ;then send ACK and loop back to get another block
 ;------------------------------------------------
-      IF PACIFY
         mvi     c,PACBLK        ;pacifier on console
         call    TYPEC
-      ENDIF
 
         call    TXACK           ;Send XMODEM ACK
 
@@ -426,15 +413,6 @@ RXRPT:  mvi     e,SOHTO*2       ;Timeout for SOH
         cpi     SOH             ;Did we get an SOH?
         jz      RXSOH           ;If so, get the block
 
-;-----------------------------------------------
-;Earlier versions of XMODEM sent some nulls here
-;We could just ignore them. (Not in this code)
-;-----------------------------------------------
-      IF FALSE
-        ora     a               ;Null?
-        jz      RXRPT           ;Yes: ignore it
-      ENDIF
-
 ;-------------------------------------
 ;Set carry and return if we get an EOT
 ;-------------------------------------
@@ -458,10 +436,8 @@ PURGE:  call    RXBYT1          ;Receive chr w/ timeout
 ;--------------------------------------------------
 RXSERR: call    CCTRLC          ;user abort?
 
-      IF PACIFY
         mvi     c,PACRSD        ;pacifier on console
         call    TYPEC
-      ENDIF
 
         lda     NAKCHR          ;current NAK chr
         call    TXBYTE
@@ -613,10 +589,8 @@ GETACK:
         cpi     NAK             ;NAK?
         jnz     ACKERR          ;NZ: bad byte received
 
-     IF PACIFY
         mvi     c,PACNAK        ;NAK pacifier
         call    TYPEC
-      ENDIF
 
         ora     a               ;NAK: Clear Z & C
         ret
@@ -905,51 +879,19 @@ RXBYT1: mvi     e,2
 ;   a = received byte if no timeout
 ;   trashes e
 ;******************************************************
-;* CUSTOMIZATION *
-;*****************
-; You can replace this call to GOBIOS with a call to
-; your subroutine that reads your hardware directly,
-; like this:
-;               call    MYRDR
-;
-;               ...
-;
-; MYRDR:        in      <my status port>
-;               ani     <my rx buffer-full bit mask>
-;               rz
-;
-;               in      <my data port>
-;               ret
-;
-; ...and then adjust the timer value loaded into hl so
-; that the loop is 1/2 second long. (Note that the code
-; detects the difference between an 8080 and a Z80,
-; and assumes an 8080 at 2 MHz, or a Z80 at 4 MHz.)
-;******************************************************
 RXBYTE: push    h
 
-; set HL for 1/2 second timeout for either a 2 MHz
-; 8080 or a 4MHz Z80
-MS500:  lxi     h,4274          ;1/2-sec count down
-        sub     a               ;test for 8080 or Z80
-        jpe     IS8080
-        dad     h               ;Z80 is twice as fast
-IS8080:
+MS500:  lxi     h,4             ;1/2 sec = 4*2 ticks
 
-RXWAIT: mvi     a,READER        ;(7)BIOS call
-        call    GOBIOS          ;(172+17=189)
+RXWAIT: mvi     a,READER        ;BIOS call
+        call    GOBIOS          ;take 2 ticks
+        stc                     ;set carry
+        jnz     RXDONE          ;not ready if Z set
 
-        stc                     ;(4)
-
- if CSTRDR
-        jnz     RXDONE          ;(10)
-
-        dcx     h               ;(5)timeout timer
-        mov     a,h             ;(5)Test for 16-bit 0
-        ora     l               ;(4)
-        jnz     RXWAIT          ;(10)
-                ;inner loop:234 cycles=117 uS for 8080
-                ;0.5 sec / 117 uS = 4273.5 cycles
+        dcx     h               ;timeout timer
+        mov     a,h             ;Test for 16-bit 0
+        ora     l
+        jnz     RXWAIT
 
         dcr     e
         jnz     MS500           ;spin for time
@@ -958,8 +900,6 @@ RXWAIT: mvi     a,READER        ;(7)BIOS call
 
         call    CCTRLC          ;user abort?
         ora     a               ;clear carry for exit
-
- endif
 
 ;-------------------------------------------
 ;Set carry for error, clear for ok & return
@@ -986,18 +926,6 @@ TXACK:  mvi     a,ACK
 ; On Exit:
 ;   Checksum in c has been updated
 ;   All registers preserved
-;******************************************************
-;* CUSTOMIZATION *
-;*****************
-; You can replace this call to GOBIOS with a direct
-; write to your hardware, like this:
-;
-; TXWAIT:       in      <my status port>
-;               ani     <my tx ready mask>
-;               jz      TXWAIT
-;
-;               mov     a,c
-;               out     <my data port>
 ;******************************************************
 TXBYTE: push    psw
         push    b
@@ -1080,41 +1008,42 @@ TYPEC:  mvi     a,CONOUT        ;BIOS WR Console func
 
 ; fall into GOBIOS
 
-;*****Subroutine***************************************
-; Go call a BIOS driver directly
-; On Entry:
-;   c=value for BIOS routine, if any
-;   a = BIOS call address offset
-; On Return:
-;   all other regs and flags as the BIOS code left them
-;   READER will take 172 8080 cycles if no chr ready
+;***Subroutine*****************************************
+;Go call a BIOS driver directly
+;On Entry:
+;  c=value for BIOS routine, if any
+;  a = BIOS call address offset
+;On Return:
+;  psw as BIOS left it
+;  all other regs preserved
 ;******************************************************
-GOBIOS: push    h               ;(11)
-        lhld    WBOOTA          ;(16)get BIOS base address
-        mov     l,a             ;(5)a has jump vector
-        xthl                    ;(18)
-        ret                     ;(10)go to BIOS routine
+GOBIOS: push    h
+        push    d
+        push    b
+        call    DOBIOS
+        pop     b
+        pop     d
+        pop     h
+        ret
 
-;Assume BIOS takes 112 cycles, when no READER chr is ready:
-;       jmp     <routine>       ;(10) BIOS jump vector
-;       call    <status>        ;(17) reader status routine
-
-;       lda     IOBYTE          ;(13) which reader port?
-;       ani     MASK            ;(7)
-;       jz      <not taken>     ;(10) not RDR=TTY
-;       cpi     <val>           ;(7)
-;       jc      <not taken>     ;(10) not RDR=HSR
-;       jz      <taken>         ;(10) RDR=UR1
-
-;       in      <port>          ;(10) get reader stat
-;       ani     <mask>          ;(7) test, set Z
-;       rz                      ;(11) return from BIOS
+;***Subroutine*****************************************
+;Go call a BIOS driver directly
+;On Entry:
+;  c=value for BIOS routine, if any
+;  a = BIOS call address offset
+;On Return:
+;  all regs as BIOS left them
+;******************************************************
+DOBIOS: lhld    WBOOTA          ;get BIOS base address
+        mov     l,a             ;a has jump vector
+        pchl                    ;'call' BIOS routine
 
 ;*****Subroutine***************************************
 ;Print $-terminated string at de
 ;trashes a,c
 ;******************************************************
 PRINTF: mvi     c,BPRINT
+
 ; fall into GOBDOS
 
 ;*****Subroutine***************************************
@@ -1633,12 +1562,6 @@ HLPEXT: call    CMSGXT          ;Exit w/ this message
  db ' error checking',CR,LF
  db '   (Transmit error-check mode is set by receiver)'
  db CR,LF
- db '   Input from RDR:, output to PUN:'
- db CR,LF
- if CSTRDR
- db '   Special BIOS RDR: returns with Z set if not'
- db ' ready'
- endif
  db CR,LF
  db '   Each + means good block, each - means block'
  db ' retry'

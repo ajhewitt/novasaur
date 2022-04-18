@@ -4,29 +4,30 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE SERSEND_PG
 
-# D = number of bytes in buffer
-# bytes read from [D-1] down to [0]
-# D=-1 on exit, else TX buffer full, D+1 bytes left
-# retry with D+1. If D==D on exit, not kernel
+# 127-D = number of bytes in buffer
+# bytes read from [D+1] up to [127]
+# D=128 on exit, else TX buffer full, 128-D bytes left
+# retry with D-1. If D==D on exit, not kernel
 # assume: Y = $VMS
 LD HL, $KERN?$NULL
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
 LDN PC, $EXIT8
-LD HL, $DEC$CTXCOL
+LD HL, $INC$CTXCOL
 LD Y, $AREG
 #11
 FNCL DZ, X                # X=CTX col
 LDZ Y, $DREG
-FNH DZ, HLD               # Dreg-1
-LDN PC, $EXIT20           # Exit if <0
-LD HL, $1COM$INC
+FNH DZ, HLD               # Dreg+1
+LDN PC, $EXIT20           # Exit if Dreg=128
+LD HL, $IDEN$NULL
 #21
-FNFL A, Y                 # Y=Dreg+1
-FNFH D, NA                # A=~[CTX,index]
+FNH A, Y                  # Y=Dreg
+FNFH D, NA                # A=[CTX,index]
 LD Y, $EREG
-FNFH AZ, ND               #~A->Ereg
-#32
+FNH AZ, HLD               # A->Ereg
+#30
+LD HL, $1COM$NULL
 LDZ Y, $TXWRIDX
 FNH DZ, HL                # HL=-tx write index
 LD Y, $TXRDIDX

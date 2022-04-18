@@ -86,7 +86,7 @@ CTX1:   DW      MVCTX
         INR     H
         JNZ     CTX1
         LXI     D, 0F002H;DEST/ROM PAGE
-        MVI     C, 13   ;14 PAGES
+        MVI     C, 15   ;16 PAGES
         DW      CPROM   ;COPY ROM
         JMP     0F800H  ;BOOT MONITOR
 ;
