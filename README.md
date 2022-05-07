@@ -21,6 +21,6 @@ The Novasaur is a full-featured personal computer built from less than three doz
 ## License Info
 
 [![License](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-- Copyright 2021 © Alastair Hewitt.
+- Copyright 2022 © Alastair Hewitt.
 
 The font files (TTF and FON remakes and enhancements) come from [_The Ultimate Oldschool PC Font Pack_](http://int10h.org/oldschool-pc-fonts/), copyright 2016 VileR, and licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
