@@ -563,7 +563,7 @@
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 597e1a93-f572-4337-ab0d-d7387026fc80)
     )
-    (fp_text value "On" (at 1.27 20.11) (layer "F.Fab")
+    (fp_text value "In" (at 1.27 20.11) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 9759ad16-ddc1-4e8a-bc93-f83048114bb5)
     )

@@ -2793,6 +2793,39 @@
     (uuid fc9722f3-a8c4-43b7-bff4-a6b3f85d97d3)
   )
 
+  (text "Register Rn can be written to via the monitor using command \"In\" \nand read from using \"On\", where n is the port number 1-7."
+    (at 160.02 45.72 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 100e51d4-db92-4333-b138-dd716677f6c5)
+  )
+  (text "I7" (at 129.54 148.59 0)
+    (effects (font (size 2.54 2.54)) (justify left bottom))
+    (uuid 6e284c63-9ea1-44d0-9ec4-1b285d75fbd7)
+  )
+  (text "Interrupts are available via J8. These need to be set high or low\nwhen in use (do not float)."
+    (at 160.02 60.96 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 775c6beb-53bb-4636-8bfb-b6991445b99a)
+  )
+  (text "Keypad is mapped to register 7 with matrix input as lower 4 bits\nof O7 and matrix out as upper 4 bits of I7. Bits 5 and 6 of O7\nmap to LEDs."
+    (at 160.02 54.61 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 7ad07bdc-dd89-447c-bbaf-af125fadb6c5)
+  )
+  (text "Register Rn will appear as input register In, where n is selected \nusing jumper J6, and as output register On where n is selected \nwith jumper J5."
+    (at 160.02 39.37 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid a63763be-aa12-4d32-a31b-08f8f13fc838)
+  )
+  (text "O7" (at 128.27 97.79 0)
+    (effects (font (size 2.54 2.54)) (justify left bottom))
+    (uuid acefb981-8e19-4968-95ce-47897ceece83)
+  )
+  (text "Rn" (at 128.27 46.99 0)
+    (effects (font (size 2.54 2.54)) (justify left bottom))
+    (uuid c47b134b-4a06-4b40-9015-d1abef925da5)
+  )
+
   (label "PD5" (at 114.3 101.6 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 0317ef75-b314-4c8a-8d2b-61e2350ed145)
@@ -3862,7 +3895,7 @@
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-00005f5d794d)
     (property "Reference" "J6" (id 0) (at 97.79 83.3882 0))
-    (property "Value" "On" (id 1) (at 97.79 85.6996 0))
+    (property "Value" "In" (id 1) (at 97.79 85.6996 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical" (id 2) (at 96.52 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -4109,7 +4142,7 @@
       (reference "J5") (unit 1) (value "On") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-00005f5d794d"
-      (reference "J6") (unit 1) (value "On") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical")
+      (reference "J6") (unit 1) (value "In") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-00005de27ae4"
       (reference "J7") (unit 1) (value "KEYPAD") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical")
