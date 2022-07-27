@@ -118,7 +118,7 @@ LD HL, $0
 LD PC, $EXIT58
 #58/10
 
-ADDR 0x80                 # PCL = 255, inc PCH
+ADDR 0x80                 # PCL = 0, inc PCH
 LDZ Y, $PCH
 FNH DZ, HLD               # PCH = PCH+1      *** inc PCH ***
 #21/3

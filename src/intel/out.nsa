@@ -116,7 +116,7 @@ FNH DZ, HLD
 LD PG, $FETCH1_PG         # cycle available, goto fetch
 #43
 
-ADDR 0x80                 # PCL = 255, inc PCH
+ADDR 0x80                 # PCL = 0, inc PCH
 LDZ Y, $PCH
 FNH DZ, HLD               # PCH = PCH+1      *** inc PCH ***
 #21/3

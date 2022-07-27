@@ -179,6 +179,7 @@ LDZ Y, $CONY
 #70/27
 FNH DZ, Y                 # Y = column
 FNH A, HLD                # A -> [Y,X]
+$EXIT74
 LD HL, $INC2$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+2
@@ -197,13 +198,5 @@ LD Y, $AREG
 #69/46
 MULH AZ, ND               # 0 -> Acc
 $EXIT72
-NOP
-$EXIT73
-NOP
-LD HL, $INC2$NULL
-LDZ Y, $VMS               # set Y = $VMS on exit
-FNH DZ, HLD               # VMS+2
-#80/55
-LD HL, $FETCH
-DISHL DZ, PGA             # jump to next VMC
-#86/59
+LD PC, $EXIT74
+#74/50
