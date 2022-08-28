@@ -6,7 +6,7 @@
 
   (title_block
     (title "Graphics Processing Unit")
-    (date "2022-03-14")
+    (date "2022-08-07")
     (rev "1.10")
     (comment 1 "(c) Solid State Machines 2022")
   )
@@ -4606,7 +4606,7 @@
     (property "Reference" "TP26" (id 0) (at 156.21 147.32 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "~VOE" (id 1) (at 156.21 147.32 0)
+    (property "Value" "~{VOE}" (id 1) (at 156.21 147.32 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
     (property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm" (id 2) (at 144.78 143.51 0)
@@ -5064,7 +5064,7 @@
     (pin "1" (uuid 86313e00-e179-4042-b547-8a6d6361d2b0))
   )
 
-  (symbol (lib_id "74xx:74LS86") (at 137.16 88.9 0) (unit 1)
+  (symbol (lib_id "74xx:74LS86") (at 137.16 88.9 0) (unit 3)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-00005f723456)
     (property "Reference" "U1" (id 0) (at 137.16 88.9 0))
@@ -5077,9 +5077,9 @@
     (property "Datasheet" "74xx/74ls86.pdf" (id 3) (at 137.16 88.9 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d89fc28a-4ed8-4796-adc5-08fea5c9f348))
-    (pin "2" (uuid df22c431-7d30-41bd-b1a2-d7cd85ac12ef))
-    (pin "3" (uuid 42caaf41-68d6-4fd6-a999-e9455e241ac0))
+    (pin "10" (uuid 7bcd7ab2-4b76-48c3-a5ee-d32473262a3d))
+    (pin "8" (uuid b52854e8-cf93-413f-a1ee-afcfa16fb2be))
+    (pin "9" (uuid d7e85945-bbbd-439c-bfdd-aee7f81c406b))
   )
 
   (symbol (lib_id "74xx:74LS11") (at 157.48 91.44 0) (unit 1)
@@ -5148,7 +5148,7 @@
     (pin "9" (uuid ad9cd185-93cd-4d1a-bc79-eb3cd44db75b))
   )
 
-  (symbol (lib_id "74xx:74LS11") (at 116.84 92.71 0) (unit 1)
+  (symbol (lib_id "74xx:74LS11") (at 116.84 92.71 0) (unit 3)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-00005fa63205)
     (property "Reference" "U3" (id 0) (at 116.84 92.71 0))
@@ -5161,10 +5161,10 @@
     (property "Datasheet" "http://www.ti.com/lit/gpn/sn74LS11" (id 3) (at 116.84 92.71 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 6ac8d744-2318-4787-8b77-a7c6e29c979d))
-    (pin "12" (uuid ded8b73b-08ab-4519-b244-6b6eb6e4bacc))
-    (pin "13" (uuid ba2e63f2-197e-4564-b58e-a808f302a36d))
-    (pin "2" (uuid fbfeb6ab-5941-4f28-810a-a56d9270e23e))
+    (pin "10" (uuid 46fb9ebc-48a1-43fb-b82f-c8a4945b5d70))
+    (pin "11" (uuid e05e05eb-3836-476f-a11a-aebc6024e210))
+    (pin "8" (uuid 544942af-4bc8-48f9-ade9-436e47b2d059))
+    (pin "9" (uuid c9baacc3-b2f6-4e5f-b8d8-5a61852cd88e))
   )
 
   (symbol (lib_id "Connector:TestPoint_Alt") (at 127 85.09 0) (unit 1)
