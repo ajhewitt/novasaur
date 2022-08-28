@@ -1,6 +1,6 @@
-; TITLE '8080 SYSTEM MONITOR, VER 0.7'
+; TITLE '8080 SYSTEM MONITOR, VER 0.8'
 ;
-; APR 14, 2022
+; AUG 28, 2022
 ;
         .PROJECT monitor.com
 ;
@@ -186,7 +186,7 @@ SIGNON: DB      CR,LF,
         DB      "            /o)",CR,LF
         DB      "   .^/\/\^.//",CR,LF
         DB      " _/NOVASAUR/    ",
-        DB      "8080 SYSMON v0.7",CR,LF
+        DB      "8080 SYSMON v0.8",CR,LF
         DB      "<__^|_|-|_|",LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
@@ -783,10 +783,11 @@ UPTIME: DW      013EDH  ;B=DAYS,C=HOURS
 ;
 ; QUIT - RUN KERNEL
 ;
-QUIT:   XRA     A
+QUIT:   MVI     A,1
+        STA     COMS    ;TURN COMS ON
+        OUT     RXEN    ;ENABLE RX
+        XRA     A
         STA     BREAK   ;RESET BREAK POINT
-        STA     COMS    ;TURN COMS OFF
-        OUT     RXEN    ;DISABLE RX
         JMP     KERNEL
 ;
 ; THESE MUST MATCH KERNEL!

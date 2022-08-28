@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; APR 16, 2022
+; AUG 28, 2022
 ;
         .PROJECT        boot.com
 ;
@@ -11,12 +11,12 @@ CMDSND	EQU	005DDH
 
         .ORG    0
 
-RST0:   ADI     TABLE
+RST0:   MOV     B, A    ;SAVE A in B
+        ADI     TABLE
         MOV     L, A    ;L=TABLE+CPU
         MVI     H, 0
         MOV     L, M    ;HL=BOOT VECTOR
         PCHL            ;JUMP TO VECTOR
-HALT:   HLT             ;HALT CPU0
 RST1:   MVI     C, 0
         DW      CMDSND  ;SEND NULL; YIELD
         JMP     RST1    ;WAIT FOREVER
@@ -95,6 +95,8 @@ CTX1:   DW      MVCTX
 CPM:    LXI     DE, 0E45CH;DEST/ROM PAGE
         MVI     C, 27   ;28 PAGES
         DW      CPROM   ;COPY ROM
+        MOV     A, B    ;A=IO BYTE
+        SBI     2       ;IO=CPU#-2
         JMP     0FA00H  ;BOOT CPM
 ;
 ; DISK QUADRANT
@@ -106,10 +108,10 @@ DISK:   LXI     DE, 0FF01H;DEST/ROM PAGE
 ;
 ; JUMP VECTOR TABLE
 ;
-TABLE:  DB      HALT
+TABLE:  DB      RST1
         DB      KERNEL
-        DB      CPM
-        DB      RST1
+        DB      CPM     ;CP/M TTY
+        DB      CPM     ;CP/M CRT
         DB      DISK
         DB      DISK
         DB      DISK

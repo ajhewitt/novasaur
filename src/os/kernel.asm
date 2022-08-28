@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; APR 14, 2022
+; AUG 28, 2022
 ;
         .PROJECT        kernel.com
 ;
@@ -190,22 +190,35 @@ PUT:    LDA     SRCCPU
         JMP     SNDRET  ;SEND/SET HANDLER CMD
 ;
 ; TTY INPUT
+; serial -> E
+;
+TTYI:   IN      SERIAL  ;CHAR IN
+        JMP     INPUT
+;
+; TTY OUT
+; E -> serial
+;
+TTYO:   MOV     A,E
+        OUT     SERIAL  ;CHAR OUT
+        JMP     OUTPUT
+;
+; CON INPUT
 ; console -> E
 ;
-TTYI:   IN      CONSOLE ;CHAR IN
-        CPI     BEL     ;BELL CHAR?
+CONI:   IN      CONSOLE ;CHAR IN
+INPUT:  CPI     BEL     ;BELL CHAR?
         CZ      BELON   ;BELL ON
         MOV     E,A     ;E=CHAR
         LDA     SRCCPU
         DW      IPCSND
         JMP     WAIT
 ;
-; TTY OUT
+; CON OUT
 ; E -> console
 ;
-TTYO:   MOV     A,E
+CONO:   MOV     A,E
         OUT     CONSOLE ;CHAR OUT
-        MOV     E,A     ;E=0 IF EOL
+OUTPUT: MOV     E,A     ;E=0 IF EOL
         LDA     SRCCPU
         DW      IPCSND
         JMP     WAIT
@@ -365,6 +378,8 @@ CMDS:   DW      WAIT    ;NULL
         DW      PUT     ;PUT RECORD
         DW      TTYI    ;TTY CHAR IN
         DW      TTYO    ;TTY CHAR OUT
+        DW      CONI    ;CON CHAR IN
+        DW      CONO    ;CON CHAR OUT
         DW      SEND    ;SERIAL SEND
         DW      RECV    ;SERIAL RECEIVE
         DW      SLEEP   ;SLEEP
