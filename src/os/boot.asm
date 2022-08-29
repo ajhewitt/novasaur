@@ -4,6 +4,19 @@
 ;
         .PROJECT        boot.com
 ;
+STACK   EQU     0E880H
+BREAK   EQU     STACK   ;KERNEL BREAK
+BOOTK   EQU     0F000H  ;BOOT KERNEL
+BOOTM   EQU     0F800H  ;BOOT MONITOR
+BOOTC   EQU     0FA00H  ;BOOT CP/M
+BOOTD   EQU     0FF00H  ;BOOT DISK
+;
+SDATA   EQU     8       ;SERIAL DATA
+CDATA   EQU     9       ;CONSOLE DATA
+RXEN    EQU     11      ;RX ENABLE
+CR      EQU     13      ;CARRIAGE RET
+LF      EQU     10      ;LINE FEED
+;
 CPROM   EQU     001EDH
 BOOTCPU EQU     002FDH
 MVCTX   EQU     004DDH
@@ -11,7 +24,7 @@ CMDSND	EQU	005DDH
 
         .ORG    0
 
-RST0:   MOV     B, A    ;SAVE A in B
+RST0:   MOV     C, A    ;SAVE A in C
         ADI     TABLE
         MOV     L, A    ;L=TABLE+CPU
         MVI     H, 0
@@ -70,46 +83,66 @@ RST7:   NOP
         NOP
         NOP
 ;
-; KERNEL
+; SIGNON MESSAGE
+;
+SIGNON: DB      CR,LF,
+        DB      "             _",CR,LF
+        DB      "            /o)",CR,LF
+        DB      "   .^/\/\^.//",CR,LF
+        DB      " _/NOVASAUR/",CR,LF,
+        DB      "<__^|_|-|_|",CR,LF,0
+;
+; BOOT ALL
 ; - BOOT OTHER CPUS
-; - SETUP CPU SEQ: 1,2,3,1,4,5,6,7
+; - CLEAR CTX SEQ
 ; - COPY KERNEL/MONITOR
 ;
-KERNEL: MVI     A, 2
-BOOT1:  DW      BOOTCPU
+BOOT:   MVI     A, 2
+BOOT1:  DW      BOOTCPU ;BOOT CPU
         INR     A
         CPI     8
         JNZ     BOOT1
+        
         XRA     A
         MOV     H, A
-CTX1:   DW      MVCTX
+CTX1:   DW      MVCTX   ;CLEAR CTX
         INR     H
         JNZ     CTX1
+        
+RESTART:MVI     A,1
+        OUT     RXEN    ;ENABLE RX
+        XRA     A
+        STA     BREAK   ;RESET BREAK POINT
+        
         LXI     D, 0F002H;DEST/ROM PAGE
         MVI     C, 15   ;16 PAGES
         DW      CPROM   ;COPY ROM
-        JMP     0F800H  ;BOOT MONITOR
+        
+        MOV     A, B    ;GET STATE
+        ORA     A       ;RESART TO MONITOR?
+        JZ      BOOTM   ;BOOT MONITOR
+        JMP     BOOTK   ;BOOT KERNEL
 ;
 ; CP/M 2.2
 ;
-CPM:    LXI     DE, 0E45CH;DEST/ROM PAGE
+CPM:    MOV     A, C    ;SAVE C IN A
+        LXI     DE, 0E45CH;DEST/ROM PAGE
         MVI     C, 27   ;28 PAGES
         DW      CPROM   ;COPY ROM
-        MOV     A, B    ;A=IO BYTE
-        SBI     2       ;IO=CPU#-2
-        JMP     0FA00H  ;BOOT CPM
+        ANI     1       ;IO=CPU#-2
+        JMP     BOOTC   ;BOOT CPM
 ;
 ; DISK QUADRANT
 ;
 DISK:   LXI     DE, 0FF01H;DEST/ROM PAGE
         MVI     C, 0    ;1 PAGE
         DW      CPROM   ;COPY ROM
-        JMP     0FF00H  ;BOOT DISK
+        JMP     BOOTD   ;BOOT DISK
 ;
 ; JUMP VECTOR TABLE
 ;
-TABLE:  DB      RST1
-        DB      KERNEL
+TABLE:  DB      BOOT
+        DB      RESTART
         DB      CPM     ;CP/M TTY
         DB      CPM     ;CP/M CRT
         DB      DISK

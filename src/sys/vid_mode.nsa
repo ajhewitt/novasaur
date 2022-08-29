@@ -26,10 +26,6 @@ LDN HL, $IDEN$NULL
 LDZ Y, $MODE
 FNH DZ, HLD               # MODE-1
 
-LD HL, $0
-LD Y, $RCODE
-MULH AZ, ND               # clear restart code
-
 LD HL, $SWAP$NULL
 LDZ Y, $VMS
 FNH DZ, HLD               # swap VMS

@@ -44,6 +44,8 @@ COLD:   MVI     A,1
         STA     COMS    ;TURN COMS ON
         OUT     RXEN    ;ENABLE RX
         LXI     SP,STACK
+        LXI     D,0x40
+        CALL    PRNTM   ;PRINT LOGO
         LXI     D,SIGNON
         CALL    PRNTM   ;PRINT SIGNON
 ;
@@ -182,12 +184,9 @@ TOGGLE: LDA     COMS    ;LOAD COMS
 ; SIGNON MESSAGE
 ;
 SIGNON: DB      CR,LF,
-        DB      "             _",CR,LF
-        DB      "            /o)",CR,LF
-        DB      "   .^/\/\^.//",CR,LF
-        DB      " _/NOVASAUR/    ",
-        DB      "8080 SYSMON v0.8",CR,LF
-        DB      "<__^|_|-|_|",LF,0
+        DB      "Novasaur 8080 SYSMON v0.8",CR,LF,
+        DB      "Copyright (c) 2022",CR,LF,
+        DB      "Solid State Machines",CR,LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
 ; INTO THE BUFFER. CARRIAGE RETURN ENDS

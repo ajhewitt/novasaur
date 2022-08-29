@@ -54,10 +54,28 @@ LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute->audio
 
+LD HL, $0x14              # -0x6C CTRL_ALT_HOME
+LD Y, $RCODE
+ADDHL DZ, NA
+LD HL, $ZERO?$NULL
+LD Y, $BREG
+FNH AZ, HLD               # Breg=0 if monitor
+
+LD HL, $IDEN$NULL
+LDZ Y, $RCODE
+FNH DZ, HLA
+LDP PC, $BOOT             # reboot?
+LD HL, $0xF               # -0x71 CTRL_ALT_DEL
+ADDHL DZ, NA
+LD HL, $ZERO?$NULL
+FNH A, HLA                # reboot?
+
 # Boot Kernel CPU
-LD HL, $1
+$BOOT
+LDP HL, $0
+LDN HL, $1
 LD Y, $AREG
-MVHL AZ, ND               # memory size -> Acc
+MVHL AZ, ND               # boot or restart -> Acc
 LD HL, $0xF1
 LD Y, $CTX0
 MVHL AZ, ND               # Kernel->Context 0
@@ -90,5 +108,9 @@ MVHL AZ, ND               # Bootstrap Kernal
 LD HL, $0x80
 LD Y, $VMS
 MVH DZ, ND                # Extended instruction
+
+LD HL, $0
+LD Y, $RCODE
+MULH AZ, ND               # clear restart code
 
 LD PG, $VID_START_PG      # start video

@@ -392,6 +392,8 @@ RETS:   DW      WAIT    ;N/A
         DW      GENR    ;GENERIC RET
         DW      WAIT
         DW      WAIT
+        DW      WAIT
+        DW      WAIT
         DW      GENT    ;GENERIC TIMER RET
         DW      GENT    ;GENERIC TIMER RET
         DW      GENT    ;GENERIC TIMER RET

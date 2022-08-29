@@ -596,7 +596,9 @@ end
 def ctrl_alt_page
   128.times.map do |code|
     case code
-    when 0x71 # del -> warm start
+    when 0x6C # home -> monitor
+      0x82
+    when 0x71 # del -> reboot
       0x82
     when 0x7D # pgup -> vid mode up
       0x88

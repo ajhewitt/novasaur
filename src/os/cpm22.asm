@@ -52,12 +52,12 @@ CBASE	JMP	COMMAND	;execute command processor (ccp).
 ;
 INBUFF	DB	127	;length of input buffer.
 	DB	0	;current length of contents.
-SIGNON:	DB	'Copyright'
+SIGNON:	DB      'Novasaur 64k CP/M vers 2.2',CR,LF,
+        DB	'Copyright'
 	DB	' 1979 (c) by Digital Research      '
 	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	DB	0,0,0,0,0,0,0,0,0,0
 INPOINT	DW	INBUFF+2;input line pointer
 NAMEPNT	DW	0	;input line pointer used for error message. Points to
 ;			;start of name in error.
@@ -3834,8 +3834,10 @@ BOOT:
 	LXI	H, BDOS		;BDOS ENTRY POINT
 	SHLD	6		;ADDRESS FIELD OF JUMP AT 5 TO BDOS
 	;
-	LXI	B,SIGNON
-	CALL	PLINE
+	LXI     B, 0x40
+	CALL	PLINE           ;PRINT LOGO
+	LXI	B, SIGNON
+	CALL	PLINE           ;PRINT COPYRIGHT
 WBOOT:
         LXI	SP, STACK	;SET MONITOR STACK
 ;
@@ -3858,7 +3860,7 @@ COMCMD: LDA	IOBYTE
         ANI     3
         LXI     B, 0304H
         RZ
-        LXI     B, 0306H
+        MVI     C, 06H
         RET
 ;
 CONST:	;CONSOLE STATUS, RETURN 0FFH IF CHARACTER READY, 00H IF NOT
