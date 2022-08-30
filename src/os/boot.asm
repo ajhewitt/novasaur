@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; AUG 28, 2022
+; AUG 29, 2022
 ;
         .PROJECT        boot.com
 ;
@@ -24,7 +24,7 @@ CMDSND	EQU	005DDH
 
         .ORG    0
 
-RST0:   MOV     C, A    ;SAVE A in C
+RST0:   MOV     B, A    ;SAVE A in B
         ADI     TABLE
         MOV     L, A    ;L=TABLE+CPU
         MVI     H, 0
@@ -109,7 +109,7 @@ CTX1:   DW      MVCTX   ;CLEAR CTX
         INR     H
         JNZ     CTX1
         
-RESTART:MVI     A,1
+        MVI     A,1
         OUT     RXEN    ;ENABLE RX
         XRA     A
         STA     BREAK   ;RESET BREAK POINT
@@ -117,18 +117,16 @@ RESTART:MVI     A,1
         LXI     D, 0F002H;DEST/ROM PAGE
         MVI     C, 15   ;16 PAGES
         DW      CPROM   ;COPY ROM
-        
-        MOV     A, B    ;GET STATE
-        ORA     A       ;RESART TO MONITOR?
-        JZ      BOOTM   ;BOOT MONITOR
         JMP     BOOTK   ;BOOT KERNEL
+;
+MONITOR:JMP     BOOTM   ;BOOT MONITOR
 ;
 ; CP/M 2.2
 ;
-CPM:    MOV     A, C    ;SAVE C IN A
-        LXI     DE, 0E45CH;DEST/ROM PAGE
+CPM:    LXI     DE, 0E45CH;DEST/ROM PAGE
         MVI     C, 27   ;28 PAGES
         DW      CPROM   ;COPY ROM
+        MOV     A, B    ;A=CPU#
         ANI     1       ;IO=CPU#-2
         JMP     BOOTC   ;BOOT CPM
 ;
@@ -142,7 +140,7 @@ DISK:   LXI     DE, 0FF01H;DEST/ROM PAGE
 ; JUMP VECTOR TABLE
 ;
 TABLE:  DB      BOOT
-        DB      RESTART
+        DB      MONITOR
         DB      CPM     ;CP/M TTY
         DB      CPM     ;CP/M CRT
         DB      DISK

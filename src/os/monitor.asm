@@ -43,6 +43,8 @@ MVCTX   EQU     04DDH
 COLD:   MVI     A,1
         STA     COMS    ;TURN COMS ON
         OUT     RXEN    ;ENABLE RX
+        XRA     A
+        STA     COMB	;CLEAR BLOCKING
         LXI     SP,STACK
         LXI     D,0x40
         CALL    PRNTM   ;PRINT LOGO

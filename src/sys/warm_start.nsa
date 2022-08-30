@@ -54,26 +54,14 @@ LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute->audio
 
+# Boot Kernel CPU
 LD HL, $0x14              # -0x6C CTRL_ALT_HOME
 LD Y, $RCODE
 ADDHL DZ, NA
 LD HL, $ZERO?$NULL
-LD Y, $BREG
-FNH AZ, HLD               # Breg=0 if monitor
-
-LD HL, $IDEN$NULL
-LDZ Y, $RCODE
-FNH DZ, HLA
-LDP PC, $BOOT             # reboot?
-LD HL, $0xF               # -0x71 CTRL_ALT_DEL
-ADDHL DZ, NA
-LD HL, $ZERO?$NULL
-FNH A, HLA                # reboot?
-
-# Boot Kernel CPU
-$BOOT
-LDP HL, $0
-LDN HL, $1
+FNH A, HLA
+LDP HL, $1
+LDN HL, $0
 LD Y, $AREG
 MVHL AZ, ND               # boot or restart -> Acc
 LD HL, $0xF1
