@@ -26,6 +26,10 @@ LDN HL, $IDEN$NULL
 LDZ Y, $MODE
 FNH DZ, HLD               # MODE-1
 
+LD HL, $0
+LD Y, $RCODE
+MULH AZ, ND               # clear restart code
+
 LD HL, $SWAP$NULL
 LDZ Y, $VMS
 FNH DZ, HLD               # swap VMS
@@ -100,4 +104,4 @@ LD HL, $1COM$NULL
 LD Y, $CONH
 FNH AZ, HLD               # -height-1 -> CON height
 
-LD PG, $WARM_START_PG     # warm start
+LD PG, $VID_START_PG      # vid start
