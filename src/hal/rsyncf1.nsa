@@ -164,7 +164,7 @@ LD Y, $RXRDIDX
 FNFL DZ, HL           # HL = -RxRdIndex
 ADDHL A, NA           # A = RxWrIndex - RxRdIndex
 #61/206
-LDN PC, $EXIT63
+LDP PC, $EXIT63
 LD HL, $0x10          # deassert RTS now
 LD Y, $EO
 ORHL DZ, ED           # 1 -> RTS
