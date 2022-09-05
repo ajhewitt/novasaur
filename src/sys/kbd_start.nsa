@@ -98,7 +98,7 @@ MULL A, S                 # kbdtx high
 LD HL, $DEC$NULL
 LDZ Y, $TEMP
 FNH DZ, HLD               # TEMP-1->TEMP
-LDN PC, $FAIL             # fail if no more retries
+LDN PC, $TIMEOUT          # timeout if no more retries
 LD HL, $0x36              # loop 54
 LD Y, $TMPH
 MVHL AZ, ND               # 54->TMPH
@@ -130,5 +130,5 @@ ORHL DZ, ND               # set MSB of kbd status
 MULL A, V                 # reset V, preset H reg
 MULL A, S                 # kbdtx high
 
-$FAIL
+$TIMEOUT
 LD PG, $WARM_START_PG

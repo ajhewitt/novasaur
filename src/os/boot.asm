@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; AUG 29, 2022
+; SEPT 4, 2022
 ;
         .PROJECT        boot.com
 ;
@@ -109,14 +109,14 @@ CTX1:   DW      MVCTX   ;CLEAR CTX
         INR     H
         JNZ     CTX1
         
+        LXI     D, 0F002H;DEST/ROM PAGE
+        MVI     C, 15   ;16 PAGES
+        DW      CPROM   ;COPY ROM
+        
         MVI     A,1
         OUT     RXEN    ;ENABLE RX
         XRA     A
         STA     BREAK   ;RESET BREAK POINT
-        
-        LXI     D, 0F002H;DEST/ROM PAGE
-        MVI     C, 15   ;16 PAGES
-        DW      CPROM   ;COPY ROM
         JMP     BOOTK   ;BOOT KERNEL
 ;
 MONITOR:JMP     BOOTM   ;BOOT MONITOR

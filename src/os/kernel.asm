@@ -1,23 +1,24 @@
 ; TITLE: 'KERNEL'
 ;
-; AUG 28, 2022
+; SEPT 4, 2022
 ;
         .PROJECT        kernel.com
 ;
 STACK   EQU     0E880H
+HANDPG  EQU     STACK>>8;HANDLER TABLE E9->EF
 BREAK   EQU     STACK
 ;
 SRCCPU  EQU     BREAK+1
-CSTAT   EQU     SRCCPU+1
-LASTT0  EQU     CSTAT+1
-TTOP    EQU     LASTT0+1
+LASTT0  EQU     SRCCPU+1
+TTOP    EQU     LASTT0+2
 BELC    EQU     TTOP+2
-HANDPG  EQU     STACK>>8;HANDLER TABLE E9->EF
 TBASE   EQU     STACK+20H
 ;
 BEL     EQU     7
 SERIAL  EQU     8
 CONSOLE EQU     9
+CR      EQU     13      ;CARRIAGE RET
+LF      EQU     10      ;LINE FEED
 AMODE   EQU     0AH
 TIME0   EQU     3CH
 ;
@@ -33,20 +34,26 @@ DMA     EQU     0FDDH   ;DMA
 ;
         .ORG    0F000H
 ;
-; MAIN EVENT LOOP
-; SCAN MSG BOXES - EXIT IF MSG RECEIVED
+; INIT KERNEL
 ;
-
         LXI     SP,STACK
         LXI     H,TBASE
         SHLD    TTOP    ;TIMER TOP=TIMER START
         XRA     A
         STA     BELC    ;BEL COUNT=0
-        LDA     SRCCPU
+;
+; WAKE ANY SLEEPING CPUS TO RESYNC WITH KERNEL
+;
+WAKE:   INR     A       ;A+1
+        ANI     7       ;A==8?
+        JZ      CTX     ;DONE; SET CTX
+        DW      SIGNAL  ;WAKE DEST CPU
+        ORA     A       ;A==0?
+        JNZ     WAKE    ;NEXT CPU
 ;
 ; SET CTX: 1,2,3,4,1,2,3,5,1,2,3,6,1,2,3,7
 ;
-        MVI     H, 0
+CTX:    MVI     H, 0
 CTX1:   MOV     A, H
         INR     A
         ANI     3
@@ -60,6 +67,9 @@ CTX2:   ORI     0F0H
         DW      MVCTX
         INR     H
         JNZ     CTX1
+;
+; MAIN EVENT LOOP
+; SCAN MSG BOXES - EXIT IF MSG RECEIVED
 ;
 START:  LDA     BREAK
         ORA     A       ;CHECK BREAK (A!=0)
@@ -75,7 +85,7 @@ WAIT:   DW	YIELD   ;WAIT UNTIL CTX SW
 SCAN:   INR     A       ;A+1
         ANI     7       ;A==8?
         STA     SRCCPU  ;SAVE CURRENT CPU
-        JZ      START   ;NO MSGS; LOOP
+        JZ      START   ;DONE; RESTART
         DW      IPCRCV  ;RX MSG
         ORA     A       ;A==0?
         JNZ     SCAN    ;NEXT CPU
@@ -83,7 +93,7 @@ SCAN:   INR     A       ;A+1
 ; MSG HANDLER
 ;
 K_CMD:  MOV	A,C	;A=CMD
-        CPI	9       ;LIMIT CMD<9
+        CPI	0BH     ;LIMIT CMD<11
         JNC     WAIT    ;SKIP HIGH CMD
         CPI     1       ;CHECK RETURN
         JC      WAIT    ;NULL CMD
@@ -193,20 +203,20 @@ PUT:    LDA     SRCCPU
 ; serial -> E
 ;
 TTYI:   IN      SERIAL  ;CHAR IN
-        JMP     INPUT
+        JMP     RETIN
 ;
 ; TTY OUT
 ; E -> serial
 ;
 TTYO:   MOV     A,E
         OUT     SERIAL  ;CHAR OUT
-        JMP     OUTPUT
+        JMP     RETOUT
 ;
 ; CON INPUT
 ; console -> E
 ;
 CONI:   IN      CONSOLE ;CHAR IN
-INPUT:  CPI     BEL     ;BELL CHAR?
+RETIN:  CPI     BEL     ;BELL CHAR?
         CZ      BELON   ;BELL ON
         MOV     E,A     ;E=CHAR
         LDA     SRCCPU
@@ -217,9 +227,18 @@ INPUT:  CPI     BEL     ;BELL CHAR?
 ; E -> console
 ;
 CONO:   MOV     A,E
+        ORA     A
+        JZ      RETOUT  ;SKIP IF NULL
         OUT     CONSOLE ;CHAR OUT
-OUTPUT: MOV     E,A     ;E=0 IF EOL
-        LDA     SRCCPU
+        ORA     A
+        JNZ     RETOUT  ;RETURN UNLESS EOL
+        MVI     A, CR
+        OUT     CONSOLE ;CR OUT
+        MVI     A, LF
+        OUT     CONSOLE ;LF OUT
+        MOV     A,E
+        OUT     CONSOLE
+RETOUT: LDA     SRCCPU
         DW      IPCSND
         JMP     WAIT
 ;
@@ -351,10 +370,10 @@ BELON:  LXI     H, BELC
         DW      NOTE1
         DW      GON1
         XRA     A
-        MVI     E, 2    ;GATE ON FOR 2 TICKS
+        MVI     E, 2    ;GATE OFF AFTER 2 TICKS
         LXI     B, BELOFF
         CALL    TADD
-        MVI     E, 8    ;AUDIO ON FOR 8 TICKS
+        MVI     E, 12   ;AUDIO OFF AFTER 12 TICKS
         LXI     B, AUDOFF
         CALL    TADD
         MVI     A, BEL  ;RETURN BEL
