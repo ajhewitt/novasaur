@@ -43,8 +43,8 @@ $CONB          0xAD # console backspace stop
 $CONC          0xAE # console cursor char
 $CONF          0xAF # console font
 $VSTART        0xB0 # start of video display
-$MODE          0xB1 # video mode to set
-#SPARE         0xB2 (1)
+$VMODE         0xB1 # video mode to set
+$ICH           0xB2 # idle cycle count high byte
 $KTO           0xB3 # max kbd idle count
 $KSRDIDX       0xB4
 $KSWRIDX       0xB5
@@ -94,12 +94,11 @@ $CTX0          0xDE # current context
 $CTX1          0xDF # next context
 $EO            0xE0 # Eo register value
 $VMS           0xE1 # virtual machine state
-$VMODE         0xE2 # video mode (used with mode line in VMS)
+$MODE          0xE2 # video mode (used with mode line in VMS)
 $BMODE         0xE3 # VID col used for block
 $VLINE         0xE4 # video memory line
-#$RCODE         0xE5 # restart scan code
-$ICL           0xE6 # idle cycle count low byte
-$ICH           0xE7 # idle cycle count high byte
+$ICL           0xE5 # idle cycle count low byte
+#SPARE         0xB6-7 (2)
 $CMDL          0xE8 # kernel IPC - command low
 $CMDH          0xE9 # kernel IPC - command high
 $MSEQ          0xEA # kernel IPC - message sequence

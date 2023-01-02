@@ -1,4 +1,4 @@
-# DMA - xfer C bytes DE->HL, one byte per 2-cycle, fetch when done
+# DMA - xfer C bytes [DE]->[HL], one byte per 2-cycle, fetch when done
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

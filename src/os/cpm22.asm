@@ -3823,6 +3823,11 @@ DPBLC:	;DISK PARAMETER BLOCK, COMMON TO ALL DISKS
 BOOT:
 	STA	IOBYTE		;ASSUME A CONTAINS IO BYTE ON BOOT
 	XRA     A
+	STA     RXSIZE          ;CLEAR RX VARS
+	STA     RXIDX
+	STA     TXSIZE
+	STA     BUFFRD
+	STA     BUFFWR
 	STA	DISKNO		;SELECT DISK ZERO
 	;
 	MVI	A, 0C3H		;C3 IS A JMP INSTRUCTION
@@ -3901,23 +3906,72 @@ LISTST:	;RETURN LIST STATUS (0 IF NOT READY, 1 IF READY)
 	XRA	A	 	;0 IS ALWAYS OK TO RETURN
 	RET
 ;
-PUNCH:	;PUNCH	CHARACTER FROM	REGISTER C
-;start buffer at 80 or 96 etc. Start filling until full
-;or EOF is recieved. If EOF, reorder to partial fill
-;after send check index, if not all sent then reorder
-;and continue filling. Block if buffer full after send?
-;could return a status: 0=sent, 1=blocked
-	MOV	A, C		;CHARACTER TO REGISTER A
-	RET			;NULL SUBROUTINE
+PUNCH:	;PUNCH CHARACTER FROM REGISTER C
+        ;SEND IF SIZE>A, RETURN A=SIZE
+;  0 1 2 3 4 5 6 7 .. 255
+; [][][][][][][][][..][] BUFF
+; x x WR        RD x  x (2-7=-5)
+;     RD  x x x WR      (7-2=5)
+
+        LXI     H, BUFFWR
+        MOV     B, M
+        INR     M               ;WR+1
+        MVI     H, BUFF>>8
+        MOV     L, B            ;HL=[BUFFWR]
+        MOV     M, C            ;C->[BUFFWR]
+        LXI     H, TXSIZE
+        INR     M               ;SIZE+1
+        JM      SENDER          ;SEND IF SIZE>-128
+        SUB     M               ;A-SIZE
+        MOV     A, M            ;A=SIZE
+        RNC                     ;SEND IF SIZE>=A
+SENDER: LXI     H, BUFFRD
+        MVI     D, BUFF>>8
+        MOV     E, M            ;DE=[BUFFRD]
+        LDA     BUFFWR
+        SUB     M               ;A=BUFFWR-BUFFRD
+        JNC     DELTA1          ;JUMP IF RD<WR
+        XRA     A               ;A=0
+        SUB     M               ;A=-BUFFWR
+DELTA1: JP      DELTA2          ;A<128
+        MVI     A, 080H
+DELTA2: CMA
+        ADI     081H            ;START=128-A
+        MOV     B, A
+        DW      RECSEND         ;DE->SHM
+        MOV     D, B
+        LXI     B, 0108H        ;SEQ 1, SERIAL TX
+        DW      CMDSND          ;CALL KERNEL
+        LDA     BUFFRD
+        ADD     E               ;RD+BYTES SENT
+        STA     BUFFRD
+        LDA     TXSIZE
+        SUB     E               ;SIZE-BYTES SENT
+        STA     TXSIZE
+	RET			;RETURN Z-FLAG BUFF EMPTY
 ;
 ;
 READER:	;READER CHARACTER INTO REGISTER A FROM READER DEVICE
-;get buffer, copy to local area, scan local area until empty
-;request buffer. Block if buffer empty are receive?
-;could return EOF if blocked
-	MVI    A, 1AH		;ENTER END OF FILE FOR NOW (REPLACE LATER)
-	ANI    7FH		;REMEMBER TO STRIP PARITY BIT
-	RET
+; read from context buffer until rxidx=0 the get serial
+; Z set if no character is available, otherwise return
+; with the received byte in A and Z cleared.
+        LXI     H, RXSIZE
+        DCR     M               ;SIZE-1
+        LXI     H, RXIDX
+        JM      RXSER           ;BUFFER EMPTY, GET SERIAL
+        MOV     D, M            ;D=INDEX
+        DW      BUFFRD
+        MOV     A, E            ;A=BYTE
+        INR     M               ;INDEX+1 (CLEAR Z-FLAG)
+        RET                     ;RETURN BYTE
+RXSER:  MVI     M, 0            ;INDEX=0
+        LXI     B, 0209H        ;SEQ 2, SERIAL RX
+        DW      CMDSND          ;CALL KERNEL
+        MOV     A, D            ;A=BUFFER SIZE
+        STA     RXSIZE
+        CPI     0               ;BUFFER EMPTY?
+        RZ                      ;RETURN Z-FLAG SET
+        JMP     READER          ;RECALL READER
 ;
 ;
 ;	I/O DRIVERS FOR THE DISK FOLLOW
@@ -4042,7 +4096,11 @@ SECTOR:	DS	2		;TWO BYTES FOR EXPANSION
 DMAAD:	DS	2		;DIRECT MEMORY ADDRESS
 DISKNO:	DS	1		;DISK NUMBER 0-15
 CSTAT:	DS	1		;CONSOLE STATUS
-BUFIDX:	DS	1		;TX/RX BUFFER INDEX
+RXSIZE:	DS	1		;RX SHM BUFF SIZE
+RXIDX:	DS	1		;RX SHM BUFF INDEX
+TXSIZE:	DS	1		;TX SHM BUFF SIZE
+BUFFRD:	DS	1		;BUFF READ INDEX
+BUFFWR:	DS	1		;BUFF WRITE INDEX
 ;
 ;	SCRATCH RAM AREA FOR BDOS USE
 BEGDAT	EQU	$	 	;BEGINNING OF DATA AREA

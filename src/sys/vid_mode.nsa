@@ -13,8 +13,8 @@ LD HL, $ZERO?$NULL
 FNH A, HLA                # page up?
 LDP HL, $INC$NULL
 LDN HL, $IDEN$NULL
-LDZ Y, $MODE
-FNH DZ, HLD               # MODE+1
+LDZ Y, $VMODE
+FNH DZ, HLD               # VMODE+1
 
 LD HL, $6                 # -0x7A
 LD Y, $RCODE
@@ -23,8 +23,8 @@ LD HL, $ZERO?$NULL
 FNH A, HLA                # page down?
 LDP HL, $DEC$NULL
 LDN HL, $IDEN$NULL
-LDZ Y, $MODE
-FNH DZ, HLD               # MODE-1
+LDZ Y, $VMODE
+FNH DZ, HLD               # VMODE-1
 
 LD HL, $0
 LD Y, $RCODE
@@ -35,20 +35,20 @@ LDZ Y, $VMS
 FNH DZ, HLD               # swap VMS
 
 LD HL, $0x40
-LD Y, $MODE
-MULH DZ, NA               # A = MODE<<2
+LD Y, $VMODE
+MULH DZ, NA               # A = VMODE<<2
 LD HL, $IDEN$NULL
 LD Y, $INDEX
 FNH AZ, HLD               # mode index->temp
 
 LD HL, $VATTR$NULL
-FNCH A, NA                # A = MODES
+FNCH A, NA                # A = VMODES
 LD HL, $IDEN$NULL
-LDZ Y, $VMODE
+LDZ Y, $MODE
 FNH AZ, HLD               # set video mode
 
 LD HL, $SWAP$NULL
-FNH A, HLA                # H = MODEL
+FNH A, HLA                # H = VMODEL
 LD Y, $VMS
 MVH DZ, NA                # H -> VMSL
 LD HL, $SWAP$NULL

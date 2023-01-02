@@ -42,11 +42,11 @@ LD HL, $INC$NULL
 LDZ Y, $BLOCK
 FNH DZ, HLD               # A,block = block+1
 LD HL, $IDEN$NULL
-LDZ Y, $VMODE
-FNH DZ, HL                # H = vmode
+LDZ Y, $MODE
+FNH DZ, HL                # H = mode
 #61
 LD Y, $BMODE
-VIDH AZ, ND               # VID(vmode,block) -> block mode
+VIDH AZ, ND               # VID(mode,block) -> block mode
 LDP PC, $NEXT_FIELD       # jump if block mode zero?
 LD HL, $DEC$NULL
 LDZ Y, $CBLOCK
@@ -67,11 +67,11 @@ $NEXT_FIELD               #68 - next field, cycle=1
 LD HL, $IDEN$NULL
 LD Y, $BLOCK
 MULH DZ, ND               # 0 -> A,block
-LDZ Y, $VMODE
-FNH DZ, HL                # H = vmode
+LDZ Y, $MODE
+FNH DZ, HL                # H = mode
 LD Y, $BMODE
 #81
-VIDH AZ, ND               # VID(vmode,block) -> block mode
+VIDH AZ, ND               # VID(mode,block) -> block mode
 LD HL, $IDEN$NULL
 LD Y, $VSTART
 FNFH DZ, NA               # A = vertical start

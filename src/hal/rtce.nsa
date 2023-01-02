@@ -6,7 +6,7 @@ PAGE RTCE_PG
 
 # assume cycle=1
 LD HL, $IDEN$NULL         #120
-LDZ Y, $VMODE
+LDZ Y, $MODE
 FNH DZ, HLA               # A = 00xx,01xx,10xx,11xx
 LDP HL, $LSL$NULL
 LDN HL, $LSR$NULL
@@ -15,7 +15,7 @@ FNH A, HLA                # A = 0xxx,1xxx,010x,011x
 LDP HL, $0xFC             # -4
 LDN HL, $0xFB             # -5
 LD Y, $FRAME
-MVHL AZ, ND               # vmode==01xx?-5:-4 -> Frame count
+MVHL AZ, ND               # mode==01xx?-5:-4 -> Frame count
 #140
 LD HL, $INC$NULL
 LDZ Y, $TIME0

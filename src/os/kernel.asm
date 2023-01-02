@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; SEPT 4, 2022
+; JAN 1, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -9,8 +9,10 @@ HANDPG  EQU     STACK>>8;HANDLER TABLE E9->EF
 BREAK   EQU     STACK
 ;
 SRCCPU  EQU     BREAK+1
-LASTT0  EQU     SRCCPU+1
-TTOP    EQU     LASTT0+2
+LASTT0  EQU     SRCCPU+1;LAST VAL OF TIME0
+TICKS   EQU     LASTT0+1;NUMBER OF TICKS (16/15)
+IDLPK   EQU     TICKS+1 ;IDLE PER KILO
+TTOP    EQU     IDLPK+1
 BELC    EQU     TTOP+2
 TBASE   EQU     STACK+20H
 ;
@@ -19,8 +21,10 @@ SERIAL  EQU     8
 CONSOLE EQU     9
 CR      EQU     13      ;CARRIAGE RET
 LF      EQU     10      ;LINE FEED
-AMODE   EQU     0AH
-TIME0   EQU     3CH
+AMODE   EQU     0AH     ;AUDIO MODE
+VMODE   EQU     31H     ;VIDEO MODE
+ICH     EQU     32H     ;IDLE COUNTER HIGH
+TIME0   EQU     3CH     ;15 TICKS PER SEC
 ;
 MVCTX   EQU     04DDH
 YIELD	EQU	06EDH   ;MASTER: YIELD UNTIL CTX SW
@@ -41,6 +45,8 @@ DMA     EQU     0FDDH   ;DMA
         SHLD    TTOP    ;TIMER TOP=TIMER START
         XRA     A
         STA     BELC    ;BEL COUNT=0
+        INR     A
+        STA     TICKS   ;TICKS=1
 ;
 ; WAKE ANY SLEEPING CPUS TO RESYNC WITH KERNEL
 ;
@@ -91,6 +97,10 @@ SCAN:   INR     A       ;A+1
         JNZ     SCAN    ;NEXT CPU
 ;
 ; MSG HANDLER
+; MAP COMMAND TO CODE LOCATION
+; WAIT IF C=0 (NULL) OR C>10
+; USE RETURN HANDLERS IF C=1
+; ELSE EXECUTE COMMAND
 ;
 K_CMD:  MOV	A,C	;A=CMD
         CPI	0BH     ;LIMIT CMD<11
@@ -99,14 +109,14 @@ K_CMD:  MOV	A,C	;A=CMD
         JC      WAIT    ;NULL CMD
         JZ      CMD1    ;HANDLE RET
         LXI	H,CMDS
-	JMP     CMD3
+	JMP     CMD3    ;HANDLE COMMAND
 CMD1:   LDA     SRCCPU  ;GET CURRENT CPU
 CMD2:   CALL    HANDHL  ;HL=HANDLER
         MOV     A,M     ;A=CMD
         MVI     M,0     ;CLEAR COMMAND
         INX     H
-        PUSH    H
-        LXI	H,RETS
+        PUSH    H       ;SAVE HL, POP IN RETURN HANDLER
+        LXI	H,RETS  ;HANDLE RETURN
 CMD3:   PUSH    D       ;SAVE DE
 	ADD	A	;A*=2
 	MOV	E,A	;OFFSET
@@ -243,15 +253,21 @@ RETOUT: LDA     SRCCPU
         JMP     WAIT
 ;
 ; SERIAL SEND
-; CTX A buffer->serial buffer, D=count
-; D==-1 all sent, D>=incomplete
+; CTX A buffer->serial buffer, D=index
+; D==128 all sent, D<128 is incomplete
+; E==number of bytes sent
 ;
 SEND:   LDA     SRCCPU
+        MOV     E, D
+        DCR     D
         DW      SERSEND
+        MOV     A, D
+        SUB     E
+        MOV     E, D
         JMP     SERRET  ;SET SERIAL RETURN
 ;
 ; SERIAL RECEIVE
-; serial buffer->CTX A buffer, D=count
+; serial buffer->CTX A buffer, D=index
 ; no data if D==0
 ;
 RECV:   LDA     SRCCPU
@@ -268,17 +284,35 @@ SERRET: PUSH    D
         JMP     SETRET  ;SET RETURN HANDLER
 ;
 ; SLEEP E=TICKS 15=1s
+; RETURN D=IDLE PER KILO
 ;
 SLEEP:  LDA     SRCCPU
         CALL    TADD    ;ADD RETURN TIMER
+        LXI     H, IDLPK
+        MOV     D, M
         JMP     SETRET  ;SET RETURN HANDLER
 ;
 ; TICK - SCAN TIMER HEAP
 ; [COUNT|CPU|BC]
 ; TIMED OUT AT COUNT ZERO
 ;
-TICK:   STA     LASTT0  ;SAVE T0
-        LXI     H,TBASE
+TICK:   MOV     M,A     ;SAVE T0
+        LXI     H,TICKS
+        DCR     M       ;TICK COUNT-1
+        JNZ     TICK0   ;SKIP UNTIL ZERO
+        MVI     M,22    ;START AT 22
+        IN      VMODE   ;A=VIDEO MODE
+        ANA     A
+        JZ      CLRICH  ;VGA 22/15=147cps
+        DCR     M
+        CPI     7
+        JC      CLRICH  ;SVGA 21/15=140cps
+        DCR     M       ;XGA 20/15=133cps
+CLRICH: IN      ICH     ;GET IDLE COUNT HIGH
+        STA     IDLPK   ;SAVE IDLE PER KILO
+        XRA     A
+        OUT     ICH     ;RESET IDLE COUNT HIGH
+TICK0:  LXI     H,TBASE
         PUSH    H
 TICKR:  POP     H
 TICK1:  XCHG            ;SAVE HL, DE=CURT
@@ -302,13 +336,13 @@ TFIRE:  PUSH    H       ;SAVE CURT
         INX     H
         MOV     A, M    ;A=CPU
         INX     H
-        MOV     C, M    ;E=LSB
+        MOV     C, M    ;C=LSB
         INX     H
-        MOV     B, M    ;D=MSB
+        MOV     B, M    ;B=MSB
         PUSH    B       ;PUSH CALL ADDR
         ORA     A       ;A==0?
         JZ      TICK3
-        CALL    CMD2
+        CALL    CMD2    ;A=CPU USE RETURN HANDLER
         POP     B       ;REMOVE CALL ADDR
 TICK3:  LXI     B, -4
         DAD     B       ;HL=CURT-1
@@ -320,10 +354,11 @@ TICK3:  LXI     B, -4
         XCHG
         MVI     C, 4
         DW      DMA     ;COPY TOP TIMER TO CUR
-        RET             ;CALL ADDR
+        RET             ;CALL ADDR OR RETURN
 ;
 ; TIMER ADD
-; A=CPU, BC=CALL ADDR or SEQ/CMD, E=COUNT
+; A=CPU, BC=SEQ/CMD, E=COUNT
+; IF A=0, BC=CALL ADDR
 ; (heap_top)=[COUNT|CPU|BC]
 ;
 TADD:   LHLD    TTOP
@@ -347,7 +382,7 @@ GENT:   POP     H
         MOV     E,M
         INX     H
         MOV     D,M     ;LOAD DE
-        DW      SIGNAL  ;WAKE DEST CPU
+        DW      IPCSND  ;WAKE DEST CPU
         RET             ;RETURN TO TICK
 ;
 VOICE1	EQU	21DDH
@@ -369,7 +404,7 @@ BELON:  LXI     H, BELC
         MVI     A, 43H  ;MIDI NOTE G
         DW      NOTE1
         DW      GON1
-        XRA     A
+        XRA     A       ;A=0 SO INTERNAL (BC=CALL ADDR)
         MVI     E, 2    ;GATE OFF AFTER 2 TICKS
         LXI     B, BELOFF
         CALL    TADD

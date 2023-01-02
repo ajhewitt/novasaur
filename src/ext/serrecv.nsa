@@ -1,4 +1,4 @@
-# Serial to Buffer - A=CTX, D=index, E=last byte
+# Serial to Buffer - A=CTX, D=index
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -32,14 +32,14 @@ LD HL, $IDEN$DEC
 FNFL A, Y                 # Y=read index-1
 #39
 FNFH D, NA                # A=char
-LD Y, $EREG
-FNH AZ, HLD               # A -> Ereg
+LD Y, $TEMP
+FNH AZ, HLD               # A -> temp
 LD HL, $IDEN$CTXCOL
 LD Y, $AREG
 #50
 FNCL DZ, X                # X=CTX col
-LD Y, $EREG
-FNFH DZ, NA               # A=Ereg
+LD Y, $TEMP
+FNFH DZ, NA               # A=temp
 LDZ Y, $DREG
 #60
 FNH DZ, Y                 # Y=index

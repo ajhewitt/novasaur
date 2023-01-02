@@ -1,4 +1,4 @@
-# Buffer to Serial - A=CTX, D=index, E=last byte
+# Buffer to Serial - A=CTX, D=index
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
@@ -24,8 +24,8 @@ LD HL, $IDEN$NULL
 #21
 FNH A, Y                  # Y=Dreg
 FNFH D, NA                # A=[CTX,index]
-LD Y, $EREG
-FNH AZ, HLD               # A->Ereg
+LD Y, $TEMP
+FNH AZ, HLD               # A->temp
 #30
 LD HL, $1COM$NULL
 LDZ Y, $TXWRIDX
@@ -38,8 +38,8 @@ LD HL, $TXBUFF
 MVHL A, XA
 LD HL, $IDEN$NULL
 #51
-LD Y, $EREG
-FNFH DZ, NA               # A=Ereg
+LD Y, $TEMP
+FNFH DZ, NA               # A=temp
 LDZ Y, $TXWRIDX
 FNH DZ, Y                 # Y=wr index
 #60
@@ -47,7 +47,7 @@ FNH A, HLD                # A->tx wr buff
 LD HL, $INC$NULL
 LDZ Y, $TXWRIDX
 FNH DZ, HLD               # wr index+1
-LD HL, $0x20              # 0x20 or $IDEN2$NULL
+LD HL, $0x20              # 0x20 aka $INC2$NULL
 #70
 LD Y, $TMODE
 ORHL DZ, ND               # enable -> tx mode
