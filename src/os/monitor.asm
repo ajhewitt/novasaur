@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.8'
 ;
-; SEPT 3, 2022
+; JAN 2, 2023
 ;
         .PROJECT monitor.com
 ;
@@ -764,9 +764,11 @@ UPTIME: DW      013EDH  ;B=DAYS,C=HOURS
         DW      010EDH  ;BC=BCD A
         PUSH    B
         MOV     A,B     ;A=DAYS 100's
-        ADI     30H     ;COVERT TO ASCII
+        ANA     A       ;A==0?
+        JZ      UPTIME1
+        ADI     '0'     ;COVERT TO ASCII
         CALL    OUTT
-        POP     B
+UPTIME1:POP     B
         CALL    OUTHX   ;OUT DAYS 10s,1s
         MVI     A,' '
         CALL    OUTT
@@ -794,8 +796,8 @@ QUIT:   MVI     A,1
 ;
 SRCCPU  EQU     STACK+1
 KERNEL  EQU     0F000H
-K_WAIT  EQU     KERNEL+3FH
-K_CMD   EQU     KERNEL+53H
+K_WAIT  EQU     KERNEL+43H
+K_CMD   EQU     KERNEL+57H
 ;
 ; EXTENDED INSTRUCTIONS
 ;

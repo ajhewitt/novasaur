@@ -1,4 +1,4 @@
-# AND immediate with accumulator (with fetch)
+# AND immediate with accumulator
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
