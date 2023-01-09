@@ -15,7 +15,7 @@ LD Y, $LREG
 ADDHL DZ, ND          # L-C -> L
 AFHL A, NA            # A = flags
 #20/14
-LD HL, $SWCARRY$FORK2
+LD HL, $SWCARRY$FORK1
 LD Y, $TEMP
 FNDH AZ, ND           # A swapped -> temp
 LDP PC, $NO_BO29
@@ -49,40 +49,6 @@ NOP
 #70/59
 LD PC, $EXIT72
 #71/61
-
-ADDR 0x40             # H = 255, borrow from L-C
-LD HL, $1COM$NULL
-LDZ Y, $BREG
-FNH DZ, HL            # HL = -B-1
-LD Y, $HREG
-#41
-ADDHL DZ, ND          # H-B -> H
-AFHL A, NA            # A = flags
-LD HL, $SWCARRY$NULL
-#51
-LD Y, $FREG
-FNDH AZ, ND           # A swapped -> flags
-LD HL, $0x40
-LD Y, $TEMP
-#60
-MULH DZ, NA           # A sign = initial zero
-LDP HL, $0xDF
-LDN HL, $0xFF
-LDZ Y, $FREG
-ANDHL DZ, ND          # flags&intial zero -> flags
-#72
-$EXIT72
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-LD HL, $FETCH
-#80
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
-#86
 
 ADDR 0x80             # H = 0, borrow from L-C, with borrow
 LD HL, $1COM$NULL
@@ -134,6 +100,7 @@ LDN HL, $0xFF
 LDZ Y, $FREG
 ANDHL DZ, ND          # flags&intial zero -> flags
 #72
+$EXIT72
 NOP
 NOP
 NOP

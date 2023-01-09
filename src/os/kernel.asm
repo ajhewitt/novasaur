@@ -1,20 +1,25 @@
 ; TITLE: 'KERNEL'
 ;
-; JAN 1, 2023
+; JAN 8, 2022
 ;
         .PROJECT        kernel.com
 ;
-STACK   EQU     0E880H
-HANDPG  EQU     STACK>>8;HANDLER TABLE E9->EF
-BREAK   EQU     STACK
+STACK   EQU     0E700H
+BASEPG  EQU     0E8H    ;PERF PAGE:E8, HANDLER TABLE:E9->EF
 ;
-SRCCPU  EQU     BREAK+1
-LASTT0  EQU     SRCCPU+1;LAST VAL OF TIME0
-TICKS   EQU     LASTT0+1;NUMBER OF TICKS (16/15)
-IDLPK   EQU     TICKS+1 ;IDLE PER KILO
-TTOP    EQU     IDLPK+1
-BELC    EQU     TTOP+2
-TBASE   EQU     STACK+20H
+BREAK   EQU     STACK
+SRCCPU  EQU     STACK+1
+LASTT0  EQU     STACK+10H;LAST VAL OF TIME0
+LASTCI  EQU     STACK+11H;LAST CONTEXT INDEX
+TICKL   EQU     STACK+12H;TICK COUNT LOW (20 or 22)
+TICKH   EQU     STACK+13H;TICK COUNT HIGH (4)
+IDLEC   EQU     STACK+14H;IDLE COUNT
+PERFI   EQU     STACK+15H;PERF RECORD INDEX
+BLKC    EQU     STACK+16H;KERNEL BLOCK COUNT
+RUNC    EQU     STACK+18H;KERNEL RUN COUNT
+TTOP    EQU     STACK+1AH;ADDR HEAP TOP
+BELC    EQU     STACK+1CH;BEL COUNT
+TBASE   EQU     STACK+20H;TIMER HEAP
 ;
 BEL     EQU     7
 SERIAL  EQU     8
@@ -24,8 +29,11 @@ LF      EQU     10      ;LINE FEED
 AMODE   EQU     0AH     ;AUDIO MODE
 VMODE   EQU     31H     ;VIDEO MODE
 ICH     EQU     32H     ;IDLE COUNTER HIGH
+CBLOCK  EQU     38H     ;CTX BLOCK COUNT
+CTXIDX  EQU     39H     ;CTX INDEX
 TIME0   EQU     3CH     ;15 TICKS PER SEC
 ;
+DSUB    EQU     8       ;HIDDEN 8085 DSUB
 MVCTX   EQU     04DDH
 YIELD	EQU	06EDH   ;MASTER: YIELD UNTIL CTX SW
 SIGNAL  EQU     07DDH   ;MASTER: SIGNAL SLAVE
@@ -44,9 +52,12 @@ DMA     EQU     0FDDH   ;DMA
         LXI     H,TBASE
         SHLD    TTOP    ;TIMER TOP=TIMER START
         XRA     A
+        STA     SRCCPU
+        STA     PERFI
         STA     BELC    ;BEL COUNT=0
         INR     A
-        STA     TICKS   ;TICKS=1
+        STA     TICKL   ;TICKL=1
+        STA     TICKH   ;TICKH=1
 ;
 ; WAKE ANY SLEEPING CPUS TO RESYNC WITH KERNEL
 ;
@@ -77,7 +88,7 @@ CTX2:   ORI     0F0H
 ; MAIN EVENT LOOP
 ; SCAN MSG BOXES - EXIT IF MSG RECEIVED
 ;
-START:  LDA     BREAK
+START:  LDA     BREAK   ;MONITOR BREAK POINT
         ORA     A       ;CHECK BREAK (A!=0)
         RNZ             ;RETURN ON BREAK
 ;
@@ -85,6 +96,19 @@ START:  LDA     BREAK
         IN      TIME0   ;A=T0
         CMP     M       ;T0==LAST T0?
         CNZ     TICK    ;T0 CHANGED
+;
+        LXI     H,RUNC  ;COUNT RUN
+        INR     M       ;ADD RUN
+        JNZ     ADDKB   ;OVERFLOW?
+        INX     H       ;RUNC MSB
+        INR     M       ;OVERFLOW
+ADDKB:  LXI     H,BLKC  ;COUNT KERNEL BLOCKS
+        IN      CBLOCK  ;GET CTX BLOCK COUNT
+        ADI     75      ;ADJUST COUNT DOWN
+        SUB     M       ;SUBTRACT BLOCKS
+        JNC     WAIT    ;WAIT IF NO BORROW
+        INX     H       ;BLKC MSB
+        DCR     M       ;BORROW
 ;
 WAIT:   DW	YIELD   ;WAIT UNTIL CTX SW
         LDA     SRCCPU
@@ -132,7 +156,7 @@ CMD3:   PUSH    D       ;SAVE DE
 ; RETURN HANDLER POINTER
 ; IN HL FROM SEQ B & CPU# IN A
 ;
-HANDHL: ADI     HANDPG  ;A=HANDPG+CPU
+HANDHL: ADI     BASEPG  ;A=BASEPG+CPU#
         MOV     H,A     ;H=CPU PAGE
         MOV     A,B     ;A=SEQ
         ADD	A	;A*=2
@@ -288,7 +312,7 @@ SERRET: PUSH    D
 ;
 SLEEP:  LDA     SRCCPU
         CALL    TADD    ;ADD RETURN TIMER
-        LXI     H, IDLPK
+        LXI     H, IDLEC
         MOV     D, M
         JMP     SETRET  ;SET RETURN HANDLER
 ;
@@ -297,21 +321,61 @@ SLEEP:  LDA     SRCCPU
 ; TIMED OUT AT COUNT ZERO
 ;
 TICK:   MOV     M,A     ;SAVE T0
-        LXI     H,TICKS
+        LXI     H,TICKL
         DCR     M       ;TICK COUNT-1
         JNZ     TICK0   ;SKIP UNTIL ZERO
-        MVI     M,22    ;START AT 22
+        
         IN      VMODE   ;A=VIDEO MODE
         ANA     A
-        JZ      CLRICH  ;VGA 22/15=147cps
-        DCR     M
-        CPI     7
-        JC      CLRICH  ;SVGA 21/15=140cps
-        DCR     M       ;XGA 20/15=133cps
-CLRICH: IN      ICH     ;GET IDLE COUNT HIGH
-        STA     IDLPK   ;SAVE IDLE PER KILO
+        JZ      TICK8   ;VGA
+        MVI     M,20    ;SET TICK LOW
+        JMP     TICK9
+TICK8:  MVI     M,22    ;SET TICK LOW
+TICK9:  IN      ICH     ;GET IDLE COUNT HIGH
+        RAR             ;ICH/2
+        LXI     H,IDLEC
+        ADD     M       ;ICLPK+ICH/2
+        MOV     M,A
         XRA     A
         OUT     ICH     ;RESET IDLE COUNT HIGH
+
+        LXI     H,TICKH
+        DCR     M       ;TICK COUNT-1
+        JNZ     TICK0   ;SKIP UNTIL ZERO
+        MVI     M,4     ;SET TICK HIGH
+        
+        LXI     H,PERFI
+        INR     M       ;INC PERF INDEX
+        MOV     A,M     ;A=INDEX
+        ANI     07FH    ;CLEAR MSB
+        MOV     L,A
+        MVI     H,BASEPG
+        PUSH    H       ;PUSH PERF ADDR
+        LDA     IDLEC   ;LOAD IDLE COUNT
+        MOV     M,A     ;STORE IDLE COUNT
+        XRA     A
+        STA     IDLEC   ;CLEAR IDLE COUNT
+        LXI     H,BLKC
+        MOV     C,M
+        INX     H
+        MOV     B,M     ;BC=BLOCK COUNT
+        LHLD    RUNC    ;HL=RUN COUNT
+        CALL    DIVIDE  ;A=BLOCK/RUN COUNT
+        POP     H
+        LXI     B,80H
+        DAD     B       ;PERF ADDR + 80
+        MOV     M,A     ;STORE LOAD AVG
+        
+        IN      VMODE   ;A=VIDEO MODE
+        ANA     A
+        JZ      TICK6   ;VGA
+        LXI     H,4*20*640
+        JMP     TICK7
+TICK6:  LXI     H,4*22*700
+TICK7:  SHLD    BLKC    ;SET BLOCK COUNT
+        LXI     H,0
+        SHLD    RUNC    ;RESET RUN COUNT
+
 TICK0:  LXI     H,TBASE
         PUSH    H
 TICKR:  POP     H
@@ -423,6 +487,46 @@ AUDOFF: LXI     H, BELC
         XRA     A
         OUT     AMODE   ;AUDIO OFF
         RET
+;
+; DIVIDE A=BC/HL
+; http://techref.massmind.org/techref/method/math/muldiv.htm
+;
+DIVIDE: mov     a,h
+        ora     l
+        rz              ;division by zero; abort operation
+        mov	a,b	;put 2's complement of BC +1 into DE for
+	cma		;purposes of subtraction. (BC will be
+	mov	d,a	;incremented to enable subtraction when minuend
+	mov	a,c	;and subtrahend are having equal values).
+	cma
+	mov	e,a	;dividend in negative form now in DE
+	inx	b	;BC +1; dividend incremented
+        xra	a	;reset counter A and
+	jmp	double	;start the division in earnest
+;
+;*********************** First phase: Doubling the divisor
+;
+restore:dad	b	;add back
+double: inr	a	;increment counter
+        push	h	;save divisor
+        dad	h	;double it, but go to second phase if
+        jc	change	;HL now is larger than dividend in B
+	dad	d	;comparison with dividend by subtraction
+	jnc	restore	;keep doubling unless HL now is larger than BC
+;
+;*********************** Second phase: Subtracting from the dividend
+;                                      and accumulating quotient bits.
+change: mov	b,a	;transfer count to new counter
+        xra     a       ;clear the quotient buffer
+subtrct:pop	h	;Fetch halved divisor as positive subtrahend
+	dad	d	;subtract by using negative dividend as minuend
+	jc	shiftc	;the carry bit becomes the quotient bit
+	xchg		;equivalent of adding back if subtraction fails
+shiftc:	cmc		;invert quotient bit from reverse polarity
+	ral             ;shift quotient bits
+	dcr	b	;count-down finished?
+	jnz	subtrct	;no, continue process
+	ret
 ;
 ; COMMAND JUMP VECTOR TABLE
 ;
