@@ -117,8 +117,8 @@ LD PG, $RTCE_PG
 #120
 
 $CTX_SWITCH               #75 Y=$CBLOCK
-LD HL, $74
-MVHL AZ, ND               # 74 -> CBLOCK
+LD HL, $99
+MVHL AZ, ND               # 99 -> CBLOCK
 #81
 LD HL, $CTX_SEQ
 MVHL A, XA                # X = CTX sequence col

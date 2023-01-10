@@ -101,7 +101,7 @@ WAIT:   LXI     H,RUNC  ;2.25 COUNT RUN
         INR     M       ;2.25 OVERFLOW [7.75-10]
 ADDKB:  LXI     H,BLKC  ;2.25 COUNT KERNEL BLOCKS
         IN      CBLOCK  ;2.25 GET CTX BLOCK COUNT
-        SUI     75      ;2.25 74 -> -1 => -1 -> -75
+        SUI     100     ;2.25 99 -> 0 => -1 -> -100
         ADD     M       ;2 ADD NEGATIVE BLOCKS
         MOV     M,A     ;2.25 UPDATE COUNT
         JC      K_WAIT  ;3.25 CARRY IF NO BORROW
@@ -344,13 +344,13 @@ TICK:   MOV     M,A     ;SAVE T0
         MOV     M,A     ;STORE LOAD AVG
 ;
         IN      VMODE   ;A=VIDEO MODE
-        ANA     A
+        ANI     7
         JZ      VGA
         MVI     A,30
-        LXI     H,30*640
+        LXI     H,30*630
         JMP     SVGA
 VGA:    MVI     A,26
-        LXI     H,26*700
+        LXI     H,26*690
 SVGA:   STA     TICKC   ;SET TICK COUNT
         SHLD    BLKC    ;SET BLOCK COUNT
         LXI     H,0
