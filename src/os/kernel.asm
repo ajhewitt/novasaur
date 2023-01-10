@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; JAN 8, 2022
+; JAN 10, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -11,14 +11,12 @@ BREAK   EQU     STACK
 SRCCPU  EQU     STACK+1
 LASTT0  EQU     STACK+10H;LAST VAL OF TIME0
 LASTCI  EQU     STACK+11H;LAST CONTEXT INDEX
-TICKL   EQU     STACK+12H;TICK COUNT LOW (20 or 22)
-TICKH   EQU     STACK+13H;TICK COUNT HIGH (4)
-IDLEC   EQU     STACK+14H;IDLE COUNT
-PERFI   EQU     STACK+15H;PERF RECORD INDEX
-BLKC    EQU     STACK+16H;KERNEL BLOCK COUNT
-RUNC    EQU     STACK+18H;KERNEL RUN COUNT
-TTOP    EQU     STACK+1AH;ADDR HEAP TOP
-BELC    EQU     STACK+1CH;BEL COUNT
+TICKC   EQU     STACK+12H;TICK COUNT (52 or 62)
+PERFI   EQU     STACK+13H;PERF RECORD INDEX
+BLKC    EQU     STACK+14H;KERNEL BLOCK COUNT
+RUNC    EQU     STACK+16H;KERNEL RUN COUNT
+TTOP    EQU     STACK+18H;ADDR HEAP TOP
+BELC    EQU     STACK+1AH;BEL COUNT
 TBASE   EQU     STACK+20H;TIMER HEAP
 ;
 BEL     EQU     7
@@ -56,8 +54,7 @@ DMA     EQU     0FDDH   ;DMA
         STA     PERFI
         STA     BELC    ;BEL COUNT=0
         INR     A
-        STA     TICKL   ;TICKL=1
-        STA     TICKH   ;TICKH=1
+        STA     TICKC   ;TICK COUNT=1
 ;
 ; WAKE ANY SLEEPING CPUS TO RESYNC WITH KERNEL
 ;
@@ -97,20 +94,21 @@ START:  LDA     BREAK   ;MONITOR BREAK POINT
         CMP     M       ;T0==LAST T0?
         CNZ     TICK    ;T0 CHANGED
 ;
-        LXI     H,RUNC  ;COUNT RUN
-        INR     M       ;ADD RUN
-        JNZ     ADDKB   ;OVERFLOW?
-        INX     H       ;RUNC MSB
-        INR     M       ;OVERFLOW
-ADDKB:  LXI     H,BLKC  ;COUNT KERNEL BLOCKS
-        IN      CBLOCK  ;GET CTX BLOCK COUNT
-        ADI     75      ;ADJUST COUNT DOWN
-        SUB     M       ;SUBTRACT BLOCKS
-        JNC     WAIT    ;WAIT IF NO BORROW
-        INX     H       ;BLKC MSB
-        DCR     M       ;BORROW
+WAIT:   LXI     H,RUNC  ;2.25 COUNT RUN
+        INR     M       ;2.25 ADD RUN
+        JNZ     ADDKB   ;3.25 OVERFLOW?
+        INX     H       ;0 RUNC MSB
+        INR     M       ;2.25 OVERFLOW [7.75-10]
+ADDKB:  LXI     H,BLKC  ;2.25 COUNT KERNEL BLOCKS
+        IN      CBLOCK  ;2.25 GET CTX BLOCK COUNT
+        SUI     75      ;2.25 74 -> -1 => -1 -> -75
+        ADD     M       ;2 ADD NEGATIVE BLOCKS
+        MOV     M,A     ;2.25 UPDATE COUNT
+        JC      K_WAIT  ;3.25 CARRY IF NO BORROW
+        INX     H       ;0 BLKC MSB
+        DCR     M       ;2.25 BORROW [14.25-16.5]
 ;
-WAIT:   DW	YIELD   ;WAIT UNTIL CTX SW
+K_WAIT: DW	YIELD   ;WAIT UNTIL CTX SW
         LDA     SRCCPU
 SCAN:   INR     A       ;A+1
         ANI     7       ;A==8?
@@ -312,8 +310,6 @@ SERRET: PUSH    D
 ;
 SLEEP:  LDA     SRCCPU
         CALL    TADD    ;ADD RETURN TIMER
-        LXI     H, IDLEC
-        MOV     D, M
         JMP     SETRET  ;SET RETURN HANDLER
 ;
 ; TICK - SCAN TIMER HEAP
@@ -321,29 +317,10 @@ SLEEP:  LDA     SRCCPU
 ; TIMED OUT AT COUNT ZERO
 ;
 TICK:   MOV     M,A     ;SAVE T0
-        LXI     H,TICKL
+        LXI     H,TICKC
         DCR     M       ;TICK COUNT-1
         JNZ     TICK0   ;SKIP UNTIL ZERO
-        
-        IN      VMODE   ;A=VIDEO MODE
-        ANA     A
-        JZ      TICK8   ;VGA
-        MVI     M,20    ;SET TICK LOW
-        JMP     TICK9
-TICK8:  MVI     M,22    ;SET TICK LOW
-TICK9:  IN      ICH     ;GET IDLE COUNT HIGH
-        RAR             ;ICH/2
-        LXI     H,IDLEC
-        ADD     M       ;ICLPK+ICH/2
-        MOV     M,A
-        XRA     A
-        OUT     ICH     ;RESET IDLE COUNT HIGH
-
-        LXI     H,TICKH
-        DCR     M       ;TICK COUNT-1
-        JNZ     TICK0   ;SKIP UNTIL ZERO
-        MVI     M,4     ;SET TICK HIGH
-        
+;
         LXI     H,PERFI
         INR     M       ;INC PERF INDEX
         MOV     A,M     ;A=INDEX
@@ -351,10 +328,10 @@ TICK9:  IN      ICH     ;GET IDLE COUNT HIGH
         MOV     L,A
         MVI     H,BASEPG
         PUSH    H       ;PUSH PERF ADDR
-        LDA     IDLEC   ;LOAD IDLE COUNT
+        IN      ICH
         MOV     M,A     ;STORE IDLE COUNT
         XRA     A
-        STA     IDLEC   ;CLEAR IDLE COUNT
+        OUT     ICH     ;CLEAR IDLE COUNT
         LXI     H,BLKC
         MOV     C,M
         INX     H
@@ -365,17 +342,20 @@ TICK9:  IN      ICH     ;GET IDLE COUNT HIGH
         LXI     B,80H
         DAD     B       ;PERF ADDR + 80
         MOV     M,A     ;STORE LOAD AVG
-        
+;
         IN      VMODE   ;A=VIDEO MODE
         ANA     A
-        JZ      TICK6   ;VGA
-        LXI     H,4*20*640
-        JMP     TICK7
-TICK6:  LXI     H,4*22*700
-TICK7:  SHLD    BLKC    ;SET BLOCK COUNT
+        JZ      VGA
+        MVI     A,30
+        LXI     H,30*640
+        JMP     SVGA
+VGA:    MVI     A,26
+        LXI     H,26*700
+SVGA:   STA     TICKC   ;SET TICK COUNT
+        SHLD    BLKC    ;SET BLOCK COUNT
         LXI     H,0
         SHLD    RUNC    ;RESET RUN COUNT
-
+;
 TICK0:  LXI     H,TBASE
         PUSH    H
 TICKR:  POP     H
