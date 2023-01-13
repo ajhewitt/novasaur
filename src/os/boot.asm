@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; SEPT 4, 2022
+; JAN 12, 2023
 ;
         .PROJECT        boot.com
 ;
@@ -94,7 +94,6 @@ SIGNON: DB      CR,LF,
 ;
 ; BOOT ALL
 ; - BOOT OTHER CPUS
-; - CLEAR CTX SEQ
 ; - COPY KERNEL/MONITOR
 ;
 BOOT:   MVI     A, 2
@@ -102,12 +101,6 @@ BOOT1:  DW      BOOTCPU ;BOOT CPU
         INR     A
         CPI     8
         JNZ     BOOT1
-        
-        XRA     A
-        MOV     H, A
-CTX1:   DW      MVCTX   ;CLEAR CTX
-        INR     H
-        JNZ     CTX1
         
         LXI     D, 0F002H;DEST/ROM PAGE
         MVI     C, 15   ;16 PAGES

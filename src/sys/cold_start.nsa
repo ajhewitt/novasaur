@@ -130,9 +130,9 @@ LDZ Y, $0x7F
 FNH DZ, HLD               # Y+1->zpageY
 LDN PC, $ROW4             # loop if Y>80
 
-LD HL, $0x01
+LD HL, $0
 LD Y, $EO
-MVHL AZ, ED               # bank1,LED on->E *** init EO
+MULH AZ, ED               # bank1,LED on->E *** init EO
 
 LD HL, $DEC$NULL
 LDZ Y, $TIME3

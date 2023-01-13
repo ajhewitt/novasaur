@@ -5,11 +5,9 @@ INCLUDE ../inc/pages.nsa
 PAGE WARM_START_PG
 
 # Set E-reg
-LD HL, $0x80
-LD Y, $EO
-ANDH DZ, NA               # clear bank
 LD HL, $0x11              # deassert, bank 1
-ORHL AZ, ED               # set RTS, bank
+LD Y, $EO
+MVHL AZ, ED               # set RTS, bank
 
 # Keyboard
 LD HL, $40                # 40
@@ -54,7 +52,26 @@ LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute->audio
 
+# Clear CTX sequence
+LD HL, $CTX_SEQ
+MVHL A, XA                # X=CTX_SEQ
+LD HL, $0xFF
+LD Y, $0x80
+MVHL AZ, ND               # -1->[80]
+$CLRY
+LD Y, $0x80
+LDZ HL, $INC$NULL
+FNH DZ, HLD               # [80]+1
+LD HL, $ZERO?$NULL
+FNH A, HLA
+LDP PC, $BOOT             # BOOT if [80]==0
+LDZ HL, $IDEN$NULL
+FNH DZ, Y                 # Y=[80]
+MULH A, ND                # 0->[X,Y]
+LD PC, $CLRY              # loop Y
+
 # Boot Kernel CPU
+$BOOT
 LD HL, $0x14              # -0x6C CTRL_ALT_HOME
 LD Y, $RCODE
 ADDHL DZ, NA

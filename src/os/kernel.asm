@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; JAN 10, 2023
+; JAN 12, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -46,24 +46,26 @@ DMA     EQU     0FDDH   ;DMA
 ;
 ; INIT KERNEL
 ;
-        LXI     SP,STACK
+INIT:   LXI     H,STACK
+        SPHL
+        LXI     B,INIT  ;CLEAR STACK TO INIT
+CLRMEM: MOV     M,C
+        INX     H
+        MOV     A,H
+        CMP     B
+        JNZ     CLRMEM
         LXI     H,TBASE
         SHLD    TTOP    ;TIMER TOP=TIMER START
-        XRA     A
-        STA     SRCCPU
-        STA     PERFI
-        STA     BELC    ;BEL COUNT=0
-        INR     A
-        STA     TICKC   ;TICK COUNT=1
+        CALL    RSTRUN  ;RESET RUN COUNT
 ;
 ; WAKE ANY SLEEPING CPUS TO RESYNC WITH KERNEL
 ;
+        XRA     A
 WAKE:   INR     A       ;A+1
         ANI     7       ;A==8?
         JZ      CTX     ;DONE; SET CTX
         DW      SIGNAL  ;WAKE DEST CPU
-        ORA     A       ;A==0?
-        JNZ     WAKE    ;NEXT CPU
+        JMP     WAKE    ;NEXT CPU
 ;
 ; SET CTX: 1,2,3,4,1,2,3,5,1,2,3,6,1,2,3,7
 ;
@@ -89,24 +91,24 @@ START:  LDA     BREAK   ;MONITOR BREAK POINT
         ORA     A       ;CHECK BREAK (A!=0)
         RNZ             ;RETURN ON BREAK
 ;
-        LXI     H,LASTT0;GET LAST T0
+        LXI     H,LASTT0;CHECK FOR TICK
         IN      TIME0   ;A=T0
         CMP     M       ;T0==LAST T0?
         CNZ     TICK    ;T0 CHANGED
 ;
-WAIT:   LXI     H,RUNC  ;2.25 COUNT RUN
-        INR     M       ;2.25 ADD RUN
-        JNZ     ADDKB   ;3.25 OVERFLOW?
-        INX     H       ;0 RUNC MSB
-        INR     M       ;2.25 OVERFLOW [7.75-10]
-ADDKB:  LXI     H,BLKC  ;2.25 COUNT KERNEL BLOCKS
-        IN      CBLOCK  ;2.25 GET CTX BLOCK COUNT
-        SUI     100     ;2.25 99 -> 0 => -1 -> -100
-        ADD     M       ;2 ADD NEGATIVE BLOCKS
-        MOV     M,A     ;2.25 UPDATE COUNT
-        JC      K_WAIT  ;3.25 CARRY IF NO BORROW
-        INX     H       ;0 BLKC MSB
-        DCR     M       ;2.25 BORROW [14.25-16.5]
+WAIT:   LXI     H,RUNC  ;2.25   COUNT RUN
+        INR     M       ;2.25   ADD RUN
+        JNZ     ADDKB   ;3.25   OVERFLOW?
+        INX     H       ;0      RUNC MSB
+        INR     M       ;2.25   OVERFLOW [7.75-10]
+ADDKB:  LXI     H,BLKC  ;2.25   COUNT KERNEL BLOCKS
+        IN      CBLOCK  ;2.25   GET CTX BLOCK COUNT
+        SUI     100     ;2.25   99 -> 0 => -1 -> -100
+        ADD     M       ;2      ADD NEGATIVE BLOCKS
+        MOV     M,A     ;2.25   UPDATE COUNT
+        JC      K_WAIT  ;3.25   CARRY IF NO BORROW
+        INX     H       ;0      BLKC MSB
+        DCR     M       ;2.25   BORROW [14.25-16.5]
 ;
 K_WAIT: DW	YIELD   ;WAIT UNTIL CTX SW
         LDA     SRCCPU
@@ -342,19 +344,7 @@ TICK:   MOV     M,A     ;SAVE T0
         LXI     B,80H
         DAD     B       ;PERF ADDR + 80
         MOV     M,A     ;STORE LOAD AVG
-;
-        IN      VMODE   ;A=VIDEO MODE
-        ANI     7
-        JZ      VGA
-        MVI     A,30
-        LXI     H,30*630
-        JMP     SVGA
-VGA:    MVI     A,26
-        LXI     H,26*690
-SVGA:   STA     TICKC   ;SET TICK COUNT
-        SHLD    BLKC    ;SET BLOCK COUNT
-        LXI     H,0
-        SHLD    RUNC    ;RESET RUN COUNT
+        CALL    RSTRUN  ;RESET RUN COUNT
 ;
 TICK0:  LXI     H,TBASE
         PUSH    H
@@ -399,6 +389,20 @@ TICK3:  LXI     B, -4
         MVI     C, 4
         DW      DMA     ;COPY TOP TIMER TO CUR
         RET             ;CALL ADDR OR RETURN
+;
+RSTRUN: IN      VMODE   ;A=VIDEO MODE
+        ANI     7
+        JZ      VGA
+        MVI     A,31
+        LXI     H,31*640
+        JMP     SVGA
+VGA:    MVI     A,26
+        LXI     H,26*700
+SVGA:   STA     TICKC   ;SET TICK COUNT
+        SHLD    BLKC    ;SET BLOCK COUNT
+        LXI     H,0
+        SHLD    RUNC    ;RESET RUN COUNT
+        RET
 ;
 ; TIMER ADD
 ; A=CPU, BC=SEQ/CMD, E=COUNT
