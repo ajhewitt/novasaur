@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; JAN 12, 2023
+; JAN 20, 2023
 ;
         .PROJECT        boot.com
 ;
@@ -105,11 +105,11 @@ BOOT1:  DW      BOOTCPU ;BOOT CPU
         LXI     D, 0F002H;DEST/ROM PAGE
         MVI     C, 15   ;16 PAGES
         DW      CPROM   ;COPY ROM
-        
-        MVI     A,1
-        OUT     RXEN    ;ENABLE RX
+
         XRA     A
         STA     BREAK   ;RESET BREAK POINT
+        INR     A
+        OUT     RXEN    ;ENABLE RX
         JMP     BOOTK   ;BOOT KERNEL
 ;
 MONITOR:JMP     BOOTM   ;BOOT MONITOR

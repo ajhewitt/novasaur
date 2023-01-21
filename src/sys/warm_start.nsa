@@ -4,6 +4,9 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE WARM_START_PG
 
+$COL 0x80
+$ROW 0x81
+
 # Set E-reg
 LD HL, $0x11              # deassert, bank 1
 LD Y, $EO
@@ -55,20 +58,19 @@ MVHL AZ, ND               # mute->audio
 # Clear CTX sequence
 LD HL, $CTX_SEQ
 MVHL A, XA                # X=CTX_SEQ
-LD HL, $0xFF
-LD Y, $0x80
-MVHL AZ, ND               # -1->[80]
-$CLRY
-LD Y, $0x80
-LDZ HL, $INC$NULL
-FNH DZ, HLD               # [80]+1
+LD HL, $0
+LD Y, $ROW
+MULH AZ, ND               # 0->[ROW]
+$CLRCTX
+LDZ HL, $IDEN$NULL
+FNH DZ, Y                 # Y=[ROW]
+MULH A, ND                # 0->[X,Y]
+LD HL, $INC$NULL
+LDZ Y, $ROW
+FNH DZ, HLD               # [ROW]+1
 LD HL, $ZERO?$NULL
 FNH A, HLA
-LDP PC, $BOOT             # BOOT if [80]==0
-LDZ HL, $IDEN$NULL
-FNH DZ, Y                 # Y=[80]
-MULH A, ND                # 0->[X,Y]
-LD PC, $CLRY              # loop Y
+LDN PC, $CLRCTX           # loop index
 
 # Boot Kernel CPU
 $BOOT
@@ -83,7 +85,7 @@ LD Y, $AREG
 MVHL AZ, ND               # boot or monitor -> Acc
 LD HL, $0xF1
 LD Y, $CTX0
-MVHL AZ, ND               # Kernel->Context 0
+MVHL AZ, ND               # Kernel->Context
 LD HL, $0
 LD Y, $CTXIDX
 MULH AZ, ND               # reset context index

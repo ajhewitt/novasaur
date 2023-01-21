@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; JAN 12, 2023
+; JAN 20, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -57,15 +57,6 @@ CLRMEM: MOV     M,C
         LXI     H,TBASE
         SHLD    TTOP    ;TIMER TOP=TIMER START
         CALL    RSTRUN  ;RESET RUN COUNT
-;
-; WAKE ANY SLEEPING CPUS TO RESYNC WITH KERNEL
-;
-        XRA     A
-WAKE:   INR     A       ;A+1
-        ANI     7       ;A==8?
-        JZ      CTX     ;DONE; SET CTX
-        DW      SIGNAL  ;WAKE DEST CPU
-        JMP     WAKE    ;NEXT CPU
 ;
 ; SET CTX: 1,2,3,4,1,2,3,5,1,2,3,6,1,2,3,7
 ;
