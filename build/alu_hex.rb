@@ -601,9 +601,9 @@ def ctrl_alt_page
     when 0x71 # del -> reboot
       0x82
     when 0x7D # pgup -> vid mode up
-      0x82
+      0x81
     when 0x7A # pgdn -> vid mode down
-      0x82
+      0x81
     else
       0
     end

@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; JAN 20, 2023
+; JAN 22, 2023
 ;
         .PROJECT        boot.com
 ;
@@ -10,6 +10,7 @@ BOOTK   EQU     0F000H  ;BOOT KERNEL
 BOOTM   EQU     0F800H  ;BOOT MONITOR
 BOOTC   EQU     0FA00H  ;BOOT CP/M
 BOOTD   EQU     0FF00H  ;BOOT DISK
+IOBYTE  EQU     3       ;CP/M IO BYTE
 ;
 SDATA   EQU     8       ;SERIAL DATA
 CDATA   EQU     9       ;CONSOLE DATA
@@ -121,6 +122,7 @@ CPM:    LXI     DE, 0E45CH;DEST/ROM PAGE
         DW      CPROM   ;COPY ROM
         MOV     A, B    ;A=CPU#
         ANI     1       ;IO=CPU#-2
+        STA	IOBYTE
         JMP     BOOTC   ;BOOT CPM
 ;
 ; DISK QUADRANT

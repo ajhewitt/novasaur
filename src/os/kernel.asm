@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; JAN 20, 2023
+; JAN 22, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -20,10 +20,12 @@ BELC    EQU     STACK+1AH;BEL COUNT
 TBASE   EQU     STACK+20H;TIMER HEAP
 ;
 BEL     EQU     7
-SERIAL  EQU     8
-CONSOLE EQU     9
+BS      EQU     8       ;^H BACKSPACE
 CR      EQU     13      ;CARRIAGE RET
 LF      EQU     10      ;LINE FEED
+;
+SERIAL  EQU     8
+CONSOLE EQU     9
 AMODE   EQU     0AH     ;AUDIO MODE
 VMODE   EQU     31H     ;VIDEO MODE
 ICH     EQU     32H     ;IDLE COUNTER HIGH
@@ -161,7 +163,7 @@ HANDHL: ADI     BASEPG  ;A=BASEPG+CPU#
 ;
 SNDRET: DW	IPCSND	;SEND MSG, EXPECT RETURN
         ORA     A       ;A==0?
-        JZ      WAIT    ;TODO: HANDLE ERR
+        JZ      IPCERR  ;HANDLE ERR
 SETRET: CALL    HANDHL  ;HL=HANDLER
         MOV     M,C     ;CMD=C
         LDA     SRCCPU
@@ -172,6 +174,12 @@ SETRET: CALL    HANDHL  ;HL=HANDLER
         INX     H
         MOV     M,D
         JMP     WAIT
+
+IPCERR: LDA     SRCCPU
+        MVI     B,0
+        DW	IPCSND
+        JP      WAIT
+
 ;
 ; RETURN CPU# IN A
 ; FROM SECTOR IN E
@@ -228,7 +236,12 @@ PUT:    LDA     SRCCPU
 ; serial -> E
 ;
 TTYI:   IN      SERIAL  ;CHAR IN
-        JMP     RETIN
+        MOV     E,A     ;E=CHAR
+        CPI     BEL     ;BELL CHAR?
+        CZ      BELON   ;BELL ON
+        LDA     SRCCPU
+        DW      IPCSND
+        JMP     WAIT
 ;
 ; TTY OUT
 ; E -> serial
@@ -241,12 +254,18 @@ TTYO:   MOV     A,E
 ; console -> E
 ;
 CONI:   IN      CONSOLE ;CHAR IN
-RETIN:  CPI     BEL     ;BELL CHAR?
-        CZ      BELON   ;BELL ON
         MOV     E,A     ;E=CHAR
+        CPI     BS
+        JZ      CLRCUR
+        CPI     BEL     ;BELL CHAR?
+        CZ      BELON   ;BELL ON
+        MVI     A,10H
+CONSND: OUT     CONSOLE ;FLASH CURSOR
         LDA     SRCCPU
         DW      IPCSND
         JMP     WAIT
+CLRCUR: XRA     A       ;CLEAR CURSOR
+        JP      CONSND
 ;
 ; CON OUT
 ; E -> console
@@ -440,8 +459,12 @@ BELON:  LXI     H, BELC
         LXI     B, 00C02H;ATTACK/DECAY
         LXI     D, 00C02H;SUSTAIN/RELEASE
         DW      VOICE1
-        MVI     A, 43H  ;MIDI NOTE G
-        DW      NOTE1
+        IN      VMODE   ;A=VIDEO MODE
+        ANI     7
+        MVI     A, 79   ;MIDI NOTE G5
+        JNZ     SETNOTE
+        ORI     80H
+SETNOTE:DW      NOTE1
         DW      GON1
         XRA     A       ;A=0 SO INTERNAL (BC=CALL ADDR)
         MVI     E, 2    ;GATE OFF AFTER 2 TICKS
@@ -450,7 +473,7 @@ BELON:  LXI     H, BELC
         MVI     E, 12   ;AUDIO OFF AFTER 12 TICKS
         LXI     B, AUDOFF
         CALL    TADD
-        MVI     A, BEL  ;RETURN BEL
+        MVI     E, BEL  ;RETURN BEL
         RET
 ; GATE OFF
 BELOFF: DW      GOFF1

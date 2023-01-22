@@ -53,11 +53,11 @@ CBASE	JMP	COMMAND	;execute command processor (ccp).
 INBUFF	DB	127	;length of input buffer.
 	DB	0	;current length of contents.
 SIGNON:	DB      'Novasaur 64k CP/M vers 2.2',CR,LF,
-        DB	'Copyright'
-	DB	' 1979 (c) by Digital Research      '
+        DB	'Copyright '
+	DB	'1979 (c) by Digital Research',CR,LF,
 	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-	DB	0,0,0,0,0,0,0,0,0,0
+	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0
 INPOINT	DW	INBUFF+2;input line pointer
 NAMEPNT	DW	0	;input line pointer used for error message. Points to
 ;			;start of name in error.
@@ -1396,9 +1396,9 @@ CKCON2	MVI	A,1	;set (A) to non zero to mean something is ready.
 OUTCHAR	LDA	OUTFLAG	;check output flag.
 	ORA	A	;anything and we won't generate output.
 	JNZ	OUTCHR1
-	PUSH	B
-	CALL	CKCONSOL;check console (we don't care whats there).
-	POP	B
+	;PUSH	B       ;COMMENTED OUT - WAS SLOWING THINGS DOWN
+	;CALL	CKCONSOL;check console (we don't care whats there).
+	;POP	B
 	PUSH	B
 	CALL	CONOUT	;output (C) to the screen.
 	POP	B
@@ -1427,6 +1427,11 @@ OUTCHR2	CPI	LF	;is it a line feed?
 	RNZ		;ignore anything else.
 	MVI	M,0	;reset pointer to start of line.
 	RET
+	NOP             ;PADDING
+	NOP
+	NOP
+	NOP
+	NOP
 ;
 ;   Output (A) to the screen. If it is a control character
 ; (other than carriage control), use ^x format.
@@ -3821,7 +3826,6 @@ DPBLC:	;DISK PARAMETER BLOCK, COMMON TO ALL DISKS
 ;
 ;	INDIVIDUAL SUBROUTINES TO PERFORM EACH FUNCTION
 BOOT:
-	STA	IOBYTE		;ASSUME A CONTAINS IO BYTE ON BOOT
 	XRA     A
 	STA     RXSIZE          ;CLEAR RX VARS
 	STA     RXIDX
@@ -3884,8 +3888,8 @@ CONIN:	;CONSOLE CHARACTER INTO REGISTER A
         MVI     M, 0            ;CLEAR CSTAT
         ORA     A
         RNZ                     ;RETURN CHAR
-        CALL    COMCMD
-GETIN:  DW      CMDSND          ;CALL KERNEL
+GETIN:  CALL    COMCMD
+        DW      CMDSND          ;CALL KERNEL
         MOV     A, E            ;A=CHAR IF READY
         ANI     7FH             ;CLEAR PARITY
 	RNZ                     ;RETURN IF NOT ZERO
@@ -4053,7 +4057,7 @@ CPSEC:  LHLD    DMAAD           ;SET DEST
         DCX     H
         MVI     C, 128          ;128 BYTES
         DW      DMA             ;COPY RECORD
-        XRA     A
+        XRA     A               ;READ B: SUCCESS
         RET
 ; TRACK 1 IS LAST EMPTY DIR RECORD OF TRACK 0
 PADB:   LXI     D, BUFF+17FH    ;SECTOR 3 -1
@@ -4064,12 +4068,15 @@ READA:	LDA     TRACK
         LDA     SECTOR
         MOV     E, A
         LXI     B, 0102H        ;SEQ 1, GET COMMAND
+        MOV     A, B            ;SAVE SEQ# IN A
         DW      CMDSND          ;CALL KERNEL
+        CMP     B               ;COMPARE SEQ#
+        JNZ     READA           ;RETRY ON ERROR
         LHLD    DMAAD
         XCHG
         XRA     A               ;START SHM@0
         DW      RECRECV         ;SHM->DE
-        XRA     A
+        XRA     A               ;READ A: SUCCESS
 	RET
 ;
 WRITE:	;PERFORM A WRITE OPERATION
@@ -4083,7 +4090,7 @@ WRITE:	;PERFORM A WRITE OPERATION
         MOV     E, A
         LXI     B, 0203H        ;SEQ 2, PUT COMMAND
         DW      CMDSND          ;CALL KERNEL
-        XRA     A
+        XRA     A               ;WRITE A: SUCCESS
         RET
 ;
 ;	THE REMAINDER OF THE CBIOS IS RESERVED UNINITIALIZED
