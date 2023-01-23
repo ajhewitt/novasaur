@@ -14,30 +14,27 @@ ANDL A, X                 # X=0xFn&0x07
 LDZ Y, $EO
 FNH DZ, HLA               # bank = kernel?
 LDN PC, $EXIT19           # exit if not kernel
-LD HL, $IDEN$NULL
+LD HL, $ZERO?$NULL
 #20
+LD Y, $CMDL
+FNH D, HLA                # A=0 if CMDL=0
+LDN PC, $EXIT26           # else exit
 LD Y, $0xFF
-FNH D, HLA                # read semaphore
-LDN PC, $CONT26           # send msg if waiting
-LD Y, $AREG
-MVHL AZ, ND               # semaphore -> Acc
-#31
+FNH D, HLA                # A=semaphore
+LDN PC, $CONT31           # cont if sleeping
+#30
+LD Y, $AREG               # assume HL=0
+MULH AZ, ND               # Acc=0
 LD HL, $INC$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+1
-LD HL, $FETCH
-DISHL DZ, PGA             # jump to next VMC
+LD PG, $FETCH1_PG         # cycle available, goto fetch
 #43
 
-$CONT26
-NOP
-NOP
-NOP
-NOP
-#30
+$CONT31
 LD HL, $0
-LD Y, $0xFF
 MULH A, ND                # signal -> semaphore
+NOP
 LD HL, $IDEN$NULL
 #39
 LDZ Y, $BREG
@@ -78,15 +75,15 @@ NOP
 NOP
 NOP
 NOP
+$EXIT26
 NOP
 NOP
-NOP
-NOP
+LD HL, $0
 #30
-NOP
+LD Y, $AREG
+MULH AZ, ND               # Acc=0
 LD HL, $INC$NULL
 LDZ Y, $VMS               # set Y = $VMS on exit
 FNH DZ, HLD               # VMS+1
-LD HL, $FETCH
-DISHL DZ, PGA             # jump to next VMC
+LD PG, $FETCH1_PG         # cycle available, goto fetch
 #43
