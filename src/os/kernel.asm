@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; JAN 22, 2023
+; JAN 24, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -176,7 +176,7 @@ SETRET: CALL    HANDHL  ;HL=HANDLER
         JMP     WAIT
 
 IPCERR: LDA     SRCCPU
-        MVI     B,0
+        MVI     B,0     ;SEQ ZERO IS ERROR
         DW	IPCSND
         JP      WAIT
 

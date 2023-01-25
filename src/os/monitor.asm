@@ -1,6 +1,6 @@
-; TITLE '8080 SYSTEM MONITOR, VER 0.8'
+; TITLE '8080 SYSTEM MONITOR, VER 0.9'
 ;
-; JAN 20, 2023
+; JAN 24, 2023
 ;
         .PROJECT monitor.com
 ;
@@ -186,8 +186,8 @@ TOGGLE: LDA     COMS    ;LOAD COMS
 ; SIGNON MESSAGE
 ;
 SIGNON: DB      CR,LF,
-        DB      "Novasaur 8080 SYSMON v0.8",CR,LF,
-        DB      "Copyright (c) 2022",CR,LF,
+        DB      "Novasaur 8080 SYSMON v0.9",CR,LF,
+        DB      "Copyright (c) 2023",CR,LF,
         DB      "Solid State Machines",CR,LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
@@ -786,10 +786,15 @@ UPTIME1:POP     B
 ;
 ; QUIT - RUN KERNEL
 ;
-QUIT:   MVI     A,1
+QUIT:   XRA     A       ;WAKE ANY SLEEPING CPUS
+QUIT1:  INR     A       ;A+1
+        ANI     7       ;A==8?
+        JZ      QUIT2   ;DONE; SET CTX
+        DW      SIGNAL  ;WAKE DEST CPU
+        JMP     QUIT1   ;NEXT CPU
+QUIT2:  STA     BREAK   ;RESET BREAK POINT
+        INR     A       ;A=1
         OUT     RXEN    ;ENABLE RX
-        XRA     A
-        STA     BREAK   ;RESET BREAK POINT
         JMP     KERNEL
 ;
 ; THESE MUST MATCH KERNEL!

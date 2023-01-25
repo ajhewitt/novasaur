@@ -4,7 +4,6 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE WARM_START_PG
 
-$COL 0x80
 $ROW 0x81
 
 # Set E-reg
