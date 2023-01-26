@@ -14,7 +14,7 @@ $ZERO?      8 # A==0 ? 0:-1
 $KERN?      9 # A&7==1 ? 0:-1
 $INCLINE   10 # ML +1, cyc=0
 $INCBLK    11 # ML reset, cyc=1
-$NSR       12 # >>1&0x80
+$NSR       12 # A>>1|0x80
 $SWAP      13 # AB -> BA
 $REVERSE   14 # reverse bits
 #AUDIO     15 # reverse bits, flip sign

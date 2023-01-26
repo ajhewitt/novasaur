@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; JAN 24, 2023
+; JAN 25, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -179,18 +179,6 @@ IPCERR: LDA     SRCCPU
         MVI     B,0     ;SEQ ZERO IS ERROR
         DW	IPCSND
         JP      WAIT
-
-;
-; RETURN CPU# IN A
-; FROM SECTOR IN E
-;
-SECCPU: MOV     A,E     ;A=000QQSSS
-        RRC             ;SHIFT>>3
-        RRC
-        RRC
-        ANI     03H     ;A=000000QQ
-        ORI     04H     ;A=000001QQ
-        RET
 ;
 ; GENERIC RETURN
 ;
@@ -203,7 +191,8 @@ GENR:   POP     H
 ; - FORWARD GET TO DISK
 ; - SET XFER ON RETURN
 ;
-GET:    CALL    SECCPU  ;A=CPU#
+GET:    MOV     A,E     ;A=00000SQQ
+        ORI     4       ;A=000001QQ
         JMP     SNDRET  ;SEND/SET HANDLER CMD
 ;
 ; RETURN FROM GET
@@ -225,7 +214,8 @@ GETR:   POP     H
 ;
 PUT:    LDA     SRCCPU
         MOV     H,A     ;SRC CPU
-        CALL    SECCPU  ;A=CPU#
+        MOV     A,E     ;A=00000SQQ
+        ORI     4       ;A=000001QQ
         MOV     L,A     ;DEST CPU
         XRA     A       ;START SHM@0
         DW      RECXFER ;XFER RECORD

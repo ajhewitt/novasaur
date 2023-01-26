@@ -3787,12 +3787,12 @@ DPBASE:	DW	0000H, 0000H
 	DW	CHK03, ALL03
 ;
 DPBLA:	;DISK PARAMETER BLOCK, COMMON TO ALL DISKS
-        ;RAM 252K DISK: 32 SEC x 63 TRX @1K BLOCKS
-	DW	32		;SECTORS PER TRACK
+        ;RAM 254K DISK: 8 SEC x 254 TRX @1K BLOCKS
+	DW	8		;SECTORS PER TRACK
 	DB	3		;BLOCK SHIFT FACTOR
 	DB	7		;BLOCK MASK
 	DB	0		;NULL MASK
-	DW	251		;DISK SIZE-1
+	DW	253		;DISK SIZE-1
 	DW	63		;DIRECTORY MAX
 	DB	192		;ALLOC 0
 	DB	0		;ALLOC 1
@@ -4088,12 +4088,15 @@ WRITE:	;PERFORM A WRITE OPERATION
         XCHG
         XRA     A               ;START SHM@0
         DW      RECSEND         ;DE->SHM
-        LDA     TRACK
+WRITEA: LDA     TRACK
         MOV     D, A
         LDA     SECTOR
         MOV     E, A
         LXI     B, 0203H        ;SEQ 2, PUT COMMAND
+        MOV     A, B            ;SAVE SEQ# IN A
         DW      CMDSND          ;CALL KERNEL
+        CMP     B               ;COMPARE SEQ#
+        JNZ     WRITEA          ;RETRY ON ERROR
         XRA     A               ;WRITE A: SUCCESS
         RET
 ;

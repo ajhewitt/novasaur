@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 0.9'
 ;
-; JAN 24, 2023
+; JAN 25, 2023
 ;
         .PROJECT monitor.com
 ;
@@ -841,6 +841,9 @@ WAIT8:  CALL    K_WAIT  ;HANDLE RETURN
 ; COPY TRACK/SEC TO MEM ADDR
 ;
 KGET:   CALL    HHLDE   ;GET HL, COPY TO DE
+        MOV     A,L
+        ANI     0F8H
+        JNZ     ERROR
         PUSH    D       ;SAVE MEM ADDR
         XCHG            ;DE=TRACK/SEC
         LXI     B,0102H ;SEQ 1, GET COMMAND
@@ -855,6 +858,9 @@ KGET:   CALL    HHLDE   ;GET HL, COPY TO DE
 ; COPY MEM ADDR TO TRACK/SEC
 ;
 KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
+        MOV     A,L
+        ANI     0F8H
+        JNZ     ERROR
         PUSH    H       ;SAVE TRACK/SEC
         XRA     A       ;START SHM@0
         DW      RECSEND ;DE->SHM
@@ -893,17 +899,22 @@ KFMT3:  MVI     M,0E5H  ;SET ERA EVERY RECORD
         XCHG            ;DE=0100
         XRA     A       ;START SHM@0
         DW      RECSEND ;COPY RECORD (0100->SHM)
-        MVI     B,0     ;SEQ=0
+        LXI     D,0     ;DE=0,0
 KFMT4:  MVI     A,1
         STA     SRCCPU  ;SET SOURCE AS KERNEL
-        MVI     C,3     ;PUT COMMAND
-        MVI     D,0     ;TRACK 0
-        MOV     E,B     ;SECTOR SEQ
+        PUSH    D
+        LXI     B,0303H ;PUT COMMAND
         CALL    K_CMD   ;HANDLE COMMAND
         CALL    CTXSW
-        INR     B       ;SEQ++
-        MOV     A,B
-        CPI     10H     ;16 RECORDS?
+        POP     D
+        INR     E       ;SEC++
+        MOV     A,E
+        ANI     7
+        JNZ     KFMT4
+        MOV     E,A
+        INR     D
+        MOV     A,D
+        CPI     2
         JNZ     KFMT4
         LXI     D,KFDONE
         JMP     PRNTM
