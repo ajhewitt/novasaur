@@ -742,13 +742,14 @@ MOVE3	MVI	B,3
 ;
 ;   Move (B) bytes from (HL) to (DE).
 ;
-HL2DE	MOV	A,M
-	STAX	D
-	INX	H
-	INX	D
-	DCR	B
-	JNZ	HL2DE
-	RET
+HL2DE	MOV     C,B
+        XCHG
+        DCX     D       ;pre dec D
+        DCX     H       ;pre dec H
+        DW      DMA     ;native DMA
+        RET
+        NOP             ;padding
+        NOP
 ;
 ;   Compute (HL)=(TBUFF)+(A)+(C) and get the byte that's here.
 ;
@@ -1721,14 +1722,15 @@ JUMPHL	MOV	E,M
 ;
 ;   Block move. (DE) to (HL), (C) bytes total.
 ;
-DE2HL	INR	C	;is count down to zero?
-DE2HL1	DCR	C
-	RZ		;yes, we are done.
-	LDAX	D	;no, move one more byte.
-	MOV	M,A
-	INX	D
-	INX	H
-	JMP	DE2HL1	;and repeat.
+DE2HL	DCX     D       ;pre dec D
+	DCX     H       ;pre dec H
+	DW      DMA     ;native DMA
+	RET
+	NOP             ;padding
+	NOP
+	NOP
+	NOP
+	NOP
 ;
 ;   Select the desired drive.
 ;
