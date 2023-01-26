@@ -3831,12 +3831,12 @@ DPBLC:	;DISK PARAMETER BLOCK, COMMON TO ALL DISKS
 ;
 ;	INDIVIDUAL SUBROUTINES TO PERFORM EACH FUNCTION
 BOOT:
-        MVI     A, BEGDAT&0FFH
+        MVI     A, BEGDAT&0FFH-1
         LXI     H, DISKNO
-INIT:   MVI     M, 0            ;CLEAR VARS
+CLRVAR: MVI     M, 0            ;CLEAR VARS
         INX     H
         CMP     L
-        JNZ     INIT
+        JNZ     CLRVAR
 ;
 	MVI	A, 0C3H		;C3 IS A JMP INSTRUCTION
 	STA	0		;FOR JMP TO WBOOT
@@ -3853,9 +3853,15 @@ INIT:   MVI     M, 0            ;CLEAR VARS
 	CALL	PLINE           ;PRINT LOGO
 	LXI	B, SIGNON
 	CALL	PLINE           ;PRINT COPYRIGHT
+;
+        JP      GOCPM
 WBOOT:
         LXI	SP, STACK	;SET MONITOR STACK
 ;
+        LXI     DE, 0E45CH      ;DEST/ROM PAGE
+        MVI     C, 21           ;22 PAGES
+        DW      CPROM           ;LOAD CCP+BDOS
+GOCPM:
         LDA     DISKNO          ;READ SELECTED DISK
         STA	CDISK		;SET SELECT DISK
 ;
