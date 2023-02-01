@@ -3923,39 +3923,39 @@ LISTST:	;RETURN LIST STATUS (0 IF NOT READY, 1 IF READY)
 	RET
 ;
 PUNCH:	;PUNCH CHARACTER FROM REGISTER C
-        ;SEND IF SIZE>A, RETURN A=SIZE
+        ;SEND IF SIZE>A|127, Z-FLAG SET IF ALL SENT
 ;  0 1 2 3 4 5 6 7 .. 255
 ; [][][][][][][][][..][] BUFF
 ; x x WR        RD x  x (2-7=-5)
 ;     RD  x x x WR      (7-2=5)
-
         LXI     H, BUFFWR
-        MOV     B, M
+        MOV     B, M            ;B=WR
         INR     M               ;WR+1
         MVI     H, BUFF>>8
-        MOV     L, B            ;HL=[BUFFWR]
+        MOV     L, B            ;HL=BUFFWR
         MOV     M, C            ;C->[BUFFWR]
         LXI     H, TXSIZE
         INR     M               ;SIZE+1
-        JM      SENDER          ;SEND IF SIZE>-128
+        JM      SENDER          ;SEND IF SIZE>127
         SUB     M               ;A-SIZE
-        MOV     A, M            ;A=SIZE
-        RNC                     ;SEND IF SIZE>=A
+        JC      SENDER          ;SEND IF SIZE>A
+        RNZ                     ;RETURN Z-FLAG CLEAR
 SENDER: LXI     H, BUFFRD
         MVI     D, BUFF>>8
-        MOV     E, M            ;DE=[BUFFRD]
+        MOV     E, M            ;DE=BUFFRD
         LDA     BUFFWR
-        SUB     M               ;A=BUFFWR-BUFFRD
-        JNC     DELTA1          ;JUMP IF RD<WR
-        XRA     A               ;A=0
-        SUB     M               ;A=-BUFFWR
-DELTA1: JP      DELTA2          ;A<128
-        MVI     A, 080H
-DELTA2: CMA
-        ADI     081H            ;START=128-A
-        MOV     B, A
+        SUB     E               ;A=BUFFWR-BUFFRD
+        JNC     DELTA1          ;JUMP IF RD>WR
+        MOV     A, E            ;SIZE=-REST OF PAGE
+        JMP     DELTA2
+DELTA1: CMA
+        INR     A               ;A=-SIZE
+DELTA2: XRI     080H            ;START=128-A
+        JP      DELTA3
+        XRA     A               ;START=0
+DELTA3: MOV     B, A            ;SAVE START
         DW      RECSEND         ;DE->SHM
-        MOV     D, B
+        MOV     D, B            ;RESTORE START
         LXI     B, 0108H        ;SEQ 1, SERIAL TX
         DW      CMDSND          ;CALL KERNEL
         LDA     BUFFRD
@@ -3968,9 +3968,11 @@ DELTA2: CMA
 ;
 ;
 READER:	;READER CHARACTER INTO REGISTER A FROM READER DEVICE
-; read from context buffer until rxidx=0 the get serial
-; Z set if no character is available, otherwise return
-; with the received byte in A and Z cleared.
+        ;Z-FLAG SET IF NO DATA RECEIVED
+; CTX  0 []
+;      1 [] RXIDX
+;     .. [] RXSIZE
+;    127 []
         LXI     H, RXSIZE
         DCR     M               ;SIZE-1
         LXI     H, RXIDX
@@ -3980,12 +3982,12 @@ READER:	;READER CHARACTER INTO REGISTER A FROM READER DEVICE
         MOV     A, E            ;A=BYTE
         INR     M               ;INDEX+1 (CLEAR Z-FLAG)
         RET                     ;RETURN BYTE
-RXSER:  MVI     M, 0            ;INDEX=0
+RXSER:  MVI     M, 0            ;RESET RXIDX
         LXI     B, 0209H        ;SEQ 2, SERIAL RX
         DW      CMDSND          ;CALL KERNEL
         MOV     A, D            ;A=BUFFER SIZE
         STA     RXSIZE
-        CPI     0               ;BUFFER EMPTY?
+        ORA     A               ;BUFFER EMPTY?
         RZ                      ;RETURN Z-FLAG SET
         JMP     READER          ;RECALL READER
 ;

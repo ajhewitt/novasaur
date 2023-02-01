@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; JAN 25, 2023
+; JAN 31, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -282,12 +282,12 @@ RETOUT: LDA     SRCCPU
 ; E==number of bytes sent
 ;
 SEND:   LDA     SRCCPU
-        MOV     E, D
+        MOV     E, D    ;E=128-size
         DCR     D
         DW      SERSEND
-        MOV     A, D
-        SUB     E
-        MOV     E, D
+        MOV     A, D    ;A=128-remain
+        SUB     E       ;A=(128-remain)-(128-size)
+        MOV     E, A    ;E=size-remain
         JMP     SERRET  ;SET SERIAL RETURN
 ;
 ; SERIAL RECEIVE
@@ -301,7 +301,8 @@ RECV:   LDA     SRCCPU
 ;
 ; SERIAL RETURN
 ;
-SERRET: PUSH    D
+SERRET: LDA     SRCCPU
+        PUSH    D
         MVI     E, 2    ;WAIT FOR 2 TICKS
         CALL    TADD    ;ADD RETURN TIMER
         POP     D
