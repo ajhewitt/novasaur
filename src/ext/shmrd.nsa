@@ -1,8 +1,8 @@
-# Buffer Read - A=CTX, D=index, E=byte
+# Shared Mem Read - A=CTX, D=index, E=byte
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE BUFFRD_PG
+PAGE SHMRD_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC$IDEN

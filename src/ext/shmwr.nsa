@@ -1,8 +1,8 @@
-# Buffer Write - A=CTX, D=index, E=byte
+# Shared Mem Write - A=CTX, D=index, E=byte
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
-PAGE BUFFWR_PG
+PAGE SHMWR_PG
 
 # assume: Y = $VMS
 LDZ HL, $INC$IDEN
