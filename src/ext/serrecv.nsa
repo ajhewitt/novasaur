@@ -1,4 +1,4 @@
-# Serial to Buffer - A=CTX, D=index
+# Serial to Shared Mem - A=CTX, D=index
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

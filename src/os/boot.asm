@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; JAN 22, 2023
+; FEB 6, 2023
 ;
         .PROJECT        boot.com
 ;
@@ -88,10 +88,10 @@ RST7:   NOP
 ;
 SIGNON: DB      CR,LF,
         DB      "             _",CR,LF
-        DB      "            /o)",CR,LF
-        DB      "   .^/\/\^.//",CR,LF
+        DB      "            /o)",CR,LF,
+        DB      "   _/\/\/\_//",CR,LF,
         DB      " _/NOVASAUR/",CR,LF,
-        DB      "<__^|_|-|_|",CR,LF,0
+        DB      "/_-'(_]-(_]",CR,LF,0
 ;
 ; BOOT ALL
 ; - BOOT OTHER CPUS

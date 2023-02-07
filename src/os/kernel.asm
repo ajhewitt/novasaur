@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; JAN 31, 2023
+; FEB 6, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -10,13 +10,13 @@ BASEPG  EQU     0E8H    ;PERF PAGE:E8, HANDLER TABLE:E9->EF
 BREAK   EQU     STACK
 SRCCPU  EQU     STACK+1
 LASTT0  EQU     STACK+10H;LAST VAL OF TIME0
-LASTCI  EQU     STACK+11H;LAST CONTEXT INDEX
 TICKC   EQU     STACK+12H;TICK COUNT (52 or 62)
 PERFI   EQU     STACK+13H;PERF RECORD INDEX
 BLKC    EQU     STACK+14H;KERNEL BLOCK COUNT
 RUNC    EQU     STACK+16H;KERNEL RUN COUNT
 TTOP    EQU     STACK+18H;ADDR HEAP TOP
 BELC    EQU     STACK+1AH;BEL COUNT
+SERC    EQU     STACK+1BH;SER COUNT
 TBASE   EQU     STACK+20H;TIMER HEAP
 ;
 BEL     EQU     7
@@ -50,8 +50,8 @@ DMA     EQU     0FDDH   ;DMA
 ;
 INIT:   LXI     H,STACK
         SPHL
-        LXI     B,INIT  ;CLEAR STACK TO INIT
-CLRMEM: MOV     M,C
+        LXI     B,INIT  ;CLEAR STACK TO INIT (B=F0,C=0)
+CLRMEM: MOV     M,C     ;(C=0)->[HL]
         INX     H
         MOV     A,H
         CMP     B
@@ -225,13 +225,18 @@ PUT:    LDA     SRCCPU
 ; TTY INPUT
 ; serial -> E
 ;
-TTYI:   IN      SERIAL  ;CHAR IN
-        MOV     E,A     ;E=CHAR
+TTYI:   LDA     SERC
+        ORA     A       ;SERIAL INHIBIT?
+        JNZ     TTYI0   ;YES
+        IN      SERIAL  ;CHAR IN
         CPI     BEL     ;BELL CHAR?
         CZ      BELON   ;BELL ON
+TTYI1:  MOV     E,A     ;E=CHAR
         LDA     SRCCPU
         DW      IPCSND
         JMP     WAIT
+TTYI0:  XRA     A       ;SERIAL DISABLED
+        JMP     TTYI1
 ;
 ; TTY OUT
 ; E -> serial
@@ -291,15 +296,18 @@ SEND:   LDA     SRCCPU
         JMP     SERRET  ;SET SERIAL RETURN
 ;
 ; SERIAL RECEIVE
-; serial buffer->CTX A buffer, D=index
-; no data if D==0
+; serial buffer->src cpu shared mem
+; E=ticks to inhibit after return
+; return D=index, no data if D==0
 ;
-RECV:   LDA     SRCCPU
+RECV:   LXI     H, SERC
+        INR     M
+        LDA     SRCCPU
         MVI     D, 0
         DW      SERRECV
-        JMP     SERRET  ;SET SERIAL RETURN
+        ;CONT TO SET SERIAL RETURN
 ;
-; SERIAL RETURN
+; SET SERIAL RETURN
 ;
 SERRET: LDA     SRCCPU
         PUSH    D
@@ -307,6 +315,10 @@ SERRET: LDA     SRCCPU
         CALL    TADD    ;ADD RETURN TIMER
         POP     D
         JMP     SETRET  ;SET RETURN HANDLER
+; SERIAL CLEAR
+SERCLR: LXI     H, SERC
+        DCR     M
+        RET
 ;
 ; SLEEP E=TICKS 15=1s
 ; RETURN D=IDLE PER KILO
@@ -347,18 +359,18 @@ TICK:   MOV     M,A     ;SAVE T0
         MOV     M,A     ;STORE LOAD AVG
         CALL    RSTRUN  ;RESET RUN COUNT
 ;
-TICK0:  LXI     H,TBASE
+TICK0:  LXI     H,TBASE ;START AT BASE
         PUSH    H
 TICKR:  POP     H
-TICK1:  XCHG            ;SAVE HL, DE=CURT
-        LXI     H,TTOP  ;HL=TTOP
-        MOV     A, M
+TICK1:  XCHG            ;DE=CURT
+        LXI     H,TTOP
+        MOV     A, M    ;A=[TTOP low]
         CMP     E
-        JNZ     TICK2   ;CURT!-TTOP
+        JNZ     TICK2   ;CURT!=TTOP
         INX     H
-        MOV     A, M
+        MOV     A, M    ;A=[TTOP high]
         CMP     D
-        RZ              ;CURT==TTOP
+        RZ              ;CURT==TTOP DONE
 TICK2:  XCHG            ;HL=CURT
         DCR     M       ;COUNT-1
         JZ      TFIRE   ;TIMED OUT
@@ -377,8 +389,10 @@ TFIRE:  PUSH    H       ;SAVE CURT
         PUSH    B       ;PUSH CALL ADDR
         ORA     A       ;A==0?
         JZ      TICK3
-        CALL    CMD2    ;A=CPU USE RETURN HANDLER
         POP     B       ;REMOVE CALL ADDR
+        PUSH    H
+        CALL    CMD2    ;DISPATCH RETURN HANDLER (A=CPU)
+        POP     H
 TICK3:  LXI     B, -4
         DAD     B       ;HL=CURT-1
         XCHG            ;SAVE HL
@@ -389,7 +403,7 @@ TICK3:  LXI     B, -4
         XCHG
         MVI     C, 4
         DW      DMA     ;COPY TOP TIMER TO CUR
-        RET             ;CALL ADDR OR RETURN
+        RET             ;CALL ADDR OR RETURN TICKR
 ;
 RSTRUN: IN      VMODE   ;A=VIDEO MODE
         ANI     7
@@ -421,6 +435,16 @@ TADD:   LHLD    TTOP
         INX     H
         SHLD    TTOP
         RET
+;
+; SERIAL TIMER RETURN
+; DISPATCHED FROM MSG HANDLER
+;
+SERT:   PUSH    B
+        XRA     A       ;A=0 SO INTERNAL (BC=CALL ADDR)
+        LXI     B, SERCLR
+        CALL    TADD    ;CLEAR INHIBIT AFTER E TICKS
+        POP     B
+        ;CONT TO GENT
 ;
 ; GENERIC TIMER RETURN
 ; DISPATCHED FROM MSG HANDLER
@@ -541,6 +565,6 @@ RETS:   DW      WAIT    ;N/A
         DW      WAIT
         DW      WAIT
         DW      WAIT
-        DW      GENT    ;GENERIC TIMER RET
-        DW      GENT    ;GENERIC TIMER RET
+        DW      GENT    ;SERIAL TIMER RET
+        DW      SERT    ;SERIAL TIMER RET
         DW      GENT    ;GENERIC TIMER RET
