@@ -1,17 +1,7 @@
 ;======================================================
-;        CP/M XMODEM 1.01 by Martin Eberhard
+;              Novasaur CP/M Utility 0.1
 ;======================================================
-; Compact XMODEM file transfer program for CP/M 2.2
-;
-; Supports both regular XMODEM checksums and XMODEM-CRC
-;
-; See help the message near the end of this code for
-; program usage
-;
-; Assemble with Digital Research's ASM Assembler
-;
-; Designed to run on a 2 MHz 8080 or a 4 MHz Z80,
-; communicating via CP/M's RDR: and PUN: drivers.
+; Heavily reworked version of XMODEM by Martin Eberhard
 ;
 ; CPM's BIOS RDR: driver must be modified to return
 ; with Z set if no character is available, and return
@@ -48,27 +38,9 @@
 ; buffer and reasonably robust options and messages.
 ;
 ; Based on XMODEM for CDOS version 1.03 by M. Eberhard
-;
-; Thanks to Ward Christensen for inventing XMODEM and
-;   keeping it simple.
-; Thanks to John Byrns for the XMODEM-CRC extension,
-;    which was adopted in Windows Hyperterm.
-; Thanks to Keith Petersen, W8SDZ, for a few ideas I
-;   borrowed from his XMODEM.ASM V3.2
-;
-; Revision History:
-;  Rev   Date       Author      Comments
-; 1.00 06APR2013 M.Eberhard  ported
-; 1.01 09APR2013 M.Eberhard  Squeezed to fit in 2k file
-;                            fix access to other drives
-;
-; To Do (maybe):
-;  use all available RAM for buffers
-;  Retries on disk errors
-;  command line option to turn pacifiers off
 ;======================================================
 
-        .PROJECT        xmodem.com
+        .PROJECT        util.com
 
 ;*************************
 ; Program Option Switches
@@ -1201,6 +1173,7 @@ EOFLG:  db      0       ;EOF flag (<>0 means true)
 ;----------------------
 ;Command line variables
 ;----------------------
+UMODE:  db      0FFH    ;1 for file, 0 for format
 XMODE:  db      0FFH    ;1 for send, 0 for receive
 CRCFLG: db      SELCRC  ;0 for checksum, SELCRC for CRC
 
@@ -1370,7 +1343,7 @@ RXCSM:  mov     a,m
 ;----------------------------------------
 FILEX:  call    CMSGXT
 
-        db      'ERROR: File already exists$'
+        db      'ERROR: File exists$'
 
 ;-------------------------
 ;Error: File create failed
@@ -1389,11 +1362,7 @@ INIT:   call    ILPRT           ;print this message
         db      SOLEN           ;message length
 SOMSG:
  db CR,LF
- db '======================================'
- db CR,LF
- db '=  CP/M XMODEM 1.01  By M. Eberhard  ='
- db CR,LF
- db '======================================'
+ db 'Novasaur CP/M Utility v0.1'
  db CR,LF
 SOLEN   equ     $-SOMSG
 
@@ -1535,7 +1504,7 @@ OPTDON:
 ;ABORT: No direction specified
 ;-----------------------------
 NODIR:  call    CMSGXT          ;Exit with this message
-        db      'ERROR: Must specify /S or /R$'
+        db      'ERROR: Invalid option$'
 
 ;---------------------------------------------------
 ;Input error exits. Print message and return to CP/M
@@ -1553,18 +1522,13 @@ IPELEN  equ     $-IPEMSG
 ;******************************************************
 HLPEXT: call    CMSGXT          ;Exit w/ this message
 
- db 'Usage:',CR,LF
- db ' XMODEM <filename.ext> {/R or /S} [/C]'
+ db 'Usage: **NOT IMPLEMENTED YET**',CR,LF
+ db ' UTIL {<filename.ext>} {/R, /S, /U, /M or /F}',CR,LF
+ db '   /R receive or /S send file',CR,LF
+ db '   /U uptime',CR,LF
+ db '   /M kernel monitor',CR,LF
+ db '   /F format A: drive',CR,LF
  db CR,LF
- db '   /R to receive, /S to send, one must be specified'
- db CR,LF
- db '   /C to receive with checksums, otherwise CRC'
- db ' error checking',CR,LF
- db '   (Transmit error-check mode is set by receiver)'
- db CR,LF
- db CR,LF
- db '   Each + means good block, each - means block'
- db ' retry'
  db '$'
 
 ;*****Subroutine***************************************

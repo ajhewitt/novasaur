@@ -73,39 +73,19 @@
         FATAL   EQU     0F7H    ;CODE FOR FATAL IS RST 6
 ;
         ORG     TBASE
+        
+        JMP     INIT    ;INIT AT TOP
 ;
-;MOVE CODE FOR INITIALIZATION
+; CONTINUE FROM RELOCATED RST4
 ;
-        LHLD    BOOT+1  ;PTR TO BIOS TABLE
-        LXI     D,CSTAT ;OFFSET OF CONSOLE QUERY ENTRY
-        DAD     D       ;POINT INTO BIOS JUMP TABLE
-        LXI     D,BTSTAT;POINT INTO BASIC JMP TABLE
-        MVI     B,9     ;COUNT
-        CALL    COPYH   ;MOVE BIOS TABLE INTO BASIC
-;
-        LXI     H,RST1  ;POINT TO RST1 CODE
-        LXI     D,8     ;POINT TO RST1 ADDR
-        MVI     B,6*8   ;COUNT 6*RST BLOCKS
-        CALL    COPYH   ;MOVE RST CODE
-;
-        LHLD    BDOS+1  ;LOCATE TOP OF RAM
-INIT:   SPHL            ;SET STACK POINTER TO END OF MEMORY
-        LXI     B,-256 ;ALLOW 256 BYTES FOR STACK
-        DAD     B       ;ADD TO ADDRESS
-        SHLD    DATAB   ;SAVE ADDR OF START OF DATA
-        XRA     A       ;GET A ZERO IN A
-        PUSH    PSW     ;SET STACK 1 LEVEL DEEP WITHOUT A GOSUB
-        LXI     H,0     ;CLEAR H,L
-        DAD     SP      ;SP TO H,L
-        SHLD    STACK   ;SAVE BEG OF STACK
-        CALL    IRAM    ;INIT RAM
-        LXI     D,NRNDX ;POINT TO RANDOM # SERIES
-        MVI     B,8     ;LOAD COUNT
-        CALL    COPYD   ;COPY TO TRND<X> IN RAM TABLE
-        MVI     M,2     ;SET RANDOM SWITCH
-        CALL    NEW0    ;AUTOMATIC "NEW"
-        LXI     H,VERS  ;POINT VERSION MESSAGE
-RDYM:   CALL    TERMM   ;WRITE IT
+RST4A:  MOV     E,A     ;PUT IN LOW
+        ORA     A       ;TEST SIGN
+        MVI     D,0     ;DEFAULT POSITIVE
+        JP      RST4B   ;BRIF +
+        MVI     D,0FFH  ;ELSE, NEG
+RST4B:  DAD     D       ;BUMP H,L
+        POP     D       ;RESTORE D,E
+        RET             ;RETURN
 ;
 RDY     EQU     $
 ;
@@ -4843,7 +4823,6 @@ RNDLI:  DB      'RND',0
 ;
 ; PROGRAM CONSTANTS
 ;
-PCHOF:  DB      19,20,0
 RNDP:   DB      3FH,0FDH        ;16381
         DB      3FH,0EBH        ;16363
         DB      3FH,0DDH        ;16349
@@ -5154,11 +5133,46 @@ JUMP    EQU     $
         PCHL            ;EXECUTE USER'S ROUTINE
 ;
 ;
+SETBT:  LHLD    BOOT+1  ;PTR TO BIOS TABLE
+        LXI     D,CSTAT ;OFFSET OF CONSOLE QUERY ENTRY
+        DAD     D       ;POINT INTO BIOS JUMP TABLE
+        LXI     D,BTSTAT;POINT INTO BASIC JMP TABLE
+        MVI     B,9     ;COUNT
+        JMP     COPYH   ;MOVE BIOS TABLE INTO BASIC
+;
                         ;...BIOS JUMP TABLE HERE
 BTSTAT: DS      3       ;JMP TO BIOS CONSOLE STATUS
 BTIN:   DS      3       ;JMP TO BIOS CONSOLE INPUT
 BTOUT:  DS      3       ;JMP TO BIOS CONSOLE OUTPUT
 ;
+;
+;CODE FOR INITIALIZATION - CAN BE OVERWRITTEN AFTER USE
+;
+INIT:   LXI     H,RST1  ;POINT TO RST1 CODE
+        LXI     D,8     ;POINT TO RST1 ADDR
+        MVI     B,6*8   ;COUNT 6*RST BLOCKS
+        CALL    COPYH   ;MOVE RST CODE
+;
+        LHLD    BDOS+1  ;LOCATE TOP OF RAM
+        SPHL            ;SET STACK POINTER TO END OF MEMORY
+        LXI     B,-256 ;ALLOW 256 BYTES FOR STACK
+        DAD     B       ;ADD TO ADDRESS
+        SHLD    DATAB   ;SAVE ADDR OF START OF DATA
+        XRA     A       ;GET A ZERO IN A
+        PUSH    PSW     ;SET STACK 1 LEVEL DEEP WITHOUT A GOSUB
+        LXI     H,0     ;CLEAR H,L
+        DAD     SP      ;SP TO H,L
+        SHLD    STACK   ;SAVE BEG OF STACK
+        CALL    IRAM    ;INIT RAM
+        LXI     D,NRNDX ;POINT TO RANDOM # SERIES
+        MVI     B,8     ;LOAD COUNT
+        CALL    COPYD   ;COPY TO TRND<X> IN RAM TABLE
+        MVI     M,2     ;SET RANDOM SWITCH
+        CALL    NEW0    ;AUTOMATIC "NEW"
+        CALL    SETBT   ;SET BIOS JUMP TABLE
+        LXI     H,VERS  ;POINT VERSION MESSAGE
+RDYM:   CALL    TERMM   ;WRITE IT
+        JMP     RDY
 ;
 ;       ORG     8
 ;
@@ -5229,15 +5243,6 @@ RST6:   XTHL            ;SAVE HL, GET ERROR CODE PTR
         JMP     ERROR   ;CONTINUE
 ;
 RSTEND  EQU     $
-;
-RST4A:  MOV     E,A     ;PUT IN LOW
-        ORA     A       ;TEST SIGN
-        MVI     D,0     ;DEFAULT POSITIVE
-        JP      RST4B   ;BRIF +
-        MVI     D,0FFH  ;ELSE, NEG
-RST4B:  DAD     D       ;BUMP H,L
-        POP     D       ;RESTORE D,E
-        RET             ;RETURN
 ;
 ROMEN   EQU     $-1
 ;

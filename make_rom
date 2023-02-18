@@ -33,7 +33,7 @@ build/bin2hex.rb lib/load.com 172 >> build/output/rom.hex
 build/bin2hex.rb lib/pip.com 180 >> build/output/rom.hex
 build/bin2hex.rb lib/stat.com 212 >> build/output/rom.hex
 build/bin2hex.rb lib/submit.com 236 >> build/output/rom.hex
-build/repack_hex.rb lib/xmodem.hex 244 >> build/output/rom.hex
+build/repack_hex.rb lib/util.hex 244 >> build/output/rom.hex
 build/bin2hex.rb lib/xsub.com 252 >> build/output/rom.hex
 
 echo "Building ALU"
