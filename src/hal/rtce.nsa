@@ -62,18 +62,16 @@ DISHL DZ, PGA             # jump to next VMC
 
 $T0_ADJ174                #174 - 10 ticks per min, cycle=3
 LD Y, $VMS
-FNEL DZ, HL               # HL = 0xF0/0xE0
+FNEL DZ, HL               # HL = adjust cycles
 #179
-ORHL A, NA                # A = TIME1 | 0xF0/0XE0
-LD HL, $INC$NULL
-FNH A, HLA                # A+1 (A +ve if TIME1=0x?F)
-LDP HL, $INC$NULL
+ADDHL A, NA               # A = TIME1 + adj
+LDP HL, $INC$NULL         # overflow = adjust
 LDN HL, $IDEN$NULL
-#190
 LDZ Y, $TIME0
 FNH DZ, HLD               # adjust TIME0 every 16/32 TIME1
-LD PC, $EXIT196
-#196
+#190
+LD PC, $EXIT192
+#192
 
 $XGA166
 NOP
@@ -165,11 +163,11 @@ $EXIT233                  #233 - 1 tick per day
 #190
 NOP
 NOP
+$EXIT192                  #192 - 10 ticks per min, cycle=3
 NOP
 NOP
 NOP
 NOP
-$EXIT196                  #196 - 10 ticks per min, cycle=3
 NOP
 #240
 LD HL, $INC$NULL
