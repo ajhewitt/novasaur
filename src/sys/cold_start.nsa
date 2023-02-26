@@ -137,6 +137,9 @@ MULH AZ, ED               # bank1,LED on->E *** init EO
 LD HL, $DEC$NULL
 LDZ Y, $TIME3
 FNH DZ, HLD               # set days to -1 (will overflow to 0 on start)
+LD HL, $36                # 36 block default = 3.75ms
+LD Y, $KTO                # PS/2 idle timeout (blocks)
+MVHL AZ, ND
 LD HL, $0xA0              # green on black, font 2
 LD Y, $CONF
 MVHL AZ, ND               # set default text colors

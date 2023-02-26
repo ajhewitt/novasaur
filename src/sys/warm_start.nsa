@@ -12,9 +12,6 @@ LD Y, $EO
 MVHL AZ, ED               # set RTS, bank
 
 # Keyboard
-LD HL, $40                # 40
-LD Y, $KTO                # PS/2 idle timeout (blocks)
-MVHL AZ, ND
 LD HL, $0
 LD Y, $KMODE
 MULH AZ, ND               # 0 -> Keyboard mode

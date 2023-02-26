@@ -1,6 +1,8 @@
 ;Edits:
 ;    30-Jun-08 KJL
 ;       - Created from IMSAI 8K BASIC Version 1.4 manual
+;    25-Feb-23 AJH
+;       - Adapted for Novasaur CP/M
 ;---------------------------------------------------------
 ; BASIC30.ASM   1.4     05/19/77        JRB     8K BASIC
 ; BASICS2.ASM   1.401   05/11/77        DK      8K BASIC
@@ -56,7 +58,7 @@
 ; 05/09/77   -SQUISH TO INCLUDE PEEK,POKE,CALL IN 8K
 ; 05/11/77   -MAKE RND(X) USE X AS RANGE; X^0->1,0^X->0
 ;            -TAB(N) GO TO NEXT LINE IF PAST POSITION
-; 5/12/77   - BUG IN NESTED FOR'S AND REENTERED FOR'S FIXED
+; 05/12/77   -BUG IN NESTED FOR'S AND REENTERED FOR'S FIXED
 ;
         .PROJECT        basic.com
 ;
@@ -66,7 +68,8 @@
         BDOS    EQU     5       ;BDOS ENTRY
         TBASE   EQU     0100H   ;PROGRAM LOAD UNDER CPM
         CSTAT   EQU     3       ;OFFSET OF CONSOLE STATUS
-                                ;...QUERY IN BIOS TABLE
+        SEROUT  EQU     15      ;OFFSET OF SERIAL OUT
+        SERIN   EQU     18      ;OFFSET OF SERIAL IN
 ;
 ; BASIC EQUATES
 ;
@@ -260,6 +263,42 @@ FREE    EQU     $
         CALL    TERMO   ;GO WRITE IT
         JMP     GETCM   ;CONTINUE
 ;
+LOAD    EQU     $
+;
+; TAPE COMMAND. DON'T ECHO INPUT. CONTINUE UNTIL KEY
+; COMMAND.
+;
+        MVI     A,1     ;SET TAPE INPUT SWITCH
+        STA     TAPES   ;STORE IT
+        LHLD    BOOT+1  ;PTR TO BIOS TABLE
+        LXI     D,SERIN
+        DAD     D
+        SHLD    BTIN+1  ;REDIRECT SERIAL TO IN
+        JMP     GETCM   ;GO PROCESS INPUT
+;
+ENDIT   EQU     $
+;
+; END COMMAND. IF TAPE PUNCH SWITCH IS ON, PUNCH 'KEY' THEN
+; CONTINUE
+;
+        LDA     TAPES   ;GET PAPER TAPE SWITCH
+        CPI     2       ;TEST FOR SAVE
+        JNZ     RDY     ;BRIF NOT
+        LXI     H,KEYL  ;POINT 'KEY'
+        CALL    TERMM   ;WRITE IT
+        CALL    CRLF    ;NEW LINE
+        XRA     A
+        MVI     C,LF    ;OUTPUT BYTE
+        CALL    BTOUT   ;CALL BIOS
+;
+; KEY COMMAND. RESET TAPE SWITCH. TURN READER OFF
+;
+KEY:
+	XRA     A       ;RESET TAPE SWITCH
+        STA     TAPES
+        CALL    SETBT
+        JMP     RDY	;PRINT READY MESSAGE
+;
 ; RUN PROCESSOR, GET NEXT STATMENT, AND EXECUTE IT
 ; IF IN IMMEDIATE MODE, THEN RETURN TO GETCMMD
 ;
@@ -317,6 +356,19 @@ RUN4:   SHLD    ADDR1   ;SAVE ADDR
 RUN7:   LHLD    ADDR1   ;RESTORE H,L POINTER
         JMP     LET     ;ASSUME IT'S LET STMT
 ;
+; SAVE COMMAND. TURN THE PUNCH ON THEN LIST PROGRAM
+;
+SAVE:   PUSH    H
+        MVI     A,2     ;SET PUNCH MODE
+        STA     TAPES
+        LHLD    BOOT+1  ;PTR TO BIOS TABLE
+        LXI     D,SEROUT
+        DAD     D
+        SHLD    BTOUT+1 ;REDIRECT OUT TO SERIAL
+        CALL    CRLF    ;NEW LINE
+        CALL    CRLF    ;NEW LINE
+        POP     H
+;
 LIST    EQU     $
 ;
 ;
@@ -353,7 +405,7 @@ LIST1:  LXI     H,BEGPR ;POINT BEGINNING OF PROGRAM
 LIST2:  CALL    TSTCC   ;GO SEE IF CONTROL-C OR CONTROL-O
         MOV     A,M     ;GET LEN CODE
         ORA     A       ;TEST IF END OF PROGRAM
-        JZ      RDY     ;BRIF END OF PGM
+        JZ      ENDIT   ;BRIF END OF PGM
         SUI     3       ;SUBTRACT THREE
         MOV     B,A     ;SAVE LEN
         INX     H       ;POINT HIGH BYTE OF LINE#
@@ -375,14 +427,14 @@ LIST4:  XCHG            ;SAVE H,L IN D,E
         MOV     A,M     ;GET LINE BYTE
         CMP     D       ;COMPARE HIGH BYTES
         JZ      LIST5   ;BRIF EQUAL
-        JNC     RDY     ;BRIF HIGHER
+        JNC     ENDIT   ;BRIF HIGHER
         JMP     LIST6   ;GO AROUND
 LIST5:  INX     H       ;POINT NEXT
         MOV     A,M     ;GET NEXT BYTE
         DCX     H       ;POINT BACK
         CMP     E       ;COMPARE LOW BYTES
         JZ      LIST6   ;BRIF EQUAL
-        JNC     RDY     ;BRIF HIGHER
+        JNC     ENDIT   ;BRIF HIGHER
 LIST6:  LXI     D,IOBUF ;POINT BUFFER AREA
         CALL    LINEO   ;CONVERT LINE NUMBER
 LIST7:  MOV     A,M     ;GET A BYTE
@@ -1225,31 +1277,6 @@ READ7:  INX     H       ;POINT PAST
 READ8:  SHLD    DATAP   ;SAVE ADDRESS
         JMP     READ4   ;CONTINUE
 ;
-OUTP    EQU     $
-;
-; STMT; OUT ADDR,VALUE
-;
-;
-        CALL    EXPR    ;GO EVALUATE ADDRESS
-        MOV     A,M     ;GET DELIM
-        CPI     ','     ;TEST IF COMMA
-        JNZ     SNERR   ;BRIF NOT
-        INX     H       ;SKIP OVER COMMA
-        CALL    FBIN    ;CONVERT TO BINARY IN A-REG
-        LXI     D,OUTA  ;POINT INSTR
-        XCHG            ;PUT TO H,L
-        MVI     M,0D3H  ;OUT INSTR
-        INX     H       ;POINT NEXT
-        MOV     M,A     ;PUT ADDR
-        INX     H       ;POINT NEXT
-        MVI     M,0C9H  ;RET INSTR
-        XCHG            ;RESTORE ORIG H,L
-        CALL    EXPR    ;GO EVAL DATA BYTE
-        CALL    EOL     ;ERROR IF NOT END OF STATEMENT
-        CALL    FBIN    ;CONVERT TO BINARY
-        CALL    OUTA    ;GO PUT THE BYTE
-        JMP     RUN     ;GO NEXT STMT
-;
 STOP    EQU     $
 ;
 ; STMT: STOP
@@ -2027,25 +2054,6 @@ RND7:   CALL    FNORM
         LXI     H,TEMP7 ;MULTIPLY BY RANGE
         JMP     FMUL
 ;
-INP     EQU     $
-;
-;
-; INPUT A BYTE FROM THE DEVICE IN FACC
-;
-; PUT THE RESULT IN THE FACC
-;
-        CALL    FBIN    ;CONVERT FACC TO BINARY
-        LXI     H,OUTA  ;POINT INSTR BUFFER
-        MVI     M,0DBH  ;IN INSTR
-        INX     H       ;POINT NEXT
-        MOV     M,A     ;MOVE ADDR
-        INX     H       ;POINT NEXT
-        MVI     M,0C9H  ;RET INSTR
-        CALL    OUTA    ;GO INPUT A BYTE
-FDEC:   MOV     E,A     ;MOVE BYTE TO LO D,E
-        MVI     D,0     ;ZERO HI D,E
-        JMP     BINFL   ;GO CONVERT TO DEC & RET
-;
 POS     EQU     $
 ;
 ;
@@ -2053,7 +2061,9 @@ POS     EQU     $
 ;
 ;
         LDA     COLUM   ;GET POSITION
-        JMP     FDEC    ;CONVERT TO FLOAT AND RETURN
+FDEC:   MOV     E,A     ;MOVE BYTE TO LO D,E
+        MVI     D,0     ;ZERO HI D,E
+        JMP     BINFL   ;GO CONVERT TO DEC & RET
 ;
 CONCA   EQU     $
 ;
@@ -4054,7 +4064,9 @@ TREAD   EQU     $
         JZ      TREAD   ;IGNORE IF IT IS
         CPI     0DH     ;TEST IF CR
         JNZ     NOTCR   ;BRIF NOT
-        CALL    CRLF    ;CR/LF
+        LDA     TAPES   ;GET PAPER TAPE SWITCH
+        RAR             ;TEST IF LOAD
+        CNC     CRLF    ;CR/LF IF NOT
 CR1:    MVI     M,0     ;MARK END
         LDA     ILSW    ;GET INPUT LINE SW
         ORA     A       ;TEST IT
@@ -4072,6 +4084,7 @@ TESTO   EQU     $
         PUSH    D
         PUSH    H
         MOV     C,A     ;OUTPUT BYTE
+        MVI     A,80H   ;SET SER TX TO 128
         CALL    BTOUT   ;CALL BIOS
         POP     H
         POP     D       ;RESTORE
@@ -4091,6 +4104,9 @@ NOTCR:  CPI     15H     ;TEST IF CONTROL-U
         JMP     REIN    ;GO RE-ENTER
 NOTCO:  CPI     8       ;TEST FOR ASCII BACKSPACE
         JNZ     NOTCH   ;BRIF NOT CONTROL H
+        LDA     TAPES   ;GET PAPER TAPE SW
+        RAR             ;TEST IF LOAD
+        JC      TREAD   ;IGNORE IF LOAD
         DCX     H       ;POINT PRIOR
         MOV     A,M     ;FETCH CHARACTER
         ORA     A       ;TEST FOR BEGINNING
@@ -4098,7 +4114,11 @@ NOTCO:  CPI     8       ;TEST FOR ASCII BACKSPACE
         MVI     A,8
         CALL    TESTO   ;WRITE IT
         JMP     TREAD   ;GET REPLACEMENT CHARACTER
-NOTCH:  CALL    TESTO   ;ECHO THE CHARCTER
+NOTCH:  LDA     TAPES   ;GET PAPER TAPE SWITCH
+        RAR             ;FLAG TO CARRY
+        JC      ECHO    ;NO ECHO IF TAPE
+        MOV     A,M     ;ELSE, LOAD THE CHAR
+        CALL    TESTO   ;ECHO THE CHARCTER
 ECHO:   INX     H       ;POINT NEXT POSIT
         JMP     TREAD   ;LOOP FOR NEXT
 ;
@@ -4768,9 +4788,6 @@ RNDLI:  DB      'RND',0
         DB      'ATN',0
         DW      ATN
         DB      0ABH
-        DB      'INP',0
-        DW      INP
-        DB      0ABH
         DB      'LN',0
         DW      LN
         DB      0ABH
@@ -4920,12 +4937,12 @@ JMPTB   EQU     $
         DW      NEW
         DB      'CON',0
         DW      CONTI
-;        DB      'TAPE',0
-;        DW      TAPE
-;        DB      'SAVE',0
-;        DW      SAVE
-;KEYL:   DB      'KEY',0
-;        DW      KEY
+        DB      'LOAD',0
+        DW      LOAD
+        DB      'SAVE',0
+        DW      SAVE
+KEYL:   DB      'KEY',0
+        DW      KEY
         DB      'FRE',0
         DW      FREE
         DB      'IF',0
@@ -4955,8 +4972,8 @@ TOLIT:  DB      'TO',0
         DW      LET
         DB      'STOP',0
         DW      STOP
-;        DB      'END',0
-;        DW      ENDIT
+        DB      'END',0
+        DW      ENDIT
         DB      'REM',0
         DW      RUN
         DB      '!',0
@@ -4967,8 +4984,6 @@ TOLIT:  DB      'TO',0
         DW      RANDO
         DB      'ON',0
         DW      ON
-        DB      'OUT',0
-        DW      OUTP
         DB      'DIM',0
         DW      DIM
         DB      'CHANGE',0
@@ -5268,7 +5283,6 @@ LINEN:  DS      5
 IMMED:  DS      82      ;IMMEDIATE COMMAND STORAGE AREA
 IOBUF:  DS      82      ;INPUT/OUTPUT BUFFER
 STRIN:  DS      256     ;STRING BUFFER AREA
-OUTA:   DS      3       ;*** FILLED IN AT RUN TIME
 INDX:   DS      2       ;HOLDS VARIABLE NAME OF FOR/NEXT
 REL:    DS      1       ;HOLDS THE RELATION IN AN IF STMT
 IFTYP:  DS      1       ;HOLDS TYPE CODE OF LEFT SIDE
