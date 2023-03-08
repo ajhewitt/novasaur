@@ -2628,7 +2628,7 @@ FNDSPACE:MOV	D,B	;set (DE) as the block that is checked.
 ; pointer and (DE) as the upper pointer.
 ;
 FNDSPA1	MOV	A,C	;is block 0 specified?
-	ORA	B
+	ORA		B
 	JZ	FNDSPA2
 	DCX	B	;nope, check previous block.
 	PUSH	D
@@ -3924,10 +3924,6 @@ LISTST:	;RETURN LIST STATUS (0 IF NOT READY, 1 IF READY)
 ;
 PUNCH:	;PUNCH CHARACTER FROM REGISTER C
         ;SEND IF SIZE>A|127, Z-FLAG SET IF ALL SENT
-;  0 1 2 3 4 5 6 7 .. 255
-; [][][][][][][][][..][] BUFF
-; x x WR        RD x  x (2-7=-5)
-;     RD  x x x WR      (7-2=5)
         LXI     H, BUFFWR
         MOV     B, M            ;B=WR
         INR     M               ;WR+1
@@ -3969,17 +3965,13 @@ DELTA3: MOV     B, A            ;SAVE START
 ;
 READER:	;READER CHARACTER INTO REGISTER A FROM READER DEVICE
         ;Z-FLAG SET IF NO DATA RECEIVED
-; CTX  0 []
-;      1 [] RXIDX
-;     .. [] RXSIZE
-;    127 []
         LXI     H, RXSIZE
         DCR     M               ;SIZE-1
         LXI     H, RXIDX
         JM      RXSER           ;BUFFER EMPTY, GET SERIAL
-        MOV     D, M            ;D=INDEX
-        DW      SHMRD
-        MOV     A, E            ;A=BYTE
+        MVI     D, (BUFF+100H)>>8
+        MOV     E, M            ;E=INDEX
+        LDAX    D               ;A=BYTE
         INR     M               ;INDEX+1 (CLEAR Z-FLAG)
         RET                     ;RETURN BYTE
 RXSER:  MVI     M, 0            ;RESET RXIDX
@@ -3989,6 +3981,9 @@ RXSER:  MVI     M, 0            ;RESET RXIDX
         STA     RXSIZE
         ORA     A               ;BUFFER EMPTY?
         RZ                      ;RETURN Z-FLAG SET
+        LXI     D, BUFF+100H
+        XRA     A
+        DW      RECRECV         ;SHM->DE
         JMP     READER          ;RECALL READER
 ;
 ;
