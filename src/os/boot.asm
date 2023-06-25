@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; FEB 6, 2023
+; JUN 24, 2023
 ;
         .PROJECT        boot.com
 ;
@@ -117,7 +117,7 @@ MONITOR:JMP     BOOTM   ;BOOT MONITOR
 ;
 ; CP/M 2.2
 ;
-CPM:    LXI     DE, 0E45CH;DEST/ROM PAGE
+CPM:    LXI     DE, 0E458H;DEST/ROM PAGE
         MVI     C, 27   ;28 PAGES
         DW      CPROM   ;COPY ROM
         MOV     A, B    ;A=CPU#

@@ -2,10 +2,10 @@
 ;
 ; JUNE 24, 2023
 ;
-; Copuright (c) 2013 Martin Eberhard
+; Copyright (c) 2013 Martin Eberhard
 ; Copyright (c) 2015 Mike Douglas
-; Copuright (c) 2020 The Glitch Works
-; Copuright (c) 2023 Solid State Machines
+; Copyright (c) 2020 The Glitch Works
+; Copyright (c) 2023 Solid State Machines
 ;
 ; Simple file transfer program. Some code
 ; taken from M Eberhard XMODEM 1.01 and 

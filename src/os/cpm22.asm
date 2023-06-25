@@ -3858,7 +3858,7 @@ CLRVAR: MVI     M, 0            ;CLEAR VARS
 WBOOT:
         LXI	SP, STACK	;SET MONITOR STACK
 ;
-        LXI     DE, 0E45CH      ;DEST/ROM PAGE
+        LXI     DE, 0E458H      ;DEST/ROM PAGE
         MVI     C, 21           ;22 PAGES
         DW      CPROM           ;LOAD CCP+BDOS
 GOCPM:
