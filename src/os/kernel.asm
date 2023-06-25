@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; FEB 6, 2023
+; JUN 22, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -300,8 +300,8 @@ SEND:   LDA     SRCCPU
 ; E=ticks to inhibit after return
 ; return D=index, no data if D==0
 ;
-RECV:   LXI     H, SERC
-        INR     M
+RECV:   MVI     A, 15
+        STA     SERC
         LDA     SRCCPU
         MVI     D, 0
         DW      SERRECV
@@ -315,10 +315,6 @@ SERRET: LDA     SRCCPU
         CALL    TADD    ;ADD RETURN TIMER
         POP     D
         JMP     SETRET  ;SET RETURN HANDLER
-; SERIAL CLEAR
-SERCLR: LXI     H, SERC
-        DCR     M
-        RET
 ;
 ; SLEEP E=TICKS 15=1s
 ; RETURN D=IDLE PER KILO
@@ -332,9 +328,14 @@ SLEEP:  LDA     SRCCPU
 ; TIMED OUT AT COUNT ZERO
 ;
 TICK:   MOV     M,A     ;SAVE T0
-        LXI     H,TICKC
+        LXI     H,SERC
+        XRA     A
+        CMP     M
+        JZ      TICK0
+        DCR     M
+TICK0:  LXI     H,TICKC
         DCR     M       ;TICK COUNT-1
-        JNZ     TICK0   ;SKIP UNTIL ZERO
+        JNZ     TICK1   ;SKIP UNTIL ZERO
 ;
         LXI     H,PERFI
         INR     M       ;INC PERF INDEX
@@ -359,24 +360,24 @@ TICK:   MOV     M,A     ;SAVE T0
         MOV     M,A     ;STORE LOAD AVG
         CALL    RSTRUN  ;RESET RUN COUNT
 ;
-TICK0:  LXI     H,TBASE ;START AT BASE
+TICK1:  LXI     H,TBASE ;START AT BASE
         PUSH    H
 TICKR:  POP     H
-TICK1:  XCHG            ;DE=CURT
+TICK2:  XCHG            ;DE=CURT
         LXI     H,TTOP
         MOV     A, M    ;A=[TTOP low]
         CMP     E
-        JNZ     TICK2   ;CURT!=TTOP
+        JNZ     TICK3   ;CURT!=TTOP
         INX     H
         MOV     A, M    ;A=[TTOP high]
         CMP     D
         RZ              ;CURT==TTOP DONE
-TICK2:  XCHG            ;HL=CURT
+TICK3:  XCHG            ;HL=CURT
         DCR     M       ;COUNT-1
         JZ      TFIRE   ;TIMED OUT
         LXI     B, 4
         DAD     B       ;CURT+4
-        JMP     TICK1
+        JMP     TICK2
 TFIRE:  PUSH    H       ;SAVE CURT
         LXI     B,TICKR
         PUSH    B       ;PUSH RETURN
@@ -388,12 +389,12 @@ TFIRE:  PUSH    H       ;SAVE CURT
         MOV     B, M    ;B=MSB
         PUSH    B       ;PUSH CALL ADDR
         ORA     A       ;A==0?
-        JZ      TICK3
+        JZ      TICK4
         POP     B       ;REMOVE CALL ADDR
         PUSH    H
         CALL    CMD2    ;DISPATCH RETURN HANDLER (A=CPU)
         POP     H
-TICK3:  LXI     B, -4
+TICK4:  LXI     B, -4
         DAD     B       ;HL=CURT-1
         XCHG            ;SAVE HL
         LHLD    TTOP
@@ -435,16 +436,6 @@ TADD:   LHLD    TTOP
         INX     H
         SHLD    TTOP
         RET
-;
-; SERIAL TIMER RETURN
-; DISPATCHED FROM MSG HANDLER
-;
-SERT:   PUSH    B
-        XRA     A       ;A=0 SO INTERNAL (BC=CALL ADDR)
-        LXI     B, SERCLR
-        CALL    TADD    ;CLEAR INHIBIT AFTER E TICKS
-        POP     B
-        ;CONT TO GENT
 ;
 ; GENERIC TIMER RETURN
 ; DISPATCHED FROM MSG HANDLER
@@ -566,5 +557,5 @@ RETS:   DW      WAIT    ;N/A
         DW      WAIT
         DW      WAIT
         DW      GENT    ;SERIAL TIMER RET
-        DW      SERT    ;SERIAL TIMER RET
+        DW      GENT    ;SERIAL TIMER RET
         DW      GENT    ;GENERIC TIMER RET
