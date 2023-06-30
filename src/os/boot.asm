@@ -1,19 +1,17 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; JUN 24, 2023
+; JUN 29, 2023
 ;
         .PROJECT        boot.com
 ;
 STACK   EQU     0E700H
 BREAK   EQU     STACK   ;KERNEL BREAK
 BOOTK   EQU     0F000H  ;BOOT KERNEL
-BOOTM   EQU     0F800H  ;BOOT MONITOR
+BOOTM   EQU     0F600H  ;BOOT MONITOR
 BOOTC   EQU     0FA00H  ;BOOT CP/M
 BOOTD   EQU     0FF00H  ;BOOT DISK
 IOBYTE  EQU     3       ;CP/M IO BYTE
 ;
-SDATA   EQU     8       ;SERIAL DATA
-CDATA   EQU     9       ;CONSOLE DATA
 RXEN    EQU     11      ;RX ENABLE
 CR      EQU     13      ;CARRIAGE RET
 LF      EQU     10      ;LINE FEED
@@ -91,7 +89,7 @@ SIGNON: DB      CR,LF,
         DB      "            /o)",CR,LF,
         DB      "   _/\/\/\_//",CR,LF,
         DB      " _/NOVASAUR/",CR,LF,
-        DB      "/_-'(_]-(_]",CR,LF,0
+        DB      "/_-^{_}^{_}",CR,LF,0
 ;
 ; BOOT ALL
 ; - BOOT OTHER CPUS
@@ -142,3 +140,5 @@ TABLE:  DB      BOOT
         DB      DISK
         DB      DISK
         DB      DISK
+        
+        END

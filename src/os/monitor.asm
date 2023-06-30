@@ -1,6 +1,6 @@
-; TITLE '8080 SYSTEM MONITOR, VER 0.9'
+; TITLE '8080 SYSTEM MONITOR, VER 1.0'
 ;
-; JAN 25, 2023
+; JUN 29, 2023
 ;
         .PROJECT monitor.com
 ;
@@ -34,7 +34,7 @@ OUTC    EQU     0D3H    ;OUT OP CODE
 RETC    EQU     0C9H    ;RET OP CODE
 MVCTX   EQU     04DDH
 
-        .ORG    0F800H
+        .ORG    0F600H
 
 ;
 ; SEND ASCII MESSAGE UNTIL BINARY ZERO
@@ -186,7 +186,7 @@ TOGGLE: LDA     COMS    ;LOAD COMS
 ; SIGNON MESSAGE
 ;
 SIGNON: DB      CR,LF,
-        DB      "Novasaur 8080 SYSMON v0.9",CR,LF,
+        DB      "Novasaur 8080 SYSMON v1.0",CR,LF,
         DB      "Copyright (c) 2023",CR,LF,
         DB      "Solid State Machines",CR,LF,0
 ;
@@ -769,8 +769,14 @@ UPTIME: DW      013EDH  ;B=DAYS,C=HOURS
         ADI     '0'     ;COVERT TO ASCII
         CALL    OUTT
 UPTIME1:POP     B
+        MOV     A,C
+        CPI     10H
+        JC      UPTIME2
         CALL    OUTHX   ;OUT DAYS 10s,1s
-        MVI     A,' '
+        JMP     UPTIME3
+UPTIME2:ADI     '0'     ;COVERT TO ASCII
+        CALL    OUTT
+UPTIME3:MVI     A,' '
         CALL    OUTT
         POP     B       ;C=HOURS
         CALL    OUTHX
@@ -824,8 +830,6 @@ KERN:   MVI     A,1
         JZ      KGET
         CPI     'P'     ;WRITE DISK
         JZ      KPUT
-        CPI     'F'     ;FORMAT DISK
-        JZ      KFMT
         ;MOAR COMMANDS
         JMP     ERROR
 ;
@@ -869,54 +873,5 @@ KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
         CALL    K_CMD   ;HANDLE COMMAND
         CALL    CTXSW
         RET
-;
-; FORMAT A: DRIVE
-;
-KFCONF: DB      "FORMAT? (Y)",CR,LF,0
-KFDONE: DB      "YES",0
-KFSKIP: DB      "..SKIP",0
 
-KFMT:   LXI     D,KFCONF
-        CALL    PRNTM
-KFMT0:  CALL    INPUTT  ;READ INPUT
-        CPI     'A'
-        JC      KFMT0   ;IGNORE CR
-        CPI     'Y'
-        JZ      KFMT1   ;CONFIRMED
-        CALL    OUTT    ;IGNORE
-        LXI     D,KFSKIP
-        JMP     PRNTM
-KFMT1:  LXI     H,0180H ;CREATE RECORD
-KFMT2:  DCR     L       ;HL--
-        MOV     A,L
-        ANI     01FH    ;FIND RECORD START
-        JZ      KFMT3
-        MVI     M,0     ;CLEAR  BYTE
-        JMP     KFMT2   ;LOOP
-KFMT3:  MVI     M,0E5H  ;SET ERA EVERY RECORD
-        ORA     L       ;L=0?
-        JNZ     KFMT2   ;LOOP IF NO
-        XCHG            ;DE=0100
-        XRA     A       ;START SHM@0
-        DW      RECSEND ;COPY RECORD (0100->SHM)
-        LXI     D,0     ;DE=0,0
-KFMT4:  MVI     A,1
-        STA     SRCCPU  ;SET SOURCE AS KERNEL
-        PUSH    D
-        LXI     B,0303H ;PUT COMMAND
-        CALL    K_CMD   ;HANDLE COMMAND
-        CALL    CTXSW
-        POP     D
-        INR     E       ;SEC++
-        MOV     A,E
-        ANI     7
-        JNZ     KFMT4
-        MOV     E,A
-        INR     D
-        MOV     A,D
-        CPI     2
-        JNZ     KFMT4
-        LXI     D,KFDONE
-        JMP     PRNTM
-        
         END

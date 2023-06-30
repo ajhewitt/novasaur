@@ -21,7 +21,8 @@ echo ":020000040001F9" >> build/output/rom.hex
 build/repack_hex.rb lib/boot.hex 0 >> build/output/rom.hex
 build/repack_hex.rb lib/disk.hex 1 >> build/output/rom.hex
 build/repack_hex.rb lib/kernel.hex 2 >> build/output/rom.hex
-build/repack_hex.rb lib/monitor.hex 10 >> build/output/rom.hex
+build/repack_hex.rb lib/monitor.hex 8 >> build/output/rom.hex
+#build/repack_hex.rb lib/system.hex 14 >> build/output/rom.hex
 build/pack_hex.rb lib/bdir.hex 18 >> build/output/rom.hex
 
 build/bin2hex.rb lib/asm.com 20 >> build/output/rom.hex
