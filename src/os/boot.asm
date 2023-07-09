@@ -1,10 +1,10 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; JUN 29, 2023
+; JUL 2, 2023
 ;
         .PROJECT        boot.com
 ;
-STACK   EQU     0E700H
+STACK   EQU     0E500H
 BREAK   EQU     STACK   ;KERNEL BREAK
 BOOTK   EQU     0F000H  ;BOOT KERNEL
 BOOTM   EQU     0F600H  ;BOOT MONITOR
@@ -89,7 +89,7 @@ SIGNON: DB      CR,LF,
         DB      "            /o)",CR,LF,
         DB      "   _/\/\/\_//",CR,LF,
         DB      " _/NOVASAUR/",CR,LF,
-        DB      "/_-^{_}^{_}",CR,LF,0
+        DB      "/_/{_}~~{_}",CR,LF,0
 ;
 ; BOOT ALL
 ; - BOOT OTHER CPUS

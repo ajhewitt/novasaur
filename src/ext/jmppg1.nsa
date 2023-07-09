@@ -11,7 +11,7 @@ FNDL A, PC                # fork within jump page
 
 # BC=BCD(A)
 LD Y, $AREG               # BC=BCD of Acc
-DIVH DZ, NA               # A=Acc%10
+DIVH DZ, NA               # A=Acc%10 (div-by-zero=mod10)
 #39/8
 LD Y, $CREG
 FNH AZ, HLD               # A->Creg
