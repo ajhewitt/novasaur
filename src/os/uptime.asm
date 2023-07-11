@@ -1,6 +1,6 @@
 ; TITLE: 'UPTIME'
 ;
-; JUL 9, 2023
+; JUL 10, 2023
 ;
         .PROJECT        uptime.com
 
@@ -27,11 +27,15 @@ SECS    EQU     11EDH
 KERNP   EQU     0E800H
 
         .ORG    100H
-
+;
+; Display Intro
+;
         LXI     D,INTR
         MVI	C,PRINT
         CALL    BDOS
-
+;
+; Show uptime
+;
 TIME:   DW      DAYHR   ;B=DAYS,C=HOURS
         PUSH    B
         PUSH    B
@@ -73,7 +77,9 @@ TIME4:  MVI	C,PRINT
         CALL    CONOUT
         DW      SECS    ;C=SECONDS
         CALL    BCD
-
+;
+; Copy Kernel stats
+;
         LXI     D,KERNP
         CALL    STATS
         MOV     A,E
@@ -88,11 +94,15 @@ TIME4:  MVI	C,PRINT
         LXI     D,BUFF
         XRA     A               ;START SHM@0
         DW      RECRECV         ;SHM->[DE]
-
+;
+; Show uptime header
+;
         LXI     D,HEAD
         MVI	C,PRINT
         CALL	BDOS
-
+;
+; Show stat rows
+;
         LDA     INDEX
         MOV     L,A
         MVI     H,BUFF>>8
@@ -143,7 +153,7 @@ ROW4:   MVI     C,' '
 ROW5:   LDA     IDLE
         CMP     B
         JNZ     ROW6
-        MVI     C,':'
+        MVI     C,'.'
 ROW6:   PUSH    B
         CALL    CONOUT
         POP     B
@@ -156,6 +166,7 @@ ROW7:   MVI     C,CR
         CALL    CONOUT
         POP     H
         LDA     INDEX
+        ADI     8
         ANI     78H
         CMP     L
         JNZ     ROW1
@@ -165,7 +176,9 @@ ROW7:   MVI     C,CR
         CALL	BDOS
 
         RET
-
+;
+; Show BCD value of C
+;
 BCD:    PUSH    B
         MOV     A,C
         RAR             ;ROTATE
@@ -179,22 +192,28 @@ BCD1:   ANI     0FH     ;TAKE 4 BITS
         ADI     '0'
         MOV     C,A
         JMP     CONOUT
-
+;
+; Request Kernel stats
+;
 STATS:  LXI     B,010BH         ;SEQ 1, GET COMMAND
         MOV     A,B             ;SAVE SEQ# IN A
         DW      CMDSND          ;CALL KERNEL
         CMP     B               ;COMPARE SEQ#
         JNZ     STATS           ;RETRY ON ERROR
         RET
-
+;
+; Calculate average
+;  A=average of 8 values
+;  D=average of 8 values *5 (range 0-39)
+;
 AVG:    MVI	B,0
         LXI	D,0     ;SUM=0
         MVI	A,8
-AVG1:   MOV	C,M
+AVG1:   DCR	L
+        MOV	C,M
         XCHG            ;HL=SUM,DE=INDEX
         DAD	B       ;SUM+=BC
         XCHG            ;HL=INDEX,DE=SUM
-        DCR	L
         DCR	A
         JNZ	AVG1
         XCHG            ;HL=SUM,DE=INDEX
@@ -211,19 +230,21 @@ AVG1:   MOV	C,M
         DAD     B       ;HL=SUM*5
         XCHG            ;HL=INDEC,DE=SUM*5
         RET
-
-INTR    db      'System uptime: $'
+;
+; Messages
+;
+INTR    db      'System Uptime: $'
 DAY     db      ' day$'
 CMR     db      's, $'
 
 HEAD    db      CR,LF,LF,
-        db      '       CPU Load Average (15 seconds per row)',CR,LF,
+        db      '           CPU Load Average (last 4 mins)',CR,LF,
         db      '     0      0.5     1.0     1.5     2.0     2.5',CR,LF,
         db      '     +-------+-------+-------+-------+-------+',CR,LF,'$'
 
 FOOT    db      '     +-------+-------+-------+-------+-------+',CR,LF
         db      '     0%      5%     10%     15%     20%     25%',CR,LF
-        db      '         CPU Idle Cycles (percentage as :)',CR,LF,'$'
+        db      '           CPU Idle Cycle % (dotted line)',CR,LF,'$'
 
 INDEX   db      0
 LOAD    db      0
