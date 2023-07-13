@@ -1,6 +1,6 @@
 ; TITLE: 'UPTIME'
 ;
-; JUL 10, 2023
+; JUL 12, 2023
 ;
         .PROJECT        uptime.com
 
@@ -82,9 +82,8 @@ TIME4:  MVI	C,PRINT
 ;
         LXI     D,KERNP
         CALL    STATS
-        MOV     A,E
-        ANI     78H
-        STA     INDEX
+        LXI     H,INDEX
+        MOV     M,E
         LXI     D,BUFF+80H
         XRA     A               ;START SHM@0
         DW      RECRECV         ;SHM->[DE]
@@ -104,72 +103,74 @@ TIME4:  MVI	C,PRINT
 ; Show stat rows
 ;
         LDA     INDEX
-        MOV     L,A
+        ANI     78H             ;INDEX BUCKET
         MVI     H,BUFF>>8
+        MOV     L,A             ;HL=BUFF POINTER
+        ADI     8
+        ANI     78H             ;END 1 BUCKET BEFORE
+        STA     INDEX
 ROW1:   MOV     A,L
-        ANI     7FH
-        JNZ     ROW2
-        MOV     A,L
-        XRI     80H
+        ANI     7FH             ;INDEX WRAPPED?
+        JNZ     ROW2            ;NO, CONTINUE
+        MOV     A,L             ;ELSE
+        XRI     80H             ;FLIP SIGN
         MOV     L,A
-ROW2:   PUSH    H
+ROW2:   PUSH    H               ;SAVE POINTER
         MOV     A,L
-        XRI     80H
+        XRI     80H             ;INDEX IDLE STATS
         MOV     L,A
-        CALL    AVG
+        CALL    AVG             ;AVERAGE 8 IDLES
         LXI     H,IDLE
-        MOV     M,D
-        POP     H
-
-        CALL    AVG
-        PUSH    H
+        MOV     M,D             ;SAVE IDLE AVG
+        
+        POP     H               ;RESTORE POINTER
+        CALL    AVG             ;AVERAGE 8 LOADS
+        PUSH    H               ;SAVE POINTER
         LXI     H,LOAD
-        MOV     M,D
-        DW      BCDA    ;BC=BCD A
-        PUSH    B
+        MOV     M,D             ;SAVE LOAD AVG
+        DW      BCDA            ;BC=BCD A
+        PUSH    B               ;SAVE BCD
         MOV     A,B
         ADI     '0'
         MOV     C,A
-        CALL    CONOUT
+        CALL    CONOUT          ;SHOW LOAD UNITS
         MVI     C,'.'
-        CALL    CONOUT
-        POP     B
-        CALL    BCD
+        CALL    CONOUT          ;POINT
+        POP     B               ;RESTORE BCD
+        CALL    BCD             ;SHOW DECIMALS
         MVI     C,' '
-        CALL    CONOUT
+        CALL    CONOUT          ;SPACE
         MVI     C,'|'
-        CALL    CONOUT
+        CALL    CONOUT          ;LINE
 
-        MVI     B,0
-ROW3:   MVI     C,'='
+        MVI     B,0             ;COL ZERO
+ROW3:   MVI     C,'='           ;DEFAULT BAR
         LDA     LOAD
-        CMP     B
-        JZ      ROW4
-        JNC     ROW5
+        CMP     B               ;COMPARE LOAD
+        JZ      ROW4            ;AT LOAD, CLEAR
+        JNC     ROW5            ;BEFORE LOAD SHOW
         LDA     IDLE
-        CMP     B
-        JC      ROW7
-ROW4:   MVI     C,' '
+        CMP     B               ;COMPARE IDLE
+        JC      ROW7            ;PAST LOAD & IDLE DONE
+ROW4:   MVI     C,' '           ;ELSE CLEAR BAR
 ROW5:   LDA     IDLE
-        CMP     B
-        JNZ     ROW6
-        MVI     C,'.'
+        CMP     B               ;AT IDLE?
+        JNZ     ROW6            ;NO, SHOW BAR
+        MVI     C,'.'           ;YES, SHOW DOT
 ROW6:   PUSH    B
-        CALL    CONOUT
-        POP     B
-        INR     B
-        JMP     ROW3
+        CALL    CONOUT          ;SHOW BAR, SPACE, OR DOT
+        POP     B               ;RESTORE COL
+        INR     B               ;NEXT COL
+        JMP     ROW3            ;REPEAT
 
-ROW7:   MVI     C,CR
+ROW7:   MVI     C,CR            ;END OF ROW
         CALL    CONOUT
         MVI     C,LF
         CALL    CONOUT
-        POP     H
+        POP     H               ;RESTORE POINTER
         LDA     INDEX
-        ADI     8
-        ANI     78H
-        CMP     L
-        JNZ     ROW1
+        CMP     L               ;AT INDEX?
+        JNZ     ROW1            ;NO, NEXT ROM
 
         LXI     D,FOOT
         MVI	C,PRINT
