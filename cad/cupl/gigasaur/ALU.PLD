@@ -1,0 +1,40 @@
+Name     ALU ;
+PartNo   00 ;
+Date     6/20/2022 ;
+Revision 02 ;
+Designer A J Hewitt ;
+Company  Solid-state Machines ;
+Assembly Novatron ;
+Location None ;
+Device   g16v8a ; /* PAL 12H6 */
+
+/****************************** INPUT PINS *******************************/
+PIN [1..4]    = [A0..3]    ; /* Accumulator                              */
+PIN [5..8]    = [B0..3]    ; /* Bus                                      */
+PIN [9,11,12] = [IR5..IR7] ; /* Instruction Register                     */
+PIN 19        = NC         ; /* Not Connected                            */
+/****************************** OUTPUT PINS ******************************/
+PIN [13..16]  = [R0..3]    ; /* Adder Right                              */
+PIN 17        = C0         ; /* Carry in to Lower Adder                  */
+PIN 18        = !LE        ; /* Adder Left Enable                        */
+/*************************************************************************/
+
+function R( F2,   F1,   F0,   A,   B) {
+      R = (      !F1 & !F0 &       B) #
+          (!F2 & !F1 &  F0 &  A &  B) #
+          (!F2 &  F1 &       !A &  B) #
+          (!F2 &  F1 &        A & !B) #
+          (!F2 &  F1 & !F0 &  A &  B) #
+          ( F2 & !F1 &  F0 &      !B) #
+          ( F2 &  F1 &  F0 & !A) ;
+}
+
+R0 = R(IR7, IR6, IR5, A0, B0) ;
+R1 = R(IR7, IR6, IR5, A1, B1) ;
+R2 = R(IR7, IR6, IR5, A2, B2) ;
+R3 = R(IR7, IR6, IR5, A3, B3) ;
+
+C0 =  IR7 &  IR5 ;
+
+LE = (IR7 & !IR6 ) #
+     (IR7 &  IR6 & !IR5 ) ;

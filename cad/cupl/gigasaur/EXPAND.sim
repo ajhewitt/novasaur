@@ -1,0 +1,75 @@
+%SIGNAL
+PIN   9 =  A15 
+PIN   2 =  B0 
+PIN   1 =  B1 
+PIN  18 =  BUS0 
+PIN  17 =  BUS1 
+PIN  12 =  MA15 
+PIN  13 =  MA16 
+PIN   3 =  MISO0 
+PIN   4 =  MISO1 
+PIN  15 = !MOE 
+PIN  14 = !MWE 
+PIN  19 =  NC 
+PIN   6 =  NOE 
+PIN   8 =  NSS0 
+PIN  11 =  NSS1 
+PIN   7 =  NWE 
+PIN  16 = !PWE 
+PIN   5 =  SCLK 
+%END
+
+%FIELD
+%END
+
+%EQUATION
+BUS0 =>
+    MISO0 & !NSS0
+  # MISO1 & !NSS1
+
+BUS0.oe  =>
+    !NOE & SCLK
+
+BUS1 =>
+    0 
+
+BUS1.oe  =>
+    !NOE & SCLK
+
+!MA15 =>
+    A15 & B0
+
+!MA16 =>
+    A15 & B1
+
+!MOE =>
+    SCLK
+  # NOE
+
+!MWE =>
+    NWE
+  # !NOE
+
+!POE =>
+    !NOE & SCLK
+
+!PWE =>
+    NWE
+  # NOE
+
+MA15.oe  =>
+    1 
+
+MA16.oe  =>
+    1 
+
+MOE.oe  =>
+    1 
+
+MWE.oe  =>
+    1 
+
+PWE.oe  =>
+    1 
+
+%END

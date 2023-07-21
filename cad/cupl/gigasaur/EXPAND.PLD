@@ -1,0 +1,49 @@
+Name     EXPAND ;
+PartNo   00 ;
+Date     9/7/2022 ;
+Revision 03 ;
+Designer A J Hewitt ;
+Company  Solid-state Machines ;
+Assembly Novatron ;
+Location None ;
+Device   g16v8a ; /* PAL 10L8 */
+
+/****************************** INPUT PINS *******************************/
+PIN 1        = B1             ; /* Bank Select 1                         */
+PIN 2        = B0             ; /* Bank Select 0                         */
+PIN [3..4]   = [MISO0..MISO1] ; /* Master In Slave Out                   */
+PIN 5        = SCLK           ; /* Serial Clock                          */
+PIN 6        = NOE            ; /* Output Enable                         */
+PIN 7        = NWE            ; /* Write Enable                          */
+PIN 8        = NSS0           ; /* SS0                                   */
+PIN 9        = A15            ; /* Address MSB                           */
+PIN 11       = NSS1           ; /* SS1                                   */
+/****************************** OUTPUT PINS ******************************/
+PIN 12       = MA15           ; /* Memory A15                            */
+PIN 13       = MA16           ; /* Memory A16                            */
+PIN 14       = !MWE           ; /* Memory Write Enable                   */
+PIN 15       = !MOE           ; /* Memory Output Enable                  */
+PIN 16       = !PWE           ; /* Port Write Enable                     */
+PIN [17..18] = [BUS1..BUS0]   ; /* Bus                                   */
+PIN 19       = NC             ; /* Not Connected                         */
+/*************************************************************************/
+
+!MA15 = A15 & B0 ;
+
+!MA16 = A15 & B1 ;
+
+!MWE =  NWE # !NOE ;
+
+!MOE = SCLK # NOE ;
+
+!PWE = NWE # NOE ;
+
+!POE = !SCLK # NOE ;
+
+BUS0 = (MISO0 & !NSS0) # (MISO1 & !NSS1) ;
+
+BUS1 = 'b'0 ;
+
+BUS0.OE = POE ;
+
+BUS1.OE = POE ;

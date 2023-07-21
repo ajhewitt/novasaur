@@ -1,0 +1,47 @@
+Name     DECODER ;
+PartNo   00 ;
+Date     6/20/2022 ;
+Revision 02 ;
+Designer A J Hewitt ;
+Company  Solid-state Machines ;
+Assembly Novatron ;
+Location None ;
+Device   g16v8a ; /* PAL 10L8 */
+
+/****************************** INPUT PINS *******************************/
+PIN [1..6]    = [IR2..IR7] ; /* Instruction Register                     */
+PIN 7         = AC7        ; /* Accumulator Sign                         */
+PIN 8         = C8         ; /* Carry                                    */
+PIN 9         = CLK2       ; /* Clock -90 degrees                        */
+PIN 11        = NC         ; /* Not Connected                            */
+/****************************** OUTPUT PINS ******************************/
+PIN 12        = !PL        ; /* Program Counter Load Low                 */
+PIN 13        = !PH        ; /* Program Counter Load High                */
+PIN 14        = !AL        ; /* Accumulator Load                         */
+PIN 15        = !OL        ; /* Output Load                              */
+PIN 16        = !XE        ; /* X-register Address Select                */
+PIN 17        = !YE        ; /* Y-register Address Select                */
+PIN 18        = !WE        ; /* Write Enable                             */
+PIN 19        = !UL        ; /* User Registers Load                      */
+/*************************************************************************/
+
+!UL = (IR7 & IR6 & IR5) # !IR4 ;
+
+!WE = CLK2 # !(IR7 & IR6 & !IR5) ;
+
+ YE = !(IR7 & IR6 & IR5) &
+      ((IR4 & IR3 & IR2) # (!IR4 & IR3)) ;
+
+ XE = !(IR7 & IR6 & IR5) &
+      ((IR4 & IR3 & IR2) # (!IR4 & IR2)) ;
+
+!OL = (IR7 & IR6) # !(IR4 & IR3) ;
+
+!AL = (IR7 & IR6) # IR4 ;
+
+ PH =  IR7 & IR6 & IR5 & !IR4 & !IR3 & !IR2 ;
+
+ PL = (IR7 & IR6 & IR5 &  !C8 & !AC7 &  IR2) # 
+      (IR7 & IR6 & IR5 &  !C8 &  AC7 &  IR3) #
+      (IR7 & IR6 & IR5 &   C8 & !AC7 &  IR4) # 
+      (IR7 & IR6 & IR5 & !IR4 & !IR3 & !IR2) ;

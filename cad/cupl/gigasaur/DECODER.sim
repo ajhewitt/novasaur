@@ -1,0 +1,70 @@
+%SIGNAL
+PIN   7 =  AC7 
+PIN  14 = !AL 
+PIN   8 =  C8 
+PIN   9 =  CLK2 
+PIN   1 =  IR2 
+PIN   2 =  IR3 
+PIN   3 =  IR4 
+PIN   4 =  IR5 
+PIN   5 =  IR6 
+PIN   6 =  IR7 
+PIN  11 =  NC 
+PIN  15 = !OL 
+PIN  13 = !PH 
+PIN  12 = !PL 
+PIN  19 = !UL 
+PIN  18 = !WE 
+PIN  16 = !XE 
+PIN  17 = !YE 
+%END
+
+%FIELD
+%END
+
+%EQUATION
+!AL =>
+    IR6 & IR7
+  # IR4
+
+!OL =>
+    IR6 & IR7
+  # !IR4
+  # !IR3
+
+PH =>
+    !IR2 & !IR3 & !IR4 & IR5 & IR6 & IR7
+
+PL =>
+    !AC7 & !C8 & IR2 & IR5 & IR6 & IR7
+  # AC7 & !C8 & IR3 & IR5 & IR6 & IR7
+  # !AC7 & C8 & IR4 & IR5 & IR6 & IR7
+  # !IR2 & !IR3 & !IR4 & IR5 & IR6 & IR7
+
+!UL =>
+    IR5 & IR6 & IR7
+  # !IR4
+
+!WE =>
+    CLK2
+  # !IR7
+  # !IR6
+  # IR5
+
+XE =>
+    IR2 & !IR4 & !IR7
+  # IR2 & !IR4 & !IR6
+  # IR2 & !IR4 & !IR5
+  # IR2 & IR3 & IR4 & !IR7
+  # IR2 & IR3 & IR4 & !IR6
+  # IR2 & IR3 & IR4 & !IR5
+
+YE =>
+    IR3 & !IR4 & !IR7
+  # IR3 & !IR4 & !IR6
+  # IR3 & !IR4 & !IR5
+  # IR2 & IR3 & IR4 & !IR7
+  # IR2 & IR3 & IR4 & !IR6
+  # IR2 & IR3 & IR4 & !IR5
+
+%END
