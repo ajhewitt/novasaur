@@ -1,6 +1,6 @@
 ; TITLE: 'XFER'
 ;
-; JUNE 24, 2023
+; JULY 23, 2023
 ;
 ; Copyright (c) 2013 Martin Eberhard
 ; Copyright (c) 2015 Mike Douglas
@@ -21,7 +21,9 @@ CTRLC	EQU	3
 LF	EQU	10
 CR	EQU	13
 EOF	EQU	1AH
-TIMEOUT EQU     21      ;2.8 SECONDS
+TOFAST  EQU     18      ;3.2 SECONDS
+TOSLOW  EQU     225     ;30 SECONDS
+CMDSND  EQU     05DDH   ;SLAVE: SEND COMMAND
 
 ;-------------------------------------------
 ;CP/M 2 BDOS Equates
@@ -31,6 +33,7 @@ WBOOT	EQU	BIOS+3  ;Warm Boot
 CONIN   EQU     BIOS+9  ;Console In
 PUNCH   EQU     BIOS+18 ;Serial Send
 READER  EQU     BIOS+21 ;Serial Recv
+IOBYTE  EQU     7
 PRINT	EQU	9
 OPEN	EQU	15	;0FFH=NOT FOUND
 CLOSE	EQU	16	;   "	"
@@ -109,7 +112,7 @@ CHKLUP: cmp     m               ;Match? (alpha order)
 ;
 ; Illegal option. Print message and return to CP/M
 ;
-        call    ERXIT           ;Exit with this message
+        call    EXIT            ;Exit with this message
         db      'Error Invalid Param /'
 PARERR: db      '&'             ;parameter goes here
         db      '$'
@@ -134,18 +137,29 @@ OPTDONE:lda     XMODE           ;did /R or /S get set?
 ;
 ; Send FIle
 ;
-        LXI	D,SENDMSG
+        MVI	C,IOBYTE
+	CALL	BDOS            ;GET IO BYTE
+	ANI     1               ;TTY=0
+        JZ      TX_TTY
+
+	LXI	D,ANYKEY
 	MVI	C,PRINT		;PRINT SEND MSG
 	CALL	BDOS
 	CALL    CONIN
+	JMP     TX_CRT
 
-	LXI	D,FCB
+TX_TTY: LXI	D,SENDMSG
+	MVI	C,PRINT		;PRINT SEND MSG 2
+	CALL    BDOS
+        CALL    SLEEP
+
+TX_CRT: LXI	D,FCB
 	MVI	C,OPEN          ;OPEN FILE
 	CALL	BDOS
 	INR	A		;OPEN OK?
 	JNZ     READ_SECTOR	;GOOD OPEN
-	CALL	ERXIT
-	DB	CR,LF,"Error Opening File",CR,LF,'$'
+	CALL	EXIT
+	DB	'Error Opening File.$'
 READ_SECTOR:
 	LXI	D,FCB
 	MVI	C,READ          ;READ SECTOR
@@ -153,9 +167,16 @@ READ_SECTOR:
 	ORA	A
         JZ      SEND_LOOP
 	DCR	A		;EOF?
-	JZ	XFER_CPLT       ;DONE
-	CALL	ERXIT
-	DB	CR,LF,'Error Reading File',CR,LF,'$'
+	JZ	SEND_DONE       ;DONE
+	CALL	EXIT
+	DB	'Error Reading File.$'
+SEND_DONE:
+        MVI	C,IOBYTE
+	CALL	BDOS            ;GET IO BYTE
+	ANI     1               ;TTY=0
+	CZ      SLEEP           ;WAIT ON TTY
+        JMP     XFER_DONE
+        
 SEND_LOOP:
 	LXI	H,80H
 SEND_CHAR:
@@ -171,12 +192,22 @@ SEND_CHAR:
 ; Receive File
 ;
 RECV_FILE:
-        LXI	D,RECVMSG
+        MVI	C,IOBYTE
+	CALL	BDOS            ;GET IO BYTE
+	ANI     1               ;TTY=0
+        JZ      RX_TTY
+
+	LXI	D,ANYKEY
 	MVI	C,PRINT		;PRINT RECV MSG
 	CALL	BDOS
 	CALL    CONIN
+	JMP     RX_CRT
 
-	LXI	D,FCB
+RX_TTY: LXI	D,RECVMSG
+	MVI	C,PRINT		;PRINT RECV MSG
+	CALL	BDOS
+
+RX_CRT: LXI	D,FCB
 	MVI	C,SRCHF		;FILE EXISTS?
 	CALL	BDOS
 	INR	A		;FOUND?
@@ -189,20 +220,22 @@ NEW_FILE:
 	MVI	C,MAKE          ;MAKE NEW FILE
 	CALL	BDOS
 	INR	A		;FF=BAD
-	JNZ     RECV_LOOP       ;OPEN OK
-	CALL	ERXIT
-	DB	CR,LF,"Error Directory Full",CR,LF,'$'
-
+	JNZ     RECV_START       ;OPEN OK
+	CALL	EXIT
+	DB	'Error Directory Full.$'
+RECV_START:
+        MVI     B,TOSLOW
 RECV_LOOP:
         LXI	H,80H		;POINT TO BUFFER
 RECV_CHAR:
-	MVI	B,TIMEOUT	;RESET TIMEOUT
-	CALL	RECV		;GET CHAR
+        CALL	RECV		;GET CHAR
 	JC	RECV_DONE       ;RECEIVE DONE
 	MOV	M,A		;STORE CHAR
 	INR	L		;DONE?
+	MVI     B,TOFAST
 	JNZ     RECV_CHAR
 	CALL    WR_SEC          ;GOT NEW SECTOR - WRITE IT
+	MVI     B,TOFAST
 	JMP	RECV_LOOP
 WR_SEC:
 	LXI	D,FCB
@@ -210,8 +243,8 @@ WR_SEC:
 	CALL	BDOS
 	ORA	A
 	RZ
-	CALL	ERXIT
-	DB	CR,LF,'Error Writing File',CR,LF,'$'
+	CALL	EXIT
+	DB	'Error Writing File.$'
 ;
 ; Handle end-of-transfer
 ;
@@ -227,16 +260,19 @@ FCLOSE: LXI	D,FCB
 	MVI	C,CLOSE
 	CALL	BDOS
 	INR	A
-	JNZ	XFER_CPLT
-	CALL	ERXIT
-	DB	CR,LF,'Error Closing File',CR,LF,'$'
+	JNZ	XFER_DONE
+	CALL	EXIT
+	DB	'Error Closing File.$'
 ;
-; Exit and print an error message
+; Exit and print a message
 ;
-ERXIT:	POP	D		;GET MESSAGE
+EXIT:   POP	D		;GET MESSAGE
 	MVI	C,PRINT
 	CALL	BDOS		;PRINT MESSAGE
-EXIT:	JMP	WBOOT		;Warm boot CP/M
+	LXI     D,NEWLINE
+        MVI	C,PRINT
+	CALL	BDOS            ;PRINT NEWLINE
+        JMP	WBOOT		;Warm boot CP/M
 ;
 ; Receive byte via READER
 ;
@@ -252,6 +288,13 @@ TICKR:  DCR	B		;DEC # OF TICKS
 	JNZ	RECV
 	STC			;Set carry flag to show timeout
 	RET
+;
+; Sleep for long timeout
+;
+SLEEP:  MVI     E,TOSLOW        ;SLOW TIMEOUT
+        LXI     B,010AH         ;SEQ 1, SLEEP COMMAND
+        DW      CMDSND          ;CALL KERNEL
+        RET
 ;
 ; Skip spaces in command line buffer
 ; On Entry:
@@ -302,7 +345,7 @@ OPTTAB:
 ;Select receive mode: puts 1 in XMODE
         db      'R',1
         dw      XMODE
-;Select sendmode: puts 2 in XMODE
+;Select send mode: puts 2 in XMODE
         db      'S',2
         dw      XMODE
 ;end of table marker
@@ -310,26 +353,28 @@ OPTTAB:
 ;
 ; Transfer done, clean up
 ;
-XFER_CPLT:
-	CALL	ERXIT
-	DB	CR,LF,'Transfer Complete',CR,LF,'$'
+XFER_DONE:
+	CALL	EXIT
+	DB	'Transfer Complete.$'
 ;
 ; Exit with usage message
 ;
-HELP:	call	ERXIT
-        db 'Transfer a file via the serial port.',CR,LF
-        db 'Usage:',CR,LF
-        db ' XFER <filename.ext> {/R or /S}',CR,LF
-        db '   /R to receive, /S to send, ',
-        db 'one must be specified',CR,LF,'$'
+HELP:	call	EXIT
+        db 'XFER <drive:filename.ext> {/R or /S}',CR,LF
+        db '  /R    Receive file over serial.',CR,LF
+        db '  /S    Send file over serial.$'
 ;
 ; Variables and Storage Defines
 ;
-XMODE   DS      1
+XMODE   DB      0
 ;
 ; Message Strings
 ;
-SENDMSG:db	'Sending file, press any key to start transfer...$'
-RECVMSG:db	'Receive file, press any key then start transfer..$'
+SENDMSG:db      'Waiting 15 seconds at start '
+        db      'and end of transfer...',CR,LF,'$'
+RECVMSG:db	'Waiting 30 seconds to start '
+        db      'reveiving file...',CR,LF,'$'
+ANYKEY: db      'Press any key to start transfer...'
+NEWLINE:db      CR,LF,'$'
 
 	END

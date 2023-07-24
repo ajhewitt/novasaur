@@ -1,11 +1,12 @@
 ; TITLE: 'FORMAT'
 ;
-; JUL 17, 2023
+; JUL 23, 2023
 ;
         .PROJECT        format.com
 
 LF      EQU	10
 CR      EQU	13
+EOF     EQU     1AH
 
 ;-------------------------------------------
 ;CP/M 2 BDOS Equates
@@ -172,7 +173,7 @@ BLCH3:  INR     D
         CMP     D
         JNZ     BLCH2
         
-        LXI     D,BLCHDN
+        LXI     D,NEWLINE
         MVI	C,PRINT
 	CALL	BDOS		;PRINT MESSAGE
         
@@ -278,10 +279,9 @@ BLEACH  DB      0
 EXIT:	POP	D		;GET MESSAGE
 	MVI	C,PRINT
 	CALL	BDOS		;PRINT MESSAGE
-	MVI     C,CR
-	CALL    CONOUT
-	MVI     C,LF
-	CALL    CONOUT
+	LXI     D,NEWLINE
+        MVI	C,PRINT
+	CALL	BDOS            ;PRINT NEWLINE
         JMP	WBOOT		;Warm boot CP/M
 ;
 ; Exit with usage message
@@ -289,15 +289,15 @@ EXIT:	POP	D		;GET MESSAGE
 HELP:	call	EXIT
         db 'FORMAT drive: [/Y] [/B]',CR,LF
         db '  /Y    Confirm without further prompt.',CR,LF
-        db '  /B    Bleach the file system (set all bytes to 0).$'
+        db '  /B    Bleach the file system (set all bytes to ctrl-Z).$'
 ;
 ; Exit on abort
 ;
 ABORT:  call    EXIT
-        db 'Format Aborted.$'
+        db      'Format Aborted.$'
 
-RUSURE: db 'Are You Sure (y/N)?',CR,LF,'$'
-BLCHST: db 'Bleaching$'
-BLCHDN: db 'done.',CR,LF,'$'
+RUSURE: db      'Are You Sure (y/N)?',CR,LF,'$'
+BLCHST: db      'Bleaching$'
+NEWLINE:db      CR,LF,'$'
 
         END
