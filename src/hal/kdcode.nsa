@@ -11,7 +11,7 @@ FNH DZ, HLA           # A=keyboard scan code
 LDP PC, $SCAN40       # scan code
 LD HL, $LSL$NULL
 #41/7
-FNH A, HLA            # F0->E0,E0->C0,83->07
+FNH A, HLA            # F0->E0,E0->C0,83->07,AA->54
 LDP PC, $SCAN45       # scan code > 0x7F
 LD HL, $0x40
 MULH A, NA            # E0->80,C0->00
@@ -53,15 +53,14 @@ LD PC, $EXIT62
 
 $MAKE53
 LD HL, $KCBUFF
-MVHL A, XA            # X=keyboard code buffer
+MVHL A, XA            # X=kbd code buffer
 #59/64
-LD HL, $0x7F          # -0x81
+LD HL, $0xF0
 LD Y, $KS0
-ADDHL DZ, NA          # A=keyboard scan code - 0x81
-#67/70
+ANDH A, NA            # A=scan code 0-15
 LD HL, $SCAN0$IDEN
-LD PC, $CONT71
-#71/74
+LD PC, $CONT70
+#70/74
 
 $MASK47
 LD Y, $KMODE
@@ -138,8 +137,8 @@ NOP
 NOP
 NOP
 #70/166
+$CONT70
 NOP
-$CONT71
 NOP
 $CONT72
 LD Y, $KCWRIDX
