@@ -146,7 +146,7 @@ MVHL AZ, ND               # set default text colors
 LD HL, $0x5F              # '_'
 LD Y, $CONC
 MVHL AZ, ND               # set default console cursor
-LD HL, $6                 # SVGA60 80x37 text
+LD HL, $62                # SVGA60 80x37 text
 LD Y, $VMODE
 MVHL AZ, ND               # set default video mode
 LD HL, $0xF1              # reboot code
