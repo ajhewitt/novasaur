@@ -1626,8 +1626,11 @@ RDBUF16	CMP	C	;nope, have we filled the buffer?
 	JC	RDBUF1
 RDBUF17	POP	H	;yes end the line and return.
 	MOV	M,B
-	MVI	C,CR
-	JMP	OUTCHAR	;output (cr) and return.
+	RET
+	NOP		;padding
+	NOP
+	NOP
+	NOP
 ;
 ;   Function to get a character from the console device.
 ;
