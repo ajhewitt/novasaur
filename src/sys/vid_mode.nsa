@@ -77,11 +77,11 @@ LD HL, $VATTR$NULL
 LD Y, $INDEX
 FNCH DZ, NA               # A = ELEFT
 LD HL, $0xC0
-ANDHL A, NA
+ANDHL A, NA               # A = Eo delta
 LD HL, $IDEN$NULL
-LDZ Y, $EO
-FNH DZ, HL                # HL = Eo
-ORHL AZ, ED               # set text/VDAC
+FNH A, HL                 # HL = Eo delta
+LD Y, $EO
+ORHL DZ, ED               # set text/VDAC bits
 
 LD HL, $INC$NULL
 LDZ Y, $INDEX

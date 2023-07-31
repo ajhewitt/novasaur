@@ -4,9 +4,9 @@ $FETCHX_PG     0x01 # extended fetch
 $DISPX1_PG     0x02 # fetch/disptch/exec 2-cycle
 $DISPX2_PG     0x03 # fetch/disptch/exec 3-cycle
 $COPYROM_PG    0x04 # ED01
-$CLRLN_PG      0x05 # dispatched from CONSOLE
-$CTXSW_PG      0x06 # dispatched from BSYNC
-$MVCTX_PG      0x07 # DD04 (dev temp?)
+$CLRLN_PG      0x05 # DD02 (dispatched from CONSOLE)
+$CTXSW_PG      0x06 # DD03 (dispatched from BSYNC)
+$MVCTX_PG      0x07 # DD04 (kernel init)
 $CMDSND_PG     0x08 # DD05
 $YIELD_PG      0x09 # ED06 kernel, DD06 slave
 $SIGNAL_PG     0x0A # DD07

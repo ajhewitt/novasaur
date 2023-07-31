@@ -5,94 +5,110 @@ INCLUDE ../inc/pages.nsa
 PAGE JMPPG1_PG
 
 #assume A=inst
-LD HL, $IDEN$EXTPC
+LD HL, $DEC$EXTPC
 FNDL A, PC                # fork within jump page
 #34/4
 
+# NOP for 3-cycle extended dispatch
+ADDR 0x04
+LD Y, $VMS                # set Y = $VMS on exit
+FNFH DZ, NA               # VMS-1
+#39
+FNH AZ, HLD               # VMS-1
+LD PG, $FETCH1_PG         # cycle available, goto fetch
+#43/11
+
 # BC=BCD(A)
+ADDR 0x0C
+LD HL, $IDEN$NULL
 LD Y, $AREG               # BC=BCD of Acc
 DIVH DZ, NA               # A=Acc%10 (div-by-zero=mod10)
-#39/8
+#41/18
 LD Y, $CREG
 FNH AZ, HLD               # A->Creg
 LD HL, $0xA0
 LD Y, $AREG
+#49/25
 DIVH DZ, NA               # A=Acc/10
-#50/17
 LD HL, $IDEN$SWAP
 LD Y, $BREG
 FNFH AZ, ND               # A->Breg
+#59/33
 DIVH A, NA                # A=Acc%10
-#60/25
 FNFL A, HL                # HL=A*16
 LD Y, $CREG
 ADDHL DZ, ND              # MSN+LSN->Creg
-#69/31
+#71/41
 LD HL, $0xA0
 LD Y, $BREG
 DIVH DZ, ND               # Acc=Acc/10
-LD PC, $EXIT78
-#78/39
+$EXIT78
+LD HL, $FETCH
+#80/49
+LD Y, $VMS                # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
+#86/53
 
-ADDR 0x28
 # SECS = (T1%10)*6 + T0/15
 #      = 13 + (|T1|%10)*6 + |T0-1|/15
 # C=BCD(SECS)
+ADDR 0x36
 LD HL, $DEC$NULL
 LDZ Y, $TIME0
 FNH DZ, HLA               # A=T0-1
-#40/5
+#40/59
 LD HL, $0xF0
 LD Y, $CREG
 DIVH AZ, ND               # Creg=A/15
 LD HL, $0x06
-#49/13
+#49/67
 LD Y, $TIME1
 DIVH DZ, NA               # A=T1%10
 MULL A, HL                # HL=A*6
 LD Y, $CREG
-#59/21
+#59/75
 ADDHL DZ, NA              # A=Creg+HL
 LD HL, $13
 ADDHL A, NA               # A=A+13
-#69/27
+#69/81
 LD HL, $MOD60$NULL
 FNCH AZ, ND               # Creg=A%60
+$EXIT74
 NOP
 NOP
 LD PC, $EXIT78
-#76/35
+#76/89
 
-ADDR 0x4C
 # MINS = (T2%10)*12 + T1/10
 #      = 35 + (|T2|%10)*12 + |T1-6|/10
 # C=BCD(MINS)
+ADDR 0x5A
 LD HL, $0xFA
 LD Y, $TIME1
 ADDHL DZ, NA              # A=T1-6
-#42/6
+#42/96
 LD HL, $0xA0
 LD Y, $CREG
 DIVH AZ, ND               # Creg=A/10
 LD HL, $0x0C
-#51/14
+#51/104
 LD Y, $TIME2
 DIVH DZ, NA               # A=T2%10
 MULL A, HL                # HL=A*12
 LD Y, $CREG
-#61/22
+#61/112
 ADDHL DZ, NA              # A=Creg+HL
 LD HL, $35
 ADDHL A, NA               # A=A+35
-#71/28
+#71/118
 LD HL, $MOD60$NULL
 FNCH AZ, ND               # Creg=A%60
 LD PC, $EXIT78
-#78/34
+#78/124
 
-ADDR 0x6E
 # HRS = (T2+120)/5
 # B=DAYS C=BCD(HRS)
+ADDR 0x7C
 LD HL, $120
 LD Y, $TIME2
 ADDHL DZ, NA              # A=T2+120
@@ -111,13 +127,9 @@ LD Y, $BREG
 MVHL AZ, ND               # Breg=T3
 MVHL A, NA                # NOP
 #70/27
-MVHL A, NA                # NOP
-MVHL A, NA                # NOP
-$EXIT78
-LD HL, $FETCH
-#80/33
-LD Y, $VMS                # set Y = $VMS on exit
-DISHL DZ, PGA             # jump to next VMC
-#86/37
+NOP
+NOP
+LD PC, $EXIT74
+#74/31
 
-ADDR 0x94
+ADDR 0x9C
