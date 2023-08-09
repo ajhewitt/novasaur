@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'distribution'
+#require 'distribution'
 
 def print_ext_addr(addr)
   print_data [2, 0, 0, 4, (addr >> 8) & 0xff, addr & 0xff]
