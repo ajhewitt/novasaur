@@ -26,14 +26,18 @@ $DMA_PG        0x1A # DD0F
 $SHMRD_PG      0x1B # DD10
 $SHMWR_PG      0x1C # DD11
 
-# 0x20-0x2F: util
+# 0x20-0x27: util
 $SAA_PG        0x20 # DD18
 
-$MOVMX_PG      0x28
-# 0x30-0x3F: sound/Gfx
+# 0x28-0x2F: 
+$MOVMX_PG      0x28 # DD7X
+
+# 0x30-0x37: sound
 $VOICE_PG      0x30 # DD20-DD23
 $NOTE_PG       0x31 # DD28-DD2B
 $GATE_PG       0x32 # DD24-DD27,DD2C-DD2F
+
+# 0x38-0x3F: graphics
 
 # 0x40-7F: user reserved
 
@@ -43,9 +47,8 @@ $WARM_START_PG 0x81
 $KBD_START_PG  0x82
 $VID_START_PG  0x83
 
-$VID_MODE_PG   0x88
-
-$FETCH1_PG     0x90 # 0x90-0xE3: 8080 instruction set
+# 0x90-0xE3 (84): 8080 instruction set
+$FETCH1_PG     0x90
 $FETCH2_PG     0x91
 $HLT_PG        0x92
 $MOVR_PG       0x93
@@ -129,6 +132,8 @@ $ICTRL_PG      0xE0 # DI, EI
 $IMASK_PG      0xE1 # RIM, SIM
 $INTR1_PG      0xE2
 $INTR2_PG      0xE3 #/end of 8080
+
+# 0xE4-0xFD (26): HAL
 $PCME_PG       0xE4 # PCM extension to audio
 $RTCE_PG       0xE5 # RTC extension to block
 $NSYNCE_PG     0xE6 # null sync on execute

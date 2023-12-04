@@ -112,4 +112,4 @@ LD HL, $0x80
 LD Y, $VMS
 MVH DZ, ND                # Extended instruction
 
-LD PG, $VID_MODE_PG       # video mode
+LD PG, $VID_START_PG      # video start

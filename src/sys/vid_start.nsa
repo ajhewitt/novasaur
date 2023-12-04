@@ -1,82 +1,113 @@
-# Video Start
+# Video Start - set video mode and start HAL
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE VID_START_PG
 
-$COL 0x80
-$ROW 0x81
+$INDEX 0x80
 
-LD HL, $0xF0              # clear display
-LD Y, $COL
-MVHL AZ, ND               # F0 -> col
-#8
-$LOOP2
-LD HL, $DEC$NULL
-FNFH DZ, XD               # X = col-1
+LD HL, $3                 # -0x7D
+LD Y, $RCODE
+ADDHL DZ, NA
+LD HL, $ZERO?$NULL
+FNH A, HLA                # page up?
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $VMODE
+FNH DZ, HLD               # VMODE+1
+
+LD HL, $6                 # -0x7A
+LD Y, $RCODE
+ADDHL DZ, NA
+LD HL, $ZERO?$NULL
+FNH A, HLA                # page down?
+LDP HL, $DEC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $VMODE
+FNH DZ, HLD               # VMODE-1
+
 LD HL, $0
-LD Y, $ROW
-MULH AZ, ND               # 0 -> row
-#12
-$LOOP1
-LDZ HL, $IDEN$NULL
-FNH DZ, Y                 # Y = row
-MULH A, ND                # 0 -> [X,Y]
-LD HL, $INC$NULL
-LDZ Y, $ROW
-FNH DZ, HLD               # row = row+1
-LD HL, $ZERO?$NULL
-FNFH A, NA                # row == 0?
-LDN PC, $LOOP1            # next row until 0
-#20,5120
-LDZ Y, $COL
-FNH DZ, HLA               # col == 0?
-LDN PC, $LOOP2            # next col until 0
-#6,1232887/37
+LD Y, $RCODE
+MULH AZ, ND               # clear restart code
 
-LD HL, $1COM$NULL         # fill color/font
-LDZ Y, $CONL
-FNH DZ, HL                # HL = -console left+1
-LD Y, $CONR
-ADDHL DZ, NA              # A = console right - left
+LD HL, $SWAP$NULL
+LDZ Y, $VMS
+FNH DZ, HLD               # swap VMS
+
+LD HL, $0x40
+LD Y, $VMODE
+MULH DZ, NA               # A = VMODE<<2
 LD HL, $IDEN$NULL
-LD Y, $COL
-FNH AZ, HLD               # A -> col
-#11
-$LOOP4
-LD HL, $LSL$NULL
-FNH A, HL                 # HL = col*2
-LD Y, $CONL
-ADDHL DZ, NA              # A = col*2 + offset
-LD HL, $0x0E
-ANDL A, X                 # X = A as even number
-LD Y, $ROW
-MULH AZ, ND               # 0 -> row
-#16
-$LOOP3
+LD Y, $INDEX
+FNH AZ, HLD               # mode index->temp
+
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = VMODES
 LD HL, $IDEN$NULL
-LD Y, $CONF
-FNFH DZ, NA               # A = color/font
-LDZ Y, $ROW
-FNH DZ, Y                 # Y = row
-FNH A, HLD                # A -> [X,Y]
+LDZ Y, $MODE
+FNH AZ, HLD               # set video mode
+
+LD HL, $SWAP$NULL
+FNH A, HLA                # H = VMODEL
+LD Y, $VMS
+MVH DZ, NA                # H -> VMSL
+LD HL, $SWAP$NULL
+FNH AZ, HLD               # swap VMS
+
 LD HL, $INC$NULL
-LDZ Y, $ROW
-FNH DZ, HLD               # row = row+1
-LD HL, $ZERO?$NULL
-FNH A, HLA                # row == 0?
-LDN PC, $LOOP3            # next row until 0
-#25,6399
-LD HL, $DEC$NULL
-LDZ Y, $COL
-FNH DZ, HLD               # col = col-1
-LDP PC, $LOOP4            # next col until neg
-#8,6424*TXTWID+10
+LDZ Y, $INDEX
+FNH DZ, HLD               # mode index+1->temp
+
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = ELEFT
+LD HL, $0x3F
+ANDHL A, NA               # A = LEFT BORDER
+LD HL, $IDEN$NULL
+LD Y, $CONL
+FNFH AZ, ND               # left border -> console left
+LD Y, $CONX
+FNFH AZ, ND               # left border -> console X
+LD Y, $CONB
+FNH AZ, HLD               # left border -> console backstop
+
+LD HL, $0x3F
+LD Y, $EO
+ANDHL DZ, ND              # Eo&3F -> Eo
+LD HL, $VATTR$NULL
+LD Y, $INDEX
+FNCH DZ, NA               # A = ELEFT
+LD HL, $0xC0
+ANDHL A, NA               # A = Eo delta
+LD HL, $IDEN$NULL
+FNH A, HL                 # HL = Eo delta
+LD Y, $EO
+ORHL DZ, ED               # set text/VDAC bits
+
+LD HL, $INC$NULL
+LDZ Y, $INDEX
+FNH DZ, HLD               # mode index+1->temp
+
+LD HL, $VATTR$IDEN
+FNCH A, NA                # A = WIDTH
+LD Y, $CONL
+FNFL DZ, HL               # HL = CON left
+LD Y, $CONR
+ADDHL AZ, ND              # CON left + WIDTH -> Con right
+
+LD HL, $INC$NULL
+LDZ Y, $INDEX
+FNH DZ, HLD               # mode index+1->temp
+
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = HEIGHT
+LD HL, $1COM$NULL
+LD Y, $CONH
+FNH AZ, HLD               # -height-1 -> CON height
 
 LD HL, $0
 LD Y, $VSTART
 MULH AZ, ND               # 0 -> vstart
-LD Y, $CONY
+LD Y, $CONY               
 MULH AZ, ND               # 0 -> console row
 
 LD Y, $VMS
