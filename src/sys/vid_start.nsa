@@ -24,7 +24,10 @@ FNH A, HLA                # page down?
 LDP HL, $DEC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $VMODE
-FNH DZ, HLD               # VMODE-1
+FNH DZ, HLA               # VMODE-1
+
+LD HL, $0xF8
+ORHL AZ, ND               # cycle on last 8 text modes
 
 LD HL, $0
 LD Y, $RCODE

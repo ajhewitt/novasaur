@@ -1,6 +1,6 @@
 ; TITLE: 'SYS LIB'
 ;
-; DEC 3, 2023
+; DEC 5, 2023
 ;
         .PROJECT        system.com
 ;
@@ -33,6 +33,7 @@ DMA     EQU     0FDDH   ;DMA
         IN      CONR
         ADD     A
         MOV     E,A     ;D=COLSOLE RIGHT
+        DCR     E
         MVI     H,0
         JMP     CLS2
 CLS1:   INR     H       ;INC LINE
@@ -46,9 +47,9 @@ CLS3:   DCR     L       ;COL-1
         MOV     A,D
         CMP     L       ;LEFT-COL
         JNC     CLS3    ;CARRY IF COL>LEFT
-        DCR     L
         MOV     A,E
         CMP     L       ;CARRY IF COL>RIGHT
         JC      CLS3
+        DCR     L
         DW      MOVMB
         JMP     CLS3
