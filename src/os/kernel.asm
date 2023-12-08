@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; DEC 3, 2023
+; DEC 8, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -18,6 +18,7 @@ RUNC    EQU     STACK+36H;KERNEL RUN COUNT
 TTOP    EQU     STACK+38H;ADDR HEAP TOP
 BELC    EQU     STACK+3AH;BEL COUNT
 SERC    EQU     STACK+3BH;SER COUNT
+CLSL    EQU     STACK+3CH;CLEAR SCREEN LINE
 TBASE   EQU     STACK+40H;TIMER HEAP
 ;
 BEL     EQU     7
@@ -45,7 +46,7 @@ SERSEND EQU     0DDDH   ;SERIAL SEND FROM BUFFER
 SERRECV EQU     0EDDH   ;SERIAL RECV TO BUFFER
 DMA     EQU     0FDDH   ;DMA
 ;
-CLS     EQU     0FC00H  ;CLEAR SCREEN
+LCLRLN  EQU     0FC00H  ;LIB CLEAR LINE
 ;
         .ORG    0F000H
 ;
@@ -79,8 +80,6 @@ CTX2:   ORI     0F0H
         DW      MVCTX
         INR     H
         JNZ     CTX1
-        
-        CALL    CLS     ;CLEAR SCREEN
 ;
 ; MAIN EVENT LOOP
 ; SCAN MSG BOXES - EXIT IF MSG RECEIVED
@@ -125,7 +124,7 @@ SCAN:   INR     A       ;A+1
 ; ELSE EXECUTE COMMAND
 ;
 K_CMD:  MOV	A,C	;A=CMD
-        CPI	0CH     ;LIMIT CMD<12
+        CPI	(RETS-CMDS)>>1
         JNC     WAIT    ;SKIP HIGH CMD
         CPI     1       ;CHECK RETURN
         JC      WAIT    ;NULL CMD
@@ -183,7 +182,7 @@ SETRET: CALL    HANDHL  ;HL=HANDLER
 IPCERR: LDA     SRCCPU
         MVI     B,0     ;SEQ ZERO IS ERROR
         DW	IPCSND
-        JP      WAIT
+        JMP     WAIT
 ;
 ; CLIENT GETS RECORD
 ; - FORWARD GET TO DISK
@@ -241,7 +240,7 @@ TTYI0:  XRA     A       ;SERIAL DISABLED
 ;
 TTYO:   MOV     A,E
         OUT     SERIAL  ;CHAR OUT
-        JMP     RETOUT
+        JMP     RETURN
 ;
 ; CON INPUT
 ; console -> E
@@ -258,24 +257,24 @@ CONSND: OUT     CONSOLE ;FLASH CURSOR
         DW      IPCSND
         JMP     WAIT
 CLRCUR: XRA     A       ;CLEAR CURSOR
-        JP      CONSND
+        JMP     CONSND
 ;
 ; CON OUT
 ; E -> console
 ;
 CONO:   MOV     A,E
         ORA     A
-        JZ      RETOUT  ;SKIP IF NULL
+        JZ      RETURN  ;SKIP IF NULL
         OUT     CONSOLE ;CHAR OUT
         ORA     A
-        JNZ     RETOUT  ;RETURN UNLESS EOL
+        JNZ     RETURN  ;RETURN UNLESS EOL
         MVI     A, CR
         OUT     CONSOLE ;CR OUT
         MVI     A, LF
         OUT     CONSOLE ;LF OUT
         MOV     A,E
         OUT     CONSOLE
-RETOUT: LDA     SRCCPU
+RETURN: LDA     SRCCPU
         DW      IPCSND
         JMP     WAIT
 ;
@@ -516,6 +515,23 @@ AUDOFF: LXI     H, BELC
         OUT     AMODE   ;AUDIO OFF
         RET
 ;
+; CLEAR SCREEN - CLEAR ONE LINE PER TICK
+;
+CLS:    CALL    NXCLN   ;CLEAR FIRST LINE
+        JMP     RETURN
+;
+NXCLN:  LDA     CLSL    ;GET CLS LINE
+        MOV     H, A
+        CALL    LCLRLN  ;CLEAR LINE
+        LXI     H, CLSL
+        INR     M       ;INC CLS LINE
+        RZ              ;DONE
+        XRA     A       ;A=0 SO INTERNAL (BC=CALL ADDR)
+        MVI     E, 2    ;CLR LINE ON NEXT TICK
+        LXI     B, NXCLN
+        CALL    TADD
+        RET
+;
 ; DIVIDE A=BC/HL
 ; http://techref.massmind.org/techref/method/math/muldiv.htm
 ;
@@ -558,18 +574,19 @@ shiftc:	cmc		;invert quotient bit from reverse polarity
 ;
 ; COMMAND JUMP VECTOR TABLE
 ;
-CMDS:   DW      WAIT    ;NULL
-        DW      WAIT    ;RETURN
-        DW      GET     ;GET RECORD
-        DW      PUT     ;PUT RECORD
-        DW      TTYI    ;TTY CHAR IN
-        DW      TTYO    ;TTY CHAR OUT
-        DW      CONI    ;CON CHAR IN
-        DW      CONO    ;CON CHAR OUT
-        DW      SEND    ;SERIAL SEND
-        DW      RECV    ;SERIAL RECEIVE
-        DW      SLEEP   ;SLEEP
-        DW      STAT    ;STATS
+CMDS:   DW      WAIT    ;00: NULL
+        DW      WAIT    ;01: RETURN
+        DW      GET     ;02: GET RECORD
+        DW      PUT     ;03: PUT RECORD
+        DW      TTYI    ;04: TTY CHAR IN
+        DW      TTYO    ;05: TTY CHAR OUT
+        DW      CONI    ;06: CON CHAR IN
+        DW      CONO    ;07: CON CHAR OUT
+        DW      SEND    ;08: SERIAL SEND
+        DW      RECV    ;09: SERIAL RECEIVE
+        DW      SLEEP   ;0A: SLEEP
+        DW      STAT    ;0B: STATS
+        DW      CLS     ;0C: CLEAR SCREEN
 ;
 ; RETURN JUMP VECTOR TABLE
 ;
@@ -584,6 +601,7 @@ RETS:   DW      WAIT    ;N/A
         DW      GENT    ;SERIAL TIMER RET
         DW      GENT    ;SERIAL TIMER RET
         DW      GENT    ;GENERIC TIMER RET
+        DW      WAIT
         DW      WAIT
         
         END

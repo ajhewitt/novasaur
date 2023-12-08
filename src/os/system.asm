@@ -1,6 +1,6 @@
 ; TITLE: 'SYS LIB'
 ;
-; DEC 5, 2023
+; DEC 8, 2023
 ;
         .PROJECT        system.com
 ;
@@ -23,10 +23,12 @@ DMA     EQU     0FDDH   ;DMA
         .ORG    0FC00H
         
 ;
-; CLEAR SCREEN
+; CLEAR LINE - H=LINE NUMBER
+; SET NULL IN L/R BORDER
+; SET LINE FONT/FG/BG COLOR
 ;
-        IN      CONF
-        MOV     B,A     ;B=CONDOLE FONT/FG/BG COLOR
+LCLRLN: IN      CONF
+        MOV     B,A     ;B=CONSOLE FONT/FG/BG COLOR
         IN      CONL
         ADD     A
         MOV     D,A     ;C=CONSOLE LEFT
@@ -34,22 +36,18 @@ DMA     EQU     0FDDH   ;DMA
         ADD     A
         MOV     E,A     ;D=COLSOLE RIGHT
         DCR     E
-        MVI     H,0
-        JMP     CLS2
-CLS1:   INR     H       ;INC LINE
-        RZ              ;DONE?
-CLS2:   MVI     L,0F0H  ;START @EOL
-CLS3:   DCR     L       ;COL-1
+        MVI     L,0F0H  ;START @EOL
+CLRLN1: DCR     L       ;COL-1
         XRA     A
         DW      MOVMA   ;NULL CODE POINT
         CMP     L       ;START OF LINE?
-        JZ      CLS1    ;NEXT LINE
+        RZ              ;LINE DONE
         MOV     A,D
         CMP     L       ;LEFT-COL
-        JNC     CLS3    ;CARRY IF COL>LEFT
+        JNC     CLRLN1  ;CARRY IF COL>LEFT
         MOV     A,E
         CMP     L       ;CARRY IF COL>RIGHT
-        JC      CLS3
+        JC      CLRLN1
         DCR     L
         DW      MOVMB
-        JMP     CLS3
+        JMP     CLRLN1

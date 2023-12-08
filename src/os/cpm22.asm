@@ -3851,13 +3851,18 @@ CLRVAR: MVI     M, 0            ;CLEAR VARS
 	SHLD	6		;ADDRESS FIELD OF JUMP AT 5 TO BDOS
 ;
         LXI	SP, STACK	;SET MONITOR STACK
+        LDA	IOBYTE
+        ANI     3
+        JZ      LOGO            ;IO TTY, SKIP CLS
+        LXI     B, 010CH        ;SEQ 1, CLS
+        DW      CMDSND          ;CALL KERNEL
 ;
-        LXI     B, 0x40
+LOGO:   LXI     B, 0x40
 	CALL	PLINE           ;PRINT LOGO
 	LXI	B, SIGNON
 	CALL	PLINE           ;PRINT COPYRIGHT
 ;
-        JP      GOCPM
+        JMP     GOCPM
 WBOOT:
         LXI	SP, STACK	;SET MONITOR STACK
 ;
