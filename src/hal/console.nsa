@@ -76,8 +76,8 @@ LDZ Y, $CONH
 #39/2
 FNH DZ, HLA               # A = console heigth+1
 LDP Y, $VSTART            # use vstart at max height
-LDNZ Y, $CONH             # else use console height
-LDZ HL, $INC$NULL
+LDN Y, $CONH              # else use console height
+LD HL, $INC$NULL
 FNFH DZ, ND               # (console height or vstart)+1
 #49/11
 LDZ Y, $CONY

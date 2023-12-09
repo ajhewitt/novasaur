@@ -29,10 +29,6 @@ FNH DZ, HLA               # VMODE-1
 LD HL, $0xF8
 ORHL AZ, ND               # cycle on last 8 text modes
 
-LD HL, $0
-LD Y, $RCODE
-MULH AZ, ND               # clear restart code
-
 LD HL, $SWAP$NULL
 LDZ Y, $VMS
 FNH DZ, HLD               # swap VMS
@@ -97,6 +93,21 @@ FNFL DZ, HL               # HL = CON left
 LD Y, $CONR
 ADDHL AZ, ND              # CON left + WIDTH -> Con right
 
+
+
+LD HL, $0x14              # -0x6C CTRL_ALT_HOME
+LD Y, $RCODE
+ADDHL DZ, NA
+LD HL, $ZERO?$NULL
+FNH A, HLA
+LDP PC, $START            # START if monitor
+
+LD HL, $0
+LD Y, $VSTART
+MULH DZ, ND               # 0 -> vstart
+LD Y, $CONY
+MULH DZ, ND               # 0 -> console
+
 LD HL, $INC$NULL
 LDZ Y, $INDEX
 FNH DZ, HLD               # mode index+1->temp
@@ -107,11 +118,11 @@ LD HL, $1COM$NULL
 LD Y, $CONH
 FNH AZ, HLD               # -height-1 -> CON height
 
+$START
+
 LD HL, $0
-LD Y, $VSTART
-MULH AZ, ND               # 0 -> vstart
-LD Y, $CONY               
-MULH AZ, ND               # 0 -> console row
+LD Y, $RCODE
+MULH AZ, ND               # clear restart code
 
 LD Y, $VMS
 LD PG, $BSYNCE_PG         # start video loop
