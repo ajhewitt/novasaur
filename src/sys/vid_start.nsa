@@ -93,8 +93,6 @@ FNFL DZ, HL               # HL = CON left
 LD Y, $CONR
 ADDHL AZ, ND              # CON left + WIDTH -> Con right
 
-
-
 LD HL, $0x14              # -0x6C CTRL_ALT_HOME
 LD Y, $RCODE
 ADDHL DZ, NA
