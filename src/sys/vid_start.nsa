@@ -24,7 +24,7 @@ FNH A, HLA                # page down?
 LDP HL, $DEC$NULL
 LDN HL, $IDEN$NULL
 LDZ Y, $VMODE
-FNH DZ, HLA               # VMODE-1
+FNH DZ, HLD               # VMODE-1
 
 LD HL, $0xF8
 ORHL AZ, ND               # cycle on last 8 text modes
@@ -61,26 +61,22 @@ LD HL, $VATTR$NULL
 FNCH A, NA                # A = ELEFT
 LD HL, $0x3F
 ANDHL A, NA               # A = LEFT BORDER
-LD HL, $IDEN$NULL
+LD HL, $IDEN$VATTR
 LD Y, $CONL
 FNFH AZ, ND               # left border -> console left
 LD Y, $CONX
 FNFH AZ, ND               # left border -> console X
 LD Y, $CONB
-FNH AZ, HLD               # left border -> console backstop
-
-LD HL, $0x3F
-LD Y, $EO
-ANDHL DZ, ND              # Eo&3F -> Eo
-LD HL, $VATTR$NULL
+FNFH AZ, ND               # left border -> console backstop
 LD Y, $INDEX
-FNCH DZ, NA               # A = ELEFT
+FNCL DZ, HL               # HL = ELEFT
+LD Y, $EO
+XORHL DZ, NA              # A = Eo^ELEFT delta
 LD HL, $0xC0
-ANDHL A, NA               # A = Eo delta
+ANDHL A, NA               # A = Eo^E delta
 LD HL, $IDEN$NULL
 FNH A, HL                 # HL = Eo delta
-LD Y, $EO
-ORHL DZ, ED               # set text/VDAC bits
+XORHL DZ, ED
 
 LD HL, $INC$NULL
 LDZ Y, $INDEX
