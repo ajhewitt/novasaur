@@ -172,4 +172,22 @@ NOP
 LD PC, $EXIT65
 #65/27
 
-#ADDR 0xD4
+#REBOOT - Set RCODE to vid mode
+ADDR 0xD4
+LD HL, $KERN?$NULL
+LDZ Y, $EO
+FNH DZ, HLA               # A=0 if root
+#40/5
+NOP
+LDN PG, $FETCH1_PG        # cycle available, fetch unless kernel
+LD HL, $0x3F
+LD Y, $AREG               # Areg=video mode (0-63)
+ANDHL DZ, NA              # A=Areg&3F
+#51/14
+LD HL, $0x40
+LD Y, $RCODE
+ORHL AZ, ND               # RCODE=A|40
+LD PG, $WARM_START_PG     # REBOOT!
+#61/22
+
+#ADDR 0xEA

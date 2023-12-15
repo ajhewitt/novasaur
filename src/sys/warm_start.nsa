@@ -68,17 +68,32 @@ LD HL, $ZERO?$NULL
 FNH A, HLA
 LDN PC, $CLRCTX           # loop index
 
+# Set CPU - CHECK CTRL_ALT
+LD HL, $IDEN$NULL
+LDZ Y, $RCODE
+FNH DZ, HLA               # RCODE > 128?
+LDN PC, $CTRL_ALT         # YES: CTRL_ALT
+
+# Set CPU - RELOC W/VID MODE
+LD HL, $LSR$NULL
+FNH A, HLA                # 64? < RCODE < 128
+LDP HL, $0                # RCODE < 64: BOOT
+LDN HL, $1                # RCODE > 64: KERNEL MODE
+LD PC, $BOOT
+
+# Set CPU - CHECK HOME KEY
+$CTRL_ALT
+LD HL, $0x14              # -0x6C CTRL_ALT_HOME
+ADDHL A, NA
+LD HL, $ZERO?$NULL
+FNH A, HLA                # KEY==HOME?
+LDP HL, $8                # YES: MONITOR
+LDN HL, $0                # NO: BOOT
+
 # Boot Kernel CPU
 $BOOT
-LD HL, $0x14              # -0x6C CTRL_ALT_HOME
-LD Y, $RCODE
-ADDHL DZ, NA
-LD HL, $ZERO?$NULL
-FNH A, HLA
-LDP HL, $1
-LDN HL, $0
 LD Y, $AREG
-MVHL AZ, ND               # boot or monitor -> Acc
+MVHL AZ, ND               # HL -> Acc
 LD HL, $0xF1
 LD Y, $CTX0
 MVHL AZ, ND               # Kernel->Context

@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; JUL 2, 2023
+; DEC 14, 2023
 ;
         .PROJECT        boot.com
 ;
@@ -77,7 +77,7 @@ RST7:   NOP
         NOP
         NOP
         NOP
-        NOP
+        RET     ; RETURN IF RELOC
         NOP
         NOP
         NOP
@@ -111,7 +111,10 @@ BOOT1:  DW      BOOTCPU ;BOOT CPU
         OUT     RXEN    ;ENABLE RX
         JMP     BOOTK   ;BOOT KERNEL
 ;
-MONITOR:JMP     BOOTM   ;BOOT MONITOR
+; KERNEL MODE
+;
+KERNEL: LXI     SP, STACK
+        JMP     100H    ;CALL CODE
 ;
 ; CP/M 2.2
 ;
@@ -130,15 +133,20 @@ DISK:   LXI     DE, 0FF01H;DEST/ROM PAGE
         DW      CPROM   ;COPY ROM
         JMP     BOOTD   ;BOOT DISK
 ;
+; SYSTEM MONITOR
+;
+MONITOR:JMP     BOOTM   ;BOOT MONITOR
+;
 ; JUMP VECTOR TABLE
 ;
-TABLE:  DB      BOOT
-        DB      MONITOR
+TABLE:  DB      BOOT    ;BOOT EVERYTHING
+        DB      KERNEL  ;KERNEL MODE
         DB      CPM     ;CP/M TTY
         DB      CPM     ;CP/M CRT
         DB      DISK
         DB      DISK
         DB      DISK
         DB      DISK
+        DB      MONITOR ;BOOT MONITOR
         
         END
