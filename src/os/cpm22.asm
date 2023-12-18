@@ -4113,25 +4113,31 @@ WRITEA: LDA     TRACK
         JNZ     WRITEA          ;RETRY ON ERROR
         XRA     A               ;WRITE A: SUCCESS
         RET
-;
-; RELOCATE CP/M->KERNEL
-; D=PAGES, E=VID MODE
-;
-RELOC:  LXI     H, 100H
-RELOC1: XRA     A               ;START SHM@0
-        CMP     H               ;H==0?
-        RZ                      ;RETURN
+;       
+; RELOCATE CP/M->KERNEL         
+; H=PAGES, L=VID MODE
+;       
+RELOC:  LXI     D, 100H
+RELOC1: XRA     A
+        DW      RECSEND         
+        INX     D               ;START NEXT RECORD
+        PUSH    D
+        PUSH    H
         XCHG
-        DW      RECSEND         ;DE->SHM
+        LXI     B,-80H
+        DAD     B
+        XCHG
 RELOC2: LXI     B, 020DH        ;SEQ 2, RELOC COMMAND
         MOV     A, B            ;SAVE SEQ# IN A
-        DW      CMDSND          ;CALL KERNEL
+        DW      CMDSND          ;CALL KERNEL 
         CMP     B               ;COMPARE SEQ#
         JNZ     RELOC2          ;RETRY ON ERROR
-        XCHG
-        LXI     B, 80H
-        DAD     B               ;HL+=80H
-        JMP     RELOC1
+        POP     H
+        MOV     A, H            ;A=PAGES 
+        POP     D 
+        CMP     D               ;ALL SENT?
+        RC
+        JMP     RELOC1          ;NEXT RECORD
 ;
 ;	THE REMAINDER OF THE CBIOS IS RESERVED UNINITIALIZED
 ;	DATA AREA, AND DOES NOT NEED TO BE A PART OF THE

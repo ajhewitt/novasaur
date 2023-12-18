@@ -116,6 +116,7 @@ LD Y, $TEMP
 FNH AZ, HLD               # A->temp
 #49/13
 MVHL A, NA                # NOP
+$EXIT53
 MVHL A, NA                # NOP
 $EXIT57
 MVHL A, NA                # NOP
@@ -178,16 +179,22 @@ LD HL, $KERN?$NULL
 LDZ Y, $EO
 FNH DZ, HLA               # A=0 if root
 #40/5
+LDP PC, $REBOOT
+LD HL, $FETCH
+LD Y, $INST
+MVHL AZ, ND
 NOP
-LDN PG, $FETCH1_PG        # cycle available, fetch unless kernel
+#50/14
+NOP
+LD PC, $EXIT53
+#53/17
+$REBOOT
 LD HL, $0x3F
 LD Y, $AREG               # Areg=video mode (0-63)
 ANDHL DZ, NA              # A=Areg&3F
-#51/14
+#50/23
 LD HL, $0x40
 LD Y, $RCODE
 ORHL AZ, ND               # RCODE=A|40
 LD PG, $WARM_START_PG     # REBOOT!
-#61/22
-
-#ADDR 0xEA
+#60/31

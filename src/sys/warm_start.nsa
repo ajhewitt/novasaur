@@ -75,10 +75,14 @@ FNH DZ, HLA               # RCODE > 128?
 LDN PC, $CTRL_ALT         # YES: CTRL_ALT
 
 # Set CPU - RELOC W/VID MODE
-LD HL, $LSR$NULL
+LD HL, $LSL$NULL
 FNH A, HLA                # 64? < RCODE < 128
-LDP HL, $0                # RCODE < 64: BOOT
-LDN HL, $1                # RCODE > 64: KERNEL MODE
+LD HL, $IDEN$NULL         # HL=0 IS BOOT
+LDP PC, $BOOT             # RCODE < 64: BOOT
+FNFH DZ, NA               # A=RCODE
+LD Y, $VMODE
+FNH AZ, HLD               # VMODE=RCODE
+LD HL, $1                 # KERNEL MODE
 LD PC, $BOOT
 
 # Set CPU - CHECK HOME KEY
