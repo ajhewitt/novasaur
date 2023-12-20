@@ -122,21 +122,16 @@ ORHL AZ, ND           # scan code+128 -> restart code
 #70/150
 LD HL, $SCAN2$IDEN
 FNCH A, NA            # A = escape page
-NOP
-NOP
-NOP
-NOP
-#79/158
-LDP PC, $EXIT81       # exit if positive
+LDP PC, $EXIT77       # exit if positive
 FNFL A, PG            # A -> page register
-#86/162
+#79/158
 
 $CONT66
 NOP
 NOP
 NOP
 NOP
-#70/166
+#70/162
 $CONT70
 NOP
 NOP
@@ -144,16 +139,16 @@ $CONT72
 LD Y, $KCWRIDX
 FNFL DZ, Y            # Y=keyboard code write index
 FNCH A, ND            # ascii -> kbd code buffer
-#80/174
+#80/170
 LD HL, $ZERO?$NULL
 FNH A, HLA            # ascii null?
 LDP HL, $IDEN$NULL
 LDN HL, $INC$NULL
 LDZ Y, $KCWRIDX
 FNH DZ, HLD           # inc kbd wr index if not null
-#91/184
+#91/180
 LD PC, $EXIT93
-#93/186
+#93/182
 
 ADDR 0xC0             # BREAK62
 NOP
@@ -174,12 +169,12 @@ NOP
 NOP
 NOP
 NOP
+$EXIT77
 NOP
 NOP
 NOP
 #80
 NOP
-$EXIT81
 NOP
 NOP
 NOP

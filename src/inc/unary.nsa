@@ -67,3 +67,8 @@ $MODPCM     7 # PCM INC/MOD, Fork, expand
 $EXTMAPH    8 # extended inst mapping util (high)
 $EXTMAPL    9 # extended inst mapping util (low)
 $CTXCOL    10 # Context Column n->0xFn 0<n<8
+$FORKR     11 # Restart code fork
+#RSVD0     12 # RSVD0
+#RSVD1     13 # RSVD1
+#RSVD2     14 # RSVD2
+#RSVD3     15 # RSVD3

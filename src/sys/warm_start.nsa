@@ -4,8 +4,6 @@ INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE WARM_START_PG
 
-$ROW 0x81
-
 # Set E-reg
 LD HL, $0x11              # deassert, bank 1
 LD Y, $EO
@@ -51,53 +49,76 @@ LD HL, $0x80
 LD Y, $AUDIO
 MVHL AZ, ND               # mute->audio
 
+# Video
+LD HL, $LSL$VATTR
+LD Y, $VMODE
+FNFH DZ, NA               # A = VMODE<<1
+LD Y, $TEMP
+FNFH AZ, ND               # VMODE<<2->temp
+
+FNCL DZ, HL               # HL = VMODES
+LD Y, $MODE
+MVHL AZ, ND               # set video mode
+
+LD HL, $0x40
+MULH A, NA                # A = VMODES<<2
+LD Y, $VMS
+MULH AZ, ND               # VMODES<<4->VMS
+
+LD HL, $INC$NULL
+LDZ Y, $TEMP
+FNH DZ, HLD               # mode index+1->temp
+
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = ELEFT
+LD HL, $0x3F
+ANDHL A, NA               # A = LEFT BORDER
+LD HL, $IDEN$VATTR
+LD Y, $CONL
+FNFH AZ, ND               # left border -> console left
+LD Y, $CONX
+FNFH AZ, ND               # left border -> console X
+LD Y, $CONB
+FNFH AZ, ND               # left border -> console backstop
+LD Y, $TEMP
+FNCL DZ, HL               # HL = ELEFT
+LD Y, $EO
+XORHL DZ, NA              # A = Eo^ELEFT delta
+LD HL, $0xC0
+ANDHL A, NA               # A = Eo^E delta
+LD HL, $IDEN$NULL
+FNH A, HL                 # HL = Eo delta
+XORHL DZ, ED
+
+LD HL, $INC$NULL
+LDZ Y, $TEMP
+FNH DZ, HLD               # mode index+1->temp
+
+LD HL, $VATTR$IDEN
+FNCH A, NA                # A = WIDTH
+LD Y, $CONL
+FNFL DZ, HL               # HL = CON left
+LD Y, $CONR
+ADDHL AZ, ND              # CON left + WIDTH -> Con right
+
 # Clear CTX sequence
 LD HL, $CTX_SEQ
 MVHL A, XA                # X=CTX_SEQ
 LD HL, $0
-LD Y, $ROW
-MULH AZ, ND               # 0->[ROW]
+LD Y, $TEMP
+MULH AZ, ND               # 0->[TEMP]
 $CLRCTX
 LDZ HL, $IDEN$NULL
-FNH DZ, Y                 # Y=[ROW]
+FNH DZ, Y                 # Y=[TEMP]
 MULH A, ND                # 0->[X,Y]
 LD HL, $INC$NULL
-LDZ Y, $ROW
-FNH DZ, HLD               # [ROW]+1
+LDZ Y, $TEMP
+FNH DZ, HLD               # [TEMP]+1
 LD HL, $ZERO?$NULL
 FNH A, HLA
 LDN PC, $CLRCTX           # loop index
 
-# Set CPU - CHECK CTRL_ALT
-LD HL, $IDEN$NULL
-LDZ Y, $RCODE
-FNH DZ, HLA               # RCODE > 128?
-LDN PC, $CTRL_ALT         # YES: CTRL_ALT
-
-# Set CPU - RELOC W/VID MODE
-LD HL, $LSL$NULL
-FNH A, HLA                # 64? < RCODE < 128
-LD HL, $IDEN$NULL         # HL=0 IS BOOT
-LDP PC, $BOOT             # RCODE < 64: BOOT
-FNFH DZ, NA               # A=RCODE
-LD Y, $VMODE
-FNH AZ, HLD               # VMODE=RCODE
-LD HL, $1                 # KERNEL MODE
-LD PC, $BOOT
-
-# Set CPU - CHECK HOME KEY
-$CTRL_ALT
-LD HL, $0x14              # -0x6C CTRL_ALT_HOME
-ADDHL A, NA
-LD HL, $ZERO?$NULL
-FNH A, HLA                # KEY==HOME?
-LDP HL, $8                # YES: MONITOR
-LDN HL, $0                # NO: BOOT
-
 # Boot Kernel CPU
-$BOOT
-LD Y, $AREG
-MVHL AZ, ND               # HL -> Acc
 LD HL, $0xF1
 LD Y, $CTX0
 MVHL AZ, ND               # Kernel->Context
@@ -130,5 +151,4 @@ MVHL AZ, ND               # Bootstrap Kernal
 LD HL, $0x80
 LD Y, $VMS
 MVH DZ, ND                # Extended instruction
-
-LD PG, $VID_START_PG      # video start
+LD PG, $BSYNCE_PG         # start video loop

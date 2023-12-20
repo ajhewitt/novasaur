@@ -1,0 +1,73 @@
+# Boot Mode - fork on RCODE, set video mode
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE BOOT_MODE_PG
+
+LD HL, $IDEN$FORKR
+LD Y, $AREG
+MULH AZ, ND               # Default CPU=0 BOOT
+LD Y, $RCODE
+FNCL DZ, PC               # PC=Fork RCODE
+#12/10
+
+ADDR 0x10                 # set video mode on RELOC
+FNFH DZ, NA               # A = RCODE
+LD Y, $VMODE
+FNH AZ, HLD               # RCODE->VMODE
+LD HL, $1
+LD Y, $AREG
+MVHL AZ, ND               # CPU=1 RELOC
+LD PC, $START
+#29/13
+
+ADDR 0x20                 # boot to monitor
+LD HL, $8
+LD Y, $AREG
+MVHL AZ, ND               # CPU=8 MONITOR
+LD PC, $TEXT
+#22/8
+
+ADDR 0x30                 # page up +1 video mode
+LD HL, $INC$NULL
+LDZ Y, $VMODE
+FNH DZ, HLD               # VMODE++
+LD PC, $HOME
+#20/7
+
+ADDR 0x40                 # page down -1 video mode
+LD HL, $DEC$NULL
+LDZ Y, $VMODE
+FNH DZ, HLD               # VMODE--
+LD PC, $HOME
+#20/7
+
+ADDR 0xC0
+$HOME
+LD HL, $0
+LD Y, $VSTART
+MULH DZ, ND               # 0 -> vstart
+LD Y, $CONY
+MULH DZ, ND               # 0 -> console
+
+LD HL, $0x40
+LD Y, $VMODE
+MULH DZ, NA               # A = VMODE<<2
+LD HL, $0x30
+ADDH A, NA                # A = mode index+3
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = HEIGHT
+LD HL, $1COM$NULL
+LD Y, $CONH
+FNH AZ, HLD               # -height-1 -> CON height
+
+$TEXT
+LD HL, $0x38
+LD Y, $VMODE
+ORHL DZ, ND               # TEXT MODE ONLY
+
+$START
+LD HL, $0
+LD Y, $RCODE
+MULH AZ, ND               # clear restart code
+LD PG, $WARM_START_PG     # warm start

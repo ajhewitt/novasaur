@@ -39,13 +39,15 @@ $GATE_PG       0x32 # DD24-DD27,DD2C-DD2F
 
 # 0x38-0x3F: graphics
 
-# 0x40-7F: user reserved
+# 0x40-7F: user reserved (40)
 
 # 0x80-0x8F: system
 $COLD_START_PG 0x80 # reset vector
-$WARM_START_PG 0x81
-$KBD_START_PG  0x82
-$VID_START_PG  0x83
+$KBD_START_PG  0x81
+$BOOT_MODE_PG  0x82
+$WARM_START_PG 0x83
+
+# 0x88-8F: user reserved (8)
 
 # 0x90-0xE3 (84): 8080 instruction set
 $FETCH1_PG     0x90

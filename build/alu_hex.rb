@@ -596,15 +596,32 @@ def ctrl_alt_page
   128.times.map do |code|
     case code
     when 0x6C # home -> monitor
-      0x81
-    when 0x71 # del -> reboot
       0x82
+    when 0x71 # del -> reboot
+      0x81
     when 0x7D # pgup -> vid mode up
-      0x81
+      0x82
     when 0x7A # pgdn -> vid mode down
-      0x81
+      0x82
     else
       0
+    end
+  end
+end
+
+def fork_restart
+  256.times.map do |code|
+    case code
+    when 0x40..0x7F # set video mode
+      0x10
+    when 0xEC # home -> monitor
+      0x20
+    when 0xFD # pgup -> vid mode up
+      0x30
+    when 0xFA # pgdn -> vid mode down
+      0x40
+    else # reboot
+      0xC0
     end
   end
 end
@@ -813,7 +830,9 @@ print_unary(0xC8, ext_map_high)
 print_unary(0xC9, ext_map_low)
 # $CTXCOL: Context column n->0xFn 0<n<8
 print_unary(0xCA, 8.times.map{|i| i>0 ? i+0xF0 : 0xF1}*32)
-# 0xCB-0xCF TBD
+# $FORKR: Restart page fork
+print_unary(0xCB, fork_restart)
+# 0xCC-0xCF RSVD
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
 # FORKI: fork on interrupt
