@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; DEC 17, 2023
+; DEC 20, 2023
 ;
         .PROJECT        kernel.com
 ;
@@ -372,7 +372,7 @@ TICK0:  LXI     H,TICKC
         INX     H
         MOV     B,M     ;BC=BLOCK COUNT
         LHLD    RUNC    ;HL=RUN COUNT
-        CALL    DIVIDE  ;A=BLOCK/RUN COUNT
+        CALL    0FC03H  ;A=BLOCK/RUN COUNT
         POP     H
         LXI     B,80H
         DAD     B       ;STAT ADDR + 80
@@ -554,46 +554,6 @@ RELOC:  MVI     L,1     ;L=DEST CPU
         JNC     RETURN  ;NO, RETURN
         MOV     A, L    ;A=VID MODE
         DW      REBOOT  ;DONE: REBOOT
-;
-; DIVIDE A=BC/HL
-; http://techref.massmind.org/techref/method/math/muldiv.htm
-;
-DIVIDE: mov     a,h
-        ora     l
-        rz              ;division by zero; abort operation
-        mov	a,b	;put 2's complement of BC +1 into DE for
-	cma		;purposes of subtraction. (BC will be
-	mov	d,a	;incremented to enable subtraction when minuend
-	mov	a,c	;and subtrahend are having equal values).
-	cma
-	mov	e,a	;dividend in negative form now in DE
-	inx	b	;BC +1; dividend incremented
-        xra	a	;reset counter A and
-	jmp	double	;start the division in earnest
-;
-;*********************** First phase: Doubling the divisor
-;
-restore:dad	b	;add back
-double: inr	a	;increment counter
-        push	h	;save divisor
-        dad	h	;double it, but go to second phase if
-        jc	change	;HL now is larger than dividend in B
-	dad	d	;comparison with dividend by subtraction
-	jnc	restore	;keep doubling unless HL now is larger than BC
-;
-;*********************** Second phase: Subtracting from the dividend
-;                                      and accumulating quotient bits.
-change: mov	b,a	;transfer count to new counter
-        xra     a       ;clear the quotient buffer
-subtrct:pop	h	;Fetch halved divisor as positive subtrahend
-	dad	d	;subtract by using negative dividend as minuend
-	jc	shiftc	;the carry bit becomes the quotient bit
-	xchg		;equivalent of adding back if subtraction fails
-shiftc:	cmc		;invert quotient bit from reverse polarity
-	ral             ;shift quotient bits
-	dcr	b	;count-down finished?
-	jnz	subtrct	;no, continue process
-	ret
 ;
 ; COMMAND JUMP VECTOR TABLE
 ;
