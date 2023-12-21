@@ -196,5 +196,5 @@ ANDHL DZ, NA              # A=Areg&3F
 LD HL, $0x40
 LD Y, $RCODE
 ORHL AZ, ND               # RCODE=A|40
-LD PG, $WARM_START_PG     # REBOOT!
+LD PG, $BOOT_MODE_PG      # REBOOT!
 #60/31

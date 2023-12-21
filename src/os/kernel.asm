@@ -541,9 +541,9 @@ NXCLN:  LDA     CLSL    ;GET CLS LINE
 ; DE=CURRENT INDEX
 ; HL=SIZE/VID MODE
 ;
-RELOC:  MVI     L,1     ;L=DEST CPU
+RELOC:  MVI     L, 1    ;L=DEST CPU
         LDA     SRCCPU
-        MOV     H,A     ;H=SRC CPU
+        MOV     H, A    ;H=SRC CPU
         XRA     A       ;START SHM@0
         DW      RECXFER ;XFER RECORD
         XRA     A       ;START SHM@0
@@ -552,7 +552,7 @@ RELOC:  MVI     L,1     ;L=DEST CPU
         INX     D       ;NEXT PAGE
         CMP     D       ;D>PAGES?
         JNC     RETURN  ;NO, RETURN
-        MOV     A, L    ;A=VID MODE
+        LDA     CALLHL  ;A=VID MODE
         DW      REBOOT  ;DONE: REBOOT
 ;
 ; COMMAND JUMP VECTOR TABLE
