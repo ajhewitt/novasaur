@@ -5,40 +5,106 @@ INCLUDE ../inc/pages.nsa
 PAGE CLRLN_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC$NULL
-FNH DZ, HLD           # inc state
-LD HL, $INC2$NULL
+LD HL, $INC2$FORK1
+FNFH DZ, ND               # inc state
 LD Y, $TEMP
-FNFH DZ, XD           # X = char column+2
-#11
-LD HL, $LSR$1COM
-FNFH A, NA            # A = console column
-FNFL A, HL            # HL = -console column-1
-LD Y, $CONR
-#21
-ADDHL DZ, NA          # A = console right-console column-1
-LDN PC, $EXIT27       # A<0 at end of line
-LD HL, $IDEN$NULL
-LDZ Y, $CONY
-#30
-FNH DZ, Y             # Y = row
-MULH A, ND            # null -> [Y,X]
-LD HL, $CLRLN_INST
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
+FNFH DZ, XD               # inc cursor
+#10
+FNDL A, PC                # fork to code
+#13
+
+$EXIT35
+LD HL, $DEC$NULL          
+LDZ Y, $VMS
+FNH DZ, HLD               
+LD PG, $FETCH1_PG         # cycle available, goto fetch
 #43
 
-$EXIT27
-NOP
-NOP
-NOP
+ADDR 0x80
+LD HL, $IDEN$NULL         # RETURN CURSOR
+LDZ Y, $CONL
+FNH DZ, HLA               # A = console left
+#19
+LD HL, $INC$NULL
+LDZ Y, $CONX              
+FNFH AZ, ND               # A+1 -> column
+LDZ Y, $CONH              # ADJUST HEIGHT
+FNH DZ, HLA               # A = console heigth+1
 #30
+LDP Y, $VSTART            # use vstart at max height
+LDN Y, $CONH              # else use console height
+LD HL, $INC$NULL
+FNFH DZ, ND               # (console height or vstart)+1
+LD HL, $LSL$NULL          # INIT CLR LINE
+#40
+LDZ Y, $CONL
+FNH DZ, HLA               # A = console left*2
+LD HL, $INC$NULL          
+LD Y, $TEMP
+FNFH AZ, XD               # A+1 -> temp
+#51
+LDZ Y, $CONY              
+FNH DZ, HLD               # row+1
+LD HL, $IDEN$NULL
+FNH DZ, Y                 # Y = row
+#59
+MULH A, ND                # null -> [Y,X]
+LD HL, $INC2$NULL         # CLEAR CHAR
+LD Y, $TEMP
+FNFH DZ, XD               # X = char column+2
+#69
+LD HL, $IDEN$NULL
+LDZ Y, $CONY
+FNH DZ, Y                 # Y = row
+MULH A, ND                # null -> [Y,X]
+LD HL, $CLRLN_INST
+#80
+LD Y, $VMS                # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
+#86
+
+ADDR 0xC0
 NOP
 NOP
 NOP
 NOP
 NOP
-LD HL, $FETCH
-LD Y, $VMS            # set Y = $VMS on exit
-DISHL DZ, PGA         # jump to next VMC
-#43
+NOP
+#19
+LD HL, $LSR$1COM          # CHECK EOL
+FNFH A, NA                # A = console column
+FNFL A, HL                # HL = -console column-1
+LD Y, $CONR
+#29
+ADDHL DZ, NA              # A = console right-console column-1
+LDN PC, $EXIT35           # A<0 at end of line
+LD HL, $IDEN$NULL
+LDZ Y, $CONY
+FNH DZ, Y                 # Y = row
+#40
+MULH A, ND                # null -> [Y,X]
+LD HL, $INC2$NULL         # CLEAR CHAR
+LD Y, $TEMP
+FNFH DZ, XD               # X = char column+2
+#50
+LD HL, $IDEN$NULL
+LDZ Y, $CONY
+FNH DZ, Y                 # Y = row
+MULH A, ND                # null -> [Y,X]
+LD HL, $INC2$NULL         # CLEAR CHAR
+#61
+LD Y, $TEMP
+FNFH DZ, XD               # X = char column+2
+LD HL, $IDEN$NULL
+LDZ Y, $CONY
+#70
+FNH DZ, Y                 # Y = row
+MULH A, ND                # null -> [Y,X]
+NOP
+NOP
+NOP
+LD HL, $CLRLN_INST
+#80
+LD Y, $VMS                # set Y = $VMS on exit
+DISHL DZ, PGA             # jump to next VMC
+#86

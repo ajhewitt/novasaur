@@ -72,36 +72,34 @@ LD PC, $EXIT72
 #72/28
 
 ADDR 0x52                 # Line Feed (row+1, dispatch clear line)
-LDZ Y, $CONH
+LD HL, $LSL$INC           # BLANK CURSOR
 #39/2
-FNH DZ, HLA               # A = console heigth+1
-LDP Y, $VSTART            # use vstart at max height
-LDN Y, $CONH              # else use console height
-LD HL, $INC$NULL
-FNFH DZ, ND               # (console height or vstart)+1
-#49/11
+LD Y, $CONX
+FNFH DZ, NA               # A = column*2
+FNFL A, X                 # X = A+1
+LD HL, $IDEN$NULL
+#49/10
 LDZ Y, $CONY
-FNH DZ, HLD               # row+1
-LD HL, $LSL$NULL
-LDZ Y, $CONL
-FNH DZ, HLA               # A = console left*2
-#59/19
-LD HL, $DEC$NULL
+FNH DZ, Y                 # Y = row
+MULH A, ND                # null -> [Y,X]
+LD HL, $0xFE              # INIT STATE
 LD Y, $TEMP
-FNH AZ, HLD               # A-1 -> temp
+#60/19
+MVHL AZ, ND               # FE -> temp
+NOP
 LD HL, $CLRLN_INST
 LD Y, $INST
-#69/28
+#69/26
 MVHL AZ, ND               # clear line -> inst cache
 LD HL, $0xA0
 LD Y, $VMS                # set Y = $VMS on exit
 ADDH DZ, ND               # VMS+EXT+2
-#80/36
+#80/34
 LD HL, $CLRLN_INST
 DISHL DZ, PGA             # jump to next VMC
-#86/40
+#86/38
 
-ADDR 0x7A                 # Carriage Return (blank cursor, column to console left)
+ADDR 0x78                 # Carriage Return (blank cursor, column to console left)
 LD HL, $LSL$INC
 #39/2
 LD Y, $CONX
@@ -122,7 +120,7 @@ MVHL A, NA                # NOP
 LD PC, $EXIT72
 #72/27
 
-ADDR 0x96                 # Standard Character (column+1, print char in acc)
+ADDR 0x94                 # Standard Character (column+1, print char in acc)
 LDZ Y, $CONX
 #39/2
 FNH DZ, HLD               # column+1
@@ -158,7 +156,7 @@ FNH DZ, HLD               # column-1
 LD PC, $EXIT61
 #61/43
 
-ADDR 0xC2                 # Flash Cursor (toggle null to char @1.2Hz)
+ADDR 0xC0                 # Flash Cursor (toggle null to char @1.2Hz)
 LD HL, $LSL$NULL
 #39/2
 LDZ Y, $CONX
