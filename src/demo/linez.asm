@@ -1,19 +1,17 @@
 ; TITLE: 'LINES DEMO'
 ;
-; DEC 21, 2023
+; JAN 6, 2024
 ;
-        .PROJECT        linez.com
-        
-MOVMA   EQU     077DDH  ;MOV vidM,A
+MOVMA   EQU     077DDH          ; MOV vidM,A
 
         org     100H
 
-        LXI     H, 020FH;2 PAGES, VMODE 15
-        CALL    3CH     ;RELOC
-        MVI     A, 0FFH ;START=0
-        OUT     30H     ;SET VIDEO START
+        LXI     H, 020FH        ; 2 PAGES, VMODE 15
+        CALL    003CH           ; RELOC
+        MVI     A, 0FFH         ; VSTART=0
+        OUT     30H             ; SET VIDEO START
         LXI     D, TABLE
-        
+
 L0:     XCHG
         MVI     B, 0
         MOV     A, M
@@ -25,12 +23,12 @@ L1:     XCHG
         LHLD    COL
         DAD     B
         MOV     A, H
-        CPI     0FFH    ;COL==-1?
-        JNZ     L2      ;NO: CONTINUE
+        CPI     0FFH            ; COL<0?
+        JNZ     L2              ; NO: CONTINUE
         LXI     H, 0
         JMP     L3
-L2:     CPI     0A9H    ;COL>160?
-        JC      L4      ;NO: CONTINUE
+L2:     CPI     0A9H            ; COL>160?
+        JC      L4              ; NO: CONTINUE
         LXI     H, 0A8FFH
 L3:     INR     E
         LDA     LIN
@@ -43,7 +41,7 @@ L3:     INR     E
 L4:     SHLD    COL
 
         INR     E
-        
+
         XCHG
         MVI     B, 0
         MOV     A, M
@@ -55,12 +53,12 @@ L5:     XCHG
         LHLD    ROW
         DAD     B
         MOV     A, H
-        CPI     0FFH    ;ROW==-1?
-        JNZ     L6      ;NO: CONTINUE
+        CPI     0FFH            ; ROW<0?
+        JNZ     L6              ; NO: CONTINUE
         LXI     H, 0
         JMP     L7
-L6:     CPI     078H    ;ROW>120?
-        JC      L8      ;NO: CONTINUE
+L6:     CPI     078H            ; ROW>120?
+        JC      L8              ; NO: CONTINUE
         LXI     H, 077FFH
 L7:     INR     E
         LDA     LIN
@@ -73,7 +71,7 @@ L7:     INR     E
 L8:     SHLD    ROW
 
         DCR     E
-        
+
         LDA     ROW+1
         MOV     H, A
         LDA     COL+1
@@ -82,7 +80,7 @@ L8:     SHLD    ROW
         LDA     LIN
         DW      MOVMA
         JMP     L0
-        
+
 LIN     DB      0
 ROW     DW      5000H
 COL     DW      3D00H
@@ -90,7 +88,7 @@ COL     DW      3D00H
         org     200H
 
 TABLE:  DB      131, 227, 134, 195, 136, 126, 127, 115
-        DB      76, 102, 187, 128, 54, 15, 96, 111, 
+        DB      76, 102, 187, 128, 54, 15, 96, 111
         DB      179, 71, 198, 141, 124, 81, 224, 9
         DB      133, 120, 140, 243, 155, 125, 170, 12
         DB      138, 15, 190, 94, 147, 163, 60, 21
@@ -121,5 +119,5 @@ TABLE:  DB      131, 227, 134, 195, 136, 126, 127, 115
         DB      252, 127, 204, 221, 48, 209, 88, 209
         DB      90, 204, 34, 76, 81, 28, 125, 3
         DB      240, 182, 115, 114, 182, 85, 155, 24
-        
-	END
+
+        END
