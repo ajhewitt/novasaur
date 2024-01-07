@@ -94,12 +94,12 @@ LD HL, $INC$NULL
 LDZ Y, $TEMP
 FNH DZ, HLD               # mode index+1->temp
 
-LD HL, $VATTR$IDEN
+LD HL, $VATTR$INC2
 FNCH A, NA                # A = WIDTH
 LD Y, $CONL
-FNFL DZ, HL               # HL = CON left
+FNFL DZ, HL               # HL = CON left + 2
 LD Y, $CONR
-ADDHL AZ, ND              # CON left + WIDTH -> Con right
+ADDHL AZ, ND              # CON left + 2 + WIDTH -> Con right
 
 # Clear CTX sequence
 LD HL, $CTX_SEQ
