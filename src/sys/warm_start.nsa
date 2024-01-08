@@ -78,8 +78,6 @@ LD Y, $CONL
 FNFH AZ, ND               # left border -> console left
 LD Y, $CONX
 FNFH AZ, ND               # left border -> console X
-LD Y, $CONB
-FNFH AZ, ND               # left border -> console backstop
 LD Y, $TEMP
 FNCL DZ, HL               # HL = ELEFT
 LD Y, $EO
@@ -101,22 +99,12 @@ FNFL DZ, HL               # HL = CON left + 2
 LD Y, $CONR
 ADDHL AZ, ND              # CON left + 2 + WIDTH -> Con right
 
-# Clear CTX sequence
-LD HL, $CTX_SEQ
-MVHL A, XA                # X=CTX_SEQ
-LD HL, $0
-LD Y, $TEMP
-MULH AZ, ND               # 0->[TEMP]
-$CLRCTX
-LDZ HL, $IDEN$NULL
-FNH DZ, Y                 # Y=[TEMP]
-MULH A, ND                # 0->[X,Y]
 LD HL, $INC$NULL
 LDZ Y, $TEMP
-FNH DZ, HLD               # [TEMP]+1
-LD HL, $ZERO?$NULL
-FNH A, HLA
-LDN PC, $CLRCTX           # loop index
+FNH DZ, HLD               # mode index+1->temp
+LD HL, $VATTR$NULL
+LD Y, $VIDH
+FNCH AZ, ND               # HEIGHT -> VIDH
 
 # Boot Kernel CPU
 LD HL, $0xF1

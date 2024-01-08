@@ -39,7 +39,7 @@ $CONR          0xA9 # console right border
 $CONX          0xAA # console column
 $CONY          0xAB # console row
 $CONH          0xAC # console height from bottom
-$CONB          0xAD # console backspace stop
+$VIDH          0xAD # video height
 $CONC          0xAE # console cursor char
 $CONF          0xAF # console font
 $VSTART        0xB0 # start of video display

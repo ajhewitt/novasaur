@@ -362,7 +362,7 @@ XMODE   DB      0
 SENDMSG:db      'Waiting 15 seconds at start '
         db      'and end of transfer...',CR,LF,'$'
 RECVMSG:db	'Waiting 30 seconds to start '
-        db      'reveiving file...',CR,LF,'$'
+        db      'receiving file...',CR,LF,'$'
 ANYKEY: db      'Press any key to start transfer...'
 NEWLINE:db      CR,LF,'$'
 

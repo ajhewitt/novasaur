@@ -19,30 +19,30 @@ LD HL, $1
 LD Y, $AREG
 MVHL AZ, ND               # CPU=1 RELOC
 LD PC, $START
-#29/13
+#17/13
 
 ADDR 0x20                 # boot to monitor
 LD HL, $8
 LD Y, $AREG
 MVHL AZ, ND               # CPU=8 MONITOR
 LD PC, $TEXT
-#22/8
+#10/8
 
 ADDR 0x30                 # page up +1 video mode
 LD HL, $INC$NULL
 LDZ Y, $VMODE
 FNH DZ, HLD               # VMODE++
 LD PC, $HOME
-#20/7
+#8/7
 
 ADDR 0x40                 # page down -1 video mode
 LD HL, $DEC$NULL
 LDZ Y, $VMODE
 FNH DZ, HLD               # VMODE--
 LD PC, $HOME
-#20/7
+#8/7
 
-ADDR 0xC0
+ADDR 0x80
 $HOME
 LD HL, $0
 LD Y, $VSTART
@@ -70,4 +70,22 @@ $START
 LD HL, $0
 LD Y, $RCODE
 MULH AZ, ND               # clear restart code
+
+# Clear CTX sequence
+LD HL, $CTX_SEQ
+MVHL A, XA                # X=CTX_SEQ
+LD HL, $0
+LD Y, $TEMP
+MULH AZ, ND               # 0->[TEMP]
+$CLRCTX
+LDZ HL, $IDEN$NULL
+FNH DZ, Y                 # Y=[TEMP]
+MULH A, ND                # 0->[X,Y]
+LD HL, $INC$NULL
+LDZ Y, $TEMP
+FNH DZ, HLD               # [TEMP]+1
+LD HL, $ZERO?$NULL
+FNH A, HLA
+LDN PC, $CLRCTX           # loop index
+
 LD PG, $WARM_START_PG     # warm start

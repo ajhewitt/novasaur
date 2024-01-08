@@ -1,17 +1,39 @@
 ; TITLE: 'LINES DEMO'
 ;
-; JAN 6, 2024
+; JAN 7, 2024
 ;
-MOVMA   EQU     077DDH          ; MOV vidM,A
+MOVMA   EQU     77DDH           ; MOV vidM,A
+CONL    EQU     28H
+CONR    EQU     29H
+VIDH    EQU     2DH
 
         org     100H
 
-        LXI     H, 020FH        ; 2 PAGES, VMODE 15
+        LXI     H, 0201H        ; 2 PAGES, VMODE 1 (208x160 VGA)
         CALL    003CH           ; RELOC
         MVI     A, 0FFH         ; VSTART=0
         OUT     30H             ; SET VIDEO START
-        LXI     D, TABLE
+        IN      CONL
+        MOV     B, A
+        IN      CONR
+        SUB     B
+        STA     WID             ; SET WIDTH
 
+        MVI     H, 0
+C0:     IN      CONL
+        MOV     L, A
+C1:     XRA     A
+        DW      MOVMA
+        INR     L
+        IN      CONR
+        CMP     L               ; COL>160?
+        JNC     C1
+        INR     H
+        IN      VIDH
+        CMP     H               ; ROW>120?
+        JNZ     C0
+
+        LXI     D, TABLE
 L0:     XCHG
         MVI     B, 0
         MOV     A, M
@@ -22,14 +44,17 @@ L0:     XCHG
 L1:     XCHG
         LHLD    COL
         DAD     B
-        MOV     A, H
-        CPI     0FFH            ; COL<0?
+        MVI     A, 0FFH
+        CMP     H               ; COL<0?
         JNZ     L2              ; NO: CONTINUE
         LXI     H, 0
         JMP     L3
-L2:     CPI     0A9H            ; COL>160?
-        JC      L4              ; NO: CONTINUE
-        LXI     H, 0A8FFH
+L2:     LDA     WID
+        CMP     H               ; COL>160?
+        JNC     L4              ; NO: CONTINUE
+        DCR     A
+        MOV     H, A
+        MVI     L, 0FFH
 L3:     INR     E
         LDA     LIN
         INR     A
@@ -57,9 +82,11 @@ L5:     XCHG
         JNZ     L6              ; NO: CONTINUE
         LXI     H, 0
         JMP     L7
-L6:     CPI     078H            ; ROW>120?
-        JC      L8              ; NO: CONTINUE
-        LXI     H, 077FFH
+L6:     IN      VIDH
+        CMP     H               ; COL>VIDH?
+        JNC     L8              ; NO: CONTINUE
+        MOV     H, A
+        MVI     L, 0FFH
 L7:     INR     E
         LDA     LIN
         INR     A
@@ -72,15 +99,17 @@ L8:     SHLD    ROW
 
         DCR     E
 
+        IN      CONL
+        LXI     H, COL+1
+        ADD     M
+        MOV     L, A
         LDA     ROW+1
         MOV     H, A
-        LDA     COL+1
-        ADI     12
-        MOV     L, A
         LDA     LIN
         DW      MOVMA
         JMP     L0
 
+WID     DB      0
 LIN     DB      0
 ROW     DW      5000H
 COL     DW      3D00H

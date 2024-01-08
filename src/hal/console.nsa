@@ -20,7 +20,7 @@ LD HL, $DEC$1COM
 #39/2
 LD Y, $CONX
 FNFH DZ, ND               # column-1
-LD Y, $CONB
+LD Y, $CONL
 FNFL DZ, HL               # HL = -console left stop-1
 #49/10
 ADDHL A, NA               # A = column-console left stop-1

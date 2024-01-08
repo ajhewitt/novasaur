@@ -621,7 +621,7 @@ def fork_restart
     when 0xFA # pgdn -> vid mode down
       0x40
     else # reboot
-      0xC0
+      0x80
     end
   end
 end
