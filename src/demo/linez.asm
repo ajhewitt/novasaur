@@ -1,36 +1,40 @@
 ; TITLE: 'LINES DEMO'
 ;
-; JAN 7, 2024
+; JAN 8, 2024
 ;
-MOVMA   EQU     77DDH           ; MOV vidM,A
-CONL    EQU     28H
-CONR    EQU     29H
-VIDH    EQU     2DH
+MOVMA   EQU     77DDH           ; MOV VM,A
+REBOOT  EQU     03EDH
 
-        org     100H
+KBD     EQU     9
+VIDL    EQU     28H
+VIDR    EQU     29H
+VIDH    EQU     2AH
+VSTART  EQU     30H
+VMODE   EQU     31H
+
+        ORG     100H
 
         LXI     H, 0201H        ; 2 PAGES, VMODE 1 (208x160 VGA)
         CALL    003CH           ; RELOC
         MVI     A, 0FFH         ; VSTART=0
-        OUT     30H             ; SET VIDEO START
-        IN      CONL
+        OUT     VSTART          ; SET VIDEO START
+        IN      VIDL
         MOV     B, A
-        IN      CONR
+        IN      VIDR
         SUB     B
         STA     WID             ; SET WIDTH
 
-        MVI     H, 0
-C0:     IN      CONL
-        MOV     L, A
+        MVI     H, 0            ; ROW=0
+C0:     MVI     L, 0            ; COL=0
 C1:     XRA     A
         DW      MOVMA
         INR     L
-        IN      CONR
-        CMP     L               ; COL>160?
+        MVI     A, 0F0H
+        CMP     L               ; COL>RIGHT?
         JNC     C1
         INR     H
         IN      VIDH
-        CMP     H               ; ROW>120?
+        CMP     H               ; ROW>HEIGHT?
         JNZ     C0
 
         LXI     D, TABLE
@@ -50,19 +54,12 @@ L1:     XCHG
         LXI     H, 0
         JMP     L3
 L2:     LDA     WID
-        CMP     H               ; COL>160?
+        CMP     H               ; COL>WIDTH?
         JNC     L4              ; NO: CONTINUE
         DCR     A
         MOV     H, A
         MVI     L, 0FFH
-L3:     INR     E
-        LDA     LIN
-        INR     A
-        STA     LIN
-        IN      3AH
-        RRC
-        JC      L4
-        INR     E
+L3:     CALL    N0
 L4:     SHLD    COL
 
         INR     E
@@ -83,23 +80,16 @@ L5:     XCHG
         LXI     H, 0
         JMP     L7
 L6:     IN      VIDH
-        CMP     H               ; COL>VIDH?
+        CMP     H               ; COL>HEIGHT?
         JNC     L8              ; NO: CONTINUE
         MOV     H, A
         MVI     L, 0FFH
-L7:     INR     E
-        LDA     LIN
-        INR     A
-        STA     LIN
-        IN      3AH
-        RRC
-        JC      L8
-        INR     E
+L7:     CALL    N0
 L8:     SHLD    ROW
 
         DCR     E
 
-        IN      CONL
+        IN      VIDL
         LXI     H, COL+1
         ADD     M
         MOV     L, A
@@ -109,12 +99,35 @@ L8:     SHLD    ROW
         DW      MOVMA
         JMP     L0
 
+N0:     IN KBD
+        ANA     A
+        JZ      N1
+        CPI     '='
+        JNZ     N1
+        IN      VMODE
+        INR     A
+        DW      REBOOT
+N1:     CPI     '-'
+        JNZ     N2
+        IN      VMODE
+        DCR     A
+        DW      REBOOT
+N2:     INR     E
+        LDA     LIN
+        INR     A
+        STA     LIN
+        IN      3AH
+        RRC
+        RC
+        INR     E
+        RET
+
 WID     DB      0
 LIN     DB      0
 ROW     DW      5000H
 COL     DW      3D00H
 
-        org     200H
+        ORG     200H
 
 TABLE:  DB      131, 227, 134, 195, 136, 126, 127, 115
         DB      76, 102, 187, 128, 54, 15, 96, 111

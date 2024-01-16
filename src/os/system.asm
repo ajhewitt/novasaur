@@ -1,14 +1,16 @@
 ; TITLE: 'SYS LIB'
 ;
-; DEC 20, 2023
+; JAN 15, 2024
 ;
         .PROJECT        system.com
 ;
-CONL    EQU     28H     ;CONSOLE LEFT
-CONR    EQU     29H     ;CONSOLE RIGHT
+VIDL    EQU     28H     ;CONSOLE LEFT
+VIDR    EQU     29H     ;CONSOLE RIGHT
 CONF    EQU     2FH     ;CONSOLE FONT
 ;
+GLYPH   EQU     030DDH  ;GLYPH DATA
 MOVMB   EQU     070DDH  ;MOV vidM,B
+MOVMC   EQU     071DDH  ;MOV vidM,B
 MOVMA   EQU     077DDH  ;MOV vidM,A
 YIELD   EQU     06EDH   ;MASTER: YIELD UNTIL CTX SW
 SIGNAL  EQU     07DDH   ;MASTER: SIGNAL SLAVE
@@ -27,6 +29,9 @@ DMA     EQU     0FDDH   ;DMA
 ;
 	JMP	LCLRLN	;CLEAR LINE
         JMP	LBDIVH	;B DIVIDE BY H
+        JMP     GRTEXT  ;DISPLAY TEXT
+
+TEMP:   DB      0, 0, 0, 0, 0, 0, 0, 0
 ;
 ; CLEAR LINE - H=LINE NUMBER
 ; SET NULL IN L/R BORDER
@@ -34,10 +39,10 @@ DMA     EQU     0FDDH   ;DMA
 ;
 LCLRLN: IN      CONF
         MOV     B,A     ;B=CONSOLE FONT/FG/BG COLOR
-        IN      CONL
+        IN      VIDL
         ADD     A
         MOV     D,A     ;C=CONSOLE LEFT
-        IN      CONR
+        IN      VIDR
         ADD     A
         MOV     E,A     ;D=COLSOLE RIGHT
         DCR     E
@@ -96,3 +101,54 @@ shiftc:	cmc		;invert quotient bit from reverse polarity
 	dcr	b	;count-down finished?
 	jnz	subtrct	;no, continue process
 	ret
+;
+; GRTEXT
+; BC = background/foreground color
+; DE = screen x, y
+; HL = text buff start, null term
+;
+GRTEXT: MOV     A, C    ;FOREGROUND
+        STA     TEMP
+        MOV     A, B    ;BACKGROUND
+        STA     TEMP+1
+        MOV     A, D    ;TOP ROW
+        STA     TEMP+2
+G0:     MOV     C, M    ;C=CHAR FROM BUFF
+        XRA     A
+        CMP     C       ;NULL?
+        RZ              ;DONE
+        MVI     B, 0    ;ROW=0
+G1:     PUSH    B       ;SAVE B
+        DW      GLYPH   ;A=GLYPH DATA
+        MVI     B, 8    ;B=COUNT
+G2:     RAL             ;SHIFT BIT
+        MOV     C, A    ;SAVE A
+        PUSH    B       ;SAVE BC
+        LXI     B, TEMP
+        JC      G3      ;FORGROUND
+        INX     B       ;BACKGROUND
+G3:     LDAX    B       ;A=COLOR
+        XCHG            ;HL=DISPLAY X,Y
+        DW      MOVMA   ;WRITE PIXEL
+        XCHG
+        POP     B       ;RECOVER BC
+        MOV     A, C    ;RECOVER A
+        INR     E       ;INC COL
+        DCR     B       ;COUNT DOWN COL
+        JNZ     G2      ;NEXT COL
+        POP     B
+        INR     B       ;INC COL
+        MVI     A, 8
+        CMP     B       ;LAST ROW?
+        JZ      G4      ;NEXT CHAR
+        MOV     A, E
+        SBI     8       ;RESET COL
+        MOV     E, A
+        INR     D       ;NEXT ROW
+        JMP     G1
+G4:     INX     H
+        LDA     TEMP+2  ;RESET ROW
+        MOV     D, A
+        JMP     G0
+
+        END

@@ -1,0 +1,52 @@
+# Move display source to accumulator
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE MOVRX_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $IDEN$NULL
+LD Y, $LREG
+FNFH DZ, XA           # A,X = L
+#11
+LDP HL, $0x80         # negate if positive
+LDN HL, $0x10         # positive if >0xF0
+ADDHL A, NA
+LDP PC, $EXIT20       # exit if positive
+LD HL, $IDEN$REGMAPL
+#21
+LDZ Y, $HREG
+FNH DZ, Y             # Y = H
+FNFH D, NA            # A = [HL]
+LD Y, $INST
+#30
+FNDL DZ, Y            # Y = zpage addr of source reg
+FNH AZ, HLD           # A -> reg
+LD HL, $FETCH
+LDZ Y, $VMS           # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43
+
+$EXIT20
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LDZ Y, $VMS           # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43

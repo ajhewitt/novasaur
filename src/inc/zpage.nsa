@@ -33,13 +33,13 @@ $ATTACK3       0xA4
 $DECAY3        0xA5
 $SUSTAIN3      0xA6
 $RELEASE3      0xA7
-#CONSOLE (read/write)
-$CONL          0xA8 # console left border
-$CONR          0xA9 # console right border
-$CONX          0xAA # console column
-$CONY          0xAB # console row
-$CONH          0xAC # console height from bottom
-$VIDH          0xAD # video height
+#VID/KBD/CONSOLE (read/write)
+$VIDL          0xA8 # video left border
+$VIDR          0xA9 # video right border
+$VIDH          0xAA # video height
+$CONH          0xAB # console height from bottom
+$CONX          0xAC # console column
+$CONY          0xAD # console row
 $CONC          0xAE # console cursor char
 $CONF          0xAF # console font
 $VSTART        0xB0 # start of video display

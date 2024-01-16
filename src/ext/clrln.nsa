@@ -14,7 +14,7 @@ FNFH DZ, XD           # X = char column+2
 LD HL, $LSR$1COM
 FNFH A, NA            # A = console column
 FNFL A, HL            # HL = -console column-1
-LD Y, $CONR
+LD Y, $VIDR
 #21
 ADDHL DZ, NA          # A = console right-console column-1
 LDN PC, $EXIT27       # A<0 at end of line

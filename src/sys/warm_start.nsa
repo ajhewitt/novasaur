@@ -74,7 +74,7 @@ FNCH A, NA                # A = ELEFT
 LD HL, $0x3F
 ANDHL A, NA               # A = LEFT BORDER
 LD HL, $IDEN$VATTR
-LD Y, $CONL
+LD Y, $VIDL
 FNFH AZ, ND               # left border -> console left
 LD Y, $CONX
 FNFH AZ, ND               # left border -> console X
@@ -94,9 +94,9 @@ FNH DZ, HLD               # mode index+1->temp
 
 LD HL, $VATTR$INC2
 FNCH A, NA                # A = WIDTH
-LD Y, $CONL
+LD Y, $VIDL
 FNFL DZ, HL               # HL = CON left + 2
-LD Y, $CONR
+LD Y, $VIDR
 ADDHL AZ, ND              # CON left + 2 + WIDTH -> Con right
 
 LD HL, $INC$NULL

@@ -1,0 +1,49 @@
+# Font glyph data, B=glyph row 0-31, C=ascii code point, A=8-bit glyph data
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE GLYPH_PG
+
+# assume: Y = $VMS
+LDZ HL, $INC$NULL
+FNH DZ, HLD           # inc state
+LD HL, $0x80
+LD Y, $BREG
+MULH DZ, NA           # row<<3
+#11
+LD HL, $LSL$1
+LDN PC, $BIGFONT      # row>16
+FNFH A, NA            # H=row
+MVL A, HL             # L=1 (identity)
+#20
+LD Y, $CREG
+MULHL DZ, NA          # A=glyph data (8x8 font)
+LD HL, $IDEN$NULL
+LD Y, $AREG
+#30
+FNH AZ, HLD
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LDZ Y, $VMS           # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43
+
+$BIGFONT
+FNFH A, NA            # H=row
+MVL A, HL             # L=1 (identity)
+#21
+LD Y, $AREG
+DIVHL DZ, NA          # A=glyph data (8x16 font)
+LD HL, $IDEN$NULL
+FNH AZ, HLD
+#31
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LDZ Y, $VMS           # set Y = $VMS on exit
+DISHL DZ, PGA         # jump to next VMC
+#43

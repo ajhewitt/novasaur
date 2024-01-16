@@ -173,7 +173,7 @@ NOP
 LD PC, $EXIT65
 #65/27
 
-#REBOOT - Set RCODE to vid mode
+#REBOOT - Set RCODE to vid mode in Acc
 ADDR 0xD4
 LD HL, $KERN?$NULL
 LDZ Y, $EO
