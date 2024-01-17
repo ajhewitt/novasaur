@@ -1,6 +1,6 @@
 ; TITLE: 'SYS LIB'
 ;
-; JAN 15, 2024
+; JAN 16, 2024
 ;
         .PROJECT        system.com
 ;
@@ -23,7 +23,6 @@ SERRECV EQU     0EDDH   ;SERIAL RECV TO BUFFER
 DMA     EQU     0FDDH   ;DMA
 ;
         .ORG    0FC00H
-
 ;
 ;	JUMP VECTOR FOR LIB FUNCTIONS
 ;
@@ -103,24 +102,30 @@ shiftc:	cmc		;invert quotient bit from reverse polarity
 	ret
 ;
 ; GRTEXT
+;  A = size (8 or 16)
 ; BC = background/foreground color
 ; DE = screen x, y
 ; HL = text buff start, null term
 ;
-GRTEXT: MOV     A, C    ;FOREGROUND
+GRTEXT: ANI     18H
+        RZ              ;A!=8 or 16
+        STA     TEMP+2  ;SAVE SIZE
+        MOV     A, C    ;FOREGROUND
         STA     TEMP
         MOV     A, B    ;BACKGROUND
         STA     TEMP+1
         MOV     A, D    ;TOP ROW
-        STA     TEMP+2
+        STA     TEMP+3
 G0:     MOV     C, M    ;C=CHAR FROM BUFF
         XRA     A
         CMP     C       ;NULL?
         RZ              ;DONE
-        MVI     B, 0    ;ROW=0
+        LDA     TEMP+2  ;A=SIZE
+        ANI     10H
+        MOV     B, A    ;ROW=0 or 16
 G1:     PUSH    B       ;SAVE B
         DW      GLYPH   ;A=GLYPH DATA
-        MVI     B, 8    ;B=COUNT
+        MVI     B, 8    ;B=COL COUNT
 G2:     RAL             ;SHIFT BIT
         MOV     C, A    ;SAVE A
         PUSH    B       ;SAVE BC
@@ -138,16 +143,17 @@ G3:     LDAX    B       ;A=COLOR
         JNZ     G2      ;NEXT COL
         POP     B
         INR     B       ;INC COL
-        MVI     A, 8
-        CMP     B       ;LAST ROW?
+        LDA     TEMP+2  ;A=SIZE
+        DCR     A       ;A=7 OR F
+        ANA     B       ;LAST ROW?
         JZ      G4      ;NEXT CHAR
         MOV     A, E
-        SBI     8       ;RESET COL
-        MOV     E, A
+        SBI     8
+        MOV     E, A    ;RESET COL
         INR     D       ;NEXT ROW
         JMP     G1
 G4:     INX     H
-        LDA     TEMP+2  ;RESET ROW
+        LDA     TEMP+3  ;RESET ROW
         MOV     D, A
         JMP     G0
 
