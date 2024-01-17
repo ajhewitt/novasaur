@@ -50,11 +50,11 @@ $KSRDIDX       0xB4
 $KSWRIDX       0xB5
 $KCRDIDX       0xB6
 $KCWRIDX       0xB7
-#PROTECTED STATE (read-only)
-$CBLOCK        0xB8 # context switch block
-$CTXIDX        0xB9 # context index
-$BLOCK         0xBA # block count, 0 to 175/160/128
-$FRAME         0xBB # frame count, -5,-4 to 0
+#COUNTS/TIMERS (read-only)
+$CBLOCK        0xB8 # context switch block, 99 to 0 in <.01s
+$CTXIDX        0xB9 # context index, 0 to 255 in <2.67s
+$BLOCK         0xBA # block count, 0 to 175/160/128 in .017/.017/.013s
+$FRAME         0xBB # frame count, -4/-4/-5 to 0 in .067s
 $TIME0         0xBC # 15tps, -90 to 0 in 6s
 $TIME1         0xBD # 10tpm, -120 to 0 in 12m
 $TIME2         0xBE # 5tph, -120 to 0 in 1d

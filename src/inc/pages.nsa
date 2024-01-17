@@ -28,6 +28,7 @@ $SHMWR_PG      0x1C # DD11
 
 # 0x20-0x2F: util
 $SAA_PG        0x20 # DD18
+$RAND_PG       0x21 # DD19
 
 $MOVMX_PG      0x28 # DD7X
 $MOVRX_PG      0x29 # DD7X
