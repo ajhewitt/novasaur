@@ -6,7 +6,7 @@ INCLUDE ../inc/pages.nsa
 PAGE RAND_PG
 
 # assume: Y = $VMS
-LDZ HL, $INC$NULL
+LDZ HL, $INC2$NULL
 FNH DZ, HLD               # inc state
 LD HL, $IDEN$LSL
 LD Y, $CREG
