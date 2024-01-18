@@ -12,7 +12,7 @@ VSTART  EQU     30H
 
         ORG     100H
 
-        LXI     H, 0101H        ; 2 PAGES, VMODE 1 (208x160 VGA)
+        LXI     H, 0101H        ; 1 PAGE, VMODE 1 (208x160 VGA)
         CALL    003CH           ; RELOC
         MVI     A, 0FFH         ; VSTART=0
         OUT     VSTART          ; SET VIDEO START
