@@ -588,5 +588,5 @@ RETS:   DW      WAIT    ;N/A
         DW      WAIT
         DW      WAIT
         DW      WAIT
-        
+
         END

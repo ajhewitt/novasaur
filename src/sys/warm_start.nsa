@@ -74,12 +74,10 @@ FNCH A, NA                # A = ELEFT
 LD HL, $0x3F
 ANDHL A, NA               # A = LEFT BORDER
 LD HL, $IDEN$VATTR
-LD Y, $CONL
+LD Y, $VIDL
 FNFH AZ, ND               # left border -> console left
 LD Y, $CONX
 FNFH AZ, ND               # left border -> console X
-LD Y, $CONB
-FNFH AZ, ND               # left border -> console backstop
 LD Y, $TEMP
 FNCL DZ, HL               # HL = ELEFT
 LD Y, $EO
@@ -94,29 +92,19 @@ LD HL, $INC$NULL
 LDZ Y, $TEMP
 FNH DZ, HLD               # mode index+1->temp
 
-LD HL, $VATTR$IDEN
+LD HL, $VATTR$INC2
 FNCH A, NA                # A = WIDTH
-LD Y, $CONL
-FNFL DZ, HL               # HL = CON left
-LD Y, $CONR
-ADDHL AZ, ND              # CON left + WIDTH -> Con right
+LD Y, $VIDL
+FNFL DZ, HL               # HL = CON left + 2
+LD Y, $VIDR
+ADDHL AZ, ND              # CON left + 2 + WIDTH -> Con right
 
-# Clear CTX sequence
-LD HL, $CTX_SEQ
-MVHL A, XA                # X=CTX_SEQ
-LD HL, $0
-LD Y, $TEMP
-MULH AZ, ND               # 0->[TEMP]
-$CLRCTX
-LDZ HL, $IDEN$NULL
-FNH DZ, Y                 # Y=[TEMP]
-MULH A, ND                # 0->[X,Y]
 LD HL, $INC$NULL
 LDZ Y, $TEMP
-FNH DZ, HLD               # [TEMP]+1
-LD HL, $ZERO?$NULL
-FNH A, HLA
-LDN PC, $CLRCTX           # loop index
+FNH DZ, HLD               # mode index+1->temp
+LD HL, $VATTR$NULL
+LD Y, $VIDH
+FNCH AZ, ND               # HEIGHT -> VIDH
 
 # Boot Kernel CPU
 LD HL, $0xF1

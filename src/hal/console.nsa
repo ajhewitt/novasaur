@@ -20,7 +20,7 @@ LD HL, $DEC$1COM
 #39/2
 LD Y, $CONX
 FNFH DZ, ND               # column-1
-LD Y, $CONB
+LD Y, $VIDL
 FNFL DZ, HL               # HL = -console left stop-1
 #49/10
 ADDHL A, NA               # A = column-console left stop-1
@@ -53,7 +53,7 @@ LD PC, $EXIT65
 ADDR 0x36                 # Horizontal Tab (cursor+8 mod 8)
 LD HL, $2COM$8
 #39/2
-LDZ Y, $CONR
+LDZ Y, $VIDR
 FNFH DZ, NA               # A = -console right
 ADDL A, HL                # HL = 8-console right
 LD Y, $CONX
@@ -63,7 +63,7 @@ LD HL, $8$IDEN
 LDP PC, $EXIT57           # End of line not negative
 ANDH A, NA                # A&8
 #59/18
-LD Y, $CONR
+LD Y, $VIDR
 FNFL DZ, HL               # HL = console right
 LD Y, $CONX
 ADDHL AZ, ND              # A+console right -> column
@@ -110,7 +110,7 @@ LD HL, $IDEN$NULL
 LDZ Y, $CONY
 FNH DZ, Y                 # Y = row
 MULH A, ND                # null -> [Y,X]
-LDZ Y, $CONL
+LDZ Y, $VIDL
 FNH DZ, HLA               # A = console left
 #60/18
 LD HL, $INC$NULL
@@ -125,7 +125,7 @@ LDZ Y, $CONX
 #39/2
 FNH DZ, HLD               # column+1
 LD HL, $1COM$NULL
-LDZ Y, $CONR
+LDZ Y, $VIDR
 FNH DZ, HL                # HL = -console right-1
 ADDHL A, NA               # A = column-console right-1
 #51/10
