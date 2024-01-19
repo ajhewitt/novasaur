@@ -22,7 +22,7 @@ LD PG, $FETCH1_PG         # cycle available, goto fetch
 
 ADDR 0x80
 LD HL, $IDEN$NULL         # RETURN CURSOR
-LDZ Y, $CONL
+LDZ Y, $VIDL
 FNH DZ, HLA               # A = console left
 #19
 LD HL, $INC$NULL
@@ -37,7 +37,7 @@ LD HL, $INC$NULL
 FNFH DZ, ND               # (console height or vstart)+1
 LD HL, $LSL$NULL          # INIT CLR LINE
 #40
-LDZ Y, $CONL
+LDZ Y, $VIDL
 FNH DZ, HLA               # A = console left*2
 LD HL, $INC$NULL          
 LD Y, $TEMP
@@ -74,7 +74,7 @@ NOP
 LD HL, $LSR$1COM          # CHECK EOL
 FNFH A, NA                # A = console column
 FNFL A, HL                # HL = -console column-1
-LD Y, $CONR
+LD Y, $VIDR
 #29
 ADDHL DZ, NA              # A = console right-console column-1
 LDN PC, $EXIT35           # A<0 at end of line
