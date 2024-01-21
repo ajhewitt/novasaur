@@ -2,7 +2,7 @@
 ;
 ; JAN 17, 2024
 ;
-RAND    EQU     19DDH
+RAND    EQU     1ADDH
 MOVMA   EQU     77DDH           ; MOV VM,A
 
 VIDL    EQU     28H

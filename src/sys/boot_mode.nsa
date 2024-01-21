@@ -25,46 +25,48 @@ ADDR 0x20                 # boot to monitor
 LD HL, $8
 LD Y, $AREG
 MVHL AZ, ND               # CPU=8 MONITOR
-LD PC, $TEXT
-#10/8
+LD HL, $0xC8
+LD Y, $VMODE
+ADDHL DZ, NA
+LD PC, $START            # IN TEXT MODE
+LDN PC, $TEXT             # SET TEXT MODE
+#19/16
 
-ADDR 0x30                 # page up +1 video mode
+ADDR 0x40                 # page up +1 video mode
 LD HL, $INC$NULL
 LDZ Y, $VMODE
 FNH DZ, HLD               # VMODE++
-LD PC, $HOME
+LD PC, $TEXT
 #8/7
 
-ADDR 0x40                 # page down -1 video mode
+ADDR 0x50                 # page down -1 video mode
 LD HL, $DEC$NULL
 LDZ Y, $VMODE
 FNH DZ, HLD               # VMODE--
-LD PC, $HOME
+LD PC, $TEXT
 #8/7
 
 ADDR 0x80
-$HOME
-LD HL, $0
-LD Y, $VSTART
-MULH DZ, ND               # 0 -> vstart
-LD Y, $CONY
-MULH DZ, ND               # 0 -> console
-
-LD HL, $0x40
-LD Y, $VMODE
-MULH DZ, NA               # A = VMODE<<2
-LD HL, $0x30
-ADDH A, NA                # A = mode index+3
-LD HL, $VATTR$NULL
-FNCH A, NA                # A = HEIGHT
-LD HL, $1COM$NULL
-LD Y, $CONH
-FNH AZ, HLD               # -height-1 -> CON height
-
 $TEXT
 LD HL, $0x38
 LD Y, $VMODE
 ORHL DZ, ND               # TEXT MODE ONLY
+LD HL, $0x40
+MULH A, NA                # A = VMODE<<2
+LD HL, $0x30
+ADDH A, NA                # A = mode index+3
+LD HL, $VATTR$NULL
+FNCH A, NA                # A = HEIGHT
+LD HL, $2COM$NULL
+LD Y, $CONH
+FNH AZ, HLD               # -height -> CON height
+
+LD HL, $0xFF
+LD Y, $VSTART
+MVHL AZ, ND               # -1 -> vstart
+LD HL, $0
+LD Y, $CONY
+MULH AZ, ND               # 0 -> console
 
 $START
 LD HL, $0

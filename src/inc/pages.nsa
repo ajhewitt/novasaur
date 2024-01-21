@@ -28,17 +28,17 @@ $SHMWR_PG      0x1C # DD11
 
 # 0x20-0x2F: util
 $SAA_PG        0x20 # DD18
-$RAND_PG       0x21 # DD19
+$CRC16_PG      0x21 # DD19
+$RAND_PG       0x22 # DD1A
 
 $MOVMX_PG      0x28 # DD7X
 $MOVRX_PG      0x29 # DD7X
 
 # 0x30-0x3F: sound/graphics
-$VOICE_PG      0x30 # DD20-DD23
-$NOTE_PG       0x31 # DD28-DD2B
-$GATE_PG       0x32 # DD24-DD27,DD2C-DD2F
-
-$GLYPH_PG      0x34 # DD30
+$VOICE_PG      0x30 # DD40-DD43
+$NOTE_PG       0x31 # DD48-DD4B
+$GATE_PG       0x32 # DD44-DD47,DD4C-DD4F
+$GLYPH_PG      0x33 # DD50
 
 # 0x40-7F: user reserved (40)
 

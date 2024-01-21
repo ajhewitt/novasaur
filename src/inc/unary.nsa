@@ -68,7 +68,7 @@ $EXTMAPH    8 # extended inst mapping util (high)
 $EXTMAPL    9 # extended inst mapping util (low)
 $CTXCOL    10 # Context Column n->0xFn 0<n<8
 $FORKR     11 # Restart code fork
-#RSVD0     12 # RSVD0
-#RSVD1     13 # RSVD1
-#RSVD2     14 # RSVD2
-#RSVD3     15 # RSVD3
+$CRC16L    12 # CRC16 lookup table low bytes
+$CRC16H    13 # CRC16 lookup table high bytes
+#TBD       14 # TBD
+#TBD       15 # TBD
