@@ -20,16 +20,19 @@ $JMPPG0_PG     0x10
 $JMPPG1_PG     0x11
 
 # 0x18-0x1F: os/kernel cont
-$SERSEND_PG    0x18 # DD0D
-$SERRECV_PG    0x19 # DD0E
-$DMA_PG        0x1A # DD0F
-$SHMRD_PG      0x1B # DD10
-$SHMWR_PG      0x1C # DD11
+$SERSEND_PG    0x18 # DD10
+$SERRECV_PG    0x19 # DD11
+$DMA_PG        0x1A # DD12
+$DSKCHK_PG     0x1B # DD13
+$DSKSEND_PG    0x1C # DD14
+$DSKRECV_PG    0x1D # DD15
+$SHMRD_PG      0x1E # DD16
+$SHMWR_PG      0x1F # DD17
 
-# 0x20-0x2F: util
+# 0x20-0x2F: os/util, discrete
 $SAA_PG        0x20 # DD18
-$CRC16_PG      0x21 # DD19
-$RAND_PG       0x22 # DD1A
+$RAND_PG       0x21 # DD19
+$CRC16_PG      0x22 # DD1A
 
 $MOVMX_PG      0x28 # DD7X
 $MOVRX_PG      0x29 # DD7X
@@ -40,7 +43,7 @@ $NOTE_PG       0x31 # DD48-DD4B
 $GATE_PG       0x32 # DD44-DD47,DD4C-DD4F
 $GLYPH_PG      0x33 # DD50
 
-# 0x40-7F: user reserved (40)
+# 0x40-7F: user reserved (64) DD80-FF (128)
 
 # 0x80-0x8F: system
 $COLD_START_PG 0x80 # reset vector

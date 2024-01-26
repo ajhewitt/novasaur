@@ -70,5 +70,5 @@ $CTXCOL    10 # Context Column n->0xFn 0<n<8
 $FORKR     11 # Restart code fork
 $CRC16L    12 # CRC16 lookup table low bytes
 $CRC16H    13 # CRC16 lookup table high bytes
-#TBD       14 # TBD
-#TBD       15 # TBD
+$CRC8      14 # CRC8 lookup table
+$LFSR      15 # Linear-function shift register

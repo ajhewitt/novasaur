@@ -1,4 +1,4 @@
-# CRC-16, A=date, BC=checksum (with fetch)
+# CRC-16, A=data, BC=checksum (with fetch)
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa

@@ -1,0 +1,58 @@
+# Send record with ECC & CRC8 - one byte per 2-cycle, fetch when done
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE DSKSEND_PG
+
+#BREG: buffer index, init 0
+#CREG: CRC8, init 0
+#DREG: RAM page
+#EREG: RAM X index, init 0 or 0x80
+#HREG: ECC code 0
+#LREG: ECC code 1
+# assume: Y = $VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD                # VMS+2
+LD HL, $INC$DEC
+LD Y, $EREG
+FNFH DZ, ND                # Ereg++
+#11
+FNFL A, X                  # X = Ereg-1
+LD HL, $IDEN$IDEN
+LD Y, $DREG
+FNH A, Y                   # Y = Dreg
+#20
+FNFH M, NA                 # data = [Y,X]
+LD Y, $CTX0
+FNFL DZ, X                 # X = context col
+LDZ Y, $BREG
+#30
+FNH DZ, Y                  # Y = row
+FNH A, HLD                 # data -> [Y,X], HL
+LD Y, $HREG
+XORHL DZ, ND               # Hreg = data^Hreg
+#40
+LD Y, $LREG
+XORHL DZ, NA               # A = data^Lreg
+LD HL, $LFSR$IDEN
+FNCH AZ, ND                # LFSR(A) -> Lreg
+#51
+LD Y, $BREG
+FNFL DZ, Y
+FNFL D, HL                 # HL = data
+LD Y, $CREG
+#61
+XORHL DZ, NA               # Creg = data^Creg
+LD HL, $CRC8$IDEN
+FNCH AZ, ND                # Creg = CRC8(A)
+#70
+NOP
+LD HL, $INC$NULL
+LDZ Y, $BREG
+FNH DZ, HLD                # Breg++
+LDP HL, $DSKSEND_INST      # continue
+LDN HL, $FETCH
+#80
+LD Y, $VMS                 # set Y = $VMS on exit
+DISHL DZ, PGA              # jump to next VMC
+#86

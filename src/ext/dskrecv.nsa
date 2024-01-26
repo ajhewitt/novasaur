@@ -1,0 +1,79 @@
+# Receive record with ECC & CRC8 - one byte per 2-cycle, fetch when done
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE DSKRECV_PG
+
+#BREG: buffer index, init 0
+#CREG: CRC8, init 0
+#DREG: RAM page
+#EREG: RAM X index, init 0 or 0x80
+#HREG: ECC code 0
+#LREG: ECC code 1
+# assume: Y = $VMS
+LDZ HL, $INC2$NULL
+FNH DZ, HLD                # VMS+2
+LD HL, $INC$IDEN
+LD Y, $CTX0
+FNFL DZ, X                 # X = context col
+#11
+LD Y, $EREG
+FNFH DZ, ND                # Ereg++
+LDZ Y, $BREG
+FNH DZ, HLD                # Breg++
+#20
+LDN PC, $EXIT22
+LD HL, $IDEN$DEC
+FNFL DZ, Y                 # Y = row-1
+FNFH D, NA                 # A = [Y,X]
+LD Y, $EREG
+#31
+FNFL DZ, X                 # X = E-1
+LDZ Y, $DREG
+FNH DZ, Y                  # Y = D
+FNFH A, HLM                # A->[Y,X]
+#41
+LD Y, $HREG
+XORHL DZ, ND               # Hreg = data^Hreg
+LD Y, $LREG
+#49
+XORHL DZ, NA               # A = data^Lreg
+LD HL, $LFSR$IDEN
+FNCH AZ, ND                # LFSR(A) -> Lreg
+LD Y, $DREG
+#60
+FNFL DZ, Y
+FNFL M, HL                 # HL = data
+LD Y, $CREG
+XORHL DZ, NA               # Creg = data^Creg
+#72
+LD HL, $CRC8$IDEN
+FNCH AZ, ND                # Creg = CRC8(A)
+NOP
+LD HL, $DSKRECV_INST       # continue
+#80
+LD Y, $VMS                 # set Y = $VMS on exit
+DISHL DZ, PGA              # jump to next VMC
+#86
+
+$EXIT22
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $DEC$NULL
+LDZ Y, $VMS                # set Y = $VMS on exit
+#39
+FNH DZ, HLD                # VMS--
+LD PG, $FETCH1_PG          # cycle available, goto fetch
+#43
