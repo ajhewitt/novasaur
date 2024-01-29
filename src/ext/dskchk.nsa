@@ -22,23 +22,39 @@ FNH A, Y                   # Y = Dreg
 FNFL M, HL                 # data = [Y,X]
 LD Y, $HREG
 #20
+LDN PC, $HIGHREC22
 XORHL DZ, ND               # Hreg = data^Hreg
 LD Y, $LREG
 XORHL DZ, NA               # A = data^Lreg
-#30
+#31
 LD HL, $LFSR$IDEN
 FNCH AZ, ND                # LFSR(A) -> Lreg
 LD Y, $DREG
 FNFL DZ, Y
-#40
+#41
+FNFL M, HL                 # HL = data
+LD Y, $BREG
+LD PC, $EXIT48
+
+$HIGHREC22
+XORHL DZ, ND               # Hreg = data^Hreg
+LD Y, $LREG
+XORHL DZ, NA               # A = data^Lreg
+#32
+LD HL, $LFSR$IDEN
+FNCH AZ, ND                # LFSR(A) -> Lreg
+LD Y, $DREG
+FNFL DZ, Y
+#42
 FNFL M, HL                 # HL = data
 LD Y, $CREG
-XORHL DZ, NA               # Creg = data^Creg
-#49
+NOP
+$EXIT48
+XORHL DZ, NA               # A = data^B|Creg
+#52
 LD HL, $CRC8$IDEN
-FNCH AZ, ND                # Creg = CRC8(A)
-LD HL, $INC$NULL
-LDZ Y, $BREG
+FNCH AZ, ND                # B|Creg = CRC8(A)
+NOP
 NOP
 NOP
 #60
@@ -48,14 +64,11 @@ NOP
 NOP
 NOP
 NOP
-NOP
-NOP
-NOP
-NOP
-#70
-NOPZ
+LD HL, $INC$NULL
+LDZ Y, $EREG
+#71
 FNH DZ, HLD                # Ereg++
-LDZ HL, $ZERO$NULL
+LDZ HL, $ZERO?$NULL
 FNH DZ, HLA                # Ereg==0?
 LDP HL, $FETCH             # yes: done
 LDN HL, $DSKCHK_INST       # no: continue

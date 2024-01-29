@@ -45,7 +45,7 @@ LD Y, $DREG
 FNFL DZ, Y
 FNFL M, HL                 # HL = data
 LD Y, $CREG
-XORHL DZ, NA               # Creg = data^Creg
+XORHL DZ, NA               # A = data^Creg
 #72
 LD HL, $CRC8$IDEN
 FNCH AZ, ND                # Creg = CRC8(A)

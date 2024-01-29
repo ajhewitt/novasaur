@@ -42,7 +42,7 @@ FNFL DZ, Y
 FNFL D, HL                 # HL = data
 LD Y, $CREG
 #61
-XORHL DZ, NA               # Creg = data^Creg
+XORHL DZ, NA               # A = data^Creg
 LD HL, $CRC8$IDEN
 FNCH AZ, ND                # Creg = CRC8(A)
 #70
