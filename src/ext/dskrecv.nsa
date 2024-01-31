@@ -1,79 +1,59 @@
-# Receive record with ECC & CRC8 - one byte per 2-cycle, fetch when done
+# Receive record with ECC - one byte per 2-cycle, fetch when done
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE DSKRECV_PG
 
-#BREG: buffer index, init 0
-#CREG: CRC8, init 0
+#AREG: buffer index, init 0
+#CREG: checksum, init 0
 #DREG: RAM page
-#EREG: RAM X index, init 0 or 0x80
+#EREG: RAM X index
 #HREG: ECC code 0
 #LREG: ECC code 1
-# assume: Y = $VMS
 LDZ HL, $INC2$NULL
 FNH DZ, HLD                # VMS+2
-LD HL, $INC$IDEN
+LD HL, $IDEN$IDEN
 LD Y, $CTX0
 FNFL DZ, X                 # X = context col
 #11
+LDZ Y, $AREG
+FNH DZ, Y                  # Y = row
+FNFH D, NA                 # data = [Y,X]
 LD Y, $EREG
-FNFH DZ, ND                # Ereg++
-LDZ Y, $BREG
-FNH DZ, HLD                # Breg++
 #20
-LDN PC, $EXIT22
-LD HL, $IDEN$DEC
-FNFL DZ, Y                 # Y = row-1
-FNFH D, NA                 # A = [Y,X]
-LD Y, $EREG
-#31
-FNFL DZ, X                 # X = E-1
+FNFL DZ, X                 # X = Ereg
 LDZ Y, $DREG
-FNH DZ, Y                  # Y = D
-FNFH A, HLM                # A->[Y,X]
-#41
+FNH DZ, Y                  # Y = Dreg
+FNFH A, HLM                # data -> [Y,X], HL
+#30
+LD Y, $CREG
+ADDHL DZ, ND               # Creg = data+Creg
 LD Y, $HREG
 XORHL DZ, ND               # Hreg = data^Hreg
+#42
 LD Y, $LREG
-#49
 XORHL DZ, NA               # A = data^Lreg
-LD HL, $LFSR$IDEN
+LD HL, $LFSR$NULL
+#50
 FNCH AZ, ND                # LFSR(A) -> Lreg
-LD Y, $DREG
-#60
-FNFL DZ, Y
-FNFL M, HL                 # HL = data
-LD Y, $CREG
-XORHL DZ, NA               # A = data^Creg
-#72
-LD HL, $CRC8$IDEN
-FNCH AZ, ND                # Creg = CRC8(A)
 NOP
-LD HL, $DSKRECV_INST       # continue
+LD HL, $INC$NULL
+LDZ Y, $EREG
+FNH DZ, HLD                # Ereg++
+#60
+LD HL, $ZERO?$NULL
+FNH A, HLA                 # Ereg == 0?
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $DREG
+FNH DZ, HLD                # Dreg++
+#71
+LD HL, $INC$NULL
+LDZ Y, $AREG
+FNH DZ, HLD                # Areg++
+LDP HL, $DSKRECV_INST      # continue
+LDN HL, $FETCH
 #80
 LD Y, $VMS                 # set Y = $VMS on exit
 DISHL DZ, PGA              # jump to next VMC
 #86
-
-$EXIT22
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#30
-NOP
-NOP
-NOP
-NOP
-NOP
-LD HL, $DEC$NULL
-LDZ Y, $VMS                # set Y = $VMS on exit
-#39
-FNH DZ, HLD                # VMS--
-LD PG, $FETCH1_PG          # cycle available, goto fetch
-#43

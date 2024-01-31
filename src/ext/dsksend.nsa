@@ -1,55 +1,57 @@
-# Send record with ECC & CRC8 - one byte per 2-cycle, fetch when done
+# Send record with ECC - one byte per 2-cycle, fetch when done
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE DSKSEND_PG
 
-#BREG: buffer index, init 0
-#CREG: CRC8, init 0
+#AREG: buffer index, init 0
+#CREG: checksum, init -checksum
 #DREG: RAM page
-#EREG: RAM X index, init 0 or 0x80
+#EREG: RAM X index
 #HREG: ECC code 0
 #LREG: ECC code 1
-# assume: Y = $VMS
 LDZ HL, $INC2$NULL
 FNH DZ, HLD                # VMS+2
-LD HL, $INC$DEC
-LD Y, $EREG
-FNFH DZ, ND                # Ereg++
-#11
-FNFL A, X                  # X = Ereg-1
 LD HL, $IDEN$IDEN
-LD Y, $DREG
-FNH A, Y                   # Y = Dreg
-#20
+LD Y, $EREG
+FNFL DZ, X                 # X = Ereg
+#11
+LDZ Y, $DREG
+FNH DZ, Y                  # Y = Dreg
 FNFH M, NA                 # data = [Y,X]
 LD Y, $CTX0
+#20
 FNFL DZ, X                 # X = context col
-LDZ Y, $BREG
-#30
+LDZ Y, $AREG
 FNH DZ, Y                  # Y = row
 FNH A, HLD                 # data -> [Y,X], HL
+LD Y, $CREG
+#31
+ANDHL DZ, ND               # Creg = data+Creg
 LD Y, $HREG
 XORHL DZ, ND               # Hreg = data^Hreg
-#40
+#41
 LD Y, $LREG
 XORHL DZ, NA               # A = data^Lreg
 LD HL, $LFSR$IDEN
+#49
 FNCH AZ, ND                # LFSR(A) -> Lreg
-#51
-LD Y, $BREG
-FNFL DZ, Y
-FNFL D, HL                 # HL = data
-LD Y, $CREG
-#61
-XORHL DZ, NA               # A = data^Creg
-LD HL, $CRC8$IDEN
-FNCH AZ, ND                # Creg = CRC8(A)
-#70
+NOP
 NOP
 LD HL, $INC$NULL
-LDZ Y, $BREG
-FNH DZ, HLD                # Breg++
+LDZ Y, $EREG
+FNH DZ, HLD                # Ereg++
+#60
+LD HL, $ZERO?$NULL
+FNH A, HLA                 # Ereg == 0?
+LDP HL, $INC$NULL
+LDN HL, $IDEN$NULL
+LDZ Y, $DREG
+FNH DZ, HLD                # Dreg++
+#71
+LD HL, $INC$NULL
+LDZ Y, $AREG
+FNH DZ, HLD                # Areg++
 LDP HL, $DSKSEND_INST      # continue
 LDN HL, $FETCH
 #80

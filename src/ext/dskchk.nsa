@@ -1,78 +1,53 @@
-# Calculate ECC & CRC8s on page - one byte per 2-cycle, fetch when done
+# Decode ECC, fetch when done
 INCLUDE ../inc/unary.nsa
 INCLUDE ../inc/zpage.nsa
 INCLUDE ../inc/pages.nsa
 PAGE DSKCHK_PG
 
-#BREG: CRC8 low record, init 0
-#CREG: CRC8 high record, init 0
-#DREG: RAM page
-#EREG: RAM X index, init 0
-#HREG: ECC code 0, init 0
-#LREG: ECC code 1, init 0
-# assume: Y = $VMS
-LDZ HL, $INC2$NULL
-FNH DZ, HLD                # VMS+2
-LD HL, $IDEN$IDEN
-LD Y, $EREG
-FNFH DZ, XA                # X = Ereg
-#11
-LD Y, $DREG
-FNH A, Y                   # Y = Dreg
-FNFL M, HL                 # data = [Y,X]
-LD Y, $HREG
-#20
-LDN PC, $HIGHREC22
-XORHL DZ, ND               # Hreg = data^Hreg
-LD Y, $LREG
-XORHL DZ, NA               # A = data^Lreg
-#31
-LD HL, $LFSR$IDEN
-FNCH AZ, ND                # LFSR(A) -> Lreg
-LD Y, $DREG
-FNFL DZ, Y
-#41
-FNFL M, HL                 # HL = data
+#AREG: error index, init data_len - 255
+#BREG: ECC code 0
+#CREG: ECC code 1
+LD HL, $INC$2COM
+FNFH DZ, ND                # VMS++
 LD Y, $BREG
-LD PC, $EXIT48
-
-$HIGHREC22
-XORHL DZ, ND               # Hreg = data^Hreg
-LD Y, $LREG
-XORHL DZ, NA               # A = data^Lreg
-#32
-LD HL, $LFSR$IDEN
-FNCH AZ, ND                # LFSR(A) -> Lreg
-LD Y, $DREG
-FNFL DZ, Y
-#42
-FNFL M, HL                 # HL = data
+FNFL DZ, HL                # HL = -Breg
+#10
 LD Y, $CREG
-NOP
-$EXIT48
-XORHL DZ, NA               # A = data^B|Creg
-#52
-LD HL, $CRC8$IDEN
-FNCH AZ, ND                # B|Creg = CRC8(A)
-NOP
-NOP
-NOP
-#60
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
+ADDHL DZ, NA               # A = Creg-Breg
+LD HL, $ZERO?$NULL
+FNH A, HLA                 # A == 0?
+#20
+LDP PC, $EXIT22
+LD HL, $LFSR$NULL
+FNCH DZ, ND                # Creg = LFSR(Creg)
 LD HL, $INC$NULL
-LDZ Y, $EREG
-#71
-FNH DZ, HLD                # Ereg++
-LDZ HL, $ZERO?$NULL
-FNH DZ, HLA                # Ereg==0?
-LDP HL, $FETCH             # yes: done
-LDN HL, $DSKCHK_INST       # no: continue
-#80
+LDZ Y, $AREG
+#30
+FNH DZ, HLD                # Areg++
+NOP
+NOP
+NOP
+LD HL, $DSKCHK_INST
 LD Y, $VMS                 # set Y = $VMS on exit
 DISHL DZ, PGA              # jump to next VMC
-#86
+#43
+
+$EXIT22
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#30
+NOP
+NOP
+NOP
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS                 # set Y = $VMS on exit
+DISHL DZ, PGA              # jump to next VMC
+#43
