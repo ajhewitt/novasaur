@@ -64,15 +64,15 @@ GET:	CALL    GETC    ;GET COMMAND
 ;
 GETC:   CALL    GETR    ;A=S0|S1: ZER0 IF S0==S1==0
         RZ              ;ECC MATCH: RETURN
-        CMP     L       ;L=S1: ZERO IF S0==0 (BAD)
-        RZ
-        CMP     H       ;H=S0: ZERO IF S1==0 (BAD)
-        RZ
+        CMP     L       ;L=S1: ZERO IF S0==0
+        RZ              ;ECC BAD: RETURN
+        CMP     H       ;H=S0: ZERO IF S1==0
+        RZ              ;ECC BAD: RETURN
 	;ATTEMPT TO REPAIR ONE BYTE
 	MVI     A, 128-255
         DW      DSKCHK	;A=BYTE INDEX
         ORA     A       ;CHECK SIGN
-        RM              ;INDEX OUT OF RANGE
+        RM              ;INDEX OUT OF RANGE: RETURN
         MOV     C, H    ;SAVE SYN0
         LXI     H, OFFSETX
         MOV     E, M    ;RECOVER E

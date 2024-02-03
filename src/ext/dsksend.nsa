@@ -10,6 +10,7 @@ PAGE DSKSEND_PG
 #EREG: RAM X index
 #HREG: ECC code 0
 #LREG: ECC code 1
+# assume: Y = $VMS
 LDZ HL, $INC2$NULL
 FNH DZ, HLD                # VMS+2
 LD HL, $IDEN$IDEN

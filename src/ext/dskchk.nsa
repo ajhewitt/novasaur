@@ -7,6 +7,8 @@ PAGE DSKCHK_PG
 #AREG: error index, init data_len - 255
 #HREG: ECC code 0
 #LREG: ECC code 1
+#~~WARNING~~ will loop forever if H==0 or L==0
+# assume: Y = $VMS
 LD HL, $INC$2COM
 FNFH DZ, ND                # VMS++
 LD Y, $HREG
