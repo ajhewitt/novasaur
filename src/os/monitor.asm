@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 1.0'
 ;
-; DEC 8, 2023
+; FEB 2, 2024
 ;
         .PROJECT monitor.com
 ;
@@ -187,7 +187,7 @@ TOGGLE: LDA     COMS    ;LOAD COMS
 ;
 SIGNON: DB      CR,LF,
         DB      "Novasaur 8080 SYSMON v1.0",CR,LF,
-        DB      "Copyright (c) 2023",CR,LF,
+        DB      "Copyright (c) 2024",CR,LF,
         DB      "Solid State Machines",CR,LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT
@@ -827,8 +827,11 @@ KERN:   MVI     A,1
         CALL    GETCH   ;NEXT CHAR
         CPI     'G'     ;READ DISK
         JZ      KGET
+        MVI     C,3     ;GET COMMAND
         CPI     'P'     ;WRITE DISK
         JZ      KPUT
+        CPI     'W'     ;WRITE DISK W/O ECC
+        JZ      NOECC
         ;MOAR COMMANDS
         JMP     ERROR
 ;
@@ -849,7 +852,7 @@ KGET:   CALL    HHLDE   ;GET HL, COPY TO DE
         JNZ     ERROR
         PUSH    D       ;SAVE MEM ADDR
         XCHG            ;DE=TRACK/SEC
-        LXI     B,0102H ;SEQ 1, GET COMMAND
+        LXI     B,0202H ;SEQ 2, GET COMMAND
         CALL    K_CMD   ;HANDLE COMMAND
         CALL    CTXSW
         POP     D       ;RECOVER MEM ADDR
@@ -860,6 +863,7 @@ KGET:   CALL    HHLDE   ;GET HL, COPY TO DE
 ; PUT DISK RECORD
 ; COPY MEM ADDR TO TRACK/SEC
 ;
+NOECC:  INR     C       ;USE NOECC PUT
 KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
         MOV     A,L
         ANI     0F8H
@@ -867,7 +871,7 @@ KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
         PUSH    H       ;SAVE TRACK/SEC
         XRA     A       ;START SHM@0
         DW      RECSEND ;DE->SHM
-        LXI     B,0203H ;SEQ 2, PUT COMMAND
+        MVI     B,3     ;SEQ 3
         POP     D       ;RECOVER TRACK/SEC
         CALL    K_CMD   ;HANDLE COMMAND
         CALL    CTXSW

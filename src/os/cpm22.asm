@@ -3854,7 +3854,7 @@ CLRVAR: MVI     M, 0            ;CLEAR VARS
         LDA	IOBYTE
         ANI     3
         JZ      LOGO            ;IO TTY, SKIP CLS
-        LXI     B, 010CH        ;SEQ 1, CLS
+        LXI     B, 010EH        ;SEQ 1, CLS
         DW      CMDSND          ;CALL KERNEL
 ;
 LOGO:   LXI     B, 0x40
@@ -3891,9 +3891,9 @@ GOCPM:
 ;
 COMCMD: LDA	IOBYTE
         ANI     3
-        LXI     B, 0304H        ;IO TTY, CON CMD 4+
+        LXI     B, 0106H        ;IO TTY, CON CMD 4+
         RZ
-        MVI     C, 06H          ;IO CRT, CON CMD 6+
+        MVI     C, 08H          ;IO CRT, CON CMD 6+
         RET
 ;
 CONST:	;CONSOLE STATUS, RETURN 0FFH IF CHARACTER READY, 00H IF NOT
@@ -3964,7 +3964,7 @@ DELTA2: XRI     080H            ;START=128-A
 DELTA3: MOV     B, A            ;SAVE START
         DW      RECSEND         ;DE->SHM
         MOV     D, B            ;RESTORE START
-        LXI     B, 0108H        ;SEQ 1, SERIAL TX
+        LXI     B, 040AH        ;SEQ 4, SERIAL TX
         DW      CMDSND          ;CALL KERNEL
         LDA     BUFFRD
         ADD     E               ;RD+BYTES SENT
@@ -3986,7 +3986,7 @@ READER:	;READER CHARACTER INTO REGISTER A FROM READER DEVICE
         INR     M               ;INDEX+1 (CLEAR Z-FLAG)
         RET                     ;RETURN BYTE
 RXSER:  MVI     M, 0            ;RESET RXIDX
-        LXI     B, 0209H        ;SEQ 2, SERIAL RX
+        LXI     B, 050BH        ;SEQ 5, SERIAL RX
         DW      CMDSND          ;CALL KERNEL
         MOV     A, D            ;A=BUFFER SIZE
         STA     RXSIZE
@@ -4085,17 +4085,21 @@ READA:	LDA     TRACK
         MOV     D, A
         LDA     SECTOR
         MOV     E, A
-        LXI     B, 0102H        ;SEQ 1, GET COMMAND
+        LXI     B, 0202H        ;SEQ 2, GET COMMAND
         MOV     A, B            ;SAVE SEQ# IN A
         DW      CMDSND          ;CALL KERNEL
         CMP     B               ;COMPARE SEQ#
         JNZ     READA           ;RETRY ON ERROR
+        XCHG
         LHLD    DMAAD
         XCHG
         XRA     A               ;START SHM@0
         DW      RECRECV         ;SHM->DE
-        XRA     A               ;READ A: SUCCESS
-	RET
+        XRA     A
+        CMP     H               ;H==0?
+        RZ                      ;READ A: SUCCESS
+        INR     A               ;A=1
+	RET                     ;READ A: ERROR
 ;
 WRITE:	;PERFORM A WRITE OPERATION
         LHLD    DMAAD
@@ -4106,7 +4110,7 @@ WRITEA: LDA     TRACK
         MOV     D, A
         LDA     SECTOR
         MOV     E, A
-        LXI     B, 0203H        ;SEQ 2, PUT COMMAND
+        LXI     B, 0303H        ;SEQ 3, PUT COMMAND
         MOV     A, B            ;SAVE SEQ# IN A
         DW      CMDSND          ;CALL KERNEL
         CMP     B               ;COMPARE SEQ#
@@ -4127,7 +4131,7 @@ RELOC1: XRA     A
         LXI     B,-80H
         DAD     B
         XCHG
-RELOC2: LXI     B, 020DH        ;SEQ 2, RELOC COMMAND
+RELOC2: LXI     B, 010FH        ;SEQ 1, RELOC COMMAND
         MOV     A, B            ;SAVE SEQ# IN A
         DW      CMDSND          ;CALL KERNEL 
         CMP     B               ;COMPARE SEQ#

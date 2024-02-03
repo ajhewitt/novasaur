@@ -281,7 +281,7 @@ TICKR:  DCR	B		;DEC # OF TICKS
 ; Sleep for long timeout
 ;
 SLEEP:  MVI     E,TOSLOW        ;SLOW TIMEOUT
-        LXI     B,010AH         ;SEQ 1, SLEEP COMMAND
+        LXI     B,010CH         ;SEQ 1, SLEEP COMMAND
         DW      CMDSND          ;CALL KERNEL
         RET
 ;

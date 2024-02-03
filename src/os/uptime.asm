@@ -196,7 +196,7 @@ BCD1:   ANI     0FH     ;TAKE 4 BITS
 ;
 ; Request Kernel stats
 ;
-STATS:  LXI     B,010BH         ;SEQ 1, GET COMMAND
+STATS:  LXI     B,010DH         ;SEQ 1, GET COMMAND
         MOV     A,B             ;SAVE SEQ# IN A
         DW      CMDSND          ;CALL KERNEL
         CMP     B               ;COMPARE SEQ#

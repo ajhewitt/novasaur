@@ -150,7 +150,7 @@ BLCH1:  MOV     M,H     ;H=0,H->[HL]
         DW      RECSEND ;COPY RECORD (0100->SHM)
         LXI     D,0     ;DE=0,0
 BLCH2:  PUSH    D
-        LXI     B, 0203H;SEQ 2, PUT COMMAND
+        LXI     B, 0303H;SEQ 3, PUT COMMAND
         MOV     A, B    ;SAVE SEQ# IN A
         DW      CMDSND  ;CALL KERNEL
         CMP     B       ;COMPARE SEQ#
@@ -194,7 +194,7 @@ FMTA2:  MVI     M,0E5H  ;SET ERA EVERY RECORD
         DW      RECSEND ;COPY RECORD (0100->SHM)
         LXI     D,0     ;DE=0,0
 FMTA3:  PUSH    D
-        LXI     B, 0203H;SEQ 2, PUT COMMAND
+        LXI     B, 0303H;SEQ 3, PUT COMMAND
         MOV     A, B    ;SAVE SEQ# IN A
         DW      CMDSND  ;CALL KERNEL
         CMP     B       ;COMPARE SEQ#

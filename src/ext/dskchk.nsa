@@ -5,21 +5,21 @@ INCLUDE ../inc/pages.nsa
 PAGE DSKCHK_PG
 
 #AREG: error index, init data_len - 255
-#BREG: ECC code 0
-#CREG: ECC code 1
+#HREG: ECC code 0
+#LREG: ECC code 1
 LD HL, $INC$2COM
 FNFH DZ, ND                # VMS++
-LD Y, $BREG
-FNFL DZ, HL                # HL = -Breg
+LD Y, $HREG
+FNFL DZ, HL                # HL = -Hreg
 #10
-LD Y, $CREG
-ADDHL DZ, NA               # A = Creg-Breg
+LD Y, $LREG
+ADDHL DZ, NA               # A = Lreg-Hreg
 LD HL, $ZERO?$NULL
 FNH A, HLA                 # A == 0?
 #20
 LDP PC, $EXIT22
 LD HL, $LFSR$NULL
-FNCH DZ, ND                # Creg = LFSR(Creg)
+FNCH DZ, ND                # Lreg = LFSR(Lreg)
 LD HL, $INC$NULL
 LDZ Y, $AREG
 #30

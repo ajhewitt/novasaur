@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; DEC 20, 2023
+; FEB 2, 2024
 ;
         .PROJECT        kernel.com
 ;
@@ -132,8 +132,8 @@ K_CMD:  MOV	A,C	;A=CMD
         JNC     WAIT    ;SKIP HIGH CMD
         CPI     1       ;CHECK RETURN
         JC      WAIT    ;NULL CMD
-        JZ      CMD1    ;HANDLE RET
         SHLD    CALLHL  ;SAVE HL FROM CALL
+        JZ      CMD1    ;HANDLE RET
         LXI	H,CMDS
 	JMP     CMD3    ;HANDLE COMMAND
 CMD1:   LDA     SRCCPU  ;GET CURRENT CPU
@@ -207,7 +207,8 @@ GETR:   POP     H
         XRA     A       ;START SHM@0
         DW      RECXFER ;XFER RECORD
         MOV     A,L     ;A=DEST CPU
-        DW      SIGNAL  ;WAKE DEST CPU
+        LHLD    CALLHL  ;RESTORE HL FROM CALL
+        DW      IPCSND  ;SEND TO DEST CPU
         JMP     WAIT
 ;
 ; CLIENT PUTS RECORD
@@ -561,22 +562,26 @@ CMDS:   DW      WAIT    ;00: NULL
         DW      WAIT    ;01: RETURN
         DW      GET     ;02: GET RECORD
         DW      PUT     ;03: PUT RECORD
-        DW      TTYI    ;04: TTY CHAR IN
-        DW      TTYO    ;05: TTY CHAR OUT
-        DW      CONI    ;06: CON CHAR IN
-        DW      CONO    ;07: CON CHAR OUT
-        DW      SEND    ;08: SERIAL SEND
-        DW      RECV    ;09: SERIAL RECEIVE
-        DW      SLEEP   ;0A: SLEEP
-        DW      STAT    ;0B: STATS
-        DW      CLS     ;0C: CLEAR SCREEN
-        DW      RELOC   ;0D: RELOACATE
+        DW      PUT     ;04: PUT RECORD
+        DW      PUT     ;05: PUT RECORD
+        DW      TTYI    ;06: TTY CHAR IN
+        DW      TTYO    ;07: TTY CHAR OUT
+        DW      CONI    ;08: CON CHAR IN
+        DW      CONO    ;09: CON CHAR OUT
+        DW      SEND    ;0A: SERIAL SEND
+        DW      RECV    ;0B: SERIAL RECEIVE
+        DW      SLEEP   ;0C: SLEEP
+        DW      STAT    ;0D: STATS
+        DW      CLS     ;0E: CLEAR SCREEN
+        DW      RELOC   ;0F: RELOCATE
 ;
 ; RETURN JUMP VECTOR TABLE
 ;
 RETS:   DW      WAIT    ;N/A
         DW      WAIT    ;N/A
         DW      GETR    ;GET RETURN
+        DW      GENR    ;GENERIC RET
+        DW      GENR    ;GENERIC RET
         DW      GENR    ;GENERIC RET
         DW      WAIT
         DW      WAIT
