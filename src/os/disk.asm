@@ -1,6 +1,6 @@
 ; TITLE 'DISK QUADRANT'
 ;
-; FEB 2, 2024
+; FEB 3, 2024
 ;
 ; PAGE 0: BOOT CODE THEN DISK CHECK MAP
 ; PAGES  1-250:  500 RECORDS OF 128 BYTES
@@ -62,8 +62,12 @@ GET:	CALL    GETC    ;GET COMMAND
 ;
 ; GET COMMAND
 ;
-GETC:   CALL    GETR    ;GET RECORD
-        RZ              ;RETURN IF GOOD
+GETC:   CALL    GETR    ;A=S0|S1: ZER0 IF S0==S1==0
+        RZ              ;ECC MATCH: RETURN
+        CMP     L       ;L=S1: ZERO IF S0==0 (BAD)
+        RZ
+        CMP     H       ;H=S0: ZERO IF S1==0 (BAD)
+        RZ
 	;ATTEMPT TO REPAIR ONE BYTE
 	MVI     A, 128-255
         DW      DSKCHK	;A=BYTE INDEX
