@@ -1,0 +1,49 @@
+# Calculate A-byte checksum C within page D starting at E, fetch when done
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE CHKSUM_PG
+
+#AREG: length
+#BREG: -checksum result
+#CREG: checksum
+#DREG: RAM page
+#EREG: starting RAM Index
+# assume: Y = $VMS
+LD HL, $INC$DEC
+FNFH DZ, ND                # VMS++
+LD Y, $EREG
+FNFH DZ, ND                # Ereg++
+#10
+FNFL A, X                  # X = Ereg
+LD HL, $DEC$NULL
+LDZ Y, $AREG
+FNH DZ, HLD                # Areg--
+LDN PC, $EXIT21
+#20
+LD HL, $IDEN$IDEN
+LDZ Y, $DREG
+FNH DZ, Y                  # Y = Dreg
+FNFL M, HL                 # HL = [Y,X]
+LD Y, $CREG
+#31
+ADDHL DZ, ND               # Creg += HL
+LD HL, $CHKSUM_INST
+LD Y, $VMS                 # set Y = $VMS on exit
+DISHL DZ, PGA              # jump to next VMC
+#43
+
+$EXIT21
+LD HL, $IDEN$NULL
+LDZ Y, $CREG
+FNH DZ, HLA
+LD HL, $2COM$NULL
+LD Y, $BREG
+#31
+FNH AZ, HLD
+NOP
+NOP
+LD HL, $FETCH
+LD Y, $VMS                 # set Y = $VMS on exit
+DISHL DZ, PGA              # jump to next VMC
+#43
