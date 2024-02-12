@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 1.0'
 ;
-; FEB 2, 2024
+; FEB 8, 2024
 ;
         .PROJECT monitor.com
 ;
@@ -825,6 +825,8 @@ KERN:   MVI     A,1
         STA     BREAK   ;SET BREAK POINT
         STA     SRCCPU  ;SET SOURCE AS KERNEL
         CALL    GETCH   ;NEXT CHAR
+        CPI     'C'     ;CHECK DISK
+        JZ      KCHK
         CPI     'G'     ;READ DISK
         JZ      KGET
         MVI     C,3     ;GET COMMAND
@@ -837,11 +839,22 @@ KERN:   MVI     A,1
 ;
 ; WAIT FOR FULL CTX CYCLE
 ;
-CTXSW:  MVI     C,16    ;WAIT 16 CYCLES
-WAITK:  CALL    K_WAIT  ;HANDLE RETURN
+CTXSW:  CALL    K_WAIT  ;HANDLE RETURN
         DCR     C
-        JNZ     WAITK
+        JNZ     CTXSW
         RET
+;
+; DISK CHECK
+;
+KCHK:   CALL    READHL  ;GET DISK #
+        MOV     A, L
+        ANI     0F8H    ;0>E>7?
+        JNZ     ERROR
+        MOV     E, L
+        LXI     B,0505H ;SEQ 5, CHK COMMAND
+        CALL    K_CMD   ;HANDLE COMMAND
+        MVI     C,40    ;WAIT 5-FULL CTX CYCLES
+        JMP     CTXSW
 ;
 ; GET DISK RECORD
 ; COPY TRACK/SEC TO MEM ADDR
@@ -854,6 +867,7 @@ KGET:   CALL    HHLDE   ;GET HL, COPY TO DE
         XCHG            ;DE=TRACK/SEC
         LXI     B,0202H ;SEQ 2, GET COMMAND
         CALL    K_CMD   ;HANDLE COMMAND
+        MVI     C,8     ;WAIT FULL CTX CYCLE
         CALL    CTXSW
         POP     D       ;RECOVER MEM ADDR
         XRA     A       ;START SHM@0
@@ -874,6 +888,7 @@ KPUT:   CALL    HHLDE   ;GET HL, COPY TO DE
         MVI     B,3     ;SEQ 3
         POP     D       ;RECOVER TRACK/SEC
         CALL    K_CMD   ;HANDLE COMMAND
+        MVI     C,8     ;WAIT FULL CTX CYCLE
         CALL    CTXSW
         RET
 

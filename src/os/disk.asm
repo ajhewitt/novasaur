@@ -1,39 +1,54 @@
 ; TITLE 'DISK QUADRANT'
 ;
-; FEB 3, 2024
+; FEB 11, 2024
 ;
-; PAGE 0: BOOT CODE THEN DISK CHECK MAP
+; GET & PUT DISK RECORDS IN RAM. USE
+; ECC TO REPAIR SINGLE BYTE/RECORD
+; ERRORS. USE CHK COMMAND TO RECALC
+; OR CHECK ECC FOR THE ECC RECORDS.
+;
+; PAGE 0: BOOT CODE THEN VARS/STACK
 ; PAGES  1-250:  500 RECORDS OF 128 BYTES
 ; PAGES 251-254: ECC0|1 FOR RECORDS AT 0xTT00|80
 ; PAGE 255: DISK CODE (RELOADED ON BOOT)
 ;
 	.PROJECT disk.com
 
-STACK   EQU     00FFH
-CMDSND	EQU	05DDH
-DSKCHK	EQU	13DDH
-DSKSEND	EQU	14DDH
-DSKRECV	EQU	15DDH
+START   EQU     100H
+OFFSETX EQU     START-1
+OFFSETY EQU     OFFSETX-1
+STACK   EQU     OFFSETY
 
 TRACKS  EQU     250
+STATUS  EQU     0FDFFH  ;ZERO IF GOOD
+CLEAN   EQU     0FEFFH  ;ZERO IF CLEAN
+
+CMDSND	EQU	005DDH
+DSKSEND	EQU	014DDH
+DSKRECV	EQU	015DDH
+DSKCHK	EQU	016DDH
 
 	.ORG    0FF00H
 
 START:  LXI     SP, STACK
-        LXI     H, 0    ;START FROM 0000
-        MVI     A, 3    ;CHECK STATUS (BOTH)
-CHKMAP: MOV     M, A    ;RESET STATUS
-        INR     L       ;NEXT RECORD
-        JNZ     CHKMAP  ;PAGE FILLED?
-WAIT:	MVI     C, 0    ;CMD NOP
+        MVI     C, 0    ;NULL COMMAND
+        JMP     SEND
+;
+; PUT W/O ERR
+;
+NOECC:	CALL    PUTR
+;
+; MAIN LOOP - RETURN FROM LAST REQUEST
+;
+RETURN:	MVI     C, 1    ;CMD RETURN
 SEND:   DW      CMDSND  ;SEND CMD; YIELD
         MOV     A, C    ;CMD OUT OF RANGE?
-        CPI     (END-TABLE)>>1
-	JNC     WAIT    ;SKIP 
+        CPI     END-TABLE
+	JNC     RETURN  ;SKIP
 	; CALCULATE RECORD MEMORY LOCATION
 	MOV     A, D
-	CPI     TRACKS  ;TRACK>=250?
-	JNC     WAIT    ;SKIP HIGH TRACKS
+	CPI     TRACKS+3;TRACK>=250?
+	JNC     RETURN  ;SKIP HIGH TRACKS
 	INR     D       ;AVOID ZERO PAGE
 	MOV	A, E    ;A=00000SQQ - 4 QUADS OF 2 SECTORS
 	ANI     4       ;A=00000S00 - CLEAR QUAD
@@ -42,10 +57,9 @@ SEND:   DW      CMDSND  ;SEND CMD; YIELD
 	RRC             ;A=0000000S
 	RRC             ;A=S0000000
 	STA     OFFSETX
-	MOV     E, A
+	MOV     E, A    ;RECOVER E
 	; CALCULATE COMMAND JUMP VECTOR
 	MOV	A, C	;A=CMD
-	ADD	A	;A*=2
         ADI     TABLE&0FFH
         MOV     L, A    ;L=TABLE+CMD OFFSET
         MVI     H, TABLE>>8
@@ -74,8 +88,6 @@ GETC:   CALL    GETR    ;A=S0|S1: ZER0 IF S0==S1==0
         ORA     A       ;CHECK SIGN
         RM              ;INDEX OUT OF RANGE: RETURN
         MOV     C, H    ;SAVE SYN0
-        LXI     H, OFFSETX
-        MOV     E, M    ;RECOVER E
         ADD     E       ;A=RECORD BYTE INDEX
         MOV     H, D    ;H=RECORD Y
         MOV     L, A    ;L=RECORD X
@@ -86,7 +98,8 @@ GETC:   CALL    GETR    ;A=S0|S1: ZER0 IF S0==S1==0
 ;
 ; GET RECORD
 ;
-GETR:   XRA     A       ;START SHM@0
+GETR:   PUSH    D       ;SAVE DE
+        XRA     A       ;START SHM@0
         MOV     H, A    ;INIT ECC0
         MOV     L, A    ;INIT ECC1
         DW	DSKSEND	;COPY FROM MEM W/ECC
@@ -100,7 +113,7 @@ GETR:   XRA     A       ;START SHM@0
         MOV     E, A	;E=SYN1^ECC1
         ORA     D	;A=SYN0|SYN1
         XCHG            ;HL=SYN,E=REC PAGE
-        MOV     D, E    ;RESTORE D
+        POP     D       ;RESTORE DE
         RET     ;RETURN HL=SYNDROME,Z-FLAG==MATCH
 ;
 ; HL=[ECC0]
@@ -117,12 +130,19 @@ HLECC:  LDA     OFFSETY
 ; - COPY FROM BUFFER TO MEM [DE]
 ; - SEND RETURN
 ;
-PUT:    CALL    PUTR    ;PUT RECORD
-        CALL    HLECC   ;HL=[ECC0],DE=ECC
+PUT:    CALL    PUTC    ;PUT COMMAND
+        MVI     A, 1
+        STA     CLEAN   ;DIRTY
+        JMP     RETURN
+;
+; PUT COMMAND
+;
+PUTC:   CALL    PUTR    ;PUT RECORD
+SAVECC: CALL    HLECC   ;HL=[ECC0],DE=ECC
         MOV     M, D	;SAVE ECC0
         INR     H
         MOV     M, E    ;SAVE ECC1
-        JMP     RETURN
+        RET
 ;
 ; PUT RECORD
 ;
@@ -132,30 +152,92 @@ PUTR:   XRA     A       ;START SHM@0
         DW	DSKRECV	;COPY TO MEM W/ECC
         RET
 ;
-; PUT W/O ERR
-;
-NOECC:	CALL    PUTR
-;
-; RETURN
-;
-RETURN: MVI     C, 1    ;CMD RETURN
-	JMP	SEND    ;SEND RETURN
-;
 ; DISK CHECK
+; - 4 EEC RECORD PAGES (251-254)
+;   . 250 RECORDS + 4 ECCS ON ECCS:
+;   . [1][127][123][4][1]
+; - 8 ECC RECORDS WITH ECC:
+;   . 0xFA:[x|000][444 01]23|x|
+;   . 0xFB:[x|111][555 01]23|x|
+;   . 0xFC:[x|222][666 45]67|S|
+;   . 0xFD:[x|333][777 45]67|C|
+; - TO PREVENT CIRCULAR REF:
+;   . SKIP LAST 3 BYTES IF E>=0x80
+; - STATUS BYTES:
+;   . 0xFDFF: STATUS (S)
+;     . 0: ECC-BLOCK GOOD OR REBOOTED
+;     . ELSE: ECC-BLOCK UNRECOVERBLE
+;   . 0xFEFF: CLEAN (C)
+;     . 0: ECC-BLOCK ACCURATE
+;     . 1: MODIFIED NEEDS RECALC
 ;
-CHK:    JMP     RETURN
+; SKIP STATUS IF E!=0
+; SKIP CHECK IF STATUS!=0
+; IF CLEAN (CLEAN==0)
+; - DSKSEND FOR ALL 8 ECC RECORDS
+; - INC STATUS AFTER EACH RECORD
+; - RETURN STATUS (0==GOOD)
+; IF DIRTY (CLEAN!=0)
+; - GETR/PUTC FOR ALL 8 ECC RECORDS
+; - MARK CLEAN (CLEAN=0)
+; RETURN: H=STATUS, L=CLEAN
 ;
-OFFSETS:
-OFFSETX DB      0
-OFFSETY DB      0
+CHK:    LXI     H, STATUS
+        XRA     A       ;A=0
+        CMP     E       ;E==0?
+        JNZ     CHK0    ;SKIP STATUS
+        CMP     M       ;STATUS==0?
+        JNZ     CHK5    ;SKIP CHECK
+CHK0:   MOV     M, A    ;CLEAR STATUS
+        PUSH    A       ;SAVE COUNT=0
+        STA     OFFSETX ;OFFSET X=0
+        STA     OFFSETY ;OFFSET Y=0
+CHK1:   ADI     TRACKS+1;OFFSET TRACKS
+        MOV     D, A    ;ECC PAGE
+        LDA     OFFSETX
+        MOV     E, A    ;RECOVER E
+        LDA     CLEAN
+        ORA     A       ;CHECK CLEAN
+        JZ      CHK2    ;YES: CHECK RECORDS
+        XRA     A       ;START SHM@0
+        MOV     H, A    ;INIT ECC0
+        MOV     L, A    ;INIT ECC1
+        PUSH    D
+        DW	DSKSEND	;COPY FROM MEM W/ECC
+        POP     D
+        CALL    SAVECC
+        JMP     CHK3    ;SKIP CLEAN
+CHK2:   CALL    GETC    ;VERIFY ECC
+        ORA     A       ;A==0?
+        JZ      CHK3    ;RECORD GOOD
+        LXI     H, STATUS
+        INR     M       ;INC STATUS
+CHK3:   POP     A       ;GET COUNT
+        INR     A       ;INCREMENT
+        ANI     7       ;A==8?
+        JZ      CHK4    ;YES: DONE
+        PUSH    A       ;SAVE COUNT
+        ANI     3       ;CLEAR HIGH BIT (A=0-3)
+        JNZ     CHK1    ;NEXT RECORD
+        LXI     H, OFFSETX
+        MVI     M, 80H-3;SKIP LAST 3 BYTES
+        DCR     L
+        MVI     M, 2
+        JMP     CHK1    ;NEXT RECORD
+CHK4:   STA     CLEAN   ;MARK CLEAN
+CHK5:   LDA     CLEAN
+        MOV     L, A
+        LDA     STATUS  ;LOAD STATUS
+        MOV     H, A    ;MOVE TO H
+        JMP     RETURN	;DONE
 ;
 ; COMMAND JUMP VECTOR TABLE
 ;
-TABLE:  DW      START   ;RESET
-	DW      WAIT    ;RETURN N/A
-	DW      GET     ;CMD 2: GET
-	DW      PUT     ;CMD 3: PUT
-	DW      NOECC   ;CMD 4: PUT W/O ECC
-	DW      CHK     ;CMD 5: CHECK
-	
+TABLE:  DB      START&0FFH      ;RESET
+	DB      RETURN&0FFH     ;RETURN N/A
+	DB      GET&0FFH        ;CMD 2: GET
+	DB      PUT&0FFH        ;CMD 3: PUT
+	DB      NOECC&0FFH      ;CMD 4: PUT W/O ECC
+	DB      CHK&0FFH        ;CMD 5: CHECK
+
 	END

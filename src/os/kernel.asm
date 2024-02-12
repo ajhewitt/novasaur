@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; FEB 2, 2024
+; FEB 11, 2024
 ;
         .PROJECT        kernel.com
 ;
@@ -563,7 +563,7 @@ CMDS:   DW      WAIT    ;00: NULL
         DW      GET     ;02: GET RECORD
         DW      PUT     ;03: PUT RECORD
         DW      PUT     ;04: PUT RECORD
-        DW      PUT     ;05: PUT RECORD
+        DW      PUT     ;05: GET RECORD
         DW      TTYI    ;06: TTY CHAR IN
         DW      TTYO    ;07: TTY CHAR OUT
         DW      CONI    ;08: CON CHAR IN
