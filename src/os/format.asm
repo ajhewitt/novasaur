@@ -1,6 +1,6 @@
 ; TITLE: 'FORMAT'
 ;
-; JUL 23, 2023
+; FEB 12, 2024
 ;
         .PROJECT        format.com
 
@@ -26,9 +26,9 @@ RECRECV EQU	0CEDH   ;GET RECORD
 FCB	EQU	5CH	;DEFAULT FCB
 PARAM   EQU	FCB	;DRIVE NUMBER IN FCB
 CMDLN   EQU     80H
+TRACKS  EQU     254     ;250 TRACKS+4 ECC
 
         .ORG    100H
-
 ;
 ; Get ready and begin the transfer
 ;
@@ -111,7 +111,7 @@ CONF:   LDA     COMMIT
 	JZ      FORMAT
 	CPI     'Y'
 	JNZ     ABORT
-	
+
 FORMAT: LDA     PARAM
         CPI     5
         JC      CHKA            ;DRIVE < E:
@@ -135,16 +135,16 @@ DRVTBD: DB      '?'
 FMTA:   LDA     BLEACH
         DCR     A
         JNZ     FMTA0
-        
+
         LXI     D,BLCHST
         MVI	C,PRINT
 	CALL	BDOS		;PRINT MESSAGE
-        
+
         LXI     H,80H
 BLCH1:  MOV     M,H     ;H=0,H->[HL]
         INR     L
         JNZ     BLCH1
-        
+
         LXI     D,80H   ;DE=80H
         XRA     A       ;START SHM@0
         DW      RECSEND ;COPY RECORD (0100->SHM)
@@ -169,14 +169,14 @@ BLCH2:  PUSH    D
         CALL    CONOUT
         POP     D
 BLCH3:  INR     D
-        MVI     A,254
+        MVI     A,TRACKS
         CMP     D
         JNZ     BLCH2
-        
+
         LXI     D,NEWLINE
         MVI	C,PRINT
 	CALL	BDOS		;PRINT MESSAGE
-        
+
 FMTA0:  LXI     H,100H  ;CREATE RECORD
 FMTA1:  DCX     H       ;HL--
         MVI     A,1FH
@@ -188,7 +188,7 @@ FMTA2:  MVI     M,0E5H  ;SET ERA EVERY RECORD
         MVI     A,7FH
         ANA     L       ;L START OF RECORD?
         JNZ     FMTA1   ;LOOP IF NO
-        
+
         XCHG            ;DE=80H
         XRA     A       ;START SHM@0
         DW      RECSEND ;COPY RECORD (0100->SHM)
@@ -209,7 +209,20 @@ FMTA3:  PUSH    D
         MVI     A,2
         CMP     D
         JNZ     FMTA3
-        
+
+        MVI     E,4     ;START DISK QUAD 0
+CHKDSK: PUSH    D
+        LXI     B, 0505H;SEQ 5, CHK COMMAND
+        MOV     A, B    ;SAVE SEQ# IN A
+        DW      CMDSND  ;CALL KERNEL
+        CMP     B       ;COMPARE SEQ#
+        POP     D
+        JNZ     CHKDSK  ;RETRY ON ERROR
+        INR     E       ;DSK++
+        MVI     A,8
+        CMP     E
+        JNZ     CHKDSK
+
         CALL    EXIT
         DB      'A: Drive Format Complete.$'
 ;
@@ -267,7 +280,6 @@ OPTTAB:
         dw      COMMIT
 ;end of table marker
         db      0FFh
-
 ;
 ; Variables and Storage Defines
 ;
@@ -289,7 +301,7 @@ EXIT:	POP	D		;GET MESSAGE
 HELP:	call	EXIT
         db 'FORMAT drive: [/Y] [/B]',CR,LF
         db '  /Y    Confirm without further prompt.',CR,LF
-        db '  /B    Bleach the file system (set all bytes to ctrl-Z).$'
+        db '  /B    Bleach the file system (set all bytes to zero).$'
 ;
 ; Exit on abort
 ;
