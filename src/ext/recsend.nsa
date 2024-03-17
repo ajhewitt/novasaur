@@ -39,6 +39,7 @@ LD HL, $INC$IDEN
 LD Y, $EREG
 #49/26
 FNFL DZ, X             # X = E
+$CONT52
 LDZ Y, $DREG
 FNH DZ, HLD            # D = D+1         *** inc D ***
 LD HL, $IDEN$IDEN
@@ -80,21 +81,23 @@ LDZ Y, $AREG
 FNH DZ, Y              # Y = row-1
 LD HL, $IDEN$NULL
 FNH A, HLD             # A->[Y,X]
-LD HL, $INC$IDEN
+LD HL, $IDEN$IDEN
 #51/27
 LD Y, $EREG
 FNFL DZ, X             # X = E
-LD HL, $IDEN$IDEN
+$CONT56
 LDZ Y, $DREG
-#60/35
 FNH DZ, Y              # Y = D
+#60/35
 FNFH M, NA             # A = [Y,X]
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
-#70/42
 LDZ Y, $AREG
+#70/42
 FNH DZ, Y              # Y = row
 FNH A, HLD             # A->[Y,X]
+NOP
+NOP
 NOP
 NOP
 LD HL, $RECSEND_INST
@@ -123,21 +126,22 @@ LDZ Y, $AREG
 FNH DZ, Y              # Y = row-1
 LD HL, $IDEN$NULL
 FNH A, HLD             # A->[Y,X]
-LD HL, $INC$IDEN
+LD HL, $IDEN$IDEN
 #49/26
 LD Y, $EREG
 FNFL DZ, X             # X = E
-LD HL, $IDEN$IDEN
 LDZ Y, $DREG
 FNH DZ, Y              # Y = D
-#60/35
 FNFH M, NA             # A = [Y,X]
+#61/35
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
 LDZ Y, $AREG
-$70/43
 FNH DZ, Y              # Y = row
+#70/42
 FNH A, HLD             # A->[Y,X]
+NOP
+NOP
 NOP
 NOP
 NOP
@@ -160,7 +164,7 @@ NOP
 NOP
 NOP
 NOP
-#20
+#20/8
 NOP
 NOP
 NOP
@@ -170,16 +174,27 @@ NOP
 NOP
 NOP
 NOP
-NOP
-#30
-NOP
-NOP
-NOP
-NOP
-NOP
+#29/17
 LD HL, $DEC$NULL
+FNFH A, NA
+LDNZ PC, $EXIT36
+FNH DZ, HLD
+LD HL, $INC$NULL
+#39/26
+LDZ Y, $EREG
+FNFH DZ, XD
+LD HL, $ZERO?$NULL
+FNH A, HLA
+LD HL, $INC$IDEN
+#50/35
+LDP PC, $CONT52           # E overflow, inc D
+NOP
+LD HL, $IDEN$IDEN
+LDN PC, $CONT56
+
+$EXIT36
+NOP
 LDZ Y, $VMS               # set Y = $VMS on exit
-#39
 FNH DZ, HLD               # VMS-1
 LD PG, $FETCH1_PG         # cycle available, goto fetch
-#43
+#43/48

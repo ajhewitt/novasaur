@@ -35,6 +35,7 @@ LDZ Y, $DREG
 #41/20
 FNH DZ, Y              # Y = D
 FNFH A, NM             # A->[Y,X]
+$CONT46
 LD HL, $INC$IDEN
 LDZ Y, $DREG
 #50/27
@@ -79,6 +80,7 @@ LDZ Y, $DREG
 FNH DZ, Y              # Y = D
 #49/26
 FNFH A, NM             # A->[Y,X]
+$CONT53
 LD HL, $IDEN$IDEN
 LD Y, $CTX0
 FNFL DZ, X             # X = context col
@@ -154,26 +156,40 @@ NOP
 NOP
 NOP
 NOP
-#20
+#20/8
 NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-NOP
-#30
 NOP
 NOP
 NOP
 NOP
 NOP
 LD HL, $DEC$NULL
+FNFH A, NA
+#31/18
+LDNZ PC, $EXIT33
+FNH DZ, HLD
+LD HL, $INC$NULL
+LDZ Y, $EREG
+FNH DZ, HLD
+#40/26
+LD HL, $ZERO?$NULL
+FNH A, HLA
+LDP PC, $CONT46           # E overflow, inc D
+NOP
+NOP
+NOP
+NOP
+NOP
+#50/36
+NOP
+LDN PC, $CONT53
+
+$EXIT33
+NOP
+NOP
+NOP
+NOP
 LDZ Y, $VMS               # set Y = $VMS on exit
-#39
 FNH DZ, HLD               # VMS-1
 LD PG, $FETCH1_PG         # cycle available, goto fetch
-#43
+#43/48
