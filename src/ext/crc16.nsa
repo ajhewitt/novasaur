@@ -30,7 +30,7 @@ FNH DZ, HLA	      # A=index
 LD HL, $CRC16L$NULL
 LD Y, $CREG
 #49
-FNCH AZ, ND           # CRC16H[index]->Cref
+FNCH AZ, ND           # CRC16L[index]->Creg
 NOP
 NOP
 NOP

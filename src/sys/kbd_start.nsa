@@ -9,7 +9,7 @@ LD Y, $TEMP
 MVHL AZ, ND               # 7->TEMP
 LD HL, $0x40
 LD Y, $KBSTAT
-MVHL DZ, ND               # set kbd status to 0b01000000
+MVHL AZ, ND               # set kbd status to 0b01000000
 MULL A, V                 # reset V, preset H reg
 MULL A, S                 # reset scan/kbdtx high
 

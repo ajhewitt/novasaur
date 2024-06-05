@@ -304,7 +304,7 @@ SEND:   LDA     SRCCPU
 ; return D=index, no data if D==0
 ;
 RECV:   MVI     A, 15
-        STA     SERC
+        STA     SERC	;INHIBIT TTY FOR 1 SEC
         LDA     SRCCPU
         MVI     D, 0
         DW      SERRECV
@@ -314,7 +314,7 @@ RECV:   MVI     A, 15
 ;
 SERRET: LDA     SRCCPU
         PUSH    D
-        MVI     E, 2    ;WAIT FOR 2 TICKS
+        MVI     E, 1    ;WAIT FOR 1 TICK (64 BYTES)
         CALL    TADD    ;ADD RETURN TIMER
         POP     D
         JMP     SETRET  ;SET RETURN HANDLER
@@ -558,12 +558,12 @@ RELOC:  MVI     L, 1    ;L=DEST CPU
 ;
 ; COMMAND JUMP VECTOR TABLE
 ;
-CMDS:   DW      WAIT    ;00: NULL
+CMDS:   DW      WAIT    ;00: NOP
         DW      WAIT    ;01: RETURN
         DW      GET     ;02: GET RECORD
         DW      PUT     ;03: PUT RECORD
-        DW      PUT     ;04: PUT RECORD
-        DW      PUT     ;05: GET RECORD
+        DW      PUT     ;04: PUT W/O ECC
+        DW      PUT     ;05: DISK CHECK
         DW      TTYI    ;06: TTY CHAR IN
         DW      TTYO    ;07: TTY CHAR OUT
         DW      CONI    ;08: CON CHAR IN

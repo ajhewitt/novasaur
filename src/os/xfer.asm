@@ -1,11 +1,11 @@
 ; TITLE: 'XFER'
 ;
-; JULY 23, 2023
+; Mar 27, 2024
 ;
 ; Copyright (c) 2013 Martin Eberhard
 ; Copyright (c) 2015 Mike Douglas
 ; Copyright (c) 2020 The Glitch Works
-; Copyright (c) 2023 Solid State Machines
+; Copyright (c) 2024 Solid State Machines
 ;
 ; Simple file transfer program. Some code
 ; taken from M Eberhard XMODEM 1.01 and 
@@ -17,13 +17,24 @@
 
         .PROJECT        xfer.com
 
-CTRLC	EQU	3
-LF	EQU	10
-CR	EQU	13
+SOH     EQU     01H
+CTRLC	EQU	03H
+EOT     EQU     04H
+ACK     EQU     06H
+LF	EQU	0AH
+CR	EQU	0DH
+NAK     EQU     15H
+ETB     EQU     17H
+CAN     EQU     18H
 EOF	EQU	1AH
-TOFAST  EQU     15      ;2 SECONDS
-TOSLOW  EQU     225     ;30 SECONDS
+
+TO1     EQU     15      ;1 SECOND
+TOFAST  EQU     30      ;2 SECONDS
+TO10    EQU     150     ;10 SECONDS
+TOSLOW  EQU     255     ;17 SECONDS
+
 CMDSND  EQU     05DDH   ;SLAVE: SEND COMMAND
+CRC16   EQU     1BDDH   ;CRC16: A=DATA, BC=CHECKSUM
 
 ;-------------------------------------------
 ;CP/M 2 BDOS Equates
@@ -137,23 +148,20 @@ OPTDONE:lda     XMODE           ;did /R or /S get set?
 ;
 ; Send FIle
 ;
-        MVI	C,IOBYTE
-	CALL	BDOS            ;GET IO BYTE
-	ANI     1               ;TTY=0
-        JZ      TX_TTY
-
-	LXI	D,ANYKEY
-	MVI	C,PRINT		;PRINT SEND MSG
-	CALL	BDOS
-	CALL    CONIN
-	JMP     TX_CRT
-
-TX_TTY: LXI	D,SENDMSG
+        LXI	D,SENDMSG
 	MVI	C,PRINT		;PRINT SEND MSG 2
 	CALL    BDOS
-        CALL    SLEEP
-
-TX_CRT: LXI	D,FCB
+	
+        CALL    PURGE           ;CLEAR RX BUFF
+        CALL    GET_ACK         ;WAIT FOR ACK
+        CPI     'C'             ;USE CRC?
+        JNZ     READ_FILE       ;NO?
+        LXI     H,CFLAG
+        INR     M               ;SET C-FLAG
+READ_FILE:
+        XRA     A
+        STA     COUNT           ;RESET COUNT
+        LXI	D,FCB
 	MVI	C,OPEN          ;OPEN FILE
 	CALL	BDOS
 	INR	A		;OPEN OK?
@@ -171,23 +179,88 @@ READ_SECTOR:
 	CALL	EXIT
 	DB	'Error Reading File.$'
 SEND_DONE:
-        MVI	C,IOBYTE
-	CALL	BDOS            ;GET IO BYTE
-	ANI     1               ;TTY=0
-	CZ      SLEEP           ;WAIT ON TTY
-        JMP     XFER_DONE
-        
+	MVI     A,EOT
+	CALL    SEND
+        CALL    FLUSH
+	CALL    GET_ACK         ;GET ACK
+        JZ      XFER_DONE
+        JMP     SEND_DONE
 SEND_LOOP:
-	LXI	H,80H
-SEND_CHAR:
-        MVI     A,80H           ;SEND WHEN BUFF FULL
-        MOV	C,M             ;READ CHAR
-        PUSH    H
-	CALL    PUNCH           ;TX CHAR
-	POP     H
+        LXI     H,COUNT
+        INR     M               ;INC BLOCK COUNT
+SEND_BLOCK:
+        MVI     A,SOH
+        CALL    SEND            ;SEND SOH
+        LDA     COUNT
+        CALL    SEND            ;SEND COUNT
+        LDA     COUNT
+        CMA
+        CALL    SEND            ;SEND 255-COUNT
+        LXI     B,0             ;RESET CHECKSUM
+	LXI	H,0080H
+SEND_CHAR1:
+        LDA     CFLAG
+        ORA     A               ;C-FLAG SET?
+        MOV     A,M             ;READ BYTE
+        JZ      CHKSUM1         ;NO
+        DW      CRC16           ;CALC CRC16
+        JMP     SEND_CHAR2
+CHKSUM1:ADD     C               ;UPDATE CHECKSUM
+        MOV     C,A
+SEND_CHAR2:
+        MOV	A,M             ;READ BYTE
+        CALL    SEND            ;SEND CHAR
 	INR	L               ;DONE?
-	JNZ	SEND_CHAR
-	JMP     READ_SECTOR
+	JNZ	SEND_CHAR1      ;NEXT CHAR
+	LDA     CFLAG
+        ORA     A               ;C-FLAG SET?
+        JZ      CHKSUM2         ;NO
+        MOV     A,B
+        CALL    SEND            ;SEND CRC
+CHKSUM2:MOV     A,C
+	CALL    SEND            ;SEND CHECKSUM
+        CALL    FLUSH
+        CALL    GET_ACK
+	JZ      READ_SECTOR     ;NEXT RECORD
+	JMP     SEND_BLOCK      ;RESEND
+;
+; Wait for ACK
+;
+GET_ACK:MVI     C,60
+RETRY:  DCR     C
+        JZ      FAIL            ;FAIL
+	MVI     B,TO1
+	CALL    RECV            ;GET ACK
+	JC	RETRY           ;TIMEOUT
+	CPI     ACK
+	RET
+FAIL:   CALL    EXIT
+        DB	'Ack failed.$'
+;
+; Send byte via PUNCH
+;
+SEND:   PUSH    H
+        PUSH    B
+        MOV     C,A             ;C=CHAR
+        MVI     A,67            ;WATER MARK
+	CALL    PUNCH           ;TX CHAR
+	POP     B
+	POP     H
+	RET
+;
+; Flush
+;
+FLUSH:	XRA     A
+	CALL    PUNCH
+	JNZ     FLUSH
+	RET
+;
+; Purge
+;
+PURGE:  MVI     B,TO1
+	CALL    RECV
+	JNC     PURGE
+	RET
 ;
 ; Receive File
 ;
@@ -209,7 +282,7 @@ NEW_FILE:
 	MVI	C,MAKE          ;MAKE NEW FILE
 	CALL	BDOS
 	INR	A		;FF=BAD
-	JNZ     RECV_START       ;OPEN OK
+	JNZ     RECV_START      ;OPEN OK
 	CALL	EXIT
 	DB	'Error Directory Full.$'
 RECV_START:
@@ -356,6 +429,8 @@ HELP:	call	EXIT
 ; Variables and Storage Defines
 ;
 XMODE   DB      0
+CFLAG   DB      0
+COUNT   DB      0
 ;
 ; Message Strings
 ;
