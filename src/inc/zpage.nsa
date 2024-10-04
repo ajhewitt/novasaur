@@ -1,10 +1,10 @@
 # zero page assignments
-#RESERVED      0x80-0x8B (12) scratch pad (protected)
-$HALTMPA       0x88 # HAL temp Async
-$HALTMPT       0x89 # HAL temp Tsync
-$HALTMPR       0x8A # HAL temp Rsync
-$HALTMPB       0x8B # HAL temp Bsync
-#SOUND (read/write)
+#RESERVED      0x80-0x8B (12) scratch pad (protected) | IN/OUT 0-7: Expansion Port
+$HALTMPA       0x88 # HAL temp Async | IN 8: Serial Rx      | OUT 8: Serial Tx
+$HALTMPT       0x89 # HAL temp Tsync | IN 9: Console (KBD)  | OUT 9: Console (CRT)
+$HALTMPR       0x8A # HAL temp Rsync | IN10: KBD Scan Codes | OUT10: Set Audio Mode
+$HALTMPB       0x8B # HAL temp Bsync | IN11: Cursor Char    | OUT11: Enable/Disable Rx
+#SOUND (kernel read/write) | IN/OUT 0x0C-0x27
 $PCMPGH        0x8C # PCM page high water - stop page
 $PCMPGL        0x8D # PCM page low water - current page
 $WAVE0         0x8E
@@ -33,7 +33,7 @@ $ATTACK3       0xA4
 $DECAY3        0xA5
 $SUSTAIN3      0xA6
 $RELEASE3      0xA7
-#VID/KBD/CONSOLE (read/write)
+#VID/KBD/CONSOLE (kernel read/write) | IN/OUT 0x28-0x37
 $VIDL          0xA8 # video left border
 $VIDR          0xA9 # video right border
 $VIDH          0xAA # video height
@@ -50,7 +50,7 @@ $KSRDIDX       0xB4
 $KSWRIDX       0xB5
 $KCRDIDX       0xB6
 $KCWRIDX       0xB7
-#COUNTS/TIMERS (read-only)
+#COUNTS/TIMERS (kernel read-only)  | IN/OUT 0x38-0x3F
 $CBLOCK        0xB8 # context switch block, 99 to 0 in <.01s
 $CTXIDX        0xB9 # context index, 0 to 255 in <2.67s
 $BLOCK         0xBA # block count, 0 to 175/160/128 in .017/.017/.013s
@@ -98,7 +98,7 @@ $BMODE         0xE3 # VID col used for block
 $VLINE         0xE4 # video memory line
 $ICL           0xE5 # idle cycle count low byte
 $KBSTAT        0xE6 # kbd status
-$RCODE         0xE7 # restart scan code
+$RCODE         0xE7 # restart code
 $CMDL          0xE8 # kernel IPC - command low
 $CMDH          0xE9 # kernel IPC - command high
 $MSEQ          0xEA # kernel IPC - message sequence

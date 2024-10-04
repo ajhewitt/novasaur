@@ -613,13 +613,13 @@ def fork_restart
   256.times.map do |code|
     case code
     when 0x40..0x7F # set video mode
-      0x10
-    when 0xEC # home -> monitor
-      0x20
-    when 0xFD # pgup -> vid mode up
       0x40
-    when 0xFA # pgdn -> vid mode down
+    when 0xEC # home -> monitor
       0x50
+    when 0xFD # pgup -> vid mode up
+      0x60
+    when 0xFA # pgdn -> vid mode down
+      0x70
     else # reboot
       0x80
     end
@@ -766,17 +766,6 @@ CRC16H = [
   0x6E, 0x7E, 0x4E, 0x5E, 0x2E, 0x3E, 0x0E, 0x1E
 ]
 
-# generate CRC8 lookup table on polynomial
-def crc8(poly)
-  crc = 0x80
-  table = Array.new(256, 0)
-  [1,2,4,8,16,32,64,128].each do |i|
-    crc = (crc & 0x80) != 0 ? ((crc << 1) ^ poly) : crc <<= 1;
-    i.times.each { |j| table[i + j] = (crc & 0xff) ^ table[j] }
-  end
-  table
-end
-
 EXPAND = [
   0x00, 0x01, 0x03, 0x07,
   0x0F, 0x1F, 0x3F, 0x7F,
@@ -920,10 +909,8 @@ print_unary(0xCB, fork_restart)
 print_unary(0xCC, CRC16L)
 # $CRC16H: CRC16 lookup table high bytes
 print_unary(0xCD, CRC16H)
-# $CRC8: CRC8 lookup table 0x4D (reversed reciprocal 0xA6)
-print_unary(0xCE, crc8(0x4D))
 # $LFSR: Linear-feedback shift register
-print_unary(0xCF, 256.times.map {|x| (x >> 1) ^ (-(x&1) & 0x8E)})
+print_unary(0xCE, 256.times.map {|x| (x >> 1) ^ (-(x&1) & 0x8E)})
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
 # FORKI: fork on interrupt

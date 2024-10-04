@@ -1,0 +1,52 @@
+# Test - flash the LED 6 times @6Hz
+INCLUDE ../inc/unary.nsa
+INCLUDE ../inc/zpage.nsa
+INCLUDE ../inc/pages.nsa
+PAGE TEST_PG
+
+LD HL, $0x11
+LD Y, $EO
+MVHL AZ, ED               # bank1,LED off->E
+
+LD HL, $12                # 1s
+LD Y, $0x80               # count addr [80]
+MVHL AZ, ND               # 0->count
+
+$LOOP4
+LD HL, $7                 # 83.3ms
+LD Y, $0x81               # count addr [81]
+MVHL AZ, ND               # 0->count
+
+$LOOP3
+LD HL, $0xFF
+LD Y, $0x82               # count addr [82]
+MVHL AZ, ND               # -1->count
+
+$LOOP2
+LD HL, $0xFF              # 11.9ms
+MVHL A, NA                # -1->A
+
+$LOOP1
+LD HL, $INC$NULL          # 93us loop
+FNH A, HLA
+LDP PC, $LOOP1            # loop if A<0x80
+
+LDZ HL, $INC$NULL
+FNH DZ, HLD
+LDP PC, $LOOP2            # loop if count<0x80
+
+LD HL, $DEC$NULL
+LDZ Y, $0x81              # count addr [81]
+FNH DZ, HLD
+LDP PC, $LOOP3            # loop if count>0
+
+LD HL, $0x10
+LD Y, $EO
+XORHL DZ, ED              # toggle LED
+
+LD HL, $DEC$NULL
+LDZ Y, $0x80              # count addr [80]
+FNH DZ, HLD
+LDP PC, $LOOP4            # loop if count>0
+
+LD PG, $WARM_START_PG

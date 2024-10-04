@@ -1,6 +1,6 @@
 ; TITLE: 'XFER'
 ;
-; Mar 27, 2024
+; May 7, 2024
 ;
 ; Copyright (c) 2013 Martin Eberhard
 ; Copyright (c) 2015 Mike Douglas
@@ -29,9 +29,8 @@ CAN     EQU     18H
 EOF	EQU	1AH
 
 TO1     EQU     15      ;1 SECOND
-TOFAST  EQU     30      ;2 SECONDS
-TO10    EQU     150     ;10 SECONDS
-TOSLOW  EQU     255     ;17 SECONDS
+TO2     EQU     30      ;2 SECONDS
+TO15    EQU     225     ;15 SECONDS
 
 CMDSND  EQU     05DDH   ;SLAVE: SEND COMMAND
 CRC16   EQU     1BDDH   ;CRC16: A=DATA, BC=CHECKSUM
@@ -146,12 +145,12 @@ OPTDONE:lda     XMODE           ;did /R or /S get set?
 ;       fall into SEND_FILE
 
 ;
-; Send FIle
+; Send File
 ;
         LXI	D,SENDMSG
 	MVI	C,PRINT		;PRINT SEND MSG 2
 	CALL    BDOS
-	
+
         CALL    PURGE           ;CLEAR RX BUFF
         CALL    GET_ACK         ;WAIT FOR ACK
         CPI     'C'             ;USE CRC?
@@ -286,7 +285,7 @@ NEW_FILE:
 	CALL	EXIT
 	DB	'Error Directory Full.$'
 RECV_START:
-        MVI     B,TOSLOW
+        MVI     B,TO15
 RECV_LOOP:
         LXI	H,80H		;POINT TO BUFFER
 RECV_CHAR:
@@ -294,10 +293,10 @@ RECV_CHAR:
 	JC	RECV_DONE       ;RECEIVE DONE
 	MOV	M,A		;STORE CHAR
 	INR	L		;DONE?
-	MVI     B,TOFAST
+	MVI     B,TO2
 	JNZ     RECV_CHAR
 	CALL    WR_SEC          ;GOT NEW SECTOR - WRITE IT
-	MVI     B,TOFAST
+	MVI     B,TO2
 	JMP	RECV_LOOP
 WR_SEC:
 	LXI	D,FCB
@@ -350,13 +349,6 @@ TICKR:  DCR	B		;DEC # OF TICKS
 	JNZ	RECV
 	STC			;Set carry flag to show timeout
 	RET
-;
-; Sleep for long timeout
-;
-SLEEP:  MVI     E,TOSLOW        ;SLOW TIMEOUT
-        LXI     B,010CH         ;SEQ 1, SLEEP COMMAND
-        DW      CMDSND          ;CALL KERNEL
-        RET
 ;
 ; Skip spaces in command line buffer
 ; On Entry:
@@ -422,9 +414,9 @@ XFER_DONE:
 ; Exit with usage message
 ;
 HELP:	call	EXIT
-        db 'XFER <drive:filename.ext> {/R or /S}',CR,LF
-        db '  /R    Receive file over serial.',CR,LF
-        db '  /S    Send file over serial.$'
+        db 'XFER <filename.ext> {/R or /S}',CR,LF
+        db '   /R to receive file sent as binary file,',CR,LF
+        db '   /S to send file using XMODEM protocol.','$'
 ;
 ; Variables and Storage Defines
 ;
@@ -434,11 +426,10 @@ COUNT   DB      0
 ;
 ; Message Strings
 ;
-SENDMSG:db      'Waiting 15 seconds at start '
-        db      'and end of transfer...',CR,LF,'$'
-RECVMSG:db	'Waiting 30 seconds to start '
-        db      'receiving file...',CR,LF,'$'
-ANYKEY: db      'Press any key to start transfer...'
+SENDMSG:db      'Waiting for XMODEM client '
+        db      'to start transfer...',CR,LF,'$'
+RECVMSG:db	'Waiting 15 seconds for file '
+        db      'transfer to start...',CR,LF,'$'
 NEWLINE:db      CR,LF,'$'
 
 	END

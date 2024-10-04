@@ -1,6 +1,6 @@
 ; TITLE: 'BOOT LOADER'
 ;
-; DEC 14, 2023
+; OCT 4, 2024
 ;
         .PROJECT        boot.com
 ;
@@ -84,11 +84,10 @@ RST7:   NOP
 ;
 ; SIGNON MESSAGE
 ;
-SIGNON: DB      CR,LF,
-        DB      "             _",CR,LF
-        DB      "            /o)",CR,LF,
-        DB      "   _/\/\/\_//",CR,LF,
-        DB      " _/NOVASAUR/",CR,LF,
+SIGNON: DB      "             _",CR,LF
+        DB      "            /o)",CR,LF
+        DB      "   _/\/\/\_//",CR,LF
+        DB      " _/NOVASAUR/  ",CR,LF
         DB      "/_/{_}~~{_}",CR,LF,0
 ;
 ; BOOT ALL

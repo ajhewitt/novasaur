@@ -46,8 +46,6 @@ COLD:   MVI     A,1
         XRA     A
         STA     COMB	;CLEAR BLOCKING
         LXI     SP,STACK
-        LXI     D,0x40
-        CALL    PRNTM   ;PRINT LOGO
         LXI     D,SIGNON
         CALL    PRNTM   ;PRINT SIGNON
 ;
@@ -185,9 +183,9 @@ TOGGLE: LDA     COMS    ;LOAD COMS
 ;
 ; SIGNON MESSAGE
 ;
-SIGNON: DB      CR,LF,
-        DB      "Novasaur 8080 SYSMON v1.0",CR,LF,
-        DB      "Copyright (c) 2024",CR,LF,
+SIGNON: DB      CR,LF,CR,LF
+        DB      "Novasaur 8080 SYSMON v1.0",CR,LF
+        DB      "Copyright 2024 (c) by "
         DB      "Solid State Machines",CR,LF,0
 ;
 ; INPUT A LINE FROM CONSOLE AND PUT IT

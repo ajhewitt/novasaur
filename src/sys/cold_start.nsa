@@ -149,8 +149,5 @@ MVHL AZ, ND               # set default console cursor
 LD HL, $62                # SVGA60 80x37 text
 LD Y, $VMODE
 MVHL AZ, ND               # set default video mode
-LD HL, $0xF1              # reboot code
-LD Y, $RCODE
-MVHL AZ, ND               # set restart code
 
 LD PG, $KBD_START_PG

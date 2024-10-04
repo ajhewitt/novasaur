@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; FEB 11, 2024
+; AUG 9, 2024
 ;
         .PROJECT        kernel.com
 ;
@@ -95,7 +95,7 @@ START:  LDA     BREAK   ;MONITOR BREAK POINT
         LXI     H,LASTT0;CHECK FOR TICK
         IN      TIME0   ;A=T0
         CMP     M       ;T0==LAST T0?
-        CNZ     TICK    ;T0 CHANGED
+        CNZ     TICK    ;T0 CHANGED (15/s)
 ;
 WAIT:   LXI     H,RUNC  ;2.25   COUNT RUN
         INR     M       ;2.25   ADD RUN
@@ -347,12 +347,12 @@ STAT:   MVI     D,BASEPG;NORMALIZE
 ; [COUNT|CPU|BC]
 ; TIMED OUT AT COUNT ZERO
 ;
-TICK:   MOV     M,A     ;SAVE T0
+TICK:   MOV     M,A     ;SAVE T0 IN [LASTT0]
         LXI     H,SERC
         XRA     A
-        CMP     M
+        CMP     M       ;SERIAL INHIBIT DONE?
         JZ      TICK0
-        DCR     M
+        DCR     M       ;DEC SERIAL INHIBIT
 TICK0:  LXI     H,TICKC
         DCR     M       ;TICK COUNT-1
         JNZ     TICK1   ;SKIP UNTIL ZERO

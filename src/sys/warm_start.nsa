@@ -56,7 +56,7 @@ FNFH DZ, NA               # A = VMODE<<1
 LD Y, $TEMP
 FNFH AZ, ND               # VMODE<<2->temp
 
-FNCL DZ, HL               # HL = VMODES
+FNCL A, HL                # HL = VMODES
 LD Y, $MODE
 MVHL AZ, ND               # set video mode
 
@@ -111,16 +111,16 @@ LD HL, $0xF1
 LD Y, $CTX0
 MVHL AZ, ND               # Kernel->Context
 LD HL, $0
+LD Y,  $CBLOCK
+MULH AZ, ND               # reset context block
 LD Y, $CTXIDX
 MULH AZ, ND               # reset context index
 LD Y, $IMASK
-MULH AZ, ND               # 0->IMASK = 0 (disable)
+MULH AZ, ND               # 0->IMASK (disable)
 LD Y, $CREG
 MULH AZ, ND               # 0->C
 LD Y, $DREG
 MULH AZ, ND               # 0->D
-LD Y, $EREG
-MULH AZ, ND               # 0->E
 LD Y, $TEMP
 MULH AZ, ND               # 0->temp
 LD Y, $TMPL
@@ -135,7 +135,7 @@ LD Y, $PCL
 MVHL AZ, ND               # 0xFFFF->PC
 LD HL, $COPYROM_INST
 LD Y, $INST
-MVHL AZ, ND               # Bootstrap Kernal
+MVHL AZ, ND               # CopyROM->inst cache
 LD HL, $0x80
 LD Y, $VMS
 MVH DZ, ND                # Extended instruction

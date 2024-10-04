@@ -53,6 +53,8 @@ $KBD_START_PG  0x81
 $BOOT_MODE_PG  0x82
 $WARM_START_PG 0x83
 
+$TEST_PG       0x84
+
 # 0x88-8F: user reserved (8)
 
 # 0x90-0xE3 (84): 8080 instruction set

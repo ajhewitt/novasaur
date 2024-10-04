@@ -1,6 +1,6 @@
 ; TITLE: 'FORMAT'
 ;
-; FEB 12, 2024
+; SEP 15, 2024
 ;
         .PROJECT        format.com
 
@@ -20,11 +20,11 @@ PRINT   EQU	9
 BDOS    EQU	5
 
 CMDSND  EQU     05DDH   ;SEND COMMAND
-RECSEND	EQU	0AEDH   ;SEND RECORD
-RECRECV EQU	0CEDH   ;GET RECORD
+RECSEND EQU     0AEDH   ;SEND RECORD
+RECRECV EQU     0CEDH   ;GET RECORD
 
-FCB	EQU	5CH	;DEFAULT FCB
-PARAM   EQU	FCB	;DRIVE NUMBER IN FCB
+FCB     EQU     5CH     ;DEFAULT FCB
+PARAM   EQU     FCB     ;DRIVE NUMBER IN FCB
 CMDLN   EQU     80H
 TRACKS  EQU     254     ;250 TRACKS+4 ECC
 
@@ -36,9 +36,9 @@ TRACKS  EQU     254     ;250 TRACKS+4 ECC
 ; filename is supplied, a help message is printed and we
 ; exit.
 ;
-START:	LDA	PARAM		;A=1st character of parameter 1
-	CPI	0		;check drive number present
-	JZ	HELP		;default drive?
+START:  LDA     PARAM           ;A=1st character of parameter 1
+        CPI     0               ;check drive number present
+        JZ      HELP            ;default drive?
         lxi     h,CMDLN         ;CP/M put cmd line here
         mov     b,m             ;1st byte is byte count
         inx     h               ;point to the string
@@ -104,13 +104,13 @@ CONF:   LDA     COMMIT
         DCR     A               ;0=YES
         JZ      FORMAT
         LXI     D,RUSURE
-        MVI	C,PRINT
-	CALL	BDOS		;PRINT MESSAGE
-	CALL    CONIN
-	CPI     'y'
-	JZ      FORMAT
-	CPI     'Y'
-	JNZ     ABORT
+        MVI     C,PRINT
+        CALL    BDOS            ;PRINT MESSAGE
+        CALL    CONIN
+        CPI     'y'
+        JZ      FORMAT
+        CPI     'Y'
+        JNZ     ABORT
 
 FORMAT: LDA     PARAM
         CPI     5
@@ -138,7 +138,7 @@ FMTA:   LDA     BLEACH
 
         LXI     D,BLCHST
         MVI	C,PRINT
-	CALL	BDOS		;PRINT MESSAGE
+        CALL    BDOS            ;PRINT MESSAGE
 
         LXI     H,80H
 BLCH1:  MOV     M,H     ;H=0,H->[HL]
@@ -174,8 +174,8 @@ BLCH3:  INR     D
         JNZ     BLCH2
 
         LXI     D,NEWLINE
-        MVI	C,PRINT
-	CALL	BDOS		;PRINT MESSAGE
+        MVI     C,PRINT
+        CALL    BDOS    ;PRINT MESSAGE
 
 FMTA0:  LXI     H,100H  ;CREATE RECORD
 FMTA1:  DCX     H       ;HL--
@@ -210,7 +210,7 @@ FMTA3:  PUSH    D
         CMP     D
         JNZ     FMTA3
 
-        MVI     E,4     ;START DISK QUAD 0
+        LXI     D,4     ;START DISK QUAD 0
 CHKDSK: PUSH    D
         LXI     B, 0505H;SEQ 5, CHK COMMAND
         MOV     A, B    ;SAVE SEQ# IN A
@@ -288,17 +288,17 @@ BLEACH  DB      0
 ;
 ; Exit and print message
 ;
-EXIT:	POP	D		;GET MESSAGE
-	MVI	C,PRINT
-	CALL	BDOS		;PRINT MESSAGE
-	LXI     D,NEWLINE
-        MVI	C,PRINT
-	CALL	BDOS            ;PRINT NEWLINE
-        JMP	WBOOT		;Warm boot CP/M
+EXIT:   POP     D               ;GET MESSAGE
+        MVI     C,PRINT
+        CALL    BDOS            ;PRINT MESSAGE
+        LXI     D,NEWLINE
+        MVI     C,PRINT
+        CALL    BDOS            ;PRINT NEWLINE
+        JMP     WBOOT           ;Warm boot CP/M
 ;
 ; Exit with usage message
 ;
-HELP:	call	EXIT
+HELP:   call    EXIT
         db 'FORMAT drive: [/Y] [/B]',CR,LF
         db '  /Y    Confirm without further prompt.',CR,LF
         db '  /B    Bleach the file system (set all bytes to zero).$'

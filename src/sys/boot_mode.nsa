@@ -11,7 +11,7 @@ LD Y, $RCODE
 FNCL DZ, PC               # PC=Fork RCODE
 #12/10
 
-ADDR 0x10                 # set video mode on RELOC
+ADDR 0x40                 # set video mode on RELOC
 FNFH DZ, NA               # A = RCODE
 LD Y, $VMODE
 FNH AZ, HLD               # RCODE->VMODE
@@ -21,25 +21,25 @@ MVHL AZ, ND               # CPU=1 RELOC
 LD PC, $START
 #17/13
 
-ADDR 0x20                 # boot to monitor
+ADDR 0x50                 # boot to monitor
 LD HL, $8
 LD Y, $AREG
 MVHL AZ, ND               # CPU=8 MONITOR
 LD HL, $0xC8
 LD Y, $VMODE
 ADDHL DZ, NA
-LD PC, $START            # IN TEXT MODE
+LDP PC, $START            # IN TEXT MODE
 LDN PC, $TEXT             # SET TEXT MODE
 #19/16
 
-ADDR 0x40                 # page up +1 video mode
+ADDR 0x60                 # page up +1 video mode
 LD HL, $INC$NULL
 LDZ Y, $VMODE
 FNH DZ, HLD               # VMODE++
 LD PC, $TEXT
 #8/7
 
-ADDR 0x50                 # page down -1 video mode
+ADDR 0x70                 # page down -1 video mode
 LD HL, $DEC$NULL
 LDZ Y, $VMODE
 FNH DZ, HLD               # VMODE--
@@ -89,5 +89,16 @@ FNH DZ, HLD               # [TEMP]+1
 LD HL, $ZERO?$NULL
 FNH A, HLA
 LDN PC, $CLRCTX           # loop index
+
+# Clear Commands
+LD HL, $0xF1
+LD Y, $CMDL
+MVHL AZ, XD               # X=F1->TEMP
+$CLRCMD
+LD HL, $0
+MULH A, ND                # 0->[X,CMDL]
+LD HL, $INC$NULL
+FNFH DZ, XD               # X=[TEMP]+1
+LDN PC, $CLRCMD
 
 LD PG, $WARM_START_PG     # warm start
