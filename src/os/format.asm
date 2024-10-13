@@ -210,7 +210,7 @@ FMTA3:  PUSH    D
         CMP     D
         JNZ     FMTA3
 
-        LXI     D,4     ;START DISK QUAD 0
+        LXI     D, 0104H;START DISK QUAD 0
 CHKDSK: PUSH    D
         LXI     B, 0505H;SEQ 5, CHK COMMAND
         MOV     A, B    ;SAVE SEQ# IN A

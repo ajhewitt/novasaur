@@ -1,6 +1,6 @@
 ; TITLE 'DISK QUADRANT'
 ;
-; SEP 15, 2024
+; OCT 13, 2024
 ;
 ; GET & PUT DISK RECORDS IN RAM. USE
 ; ECC TO REPAIR SINGLE BYTE/RECORD
@@ -178,11 +178,12 @@ PUTR:   XRA     A       ;START SHM@0
 ; SKIP STATUS IF D!=0
 ; SKIP CHECK IF STATUS!=0
 ; IF CLEAN (CLEAN==0)
-; - DSKSEND FOR ALL 8 ECC RECORDS
+; - GET CMD FOR ALL 8 ECC RECORDS
 ; - INC STATUS AFTER EACH RECORD
 ; - RETURN STATUS (0==GOOD)
 ; IF DIRTY (CLEAN!=0)
-; - GETR/PUTC FOR ALL 8 ECC RECORDS
+; - DSK SND FOR ALL 8 ECC RECORDS
+; - SAVE NEW ECC VALUE
 ; - MARK CLEAN (CLEAN=0)
 ; RETURN: H=STATUS, L=CLEAN
 ;
@@ -209,13 +210,13 @@ CHK1:   ADI     TRACKS+1;OFFSET TRACKS
         PUSH    D
         DW	DSKSEND	;COPY FROM MEM W/ECC
         POP     D
-        CALL    SAVECC
-        JMP     CHK3    ;SKIP CLEAN
+        CALL    SAVECC  ;SAVE ECC
+        JMP     CHK3    ;SKIP ECC CHECK
 CHK2:   CALL    GETC    ;VERIFY ECC
         ORA     A       ;A==0?
         JZ      CHK3    ;RECORD GOOD
         LXI     H, STATUS
-        INR     M       ;INC STATUS
+        INR     M       ;INC STATUS IF BAD
 CHK3:   POP     A       ;GET COUNT
         INR     A       ;INCREMENT
         ANI     7       ;A==8?
@@ -228,11 +229,11 @@ CHK3:   POP     A       ;GET COUNT
         DCR     L
         MVI     M, 2
         JMP     CHK1    ;NEXT RECORD
-CHK4:   STA     CLEAN   ;MARK CLEAN
+CHK4:   STA     CLEAN   ;MARK CLEAN (A==0)
 CHK5:   LDA     CLEAN
-        MOV     L, A
-        LDA     STATUS  ;LOAD STATUS
-        MOV     H, A    ;MOVE TO H
+        MOV     L, A    ;L=CLEAN
+        LDA     STATUS
+        MOV     H, A    ;H=STATUS
         JMP     RETURN	;DONE
 ;
 ; COMMAND JUMP VECTOR TABLE

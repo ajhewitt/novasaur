@@ -28,7 +28,7 @@ DMA     EQU     0FDDH   ;DMA
 ;
 	JMP	LCLRLN	;CLEAR LINE
         JMP	LBDIVH	;B DIVIDE BY H
-        JMP     GRTEXT  ;DISPLAY TEXT
+        JMP     LGRTXT  ;DISPLAY TEXT
 
 TEMP:   DB      0, 0, 0, 0, 0, 0, 0, 0
 ;
@@ -101,13 +101,13 @@ shiftc:	cmc		;invert quotient bit from reverse polarity
 	jnz	subtrct	;no, continue process
 	ret
 ;
-; GRTEXT
+; LGRTXT - print text in graphics mode
 ;  A = size (8 or 16)
 ; BC = background/foreground color
 ; DE = screen x, y
 ; HL = text buff start, null term
 ;
-GRTEXT: ANI     18H
+LGRTXT: ANI     18H
         RZ              ;A!=8 or 16
         STA     TEMP+2  ;SAVE SIZE
         MOV     A, C    ;FOREGROUND

@@ -1,6 +1,6 @@
 ; TITLE: 'KERNEL'
 ;
-; AUG 9, 2024
+; OCT 13, 2024
 ;
         .PROJECT        kernel.com
 ;
@@ -13,7 +13,7 @@ SRCCPU  EQU     STACK+1
 ; SPACE FOR MONITOR VARS/BUFF
 CALLHL  EQU     STACK+30H;SAVE CALLER HL
 LASTT0  EQU     STACK+32H;LAST VAL OF TIME0
-TICKC   EQU     STACK+34H;TICK COUNT (52 or 62)
+TICKC   EQU     STACK+34H;TICK COUNT (26 or 31)
 STATI   EQU     STACK+35H;STAT RECORD INDEX
 BLKC    EQU     STACK+36H;KERNEL BLOCK COUNT
 RUNC    EQU     STACK+38H;KERNEL RUN COUNT
@@ -21,6 +21,7 @@ TTOP    EQU     STACK+3AH;ADDR HEAP TOP
 BELC    EQU     STACK+3CH;BEL COUNT
 SERC    EQU     STACK+3DH;SER COUNT
 CLSL    EQU     STACK+3EH;CLEAR SCREEN LINE
+DSKC    EQU     STACK+3FH;DISC CHK COUNT
 TBASE   EQU     STACK+40H;TIMER HEAP
 ;
 BEL     EQU     7
@@ -51,6 +52,7 @@ SERRECV EQU     11DDH   ;SERIAL RECV TO BUFFER
 DMA     EQU     12DDH   ;DMA
 ;
 LCLRLN  EQU     0FC00H  ;LIB CLEAR LINE
+LBDIVH  EQU     0FC03H  ;B DIVIDE BY H
 ;
         .ORG    0F000H
 ;
@@ -343,21 +345,24 @@ STAT:   MVI     D,BASEPG;NORMALIZE
         DW      IPCSND
         JMP     WAIT
 ;
-; TICK - SCAN TIMER HEAP
-; [COUNT|CPU|BC]
-; TIMED OUT AT COUNT ZERO
+; TICK (15 Hz):
+; - UPDATE STATS EVERY TICKC
+; - CHECK DISK ECC EVERY 8 TICKS
+; - SCAN TIMER HEAP EVERY TICK
+;   [COUNT|CPU|BC]
+;   TIMED OUT WHEN COUNT ZERO
 ;
 TICK:   MOV     M,A     ;SAVE T0 IN [LASTT0]
         LXI     H,SERC
         XRA     A
         CMP     M       ;SERIAL INHIBIT DONE?
-        JZ      TICK0
+        JZ      TICK1
         DCR     M       ;DEC SERIAL INHIBIT
-TICK0:  LXI     H,TICKC
+TICK1:  LXI     H,TICKC
         DCR     M       ;TICK COUNT-1
-        JNZ     TICK1   ;SKIP UNTIL ZERO
+        JNZ     TICK2   ;SKIP UNTIL ZERO
 ;
-        LXI     H,STATI
+        LXI     H,STATI ;UPDATE STATS
         INR     M       ;INC STAT INDEX
         MOV     A,M     ;A=INDEX
         ANI     07FH    ;CLEAR MSB
@@ -373,33 +378,48 @@ TICK0:  LXI     H,TICKC
         INX     H
         MOV     B,M     ;BC=BLOCK COUNT
         LHLD    RUNC    ;HL=RUN COUNT
-        CALL    0FC03H  ;A=BLOCK/RUN COUNT
+        CALL    LBDIVH  ;A=BLOCK/RUN COUNT
         POP     H
         LXI     B,80H
         DAD     B       ;STAT ADDR + 80
         MOV     M,A     ;STORE LOAD AVG
         CALL    RSTRUN  ;RESET RUN COUNT
 ;
-TICK1:  LXI     H,TBASE ;START AT BASE
+TICK2:  LXI     H, DSKC ;DISK CHECK
+        INR     M
+        MVI     A, 7
+        ANA     M       ;A=111b & [DSKC]
+        JNZ     TICK3
+        MVI     A, 18H
+        ANA     M       ;A=11000b & [DSKC]
+        RRC
+        RRC
+        RRC             ;A>>3
+        ORI     4       ;A=CPU#
+        LXI     B, 0505H;DSK CHK CMD
+        MVI     D, 0    ;OBEY STATUS
+        DW      IPCSND  ;SEND DSK CHK MSG
+;
+TICK3:  LXI     H,TBASE ;START AT BASE
         PUSH    H
-TICKR:  POP     H
-TICK2:  XCHG            ;DE=CURT
+TICK4:  POP     H
+TICK5:  XCHG            ;DE=CURT
         LXI     H,TTOP
         MOV     A, M    ;A=[TTOP low]
         CMP     E
-        JNZ     TICK3   ;CURT!=TTOP
+        JNZ     TICK6   ;CURT!=TTOP
         INX     H
         MOV     A, M    ;A=[TTOP high]
         CMP     D
         RZ              ;CURT==TTOP DONE
-TICK3:  XCHG            ;HL=CURT
+TICK6:  XCHG            ;HL=CURT
         DCR     M       ;COUNT-1
         JZ      TFIRE   ;TIMED OUT
         LXI     B, 4
         DAD     B       ;CURT+4
-        JMP     TICK2
+        JMP     TICK5
 TFIRE:  PUSH    H       ;SAVE CURT
-        LXI     B,TICKR
+        LXI     B,TICK4
         PUSH    B       ;PUSH RETURN
         INX     H
         MOV     A, M    ;A=CPU
@@ -409,12 +429,12 @@ TFIRE:  PUSH    H       ;SAVE CURT
         MOV     B, M    ;B=MSB
         PUSH    B       ;PUSH CALL ADDR
         ORA     A       ;A==0?
-        JZ      TICK4
+        JZ      TICK7
         POP     B       ;REMOVE CALL ADDR
         PUSH    H
         CALL    CMD2    ;DISPATCH RETURN HANDLER (A=CPU)
         POP     H
-TICK4:  LXI     B, -4
+TICK7:  LXI     B, -4
         DAD     B       ;HL=CURT-1
         XCHG            ;SAVE HL
         LHLD    TTOP

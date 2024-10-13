@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 1.0'
 ;
-; FEB 8, 2024
+; OCT 13, 2024
 ;
         .PROJECT monitor.com
 ;
@@ -11,6 +11,7 @@ SDATA   EQU     8       ;SERIAL DATA
 CDATA   EQU     9       ;CONSOLE DATA
 RXEN    EQU     11      ;RX ENABLE
 ;
+WAIT    EQU     STACK+1 ;1BYTE WAIT ON INPUT
 COMS    EQU     STACK+2 ;1BYTE COM SERIAL
 COMB    EQU     STACK+3 ;1BYTE COM BLOCK
 PORTN   EQU     STACK+4 ;3BYTES I/O
@@ -44,8 +45,12 @@ COLD:   MVI     A,1
         STA     COMS    ;TURN COMS ON
         OUT     RXEN    ;ENABLE RX
         XRA     A
+        STA     WAIT    ;CLEAR WAIT
         STA     COMB	;CLEAR BLOCKING
         LXI     SP,STACK
+        CALL    CRLF
+        LXI     D,40H
+        CALL    PRNTM   ;PRINT LOGO
         LXI     D,SIGNON
         CALL    PRNTM   ;PRINT SIGNON
 ;
@@ -141,27 +146,46 @@ INPUT2: LDA     COMS    ;CHECK STATE
         MVI     A,1
 INPUT3: STA     COMB    ;SET COMS STATE
         MOV     A,B
-        CPI     CTRX    ;ABORT?
-        JZ      START   ;YES
         RET
 ;
 ; CONSOLE OUTPUT ROUTINE
 ; SAVE A IN B
 ;
 OUTT:   MOV     B,A     ;SAVE A
+OUT1:   IN      CDATA   ;GET BYTE
+        ORA     A       ;ZERO?
+        JNZ     OUT2    ;CHECK VAL
+        LDA     COMS    ;CHECK STATE
+        ORA     A       ;ZERO?
+        JZ      OUT5    ;SHOW CHAR
+        IN      SDATA   ;GET BYTE
+        ORA     A       ;ZERO?
+        JZ      OUT5    ;SHOW CHAR
+OUT2:   CPI     CTRS    ;CHECK CTRL-S
+        JNZ     OUT3    ;NO: NEXT CHECK
+        MVI     A,1     ;A=1
+        JMP     OUT4    ;SET TO WAIT
+OUT3:   CPI     CTRX    ;CHECK CTRL-X
+        JZ      WARM    ;YES: ABORT
+        XRA     A       ;A=0
+OUT4:   STA     WAIT    ;SET/CLEAR WAIT
+OUT5:   LDA     WAIT    ;GET WAIT
+        ORA     A       ;WAITING?
+        JNZ     OUT1    ;YES: WAIT FOR CHAR
+        MOV     A,B     ;RESTORE A
         OUT     CDATA   ;WRITE CONSOLE
         ORA     A       ;ZERO?
         RZ              ;RETURN IF NULL
         LDA     COMS    ;CHECK COMS
         ORA     A       ;SERIAL ON?
-        RZ              ;RETURN IF OFF
-OUT2:   MOV     A,B     ;RESTORE A
+        RZ              ;NO: RETURN
+OUT6:   MOV     A,B     ;RESTORE A
         OUT     SDATA   ;WRITE SERIAL
         ORA     A       ;BUFFER FULL?
-        RNZ             ;NO, RETURN
+        RNZ             ;NO: RETURN
         LDA     COMB    ;LOAD COM BLOCK
         ORA     A       ;BLOCK ON IO?
-        JNZ     OUT2    ;BLOCK
+        JNZ     OUT6    ;NO: BLOCK
         RET
 ;
 ; PRINT MESSAGE
@@ -730,7 +754,7 @@ VERM3:  CALL    TSTOP   ;DONE?
         INX     B       ;2ND POINTER
         JMP     VERM2
 ;
-; SPEED TEST
+; PROCESSOR SPEED TEST - SHOWN IN MIPS
 ;
 PROC:   IN      3CH
         MOV     B,A     ;SAVE TIME
@@ -751,7 +775,13 @@ PROC3:  MOV     E,M     ;1+1 (2) PACK
         IN      3CH
         CMP     B       ;TIME CHANGED?
         JZ      PROC2   ;WAIT FOR TICK
-        CALL    OUTHX
+        MVI     A,'0'
+        CALL    OUTT
+        MVI     A,'.'
+        CALL    OUTT
+        MVI     A,'0'
+        CALL    OUTT
+        CALL    OUTHX   ;ALWAYS 2 DIGITS
         RET
 ;
 ; UPTIME DDD HH:MM:SS
