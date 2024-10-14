@@ -12,14 +12,15 @@ FNCL DZ, PC               # PC=Fork RCODE
 #12/10
 
 ADDR 0x40                 # set video mode on RELOC
-FNFH DZ, NA               # A = RCODE
+FNH DZ, HLA               # A = RCODE
+LD HL, $0x3F
 LD Y, $VMODE
-FNH AZ, HLD               # RCODE->VMODE
+ANDHL AZ, ND              # RCODE->VMODE
 LD HL, $1
 LD Y, $AREG
 MVHL AZ, ND               # CPU=1 RELOC
 LD PC, $START
-#17/13
+#20/15
 
 ADDR 0x50                 # boot to monitor
 LD HL, $8
@@ -28,8 +29,8 @@ MVHL AZ, ND               # CPU=8 MONITOR
 LD HL, $0xC8
 LD Y, $VMODE
 ADDHL DZ, NA
-LDP PC, $START            # IN TEXT MODE
 LDN PC, $TEXT             # SET TEXT MODE
+LD PC, $START             # IN TEXT MODE
 #19/16
 
 ADDR 0x60                 # page up +1 video mode

@@ -223,11 +223,11 @@ def print_disp(offset, opts = {})
       if opts[:high] # a=HHHH, b=0ECC,0Z00
         d = 16.times.map do |c|
           if b&3 == 0 # end of line - sync page - c=MMMM
-            pg = (a|b).zero? ? 0xF0 : 0xE6
+            pg = (a|b).zero? ? 0xF0 : 0xE6 # inst==0?syncf:synce
             pg + ML2SYNC_PG[c]
           else # fetch/exec inst page - c=LLLL
             inst = (b&4)==0 ? I8080 : EXT
-            i = (a<<4) | c
+            i = (a<<4) | c # i=inst
             pg = i<<1
             cc = pg+1
             b&3<inst[cc] ? IDLE_PG : inst[pg]
