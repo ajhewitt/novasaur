@@ -1,6 +1,6 @@
 ; TITLE '8080 SYSTEM MONITOR, VER 1.0'
 ;
-; OCT 13, 2024
+; OCT 14, 2024
 ;
         .PROJECT monitor.com
 ;
@@ -207,7 +207,7 @@ TOGGLE: LDA     COMS    ;LOAD COMS
 ;
 ; SIGNON MESSAGE
 ;
-SIGNON: DB      CR,LF,CR,LF
+SIGNON: DB      CR,LF
         DB      "Novasaur 8080 SYSMON v1.0",CR,LF
         DB      "Copyright 2024 (c) by "
         DB      "Solid State Machines",CR,LF,0
