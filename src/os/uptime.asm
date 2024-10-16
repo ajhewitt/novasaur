@@ -1,6 +1,6 @@
 ; TITLE: 'UPTIME'
 ;
-; JUL 12, 2023
+; OCT 15, 2024
 ;
         .PROJECT        uptime.com
 
@@ -27,56 +27,6 @@ SECS    EQU     11EDH
 KERNP   EQU     0E800H
 
         .ORG    100H
-;
-; Display Intro
-;
-        LXI     D,INTR
-        MVI	C,PRINT
-        CALL    BDOS
-;
-; Show uptime
-;
-TIME:   DW      DAYHR   ;B=DAYS,C=HOURS
-        PUSH    B
-        PUSH    B
-        MOV     A,B     ;A=DAYS
-        DW      BCDA    ;BC=BCD A
-        PUSH    B
-        MOV     A,B     ;A=DAYS 100's
-        ANA     A       ;A==0?
-        JZ      TIME1
-        ADI     '0'     ;COVERT TO ASCII
-        MOV     C,A
-        CALL    CONOUT
-TIME1:  POP     B
-        MOV     A,C
-        CPI     10H
-        JC      TIME2
-        CALL    BCD     ;OUT DAYS 10s,1s
-        JMP     TIME3
-TIME2:  ADI     '0'     ;COVERT TO ASCII
-        MOV     C,A
-        CALL    CONOUT
-TIME3:  LXI     D,DAY
-        MVI	C,PRINT
-        CALL	BDOS
-        LXI     D,CMR
-        POP     A
-        CPI     1
-        JNZ     TIME4
-        INX     D
-TIME4:  MVI	C,PRINT
-        CALL    BDOS
-        POP     B       ;C=HOURS
-        CALL    BCD
-        MVI     C,':'
-        CALL    CONOUT
-        DW      MINS    ;C=MINUTES
-        CALL    BCD
-        MVI     C,':'
-        CALL    CONOUT
-        DW      SECS    ;C=SECONDS
-        CALL    BCD
 ;
 ; Copy Kernel stats
 ;
@@ -175,6 +125,54 @@ ROW7:   MVI     C,CR            ;END OF ROW
         LXI     D,FOOT
         MVI	C,PRINT
         CALL	BDOS
+;
+; Show uptime
+;
+TIME:   DW      DAYHR   ;B=DAYS,C=HOURS
+        PUSH    B
+        PUSH    B
+        MOV     A,B     ;A=DAYS
+        DW      BCDA    ;BC=BCD A
+        PUSH    B
+        MOV     A,B     ;A=DAYS 100's
+        ANA     A       ;A==0?
+        JZ      TIME1
+        ADI     '0'     ;COVERT TO ASCII
+        MOV     C,A
+        CALL    CONOUT
+TIME1:  POP     B
+        MOV     A,C
+        CPI     10H
+        JC      TIME2
+        CALL    BCD     ;OUT DAYS 10s,1s
+        JMP     TIME3
+TIME2:  ADI     '0'     ;COVERT TO ASCII
+        MOV     C,A
+        CALL    CONOUT
+TIME3:  LXI     D,DAY
+        MVI	C,PRINT
+        CALL	BDOS
+        LXI     D,CMR
+        POP     A
+        CPI     1
+        JNZ     TIME4
+        INX     D
+TIME4:  MVI	C,PRINT
+        CALL    BDOS
+        POP     B       ;C=HOURS
+        CALL    BCD
+        MVI     C,':'
+        CALL    CONOUT
+        DW      MINS    ;C=MINUTES
+        CALL    BCD
+        MVI     C,':'
+        CALL    CONOUT
+        DW      SECS    ;C=SECONDS
+        CALL    BCD
+        MVI     C,CR
+        CALL    CONOUT
+        MVI     C,LF
+        CALL    CONOUT
 
         RET
 ;
@@ -234,18 +232,17 @@ AVG1:   DCR	L
 ;
 ; Messages
 ;
-INTR    db      'System Uptime: $'
-DAY     db      ' day$'
-CMR     db      's, $'
-
-HEAD    db      CR,LF,LF,
-        db      '           CPU Load Average (last 4 mins)',CR,LF,
+HEAD    db      '           CPU Load Average (last 4 mins)',CR,LF,
         db      '     0      0.5     1.0     1.5     2.0     2.5',CR,LF,
         db      '     +-------+-------+-------+-------+-------+',CR,LF,'$'
 
 FOOT    db      '     +-------+-------+-------+-------+-------+',CR,LF
         db      '     0%      5%     10%     15%     20%     25%',CR,LF
-        db      '           CPU Idle Cycle % (dotted line)',CR,LF,'$'
+        db      '           CPU Idle Cycle % (dotted line)',CR,LF
+        db      CR,LF
+        db      'System Uptime: $'
+DAY     db      ' day$'
+CMR     db      's, $'
 
 INDEX   db      0
 LOAD    db      0
