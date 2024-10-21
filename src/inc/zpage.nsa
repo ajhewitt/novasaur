@@ -9,7 +9,7 @@ $PCMPGH        0x8C # PCM page high water - stop page
 $PCMPGL        0x8D # PCM page low water - current page
 $WAVE0         0x8E
 $ATTACK0       0x8F
-$DECAY0        0x90
+$DECAY0        0x90 # --''-- voice 0 (see below) --''--
 $SUSTAIN0      0x91
 $RELEASE0      0x92
 $NOTE1L        0x93 # note interval low (FREQL)
@@ -25,8 +25,8 @@ $WAVE2         0x9C
 $ATTACK2       0x9D
 $DECAY2        0x9E
 $SUSTAIN2      0x9F
-$RELEASE2      0xA0
-$NOTE3L        0xA1
+$RELEASE2      0xA0 # --''-- voice 2 (see above) --''--
+$NOTE3L        0xA1 # --''-- voice 3 (see above) --''--
 $NOTE3H        0xA2
 $WAVE3         0xA3
 $ATTACK3       0xA4
@@ -46,10 +46,10 @@ $VSTART        0xB0 # start of video display
 $VMODE         0xB1 # video mode to set
 $ICH           0xB2 # idle cycle count high byte
 $KTO           0xB3 # max kbd idle count
-$KSRDIDX       0xB4
-$KSWRIDX       0xB5
-$KCRDIDX       0xB6
-$KCWRIDX       0xB7
+$KSRDIDX       0xB4 # kbd scan-code read index
+$KSWRIDX       0xB5 # kbd scan-code write index
+$KCRDIDX       0xB6 # kbd code-point read index
+$KCWRIDX       0xB7 # kbd code-point write index
 #COUNTS/TIMERS (kernel read-only)  | IN/OUT 0x38-0x3F
 $CBLOCK        0xB8 # context switch block, 99 to 0 in <.01s
 $CTXIDX        0xB9 # context index, 0 to 255 in <2.67s
@@ -58,34 +58,34 @@ $FRAME         0xBB # frame count, -4/-4/-5 to 0 in .067s
 $TIME0         0xBC # 15tps, -90 to 0 in 6s
 $TIME1         0xBD # 10tpm, -120 to 0 in 12m
 $TIME2         0xBE # 5tph, -120 to 0 in 1d
-$TIME3         0xBF # 1tpd, overflow at 256 in 0.7y
+$TIME3         0xBF # 1tpd, overflow at 256d in 0.7y
 #INTERNAL STATE (hidden)
-$DELTA0        0xC0
-$DELTA1        0xC1 # ADSR state as Y indirect
-$DELTA2        0xC2
-$DELTA3        0xC3
-$GATE0         0xC4
-$GATE1         0xC5 # ADSR sustain to set on gate on
-$GATE2         0xC6
-$GATE3         0xC7
-$WAVIDX1L      0xC8 # wave table index low
-$WAVIDX1H      0xC9 # wave table index high
-$WAVIDX2L      0xCA
-$WAVIDX2H      0xCB
-$WAVIDX3L      0xCC
-$WAVIDX3H      0xCD
+$DELTA0        0xC0 # ADSR0 state as Y indirect
+$DELTA1        0xC1 # ADSR1 state as Y indirect
+$DELTA2        0xC2 # ADSR2 state as Y indirect
+$DELTA3        0xC3 # ADSR3 state as Y indirect
+$GATE0         0xC4 # ADSR0 sustain to set on gate on
+$GATE1         0xC5 # ADSR1 sustain to set on gate on
+$GATE2         0xC6 # ADSR2 sustain to set on gate on
+$GATE3         0xC7 # ADSR3 sustain to set on gate on
+$WAVIDX1L      0xC8 # voice1 wave table index low
+$WAVIDX1H      0xC9 # voice1 wave table index high
+$WAVIDX2L      0xCA # voice2 wave table index low
+$WAVIDX2H      0xCB # voice2 wave table index high
+$WAVIDX3L      0xCC # voice3 wave table index low
+$WAVIDX3H      0xCD # voice3 wave table index high
 $AMODE         0xCE # audio mode - 0x00-0x3F
 $KMODE         0xCF # kbd decode state
 $KIDLE         0xD0 # kbd idle cycle count
 $KS0           0xD1 # kbd sample 0
 $KS1           0xD2 # kbd sample 1
-$RMODE         0xD3 # Rx mode - 0x40-0x7F
-$RXRDIDX       0xD4
-$RXWRIDX       0xD5
+$RMODE         0xD3 # rx mode - 0x40-0x7F
+$RXRDIDX       0xD4 # rx read index
+$RXWRIDX       0xD5 # rx write index
 $RMULT         0xD6 # rx multiplier
-$TMODE         0xD7 # Tx mode - 0x80-0xBF
-$TXRDIDX       0xD8
-$TXWRIDX       0xD9
+$TMODE         0xD7 # tx mode - 0x80-0xBF
+$TXRDIDX       0xD8 # tx read index
+$TXWRIDX       0xD9 # tx write index
 $COMLS         0xDA # comms line state
 $COMBS         0xDB # comms block state
 $CTX0          0xDC # current context
@@ -103,19 +103,19 @@ $CMDL          0xE8 # kernel IPC - command low
 $CMDH          0xE9 # kernel IPC - command high
 $MSEQ          0xEA # kernel IPC - message sequence
 $MLEN          0xEB # kernel IPC - message length
-#8080CPU
+#8080CPU state (19)
 $INST          0xEC # instruction cache
 $EXT           0xED # extended mode cache
 $IMODE         0xEE # check interrupt - 0: check, -1: skip
 $IMASK         0xEF # interrupt mask - lower nibble, bit3: enable
 $AREG          0xF0 # Accumulator
-$FREG          0xF1 # Flags - COZNHP00
-$BREG          0xF2
-$CREG          0xF3
-$DREG          0xF4
-$EREG          0xF5
-$HREG          0xF6
-$LREG          0xF7
+$FREG          0xF1 # Flag register - COZNHP00
+$BREG          0xF2 # B register
+$CREG          0xF3 # C register
+$DREG          0xF4 # D register
+$EREG          0xF5 # E register
+$HREG          0xF6 # H register
+$LREG          0xF7 # L register
 $SPH           0xF8 # SP MSB
 $SPL           0xF9 # SP LSB
 $PCH           0xFA # PC MSB
@@ -124,7 +124,7 @@ $TMPH          0xFC # 16-bit temp MSB
 $TMPL          0xFD # 16-bit temp LSB
 $TEMP          0xFE # 8-bit temp
 #HARDWARE
-$AUDIO         0xFF
+$AUDIO         0xFF # audio output
 
 #Constants
 $FETCH         0x00

@@ -17,7 +17,7 @@ $INCBLK    11 # ML reset, cyc=1
 $NSR       12 # A>>1|0x80
 $SWAP      13 # AB -> BA
 $REVERSE   14 # reverse bits
-#AUDIO     15 # reverse bits, flip sign
+#AUDIO     15 # flip sign, reverse bits
 
 #FNE - HAL
 $XGA?       0 # mode-line>=11?: 0-10->-1,else->0
