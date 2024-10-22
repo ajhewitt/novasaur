@@ -20,12 +20,12 @@ $REVERSE   14 # reverse bits
 #AUDIO     15 # flip sign, reverse bits
 
 #FNE - HAL
-$XGA?       0 # mode-line>=11?: 0-10->-1,else->0
+$RSVD       0 # reserved
 $INCCYC     1 # cyc+1, ext=0 *** DO NOT MOVE
 $FORKJ      2 # feature fork (audio, rx, tx/kb)
 $FORKK      3 # keyboard fork
 $ML2ADJ     4 # mode-line to T0 adjust: 0-2->0xE0,else->0xF0
-$MASK2MODE  5 # &8==0 ? -1:0
+$XGA?       5 # mode-line>=11?: 0-10->-1,else->0
 $RXS2M      6 # Rx state to mult/mode
 $TKTOG      7 # 81->C2->98,83->E2->9A
 $KS01?      8 # A&3==0||1 ? 0:-1
@@ -38,7 +38,7 @@ $FREQL     14 # MIDI->wave index delta L
 $FREQH     15 # MIDI->wave index delta H
 
 #FND - CPU
-$FORKI      0 # interupt vector fork
+$RSVD       0 # reserved
 $FORK1      1 # 0->0x80,else->0xC0
 $FORK2      2 # 0xFF->0x40,0->0x80,else->0xC0
 $FORK3      3 # 0xFE->0x20,0xFF->0x58,0->0x90,else->0xC8
@@ -56,19 +56,19 @@ $EXTPC     14 # extended execute jump PC
 $EXTFCH    15 # extended fetch ok? INST : NOP
 
 #FNC - Extended
-$SCAN0      0 # lower/upper scan code->ascii
-$SCAN1      1 # extended/control scan code->ascii
-$SCAN2      2 # alt/ext-ctrl-alt scan code->ascii
-$KS2MODE    3 # kbd scan code->kmode mask bit
-$MOD60      4 # binary-coded sexagesimal
-$VATTR      5 # video mode attributes (64 modes, 4 attrs/mode)
-$WAV2FNC    6 # WAVE in L to SQRWAV/SAWWAV/0 in H
-$MODPCM     7 # PCM INC/MOD, Fork, expand
-$EXTMAPH    8 # extended inst mapping util (high)
-$EXTMAPL    9 # extended inst mapping util (low)
-$CTXCOL    10 # Context Column n->0xFn 0<n<8
-$FORKR     11 # Restart code fork
-$CRC16L    12 # CRC16 lookup table low bytes
-$CRC16H    13 # CRC16 lookup table high bytes
-$LFSR      14 # Linear-function shift register
-$RESV      15 # Reserved
+$RSVD       0 # reserved
+$SCAN1      1 # lower/upper scan code->ascii
+$SCAN2      2 # extended/control scan code->ascii
+$SCAN3      3 # alt/ext-ctrl-alt scan code->ascii
+$KS2MODE    4 # kbd scan code->kmode mask bit
+$MOD60      5 # binary-coded sexagesimal
+$VATTR      6 # video mode attributes (64 modes, 4 attrs/mode)
+$WAV2FNC    7 # WAVE in L to SQRWAV/SAWWAV/0 in H
+$MODPCM     8 # PCM INC/MOD, Fork, expand
+$EXTMAPH    9 # extended inst mapping util (high)
+$EXTMAPL   10 # extended inst mapping util (low)
+$CTXCOL    11 # Context Column n->0xFn 0<n<8
+$FORKR     12 # Restart code fork
+$CRC16L    13 # CRC16 lookup table low bytes
+$CRC16H    14 # CRC16 lookup table high bytes
+$LFSR      15 # Linear-function shift register

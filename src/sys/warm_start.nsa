@@ -115,8 +115,6 @@ LD Y,  $CBLOCK
 MULH AZ, ND               # reset context block
 LD Y, $CTXIDX
 MULH AZ, ND               # reset context index
-LD Y, $IMASK
-MULH AZ, ND               # 0->IMASK (disable)
 LD Y, $CREG
 MULH AZ, ND               # 0->C
 LD Y, $DREG

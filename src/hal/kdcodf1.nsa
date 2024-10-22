@@ -58,7 +58,7 @@ MVHL A, XA            # X=kbd code buffer
 LD HL, $0xF0
 LD Y, $KS0
 ANDH A, NA            # A=scan code 0-15
-LD HL, $SCAN0$IDEN
+LD HL, $SCAN1$IDEN
 LD PC, $CONT70
 #70/74
 
@@ -87,31 +87,31 @@ LD PC, $EXIT70
 #70/103
 
 ADDR 0x68             # DEFAULT62
-LD HL, $SCAN0$IDEN
+LD HL, $SCAN1$IDEN
 LD PC, $CONT66
 #66
 
 ADDR 0x70
 LD HL, $0x80          # SHIFT62
 ORHL A, NA
-LD HL, $SCAN0$IDEN
+LD HL, $SCAN1$IDEN
 #70
 LD PC, $CONT72
 
 ADDR 0x78             # EXTENDED62
-LD HL, $SCAN1$IDEN
+LD HL, $SCAN2$IDEN
 LD PC, $CONT66
 #66
 
 ADDR 0x80
 LD HL, $0x80          # CONTROL62
 ORHL A, NA
-LD HL, $SCAN1$IDEN
+LD HL, $SCAN2$IDEN
 #70
 LD PC, $CONT72
 
 ADDR 0x88             # ALT62
-LD HL, $SCAN2$IDEN
+LD HL, $SCAN3$IDEN
 LD PC, $CONT66
 #66
 
@@ -120,7 +120,7 @@ LD HL, $0x80          # EXTCTRLALT62
 LD Y, $RCODE
 ORHL AZ, ND           # scan code+128 -> restart code
 #70/150
-LD HL, $SCAN2$IDEN
+LD HL, $SCAN3$IDEN
 FNCH A, NA            # A = escape page
 NOP
 NOP
