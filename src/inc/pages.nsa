@@ -57,10 +57,10 @@ $TEST_PG       0x84
 
 # 0x88-8F: user reserved (8)
 
-# 0x90-0xE3 (84): 8080 instruction set
+# 0x90-0xDF (80): 8080 instruction set
 $FETCH1_PG     0x90 # pre-inc fetch
 $FETCH2_PG     0x91 # no-inc fetch
-$HLT_PG        0x92
+$HLT_PG        0x92 # idle count; yield
 $MOVR_PG       0x93
 $MOVM_PG       0x94
 $MVIR_PG       0x95
@@ -138,24 +138,24 @@ $IN_PG         0xDC
 $OUT_PG        0xDD
 $CON_PG        0xDE # Console extension to IN/OUT
 $DSUB_PG       0xDF # 8085 hidden instruction
-$ICTRL_PG      0xE0 # DI, EI
-$IMASK_PG      0xE1 # RIM, SIM (8085)
-$INTR1_PG      0xE2 # check for HW interupt (1/block if EI)
-$INTR2_PG      0xE3 # check for HW interupt when halted
 
-# 0xE4-0xFD (26): HAL
-$PCME_PG       0xE4 # PCM extension to audio
-$RTCE_PG       0xE5 # RTC extension to block
-$NSYNCE_PG     0xE6 # null sync on execute
-$DASYNCE_PG    0xE7 # delayed audio sync on execute
-$ASYNCE_PG     0xE8 # audio sync on execute
-$DTSYNCE_PG    0xE9 # delayed transmit sync on execute
-$TSYNCE_PG     0xEA # transmit sync on execute
-$KSCANE_PG     0xEB # keyboard sync on execute
-$KDCODE_PG     0xEC # keyboard decode sync on execute
-$RSYNCE_PG     0xED # receive sync on execute
-$DBSYNCE_PG    0xEE # delayed block sync on execute
-$BSYNCE_PG     0xEF # block sync on execute
+# 0xE0-0xF9 (26): HAL
+$NSYNCE_PG     0xE0 # null sync on execute
+$DASYNCE_PG    0xE1 # delayed audio sync on execute
+$ASYNCE_PG     0xE2 # audio sync on execute
+$DTSYNCE_PG    0xE3 # delayed transmit sync on execute
+$TSYNCE_PG     0xE4 # transmit sync on execute
+$KSCANE_PG     0xE5 # keyboard sync on execute
+$KDCODE_PG     0xE6 # keyboard decode sync on execute
+$RSYNCE_PG     0xE7 # receive sync on execute
+$DBSYNCE_PG    0xE8 # delayed block sync on execute
+$BSYNCE_PG     0xE9 # block sync on execute
+$PCME_PG       0xEA # PCM extension to audio
+$RTCE_PG       0xEB # RTC extension to block
+$ADSRE0_PG     0xEC # ADSR voice 0
+$ADSRE1_PG     0xED # ADSR voice 1
+$ADSRE2_PG     0xEE # ADSR voice 2
+$ADSRE3_PG     0xEF # ADSR voice 3
 $NSYNCF1_PG    0xF0 # --''-- syncs on fetch (see above)
 $DASYNCF1_PG   0xF1
 $ASYNCF1_PG    0xF2
@@ -166,9 +166,5 @@ $KDCODF1_PG    0xF6
 $RSYNCF1_PG    0xF7
 $DBSYNCF1_PG   0xF8
 $BSYNCF1_PG    0xF9
-$ADSRE0_PG     0xFA # ADSR voice 0
-$ADSRE1_PG     0xFB # ADSR voice 1
-$ADSRE2_PG     0xFC # ADSR voice 2
-$ADSRE3_PG     0xFD # ADSR voice 3
 
 $BOOT          0xFF # hardware reset

@@ -70,10 +70,10 @@ ANDL A, X                 # X=0xFn&7
 LD Y, $AREG
 ANDHL A, ND               # CPU Acc = n&0x07
 #60/21
-LD Y, $IMASK
-MULH A, ND                # 0->IMASK
 LD Y, $CREG
 MULH A, ND                # 0->C
+LD Y, $CREG
+MULH A, ND                # 0->C #NOP
 #70/29
 LD Y, $DREG
 MULH A, ND                # 0->D

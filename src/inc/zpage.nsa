@@ -106,8 +106,7 @@ $MLEN          0xEB # kernel IPC - message length
 #8080CPU state (19)
 $INST          0xEC # instruction cache
 $EXT           0xED # extended mode cache
-$IMODE         0xEE # check interrupt - 0: check, -1: skip
-$IMASK         0xEF # interrupt mask - lower nibble, bit3: enable
+#SPARE         0xEE-F (2)
 $AREG          0xF0 # Accumulator
 $FREG          0xF1 # Flag register - COZNHP00
 $BREG          0xF2 # B register
@@ -130,8 +129,6 @@ $AUDIO         0xFF # audio output
 $FETCH         0x00
 $FETCH2        0x10
 $RST2_INST     0x18
-$INTR1_INST    0x28
-$INTR2_INST    0x38
 $SKIP_INST     0xCB
 $PUSHPC_INST   0xD9
 $JMP_INST      0xC3

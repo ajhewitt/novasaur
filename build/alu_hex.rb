@@ -111,10 +111,10 @@ I8080 = [
   0xDF,2, 0xB5,2, 0xA0,1, 0xB4,1, 0xAF,2, 0xB1,2, 0x95,1, 0xC4,1,
   0x91,1, 0x97,2, 0xA1,1, 0xB3,1, 0xAF,2, 0xB1,2, 0x95,1, 0xC5,2, #0x1X
   0xD3,2, 0xB5,2, 0xA0,1, 0xB4,1, 0xAF,2, 0xB1,2, 0x95,1, 0xC6,2,
-  0xE1,2, 0x97,2, 0x9D,3, 0xB3,1, 0xAF,2, 0xB1,2, 0x95,1, 0xB6,2, #0x2X
-  0xE2,1, 0xB5,2, 0x9A,3, 0xB4,1, 0xAF,2, 0xB1,2, 0x95,1, 0xC7,1,
-  0xE1,2, 0x97,2, 0x99,2, 0xB3,1, 0xB0,2, 0xB2,2, 0x96,2, 0xC9,1, #0x3X
-  0xE3,1, 0xB5,2, 0x98,2, 0xB4,1, 0xAF,2, 0xB1,2, 0x95,1, 0xC8,1,
+  0x90,1, 0x97,2, 0x9D,3, 0xB3,1, 0xAF,2, 0xB1,2, 0x95,1, 0xB6,2, #0x2X
+  0x90,1, 0xB5,2, 0x9A,3, 0xB4,1, 0xAF,2, 0xB1,2, 0x95,1, 0xC7,1,
+  0x90,1, 0x97,2, 0x99,2, 0xB3,1, 0xB0,2, 0xB2,2, 0x96,2, 0xC9,1, #0x3X
+  0x90,1, 0xB5,2, 0x98,2, 0xB4,1, 0xAF,2, 0xB1,2, 0x95,1, 0xC8,1,
   0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, #0x4X
   0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1,
   0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, 0x93,1, #0x5X
@@ -137,8 +137,8 @@ I8080 = [
   0xD1,2, 0xCF,2, 0xCB,1, 0xDC,2, 0xCE,2, 0x01,1, 0xAE,2, 0xD2,1,
   0xD0,2, 0xD7,2, 0xCB,1, 0xDA,3, 0xCD,2, 0xD5,2, 0xB9,2, 0xD2,1, #0xEX
   0xD1,2, 0xD4,1, 0xCB,1, 0xA2,2, 0xCE,2, 0x02,2, 0xBF,2, 0xD2,1,
-  0xD0,2, 0xD8,2, 0xCB,1, 0xE0,1, 0xCD,2, 0xD6,2, 0xBC,2, 0xD2,1, #0xFX
-  0xD1,2, 0xDB,1, 0xCB,1, 0xE0,1, 0xCE,2, 0x03,3, 0xC2,2, 0xD2,1,
+  0xD0,2, 0xD8,2, 0xCB,1, 0x90,1, 0xCD,2, 0xD6,2, 0xBC,2, 0xD2,1, #0xFX
+  0xD1,2, 0xDB,1, 0xCB,1, 0x90,1, 0xCE,2, 0x03,3, 0xC2,2, 0xD2,1,
 ].freeze # Intel 8080 inst page decoding, cycle count
 EXT = [
   0x90,1, 0x04,2, 0x05,2, 0x06,2, 0x07,1, 0x08,1, 0x09,1, 0x0A,1, #0x0X
@@ -223,8 +223,9 @@ def print_disp(offset, opts = {})
       if opts[:high] # a=HHHH, b=0ECC,0Z00
         d = 16.times.map do |c|
           if b&3 == 0 # end of line - sync page - c=MMMM
-            pg = (a|b).zero? ? 0xF0 : 0xE6 # inst==0?syncf:synce
-            pg + ML2SYNC_PG[c]
+            pg = 0xE0 # synce
+            pg += 0x10 if (a|b).zero? # move to syncf
+            pg + ML2SYNC_PG[c] # move to thread
           else # fetch/exec inst page - c=LLLL
             inst = (b&4)==0 ? I8080 : EXT
             i = (a<<4) | c # i=inst
@@ -451,24 +452,6 @@ SCAN_UP = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t"
 SCAN_EX = [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "\t", '`', nil, nil, nil, nil, nil, nil, 'q', '1', nil, nil, nil, 'z', 's', 'a', 'w', '2', nil, nil, 'c', 'x', 'd', 'e', '4', '3', nil, nil, ' ', 'v', 'f', 't', 'r', '5', nil, nil, 'n', 'b', 'h', 'g', 'y', '6', nil, nil, nil, 'm', 'j', 'u', '7', '8', nil, nil, ',', 'k', 'i', 'o', '0', '9', nil, nil, '.', '/', 'l', ';', 'p', '-', nil, nil, nil, '\'', nil, '[', '=', nil, nil, nil, nil, "\r", ']', nil, '\\', nil, nil, nil, nil, nil, nil, nil, nil, "\b", nil, nil, '1', nil, '4', '7', nil, nil, nil, '0', '.', '2', '5', '6', '8', "\e", nil, nil, '+', '3', '-', '*', '9', nil, nil].freeze
 
 SCAN_CTRL = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 26, 19, 1, 23, 0, 0, 0, 3, 24, 4, 5, 0, 0, 0, 0, 0, 22, 6, 20, 18, 0, 0, 0, 14, 2, 8, 7, 25, 30, 0, 0, 0, 13, 10, 21, 0, 0, 0, 0, 0, 11, 9, 15, 0, 0, 0, 0, 0, 0, 12, 0, 16, 31, 0, 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 29, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].freeze
-
-# fork on masked interupt
-def fork_intr
-  256.times.map do |i|
-    case 
-    when i & 0x04 != 0 # rst 7.5
-      0xA0
-    when i & 0x02 != 0 # rst 6.5
-      0x80
-    when i & 0x01 != 0 # rst 5.5
-      0x60
-    when i & 0x08 != 0 # intr
-      0x40
-    else               # fetch
-      0x20
-    end
-  end
-end
 
 # Rx state to multiplier/mode
 #curr,prev
@@ -881,40 +864,38 @@ print_com 0xA0
 print_vid 0xB0
 
 # 0x0003C000-0x0003CFFF: FNC low nibble only
-# $SCAN0: default/shift
-print_unary(0xC0, (SCAN_LO + SCAN_UP).map {|c| c ? c.ord : 0})
-# $SCAN1: extended/control
-print_unary(0xC1, SCAN_EX.map {|c| c ? c.ord : 0} + SCAN_CTRL)
-# $SCAN2: alt/ext-ctrl-alt
-print_unary(0xC2, Array.new(0x80, 0) + ctrl_alt_page)
+# $SCAN1: default/shift
+print_unary(0xC1, (SCAN_LO + SCAN_UP).map {|c| c ? c.ord : 0})
+# $SCAN2: extended/control
+print_unary(0xC2, SCAN_EX.map {|c| c ? c.ord : 0} + SCAN_CTRL)
+# $SCAN3: alt/ext-ctrl-alt
+print_unary(0xC3, Array.new(0x80, 0) + ctrl_alt_page)
 # $KS2MODE: kbd scan code->keyboard mode bit mask
-print_unary(0xC3, kmode_mask)
+print_unary(0xC4, kmode_mask)
 # $MOD60: binary-coded sexagesimal
-print_unary(0xC4, 256.times.map{|i| j=i%60; ((j/10)<<4)+(j%10)})
+print_unary(0xC5, 256.times.map{|i| j=i%60; ((j/10)<<4)+(j%10)})
 # $VATTR: video attributes
-print_unary(0xC5, VATTR)
+print_unary(0xC6, VATTR)
 # $WAV2FNC: WAVE->FNCWAV(1-13?[even?C0:D0]:0)
-print_unary(0xC6, 16.times.map{|i| i>0 && i<14 ? i&1 == 0 ? 0xC0 : 0xD0 : 0}*16)
+print_unary(0xC7, 16.times.map{|i| i>0 && i<14 ? i&1 == 0 ? 0xC0 : 0xD0 : 0}*16)
 # $MODPCM: PCM INC/MOD, Fork, expand
-print_unary(0xC7, mod_pcm)
+print_unary(0xC8, mod_pcm)
 #Extended Instruction Mapper High
-print_unary(0xC8, ext_map_high)
+print_unary(0xC9, ext_map_high)
 #Extended Instruction Mapper Low
-print_unary(0xC9, ext_map_low)
+print_unary(0xCA, ext_map_low)
 # $CTXCOL: Context column n->0xFn 0<n<8
-print_unary(0xCA, 8.times.map{|i| i>0 ? i+0xF0 : 0xF1}*32)
+print_unary(0xCB, 8.times.map{|i| i>0 ? i+0xF0 : 0xF1}*32)
 # $FORKR: Restart page fork
-print_unary(0xCB, fork_restart)
+print_unary(0xCC, fork_restart)
 # $CRC16L: CRC16 lookup table low bytes
-print_unary(0xCC, CRC16L)
+print_unary(0xCD, CRC16L)
 # $CRC16H: CRC16 lookup table high bytes
-print_unary(0xCD, CRC16H)
+print_unary(0xCE, CRC16H)
 # $LFSR: Linear-feedback shift register
-print_unary(0xCE, 256.times.map {|x| (x >> 1) ^ (-(x&1) & 0x8E)})
+print_unary(0xCF, 256.times.map {|x| (x >> 1) ^ (-(x&1) & 0x8E)})
 
 # 0x0003D000-0x0003DFFF: FND low nibble only - 8080 vCPU related
-# FORKI: fork on interrupt
-print_unary(0xD0, fork_intr)
 # $FORK1: 0->0x80,else->0xC0
 print_unary(0xD1, [0x80] + Array.new(0xFF, 0xC0))
 # $FORK2: 0xFF->0x40,0->0x80,else->0xC0
@@ -964,8 +945,6 @@ print_unary(0xDE, EXTDISP.each_slice(2).map {|i,j| i>0 ? i&0xFF : EXTNOP_PC})
 print_unary(0xDF, [*0..0xFF])
 
 # 0x0003E000-0x0003EFFF: FNE low nibble only - HAL related
-# $XGA?: mode-line: 0-10->-1,else->0
-print_unary(0xE0, [0xFF]*0xB0 + [0]*0x50)
 # $INCCYC: inc, clear ext bit
 print_unary(0xE1, 256.times.map{|i| (i&0xF0) + (i+1)%8})
 # $FORKJ: fork on HAL features (audio/rx/tx)
@@ -974,8 +953,8 @@ print_unary(0xE2, FORK_HAL)
 print_unary(0xE3, FORK_KBD)
 # $ML2ADJ: mode-line to frame count: 0-2->0xE0,else->0xF0
 print_unary(0xE4, [4]*3*16 + [8]*8*16 + [75]*5*16)
-# $MASK2MODE: IMASK enable bit (3) 0->-1, 1->0
-print_unary(0xE5, 256.times.map{|i| i&8==0 ? 0xFF : 0})
+# $XGA?: mode-line: 0-10->-1,else->0
+print_unary(0xE5, [0xFF]*0xB0 + [0]*0x50)
 # $RXS2M: Rx serial to multiplier/mode
 print_unary(0xE6, rxstate_mulmode)
 # $TKTOG: tx/kbd mode toggle 10xxxxQx->11Q00010, 11QxxxxK->100110QK
@@ -985,7 +964,7 @@ print_unary(0xE8, 256.times.map{|i| i&3 <= 1 ? 0 : 0xFF})
 # $KDATA: &C<<2
 print_unary(0xE9, 256.times.map{|i| (i&0xC) << 2})
 # $ADSRPG: FRAME->ADSR Page: FC->3,FD->2,FE->1,FF->0
-print_unary(0xEA, [0xFD,0xFC,0xFB,0xFA]*64)
+print_unary(0xEA, [0xEF,0xEE,0xED,0xEC]*64)
 # $SUS2LEV: sustain to level
 print_unary(0xEB, 256.times.map{|i| ((-1*i)&0xF)<<4})
 # SQRWAV: square wave number bandlimit

@@ -29,16 +29,24 @@ LD HL, $IDEN$NULL
 LDZ Y, $COMBS
 #29
 FNH AZ, HLD               # comms line state -> comms block state
-LD HL, $1$MASK2MODE
+LD HL, $1$NULL
 LD Y, $COMLS
 ANDH AZ, ND               # reset ps2 state/data
-LD Y, $IMASK
+NOP
+NOP
 #40
-FNEL DZ, HL               # HL = IMODE
-LD Y, $IMODE
-MVHL AZ, ND               # HL -> IMODE
-LD HL, $INC$NULL
-#51
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+#50
+NOP
 LDZ Y, $BLOCK
 FNH DZ, HLD               # A,block = block+1
 LD HL, $IDEN$NULL

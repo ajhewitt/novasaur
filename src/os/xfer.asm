@@ -1,6 +1,6 @@
 ; TITLE: 'XFER'
 ;
-; May 7, 2024
+; OCT 30, 2024
 ;
 ; Copyright (c) 2013 Martin Eberhard
 ; Copyright (c) 2015 Mike Douglas
@@ -415,8 +415,8 @@ XFER_DONE:
 ;
 HELP:	call	EXIT
         db 'XFER <filename.ext> {/R or /S}',CR,LF
-        db '   /R to receive file sent as binary file,',CR,LF
-        db '   /S to send file using XMODEM protocol.','$'
+        db '  /R    Receive file sent as text/binary.',CR,LF
+        db '  /S    Send file using XMODEM protocol.','$'
 ;
 ; Variables and Storage Defines
 ;
