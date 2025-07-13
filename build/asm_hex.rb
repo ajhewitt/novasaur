@@ -149,7 +149,7 @@ srcs.each do |src|
       b = a.split.first
       next unless b&.start_with? '$'
 
-      d = a.partition /\s+/
+      d = a.partition(/\s+/)
       e = d.first[1..-1]&.strip
       vars[e] = d[2].strip if vars[e].nil?
     end
