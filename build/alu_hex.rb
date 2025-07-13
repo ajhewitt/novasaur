@@ -91,7 +91,7 @@ def print_wav(offset, opts = {})
 #           first(256).map {|i| i&0xFF}                 # sample 256 and convert to byte
       else
         w = 256.times.map do |i|
-          l = h.first(a+1).each_with_index.map do |j,k| # limit band to a+1
+          h.first(a+1).each_with_index.map do |j,k|     # limit band to a+1
             a.even? && k.odd? ? 0 : j[i]/(k+1)          # skip even harmonics on even a
           end.reduce(&:+)                               # sum harmonics
         end
